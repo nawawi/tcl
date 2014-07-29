@@ -1395,7 +1395,7 @@ MODULE_SCOPE Tcl_Obj	*TclNewInstNameObj(unsigned char inst);
 #define TclClearNumConversion(envPtr) \
     do {								\
 	if (*(envPtr->codeNext - 1) == INST_TRY_CVT_TO_NUMERIC) {	\
-	    envPtr->codeNext--;						\
+	    *(envPtr->codeNext - 1) = INST_NOP;				\
 	}								\
     } while (0)
 
