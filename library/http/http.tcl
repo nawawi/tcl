@@ -544,10 +544,17 @@ proc http::geturl {url args} {
     append url $srvurl
     # Don't append the fragment!
     set state(url) $url
+<<<<<<< HEAD
 
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
+=======
+
+    # If a timeout is specified we set up the after event and arrange for an
+    # asynchronous socket connection.
+
+>>>>>>> upstream/master
     set sockopts [list -async]
     if {$state(-timeout) > 0} {
 	set state(after) [after $state(-timeout) \
@@ -562,6 +569,7 @@ proc http::geturl {url args} {
 	set targetAddr [list $phost $pport]
     } else {
 	set targetAddr [list $host $port]
+<<<<<<< HEAD
     }
     # Proxy connections aren't shared among different hosts.
     set state(socketinfo) $host:$port
@@ -583,6 +591,33 @@ proc http::geturl {url args} {
 	# don't automatically close this connection socket
 	set state(connection) {}
     }
+=======
+    }
+    # Proxy connections aren't shared among different hosts.
+    set state(socketinfo) $host:$port
+
+    # Save the accept types at this point to prevent a race condition. [Bug
+    # c11a51c482]
+    set state(accept-types) $http(-accept)
+
+    # See if we are supposed to use a previously opened channel.
+    if {$state(-keepalive)} {
+	variable socketmap
+	if {[info exists socketmap($state(socketinfo))]} {
+	    if {[catch {fconfigure $socketmap($state(socketinfo))}]} {
+		Log "WARNING: socket for $state(socketinfo) was closed"
+		unset socketmap($state(socketinfo))
+	    } else {
+		set sock $socketmap($state(socketinfo))
+		Log "reusing socket $sock for $state(socketinfo)"
+		catch {fileevent $sock writable {}}
+		catch {fileevent $sock readable {}}
+	    }
+	}
+	# don't automatically close this connection socket
+	set state(connection) {}
+    }
+>>>>>>> upstream/master
     if {![info exists sock]} {
 	# Pass -myaddr directly to the socket command
 	if {[info exists state(-myaddr)]} {
@@ -637,8 +672,25 @@ proc http::geturl {url args} {
     return $token
 }
 
+<<<<<<< HEAD
 
 proc http::Connected { token proto phost srvurl} {
+=======
+# http::Connected --
+#
+#	Callback used when the connection to the HTTP server is actually
+#	established.
+#
+# Arguments:
+#       token	State token.
+#       proto	What protocol (http, https, etc.) was used to connect.
+#	phost	Are we using keep-alive? Non-empty if yes.
+#	srvurl	Service-local URL that we're requesting
+# Results:
+#	None.
+
+proc http::Connected {token proto phost srvurl} {
+>>>>>>> upstream/master
     variable http
     variable urlTypes
 
@@ -691,6 +743,7 @@ proc http::Connected { token proto phost srvurl} {
     if {[info exists state(-handler)]} {
 	set state(-protocol) 1.0
     }
+<<<<<<< HEAD
     if {[catch {
 	puts $sock "$how $srvurl HTTP/$state(-protocol)"
 	puts $sock "Accept: $http(-accept)"
@@ -698,6 +751,14 @@ proc http::Connected { token proto phost srvurl} {
 	if {[info exists hdrs(Host)]} {
 	    # Allow Host spoofing. [Bug 928154]
 	    puts $sock "Host: $hdrs(Host)"
+=======
+    set accept_types_seen 0
+    if {[catch {
+	puts $sock "$how $srvurl HTTP/$state(-protocol)"
+	if {[dict exists $state(-headers) Host]} {
+	    # Allow Host spoofing. [Bug 928154]
+	    puts $sock "Host: [dict get $state(-headers) Host]"
+>>>>>>> upstream/master
 	} elseif {$port == $defport} {
 	    # Don't add port in this case, to handle broken servers. [Bug
 	    # #504508]
@@ -705,7 +766,10 @@ proc http::Connected { token proto phost srvurl} {
 	} else {
 	    puts $sock "Host: $host:$port"
 	}
+<<<<<<< HEAD
 	unset hdrs
+=======
+>>>>>>> upstream/master
 	puts $sock "User-Agent: $http(-useragent)"
         if {$state(-protocol) == 1.0 && $state(-keepalive)} {
 	    puts $sock "Connection: keep-alive"
@@ -718,18 +782,33 @@ proc http::Connected { token proto phost srvurl} {
         }
         set accept_encoding_seen 0
 	set content_type_seen 0
+<<<<<<< HEAD
 	foreach {key value} $state(-headers) {
+=======
+	dict for {key value} $state(-headers) {
+	    set value [string map [list \n "" \r ""] $value]
+	    set key [string map {" " -} [string trim $key]]
+>>>>>>> upstream/master
 	    if {[string equal -nocase $key "host"]} {
 		continue
 	    }
 	    if {[string equal -nocase $key "accept-encoding"]} {
 		set accept_encoding_seen 1
 	    }
+<<<<<<< HEAD
 	    if {[string equal -nocase $key "content-type"]} {
 		set content_type_seen 1
 	    }
 	    set value [string map [list \n "" \r ""] $value]
 	    set key [string trim $key]
+=======
+	    if {[string equal -nocase $key "accept"]} {
+		set accept_types_seen 1
+	    }
+	    if {[string equal -nocase $key "content-type"]} {
+		set content_type_seen 1
+	    }
+>>>>>>> upstream/master
 	    if {[string equal -nocase $key "content-length"]} {
 		set contDone 1
 		set state(querylength) $value
@@ -738,6 +817,14 @@ proc http::Connected { token proto phost srvurl} {
 		puts $sock "$key: $value"
 	    }
 	}
+<<<<<<< HEAD
+=======
+	# Allow overriding the Accept header on a per-connection basis. Useful
+	# for working with REST services. [Bug c11a51c482]
+	if {!$accept_types_seen} {
+	    puts $sock "Accept: $state(accept-types)"
+	}
+>>>>>>> upstream/master
         if {!$accept_encoding_seen && ![info exists state(-handler)]} {
 	    puts $sock "Accept-Encoding: gzip,deflate,compress"
         }
@@ -795,7 +882,10 @@ proc http::Connected { token proto phost srvurl} {
 	    Finish $token $err
 	}
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 }
 
 # Data access functions:
@@ -1450,6 +1540,7 @@ proc http::CharsetToEncoding {charset} {
 		set encoding "iso8859-$num"
 	    }
 	}
+<<<<<<< HEAD
     } else {
 	# other charset, like euc-xx, utf-8,...  may directly map to encoding
 	set encoding $charset
@@ -1458,6 +1549,16 @@ proc http::CharsetToEncoding {charset} {
     if {$idx >= 0} {
 	return $encoding
     } else {
+=======
+    } else {
+	# other charset, like euc-xx, utf-8,...  may directly map to encoding
+	set encoding $charset
+    }
+    set idx [lsearch -exact $encodings $encoding]
+    if {$idx >= 0} {
+	return $encoding
+    } else {
+>>>>>>> upstream/master
 	return "binary"
     }
 }

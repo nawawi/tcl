@@ -710,6 +710,7 @@ tcltest-real:
 #	% make test TESTFLAGS="-verbose bps -file fileName.test"
 
 test: test-tcl test-packages
+<<<<<<< HEAD
 
 test-tcl: ${TCLTEST_EXE}
 	$(SHELL_ENV) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl $(TESTFLAGS)
@@ -786,6 +787,80 @@ install-strip:
 # Note: before running ranlib below, must cd to target directory because some
 # ranlibs write to current directory, and this might not always be possible
 # (e.g. if installing as root).
+=======
+
+test-tcl: ${TCLTEST_EXE}
+	$(SHELL_ENV) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl $(TESTFLAGS)
+
+gdb-test: ${TCLTEST_EXE}
+	@echo "set env @LD_LIBRARY_PATH_VAR@=`pwd`:$${@LD_LIBRARY_PATH_VAR@}" > gdb.run
+	@echo "set env TCL_LIBRARY=${TCL_BUILDTIME_LIBRARY}" >> gdb.run
+	@echo "set args $(TOP_DIR)/tests/all.tcl $(TESTFLAGS) -singleproc 1" >> gdb.run
+	$(GDB) ./${TCLTEST_EXE} --command=gdb.run
+	rm gdb.run
+
+# Useful target to launch a built tcltest with the proper path,...
+runtest: ${TCLTEST_EXE}
+	$(SHELL_ENV) ./${TCLTEST_EXE}
+
+# Useful target for running the test suite with an unwritable current
+# directory...
+ro-test: ${TCLTEST_EXE}
+	echo 'exec chmod -w .;package require tcltest;tcltest::temporaryDirectory /tmp;source ../tests/all.tcl;exec chmod +w .' | $(SHELL_ENV) ./${TCLTEST_EXE}
+
+# The following target generates the shared libraries in dltest/ that are used
+# for testing; they are included as part of the "tcltest" target (via the
+# BUILD_DLTEST variable) if dynamic loading is supported on this platform. The
+# Makefile in the dltest subdirectory creates the dltest.marker file in this
+# directory after a successful build.
+
+dltest.marker: ${STUB_LIB_FILE}
+	cd dltest ; $(MAKE)
+
+#--------------------------------------------------------------------------
+# Rules for running a shell before installation
+#--------------------------------------------------------------------------
+
+# This target can be used to run tclsh from the build directory
+# via `make shell SCRIPT=/tmp/foo.tcl`
+shell: ${TCL_EXE}
+	$(SHELL_ENV) ./${TCL_EXE} $(SCRIPT)
+
+# This target can be used to run tclsh inside either gdb or insight
+gdb: ${TCL_EXE}
+	$(SHELL_ENV) $(GDB) ./${TCL_EXE}
+
+valgrind: ${TCL_EXE} ${TCLTEST_EXE}
+	$(SHELL_ENV) $(VALGRIND) $(VALGRINDARGS) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl -singleproc 1 -constraints valgrind $(TESTFLAGS)
+
+valgrindshell: ${TCL_EXE}
+	$(SHELL_ENV) $(VALGRIND) $(VALGRINDARGS) ./${TCL_EXE} $(SCRIPT)
+
+trace-shell: ${TCL_EXE}
+	$(SHELL_ENV) ${TRACE} $(TRACE_OPTS) ./${TCL_EXE} $(SCRIPT)
+
+trace-test: ${TCLTEST_EXE}
+	$(SHELL_ENV) ${TRACE} $(TRACE_OPTS) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl -singleproc 1 $(TESTFLAGS)
+
+#--------------------------------------------------------------------------
+# Installation rules
+#--------------------------------------------------------------------------
+
+INSTALL_BASE_TARGETS = install-binaries install-libraries install-msgs $(INSTALL_TZDATA)
+INSTALL_DOC_TARGETS = install-doc
+INSTALL_PACKAGE_TARGETS = install-packages
+INSTALL_DEV_TARGETS = install-headers
+INSTALL_EXTRA_TARGETS = @EXTRA_INSTALL@
+INSTALL_TARGETS = $(INSTALL_BASE_TARGETS) $(INSTALL_DOC_TARGETS) $(INSTALL_DEV_TARGETS) \
+		  $(INSTALL_PACKAGE_TARGETS) $(INSTALL_EXTRA_TARGETS)
+
+install: $(INSTALL_TARGETS)
+
+install-strip:
+	$(MAKE) $(INSTALL_TARGETS) \
+		INSTALL_PROGRAM="$(INSTALL_PROGRAM) ${INSTALL_STRIP_PROGRAM}" \
+		INSTALL_LIBRARY="$(INSTALL_LIBRARY) ${INSTALL_STRIP_LIBRARY}"
+>>>>>>> upstream/master
 
 install-binaries: binaries
 	@for i in "$(LIB_INSTALL_DIR)" "$(BIN_INSTALL_DIR)" \
@@ -983,11 +1058,19 @@ install-private-headers:
 	@if test -f tclConfig.h; then\
 	    $(INSTALL_DATA) tclConfig.h "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
 	    fi;
+<<<<<<< HEAD
 
 #--------------------------------------------------------------------------
 # Rules for how to compile C files
 #--------------------------------------------------------------------------
 
+=======
+
+#--------------------------------------------------------------------------
+# Rules for how to compile C files
+#--------------------------------------------------------------------------
+
+>>>>>>> upstream/master
 # Test binaries. The rules for tclTestInit.o and xtTestInit.o are complicated
 # because they are compiled from tclAppInit.c. Can't use the "-o" option
 # because this doesn't work on some strange compilers (e.g. UnixWare).
@@ -1231,10 +1314,17 @@ tclOOCall.o: $(GENERIC_DIR)/tclOOCall.c
 
 tclOODefineCmds.o: $(GENERIC_DIR)/tclOODefineCmds.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOODefineCmds.c
+<<<<<<< HEAD
 
 tclOOInfo.o: $(GENERIC_DIR)/tclOOInfo.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOOInfo.c
 
+=======
+
+tclOOInfo.o: $(GENERIC_DIR)/tclOOInfo.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOOInfo.c
+
+>>>>>>> upstream/master
 tclOOMethod.o: $(GENERIC_DIR)/tclOOMethod.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOOMethod.c
 
@@ -1324,10 +1414,17 @@ tclVar.o: $(GENERIC_DIR)/tclVar.c
 
 tclZlib.o: $(GENERIC_DIR)/tclZlib.c
 	$(CC) -c $(CC_SWITCHES) $(ZLIB_INCLUDE) $(GENERIC_DIR)/tclZlib.c
+<<<<<<< HEAD
 
 tclTest.o: $(GENERIC_DIR)/tclTest.c $(IOHDR) $(TCLREHDRS)
 	$(CC) -c $(APP_CC_SWITCHES) $(GENERIC_DIR)/tclTest.c
 
+=======
+
+tclTest.o: $(GENERIC_DIR)/tclTest.c $(IOHDR) $(TCLREHDRS)
+	$(CC) -c $(APP_CC_SWITCHES) $(GENERIC_DIR)/tclTest.c
+
+>>>>>>> upstream/master
 tclTestObj.o: $(GENERIC_DIR)/tclTestObj.c $(MATHHDRS)
 	$(CC) -c $(APP_CC_SWITCHES) $(GENERIC_DIR)/tclTestObj.c
 
@@ -1366,10 +1463,17 @@ bn_fast_s_mp_mul_digs.o: $(TOMMATH_DIR)/bn_fast_s_mp_mul_digs.c $(MATHHDRS)
 
 bn_fast_s_mp_sqr.o: $(TOMMATH_DIR)/bn_fast_s_mp_sqr.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_fast_s_mp_sqr.c
+<<<<<<< HEAD
 
 bn_mp_add.o: $(TOMMATH_DIR)/bn_mp_add.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_add.c
 
+=======
+
+bn_mp_add.o: $(TOMMATH_DIR)/bn_mp_add.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_add.c
+
+>>>>>>> upstream/master
 bn_mp_add_d.o: $(TOMMATH_DIR)/bn_mp_add_d.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_add_d.c
 
@@ -1590,6 +1694,7 @@ tclMacOSXBundle.o: $(MAC_OSX_DIR)/tclMacOSXBundle.c
 
 tclMacOSXFCmd.o: $(MAC_OSX_DIR)/tclMacOSXFCmd.c
 	$(CC) -c $(CC_SWITCHES) $(MAC_OSX_DIR)/tclMacOSXFCmd.c
+<<<<<<< HEAD
 
 tclMacOSXNotify.o: $(MAC_OSX_DIR)/tclMacOSXNotify.c
 	$(CC) -c $(CC_SWITCHES) $(MAC_OSX_DIR)/tclMacOSXNotify.c
@@ -1598,6 +1703,16 @@ tclMacOSXNotify.o: $(MAC_OSX_DIR)/tclMacOSXNotify.c
 tclWinError.o: $(TOP_DIR)/win/tclWinError.c
 	$(CC) -c $(CC_SWITCHES) $(TOP_DIR)/win/tclWinError.c
 
+=======
+
+tclMacOSXNotify.o: $(MAC_OSX_DIR)/tclMacOSXNotify.c
+	$(CC) -c $(CC_SWITCHES) $(MAC_OSX_DIR)/tclMacOSXNotify.c
+
+# The following is a CYGWIN only source:
+tclWinError.o: $(TOP_DIR)/win/tclWinError.c
+	$(CC) -c $(CC_SWITCHES) $(TOP_DIR)/win/tclWinError.c
+
+>>>>>>> upstream/master
 # DTrace support
 
 $(TCL_OBJS) $(STUB_LIB_OBJS) $(TCLSH_OBJS) $(TCLTEST_OBJS) $(XTTEST_OBJS): @DTRACE_HDR@

@@ -1301,11 +1301,18 @@ TclFreeObj(
 
     ObjInitDeletionContext(context);
 
+# ifdef TCL_THREADS
     /*
+<<<<<<< HEAD
      * Check for a double free of the same value.  This is slightly tricky
      * because it is customary to free a Tcl_Obj when its refcount falls
      * either from 1 to 0, or from 0 to -1.  Falling from -1 to -2, though,
      * and so on, is always a sign of a botch in the caller.
+=======
+     * Check to make sure that the Tcl_Obj was allocated by the current
+     * thread. Don't do this check when shutting down since thread local
+     * storage can be finalized before the last Tcl_Obj is freed.
+>>>>>>> upstream/master
      */
     if (objPtr->refCount < -1) {
 	Tcl_Panic("Reference count for %p was negative", objPtr);
@@ -1317,6 +1324,7 @@ TclFreeObj(
      */
     objPtr->refCount = -1;
 
+<<<<<<< HEAD
     /*
      * Invalidate the string rep first so we can use the bytes value for our
      * pointer chain, and signal an obj deletion (as opposed to shimmering)
@@ -1364,6 +1372,179 @@ TclFreeObj(
      * already killed the thread-global data structures. Performing
      * TCL_TSD_INIT will leave us with an un-initialized memory block upon
      * which we crash (if we where to access the uninitialized hashtable).
+=======
+    if (!TclInExit()) {
+	Tcl_HashTable *tablePtr;
+	Tcl_HashEntry *hPtr;
+	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+
+	tablePtr = tsdPtr->objThreadMap;
+	if (!tablePtr) {
+	    Tcl_Panic("TclFreeObj: object table not initialized");
+	}
+	hPtr = Tcl_FindHashEntry(tablePtr, (char *) objPtr);
+	if (hPtr) {
+	    /*
+	     * As the Tcl_Obj is going to be deleted we remove the entry.
+	     */
+
+	    ObjData *objData = Tcl_GetHashValue(hPtr);
+
+	    if (objData != NULL) {
+		ckfree(objData);
+	    }
+
+	    Tcl_DeleteHashEntry(hPtr);
+	}
+    }
+# endif
+
+    /*
+     * Check for a double free of the same value.  This is slightly tricky
+     * because it is customary to free a Tcl_Obj when its refcount falls
+     * either from 1 to 0, or from 0 to -1.  Falling from -1 to -2, though,
+     * and so on, is always a sign of a botch in the caller.
+     */
+    if (objPtr->refCount < -1) {
+	Tcl_Panic("Reference count for %p was negative", objPtr);
+    }
+    /*
+     * Now, in case we just approved drop from 1 to 0 as acceptable, make
+     * sure we do not accept a second free when falling from 0 to -1.
+     * Skip that possibility so any double free will trigger the panic.
+>>>>>>> upstream/master
+     */
+    objPtr->refCount = -1;
+
+<<<<<<< HEAD
+    {
+	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+        Tcl_HashEntry *hPtr;
+
+	if (tsdPtr->lineCLPtr) {
+            hPtr = Tcl_FindHashEntry(tsdPtr->lineCLPtr, objPtr);
+	    if (hPtr) {
+		ckfree(Tcl_GetHashValue(hPtr));
+		Tcl_DeleteHashEntry(hPtr);
+	    }
+	}
+    }
+}
+#else /* TCL_MEM_DEBUG */
+
+void
+TclFreeObj(
+    register Tcl_Obj *objPtr)	/* The object to be freed. */
+{
+    /*
+     * Invalidate the string rep first so we can use the bytes value for our
+     * pointer chain, and signal an obj deletion (as opposed to shimmering)
+     * with 'length == -1'.
+     */
+
+    TclInvalidateStringRep(objPtr);
+    objPtr->length = -1;
+
+    if (!objPtr->typePtr || !objPtr->typePtr->freeIntRepProc) {
+	/*
+	 * objPtr can be freed safely, as it will not attempt to free any
+	 * other objects: it will not cause recursive calls to this function.
+	 */
+
+	TCL_DTRACE_OBJ_FREE(objPtr);
+	TclFreeObjStorage(objPtr);
+	TclIncrObjsFreed();
+    } else {
+	/*
+	 * This macro declares a variable, so must come here...
+	 */
+
+	ObjInitDeletionContext(context);
+
+	if (ObjDeletePending(context)) {
+	    PushObjToDelete(context, objPtr);
+	} else {
+	    /*
+	     * Note that the contents of the while loop assume that the string
+	     * rep has already been freed and we don't want to do anything
+	     * fancy with adding to the queue inside ourselves. Must take care
+	     * to unstack the object first since freeing the internal rep can
+	     * add further objects to the stack. The code assumes that it is
+	     * the first thing in a block; all current usages in the core
+	     * satisfy this.
+	     */
+
+	    TCL_DTRACE_OBJ_FREE(objPtr);
+	    ObjDeletionLock(context);
+	    objPtr->typePtr->freeIntRepProc(objPtr);
+	    ObjDeletionUnlock(context);
+
+	    TclFreeObjStorage(objPtr);
+	    TclIncrObjsFreed();
+	    ObjDeletionLock(context);
+	    while (ObjOnStack(context)) {
+		Tcl_Obj *objToFree;
+
+		PopObjToDelete(context, objToFree);
+		TCL_DTRACE_OBJ_FREE(objToFree);
+		if ((objToFree->typePtr != NULL)
+			&& (objToFree->typePtr->freeIntRepProc != NULL)) {
+		    objToFree->typePtr->freeIntRepProc(objToFree);
+		}
+		TclFreeObjStorage(objToFree);
+		TclIncrObjsFreed();
+	    }
+	    ObjDeletionUnlock(context);
+	}
+=======
+    /*
+     * Invalidate the string rep first so we can use the bytes value for our
+     * pointer chain, and signal an obj deletion (as opposed to shimmering)
+     * with 'length == -1'.
+     */
+
+    TclInvalidateStringRep(objPtr);
+    objPtr->length = -1;
+
+    if (ObjDeletePending(context)) {
+	PushObjToDelete(context, objPtr);
+    } else {
+	TCL_DTRACE_OBJ_FREE(objPtr);
+	if ((typePtr != NULL) && (typePtr->freeIntRepProc != NULL)) {
+	    ObjDeletionLock(context);
+	    typePtr->freeIntRepProc(objPtr);
+	    ObjDeletionUnlock(context);
+	}
+
+	Tcl_MutexLock(&tclObjMutex);
+	ckfree(objPtr);
+	Tcl_MutexUnlock(&tclObjMutex);
+	TclIncrObjsFreed();
+	ObjDeletionLock(context);
+	while (ObjOnStack(context)) {
+	    Tcl_Obj *objToFree;
+
+	    PopObjToDelete(context, objToFree);
+	    TCL_DTRACE_OBJ_FREE(objToFree);
+	    TclFreeIntRep(objToFree);
+
+	    Tcl_MutexLock(&tclObjMutex);
+	    ckfree(objToFree);
+	    Tcl_MutexUnlock(&tclObjMutex);
+	    TclIncrObjsFreed();
+	}
+	ObjDeletionUnlock(context);
+>>>>>>> upstream/master
+    }
+
+    /*
+     * We cannot use TclGetContinuationTable() here, because that may
+     * re-initialize the thread-data for calls coming after the finalization.
+     * We have to access it using the low-level call and then check for
+     * validity. This function can be called after TclFinalizeThreadData() has
+     * already killed the thread-global data structures. Performing
+     * TCL_TSD_INIT will leave us with an un-initialized memory block upon
+     * which we crash (if we where to access the uninitialized hashtable).
      */
 
     {
@@ -1379,6 +1560,33 @@ TclFreeObj(
 	}
     }
 }
+<<<<<<< HEAD
+#endif /* TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclObjBeingDeleted --
+ *
+ *	This function returns 1 when the Tcl_Obj is being deleted. It is
+ *	provided for the rare cases where the reason for the loss of an
+ *	internal rep might be relevant. [FR 1512138]
+ *
+ * Results:
+ *	1 if being deleted, 0 otherwise.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+TclObjBeingDeleted(
+    Tcl_Obj *objPtr)
+{
+    return (objPtr->length == -1);
+=======
 #else /* TCL_MEM_DEBUG */
 
 void
@@ -1469,37 +1677,14 @@ TclFreeObj(
 	    }
 	}
     }
+>>>>>>> upstream/master
 }
 #endif /* TCL_MEM_DEBUG */
 
 /*
  *----------------------------------------------------------------------
  *
- * TclObjBeingDeleted --
- *
- *	This function returns 1 when the Tcl_Obj is being deleted. It is
- *	provided for the rare cases where the reason for the loss of an
- *	internal rep might be relevant. [FR 1512138]
- *
- * Results:
- *	1 if being deleted, 0 otherwise.
- *
- * Side effects:
- *	None.
- *
- *----------------------------------------------------------------------
- */
-
-int
-TclObjBeingDeleted(
-    Tcl_Obj *objPtr)
-{
-    return (objPtr->length == -1);
-}
-
-/*
- *----------------------------------------------------------------------
- *
+<<<<<<< HEAD
  * Tcl_DuplicateObj --
  *
  *	Create and return a new object that is a duplicate of the argument
@@ -1706,6 +1891,16 @@ Tcl_InvalidateStringRep(
  * Results:
  *	The newly created object is returned. This object will have an invalid
  *	string representation. The returned object has ref count 0.
+=======
+ * TclObjBeingDeleted --
+ *
+ *	This function returns 1 when the Tcl_Obj is being deleted. It is
+ *	provided for the rare cases where the reason for the loss of an
+ *	internal rep might be relevant. [FR 1512138]
+ *
+ * Results:
+ *	1 if being deleted, 0 otherwise.
+>>>>>>> upstream/master
  *
  * Side effects:
  *	None.
@@ -1713,6 +1908,7 @@ Tcl_InvalidateStringRep(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 #undef Tcl_NewBooleanObj
 #ifdef TCL_MEM_DEBUG
 
@@ -1735,10 +1931,19 @@ Tcl_NewBooleanObj(
     return objPtr;
 }
 #endif /* TCL_MEM_DEBUG */
+=======
+int
+TclObjBeingDeleted(
+    Tcl_Obj *objPtr)
+{
+    return (objPtr->length == -1);
+}
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * Tcl_DbNewBooleanObj --
  *
  *	This function is normally called when debugging: i.e., when
@@ -1755,13 +1960,35 @@ Tcl_NewBooleanObj(
  * Results:
  *	The newly created object is returned. This object will have an invalid
  *	string representation. The returned object has ref count 0.
+=======
+ * Tcl_DuplicateObj --
+ *
+ *	Create and return a new object that is a duplicate of the argument
+ *	object.
+ *
+ * Results:
+ *	The return value is a pointer to a newly created Tcl_Obj. This object
+ *	has reference count 0 and the same type, if any, as the source object
+ *	objPtr. Also:
+ *	  1) If the source object has a valid string rep, we copy it;
+ *	     otherwise, the duplicate's string rep is set NULL to mark it
+ *	     invalid.
+ *	  2) If the source object has an internal representation (i.e. its
+ *	     typePtr is non-NULL), the new object's internal rep is set to a
+ *	     copy; otherwise the new internal rep is marked invalid.
+>>>>>>> upstream/master
  *
  * Side effects:
- *	None.
+ *	What constitutes "copying" the internal representation depends on the
+ *	type. For example, if the argument object is a list, the element
+ *	objects it points to will not actually be copied but will be shared
+ *	with the duplicate list. That is, the ref counts of the element
+ *	objects will be incremented.
  *
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 #undef Tcl_DbNewBooleanObj
 #ifdef TCL_MEM_DEBUG
 
@@ -1772,9 +1999,34 @@ Tcl_DbNewBooleanObj(
 				 * function; used for debugging. */
     int line)			/* Line number in the source file; used for
 				 * debugging. */
-{
-    register Tcl_Obj *objPtr;
+=======
+#define SetDuplicateObj(dupPtr, objPtr)					\
+    {									\
+	const Tcl_ObjType *typePtr = (objPtr)->typePtr;			\
+	const char *bytes = (objPtr)->bytes;				\
+	if (bytes) {							\
+	    TclInitStringRep((dupPtr), bytes, (objPtr)->length);	\
+	} else {							\
+	    (dupPtr)->bytes = NULL;					\
+	}								\
+	if (typePtr) {							\
+	    if (typePtr->dupIntRepProc) {				\
+		typePtr->dupIntRepProc((objPtr), (dupPtr));		\
+	    } else {							\
+		(dupPtr)->internalRep = (objPtr)->internalRep;		\
+		(dupPtr)->typePtr = typePtr;				\
+	    }								\
+	}								\
+    }
 
+Tcl_Obj *
+Tcl_DuplicateObj(
+    Tcl_Obj *objPtr)		/* The object to duplicate. */
+>>>>>>> upstream/master
+{
+    Tcl_Obj *dupPtr;
+
+<<<<<<< HEAD
     TclDbNewObj(objPtr, file, line);
     objPtr->bytes = NULL;
 
@@ -1794,27 +2046,60 @@ Tcl_DbNewBooleanObj(
 				 * debugging. */
 {
     return Tcl_NewBooleanObj(boolValue);
+=======
+    TclNewObj(dupPtr);
+    SetDuplicateObj(dupPtr, objPtr);
+    return dupPtr;
 }
-#endif /* TCL_MEM_DEBUG */
+
+void
+TclSetDuplicateObj(
+    Tcl_Obj *dupPtr,
+    Tcl_Obj *objPtr)
+{
+    if (Tcl_IsShared(dupPtr)) {
+	Tcl_Panic("%s called with shared object", "TclSetDuplicateObj");
+    }
+    TclInvalidateStringRep(dupPtr);
+    TclFreeIntRep(dupPtr);
+    SetDuplicateObj(dupPtr, objPtr);
+>>>>>>> upstream/master
+}
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * Tcl_SetBooleanObj --
  *
  *	Modify an object to be a boolean object and to have the specified
  *	boolean value. A nonzero "boolValue" is coerced to 1.
+=======
+ * Tcl_GetString --
+ *
+ *	Returns the string representation byte array pointer for an object.
+>>>>>>> upstream/master
  *
  * Results:
- *	None.
+ *	Returns a pointer to the string representation of objPtr. The byte
+ *	array referenced by the returned pointer must not be modified by the
+ *	caller. Furthermore, the caller must copy the bytes if they need to
+ *	retain them since the object's string rep can change as a result of
+ *	other operations.
  *
  * Side effects:
+<<<<<<< HEAD
  *	The object's old string rep, if any, is freed. Also, any old internal
  *	rep is freed.
+=======
+ *	May call the object's updateStringProc to update the string
+ *	representation from the internal representation.
+>>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 #undef Tcl_SetBooleanObj
 void
 Tcl_SetBooleanObj(
@@ -1826,27 +2111,78 @@ Tcl_SetBooleanObj(
     }
 
     TclSetBooleanObj(objPtr, boolValue);
+=======
+char *
+Tcl_GetString(
+    register Tcl_Obj *objPtr)	/* Object whose string rep byte pointer should
+				 * be returned. */
+{
+    if (objPtr->bytes != NULL) {
+	return objPtr->bytes;
+    }
+
+    /*
+     * Note we do not check for objPtr->typePtr == NULL.  An invariant of
+     * a properly maintained Tcl_Obj is that at least  one of objPtr->bytes
+     * and objPtr->typePtr must not be NULL.  If broken extensions fail to
+     * maintain that invariant, we can crash here.
+     */
+
+    if (objPtr->typePtr->updateStringProc == NULL) {
+	/*
+	 * Those Tcl_ObjTypes which choose not to define an updateStringProc
+	 * must be written in such a way that (objPtr->bytes) never becomes
+	 * NULL.  This panic was added in Tcl 8.1.
+	 */
+
+	Tcl_Panic("UpdateStringProc should not be invoked for type %s",
+		objPtr->typePtr->name);
+    }
+    objPtr->typePtr->updateStringProc(objPtr);
+    if (objPtr->bytes == NULL || objPtr->length < 0
+	    || objPtr->bytes[objPtr->length] != '\0') {
+	Tcl_Panic("UpdateStringProc for type '%s' "
+		"failed to create a valid string rep", objPtr->typePtr->name);
+    }
+    return objPtr->bytes;
+>>>>>>> upstream/master
 }
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * Tcl_GetBooleanFromObj --
  *
  *	Attempt to return a boolean from the Tcl object "objPtr". This
  *	includes conversion from any of Tcl's numeric types.
+=======
+ * Tcl_GetStringFromObj --
+ *
+ *	Returns the string representation's byte array pointer and length for
+ *	an object.
+>>>>>>> upstream/master
  *
  * Results:
- *	The return value is a standard Tcl object result. If an error occurs
- *	during conversion, an error message is left in the interpreter's
- *	result unless "interp" is NULL.
+ *	Returns a pointer to the string representation of objPtr. If lengthPtr
+ *	isn't NULL, the length of the string representation is stored at
+ *	*lengthPtr. The byte array referenced by the returned pointer must not
+ *	be modified by the caller. Furthermore, the caller must copy the bytes
+ *	if they need to retain them since the object's string rep can change
+ *	as a result of other operations.
  *
  * Side effects:
+<<<<<<< HEAD
  *	The intrep of *objPtr may be changed.
+=======
+ *	May call the object's updateStringProc to update the string
+ *	representation from the internal representation.
+>>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 int
 Tcl_GetBooleanFromObj(
     Tcl_Interp *interp,         /* Used for error reporting if not NULL. */
@@ -1892,11 +2228,28 @@ Tcl_GetBooleanFromObj(
     } while ((ParseBoolean(objPtr) == TCL_OK) || (TCL_OK ==
 	    TclParseNumber(interp, objPtr, "boolean value", NULL,-1,NULL,0)));
     return TCL_ERROR;
+=======
+char *
+Tcl_GetStringFromObj(
+    register Tcl_Obj *objPtr,	/* Object whose string rep byte pointer should
+				 * be returned. */
+    register int *lengthPtr)	/* If non-NULL, the location where the string
+				 * rep's byte array length should * be stored.
+				 * If NULL, no length is stored. */
+{
+    (void) TclGetString(objPtr);
+
+    if (lengthPtr != NULL) {
+	*lengthPtr = objPtr->length;
+    }
+    return objPtr->bytes;
+>>>>>>> upstream/master
 }
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclSetBooleanFromAny --
  *
  *	Attempt to generate a boolean internal form for the Tcl object
@@ -1910,10 +2263,24 @@ Tcl_GetBooleanFromObj(
  * Side effects:
  *	If no error occurs, an integer 1 or 0 is stored as "objPtr"s internal
  *	representation and the type of "objPtr" is set to boolean.
+=======
+ * Tcl_InvalidateStringRep --
+ *
+ *	This function is called to invalidate an object's string
+ *	representation.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Deallocates the storage for any old string representation, then sets
+ *	the string representation NULL to mark it invalid.
+>>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 int
 TclSetBooleanFromAny(
     Tcl_Interp *interp,		/* Used for error reporting if not NULL. */
@@ -2208,6 +2575,1860 @@ Tcl_DbNewDoubleObj(
  */
 
 void
+Tcl_SetDoubleObj(
+    register Tcl_Obj *objPtr,	/* Object whose internal rep to init. */
+    register double dblValue)	/* Double used to set the object's value. */
+{
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_SetDoubleObj");
+    }
+
+    TclSetDoubleObj(objPtr, dblValue);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_GetDoubleFromObj --
+ *
+ *	Attempt to return a double from the Tcl object "objPtr". If the object
+ *	is not already a double, an attempt will be made to convert it to one.
+ *
+ * Results:
+ *	The return value is a standard Tcl object result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ * Side effects:
+ *	If the object is not already a double, the conversion will free any
+ *	old internal representation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+Tcl_GetDoubleFromObj(
+    Tcl_Interp *interp,         /* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr,	/* The object from which to get a double. */
+    register double *dblPtr)	/* Place to store resulting double. */
+{
+    do {
+	if (objPtr->typePtr == &tclDoubleType) {
+	    if (TclIsNaN(objPtr->internalRep.doubleValue)) {
+		if (interp != NULL) {
+		    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			    "floating point value is Not a Number", -1));
+                    Tcl_SetErrorCode(interp, "TCL", "VALUE", "DOUBLE", "NAN",
+                            NULL);
+		}
+		return TCL_ERROR;
+	    }
+	    *dblPtr = (double) objPtr->internalRep.doubleValue;
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclIntType) {
+	    *dblPtr = objPtr->internalRep.longValue;
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclBignumType) {
+	    mp_int big;
+
+	    UNPACK_BIGNUM(objPtr, big);
+	    *dblPtr = TclBignumToDouble(&big);
+	    return TCL_OK;
+	}
+#ifndef TCL_WIDE_INT_IS_LONG
+	if (objPtr->typePtr == &tclWideIntType) {
+	    *dblPtr = (double) objPtr->internalRep.wideValue;
+	    return TCL_OK;
+	}
+#endif
+    } while (SetDoubleFromAny(interp, objPtr) == TCL_OK);
+    return TCL_ERROR;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SetDoubleFromAny --
+ *
+ *	Attempt to generate an double-precision floating point internal form
+ *	for the Tcl object "objPtr".
+ *
+ * Results:
+ *	The return value is a standard Tcl object result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ * Side effects:
+ *	If no error occurs, a double is stored as "objPtr"s internal
+ *	representation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+SetDoubleFromAny(
+    Tcl_Interp *interp,		/* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr)	/* The object to convert. */
+{
+    return TclParseNumber(interp, objPtr, "floating-point number", NULL, -1,
+	    NULL, 0);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * UpdateStringOfDouble --
+ *
+ *	Update the string representation for a double-precision floating point
+ *	object. This must obey the current tcl_precision value for
+ *	double-to-string conversions. Note: This function does not free an
+ *	existing old string rep so storage will be lost if this has not
+ *	already been done.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The object's string is set to a valid string that results from the
+ *	double-to-string conversion.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+UpdateStringOfDouble(
+    register Tcl_Obj *objPtr)	/* Double obj with string rep to update. */
+{
+    char buffer[TCL_DOUBLE_SPACE];
+    register int len;
+
+    Tcl_PrintDouble(NULL, objPtr->internalRep.doubleValue, buffer);
+    len = strlen(buffer);
+
+    objPtr->bytes = ckalloc(len + 1);
+    memcpy(objPtr->bytes, buffer, (unsigned) len + 1);
+    objPtr->length = len;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_NewIntObj --
+ *
+ *	If a client is compiled with TCL_MEM_DEBUG defined, calls to
+ *	Tcl_NewIntObj to create a new integer object end up calling the
+ *	debugging function Tcl_DbNewLongObj instead.
+ *
+ *	Otherwise, if the client is compiled without TCL_MEM_DEBUG defined,
+ *	calls to Tcl_NewIntObj result in a call to one of the two
+ *	Tcl_NewIntObj implementations below. We provide two implementations so
+ *	that the Tcl core can be compiled to do memory debugging of the core
+ *	even if a client does not request it for itself.
+ *
+ *	Integer and long integer objects share the same "integer" type
+ *	implementation. We store all integers as longs and Tcl_GetIntFromObj
+ *	checks whether the current value of the long can be represented by an
+ *	int.
+ *
+ * Results:
+ *	The newly created object is returned. This object will have an invalid
+ *	string representation. The returned object has ref count 0.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+#undef Tcl_NewIntObj
+#ifdef TCL_MEM_DEBUG
+
+Tcl_Obj *
+Tcl_NewIntObj(
+    register int intValue)	/* Int used to initialize the new object. */
+{
+    return Tcl_DbNewLongObj((long)intValue, "unknown", 0);
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_NewIntObj(
+    register int intValue)	/* Int used to initialize the new object. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclNewIntObj(objPtr, intValue);
+    return objPtr;
+}
+#endif /* if TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_SetIntObj --
+ *
+ *	Modify an object to be an integer and to have the specified integer
+ *	value.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The object's old string rep, if any, is freed. Also, any old internal
+ *	rep is freed.
+ *
+ *----------------------------------------------------------------------
+ */
+
+#undef Tcl_SetIntObj
+void
+Tcl_SetIntObj(
+    register Tcl_Obj *objPtr,	/* Object whose internal rep to init. */
+    register int intValue)	/* Integer used to set object's value. */
+{
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_SetIntObj");
+    }
+
+    TclSetIntObj(objPtr, intValue);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_GetIntFromObj --
+ *
+ *	Attempt to return an int from the Tcl object "objPtr". If the object
+ *	is not already an int, an attempt will be made to convert it to one.
+ *
+ *	Integer and long integer objects share the same "integer" type
+ *	implementation. We store all integers as longs and Tcl_GetIntFromObj
+ *	checks whether the current value of the long can be represented by an
+ *	int.
+ *
+ * Results:
+ *	The return value is a standard Tcl object result. If an error occurs
+ *	during conversion or if the long integer held by the object can not be
+ *	represented by an int, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ * Side effects:
+ *	If the object is not already an int, the conversion will free any old
+ *	internal representation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+Tcl_GetIntFromObj(
+    Tcl_Interp *interp,         /* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr,	/* The object from which to get a int. */
+    register int *intPtr)	/* Place to store resulting int. */
+{
+#if (LONG_MAX == INT_MAX)
+    return TclGetLongFromObj(interp, objPtr, (long *) intPtr);
+#else
+    long l;
+
+    if (TclGetLongFromObj(interp, objPtr, &l) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    if ((ULONG_MAX > UINT_MAX) && ((l > UINT_MAX) || (l < -(long)UINT_MAX))) {
+	if (interp != NULL) {
+	    const char *s =
+		    "integer value too large to represent as non-long integer";
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(s, -1));
+	    Tcl_SetErrorCode(interp, "ARITH", "IOVERFLOW", s, NULL);
+	}
+	return TCL_ERROR;
+    }
+    *intPtr = (int) l;
+    return TCL_OK;
+#endif
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SetIntFromAny --
+ *
+ *	Attempts to force the internal representation for a Tcl object to
+ *	tclIntType, specifically.
+ *
+ * Results:
+ *	The return value is a standard object Tcl result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+SetIntFromAny(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    Tcl_Obj *objPtr)		/* Pointer to the object to convert */
+{
+    long l;
+
+    return TclGetLongFromObj(interp, objPtr, &l);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * UpdateStringOfInt --
+ *
+ *	Update the string representation for an integer object. Note: This
+ *	function does not free an existing old string rep so storage will be
+ *	lost if this has not already been done.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The object's string is set to a valid string that results from the
+ *	int-to-string conversion.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+UpdateStringOfInt(
+    register Tcl_Obj *objPtr)	/* Int object whose string rep to update. */
+{
+    char buffer[TCL_INTEGER_SPACE];
+    register int len;
+
+    len = TclFormatInt(buffer, objPtr->internalRep.longValue);
+
+    objPtr->bytes = ckalloc(len + 1);
+    memcpy(objPtr->bytes, buffer, (unsigned) len + 1);
+    objPtr->length = len;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_NewLongObj --
+ *
+ *	If a client is compiled with TCL_MEM_DEBUG defined, calls to
+ *	Tcl_NewLongObj to create a new long integer object end up calling the
+ *	debugging function Tcl_DbNewLongObj instead.
+ *
+ *	Otherwise, if the client is compiled without TCL_MEM_DEBUG defined,
+ *	calls to Tcl_NewLongObj result in a call to one of the two
+ *	Tcl_NewLongObj implementations below. We provide two implementations
+ *	so that the Tcl core can be compiled to do memory debugging of the
+ *	core even if a client does not request it for itself.
+ *
+ *	Integer and long integer objects share the same "integer" type
+ *	implementation. We store all integers as longs and Tcl_GetIntFromObj
+ *	checks whether the current value of the long can be represented by an
+ *	int.
+ *
+ * Results:
+ *	The newly created object is returned. This object will have an invalid
+ *	string representation. The returned object has ref count 0.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+#ifdef TCL_MEM_DEBUG
+#undef Tcl_NewLongObj
+
+Tcl_Obj *
+Tcl_NewLongObj(
+    register long longValue)	/* Long integer used to initialize the
+				 * new object. */
+{
+    return Tcl_DbNewLongObj(longValue, "unknown", 0);
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_NewLongObj(
+    register long longValue)	/* Long integer used to initialize the
+				 * new object. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclNewLongObj(objPtr, longValue);
+    return objPtr;
+}
+#endif /* if TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_DbNewLongObj --
+ *
+ *	If a client is compiled with TCL_MEM_DEBUG defined, calls to
+ *	Tcl_NewIntObj and Tcl_NewLongObj to create new integer or long integer
+ *	objects end up calling the debugging function Tcl_DbNewLongObj
+ *	instead. We provide two implementations of Tcl_DbNewLongObj so that
+ *	whether the Tcl core is compiled to do memory debugging of the core is
+ *	independent of whether a client requests debugging for itself.
+ *
+ *	When the core is compiled with TCL_MEM_DEBUG defined, Tcl_DbNewLongObj
+ *	calls Tcl_DbCkalloc directly with the file name and line number from
+ *	its caller. This simplifies debugging since then the [memory active]
+ *	command will report the caller's file name and line number when
+ *	reporting objects that haven't been freed.
+ *
+ *	Otherwise, when the core is compiled without TCL_MEM_DEBUG defined,
+ *	this function just returns the result of calling Tcl_NewLongObj.
+ *
+ * Results:
+ *	The newly created long integer object is returned. This object will
+ *	have an invalid string representation. The returned object has ref
+ *	count 0.
+ *
+ * Side effects:
+ *	Allocates memory.
+ *
+ *----------------------------------------------------------------------
+ */
+
+#ifdef TCL_MEM_DEBUG
+
+Tcl_Obj *
+Tcl_DbNewLongObj(
+    register long longValue,	/* Long integer used to initialize the new
+				 * object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclDbNewObj(objPtr, file, line);
+    objPtr->bytes = NULL;
+
+    objPtr->internalRep.longValue = longValue;
+    objPtr->typePtr = &tclIntType;
+    return objPtr;
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_DbNewLongObj(
+    register long longValue,	/* Long integer used to initialize the new
+				 * object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    return Tcl_NewLongObj(longValue);
+}
+#endif /* TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_SetLongObj --
+ *
+ *	Modify an object to be an integer object and to have the specified
+ *	long integer value.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The object's old string rep, if any, is freed. Also, any old internal
+ *	rep is freed.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+Tcl_SetLongObj(
+    register Tcl_Obj *objPtr,	/* Object whose internal rep to init. */
+    register long longValue)	/* Long integer used to initialize the
+				 * object's value. */
+{
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_SetLongObj");
+    }
+
+    TclSetLongObj(objPtr, longValue);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_GetLongFromObj --
+ *
+ *	Attempt to return an long integer from the Tcl object "objPtr". If the
+ *	object is not already an int object, an attempt will be made to
+ *	convert it to one.
+ *
+ * Results:
+ *	The return value is a standard Tcl object result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ * Side effects:
+ *	If the object is not already an int object, the conversion will free
+ *	any old internal representation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+Tcl_GetLongFromObj(
+    Tcl_Interp *interp,         /* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr,	/* The object from which to get a long. */
+    register long *longPtr)	/* Place to store resulting long. */
+{
+    do {
+	if (objPtr->typePtr == &tclIntType) {
+	    *longPtr = objPtr->internalRep.longValue;
+	    return TCL_OK;
+	}
+#ifndef TCL_WIDE_INT_IS_LONG
+	if (objPtr->typePtr == &tclWideIntType) {
+	    /*
+	     * We return any integer in the range -ULONG_MAX to ULONG_MAX
+	     * converted to a long, ignoring overflow. The rule preserves
+	     * existing semantics for conversion of integers on input, but
+	     * avoids inadvertent demotion of wide integers to 32-bit ones in
+	     * the internal rep.
+	     */
+
+	    Tcl_WideInt w = objPtr->internalRep.wideValue;
+
+	    if (w >= -(Tcl_WideInt)(ULONG_MAX)
+		    && w <= (Tcl_WideInt)(ULONG_MAX)) {
+		*longPtr = Tcl_WideAsLong(w);
+		return TCL_OK;
+	    }
+	    goto tooLarge;
+	}
+#endif
+	if (objPtr->typePtr == &tclDoubleType) {
+	    if (interp != NULL) {
+                Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                        "expected integer but got \"%s\"",
+                        Tcl_GetString(objPtr)));
+		Tcl_SetErrorCode(interp, "TCL", "VALUE", "INTEGER", NULL);
+	    }
+	    return TCL_ERROR;
+	}
+	if (objPtr->typePtr == &tclBignumType) {
+	    /*
+	     * Must check for those bignum values that can fit in a long, even
+	     * when auto-narrowing is enabled. Only those values in the signed
+	     * long range get auto-narrowed to tclIntType, while all the
+	     * values in the unsigned long range will fit in a long.
+	     */
+
+	    mp_int big;
+
+	    UNPACK_BIGNUM(objPtr, big);
+	    if ((size_t) big.used <= (CHAR_BIT * sizeof(long) + DIGIT_BIT - 1)
+		    / DIGIT_BIT) {
+		unsigned long value = 0, numBytes = sizeof(long);
+		long scratch;
+		unsigned char *bytes = (unsigned char *) &scratch;
+
+		if (mp_to_unsigned_bin_n(&big, bytes, &numBytes) == MP_OKAY) {
+		    while (numBytes-- > 0) {
+			value = (value << CHAR_BIT) | *bytes++;
+		    }
+		    if (big.sign) {
+			*longPtr = - (long) value;
+		    } else {
+			*longPtr = (long) value;
+		    }
+		    return TCL_OK;
+		}
+	    }
+#ifndef TCL_WIDE_INT_IS_LONG
+	tooLarge:
+#endif
+	    if (interp != NULL) {
+		const char *s = "integer value too large to represent";
+		Tcl_Obj *msg = Tcl_NewStringObj(s, -1);
+
+		Tcl_SetObjResult(interp, msg);
+		Tcl_SetErrorCode(interp, "ARITH", "IOVERFLOW", s, NULL);
+	    }
+	    return TCL_ERROR;
+	}
+    } while (TclParseNumber(interp, objPtr, "integer", NULL, -1, NULL,
+	    TCL_PARSE_INTEGER_ONLY)==TCL_OK);
+    return TCL_ERROR;
+}
+#ifndef TCL_WIDE_INT_IS_LONG
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * UpdateStringOfWideInt --
+ *
+ *	Update the string representation for a wide integer object. Note: this
+ *	function does not free an existing old string rep so storage will be
+ *	lost if this has not already been done.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The object's string is set to a valid string that results from the
+ *	wideInt-to-string conversion.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+UpdateStringOfWideInt(
+    register Tcl_Obj *objPtr)	/* Int object whose string rep to update. */
+{
+    char buffer[TCL_INTEGER_SPACE+2];
+    register unsigned len;
+    register Tcl_WideInt wideVal = objPtr->internalRep.wideValue;
+
+    /*
+     * Note that sprintf will generate a compiler warning under Mingw claiming
+     * %I64 is an unknown format specifier. Just ignore this warning. We can't
+     * use %L as the format specifier since that gets printed as a 32 bit
+     * value.
+     */
+
+    sprintf(buffer, "%" TCL_LL_MODIFIER "d", wideVal);
+    len = strlen(buffer);
+    objPtr->bytes = ckalloc(len + 1);
+    memcpy(objPtr->bytes, buffer, len + 1);
+    objPtr->length = len;
+}
+#endif /* !TCL_WIDE_INT_IS_LONG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_NewWideIntObj --
+ *
+ *	If a client is compiled with TCL_MEM_DEBUG defined, calls to
+ *	Tcl_NewWideIntObj to create a new 64-bit integer object end up calling
+ *	the debugging function Tcl_DbNewWideIntObj instead.
+ *
+ *	Otherwise, if the client is compiled without TCL_MEM_DEBUG defined,
+ *	calls to Tcl_NewWideIntObj result in a call to one of the two
+ *	Tcl_NewWideIntObj implementations below. We provide two
+ *	implementations so that the Tcl core can be compiled to do memory
+ *	debugging of the core even if a client does not request it for itself.
+ *
+ * Results:
+ *	The newly created object is returned. This object will have an invalid
+ *	string representation. The returned object has ref count 0.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+#ifdef TCL_MEM_DEBUG
+#undef Tcl_NewWideIntObj
+
+Tcl_Obj *
+Tcl_NewWideIntObj(
+    register Tcl_WideInt wideValue)
+				/* Wide integer used to initialize the new
+				 * object. */
+{
+    return Tcl_DbNewWideIntObj(wideValue, "unknown", 0);
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_NewWideIntObj(
+    register Tcl_WideInt wideValue)
+				/* Wide integer used to initialize the new
+				 * object. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclNewObj(objPtr);
+    Tcl_SetWideIntObj(objPtr, wideValue);
+    return objPtr;
+}
+#endif /* if TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_DbNewWideIntObj --
+ *
+ *	If a client is compiled with TCL_MEM_DEBUG defined, calls to
+ *	Tcl_NewWideIntObj to create new wide integer end up calling the
+ *	debugging function Tcl_DbNewWideIntObj instead. We provide two
+ *	implementations of Tcl_DbNewWideIntObj so that whether the Tcl core is
+ *	compiled to do memory debugging of the core is independent of whether
+ *	a client requests debugging for itself.
+ *
+ *	When the core is compiled with TCL_MEM_DEBUG defined,
+ *	Tcl_DbNewWideIntObj calls Tcl_DbCkalloc directly with the file name
+ *	and line number from its caller. This simplifies debugging since then
+ *	the checkmem command will report the caller's file name and line
+ *	number when reporting objects that haven't been freed.
+ *
+ *	Otherwise, when the core is compiled without TCL_MEM_DEBUG defined,
+ *	this function just returns the result of calling Tcl_NewWideIntObj.
+ *
+ * Results:
+ *	The newly created wide integer object is returned. This object will
+ *	have an invalid string representation. The returned object has ref
+ *	count 0.
+ *
+ * Side effects:
+ *	Allocates memory.
+ *
+ *----------------------------------------------------------------------
+ */
+
+#ifdef TCL_MEM_DEBUG
+
+Tcl_Obj *
+Tcl_DbNewWideIntObj(
+    register Tcl_WideInt wideValue,
+				/* Wide integer used to initialize the new
+				 * object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclDbNewObj(objPtr, file, line);
+    Tcl_SetWideIntObj(objPtr, wideValue);
+    return objPtr;
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_DbNewWideIntObj(
+    register Tcl_WideInt wideValue,
+				/* Long integer used to initialize the new
+				 * object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    return Tcl_NewWideIntObj(wideValue);
+}
+#endif /* TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_SetWideIntObj --
+ *
+ *	Modify an object to be a wide integer object and to have the specified
+ *	wide integer value.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The object's old string rep, if any, is freed. Also, any old internal
+ *	rep is freed.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+Tcl_SetWideIntObj(
+    register Tcl_Obj *objPtr,	/* Object w. internal rep to init. */
+    register Tcl_WideInt wideValue)
+				/* Wide integer used to initialize the
+				 * object's value. */
+{
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_SetWideIntObj");
+    }
+
+    if ((wideValue >= (Tcl_WideInt) LONG_MIN)
+	    && (wideValue <= (Tcl_WideInt) LONG_MAX)) {
+	TclSetLongObj(objPtr, (long) wideValue);
+    } else {
+#ifndef TCL_WIDE_INT_IS_LONG
+	TclSetWideIntObj(objPtr, wideValue);
+#else
+	mp_int big;
+
+	TclBNInitBignumFromWideInt(&big, wideValue);
+	Tcl_SetBignumObj(objPtr, &big);
+#endif
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_GetWideIntFromObj --
+ *
+ *	Attempt to return a wide integer from the Tcl object "objPtr". If the
+ *	object is not already a wide int object, an attempt will be made to
+ *	convert it to one.
+ *
+ * Results:
+ *	The return value is a standard Tcl object result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ * Side effects:
+ *	If the object is not already an int object, the conversion will free
+ *	any old internal representation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+Tcl_GetWideIntFromObj(
+    Tcl_Interp *interp,         /* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr,	/* Object from which to get a wide int. */
+    register Tcl_WideInt *wideIntPtr)
+				/* Place to store resulting long. */
+{
+    do {
+#ifndef TCL_WIDE_INT_IS_LONG
+	if (objPtr->typePtr == &tclWideIntType) {
+	    *wideIntPtr = objPtr->internalRep.wideValue;
+	    return TCL_OK;
+	}
+#endif
+	if (objPtr->typePtr == &tclIntType) {
+	    *wideIntPtr = (Tcl_WideInt) objPtr->internalRep.longValue;
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclDoubleType) {
+	    if (interp != NULL) {
+                Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                        "expected integer but got \"%s\"",
+                        Tcl_GetString(objPtr)));
+		Tcl_SetErrorCode(interp, "TCL", "VALUE", "INTEGER", NULL);
+	    }
+	    return TCL_ERROR;
+	}
+	if (objPtr->typePtr == &tclBignumType) {
+	    /*
+	     * Must check for those bignum values that can fit in a
+	     * Tcl_WideInt, even when auto-narrowing is enabled.
+	     */
+
+	    mp_int big;
+
+	    UNPACK_BIGNUM(objPtr, big);
+	    if ((size_t) big.used <= (CHAR_BIT * sizeof(Tcl_WideInt)
+		     + DIGIT_BIT - 1) / DIGIT_BIT) {
+		Tcl_WideUInt value = 0;
+		unsigned long numBytes = sizeof(Tcl_WideInt);
+		Tcl_WideInt scratch;
+		unsigned char *bytes = (unsigned char *) &scratch;
+
+		if (mp_to_unsigned_bin_n(&big, bytes, &numBytes) == MP_OKAY) {
+		    while (numBytes-- > 0) {
+			value = (value << CHAR_BIT) | *bytes++;
+		    }
+		    if (big.sign) {
+			*wideIntPtr = - (Tcl_WideInt) value;
+		    } else {
+			*wideIntPtr = (Tcl_WideInt) value;
+		    }
+		    return TCL_OK;
+		}
+	    }
+	    if (interp != NULL) {
+		const char *s = "integer value too large to represent";
+		Tcl_Obj *msg = Tcl_NewStringObj(s, -1);
+
+		Tcl_SetObjResult(interp, msg);
+		Tcl_SetErrorCode(interp, "ARITH", "IOVERFLOW", s, NULL);
+	    }
+	    return TCL_ERROR;
+	}
+    } while (TclParseNumber(interp, objPtr, "integer", NULL, -1, NULL,
+	    TCL_PARSE_INTEGER_ONLY)==TCL_OK);
+    return TCL_ERROR;
+}
+#ifndef TCL_WIDE_INT_IS_LONG
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SetWideIntFromAny --
+ *
+ *	Attempts to force the internal representation for a Tcl object to
+ *	tclWideIntType, specifically.
+ *
+ * Results:
+ *	The return value is a standard object Tcl result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+SetWideIntFromAny(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    Tcl_Obj *objPtr)		/* Pointer to the object to convert */
+{
+    Tcl_WideInt w;
+    return Tcl_GetWideIntFromObj(interp, objPtr, &w);
+}
+#endif /* !TCL_WIDE_INT_IS_LONG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FreeBignum --
+ *
+ *	This function frees the internal rep of a bignum.
+ *
+ * Results:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+FreeBignum(
+    Tcl_Obj *objPtr)
+{
+    mp_int toFree;		/* Bignum to free */
+
+    UNPACK_BIGNUM(objPtr, toFree);
+    mp_clear(&toFree);
+    if ((long) objPtr->internalRep.ptrAndLongRep.value < 0) {
+	ckfree(objPtr->internalRep.ptrAndLongRep.ptr);
+    }
+    objPtr->typePtr = NULL;
+=======
+void
+Tcl_InvalidateStringRep(
+    register Tcl_Obj *objPtr)	/* Object whose string rep byte pointer should
+				 * be freed. */
+{
+    TclInvalidateStringRep(objPtr);
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * DupBignum --
+ *
+ *	This function duplicates the internal rep of a bignum.
+=======
+ * Tcl_NewBooleanObj --
+ *
+ *	This function is normally called when not debugging: i.e., when
+ *	TCL_MEM_DEBUG is not defined. It creates a new Tcl_Obj and
+ *	initializes it from the argument boolean value. A nonzero "boolValue"
+ *	is coerced to 1.
+ *
+ *	When TCL_MEM_DEBUG is defined, this function just returns the result
+ *	of calling the debugging version Tcl_DbNewBooleanObj.
+>>>>>>> upstream/master
+ *
+ * Results:
+ *	The newly created object is returned. This object will have an invalid
+ *	string representation. The returned object has ref count 0.
+ *
+ * Side effects:
+<<<<<<< HEAD
+ *	The destination object receies a copy of the source object
+=======
+ *	None.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+static void
+DupBignum(
+    Tcl_Obj *srcPtr,
+    Tcl_Obj *copyPtr)
+{
+    mp_int bignumVal;
+    mp_int bignumCopy;
+
+    copyPtr->typePtr = &tclBignumType;
+    UNPACK_BIGNUM(srcPtr, bignumVal);
+    if (mp_init_copy(&bignumCopy, &bignumVal) != MP_OKAY) {
+	Tcl_Panic("initialization failure in DupBignum");
+    }
+    PACK_BIGNUM(bignumCopy, copyPtr);
+=======
+#undef Tcl_NewBooleanObj
+#ifdef TCL_MEM_DEBUG
+
+Tcl_Obj *
+Tcl_NewBooleanObj(
+    register int boolValue)	/* Boolean used to initialize new object. */
+{
+    return Tcl_DbNewBooleanObj(boolValue, "unknown", 0);
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_NewBooleanObj(
+    register int boolValue)	/* Boolean used to initialize new object. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclNewBooleanObj(objPtr, boolValue);
+    return objPtr;
+>>>>>>> upstream/master
+}
+#endif /* TCL_MEM_DEBUG */
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * UpdateStringOfBignum --
+ *
+ *	This function updates the string representation of a bignum object.
+ *
+ * Results:
+ *	None.
+=======
+ * Tcl_DbNewBooleanObj --
+ *
+ *	This function is normally called when debugging: i.e., when
+ *	TCL_MEM_DEBUG is defined. It creates new boolean objects. It is the
+ *	same as the Tcl_NewBooleanObj function above except that it calls
+ *	Tcl_DbCkalloc directly with the file name and line number from its
+ *	caller. This simplifies debugging since then the [memory active]
+ *	command will report the correct file name and line number when
+ *	reporting objects that haven't been freed.
+ *
+ *	When TCL_MEM_DEBUG is not defined, this function just returns the
+ *	result of calling Tcl_NewBooleanObj.
+ *
+ * Results:
+ *	The newly created object is returned. This object will have an invalid
+ *	string representation. The returned object has ref count 0.
+>>>>>>> upstream/master
+ *
+ * Side effects:
+ *	The object's string is set to whatever results from the bignum-
+ *	to-string conversion.
+ *
+ * The object's existing string representation is NOT freed; memory will leak
+ * if the string rep is still valid at the time this function is called.
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+static void
+UpdateStringOfBignum(
+    Tcl_Obj *objPtr)
+{
+    mp_int bignumVal;
+    int size;
+    int status;
+    char *stringVal;
+
+    UNPACK_BIGNUM(objPtr, bignumVal);
+    status = mp_radix_size(&bignumVal, 10, &size);
+    if (status != MP_OKAY) {
+	Tcl_Panic("radix size failure in UpdateStringOfBignum");
+    }
+    if (size == 3) {
+	/*
+	 * mp_radix_size() returns 3 when more than INT_MAX bytes would be
+	 * needed to hold the string rep (because mp_radix_size ignores
+	 * integer overflow issues). When we know the string rep will be more
+	 * than 3, we can conclude the string rep would overflow our string
+	 * length limits.
+	 *
+	 * Note that so long as we enforce our bignums to the size that fits
+	 * in a packed bignum, this branch will never be taken.
+	 */
+
+	Tcl_Panic("UpdateStringOfBignum: string length limit exceeded");
+    }
+    stringVal = ckalloc(size);
+    status = mp_toradix_n(&bignumVal, stringVal, 10, size);
+    if (status != MP_OKAY) {
+	Tcl_Panic("conversion failure in UpdateStringOfBignum");
+    }
+    objPtr->bytes = stringVal;
+    objPtr->length = size - 1;	/* size includes a trailing NUL byte. */
+}
+=======
+#undef Tcl_DbNewBooleanObj
+#ifdef TCL_MEM_DEBUG
+
+Tcl_Obj *
+Tcl_DbNewBooleanObj(
+    register int boolValue,	/* Boolean used to initialize new object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclDbNewObj(objPtr, file, line);
+    objPtr->bytes = NULL;
+
+    objPtr->internalRep.longValue = (boolValue? 1 : 0);
+    objPtr->typePtr = &tclIntType;
+    return objPtr;
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_DbNewBooleanObj(
+    register int boolValue,	/* Boolean used to initialize new object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    return Tcl_NewBooleanObj(boolValue);
+}
+#endif /* TCL_MEM_DEBUG */
+>>>>>>> upstream/master
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * Tcl_NewBignumObj --
+ *
+ *	Creates an initializes a bignum object.
+=======
+ * Tcl_SetBooleanObj --
+ *
+ *	Modify an object to be a boolean object and to have the specified
+ *	boolean value. A nonzero "boolValue" is coerced to 1.
+>>>>>>> upstream/master
+ *
+ * Results:
+ *	Returns the newly created object.
+ *
+ * Side effects:
+<<<<<<< HEAD
+ *	The bignum value is cleared, since ownership has transferred to Tcl.
+=======
+ *	The object's old string rep, if any, is freed. Also, any old internal
+ *	rep is freed.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+#ifdef TCL_MEM_DEBUG
+#undef Tcl_NewBignumObj
+
+Tcl_Obj *
+Tcl_NewBignumObj(
+    mp_int *bignumValue)
+{
+    return Tcl_DbNewBignumObj(bignumValue, "unknown", 0);
+}
+#else
+Tcl_Obj *
+Tcl_NewBignumObj(
+    mp_int *bignumValue)
+{
+    Tcl_Obj *objPtr;
+
+    TclNewObj(objPtr);
+    Tcl_SetBignumObj(objPtr, bignumValue);
+    return objPtr;
+=======
+#undef Tcl_SetBooleanObj
+void
+Tcl_SetBooleanObj(
+    register Tcl_Obj *objPtr,	/* Object whose internal rep to init. */
+    register int boolValue)	/* Boolean used to set object's value. */
+{
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_SetBooleanObj");
+    }
+
+    TclSetBooleanObj(objPtr, boolValue);
+>>>>>>> upstream/master
+}
+#endif
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * Tcl_DbNewBignumObj --
+ *
+ *	This function is normally called when debugging: that is, when
+ *	TCL_MEM_DEBUG is defined. It constructs a bignum object, recording the
+ *	creation point so that [memory active] can report it.
+ *
+ * Results:
+ *	Returns the newly created object.
+ *
+ * Side effects:
+ *	The bignum value is cleared, since ownership has transferred to Tcl.
+=======
+ * Tcl_GetBooleanFromObj --
+ *
+ *	Attempt to return a boolean from the Tcl object "objPtr". This
+ *	includes conversion from any of Tcl's numeric types.
+ *
+ * Results:
+ *	The return value is a standard Tcl object result. If an error occurs
+ *	during conversion, an error message is left in the interpreter's
+ *	result unless "interp" is NULL.
+ *
+ * Side effects:
+ *	The intrep of *objPtr may be changed.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+#ifdef TCL_MEM_DEBUG
+Tcl_Obj *
+Tcl_DbNewBignumObj(
+    mp_int *bignumValue,
+    const char *file,
+    int line)
+{
+    Tcl_Obj *objPtr;
+
+    TclDbNewObj(objPtr, file, line);
+    Tcl_SetBignumObj(objPtr, bignumValue);
+    return objPtr;
+=======
+int
+Tcl_GetBooleanFromObj(
+    Tcl_Interp *interp,         /* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr,	/* The object from which to get boolean. */
+    register int *boolPtr)	/* Place to store resulting boolean. */
+{
+    do {
+	if (objPtr->typePtr == &tclIntType) {
+	    *boolPtr = (objPtr->internalRep.longValue != 0);
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclBooleanType) {
+	    *boolPtr = (int) objPtr->internalRep.longValue;
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclDoubleType) {
+	    /*
+	     * Caution: Don't be tempted to check directly for the "double"
+	     * Tcl_ObjType and then compare the intrep to 0.0. This isn't
+	     * reliable because a "double" Tcl_ObjType can hold the NaN value.
+	     * Use the API Tcl_GetDoubleFromObj, which does the checking and
+	     * sets the proper error message for us.
+	     */
+
+	    double d;
+
+	    if (Tcl_GetDoubleFromObj(interp, objPtr, &d) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+	    *boolPtr = (d != 0.0);
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclBignumType) {
+	    *boolPtr = 1;
+	    return TCL_OK;
+	}
+#ifndef TCL_WIDE_INT_IS_LONG
+	if (objPtr->typePtr == &tclWideIntType) {
+	    *boolPtr = (objPtr->internalRep.wideValue != 0);
+	    return TCL_OK;
+	}
+#endif
+    } while ((ParseBoolean(objPtr) == TCL_OK) || (TCL_OK ==
+	    TclParseNumber(interp, objPtr, "boolean value", NULL,-1,NULL,0)));
+    return TCL_ERROR;
+>>>>>>> upstream/master
+}
+#else
+Tcl_Obj *
+Tcl_DbNewBignumObj(
+    mp_int *bignumValue,
+    const char *file,
+    int line)
+{
+    return Tcl_NewBignumObj(bignumValue);
+}
+#endif
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * GetBignumFromObj --
+ *
+ *	This function retrieves a 'bignum' value from a Tcl object, converting
+ *	the object if necessary. Either copies or transfers the mp_int value
+ *	depending on the copy flag value passed in.
+ *
+ * Results:
+ *	Returns TCL_OK if the conversion is successful, TCL_ERROR otherwise.
+ *
+ * Side effects:
+ *	A copy of bignum is stored in *bignumValue, which is expected to be
+ *	uninitialized or cleared. If conversion fails, and the 'interp'
+ *	argument is not NULL, an error message is stored in the interpreter
+ *	result.
+=======
+ * TclSetBooleanFromAny --
+ *
+ *	Attempt to generate a boolean internal form for the Tcl object
+ *	"objPtr".
+ *
+ * Results:
+ *	The return value is a standard Tcl result. If an error occurs during
+ *	conversion, an error message is left in the interpreter's result
+ *	unless "interp" is NULL.
+ *
+ * Side effects:
+ *	If no error occurs, an integer 1 or 0 is stored as "objPtr"s internal
+ *	representation and the type of "objPtr" is set to boolean.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+static int
+GetBignumFromObj(
+    Tcl_Interp *interp,		/* Tcl interpreter for error reporting */
+    Tcl_Obj *objPtr,		/* Object to read */
+    int copy,			/* Whether to copy the returned bignum value */
+    mp_int *bignumValue)	/* Returned bignum value. */
+{
+    do {
+	if (objPtr->typePtr == &tclBignumType) {
+	    if (copy || Tcl_IsShared(objPtr)) {
+		mp_int temp;
+
+		UNPACK_BIGNUM(objPtr, temp);
+		mp_init_copy(bignumValue, &temp);
+	    } else {
+		UNPACK_BIGNUM(objPtr, *bignumValue);
+		objPtr->internalRep.ptrAndLongRep.ptr = NULL;
+		objPtr->internalRep.ptrAndLongRep.value = 0;
+		objPtr->typePtr = NULL;
+		if (objPtr->bytes == NULL) {
+		    TclInitStringRep(objPtr, tclEmptyStringRep, 0);
+		}
+	    }
+	    return TCL_OK;
+	}
+	if (objPtr->typePtr == &tclIntType) {
+	    TclBNInitBignumFromLong(bignumValue, objPtr->internalRep.longValue);
+	    return TCL_OK;
+	}
+#ifndef TCL_WIDE_INT_IS_LONG
+	if (objPtr->typePtr == &tclWideIntType) {
+	    TclBNInitBignumFromWideInt(bignumValue,
+		    objPtr->internalRep.wideValue);
+	    return TCL_OK;
+	}
+#endif
+	if (objPtr->typePtr == &tclDoubleType) {
+	    if (interp != NULL) {
+                Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                        "expected integer but got \"%s\"",
+                        Tcl_GetString(objPtr)));
+		Tcl_SetErrorCode(interp, "TCL", "VALUE", "INTEGER", NULL);
+	    }
+	    return TCL_ERROR;
+	}
+    } while (TclParseNumber(interp, objPtr, "integer", NULL, -1, NULL,
+	    TCL_PARSE_INTEGER_ONLY)==TCL_OK);
+    return TCL_ERROR;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_GetBignumFromObj --
+ *
+ *	This function retrieves a 'bignum' value from a Tcl object, converting
+ *	the object if necessary.
+ *
+ * Results:
+ *	Returns TCL_OK if the conversion is successful, TCL_ERROR otherwise.
+ *
+ * Side effects:
+ *	A copy of bignum is stored in *bignumValue, which is expected to be
+ *	uninitialized or cleared. If conversion fails, an the 'interp'
+ *	argument is not NULL, an error message is stored in the interpreter
+ *	result.
+ *
+ *	It is expected that the caller will NOT have invoked mp_init on the
+ *	bignum value before passing it in. Tcl will initialize the mp_int as
+ *	it sets the value. The value is a copy of the value in objPtr, so it
+ *	becomes the responsibility of the caller to call mp_clear on it.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+Tcl_GetBignumFromObj(
+    Tcl_Interp *interp,		/* Tcl interpreter for error reporting */
+    Tcl_Obj *objPtr,		/* Object to read */
+    mp_int *bignumValue)	/* Returned bignum value. */
+{
+    return GetBignumFromObj(interp, objPtr, 1, bignumValue);
+=======
+int
+TclSetBooleanFromAny(
+    Tcl_Interp *interp,		/* Used for error reporting if not NULL. */
+    register Tcl_Obj *objPtr)	/* The object to convert. */
+{
+    /*
+     * For some "pure" numeric Tcl_ObjTypes (no string rep), we can determine
+     * whether a boolean conversion is possible without generating the string
+     * rep.
+     */
+
+    if (objPtr->bytes == NULL) {
+	if (objPtr->typePtr == &tclIntType) {
+	    switch (objPtr->internalRep.longValue) {
+	    case 0L: case 1L:
+		return TCL_OK;
+	    }
+	    goto badBoolean;
+	}
+
+	if (objPtr->typePtr == &tclBignumType) {
+	    goto badBoolean;
+	}
+
+#ifndef TCL_WIDE_INT_IS_LONG
+	if (objPtr->typePtr == &tclWideIntType) {
+	    goto badBoolean;
+	}
+#endif
+
+	if (objPtr->typePtr == &tclDoubleType) {
+	    goto badBoolean;
+	}
+    }
+
+    if (ParseBoolean(objPtr) == TCL_OK) {
+	return TCL_OK;
+    }
+
+  badBoolean:
+    if (interp != NULL) {
+	int length;
+	const char *str = Tcl_GetStringFromObj(objPtr, &length);
+	Tcl_Obj *msg;
+
+	TclNewLiteralStringObj(msg, "expected boolean value but got \"");
+	Tcl_AppendLimitedToObj(msg, str, length, 50, "");
+	Tcl_AppendToObj(msg, "\"", -1);
+	Tcl_SetObjResult(interp, msg);
+	Tcl_SetErrorCode(interp, "TCL", "VALUE", "BOOLEAN", NULL);
+    }
+    return TCL_ERROR;
+}
+
+static int
+ParseBoolean(
+    register Tcl_Obj *objPtr)	/* The object to parse/convert. */
+{
+    int i, length, newBool;
+    char lowerCase[6];
+    const char *str = TclGetStringFromObj(objPtr, &length);
+
+    if ((length == 0) || (length > 5)) {
+	/*
+         * Longest valid boolean string rep. is "false".
+         */
+
+	return TCL_ERROR;
+    }
+
+    switch (str[0]) {
+    case '0':
+	if (length == 1) {
+	    newBool = 0;
+	    goto numericBoolean;
+	}
+	return TCL_ERROR;
+    case '1':
+	if (length == 1) {
+	    newBool = 1;
+	    goto numericBoolean;
+	}
+	return TCL_ERROR;
+    }
+
+    /*
+     * Force to lower case for case-insensitive detection. Filter out known
+     * invalid characters at the same time.
+     */
+
+    for (i=0; i < length; i++) {
+	char c = str[i];
+
+	switch (c) {
+	case 'A': case 'E': case 'F': case 'L': case 'N':
+	case 'O': case 'R': case 'S': case 'T': case 'U': case 'Y':
+	    lowerCase[i] = c + (char) ('a' - 'A');
+	    break;
+	case 'a': case 'e': case 'f': case 'l': case 'n':
+	case 'o': case 'r': case 's': case 't': case 'u': case 'y':
+	    lowerCase[i] = c;
+	    break;
+	default:
+	    return TCL_ERROR;
+	}
+    }
+    lowerCase[length] = 0;
+    switch (lowerCase[0]) {
+    case 'y':
+	/*
+	 * Checking the 'y' is redundant, but makes the code clearer.
+	 */
+	if (strncmp(lowerCase, "yes", (size_t) length) == 0) {
+	    newBool = 1;
+	    goto goodBoolean;
+	}
+	return TCL_ERROR;
+    case 'n':
+	if (strncmp(lowerCase, "no", (size_t) length) == 0) {
+	    newBool = 0;
+	    goto goodBoolean;
+	}
+	return TCL_ERROR;
+    case 't':
+	if (strncmp(lowerCase, "true", (size_t) length) == 0) {
+	    newBool = 1;
+	    goto goodBoolean;
+	}
+	return TCL_ERROR;
+    case 'f':
+	if (strncmp(lowerCase, "false", (size_t) length) == 0) {
+	    newBool = 0;
+	    goto goodBoolean;
+	}
+	return TCL_ERROR;
+    case 'o':
+	if (length < 2) {
+	    return TCL_ERROR;
+	}
+	if (strncmp(lowerCase, "on", (size_t) length) == 0) {
+	    newBool = 1;
+	    goto goodBoolean;
+	} else if (strncmp(lowerCase, "off", (size_t) length) == 0) {
+	    newBool = 0;
+	    goto goodBoolean;
+	}
+	return TCL_ERROR;
+    default:
+	return TCL_ERROR;
+    }
+
+    /*
+     * Free the old internalRep before setting the new one. We do this as late
+     * as possible to allow the conversion code, in particular
+     * Tcl_GetStringFromObj, to use that old internalRep.
+     */
+
+  goodBoolean:
+    TclFreeIntRep(objPtr);
+    objPtr->internalRep.longValue = newBool;
+    objPtr->typePtr = &tclBooleanType;
+    return TCL_OK;
+
+  numericBoolean:
+    TclFreeIntRep(objPtr);
+    objPtr->internalRep.longValue = newBool;
+    objPtr->typePtr = &tclIntType;
+    return TCL_OK;
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * Tcl_TakeBignumFromObj --
+ *
+ *	This function retrieves a 'bignum' value from a Tcl object, converting
+ *	the object if necessary.
+=======
+ * Tcl_NewDoubleObj --
+ *
+ *	This function is normally called when not debugging: i.e., when
+ *	TCL_MEM_DEBUG is not defined. It creates a new double object and
+ *	initializes it from the argument double value.
+ *
+ *	When TCL_MEM_DEBUG is defined, this function just returns the result
+ *	of calling the debugging version Tcl_DbNewDoubleObj.
+>>>>>>> upstream/master
+ *
+ * Results:
+ *	Returns TCL_OK if the conversion is successful, TCL_ERROR otherwise.
+ *
+ * Side effects:
+ *	A copy of bignum is stored in *bignumValue, which is expected to be
+ *	uninitialized or cleared. If conversion fails, an the 'interp'
+ *	argument is not NULL, an error message is stored in the interpreter
+ *	result.
+ *
+ *	It is expected that the caller will NOT have invoked mp_init on the
+ *	bignum value before passing it in. Tcl will initialize the mp_int as
+ *	it sets the value. The value is transferred from the internals of
+ *	objPtr to the caller, passing responsibility of the caller to call
+ *	mp_clear on it. The objPtr is cleared to hold an empty value.
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+int
+Tcl_TakeBignumFromObj(
+    Tcl_Interp *interp,		/* Tcl interpreter for error reporting */
+    Tcl_Obj *objPtr,		/* Object to read */
+    mp_int *bignumValue)	/* Returned bignum value. */
+{
+    return GetBignumFromObj(interp, objPtr, 0, bignumValue);
+=======
+#ifdef TCL_MEM_DEBUG
+#undef Tcl_NewDoubleObj
+
+Tcl_Obj *
+Tcl_NewDoubleObj(
+    register double dblValue)	/* Double used to initialize the object. */
+{
+    return Tcl_DbNewDoubleObj(dblValue, "unknown", 0);
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_NewDoubleObj(
+    register double dblValue)	/* Double used to initialize the object. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclNewDoubleObj(objPtr, dblValue);
+    return objPtr;
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * Tcl_SetBignumObj --
+ *
+ *	This function sets the value of a Tcl_Obj to a large integer.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Object value is stored. The bignum value is cleared, since ownership
+ *	has transferred to Tcl.
+=======
+ * Tcl_DbNewDoubleObj --
+ *
+ *	This function is normally called when debugging: i.e., when
+ *	TCL_MEM_DEBUG is defined. It creates new double objects. It is the
+ *	same as the Tcl_NewDoubleObj function above except that it calls
+ *	Tcl_DbCkalloc directly with the file name and line number from its
+ *	caller. This simplifies debugging since then the [memory active]
+ *	command will report the correct file name and line number when
+ *	reporting objects that haven't been freed.
+ *
+ *	When TCL_MEM_DEBUG is not defined, this function just returns the
+ *	result of calling Tcl_NewDoubleObj.
+ *
+ * Results:
+ *	The newly created object is returned. This object will have an invalid
+ *	string representation. The returned object has ref count 0.
+ *
+ * Side effects:
+ *	None.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+void
+Tcl_SetBignumObj(
+    Tcl_Obj *objPtr,		/* Object to set */
+    mp_int *bignumValue)	/* Value to store */
+{
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_SetBignumObj");
+    }
+    if ((size_t) bignumValue->used
+	    <= (CHAR_BIT * sizeof(long) + DIGIT_BIT - 1) / DIGIT_BIT) {
+	unsigned long value = 0, numBytes = sizeof(long);
+	long scratch;
+	unsigned char *bytes = (unsigned char *) &scratch;
+
+	if (mp_to_unsigned_bin_n(bignumValue, bytes, &numBytes) != MP_OKAY) {
+	    goto tooLargeForLong;
+	}
+	while (numBytes-- > 0) {
+	    value = (value << CHAR_BIT) | *bytes++;
+	}
+	if (value > (((~(unsigned long)0) >> 1) + bignumValue->sign)) {
+	    goto tooLargeForLong;
+	}
+	if (bignumValue->sign) {
+	    TclSetLongObj(objPtr, -(long)value);
+	} else {
+	    TclSetLongObj(objPtr, (long)value);
+	}
+	mp_clear(bignumValue);
+	return;
+    }
+  tooLargeForLong:
+#ifndef TCL_WIDE_INT_IS_LONG
+    if ((size_t) bignumValue->used
+	    <= (CHAR_BIT * sizeof(Tcl_WideInt) + DIGIT_BIT - 1) / DIGIT_BIT) {
+	Tcl_WideUInt value = 0;
+	unsigned long numBytes = sizeof(Tcl_WideInt);
+	Tcl_WideInt scratch;
+	unsigned char *bytes = (unsigned char *)&scratch;
+
+	if (mp_to_unsigned_bin_n(bignumValue, bytes, &numBytes) != MP_OKAY) {
+	    goto tooLargeForWide;
+	}
+	while (numBytes-- > 0) {
+	    value = (value << CHAR_BIT) | *bytes++;
+	}
+	if (value > (((~(Tcl_WideUInt)0) >> 1) + bignumValue->sign)) {
+	    goto tooLargeForWide;
+	}
+	if (bignumValue->sign) {
+	    TclSetWideIntObj(objPtr, -(Tcl_WideInt)value);
+	} else {
+	    TclSetWideIntObj(objPtr, (Tcl_WideInt)value);
+	}
+	mp_clear(bignumValue);
+	return;
+    }
+  tooLargeForWide:
+#endif
+    TclInvalidateStringRep(objPtr);
+    TclFreeIntRep(objPtr);
+    TclSetBignumIntRep(objPtr, bignumValue);
+=======
+#ifdef TCL_MEM_DEBUG
+
+Tcl_Obj *
+Tcl_DbNewDoubleObj(
+    register double dblValue,	/* Double used to initialize the object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    register Tcl_Obj *objPtr;
+
+    TclDbNewObj(objPtr, file, line);
+    objPtr->bytes = NULL;
+
+    objPtr->internalRep.doubleValue = dblValue;
+    objPtr->typePtr = &tclDoubleType;
+    return objPtr;
+}
+
+#else /* if not TCL_MEM_DEBUG */
+
+Tcl_Obj *
+Tcl_DbNewDoubleObj(
+    register double dblValue,	/* Double used to initialize the object. */
+    const char *file,		/* The name of the source file calling this
+				 * function; used for debugging. */
+    int line)			/* Line number in the source file; used for
+				 * debugging. */
+{
+    return Tcl_NewDoubleObj(dblValue);
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * TclSetBignumIntRep --
+ *
+ *	Install a bignum into the internal representation of an object.
+=======
+ * Tcl_SetDoubleObj --
+ *
+ *	Modify an object to be a double object and to have the specified
+ *	double value.
+>>>>>>> upstream/master
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+<<<<<<< HEAD
+ *	Object internal representation is updated and object type is set. The
+ *	bignum value is cleared, since ownership has transferred to the
+ *	object.
+=======
+ *	The object's old string rep, if any, is freed. Also, any old internal
+ *	rep is freed.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+<<<<<<< HEAD
+TclSetBignumIntRep(
+    Tcl_Obj *objPtr,
+    mp_int *bignumValue)
+{
+    objPtr->typePtr = &tclBignumType;
+    PACK_BIGNUM(*bignumValue, objPtr);
+
+    /*
+     * Clear the mp_int value.
+     *
+     * Don't call mp_clear() because it would free the digit array we just
+     * packed into the Tcl_Obj.
+     */
+
+=======
 Tcl_SetDoubleObj(
     register Tcl_Obj *objPtr,	/* Object whose internal rep to init. */
     register double dblValue)	/* Double used to set the object's value. */
@@ -3577,6 +5798,7 @@ TclSetBignumIntRep(
      * packed into the Tcl_Obj.
      */
 
+>>>>>>> upstream/master
     bignumValue->dp = NULL;
     bignumValue->alloc = bignumValue->used = 0;
     bignumValue->sign = MP_NEG;
@@ -3766,6 +5988,7 @@ Tcl_DbDecrRefCount(
 	    Tcl_Panic("Trying to %s of Tcl_Obj allocated in another thread",
                     "decr ref count");
 	}
+<<<<<<< HEAD
 
 	/*
 	 * If the Tcl_Obj is going to be deleted, remove the entry.
@@ -3780,6 +6003,8 @@ Tcl_DbDecrRefCount(
 
 	    Tcl_DeleteHashEntry(hPtr);
 	}
+=======
+>>>>>>> upstream/master
     }
 # endif /* TCL_THREADS */
 #endif /* TCL_MEM_DEBUG */

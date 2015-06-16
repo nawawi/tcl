@@ -37,6 +37,7 @@ static struct {
 /*
  * Declarations for local functions defined in this file:
  */
+<<<<<<< HEAD
 
 static char *		EnvTraceProc(ClientData clientData, Tcl_Interp *interp,
 			    const char *name1, const char *name2, int flags);
@@ -48,6 +49,14 @@ MODULE_SCOPE void	TclUnsetEnv(const char *name);
     static void TclCygwinPutenv(char *string);
 #   define putenv TclCygwinPutenv
 #endif
+=======
+
+static char *		EnvTraceProc(ClientData clientData, Tcl_Interp *interp,
+			    const char *name1, const char *name2, int flags);
+static void		ReplaceString(const char *oldStr, char *newStr);
+MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
+MODULE_SCOPE void	TclUnsetEnv(const char *name);
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -444,7 +453,11 @@ TclUnsetEnv(
      * that no = should be included, and Windows requires it.
      */
 
+<<<<<<< HEAD
 #if defined(_WIN32) || defined(__CYGWIN__)
+=======
+#if defined(_WIN32)
+>>>>>>> upstream/master
     string = ckalloc(length + 2);
     memcpy(string, name, (size_t) length);
     string[length] = '=';
@@ -740,6 +753,7 @@ TclFinalizeEnvironment(void)
     }
 }
 
+<<<<<<< HEAD
 #if defined(__CYGWIN__)
 
 /*
@@ -832,6 +846,8 @@ TclCygwinPutenv(
 }
 #endif /* __CYGWIN__ */
 
+=======
+>>>>>>> upstream/master
 /*
  * Local Variables:
  * mode: c

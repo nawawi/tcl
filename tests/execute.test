@@ -775,6 +775,7 @@ test execute-6.18 {Tcl_ExprObj: exprcode context validation} -body {
     rename foo {}
     rename bar {}
 } -result {0 1}
+<<<<<<< HEAD
 
 test execute-7.0 {Wide int handling in INST_JUMP_FALSE/LAND} {
     set x 0x100000000
@@ -992,6 +993,225 @@ test execute-9.1 {Interp result resetting [Bug 1522803]} {
     set result
 } SUCCESS
 
+=======
+
+test execute-7.0 {Wide int handling in INST_JUMP_FALSE/LAND} {
+    set x 0x100000000
+    expr {$x && 1}
+} 1
+test execute-7.1 {Wide int handling in INST_JUMP_FALSE/LAND} {
+    expr {0x100000000 && 1}
+} 1
+test execute-7.2 {Wide int handling in INST_JUMP_FALSE/LAND} {
+    expr {1 && 0x100000000}
+} 1
+test execute-7.3 {Wide int handling in INST_JUMP_FALSE/LAND} {
+    expr {wide(0x100000000) && 1}
+} 1
+test execute-7.4 {Wide int handling in INST_JUMP_FALSE/LAND} {
+    expr {1 && wide(0x100000000)}
+} 1
+test execute-7.5 {Wide int handling in INST_EQ} {
+    expr {4 == (wide(1)+wide(3))}
+} 1
+test execute-7.6 {Wide int handling in INST_EQ and [incr]} {
+    set x 399999999999
+    expr {400000000000 == [incr x]}
+} 1
+# wide ints have more bits of precision than doubles, but we convert anyway
+test execute-7.7 {Wide int handling in INST_EQ and [incr]} {
+    set x [expr {wide(1)<<62}]
+    set y [expr {$x+1}]
+    expr {double($x) == double($y)}
+} 1
+test execute-7.8 {Wide int conversions can change sign} longIs32bit {
+    set x 0x80000000
+    expr {int($x) < wide($x)}
+} 1
+test execute-7.9 {Wide int handling in INST_MOD} {
+    expr {(wide(1)<<60) % ((wide(47)<<45)-1)}
+} 316659348800185
+test execute-7.10 {Wide int handling in INST_MOD} {
+    expr {((wide(1)<<60)-1) % 0x400000000}
+} 17179869183
+test execute-7.11 {Wide int handling in INST_LSHIFT} {
+    expr wide(42)<<30
+} 45097156608
+test execute-7.12 {Wide int handling in INST_LSHIFT} {
+    expr 12345678901<<3
+} 98765431208
+test execute-7.13 {Wide int handling in INST_RSHIFT} {
+    expr 0x543210febcda9876>>7
+} 47397893236700464
+test execute-7.14 {Wide int handling in INST_RSHIFT} {
+    expr wide(0x9876543210febcda)>>7
+} -58286587177206407
+test execute-7.15 {Wide int handling in INST_BITOR} {
+    expr wide(0x9876543210febcda) | 0x543210febcda9876
+} -2560765885044310786
+test execute-7.16 {Wide int handling in INST_BITXOR} {
+    expr wide(0x9876543210febcda) ^ 0x543210febcda9876
+} -3727778945703861076
+test execute-7.17 {Wide int handling in INST_BITAND} {
+    expr wide(0x9876543210febcda) & 0x543210febcda9876
+} 1167013060659550290
+test execute-7.18 {Wide int handling in INST_ADD} {
+    expr wide(0x7fffffff)+wide(0x7fffffff)
+} 4294967294
+test execute-7.19 {Wide int handling in INST_ADD} {
+    expr 0x7fffffff+wide(0x7fffffff)
+} 4294967294
+test execute-7.20 {Wide int handling in INST_ADD} {
+    expr wide(0x7fffffff)+0x7fffffff
+} 4294967294
+test execute-7.21 {Wide int handling in INST_ADD} {
+    expr double(0x7fffffff)+wide(0x7fffffff)
+} 4294967294.0
+test execute-7.22 {Wide int handling in INST_ADD} {
+    expr wide(0x7fffffff)+double(0x7fffffff)
+} 4294967294.0
+test execute-7.23 {Wide int handling in INST_SUB} {
+    expr 0x123456789a-0x20406080a
+} 69530054800
+test execute-7.24 {Wide int handling in INST_MULT} {
+    expr 0x123456789a*193
+} 15090186251290
+test execute-7.25 {Wide int handling in INST_DIV} {
+    expr 0x123456789a/193
+} 405116546
+test execute-7.26 {Wide int handling in INST_UPLUS} {
+    set x 0x123456871234568
+    expr {+ $x}
+} 81985533099853160
+test execute-7.27 {Wide int handling in INST_UMINUS} {
+    set x 0x123456871234568
+    expr {- $x}
+} -81985533099853160
+test execute-7.28 {Wide int handling in INST_LNOT} {
+    set x 0x123456871234568
+    expr {! $x}
+} 0
+test execute-7.29 {Wide int handling in INST_BITNOT} {
+    set x 0x123456871234568
+    expr {~ $x}
+} -81985533099853161
+test execute-7.30 {Wide int handling in function call} {
+    set x 0x12345687123456
+    incr x
+    expr {log($x) == log(double($x))}
+} 1
+test execute-7.31 {Wide int handling in abs()} {
+    set x 0xa23456871234568
+    incr x
+    set y 0x123456871234568
+    concat [expr {abs($x)}] [expr {abs($y)}]
+} {730503879441204585 81985533099853160}
+test execute-7.32 {Wide int handling} longIs32bit {
+    expr {int(1024 * 1024 * 1024 * 1024)}
+} 0
+test execute-7.33 {Wide int handling} longIs32bit {
+    expr {int(0x1 * 1024 * 1024 * 1024 * 1024)}
+} 0
+test execute-7.34 {Wide int handling} {
+    expr {wide(0x1) * 1024 * 1024 * 1024 * 1024}
+} 1099511627776
+
+test execute-8.1 {Stack protection} -setup {
+    # If [Bug #804681] has not been properly taken care of, this should
+    # segfault
+    proc whatever args {llength $args}
+    trace add variable ::errorInfo {write unset} whatever
+} -body {
+    expr {1+9/0}
+} -cleanup {
+    trace remove variable ::errorInfo {write unset} whatever
+    rename whatever {}
+} -returnCodes error -match glob -result *
+test execute-8.2 {Stack restoration} -setup {
+    # Avoid crashes when system stack size is limited (thread-enabled!)
+    set limit [interp recursionlimit {}]
+    interp recursionlimit {} 100
+} -body {
+    # Test for [Bug #816641], correct restoration of the stack top after the
+    # stack is grown
+    proc f {args} { f bee bop }
+    catch f msg
+    set msg
+} -cleanup {
+    interp recursionlimit {} $limit
+} -result {too many nested evaluations (infinite loop?)}
+test execute-8.3 {Stack restoration} -setup {
+    # Avoid crashes when system stack size is limited (thread-enabled!)
+    set limit [interp recursionlimit {}]
+    interp recursionlimit {} 100
+} -body {
+    # Test for [Bug #1055676], correct restoration of the stack top after the
+    # epoch is bumped and the stack is grown in a call from a nested
+    # evaluation
+    set arglst [string repeat "a " 1000]
+    proc f {args} "f $arglst"
+    proc run {} {
+	# bump the interp's epoch
+	rename ::set ::dummy
+	rename ::dummy ::set
+	catch f msg
+	set msg
+    }
+    run
+} -cleanup {
+    interp recursionlimit {} $limit
+} -result {too many nested evaluations (infinite loop?)}
+test execute-8.4 {Compile epoch bump effect on stack trace} -setup {
+    proc foo {} {
+	error bar
+    }
+    proc FOO {} {
+	catch {error bar} m o
+	rename ::set ::dummy
+	rename ::dummy ::set
+	return -options $o $m
+    }
+} -body {
+    catch foo m o
+    set stack1 [dict get $o -errorinfo]
+    catch FOO m o
+    set stack2 [string map {FOO foo} [dict get $o -errorinfo]]
+    expr {$stack1 eq $stack2 ? {} : "These differ:\n$stack1\n$stack2"}
+} -cleanup {
+    rename foo {}
+    rename FOO {}
+    unset -nocomplain m o stack1 stack2
+} -result {}
+test execute-8.5 {Bug 2038069} -setup {
+    proc demo {} {
+	catch [list error FOO] m o
+	return $o
+    }
+} -body {
+    demo
+} -cleanup {
+    rename demo {}
+} -match glob -result {-code 1 -level 0 -errorstack * -errorcode NONE -errorinfo {FOO
+    while executing
+"error FOO"
+    invoked from within
+"catch \[list error FOO\] m o"} -errorline 2}
+
+test execute-9.1 {Interp result resetting [Bug 1522803]} {
+    set c 0
+    catch {
+	catch {set foo}
+	expr {1/$c}
+    }
+    if {[string match *foo* $::errorInfo]} {
+	set result "Bad errorInfo: $::errorInfo"
+    } else {
+	set result SUCCESS
+    }
+    set result
+} SUCCESS
+
+>>>>>>> upstream/master
 test execute-10.1 {TclExecuteByteCode, INST_CONCAT1, bytearrays} {
     apply {s {binary scan $s c x; list $x [scan $s$s %c%c]}} \u0130
 } {48 {304 304}}
@@ -1043,6 +1263,23 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 } -cleanup {
     interp delete slave
 } -result ok
+<<<<<<< HEAD
+=======
+
+test execute-11.2 {Bug 268b23df11} -setup {
+    proc zero {} {return 0}
+    proc crash {} {expr {abs([zero])}}
+    proc noop args {}
+    trace add execution crash enterstep noop
+} -body {
+    crash
+} -cleanup {
+    trace remove execution crash enterstep noop
+    rename noop {}
+    rename crash {}
+    rename zero {}
+} -result 0
+>>>>>>> upstream/master
 
 # cleanup
 if {[info commands testobj] != {}} {
