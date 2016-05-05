@@ -111,6 +111,10 @@ proc ::tcl::clock::Initialize {} {
     mcpackagelocale set {}
     ::msgcat::mcpackageconfig set mcfolder [file join $LibDir msgs]
     ::msgcat::mcpackageconfig set unknowncmd ""
+<<<<<<< HEAD
+=======
+    ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
+>>>>>>> upstream/master
 
     # Define the message catalog for the root locale.
 
@@ -1314,6 +1318,7 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
     dict set date secondOfDay [expr {
 	[dict get $date localSeconds] % 86400
     }]
+<<<<<<< HEAD
 
     # Parse the date.  The parser will return a list comprising date, time,
     # time zone, relative month/day/seconds, relative weekday, ordinal month.
@@ -1331,6 +1336,25 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 	    "unable to convert date-time string \"$string\": $message"
     }
 
+=======
+
+    # Parse the date.  The parser will return a list comprising date, time,
+    # time zone, relative month/day/seconds, relative weekday, ordinal month.
+
+    try {
+	set scanned [Oldscan $string \
+		     [dict get $date year] \
+		     [dict get $date month] \
+		     [dict get $date dayOfMonth]]
+	lassign $scanned \
+	    parseDate parseTime parseZone parseRel \
+	    parseWeekday parseOrdinalMonth
+    } on error message {
+	return -code error \
+	    "unable to convert date-time string \"$string\": $message"
+    }
+
+>>>>>>> upstream/master
     # If the caller supplied a date in the string, update the 'date' dict with
     # the value. If the caller didn't specify a time with the date, default to
     # midnight.
@@ -4475,6 +4499,44 @@ proc ::tcl::clock::AddDays { days clockval timezone changeover } {
 
 #----------------------------------------------------------------------
 #
+<<<<<<< HEAD
+=======
+# ChangeCurrentLocale --
+#
+#        The global locale was changed within msgcat.
+#        Clears the buffered parse functions of the current locale.
+#
+# Parameters:
+#        loclist (ignored)
+#
+# Results:
+#        None.
+#
+# Side effects:
+#        Buffered parse functions are cleared.
+#
+#----------------------------------------------------------------------
+
+proc ::tcl::clock::ChangeCurrentLocale {args} {
+    variable FormatProc
+    variable LocaleNumeralCache
+    variable CachedSystemTimeZone
+    variable TimeZoneBad
+
+    foreach p [info procs [namespace current]::scanproc'*'current] {
+        rename $p {}
+    }
+    foreach p [info procs [namespace current]::formatproc'*'current] {
+        rename $p {}
+    }
+
+    catch {array unset FormatProc *'current}
+    set LocaleNumeralCache {}
+}
+
+#----------------------------------------------------------------------
+#
+>>>>>>> upstream/master
 # ClearCaches --
 #
 #	Clears all caches to reclaim the memory used in [clock]

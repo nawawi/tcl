@@ -372,11 +372,19 @@ test http-3.27 {http::geturl: -headers override -type} -body {
 } -cleanup {
     http::cleanup $token
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
 Connection close
 Content-Type {text/plain;charset=utf-8}
+=======
+} -match regexp -result {(?n)Host .*
+User-Agent .*
+Connection close
+Content-Type {text/plain;charset=utf-8}
+Accept \*/\*
+>>>>>>> upstream/master
 =======
 } -match regexp -result {(?n)Host .*
 User-Agent .*
@@ -393,11 +401,19 @@ test http-3.28 {http::geturl: -headers override -type default} -body {
 } -cleanup {
     http::cleanup $token
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
 Connection close
 Content-Type {text/plain;charset=utf-8}
+=======
+} -match regexp -result {(?n)Host .*
+User-Agent .*
+Connection close
+Content-Type {text/plain;charset=utf-8}
+Accept \*/\*
+>>>>>>> upstream/master
 =======
 } -match regexp -result {(?n)Host .*
 User-Agent .*
@@ -434,7 +450,10 @@ test http-3.31 {http::geturl fragment without path} -body {
     catch { http::cleanup $token }
 } -result 200
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 # Bug c11a51c482
 test http-3.32 {http::geturl: -headers override -accept default} -body {
     set token [http::geturl $url/headers -query dummy \
@@ -450,6 +469,9 @@ Accept-Encoding .*
 Content-Type application/x-www-form-urlencoded
 Content-Length 5}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test http-4.1 {http::Event} -body {
     set token [http::geturl $url -keepalive 0]

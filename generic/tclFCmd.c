@@ -120,7 +120,11 @@ FileCopyRename(
     }
     i++;
     if ((objc - i) < 2) {
+<<<<<<< HEAD
 	Tcl_WrongNumArgs(interp, 1, objv, 
+=======
+	Tcl_WrongNumArgs(interp, 1, objv,
+>>>>>>> upstream/master
 		"?-option value ...? source ?source ...? target");
 	return TCL_ERROR;
     }

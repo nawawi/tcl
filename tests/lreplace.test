@@ -187,6 +187,9 @@ test lreplace-4.11 {lreplace end index first} {
 test lreplace-4.12 {lreplace end index first} {
     lreplace {0 1 2 3 4} end-2 2 a b c
 } {0 1 a b c 3 4}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup

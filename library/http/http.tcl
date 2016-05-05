@@ -673,8 +673,25 @@ proc http::geturl {url args} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 proc http::Connected { token proto phost srvurl} {
+=======
+# http::Connected --
+#
+#	Callback used when the connection to the HTTP server is actually
+#	established.
+#
+# Arguments:
+#       token	State token.
+#       proto	What protocol (http, https, etc.) was used to connect.
+#	phost	Are we using keep-alive? Non-empty if yes.
+#	srvurl	Service-local URL that we're requesting
+# Results:
+#	None.
+
+proc http::Connected {token proto phost srvurl} {
+>>>>>>> upstream/master
 =======
 # http::Connected --
 #
@@ -744,12 +761,15 @@ proc http::Connected {token proto phost srvurl} {
 	set state(-protocol) 1.0
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    set accept_types_seen 0
+>>>>>>> upstream/master
     if {[catch {
 	puts $sock "$how $srvurl HTTP/$state(-protocol)"
-	puts $sock "Accept: $http(-accept)"
-	array set hdrs $state(-headers)
-	if {[info exists hdrs(Host)]} {
+	if {[dict exists $state(-headers) Host]} {
 	    # Allow Host spoofing. [Bug 928154]
+<<<<<<< HEAD
 	    puts $sock "Host: $hdrs(Host)"
 =======
     set accept_types_seen 0
@@ -757,6 +777,9 @@ proc http::Connected {token proto phost srvurl} {
 	puts $sock "$how $srvurl HTTP/$state(-protocol)"
 	if {[dict exists $state(-headers) Host]} {
 	    # Allow Host spoofing. [Bug 928154]
+	    puts $sock "Host: [dict get $state(-headers) Host]"
+>>>>>>> upstream/master
+=======
 	    puts $sock "Host: [dict get $state(-headers) Host]"
 >>>>>>> upstream/master
 	} elseif {$port == $defport} {
@@ -767,7 +790,10 @@ proc http::Connected {token proto phost srvurl} {
 	    puts $sock "Host: $host:$port"
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unset hdrs
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	puts $sock "User-Agent: $http(-useragent)"
@@ -783,7 +809,13 @@ proc http::Connected {token proto phost srvurl} {
         set accept_encoding_seen 0
 	set content_type_seen 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 	foreach {key value} $state(-headers) {
+=======
+	dict for {key value} $state(-headers) {
+	    set value [string map [list \n "" \r ""] $value]
+	    set key [string map {" " -} [string trim $key]]
+>>>>>>> upstream/master
 =======
 	dict for {key value} $state(-headers) {
 	    set value [string map [list \n "" \r ""] $value]
@@ -796,11 +828,20 @@ proc http::Connected {token proto phost srvurl} {
 		set accept_encoding_seen 1
 	    }
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if {[string equal -nocase $key "content-type"]} {
 		set content_type_seen 1
 	    }
 	    set value [string map [list \n "" \r ""] $value]
 	    set key [string trim $key]
+=======
+	    if {[string equal -nocase $key "accept"]} {
+		set accept_types_seen 1
+	    }
+	    if {[string equal -nocase $key "content-type"]} {
+		set content_type_seen 1
+	    }
+>>>>>>> upstream/master
 =======
 	    if {[string equal -nocase $key "accept"]} {
 		set accept_types_seen 1
@@ -818,12 +859,18 @@ proc http::Connected {token proto phost srvurl} {
 	    }
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 	# Allow overriding the Accept header on a per-connection basis. Useful
 	# for working with REST services. [Bug c11a51c482]
 	if {!$accept_types_seen} {
 	    puts $sock "Accept: $state(accept-types)"
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         if {!$accept_encoding_seen && ![info exists state(-handler)]} {
 	    puts $sock "Accept-Encoding: gzip,deflate,compress"
@@ -883,7 +930,10 @@ proc http::Connected {token proto phost srvurl} {
 	}
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 }

@@ -943,7 +943,11 @@ ReflectClose(
 		Tcl_EventuallyFree(rtPtr,
 			(Tcl_FreeProc *) FreeReflectedTransform);
 		return errorCode;
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 #endif /* TCL_THREADS */
 	    errorCodeSet = 1;
 	    goto cleanup;
@@ -957,7 +961,11 @@ ReflectClose(
 		Tcl_EventuallyFree(rtPtr,
 			(Tcl_FreeProc *) FreeReflectedTransform);
 		return errorCode;
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 #endif /* TCL_THREADS */
 	    errorCodeSet = 1;
 	    goto cleanup;
@@ -1177,7 +1185,11 @@ ReflectInput(
 	     */
 
 	    rtPtr->eofPending = 1;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 		/*
 		 * Now this is a bit different. The partial data waiting is
 		 * converted and returned.

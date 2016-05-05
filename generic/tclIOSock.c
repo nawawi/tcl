@@ -23,7 +23,11 @@ static Tcl_ThreadDataKey dataKey;
 #undef gai_strerror
 static const char *gai_strerror(int code) {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> upstream/master
     if (tsdPtr->initialized) {
 	Tcl_DStringFree(&tsdPtr->errorMsg);
     } else {
@@ -187,11 +191,19 @@ TclCreateSocketAddress(
         TclFormatInt(portbuf, port);
         portstring = portbuf;
     }
+<<<<<<< HEAD
     
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
 
     /* 
+=======
+
+    (void) memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+
+    /*
+>>>>>>> upstream/master
      * Magic variable to enforce a certain address family - to be superseded
      * by a TIP that adds explicit switches to [socket]
      */
@@ -228,7 +240,11 @@ TclCreateSocketAddress(
 
     if (willBind) {
 	hints.ai_flags |= AI_PASSIVE;
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 
     result = getaddrinfo(native, portstring, &hints, addrlist);
 
@@ -283,7 +299,11 @@ TclCreateSocketAddress(
     for (p = *addrlist; p != NULL; p = p->ai_next) {
 	i++;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
     return 1;
 }
 

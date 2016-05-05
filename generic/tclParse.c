@@ -1909,6 +1909,15 @@ Tcl_ParseQuotedString(
  *----------------------------------------------------------------------
  *
  * TclSubstParse --
+<<<<<<< HEAD
+=======
+ *
+ *	Token parser used by the [subst] command. Parses the string made up of
+ *	'numBytes' bytes starting at 'bytes'. Parsing is controlled by the
+ *	flags argument to provide support for the -nobackslashes, -nocommands,
+ *	and -novariables options, as represented by the flag values
+ *	TCL_SUBST_BACKSLASHES, TCL_SUBST_COMMANDS, TCL_SUBST_VARIABLES.
+>>>>>>> upstream/master
  *
  *	Token parser used by the [subst] command. Parses the string made up of
  *	'numBytes' bytes starting at 'bytes'. Parsing is controlled by the

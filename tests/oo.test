@@ -1570,7 +1570,10 @@ test oo-12.7 {OO: filters} -setup {
     Aclass destroy
 } -result {foo {{::Aclass outerfoo} {::Aclass InnerFoo}}}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test oo-12.8 {OO: filters and destructors} -setup {
     oo::class create Aclass
     Aclass create Aobject
@@ -1599,6 +1602,9 @@ test oo-12.8 {OO: filters and destructors} -setup {
 } -cleanup {
     Aclass destroy
 } -result {{in constructor} {::Aclass bar} {in method} {::oo::object destroy} {in destructor}}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test oo-13.1 {OO: changing an object's class} {

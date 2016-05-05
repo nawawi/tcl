@@ -1417,6 +1417,7 @@ TclFreeObj(
     objPtr->refCount = -1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     {
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
         Tcl_HashEntry *hPtr;
@@ -1497,6 +1498,8 @@ TclFreeObj(
 	    ObjDeletionUnlock(context);
 	}
 =======
+=======
+>>>>>>> upstream/master
     /*
      * Invalidate the string rep first so we can use the bytes value for our
      * pointer chain, and signal an obj deletion (as opposed to shimmering)
@@ -1680,6 +1683,34 @@ TclFreeObj(
 >>>>>>> upstream/master
 }
 #endif /* TCL_MEM_DEBUG */
+<<<<<<< HEAD
+=======
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclObjBeingDeleted --
+ *
+ *	This function returns 1 when the Tcl_Obj is being deleted. It is
+ *	provided for the rare cases where the reason for the loss of an
+ *	internal rep might be relevant. [FR 1512138]
+ *
+ * Results:
+ *	1 if being deleted, 0 otherwise.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+TclObjBeingDeleted(
+    Tcl_Obj *objPtr)
+{
+    return (objPtr->length == -1);
+}
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -3775,6 +3806,9 @@ Tcl_SetBooleanObj(
     }
 
     TclSetBooleanObj(objPtr, boolValue);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }
 #endif
@@ -3888,6 +3922,7 @@ Tcl_DbNewBignumObj(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * GetBignumFromObj --
  *
  *	This function retrieves a 'bignum' value from a Tcl object, converting
@@ -3903,6 +3938,8 @@ Tcl_DbNewBignumObj(
  *	argument is not NULL, an error message is stored in the interpreter
  *	result.
 =======
+=======
+>>>>>>> upstream/master
  * TclSetBooleanFromAny --
  *
  *	Attempt to generate a boolean internal form for the Tcl object
@@ -3998,6 +4035,7 @@ GetBignumFromObj(
  */
 
 int
+<<<<<<< HEAD
 Tcl_GetBignumFromObj(
     Tcl_Interp *interp,		/* Tcl interpreter for error reporting */
     Tcl_Obj *objPtr,		/* Object to read */
@@ -4006,6 +4044,8 @@ Tcl_GetBignumFromObj(
     return GetBignumFromObj(interp, objPtr, 1, bignumValue);
 =======
 int
+=======
+>>>>>>> upstream/master
 TclSetBooleanFromAny(
     Tcl_Interp *interp,		/* Used for error reporting if not NULL. */
     register Tcl_Obj *objPtr)	/* The object to convert. */
@@ -5987,6 +6027,7 @@ Tcl_DbDecrRefCount(
 	if (!hPtr) {
 	    Tcl_Panic("Trying to %s of Tcl_Obj allocated in another thread",
                     "decr ref count");
+<<<<<<< HEAD
 	}
 <<<<<<< HEAD
 
@@ -6002,6 +6043,8 @@ Tcl_DbDecrRefCount(
 	    }
 
 	    Tcl_DeleteHashEntry(hPtr);
+=======
+>>>>>>> upstream/master
 	}
 =======
 >>>>>>> upstream/master
@@ -6178,10 +6221,17 @@ TclCompareObjKeys(
     /*
      * If the object pointers are the same then they match.
      * OPT: this comparison was moved to the caller
+<<<<<<< HEAD
      
        if (objPtr1 == objPtr2) return 1;
     */
     
+=======
+
+       if (objPtr1 == objPtr2) return 1;
+    */
+
+>>>>>>> upstream/master
     /*
      * Don't use Tcl_GetStringFromObj as it would prevent l1 and l2 being
      * in a register.

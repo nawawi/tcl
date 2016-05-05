@@ -8456,6 +8456,10 @@ include ::oo::class (fellows)
 2014-08-28 (bug)[b9e1a3] Correct Method Search Order (nadkarni,fellows)
 => TclOO 1.0.3
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        *** POTENTIAL INCOMPATIBILITY ***
+>>>>>>> upstream/master
 =======
         *** POTENTIAL INCOMPATIBILITY ***
 >>>>>>> upstream/master

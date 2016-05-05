@@ -776,6 +776,9 @@ test execute-6.18 {Tcl_ExprObj: exprcode context validation} -body {
     rename bar {}
 } -result {0 1}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 test execute-7.0 {Wide int handling in INST_JUMP_FALSE/LAND} {
     set x 0x100000000
@@ -943,6 +946,7 @@ test execute-8.3 {Stack restoration} -setup {
 } -cleanup {
     interp recursionlimit {} $limit
 } -result {too many nested evaluations (infinite loop?)}
+<<<<<<< HEAD
 test execute-8.4 {Compile epoch bump effect on stack trace} -setup {
     proc foo {} {
 	error bar
@@ -1161,6 +1165,8 @@ test execute-8.3 {Stack restoration} -setup {
 } -cleanup {
     interp recursionlimit {} $limit
 } -result {too many nested evaluations (infinite loop?)}
+=======
+>>>>>>> upstream/master
 test execute-8.4 {Compile epoch bump effect on stack trace} -setup {
     proc foo {} {
 	error bar
@@ -1211,6 +1217,9 @@ test execute-9.1 {Interp result resetting [Bug 1522803]} {
     set result
 } SUCCESS
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test execute-10.1 {TclExecuteByteCode, INST_CONCAT1, bytearrays} {
     apply {s {binary scan $s c x; list $x [scan $s$s %c%c]}} \u0130
@@ -1247,6 +1256,7 @@ test execute-10.3 {Bug 3072640} -setup {
     rename t {}
     rename coro {}
 } -result 4
+<<<<<<< HEAD
 
 test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
     interp create slave
@@ -1266,6 +1276,25 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 <<<<<<< HEAD
 =======
 
+=======
+
+test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
+    interp create slave
+} -body {
+    slave eval {
+	set x [lrepeat 1320 199]
+	for {set i 0} {$i < 20} {incr i} {
+	    lappend x $i
+	    lsort -integer $x
+	}
+	# Crashes on failure
+	return ok
+    }
+} -cleanup {
+    interp delete slave
+} -result ok
+
+>>>>>>> upstream/master
 test execute-11.2 {Bug 268b23df11} -setup {
     proc zero {} {return 0}
     proc crash {} {expr {abs([zero])}}
@@ -1280,8 +1309,11 @@ test execute-11.2 {Bug 268b23df11} -setup {
     rename zero {}
 } -result 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 test execute-11.3 {Bug a0ece9d6d4} -setup {
     proc crash {} {expr {rand()}}
     trace add execution crash enterstep {apply {args {info frame -2}}}
@@ -1291,6 +1323,9 @@ test execute-11.3 {Bug a0ece9d6d4} -setup {
     trace remove execution crash enterstep {apply {args {info frame -2}}}
     rename crash {}
 } -result 1
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup
