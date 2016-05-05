@@ -122,7 +122,11 @@ test compile-3.4 {TclCompileCatchCmd: bcc'ed [return] is caught} {
     proc foo {} {
 	set fail [catch {
 	    return 1
+<<<<<<< HEAD
 	}] ; # {}	
+=======
+	}] ; # {}
+>>>>>>> upstream/master
 	return 2
     }
     foo
@@ -132,8 +136,13 @@ test compile-3.5 {TclCompileCatchCmd: recover from error, [Bug 705406]} {
 	catch {
 	    if {[a]} {
 		if b {}
+<<<<<<< HEAD
 	    }   
 	}   
+=======
+	    }
+	}
+>>>>>>> upstream/master
     }
     list [catch foo msg] $msg
 } {0 1}
@@ -224,6 +233,17 @@ test compile-5.2 {TclCompileForeachCmd: non-local variables} {
     foreach-test
     set ::foo
 } 3
+test compile-5.3 {TclCompileForeachCmd: [Bug b9b2079e6d]} -setup {
+    proc demo {} {
+	foreach x y {
+	    if 1 break else
+	}
+    }
+} -body {
+    demo
+} -cleanup {
+    rename demo {}
+} -returnCodes error -result {wrong # args: no script following "else" argument}
 
 test compile-6.1 {TclCompileSetCmd: global scalar names with ::s} -setup {
     catch {unset x}
@@ -333,13 +353,21 @@ test compile-11.9 {Tcl_Append*: ensure Tcl_ResetResult is used properly} -body {
     list [catch {p} msg] $msg
 } -returnCodes error -result {unmatched open brace in list}
 
+<<<<<<< HEAD
 # 
+=======
+#
+>>>>>>> upstream/master
 # Special section for tests of tclLiteral.c
 # The following tests check for incorrect memory handling in
 # TclReleaseLiteral. They are only effective when tcl is compiled with
 # TCL_MEM_DEBUG
 #
+<<<<<<< HEAD
 # Special test for leak on interp delete [Bug 467523]. 
+=======
+# Special test for leak on interp delete [Bug 467523].
+>>>>>>> upstream/master
 test compile-12.1 {testing literal leak on interp delete} -setup {
     proc getbytes {} {
 	set lines [split [memory info] "\n"]
@@ -348,10 +376,17 @@ test compile-12.1 {testing literal leak on interp delete} -setup {
 } -constraints memory -body {
     set end [getbytes]
     for {set i 0} {$i < 5} {incr i} {
+<<<<<<< HEAD
 	interp create foo 
 	foo eval { 
 	    namespace eval bar {}
 	} 
+=======
+	interp create foo
+	foo eval {
+	    namespace eval bar {}
+	}
+>>>>>>> upstream/master
 	interp delete foo
 	set tmp $end
 	set end [getbytes]
@@ -372,7 +407,11 @@ test compile-12.2 {testing error on literal deletion} -constraints {memory exec}
 	}
 	puts 0
     } source.file]
+<<<<<<< HEAD
     exec [interpreter] $sourceFile 
+=======
+    exec [interpreter] $sourceFile
+>>>>>>> upstream/master
 } -cleanup {
     catch {removeFile $sourceFile}
 } -result 0
@@ -461,6 +500,7 @@ test compile-14.1 {testing errors in element name; segfault?} {} {
      catch {set bubba([join $abba $jubba]) $vol} msg2
      list $msg1 $msg2
 } {{wrong # args: should be "error message ?errorInfo? ?errorCode?"} {can't read "abba": no such variable}}
+<<<<<<< HEAD
 
 test compile-14.2 {testing element name "$"} -body {
     unset -nocomplain a
@@ -469,8 +509,179 @@ test compile-14.2 {testing element name "$"} -body {
     set a($) 3
     list [set a()] [set a(1)] [set a($)] [unset a() a(1); lindex [array names a] 0]
 } -cleanup {unset a} -result [list 1 2 3 {$}]
+=======
+>>>>>>> upstream/master
 
+test compile-14.2 {testing element name "$"} -body {
+    unset -nocomplain a
+    set a() 1
+    set a(1) 2
+    set a($) 3
+    list [set a()] [set a(1)] [set a($)] [unset a() a(1); lindex [array names a] 0]
+} -cleanup {unset a} -result [list 1 2 3 {$}]
 
+# Tests compile-15.* cover Tcl Bug 633204
+test compile-15.1 {proper TCL_RETURN code from [return]} {
+    apply {{} {catch return}}
+} 2
+test compile-15.2 {proper TCL_RETURN code from [return]} {
+    apply {{} {catch {return foo}}}
+} 2
+test compile-15.3 {proper TCL_RETURN code from [return]} {
+    apply {{} {catch {return $::tcl_library}}}
+} 2
+test compile-15.4 {proper TCL_RETURN code from [return]} {
+    apply {{} {catch {return [info library]}}}
+} 2
+test compile-15.5 {proper TCL_RETURN code from [return]} {
+    apply {{} {catch {set a 1}; return}}
+} ""
+
+<<<<<<< HEAD
+for {set noComp 0} {$noComp <= 1} {incr noComp} {
+
+if $noComp {
+    interp alias {} run {} testevalex
+    set constraints testevalex
+} else {
+    interp alias {} run {} if 1
+    set constraints {}
+}
+
+test compile-16.1.$noComp {TclCompileScript: word expansion} $constraints {
+    run "list [string repeat {{*}a } 255]"
+} [lrepeat 255 a]
+test compile-16.2.$noComp {TclCompileScript: word expansion} $constraints {
+    run "list [string repeat {{*}a } 256]"
+} [lrepeat 256 a]
+test compile-16.3.$noComp {TclCompileScript: word expansion} $constraints {
+    run "list [string repeat {{*}a } 257]"
+} [lrepeat 257 a]
+test compile-16.4.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list}
+} {}
+test compile-16.5.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list {*}{x y z}}
+} {x y z}
+test compile-16.6.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list {*}[list x y z]}
+} {x y z}
+test compile-16.7.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list {*}[list x y z][list x y z]}
+} {x y zx y z}
+test compile-16.8.$noComp {TclCompileScript: word expansion} -body {
+    set l {x y z}
+    run {{*}list {*}$l}
+} -constraints $constraints -cleanup {
+    unset l
+} -result {x y z}
+test compile-16.9.$noComp {TclCompileScript: word expansion} -body {
+    set l {x y z}
+    run {{*}list {*}$l$l}
+} -constraints $constraints -cleanup {
+    unset l
+} -result {x y zx y z}
+test compile-16.10.$noComp {TclCompileScript: word expansion} -body {
+    run {{*}\{}
+} -constraints $constraints -returnCodes error \
+-result {unmatched open brace in list}
+test compile-16.11.$noComp {TclCompileScript: word expansion} -body {
+    proc badList {} {return \{}
+    run {{*}[badList]}
+} -constraints $constraints -cleanup {
+    rename badList {}
+} -returnCodes error  -result {unmatched open brace in list}
+test compile-16.12.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list x y z}
+} {x y z}
+test compile-16.13.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list x y {*}z}
+} {x y z}
+test compile-16.14.$noComp {TclCompileScript: word expansion} $constraints {
+    run {{*}list x {*}y z}
+} {x y z}
+test compile-16.15.$noComp {TclCompileScript: word expansion} $constraints {
+    run {list x y {*}z}
+} {x y z}
+test compile-16.16.$noComp {TclCompileScript: word expansion} $constraints {
+    run {list x {*}y z}
+} {x y z}
+test compile-16.17.$noComp {TclCompileScript: word expansion} $constraints {
+    run {list {*}x y z}
+} {x y z}
+
+# These tests note that expansion can in theory cause the number of arguments
+# to a command to exceed INT_MAX, which is as big as objc is allowed to get.
+#
+# In practice, it seems we will run out of memory before we confront this
+# issue. Note that compiled operations run out of memory at smaller objc
+# values than direct string evaluation.
+#
+# These tests are constrained as knownBug because they are likely to cause
+# memory allocation panics somewhere, and we don't want panics in the test
+# suite.
+#
+test compile-16.18.$noComp {TclCompileScript: word expansion} -body {
+    proc LongList {} {return [lrepeat [expr {1<<10}] x]}
+    llength [run "list [string repeat {{*}[LongList] } [expr {1<<10}]]"]
+} -constraints [linsert $constraints 0 knownBug] -cleanup {
+    rename LongList {}
+} -returnCodes ok  -result [expr {1<<20}]
+test compile-16.19.$noComp {TclCompileScript: word expansion} -body {
+    proc LongList {} {return [lrepeat [expr {1<<11}] x]}
+    llength [run "list [string repeat {{*}[LongList] } [expr {1<<11}]]"]
+} -constraints [linsert $constraints 0 knownBug] -cleanup {
+    rename LongList {}
+} -returnCodes ok  -result [expr {1<<22}]
+test compile-16.20.$noComp {TclCompileScript: word expansion} -body {
+    proc LongList {} {return [lrepeat [expr {1<<12}] x]}
+    llength [run "list [string repeat {{*}[LongList] } [expr {1<<12}]]"]
+} -constraints [linsert $constraints 0 knownBug] -cleanup {
+    rename LongList {}
+} -returnCodes ok  -result [expr {1<<24}]
+# This is the one that should cause overflow
+test compile-16.21.$noComp {TclCompileScript: word expansion} -body {
+    proc LongList {} {return [lrepeat [expr {1<<16}] x]}
+    llength [run "list [string repeat {{*}[LongList] } [expr {1<<16}]]"]
+} -constraints [linsert $constraints 0 knownBug] -cleanup {
+    rename LongList {}
+} -returnCodes ok  -result [expr {wide(1)<<32}]
+test compile-16.22.$noComp {
+    Bug 845412: TclCompileScript: word expansion not mandatory
+} -body {
+    # This test may crash and will fail unless Bug 845412 is fixed.
+    proc ReturnResults args {return $args}
+    run "ReturnResults [string repeat {x } 260]"
+} -constraints $constraints -cleanup {
+    rename ReturnResults {}
+} -returnCodes ok -result [string trim [string repeat {x } 260]]
+test compile-16.23.$noComp {
+    Bug 1032805: defer parse error until run time
+} -constraints $constraints -body {
+    namespace eval x {
+	run {
+	    proc if {a b} {uplevel 1 [list set $a $b]}
+	    if 1 {syntax {}{}}
+	}
+    }
+} -cleanup {
+    namespace delete x
+} -returnCodes ok -result {syntax {}{}}
+test compile-16.24.$noComp {
+    Bug 1638414: bad list constant as first expanded term
+} -constraints $constraints -body {
+    run "{*}\"\{foo bar\""
+} -returnCodes error -result {unmatched open brace in list}
+test compile-16.25.$noComp {TclCompileScript: word expansion, naked backslashes} $constraints {
+    run {list {*}{a \n b}}
+} {a {
+} b}
+test compile-16.26.$noComp {TclCompileScript: word expansion, protected backslashes} $constraints {
+    run {list {*}{a {\n} b}}
+} {a {\n} b}
+}	;# End of noComp loop
+
+=======
 # Tests compile-15.* cover Tcl Bug 633204
 test compile-15.1 {proper TCL_RETURN code from [return]} {
     apply {{} {catch return}}
@@ -631,6 +842,7 @@ test compile-16.26.$noComp {TclCompileScript: word expansion, protected backslas
 } {a {\n} b}
 }	;# End of noComp loop
 
+>>>>>>> upstream/master
 # These tests are messy because it wrecks the interpreter it runs in!  They
 # demonstrate issues arising from [FRQ 1101710]
 test compile-17.1 {Command interpretation binding for compiled code} -constraints knownBug -setup {
@@ -765,7 +977,11 @@ test compile-18.24 {disassembler - basics} -returnCodes error -body {
 } -result "can't interpret \"\{\" as a lambda expression"
 test compile-18.25 {disassembler - basics} -body {
     dict keys [tcl::unsupported::getbytecode lambda {{} {}}]
+<<<<<<< HEAD
 } -result $bytecodekeys
+=======
+} -result "$bytecodekeys initiallinenumber sourcefile"
+>>>>>>> upstream/master
 test compile-18.26 {disassembler - basics} -returnCodes error -body {
     tcl::unsupported::getbytecode proc
 } -match glob -result {wrong # args: should be "* proc procName"}
@@ -778,7 +994,47 @@ test compile-18.28 {disassembler - basics} -setup {
     dict keys [tcl::unsupported::getbytecode proc chewonthis]
 } -cleanup {
     rename chewonthis {}
+<<<<<<< HEAD
 } -result $bytecodekeys
+=======
+} -result "$bytecodekeys initiallinenumber sourcefile"
+test compile-18.28.1 {disassembler - tricky bit} -setup {
+    eval [list proc chewonthis {} {}]
+} -body {
+    dict keys [tcl::unsupported::getbytecode proc chewonthis]
+} -cleanup {
+    rename chewonthis {}
+} -result $bytecodekeys
+test compile-18.28.2 {disassembler - tricky bit} -setup {
+    eval {proc chewonthis {} {}}
+} -body {
+    dict keys [tcl::unsupported::getbytecode proc chewonthis]
+} -cleanup {
+    rename chewonthis {}
+} -result "$bytecodekeys initiallinenumber sourcefile"
+test compile-18.28.3 {disassembler - tricky bit} -setup {
+    proc Proc {n a b} {
+	proc $n $a $b
+    }
+    Proc chewonthis {} {}
+} -body {
+    dict keys [tcl::unsupported::getbytecode proc chewonthis]
+} -cleanup {
+    rename Proc {}
+    rename chewonthis {}
+} -result $bytecodekeys
+test compile-18.28.4 {disassembler - tricky bit} -setup {
+    proc Proc {n a b} {
+	tailcall proc $n $a $b
+    }
+    Proc chewonthis {} {}
+} -body {
+    dict keys [tcl::unsupported::getbytecode proc chewonthis]
+} -cleanup {
+    rename Proc {}
+    rename chewonthis {}
+} -result "$bytecodekeys initiallinenumber sourcefile"
+>>>>>>> upstream/master
 test compile-18.29 {disassembler - basics} -returnCodes error -body {
     tcl::unsupported::getbytecode script
 } -match glob -result {wrong # args: should be "* script script"}
@@ -807,7 +1063,11 @@ test compile-18.35 {disassembler - basics} -setup {
     dict keys [tcl::unsupported::getbytecode method foo bar]
 } -cleanup {
     foo destroy
+<<<<<<< HEAD
 } -result $bytecodekeys
+=======
+} -result "$bytecodekeys initiallinenumber sourcefile"
+>>>>>>> upstream/master
 test compile-18.36 {disassembler - basics} -returnCodes error -body {
     tcl::unsupported::getbytecode objmethod
 } -match glob -result {wrong # args: should be "* objmethod objectName methodName"}
@@ -824,7 +1084,11 @@ test compile-18.39 {disassembler - basics} -setup {
     dict keys [tcl::unsupported::getbytecode objmethod foo bar]
 } -cleanup {
     foo destroy
+<<<<<<< HEAD
 } -result $bytecodekeys
+=======
+} -result "$bytecodekeys initiallinenumber sourcefile"
+>>>>>>> upstream/master
 
 test compile-19.0 {Bug 3614102: reset stack housekeeping} -body {
     # This will panic in a --enable-symbols=compile build, unless bug is fixed.

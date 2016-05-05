@@ -667,11 +667,15 @@ try {
 
 	    # ... but try to extract (name, version) from subdir contents
 	    try {
+<<<<<<< HEAD
 		try {
 		    set f [open [file join $pkgsDir $dir configure.in]]
 		} trap {POSIX ENOENT} {} {
 		    set f [open [file join $pkgsDir $dir configure.ac]]
 		}
+=======
+		set f [open [file join $pkgsDir $dir configure.ac]]
+>>>>>>> upstream/master
 		foreach line [split [read $f] \n] {
 		    if {2 == [scan $line \
 			    { AC_INIT ( [%[^]]] , [%[^]]] ) } n v]} {

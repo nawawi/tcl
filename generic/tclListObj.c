@@ -857,7 +857,11 @@ Tcl_ListObjReplace(
 {
     List *listRepPtr;
     register Tcl_Obj **elemPtrs;
+<<<<<<< HEAD
     int numElems, numRequired, numAfterLast, start, i, j, isShared;
+=======
+    int needGrow, numElems, numRequired, numAfterLast, start, i, j, isShared;
+>>>>>>> upstream/master
 
     if (Tcl_IsShared(listPtr)) {
 	Tcl_Panic("%s called with shared object", "Tcl_ListObjReplace");
@@ -898,6 +902,7 @@ Tcl_ListObjReplace(
     if (count < 0) {
 	count = 0;
     } else if (numElems < first+count || first+count < 0) {
+<<<<<<< HEAD
 	/*
 	 * The 'first+count < 0' condition here guards agains integer
 	 * overflow in determining 'first+count'.
@@ -951,6 +956,183 @@ Tcl_ListObjReplace(
 	int newMax;
 
 	if (numRequired > listRepPtr->maxElemCount){
+	    newMax = 2 * numRequired;
+	} else {
+	    newMax = listRepPtr->maxElemCount;
+	}
+
+	listRepPtr = AttemptNewList(NULL, newMax, NULL);
+	if (listRepPtr == NULL) {
+	    unsigned int limit = LIST_MAX - numRequired;
+	    unsigned int extra = numRequired - numElems
+		    + TCL_MIN_ELEMENT_GROWTH;
+	    int growth = (int) ((extra > limit) ? limit : extra);
+
+	    listRepPtr = AttemptNewList(NULL, numRequired + growth, NULL);
+	    if (listRepPtr == NULL) {
+		listRepPtr = AttemptNewList(interp, numRequired, NULL);
+		if (listRepPtr == NULL) {
+		    for (i = 0;  i < objc;  i++) {
+			/* See bug 3598580 */
+#if TCL_MAJOR_VERSION > 8
+			Tcl_DecrRefCount(objv[i]);
+#else
+			objv[i]->refCount--;
+#endif
+		    }
+		    return TCL_ERROR;
+		}
+=======
+	/*
+	 * The 'first+count < 0' condition here guards agains integer
+	 * overflow in determining 'first+count'.
+	 */
+
+	count = numElems - first;
+    }
+
+    if (objc > LIST_MAX - (numElems - count)) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"max length of a Tcl list (%d elements) exceeded", LIST_MAX));
+	return TCL_ERROR;
+    }
+    isShared = (listRepPtr->refCount > 1);
+    numRequired = numElems - count + objc; /* Known <= LIST_MAX */
+    needGrow = numRequired > listRepPtr->maxElemCount;
+
+    for (i = 0;  i < objc;  i++) {
+	Tcl_IncrRefCount(objv[i]);
+    }
+
+    if (needGrow && !isShared) {
+	/* Try to use realloc */
+	List *newPtr = NULL;
+	int attempt = 2 * numRequired;
+	if (attempt <= LIST_MAX) {
+	    newPtr = attemptckrealloc(listRepPtr, LIST_SIZE(attempt));
+	}
+	if (newPtr == NULL) {
+	    attempt = numRequired + 1 + TCL_MIN_ELEMENT_GROWTH;
+	    if (attempt > LIST_MAX) {
+		attempt = LIST_MAX;
+>>>>>>> upstream/master
+	    }
+	    newPtr = attemptckrealloc(listRepPtr, LIST_SIZE(attempt));
+	}
+	if (newPtr == NULL) {
+	    attempt = numRequired;
+	    newPtr = attemptckrealloc(listRepPtr, LIST_SIZE(attempt));
+	}
+	if (newPtr) {
+	    listRepPtr = newPtr;
+	    listPtr->internalRep.twoPtrValue.ptr1 = listRepPtr;
+	    elemPtrs = &listRepPtr->elements;
+	    listRepPtr->maxElemCount = attempt;
+	    needGrow = numRequired > listRepPtr->maxElemCount;
+	}
+    }
+    if (!needGrow && !isShared) {
+	int shift;
+
+<<<<<<< HEAD
+	listPtr->internalRep.twoPtrValue.ptr1 = listRepPtr;
+	listRepPtr->refCount++;
+
+	elemPtrs = &listRepPtr->elements;
+
+	if (isShared) {
+	    /*
+	     * The old struct will remain in place; need new refCounts for the
+	     * new List struct references. Copy over only the surviving
+	     * elements.
+	     */
+
+	    for (i=0; i < first; i++) {
+		elemPtrs[i] = oldPtrs[i];
+		Tcl_IncrRefCount(elemPtrs[i]);
+	    }
+	    for (i = first + count, j = first + objc;
+		    j < numRequired; i++, j++) {
+		elemPtrs[j] = oldPtrs[i];
+		Tcl_IncrRefCount(elemPtrs[j]);
+	    }
+
+	    oldListRepPtr->refCount--;
+	} else {
+	    /*
+	     * The old struct will be removed; use its inherited refCounts.
+	     */
+
+	    if (first > 0) {
+		memcpy(elemPtrs, oldPtrs, (size_t) first * sizeof(Tcl_Obj *));
+	    }
+
+	    /*
+	     * "Delete" count elements starting at first.
+	     */
+
+	    for (j = first;  j < first + count;  j++) {
+		Tcl_Obj *victimPtr = oldPtrs[j];
+
+		TclDecrRefCount(victimPtr);
+	    }
+
+	    /*
+	     * Copy the elements after the last one removed, shifted to their
+	     * new locations.
+	     */
+
+	    start = first + count;
+	    numAfterLast = numElems - start;
+	    if (numAfterLast > 0) {
+		memcpy(elemPtrs + first + objc, oldPtrs + start,
+			(size_t) numAfterLast * sizeof(Tcl_Obj *));
+	    }
+
+	    ckfree(oldListRepPtr);
+	}
+    }
+
+    /*
+     * Insert the new elements into elemPtrs before "first".
+     */
+
+=======
+	/*
+	 * Can use the current List struct. First "delete" count elements
+	 * starting at first.
+	 */
+
+	for (j = first;  j < first + count;  j++) {
+	    Tcl_Obj *victimPtr = elemPtrs[j];
+
+	    TclDecrRefCount(victimPtr);
+	}
+
+	/*
+	 * Shift the elements after the last one removed to their new
+	 * locations.
+	 */
+
+	start = first + count;
+	numAfterLast = numElems - start;
+	shift = objc - count;	/* numNewElems - numDeleted */
+	if ((numAfterLast > 0) && (shift != 0)) {
+	    Tcl_Obj **src = elemPtrs + start;
+
+	    memmove(src+shift, src, (size_t) numAfterLast * sizeof(Tcl_Obj*));
+	}
+    } else {
+	/*
+	 * Cannot use the current List struct; it is shared, too small, or
+	 * both. Allocate a new struct and insert elements into it.
+	 */
+
+	List *oldListRepPtr = listRepPtr;
+	Tcl_Obj **oldPtrs = elemPtrs;
+	int newMax;
+
+	if (needGrow){
 	    newMax = 2 * numRequired;
 	} else {
 	    newMax = listRepPtr->maxElemCount;
@@ -1042,6 +1224,7 @@ Tcl_ListObjReplace(
      * Insert the new elements into elemPtrs before "first".
      */
 
+>>>>>>> upstream/master
     for (i=0,j=first ; i<objc ; i++,j++) {
 	elemPtrs[j] = objv[i];
     }
@@ -1973,10 +2156,17 @@ UpdateStringOfList(
 	if (bytesNeeded < 0) {
 	    Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
 	}
+<<<<<<< HEAD
     }
     if (bytesNeeded > INT_MAX - numElems + 1) {
 	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
     }
+=======
+    }
+    if (bytesNeeded > INT_MAX - numElems + 1) {
+	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
+    }
+>>>>>>> upstream/master
     bytesNeeded += numElems;
 
     /*

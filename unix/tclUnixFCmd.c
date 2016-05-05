@@ -564,7 +564,11 @@ TclUnixCopyFile(
 #define BINMODE
 #endif /* DJGPP */
 
+<<<<<<< HEAD
 #define DEFAULT_COPY_BLOCK_SIZE 4069
+=======
+#define DEFAULT_COPY_BLOCK_SIZE 4096
+>>>>>>> upstream/master
 
     if ((srcFd = TclOSopen(src, O_RDONLY BINMODE, 0)) < 0) { /* INTL: Native */
 	return TCL_ERROR;

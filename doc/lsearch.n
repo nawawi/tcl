@@ -6,7 +6,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH lsearch n 8.6 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS
@@ -111,7 +115,11 @@ The list elements are to be compared as integers.
 \fB\-nocase\fR
 .
 Causes comparisons to be handled in a case-insensitive manner.  Has no
+<<<<<<< HEAD
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or 
+=======
+effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
+>>>>>>> upstream/master
 \fB\-real\fR options.
 .TP
 \fB\-real\fR
@@ -209,7 +217,11 @@ It is also possible to search inside elements:
       \fI\(-> {a abc} {b bcd}\fR
 .CE
 .SH "SEE ALSO"
+<<<<<<< HEAD
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n), 
+=======
+foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
+>>>>>>> upstream/master
 lset(n), lsort(n), lrange(n), lreplace(n),
 string(n)
 .SH KEYWORDS

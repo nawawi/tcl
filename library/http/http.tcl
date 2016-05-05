@@ -545,15 +545,21 @@ proc http::geturl {url args} {
     # Don't append the fragment!
     set state(url) $url
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
 =======
+=======
+>>>>>>> upstream/master
 
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set sockopts [list -async]
     if {$state(-timeout) > 0} {
@@ -569,6 +575,7 @@ proc http::geturl {url args} {
 	set targetAddr [list $phost $pport]
     } else {
 	set targetAddr [list $host $port]
+<<<<<<< HEAD
 <<<<<<< HEAD
     }
     # Proxy connections aren't shared among different hosts.
@@ -592,6 +599,8 @@ proc http::geturl {url args} {
 	set state(connection) {}
     }
 =======
+=======
+>>>>>>> upstream/master
     }
     # Proxy connections aren't shared among different hosts.
     set state(socketinfo) $host:$port
@@ -617,6 +626,9 @@ proc http::geturl {url args} {
 	# don't automatically close this connection socket
 	set state(connection) {}
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if {![info exists sock]} {
 	# Pass -myaddr directly to the socket command
@@ -674,6 +686,7 @@ proc http::geturl {url args} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 proc http::Connected { token proto phost srvurl} {
 =======
@@ -693,6 +706,8 @@ proc http::Connected { token proto phost srvurl} {
 proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 # http::Connected --
 #
 #	Callback used when the connection to the HTTP server is actually
@@ -707,6 +722,9 @@ proc http::Connected {token proto phost srvurl} {
 #	None.
 
 proc http::Connected {token proto phost srvurl} {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     variable http
     variable urlTypes
@@ -762,6 +780,7 @@ proc http::Connected {token proto phost srvurl} {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     set accept_types_seen 0
 >>>>>>> upstream/master
@@ -772,15 +791,20 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 	    puts $sock "Host: $hdrs(Host)"
 =======
+=======
+>>>>>>> upstream/master
     set accept_types_seen 0
     if {[catch {
 	puts $sock "$how $srvurl HTTP/$state(-protocol)"
 	if {[dict exists $state(-headers) Host]} {
 	    # Allow Host spoofing. [Bug 928154]
 	    puts $sock "Host: [dict get $state(-headers) Host]"
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 	    puts $sock "Host: [dict get $state(-headers) Host]"
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	} elseif {$port == $defport} {
 	    # Don't add port in this case, to handle broken servers. [Bug
@@ -791,7 +815,10 @@ proc http::Connected {token proto phost srvurl} {
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unset hdrs
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -810,7 +837,13 @@ proc http::Connected {token proto phost srvurl} {
 	set content_type_seen 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	foreach {key value} $state(-headers) {
+=======
+	dict for {key value} $state(-headers) {
+	    set value [string map [list \n "" \r ""] $value]
+	    set key [string map {" " -} [string trim $key]]
+>>>>>>> upstream/master
 =======
 	dict for {key value} $state(-headers) {
 	    set value [string map [list \n "" \r ""] $value]
@@ -829,6 +862,7 @@ proc http::Connected {token proto phost srvurl} {
 	    }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if {[string equal -nocase $key "content-type"]} {
 		set content_type_seen 1
 	    }
@@ -843,12 +877,17 @@ proc http::Connected {token proto phost srvurl} {
 	    }
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 	    if {[string equal -nocase $key "accept"]} {
 		set accept_types_seen 1
 	    }
 	    if {[string equal -nocase $key "content-type"]} {
 		set content_type_seen 1
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    if {[string equal -nocase $key "content-length"]} {
 		set contDone 1
@@ -860,7 +899,10 @@ proc http::Connected {token proto phost srvurl} {
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	# Allow overriding the Accept header on a per-connection basis. Useful
@@ -869,6 +911,9 @@ proc http::Connected {token proto phost srvurl} {
 	    puts $sock "Accept: $state(accept-types)"
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -931,7 +976,10 @@ proc http::Connected {token proto phost srvurl} {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1591,6 +1639,7 @@ proc http::CharsetToEncoding {charset} {
 	    }
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else {
 	# other charset, like euc-xx, utf-8,...  may directly map to encoding
 	set encoding $charset
@@ -1601,6 +1650,9 @@ proc http::CharsetToEncoding {charset} {
     } else {
 =======
     } else {
+=======
+    } else {
+>>>>>>> upstream/master
 	# other charset, like euc-xx, utf-8,...  may directly map to encoding
 	set encoding $charset
     }
@@ -1608,6 +1660,9 @@ proc http::CharsetToEncoding {charset} {
     if {$idx >= 0} {
 	return $encoding
     } else {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	return "binary"
     }

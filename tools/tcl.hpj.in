@@ -5,9 +5,15 @@ HCW=0
 LCID=0x409 0x0 0x0 ;English (United States)
 REPORT=Yes
 TITLE=Tcl/Tk Reference Manual
+<<<<<<< HEAD
 CNT=tcl86.cnt
 COPYRIGHT=Copyright © 2000 Ajuba Solutions
 HLP=tcl86.hlp
+=======
+CNT=tcl87.cnt
+COPYRIGHT=Copyright © 2000 Ajuba Solutions
+HLP=tcl87.hlp
+>>>>>>> upstream/master
 
 [FILES]
 tcl.rtf

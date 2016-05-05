@@ -5,7 +5,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH scan n 8.4 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS
@@ -37,7 +41,11 @@ performed.
 If the next character in \fIformat\fR is a blank or tab then it
 matches any number of white space characters in \fIstring\fR (including
 zero).
+<<<<<<< HEAD
 Otherwise, if it is not a \fB%\fR character then it 
+=======
+Otherwise, if it is not a \fB%\fR character then it
+>>>>>>> upstream/master
 must match the next character of \fIstring\fR.
 When a \fB%\fR is encountered in \fIformat\fR, it indicates
 the start of a conversion specifier.
@@ -52,7 +60,11 @@ The fields that are present must appear in the order given above.
 When \fBscan\fR finds a conversion specifier in \fIformat\fR, it
 first skips any white-space characters in \fIstring\fR (unless the
 conversion character is \fB[\fR or \fBc\fR).
+<<<<<<< HEAD
 Then it converts the next input characters according to the 
+=======
+Then it converts the next input characters according to the
+>>>>>>> upstream/master
 conversion specifier and stores the result in the variable given
 by the next argument to \fBscan\fR.
 .SS "OPTIONAL POSITIONAL SPECIFIER"
@@ -95,7 +107,11 @@ truncated as required by the size modifier value.
 .TP
 \fBo\fR
 .
+<<<<<<< HEAD
 The input substring must be an octal integer. It is read in and the 
+=======
+The input substring must be an octal integer. It is read in and the
+>>>>>>> upstream/master
 integer value is stored in the variable,
 truncated as required by the size modifier value.
 .TP
@@ -130,22 +146,34 @@ truncated as required by the size modifier value.
 .TP
 \fBc\fR
 .
+<<<<<<< HEAD
 A single character is read in and its Unicode value is stored in 
+=======
+A single character is read in and its Unicode value is stored in
+>>>>>>> upstream/master
 the variable as an integer value.
 Initial white space is not skipped in this case, so the input
 substring may be a white-space character.
 .TP
 \fBs\fR
 .
+<<<<<<< HEAD
 The input substring consists of all the characters up to the next 
+=======
+The input substring consists of all the characters up to the next
+>>>>>>> upstream/master
 white-space character; the characters are copied to the variable.
 .TP
 \fBe\fR or \fBf\fR or \fBg\fR or \fBE\fR or \fBG\fR
 .
+<<<<<<< HEAD
 The input substring must be a floating-point number consisting 
+=======
+The input substring must be a floating-point number consisting
+>>>>>>> upstream/master
 of an optional sign, a string of decimal digits possibly
-containing a decimal point, and an optional exponent consisting 
-of an \fBe\fR or \fBE\fR followed by an optional sign and a string of 
+containing a decimal point, and an optional exponent consisting
+of an \fBe\fR or \fBE\fR followed by an optional sign and a string of
 decimal digits.
 It is read in and stored in the variable as a floating-point value.
 .TP
@@ -166,8 +194,8 @@ it is treated as part of \fIchars\fR rather than indicating a range.
 .
 The input substring consists of one or more characters not in \fIchars\fR.
 The matching string is stored in the variable.
-If the character immediately following the \fB^\fR is a \fB]\fR then it is 
-treated as part of the set rather than the closing bracket for 
+If the character immediately following the \fB^\fR is a \fB]\fR then it is
+treated as part of the set rather than the closing bracket for
 the set.
 If \fIchars\fR
 contains a sequence of the form \fIa\fB\-\fIb\fR then any
@@ -183,12 +211,16 @@ of characters scanned from the input string so far is stored in the variable.
 .PP
 The number of characters read from the input for a conversion is the
 largest number that makes sense for that particular conversion (e.g.
-as many decimal digits as possible for \fB%d\fR, as 
+as many decimal digits as possible for \fB%d\fR, as
 many octal digits as possible for \fB%o\fR, and so on).
 The input substring for a given conversion terminates either when a
+<<<<<<< HEAD
 white-space character is encountered or when the maximum substring 
+=======
+white-space character is encountered or when the maximum substring
+>>>>>>> upstream/master
 width has been reached, whichever comes first.
-If a \fB*\fR is present in the conversion specifier 
+If a \fB*\fR is present in the conversion specifier
 then no variable is assigned and the next scan argument is not consumed.
 .SH "DIFFERENCES FROM ANSI SSCANF"
 .PP

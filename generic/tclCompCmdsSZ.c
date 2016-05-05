@@ -293,7 +293,11 @@ TclCompileStringCatCmd(
 	return TCL_OK;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -318,7 +322,11 @@ TclCompileStringCatCmd(
 		int len;
 		const char *bytes = Tcl_GetStringFromObj(folded, &len);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -340,7 +348,11 @@ TclCompileStringCatCmd(
 	int len;
 	const char *bytes = Tcl_GetStringFromObj(folded, &len);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1016,7 +1028,11 @@ TclCompileStringRangeCmd(
     /*
      * Push the operands onto the stack and then the substring operation.
 <<<<<<< HEAD
+<<<<<<< HEAD
      */    
+=======
+     */
+>>>>>>> upstream/master
 =======
      */
 >>>>>>> upstream/master
@@ -2044,7 +2060,11 @@ IssueSwitchChainedTests(
     int foundDefault;		/* Flag to indicate whether a "default" clause
 				 * is present. */
     JumpFixup *fixupArray;	/* Array of forward-jump fixup records. */
+<<<<<<< HEAD
     int *fixupTargetArray;	/* Array of places for fixups to point at. */
+=======
+    unsigned int *fixupTargetArray; /* Array of places for fixups to point at. */
+>>>>>>> upstream/master
     int fixupCount;		/* Number of places to fix up. */
     int contFixIndex;		/* Where the first of the jumps due to a group
 				 * of continuation bodies starts, or -1 if
@@ -2199,7 +2219,11 @@ IssueSwitchChainedTests(
 
 	/*
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Now do the actual compilation. Note that we do not use BODY() 
+=======
+	 * Now do the actual compilation. Note that we do not use BODY()
+>>>>>>> upstream/master
 =======
 	 * Now do the actual compilation. Note that we do not use BODY()
 >>>>>>> upstream/master
@@ -2661,7 +2685,11 @@ TclCompileThrowCmd(
     CompileWord(envPtr, msgToken, interp, 2);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     codeIsList = codeKnown && (TCL_OK == 
+=======
+    codeIsList = codeKnown && (TCL_OK ==
+>>>>>>> upstream/master
 =======
     codeIsList = codeKnown && (TCL_OK ==
 >>>>>>> upstream/master

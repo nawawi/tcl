@@ -1,4 +1,4 @@
-'\" 
+'\"
 '\" Copyright (c) 1995-1996 Sun Microsystems, Inc.
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
@@ -125,7 +125,7 @@ generate an error.
 .TP
 \fB\-translation\fR \fImode\fR
 .TP
-\fB\-translation\fR \fB{\fIinMode outMode\fB}\fR 
+\fB\-translation\fR \fB{\fIinMode outMode\fB}\fR
 .
 In Tcl scripts the end of a line is always represented using a single
 newline character (\en).  However, in actual files and devices the end of
@@ -163,7 +163,7 @@ Tcl chooses \fBcrlf\fR, for all Unix flavors, it chooses \fBlf\fR, and
 for the various flavors of Windows it chooses \fBcrlf\fR.  The default
 setting for \fB\-translation\fR is \fBauto\fR for both input and output.
 .TP
-\fBbinary\fR 
+\fBbinary\fR
 .
 No end-of-line translations are performed.  This is nearly identical to
 \fBlf\fR mode, except that in addition \fBbinary\fR mode also sets the
@@ -255,6 +255,7 @@ set f [open teapot.ppm]
 if {[gets $f] ne "P6"} {
     error "not a raw\-bits PPM"
 }
+<<<<<<< HEAD
 
 # Read lines until we have got non-comment lines
 # that supply us with three decimal values.
@@ -269,6 +270,22 @@ while {[llength $words] < 3} {
 # overall depth per channel. Assign to variables.
 lassign $words xSize ySize depth
 
+=======
+
+# Read lines until we have got non-comment lines
+# that supply us with three decimal values.
+set words {}
+while {[llength $words] < 3} {
+    gets $f line
+    if {[string match "#*" $line]} continue
+    lappend words {*}[join [scan $line %d%d%d]]
+}
+
+# Those words supply the size of the image and its
+# overall depth per channel. Assign to variables.
+lassign $words xSize ySize depth
+
+>>>>>>> upstream/master
 # Now switch to binary mode to pull in the data,
 # one byte per channel (red,green,blue) per pixel.
 \fBfconfigure\fR $f \-translation binary

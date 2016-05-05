@@ -255,15 +255,21 @@ struct arc {
     struct state *to;		/* where it's to */
     struct arc *outchain;	/* link in *from's outs chain or free chain */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define	freechain	outchain
     struct arc *inchain;	/* link in *to's ins chain */
     struct arc *colorchain;	/* link in color's arc chain */
 =======
+=======
+>>>>>>> upstream/master
     struct arc *outchainRev;	/* back-link in *from's outs chain */
 #define	freechain outchain	/* we do not maintain "freechainRev" */
     struct arc *inchain;	/* *to's ins chain */
     struct arc *inchainRev;	/* back-link in *to's ins chain */
     struct arc *colorchain;	/* color's arc chain */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     struct arc *colorchainRev;	/* back-link in color's arc chain */
 };

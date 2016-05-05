@@ -4,7 +4,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH file n 8.3 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS
@@ -23,7 +27,7 @@ substitution is done before executing the command (see the manual entry for
 file name.  Any unique abbreviation for \fIoption\fR is acceptable.  The
 valid options are:
 .TP
-\fBfile atime \fIname\fR ?\fBtime\fR?
+\fBfile atime \fIname\fR ?\fItime\fR?
 .
 Returns a decimal string giving the time at which file \fIname\fR was last
 accessed.  If \fItime\fR is specified, it is an access time to set
@@ -34,9 +38,15 @@ generated.  On Windows, FAT file systems do not support access time.
 .TP
 \fBfile attributes \fIname\fR
 .TP
+<<<<<<< HEAD
 \fBfile attributes \fIname\fR ?\fBoption\fR?
 .TP
 \fBfile attributes \fIname\fR ?\fBoption value option value...\fR?
+=======
+\fBfile attributes \fIname\fR ?\fIoption\fR?
+.TP
+\fBfile attributes \fIname\fR ?\fIoption value option value...\fR?
+>>>>>>> upstream/master
 .
 This subcommand returns or sets platform specific values associated
 with a file. The first form returns a list of the platform specific
@@ -80,7 +90,7 @@ set to the value 0, which results in the resource fork being stripped
 off the file.
 .RE
 .TP
-\fBfile channels ?\fIpattern\fR?
+\fBfile channels\fR ?\fIpattern\fR?
 .
 If \fIpattern\fR is not specified, returns a list of names of all
 registered open channels in this interpreter.  If \fIpattern\fR is
@@ -141,7 +151,11 @@ returned.  For example,
 \fBfile dirname\fR c:/
 .CE
 .PP
+<<<<<<< HEAD
 returns \fBc:/\fR. 
+=======
+returns \fBc:/\fR.
+>>>>>>> upstream/master
 .PP
 Note that tilde substitution will only be
 performed if it is necessary to complete the command. For example,
@@ -162,7 +176,7 @@ returns \fB/home\fR (or something similar).
 \fBfile executable \fIname\fR
 .
 Returns \fB1\fR if file \fIname\fR is executable by the current user,
-\fB0\fR otherwise.  
+\fB0\fR otherwise.
 .TP
 \fBfile exists \fIname\fR
 .
@@ -203,7 +217,11 @@ is always canonical for the current platform: \fB/\fR for Unix and
 Windows.
 .RE
 .TP
+<<<<<<< HEAD
 \fBfile link ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+=======
+\fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+>>>>>>> upstream/master
 .
 If only one argument is given, that argument is assumed to be
 \fIlinkName\fR, and this command returns the value of the link given by
@@ -255,7 +273,11 @@ is for the link rather than the file it refers to.  On systems that
 do not support symbolic links this option behaves exactly the same
 as the \fBstat\fR option.
 .TP
+<<<<<<< HEAD
 \fBfile mkdir ?\fIdir\fR ...?
+=======
+\fBfile mkdir\fR ?\fIdir\fR ...?
+>>>>>>> upstream/master
 .
 Creates each directory specified.  For each pathname \fIdir\fR specified,
 this command will create all non-existing parent directories as
@@ -300,7 +322,11 @@ operate on the actual symbolic link itself (for example \fBfile delete\fR,
 \fBfile rename\fR, \fBfile copy\fR are defined to operate on symbolic
 links, not on the things that they point to).
 .TP
+<<<<<<< HEAD
 \fBfile owned \fIname\fR 
+=======
+\fBfile owned \fIname\fR
+>>>>>>> upstream/master
 .
 Returns \fB1\fR if file \fIname\fR is owned by the current user, \fB0\fR
 otherwise.
@@ -318,7 +344,7 @@ type is \fBvolumerelative\fR.
 \fBfile readable \fIname\fR
 .
 Returns \fB1\fR if file \fIname\fR is readable by the current user,
-\fB0\fR otherwise. 
+\fB0\fR otherwise.
 .TP
 \fBfile readlink \fIname\fR
 .
@@ -356,7 +382,7 @@ component of \fIname\fR does not contain a dot, then returns \fIname\fR.
 .TP
 \fBfile separator\fR ?\fIname\fR?
 .
-If no argument is given, returns the character which is used to separate 
+If no argument is given, returns the character which is used to separate
 path segments for native files on this platform.  If a path is given,
 the filesystem responsible for that path is asked to return its
 separator character.  If no file system accepts \fIname\fR, an error
@@ -427,7 +453,11 @@ If the file does not belong to any filesystem, an error is generated.
 .
 Returns all of the characters in the last filesystem component of
 \fIname\fR.  Any trailing directory separator in \fIname\fR is ignored.
+<<<<<<< HEAD
 If \fIname\fR contains no separators then returns \fIname\fR.  So, 
+=======
+If \fIname\fR contains no separators then returns \fIname\fR.  So,
+>>>>>>> upstream/master
 \fBfile tail a/b\fR, \fBfile tail a/b/\fR and \fBfile tail b\fR all
 return \fBb\fR.
 .TP
@@ -457,7 +487,11 @@ Returns a string giving the type of file \fIname\fR, which will be one of
 \fBfifo\fR, \fBlink\fR, or \fBsocket\fR.
 .TP
 \fBfile volumes\fR
+<<<<<<< HEAD
 . 
+=======
+.
+>>>>>>> upstream/master
 Returns the absolute paths to the volumes mounted on the system, as a
 proper Tcl list.  Without any virtual filesystems mounted as root
 volumes, on UNIX, the command will always return
@@ -478,7 +512,11 @@ Returns \fB1\fR if file \fIname\fR is writable by the current user,
 \fBUnix\fR\0\0\0\0\0\0\0
 .
 These commands always operate using the real user and group identifiers,
+<<<<<<< HEAD
 not the effective ones. 
+=======
+not the effective ones.
+>>>>>>> upstream/master
 .TP
 \fBWindows\fR\0\0\0\0
 .

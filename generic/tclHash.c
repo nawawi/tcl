@@ -269,6 +269,7 @@ Tcl_HashEntry *
 Tcl_CreateHashEntry(
     Tcl_HashTable *tablePtr,	/* Table in which to lookup entry. */
     const void *key,		/* Key to use to find or create matching
+<<<<<<< HEAD
 				 * entry. */
     int *newPtr)		/* Store info here telling whether a new entry
 				 * was created. */
@@ -283,6 +284,22 @@ CreateHashEntry(
 				 * entry. */
     int *newPtr)		/* Store info here telling whether a new entry
 				 * was created. */
+=======
+				 * entry. */
+    int *newPtr)		/* Store info here telling whether a new entry
+				 * was created. */
+{
+    return (*((tablePtr)->createProc))(tablePtr, key, newPtr);
+}
+
+static Tcl_HashEntry *
+CreateHashEntry(
+    Tcl_HashTable *tablePtr,	/* Table in which to lookup entry. */
+    const char *key,		/* Key to use to find or create matching
+				 * entry. */
+    int *newPtr)		/* Store info here telling whether a new entry
+				 * was created. */
+>>>>>>> upstream/master
 {
     register Tcl_HashEntry *hPtr;
     const Tcl_HashKeyType *typePtr;
@@ -321,11 +338,17 @@ CreateHashEntry(
 
 	for (hPtr = tablePtr->buckets[index]; hPtr != NULL;
 		hPtr = hPtr->nextPtr) {
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
 	    }
 #endif
+=======
+	    if (hash != PTR2UINT(hPtr->hash)) {
+		continue;
+	    }
+>>>>>>> upstream/master
 	    if (((void *) key == hPtr) || compareKeysProc((void *) key, hPtr)) {
 		if (newPtr) {
 		    *newPtr = 0;
@@ -336,11 +359,13 @@ CreateHashEntry(
     } else {
 	for (hPtr = tablePtr->buckets[index]; hPtr != NULL;
 		hPtr = hPtr->nextPtr) {
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
 	    }
-#endif
 	    if (key == hPtr->key.oneWordValue) {
 		if (newPtr) {
 		    *newPtr = 0;
@@ -368,6 +393,7 @@ CreateHashEntry(
     }
 
     hPtr->tablePtr = tablePtr;
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
     hPtr->hash = UINT2PTR(hash);
     hPtr->nextPtr = tablePtr->buckets[index];
@@ -377,6 +403,11 @@ CreateHashEntry(
     hPtr->nextPtr = *hPtr->bucketPtr;
     *hPtr->bucketPtr = hPtr;
 #endif
+=======
+    hPtr->hash = UINT2PTR(hash);
+    hPtr->nextPtr = tablePtr->buckets[index];
+    tablePtr->buckets[index] = hPtr;
+>>>>>>> upstream/master
     tablePtr->numEntries++;
 
     /*
@@ -416,9 +447,7 @@ Tcl_DeleteHashEntry(
     const Tcl_HashKeyType *typePtr;
     Tcl_HashTable *tablePtr;
     Tcl_HashEntry **bucketPtr;
-#if TCL_HASH_KEY_STORE_HASH
     int index;
-#endif
 
     tablePtr = entryPtr->tablePtr;
 
@@ -433,7 +462,10 @@ Tcl_DeleteHashEntry(
 	typePtr = &tclArrayHashKeyType;
     }
 
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
     if (typePtr->hashKeyProc == NULL
 	    || typePtr->flags & TCL_HASH_KEY_RANDOMIZE_HASH) {
 	index = RANDOM_INDEX(tablePtr, PTR2INT(entryPtr->hash));
@@ -442,9 +474,12 @@ Tcl_DeleteHashEntry(
     }
 
     bucketPtr = &tablePtr->buckets[index];
+<<<<<<< HEAD
 #else
     bucketPtr = entryPtr->bucketPtr;
 #endif
+=======
+>>>>>>> upstream/master
 
     if (*bucketPtr == entryPtr) {
 	*bucketPtr = entryPtr->nextPtr;
@@ -901,6 +936,7 @@ HashStringKey(
      * different, but no-one had much idea why they were good ones. I chose
      * the one below (multiply by 9 and add new character) because of the
      * following reasons:
+<<<<<<< HEAD
      *
      * 1. Multiplying by 10 is perfect for keys that are decimal strings, and
      *    multiplying by 9 is just about as good.
@@ -921,6 +957,28 @@ HashStringKey(
      * main use for string hashes in modern Tcl) speed is far more important
      * than strength.
      *
+=======
+     *
+     * 1. Multiplying by 10 is perfect for keys that are decimal strings, and
+     *    multiplying by 9 is just about as good.
+     * 2. Times-9 is (shift-left-3) plus (old). This means that each
+     *    character's bits hang around in the low-order bits of the hash value
+     *    for ever, plus they spread fairly rapidly up to the high-order bits
+     *    to fill out the hash value. This seems works well both for decimal
+     *    and non-decimal strings, but isn't strong against maliciously-chosen
+     *    keys.
+     *
+     * Note that this function is very weak against malicious strings; it's
+     * very easy to generate multiple keys that have the same hashcode. On the
+     * other hand, that hardly ever actually occurs and this function *is*
+     * very cheap, even by comparison with industry-standard hashes like FNV.
+     * If real strength of hash is required though, use a custom hash based on
+     * Bob Jenkins's lookup3(), but be aware that it's significantly slower.
+     * Since Tcl command and namespace names are usually reasonably-named (the
+     * main use for string hashes in modern Tcl) speed is far more important
+     * than strength.
+     *
+>>>>>>> upstream/master
      * See also HashString in tclLiteral.c.
      * See also TclObjHashKey in tclObj.c.
      *
@@ -1062,7 +1120,10 @@ RebuildTable(
     for (oldChainPtr = oldBuckets; oldSize > 0; oldSize--, oldChainPtr++) {
 	for (hPtr = *oldChainPtr; hPtr != NULL; hPtr = *oldChainPtr) {
 	    *oldChainPtr = hPtr->nextPtr;
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 	    if (typePtr->hashKeyProc == NULL
 		    || typePtr->flags & TCL_HASH_KEY_RANDOMIZE_HASH) {
 		index = RANDOM_INDEX(tablePtr, PTR2INT(hPtr->hash));
@@ -1071,6 +1132,7 @@ RebuildTable(
 	    }
 	    hPtr->nextPtr = tablePtr->buckets[index];
 	    tablePtr->buckets[index] = hPtr;
+<<<<<<< HEAD
 #else
 	    void *key = Tcl_GetHashKey(tablePtr, hPtr);
 
@@ -1091,6 +1153,8 @@ RebuildTable(
 	    hPtr->nextPtr = *hPtr->bucketPtr;
 	    *hPtr->bucketPtr = hPtr;
 #endif
+=======
+>>>>>>> upstream/master
 	}
     }
 

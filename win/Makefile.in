@@ -419,7 +419,13 @@ all: binaries libraries doc packages
 
 tcltest: $(TCLSH) $(TEST_DLL_FILE)
 
+<<<<<<< HEAD
 binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ $(DDE_DLL_FILE) $(REG_DLL_FILE) $(TCLSH)
+=======
+binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions $(TCLSH)
+
+winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
+>>>>>>> upstream/master
 
 libraries:
 
@@ -463,6 +469,7 @@ ${REG_DLL_FILE}: ${TCL_STUB_LIB_FILE} ${REG_OBJS}
 ${TEST_DLL_FILE}: ${TCL_STUB_LIB_FILE} ${TCLTEST_OBJS}
 	@$(RM) ${TEST_DLL_FILE} ${TEST_LIB_FILE}
 	@MAKE_DLL@ ${TCLTEST_OBJS} $(TCL_STUB_LIB_FILE) $(SHLIB_LD_LIBS)
+<<<<<<< HEAD
 
 # use pre-built zlib1.dll
 ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
@@ -472,6 +479,17 @@ ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
 		$(COPY) $(ZLIB_DIR)/win32/${ZLIB_DLL_FILE} ${ZLIB_DLL_FILE}; \
 	fi;
 
+=======
+
+# use pre-built zlib1.dll
+${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
+	@if test "@ZLIB_LIBS@set" != "${ZLIB_DIR_NATIVE}/win32/zdll.libset" ; then \
+		$(COPY) $(ZLIB_DIR)/win64/${ZLIB_DLL_FILE} ${ZLIB_DLL_FILE}; \
+	else \
+		$(COPY) $(ZLIB_DIR)/win32/${ZLIB_DLL_FILE} ${ZLIB_DLL_FILE}; \
+	fi;
+
+>>>>>>> upstream/master
 # Add the object extension to the implicit rules. By default .obj is not
 # automatically added.
 

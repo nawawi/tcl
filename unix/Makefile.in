@@ -145,6 +145,7 @@ NO_DEPRECATED_FLAGS	=
 # Some versions of make, like SGI's, use the following variable to determine
 # which shell to use for executing commands:
 SHELL			= @MAKEFILE_SHELL@
+<<<<<<< HEAD
 
 # Tcl used to let the configure script choose which program to use for
 # installing, but there are just too many different versions of "install"
@@ -154,6 +155,17 @@ SHELL			= @MAKEFILE_SHELL@
 INSTALL_STRIP_PROGRAM   = -s
 INSTALL_STRIP_LIBRARY   = -S -x
 
+=======
+
+# Tcl used to let the configure script choose which program to use for
+# installing, but there are just too many different versions of "install"
+# around; better to use the install-sh script that comes with the
+# distribution, which is slower but guaranteed to work.
+
+INSTALL_STRIP_PROGRAM   = -s
+INSTALL_STRIP_LIBRARY   = -S -x
+
+>>>>>>> upstream/master
 INSTALL			= $(SHELL) $(UNIX_DIR)/install-sh -c
 INSTALL_PROGRAM		= ${INSTALL}
 INSTALL_LIBRARY		= ${INSTALL}
@@ -171,7 +183,11 @@ TCLTEST_EXE		= tcltest${EXE_SUFFIX}
 NATIVE_TCLSH		= @TCLSH_PROG@
 
 # The symbols below provide support for dynamic loading and shared libraries.
+<<<<<<< HEAD
 # See configure.in for a description of what the symbols mean. The values of
+=======
+# See configure.ac for a description of what the symbols mean. The values of
+>>>>>>> upstream/master
 # the symbols are normally set by the configure script. You shouldn't normally
 # need to modify any of these definitions by hand.
 
@@ -344,6 +360,7 @@ UNIX_OBJS = tclUnixChan.o tclUnixEvent.o tclUnixFCmd.o \
 	tclUnixFile.o tclUnixPipe.o tclUnixSock.o \
 	tclUnixTime.o tclUnixInit.o tclUnixThrd.o \
 	tclUnixCompat.o
+<<<<<<< HEAD
 
 NOTIFY_OBJS = tclUnixNotfy.o
 
@@ -353,6 +370,17 @@ CYGWIN_OBJS = tclWinError.o
 
 DTRACE_OBJ = tclDTrace.o
 
+=======
+
+NOTIFY_OBJS = tclUnixNotfy.o
+
+MAC_OSX_OBJS = tclMacOSXBundle.o tclMacOSXFCmd.o tclMacOSXNotify.o
+
+CYGWIN_OBJS = tclWinError.o
+
+DTRACE_OBJ = tclDTrace.o
+
+>>>>>>> upstream/master
 ZLIB_OBJS = Zadler32.o Zcompress.o Zcrc32.o Zdeflate.o Zinfback.o \
 	Zinffast.o Zinflate.o Zinftrees.o Ztrees.o Zuncompr.o Zzutil.o
 
@@ -628,7 +656,11 @@ ${LIB_FILE}: ${STUB_LIB_FILE} ${OBJS}
 
 ${STUB_LIB_FILE}: ${STUB_LIB_OBJS}
 	@if test "x${LIB_FILE}" = "xlibtcl${MAJOR_VERSION}.${MINOR_VERSION}.dll"; then \
+<<<<<<< HEAD
 	    (cd ${TOP_DIR}/win; ${MAKE} tcldde14.dll tclreg13.dll); \
+=======
+	    (cd ${TOP_DIR}/win; ${MAKE} winextensions); \
+>>>>>>> upstream/master
 	fi
 	rm -f $@
 	@MAKE_STUB_LIB@
@@ -647,6 +679,7 @@ ${TCL_EXE}: ${TCLSH_OBJS} ${TCL_LIB_FILE} ${TCL_STUB_LIB_FILE}
 	${CC} ${CFLAGS} ${LDFLAGS} ${TCLSH_OBJS} \
 		@TCL_BUILD_LIB_SPEC@ ${TCL_STUB_LIB_FILE} ${LIBS} @EXTRA_TCLSH_LIBS@ \
 		${CC_SEARCH_FLAGS} -o ${TCL_EXE}
+<<<<<<< HEAD
 
 # Must be empty so it doesn't conflict with rule for ${TCL_EXE} above
 ${NATIVE_TCLSH}:
@@ -681,6 +714,42 @@ depend:
 topDirName:
 	@cd $(TOP_DIR); pwd
 
+=======
+
+# Must be empty so it doesn't conflict with rule for ${TCL_EXE} above
+${NATIVE_TCLSH}:
+
+Makefile: $(UNIX_DIR)/Makefile.in $(DLTEST_DIR)/Makefile.in
+	$(SHELL) config.status
+#tclConfig.h: $(UNIX_DIR)/tclConfig.h.in
+#	$(SHELL) config.status
+
+clean: clean-packages
+	rm -rf *.a *.o libtcl* core errs *~ \#* TAGS *.E a.out \
+		errors ${TCL_EXE} ${TCLTEST_EXE} lib.exp Tcl @DTRACE_HDR@
+	cd dltest ; $(MAKE) clean
+
+distclean: distclean-packages clean
+	rm -rf Makefile config.status config.cache config.log tclConfig.sh \
+		tclConfig.h *.plist Tcl.framework tcl.pc
+	cd dltest ; $(MAKE) distclean
+
+depend:
+	makedepend -- $(DEPEND_SWITCHES) -- $(SRCS)
+
+#--------------------------------------------------------------------------
+# The following target outputs the name of the top-level source directory for
+# Tcl (it is used by Tk's configure script, for example). The .NO_PARALLEL
+# line is needed to avoid problems under Sun's "pmake". Note: this target is
+# now obsolete (use the autoconf variable TCL_SRC_DIR from tclConfig.sh
+# instead).
+#--------------------------------------------------------------------------
+
+.NO_PARALLEL: topDirName
+topDirName:
+	@cd $(TOP_DIR); pwd
+
+>>>>>>> upstream/master
 #--------------------------------------------------------------------------
 # Rules for testing
 #--------------------------------------------------------------------------
@@ -712,15 +781,21 @@ tcltest-real:
 test: test-tcl test-packages
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 test-tcl: ${TCLTEST_EXE}
 	$(SHELL_ENV) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl $(TESTFLAGS)
 
+<<<<<<< HEAD
 =======
 
 test-tcl: ${TCLTEST_EXE}
 	$(SHELL_ENV) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl $(TESTFLAGS)
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 gdb-test: ${TCLTEST_EXE}
 	@echo "set env @LD_LIBRARY_PATH_VAR@=`pwd`:$${@LD_LIBRARY_PATH_VAR@}" > gdb.run
@@ -765,6 +840,7 @@ valgrind: ${TCL_EXE} ${TCLTEST_EXE}
 
 valgrindshell: ${TCL_EXE}
 	$(SHELL_ENV) $(VALGRIND) $(VALGRINDARGS) ./${TCL_EXE} $(SCRIPT)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 trace-shell: ${TCL_EXE}
@@ -860,6 +936,19 @@ trace-test: ${TCLTEST_EXE}
 
 =======
 >>>>>>> upstream/master
+=======
+
+trace-shell: ${TCL_EXE}
+	$(SHELL_ENV) ${TRACE} $(TRACE_OPTS) ./${TCL_EXE} $(SCRIPT)
+
+trace-test: ${TCLTEST_EXE}
+	$(SHELL_ENV) ${TRACE} $(TRACE_OPTS) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl -singleproc 1 $(TESTFLAGS)
+
+#--------------------------------------------------------------------------
+# Installation rules
+#--------------------------------------------------------------------------
+
+>>>>>>> upstream/master
 INSTALL_BASE_TARGETS = install-binaries install-libraries install-msgs $(INSTALL_TZDATA)
 INSTALL_DOC_TARGETS = install-doc
 INSTALL_PACKAGE_TARGETS = install-packages
@@ -875,6 +964,9 @@ install-strip:
 		INSTALL_PROGRAM="$(INSTALL_PROGRAM) ${INSTALL_STRIP_PROGRAM}" \
 		INSTALL_LIBRARY="$(INSTALL_LIBRARY) ${INSTALL_STRIP_LIBRARY}"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1013,6 +1105,7 @@ install-msgs:
 
 install-doc: doc
 	@for i in "$(MAN_INSTALL_DIR)" "$(MAN1_INSTALL_DIR)" "$(MAN3_INSTALL_DIR)" "$(MANN_INSTALL_DIR)" ; \
+<<<<<<< HEAD
 	    do \
 	    if [ ! -d "$$i" ] ; then \
 		echo "Making directory $$i"; \
@@ -1020,6 +1113,68 @@ install-doc: doc
 		else true; \
 		fi; \
 	    done;
+	@echo "Installing and cross-linking top-level (.1) docs to $(MAN1_INSTALL_DIR)/";
+	@for i in $(TOP_DIR)/doc/*.1; do \
+	    $(SHELL) $(UNIX_DIR)/installManPage $(MAN_FLAGS) $$i "$(MAN1_INSTALL_DIR)"; \
+	done
+
+	@echo "Installing and cross-linking C API (.3) docs to $(MAN3_INSTALL_DIR)/";
+	@for i in $(TOP_DIR)/doc/*.3; do \
+	    $(SHELL) $(UNIX_DIR)/installManPage $(MAN_FLAGS) $$i "$(MAN3_INSTALL_DIR)"; \
+	done
+
+	@echo "Installing and cross-linking command (.n) docs to $(MANN_INSTALL_DIR)/";
+	@for i in $(TOP_DIR)/doc/*.n; do \
+	    $(SHELL) $(UNIX_DIR)/installManPage $(MAN_FLAGS) $$i "$(MANN_INSTALL_DIR)"; \
+	done
+
+install-headers:
+	@for i in "$(INCLUDE_INSTALL_DIR)"; \
+=======
+>>>>>>> upstream/master
+	    do \
+	    if [ ! -d "$$i" ] ; then \
+		echo "Making directory $$i"; \
+		$(INSTALL_DATA_DIR) "$$i"; \
+		else true; \
+		fi; \
+	    done;
+<<<<<<< HEAD
+	@echo "Installing header files to $(INCLUDE_INSTALL_DIR)/";
+	@for i in $(GENERIC_DIR)/tcl.h $(GENERIC_DIR)/tclDecls.h \
+		$(GENERIC_DIR)/tclOO.h $(GENERIC_DIR)/tclOODecls.h \
+		$(GENERIC_DIR)/tclPlatDecls.h \
+		$(GENERIC_DIR)/tclTomMath.h \
+		$(GENERIC_DIR)/tclTomMathDecls.h ; \
+	    do \
+	    $(INSTALL_DATA) $$i "$(INCLUDE_INSTALL_DIR)"; \
+	    done;
+
+# Optional target to install private headers
+install-private-headers:
+	@for i in "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
+	    do \
+	    if [ ! -d "$$i" ] ; then \
+		echo "Making directory $$i"; \
+		$(INSTALL_DATA_DIR) "$$i"; \
+		else true; \
+		fi; \
+	    done;
+	@echo "Installing private header files to $(PRIVATE_INCLUDE_INSTALL_DIR)/";
+	@for i in $(GENERIC_DIR)/tclInt.h $(GENERIC_DIR)/tclIntDecls.h \
+		$(GENERIC_DIR)/tclIntPlatDecls.h $(GENERIC_DIR)/tclPort.h \
+		$(GENERIC_DIR)/tclOOInt.h $(GENERIC_DIR)/tclOOIntDecls.h \
+		$(UNIX_DIR)/tclUnixPort.h; \
+	    do \
+	    $(INSTALL_DATA) $$i "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
+	    done;
+	@if test -f tclConfig.h; then\
+	    $(INSTALL_DATA) tclConfig.h "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
+	    fi;
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+=======
 	@echo "Installing and cross-linking top-level (.1) docs to $(MAN1_INSTALL_DIR)/";
 	@for i in $(TOP_DIR)/doc/*.1; do \
 	    $(SHELL) $(UNIX_DIR)/installManPage $(MAN_FLAGS) $$i "$(MAN1_INSTALL_DIR)"; \
@@ -1075,13 +1230,13 @@ install-private-headers:
 	@if test -f tclConfig.h; then\
 	    $(INSTALL_DATA) tclConfig.h "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
 	    fi;
-<<<<<<< HEAD
 
-<<<<<<< HEAD
+>>>>>>> upstream/master
 #--------------------------------------------------------------------------
 # Rules for how to compile C files
 #--------------------------------------------------------------------------
 
+<<<<<<< HEAD
 =======
 
 =======
@@ -1090,6 +1245,8 @@ install-private-headers:
 # Rules for how to compile C files
 #--------------------------------------------------------------------------
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Test binaries. The rules for tclTestInit.o and xtTestInit.o are complicated
 # because they are compiled from tclAppInit.c. Can't use the "-o" option
@@ -1331,6 +1488,7 @@ tclOOBasic.o: $(GENERIC_DIR)/tclOOBasic.c
 
 tclOOCall.o: $(GENERIC_DIR)/tclOOCall.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOOCall.c
+<<<<<<< HEAD
 
 tclOODefineCmds.o: $(GENERIC_DIR)/tclOODefineCmds.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOODefineCmds.c
@@ -1350,6 +1508,15 @@ tclOOInfo.o: $(GENERIC_DIR)/tclOOInfo.c
 
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+
+tclOODefineCmds.o: $(GENERIC_DIR)/tclOODefineCmds.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOODefineCmds.c
+
+tclOOInfo.o: $(GENERIC_DIR)/tclOOInfo.c
+	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOOInfo.c
+
 >>>>>>> upstream/master
 tclOOMethod.o: $(GENERIC_DIR)/tclOOMethod.c
 	$(CC) -c $(CC_SWITCHES) $(GENERIC_DIR)/tclOOMethod.c
@@ -1442,12 +1609,19 @@ tclZlib.o: $(GENERIC_DIR)/tclZlib.c
 	$(CC) -c $(CC_SWITCHES) $(ZLIB_INCLUDE) $(GENERIC_DIR)/tclZlib.c
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
 tclTest.o: $(GENERIC_DIR)/tclTest.c $(IOHDR) $(TCLREHDRS)
 	$(CC) -c $(APP_CC_SWITCHES) $(GENERIC_DIR)/tclTest.c
 
+=======
+
+tclTest.o: $(GENERIC_DIR)/tclTest.c $(IOHDR) $(TCLREHDRS)
+	$(CC) -c $(APP_CC_SWITCHES) $(GENERIC_DIR)/tclTest.c
+
+>>>>>>> upstream/master
 =======
 
 tclTest.o: $(GENERIC_DIR)/tclTest.c $(IOHDR) $(TCLREHDRS)
@@ -1493,15 +1667,21 @@ bn_fast_s_mp_mul_digs.o: $(TOMMATH_DIR)/bn_fast_s_mp_mul_digs.c $(MATHHDRS)
 bn_fast_s_mp_sqr.o: $(TOMMATH_DIR)/bn_fast_s_mp_sqr.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_fast_s_mp_sqr.c
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 bn_mp_add.o: $(TOMMATH_DIR)/bn_mp_add.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_add.c
 
+<<<<<<< HEAD
 =======
 
 bn_mp_add.o: $(TOMMATH_DIR)/bn_mp_add.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_add.c
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 bn_mp_add_d.o: $(TOMMATH_DIR)/bn_mp_add_d.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_add_d.c
@@ -1586,6 +1766,7 @@ bn_mp_karatsuba_sqr.o: $(TOMMATH_DIR)/bn_mp_karatsuba_sqr.c $(MATHHDRS)
 
 bn_mp_lshd.o: $(TOMMATH_DIR)/bn_mp_lshd.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_lshd.c
+<<<<<<< HEAD
 
 bn_mp_mod.o: $(TOMMATH_DIR)/bn_mp_mod.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mod.c
@@ -1674,6 +1855,96 @@ bn_s_mp_add.o: $(TOMMATH_DIR)/bn_s_mp_add.c $(MATHHDRS)
 bn_s_mp_mul_digs.o: $(TOMMATH_DIR)/bn_s_mp_mul_digs.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_s_mp_mul_digs.c
 
+=======
+
+bn_mp_mod.o: $(TOMMATH_DIR)/bn_mp_mod.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mod.c
+
+bn_mp_mod_2d.o: $(TOMMATH_DIR)/bn_mp_mod_2d.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mod_2d.c
+
+bn_mp_mul.o: $(TOMMATH_DIR)/bn_mp_mul.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mul.c
+
+bn_mp_mul_2.o: $(TOMMATH_DIR)/bn_mp_mul_2.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mul_2.c
+
+bn_mp_mul_2d.o: $(TOMMATH_DIR)/bn_mp_mul_2d.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mul_2d.c
+
+bn_mp_mul_d.o: $(TOMMATH_DIR)/bn_mp_mul_d.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_mul_d.c
+
+bn_mp_neg.o: $(TOMMATH_DIR)/bn_mp_neg.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_neg.c
+
+bn_mp_or.o: $(TOMMATH_DIR)/bn_mp_or.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_or.c
+
+bn_mp_radix_size.o: $(TOMMATH_DIR)/bn_mp_radix_size.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_radix_size.c
+
+bn_mp_radix_smap.o: $(TOMMATH_DIR)/bn_mp_radix_smap.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_radix_smap.c
+
+bn_mp_read_radix.o: $(TOMMATH_DIR)/bn_mp_read_radix.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_read_radix.c
+
+bn_mp_rshd.o: $(TOMMATH_DIR)/bn_mp_rshd.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_rshd.c
+
+bn_mp_set.o: $(TOMMATH_DIR)/bn_mp_set.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_set.c
+
+bn_mp_set_int.o: $(TOMMATH_DIR)/bn_mp_set_int.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_set_int.c
+
+bn_mp_shrink.o: $(TOMMATH_DIR)/bn_mp_shrink.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_shrink.c
+
+bn_mp_sqr.o: $(TOMMATH_DIR)/bn_mp_sqr.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_sqr.c
+
+bn_mp_sqrt.o: $(TOMMATH_DIR)/bn_mp_sqrt.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_sqrt.c
+
+bn_mp_sub.o: $(TOMMATH_DIR)/bn_mp_sub.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_sub.c
+
+bn_mp_sub_d.o: $(TOMMATH_DIR)/bn_mp_sub_d.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_sub_d.c
+
+bn_mp_to_unsigned_bin.o: $(TOMMATH_DIR)/bn_mp_to_unsigned_bin.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_to_unsigned_bin.c
+
+bn_mp_to_unsigned_bin_n.o: $(TOMMATH_DIR)/bn_mp_to_unsigned_bin_n.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_to_unsigned_bin_n.c
+
+bn_mp_toom_mul.o: $(TOMMATH_DIR)/bn_mp_toom_mul.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_toom_mul.c
+
+bn_mp_toom_sqr.o: $(TOMMATH_DIR)/bn_mp_toom_sqr.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_toom_sqr.c
+
+bn_mp_toradix_n.o: $(TOMMATH_DIR)/bn_mp_toradix_n.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_toradix_n.c
+
+bn_mp_unsigned_bin_size.o: $(TOMMATH_DIR)/bn_mp_unsigned_bin_size.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_unsigned_bin_size.c
+
+bn_mp_xor.o: $(TOMMATH_DIR)/bn_mp_xor.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_xor.c
+
+bn_mp_zero.o: $(TOMMATH_DIR)/bn_mp_zero.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_zero.c
+
+bn_s_mp_add.o: $(TOMMATH_DIR)/bn_s_mp_add.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_s_mp_add.c
+
+bn_s_mp_mul_digs.o: $(TOMMATH_DIR)/bn_s_mp_mul_digs.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_s_mp_mul_digs.c
+
+>>>>>>> upstream/master
 bn_s_mp_sqr.o: $(TOMMATH_DIR)/bn_s_mp_sqr.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_s_mp_sqr.c
 
@@ -1724,6 +1995,7 @@ tclMacOSXBundle.o: $(MAC_OSX_DIR)/tclMacOSXBundle.c
 tclMacOSXFCmd.o: $(MAC_OSX_DIR)/tclMacOSXFCmd.c
 	$(CC) -c $(CC_SWITCHES) $(MAC_OSX_DIR)/tclMacOSXFCmd.c
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 tclMacOSXNotify.o: $(MAC_OSX_DIR)/tclMacOSXNotify.c
 	$(CC) -c $(CC_SWITCHES) $(MAC_OSX_DIR)/tclMacOSXNotify.c
@@ -1745,6 +2017,19 @@ tclWinError.o: $(TOP_DIR)/win/tclWinError.c
 # DTrace support
 
 $(TCL_OBJS) $(STUB_LIB_OBJS) $(TCLSH_OBJS) $(TCLTEST_OBJS) $(XTTEST_OBJS): @DTRACE_HDR@
+=======
+
+tclMacOSXNotify.o: $(MAC_OSX_DIR)/tclMacOSXNotify.c
+	$(CC) -c $(CC_SWITCHES) $(MAC_OSX_DIR)/tclMacOSXNotify.c
+
+# The following is a CYGWIN only source:
+tclWinError.o: $(TOP_DIR)/win/tclWinError.c
+	$(CC) -c $(CC_SWITCHES) $(TOP_DIR)/win/tclWinError.c
+
+# DTrace support
+
+$(TCL_OBJS) $(STUB_LIB_OBJS) $(TCLSH_OBJS) $(TCLTEST_OBJS) $(XTTEST_OBJS) $(TOMMATH_OBJS): @DTRACE_HDR@
+>>>>>>> upstream/master
 
 $(DTRACE_HDR): $(DTRACE_SRC)
 	$(DTRACE) -h $(DTRACE_SWITCHES) -o $@ -s $(DTRACE_SRC)
@@ -1859,7 +2144,11 @@ tclOOStubLib.o: $(GENERIC_DIR)/tclOOStubLib.c
 # Propagate configure args like --enable-64bit to package configure
 PKG_CFG_ARGS		= @PKG_CFG_ARGS@
 # If PKG_DIR is changed to a different relative depth to the build dir, need
+<<<<<<< HEAD
 # to adapt the ../.. relative paths below and at the top of configure.in (we
+=======
+# to adapt the ../.. relative paths below and at the top of configure.ac (we
+>>>>>>> upstream/master
 # cannot use absolute paths due to issues in nested configure when path to
 # build dir contains spaces).
 PKG_DIR			= ./pkgs
@@ -1976,7 +2265,11 @@ gendate:
 #	    -e 's?SCCSID?RCS: @(#) ?' \
 #	    -e '/#ifdef __STDC__/,/#endif/d' -e '/TclDateerrlab:/d' \
 #	    -e '/TclDatenewstate:/d' -e '/#pragma/d' \
+<<<<<<< HEAD
 #	    -e '/#include <inttypes.h>/d' -e 's/const /CONST /g' \
+=======
+#	    -e '/#include <inttypes.h>/d' \
+>>>>>>> upstream/master
 #           -e '/#define YYNEW/s/malloc/TclDateAlloc/g' \
 #	    -e '/#define YYENLARGE/,/realloc/s/realloc/TclDateRealloc/g' \
 #	    <y.tab.c >$(GENERIC_DIR)/tclDate.c
@@ -2092,7 +2385,11 @@ DISTROOT = /tmp/dist
 DISTNAME = tcl${VERSION}${PATCH_LEVEL}
 ZIPNAME	 = tcl${MAJOR_VERSION}${MINOR_VERSION}${PATCH_LEVEL}-src.zip
 DISTDIR	 = $(DISTROOT)/$(DISTNAME)
+<<<<<<< HEAD
 $(UNIX_DIR)/configure: $(UNIX_DIR)/configure.in $(UNIX_DIR)/tcl.m4 \
+=======
+$(UNIX_DIR)/configure: $(UNIX_DIR)/configure.ac $(UNIX_DIR)/tcl.m4 \
+>>>>>>> upstream/master
 		$(UNIX_DIR)/aclocal.m4
 	cd $(UNIX_DIR); autoconf
 $(MAC_OSX_DIR)/configure: $(MAC_OSX_DIR)/configure.ac $(UNIX_DIR)/configure
@@ -2106,14 +2403,18 @@ dist: $(UNIX_DIR)/configure $(UNIX_DIR)/tclConfig.h.in $(UNIX_DIR)/tcl.pc.in $(M
 	cp -p $(UNIX_DIR)/*.[ch] $(DISTDIR)/unix
 	cp $(UNIX_DIR)/Makefile.in $(DISTDIR)/unix
 	chmod 664 $(DISTDIR)/unix/Makefile.in
-	cp $(UNIX_DIR)/configure $(UNIX_DIR)/configure.in \
+	cp $(UNIX_DIR)/configure $(UNIX_DIR)/configure.ac \
 		$(UNIX_DIR)/tcl.m4 $(UNIX_DIR)/aclocal.m4 \
 		$(UNIX_DIR)/tclConfig.sh.in $(UNIX_DIR)/tclooConfig.sh \
 		$(UNIX_DIR)/install-sh \
 		$(UNIX_DIR)/README $(UNIX_DIR)/ldAix $(UNIX_DIR)/tcl.spec \
 		$(UNIX_DIR)/installManPage $(UNIX_DIR)/tclConfig.h.in \
 		$(UNIX_DIR)/tcl.pc.in $(DISTDIR)/unix
+<<<<<<< HEAD
 	chmod 775 $(DISTDIR)/unix/configure $(DISTDIR)/unix/configure.in
+=======
+	chmod 775 $(DISTDIR)/unix/configure $(DISTDIR)/unix/configure.ac
+>>>>>>> upstream/master
 	chmod 775 $(DISTDIR)/unix/ldAix
 	@mkdir $(DISTDIR)/generic
 	cp -p $(GENERIC_DIR)/*.[cdh] $(DISTDIR)/generic
@@ -2158,7 +2459,11 @@ dist: $(UNIX_DIR)/configure $(UNIX_DIR)/tclConfig.h.in $(UNIX_DIR)/tcl.pc.in $(M
 		$(DISTDIR)/tests
 	@mkdir $(DISTDIR)/win
 	cp $(TOP_DIR)/win/Makefile.in $(DISTDIR)/win
+<<<<<<< HEAD
 	cp $(TOP_DIR)/win/configure.in $(TOP_DIR)/win/configure \
+=======
+	cp $(TOP_DIR)/win/configure.ac $(TOP_DIR)/win/configure \
+>>>>>>> upstream/master
 		$(TOP_DIR)/win/tclConfig.sh.in $(TOP_DIR)/win/tclooConfig.sh \
 		$(TOP_DIR)/win/tcl.m4 $(TOP_DIR)/win/aclocal.m4 \
 		$(TOP_DIR)/win/tclsh.exe.manifest.in \
@@ -2192,7 +2497,11 @@ dist: $(UNIX_DIR)/configure $(UNIX_DIR)/tclConfig.h.in $(UNIX_DIR)/tcl.pc.in $(M
 		$(UNIX_DIR)/dltest/README $(DISTDIR)/unix/dltest
 	@mkdir $(DISTDIR)/tools
 	cp -p $(TOOL_DIR)/Makefile.in $(TOOL_DIR)/README \
+<<<<<<< HEAD
 		$(TOOL_DIR)/configure $(TOOL_DIR)/configure.in \
+=======
+		$(TOOL_DIR)/configure $(TOOL_DIR)/configure.ac \
+>>>>>>> upstream/master
 		$(TOOL_DIR)/*.tcl $(TOOL_DIR)/man2tcl.c \
 		$(TOOL_DIR)/*.bmp $(TOOL_DIR)/tcl.hpj.in \
 		$(DISTDIR)/tools

@@ -1981,7 +1981,15 @@ Tcl_ConcatObj(
 		continue;
 	    }
 	    if (resPtr) {
+<<<<<<< HEAD
 		Tcl_ListObjAppendList(NULL, resPtr, objPtr);
+=======
+		if (TCL_OK != Tcl_ListObjAppendList(NULL, resPtr, objPtr)) {
+		    /* Abandon ship! */
+		    Tcl_DecrRefCount(resPtr);
+		    goto slow;
+		}
+>>>>>>> upstream/master
 	    } else {
 		resPtr = TclListObjCopy(NULL, objPtr);
 	    }
@@ -1992,6 +2000,10 @@ Tcl_ConcatObj(
 	return resPtr;
     }
 
+<<<<<<< HEAD
+=======
+  slow:
+>>>>>>> upstream/master
     /*
      * Something cannot be determined to be safe, so build the concatenation
      * the slow way, using the string representations.
@@ -2536,6 +2548,7 @@ TclStringMatchObj(
 
     if ((strObj->typePtr == &tclStringType) || (strObj->typePtr == NULL)) {
 	Tcl_UniChar *udata, *uptn;
+<<<<<<< HEAD
 
 	udata = Tcl_GetUnicodeFromObj(strObj, &length);
 	uptn  = Tcl_GetUnicodeFromObj(ptnObj, &plen);
@@ -2615,6 +2628,87 @@ Tcl_DStringAppend(
     }
     newSize = length + dsPtr->length;
 
+=======
+
+	udata = Tcl_GetUnicodeFromObj(strObj, &length);
+	uptn  = Tcl_GetUnicodeFromObj(ptnObj, &plen);
+	match = TclUniCharMatch(udata, length, uptn, plen, flags);
+    } else if (TclIsPureByteArray(strObj) && !flags) {
+	unsigned char *data, *ptn;
+
+	data = Tcl_GetByteArrayFromObj(strObj, &length);
+	ptn  = Tcl_GetByteArrayFromObj(ptnObj, &plen);
+	match = TclByteArrayMatch(data, length, ptn, plen, 0);
+    } else {
+	match = Tcl_StringCaseMatch(TclGetString(strObj),
+		TclGetString(ptnObj), flags);
+    }
+    return match;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_DStringInit --
+ *
+ *	Initializes a dynamic string, discarding any previous contents of the
+ *	string (Tcl_DStringFree should have been called already if the dynamic
+ *	string was previously in use).
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The dynamic string is initialized to be empty.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+Tcl_DStringInit(
+    Tcl_DString *dsPtr)		/* Pointer to structure for dynamic string. */
+{
+    dsPtr->string = dsPtr->staticSpace;
+    dsPtr->length = 0;
+    dsPtr->spaceAvl = TCL_DSTRING_STATIC_SIZE;
+    dsPtr->staticSpace[0] = '\0';
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_DStringAppend --
+ *
+ *	Append more bytes to the current value of a dynamic string.
+ *
+ * Results:
+ *	The return value is a pointer to the dynamic string's new value.
+ *
+ * Side effects:
+ *	Length bytes from "bytes" (or all of "bytes" if length is less than
+ *	zero) are added to the current value of the string. Memory gets
+ *	reallocated if needed to accomodate the string's new size.
+ *
+ *----------------------------------------------------------------------
+ */
+
+char *
+Tcl_DStringAppend(
+    Tcl_DString *dsPtr,		/* Structure describing dynamic string. */
+    const char *bytes,		/* String to append. If length is -1 then this
+				 * must be null-terminated. */
+    int length)			/* Number of bytes from "bytes" to append. If
+				 * < 0, then append all of bytes, up to null
+				 * at end. */
+{
+    int newSize;
+
+    if (length < 0) {
+	length = strlen(bytes);
+    }
+    newSize = length + dsPtr->length;
+
+>>>>>>> upstream/master
     /*
      * Allocate a larger buffer for the string if the current one isn't large
      * enough. Allocate extra space in the new buffer so that there will be
@@ -3117,6 +3211,7 @@ Tcl_PrintDouble(
     char *digits;
     char *end;
     int *precisionPtr = Tcl_GetThreadData(&precisionKey, (int) sizeof(int));
+<<<<<<< HEAD
 
     /*
      * Handle NaN.
@@ -3136,6 +3231,27 @@ Tcl_PrintDouble(
 	 * Remember to copy the terminating NUL too.
 	 */
 
+=======
+
+    /*
+     * Handle NaN.
+     */
+
+    if (TclIsNaN(value)) {
+	TclFormatNaN(value, dst);
+	return;
+    }
+
+    /*
+     * Handle infinities.
+     */
+
+    if (TclIsInfinite(value)) {
+	/*
+	 * Remember to copy the terminating NUL too.
+	 */
+
+>>>>>>> upstream/master
 	if (value < 0) {
 	    memcpy(dst, "-Inf", 5);
 	} else {
@@ -3655,6 +3771,8 @@ UpdateStringOfEndOffset(
     if (objPtr->internalRep.longValue != 0) {
 	buffer[len++] = '-';
 	len += TclFormatInt(buffer+len, -(objPtr->internalRep.longValue));
+<<<<<<< HEAD
+=======
     }
     objPtr->bytes = ckalloc((unsigned) len+1);
     memcpy(objPtr->bytes, buffer, (unsigned) len+1);
@@ -3694,8 +3812,51 @@ SetEndOffsetFromAny(
 
     if (objPtr->typePtr == &tclEndOffsetType) {
 	return TCL_OK;
+>>>>>>> upstream/master
+    }
+    objPtr->bytes = ckalloc((unsigned) len+1);
+    memcpy(objPtr->bytes, buffer, (unsigned) len+1);
+    objPtr->length = len;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SetEndOffsetFromAny --
+ *
+ *	Look for a string of the form "end[+-]offset" and convert it to an
+ *	internal representation holding the offset.
+ *
+ * Results:
+ *	Returns TCL_OK if ok, TCL_ERROR if the string was badly formed.
+ *
+ * Side effects:
+ *	If interp is not NULL, stores an error message in the interpreter
+ *	result.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+SetEndOffsetFromAny(
+    Tcl_Interp *interp,		/* Tcl interpreter or NULL */
+    Tcl_Obj *objPtr)		/* Pointer to the object to parse */
+{
+    int offset;			/* Offset in the "end-offset" expression */
+    register const char *bytes;	/* String rep of the object */
+    int length;			/* Length of the object's string rep */
+
+    /*
+     * If it's already the right type, we're fine.
+     */
+
+<<<<<<< HEAD
+    if (objPtr->typePtr == &tclEndOffsetType) {
+	return TCL_OK;
     }
 
+=======
+>>>>>>> upstream/master
     /*
      * Check for a string rep of the right form.
      */

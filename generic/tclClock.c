@@ -2005,22 +2005,37 @@ ClockSecondsObjCmd(
 static void
 TzsetIfNecessary(void)
 {
+<<<<<<< HEAD
     static char *tzWas = NULL;	/* Previous value of TZ, protected by
+=======
+    static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
+>>>>>>> upstream/master
 				 * clockMutex. */
     const char *tzIsNow;	/* Current value of TZ */
 
     Tcl_MutexLock(&clockMutex);
     tzIsNow = getenv("TZ");
+<<<<<<< HEAD
     if (tzIsNow != NULL && (tzWas == NULL || strcmp(tzIsNow, tzWas) != 0)) {
 	tzset();
 	if (tzWas != NULL) {
+=======
+    if (tzIsNow != NULL && (tzWas == NULL || tzWas == INT2PTR(-1)
+	    || strcmp(tzIsNow, tzWas) != 0)) {
+	tzset();
+	if (tzWas != NULL && tzWas != INT2PTR(-1)) {
+>>>>>>> upstream/master
 	    ckfree(tzWas);
 	}
 	tzWas = ckalloc(strlen(tzIsNow) + 1);
 	strcpy(tzWas, tzIsNow);
     } else if (tzIsNow == NULL && tzWas != NULL) {
 	tzset();
+<<<<<<< HEAD
 	ckfree(tzWas);
+=======
+	if (tzWas != INT2PTR(-1)) ckfree(tzWas);
+>>>>>>> upstream/master
 	tzWas = NULL;
     }
     Tcl_MutexUnlock(&clockMutex);

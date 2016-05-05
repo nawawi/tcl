@@ -1889,7 +1889,12 @@ TraceExecutionProc(
 	     * interpreter.
 	     */
 
+<<<<<<< HEAD
 	    traceCode = Tcl_Eval(interp, Tcl_DStringValue(&cmd));
+=======
+	    traceCode = Tcl_EvalEx(interp, Tcl_DStringValue(&cmd),
+		    Tcl_DStringLength(&cmd), 0);
+>>>>>>> upstream/master
 	    tcmdPtr->flags &= ~TCL_TRACE_EXEC_IN_PROGRESS;
 
 	    /*

@@ -92,12 +92,6 @@ extern "C" {
 #ifdef __REG_REGOFF_T
 #undef __REG_REGOFF_T
 #endif
-#ifdef __REG_VOID_T
-#undef __REG_VOID_T
-#endif
-#ifdef __REG_CONST
-#undef __REG_CONST
-#endif
 #ifdef __REG_NOFRONT
 #undef __REG_NOFRONT
 #endif
@@ -107,8 +101,11 @@ extern "C" {
 /* interface types */
 #define	__REG_WIDE_T	Tcl_UniChar
 #define	__REG_REGOFF_T	long	/* not really right, but good enough... */
+<<<<<<< HEAD
 #define	__REG_VOID_T	void
 #define	__REG_CONST	const
+=======
+>>>>>>> upstream/master
 /* names and declarations */
 #define	__REG_WIDE_COMPILE	TclReComp
 #define	__REG_WIDE_EXEC		TclReExec
@@ -134,6 +131,7 @@ typedef long regoff_t;
 #endif
 
 /*
+<<<<<<< HEAD
  * For benefit of old compilers, we offer <sys/types.h> the option of
  * overriding the `void' type used to declare nonexistent return types.
  */
@@ -154,6 +152,8 @@ typedef void re_void;
 
 
 /*
+=======
+>>>>>>> upstream/master
  * other interface types
  */
 
@@ -197,13 +197,13 @@ typedef struct {
 /*
  * compilation
  ^ #ifndef __REG_NOCHAR
- ^ int re_comp(regex_t *, __REG_CONST char *, size_t, int);
+ ^ int re_comp(regex_t *, const char *, size_t, int);
  ^ #endif
  ^ #ifndef __REG_NOFRONT
- ^ int regcomp(regex_t *, __REG_CONST char *, int);
+ ^ int regcomp(regex_t *, const char *, int);
  ^ #endif
  ^ #ifdef __REG_WIDE_T
- ^ int __REG_WIDE_COMPILE(regex_t *, __REG_CONST __REG_WIDE_T *, size_t, int);
+ ^ int __REG_WIDE_COMPILE(regex_t *, const __REG_WIDE_T *, size_t, int);
  ^ #endif
  */
 #define	REG_BASIC	000000	/* BREs (convenience) */
@@ -228,14 +228,14 @@ typedef struct {
 /*
  * execution
  ^ #ifndef __REG_NOCHAR
- ^ int re_exec(regex_t *, __REG_CONST char *, size_t,
+ ^ int re_exec(regex_t *, const char *, size_t,
  ^				rm_detail_t *, size_t, regmatch_t [], int);
  ^ #endif
  ^ #ifndef __REG_NOFRONT
- ^ int regexec(regex_t *, __REG_CONST char *, size_t, regmatch_t [], int);
+ ^ int regexec(regex_t *, const char *, size_t, regmatch_t [], int);
  ^ #endif
  ^ #ifdef __REG_WIDE_T
- ^ int __REG_WIDE_EXEC(regex_t *, __REG_CONST __REG_WIDE_T *, size_t,
+ ^ int __REG_WIDE_EXEC(regex_t *, const __REG_WIDE_T *, size_t,
  ^				rm_detail_t *, size_t, regmatch_t [], int);
  ^ #endif
  */
@@ -248,7 +248,7 @@ typedef struct {
 
 /*
  * misc generics (may be more functions here eventually)
- ^ re_void regfree(regex_t *);
+ ^ void regfree(regex_t *);
  */
 
 /*
@@ -260,7 +260,7 @@ typedef struct {
  * of character is used for error reports is independent of what kind is used
  * in matching.
  *
- ^ extern size_t regerror(int, __REG_CONST regex_t *, char *, size_t);
+ ^ extern size_t regerror(int, const regex_t *, char *, size_t);
  */
 #define	REG_OKAY	 0	/* no errors detected */
 #define	REG_NOMATCH	 1	/* failed to match */
@@ -293,6 +293,7 @@ typedef struct {
 /* automatically gathered by fwd; do not hand-edit */
 /* === regproto.h === */
 #ifndef __REG_NOCHAR
+<<<<<<< HEAD
 int re_comp(regex_t *, __REG_CONST char *, size_t, int);
 #endif
 #ifndef __REG_NOFRONT
@@ -312,6 +313,27 @@ MODULE_SCOPE int __REG_WIDE_EXEC(regex_t *, __REG_CONST __REG_WIDE_T *, size_t, 
 #endif
 MODULE_SCOPE re_void regfree(regex_t *);
 MODULE_SCOPE size_t regerror(int, __REG_CONST regex_t *, char *, size_t);
+=======
+int re_comp(regex_t *, const char *, size_t, int);
+#endif
+#ifndef __REG_NOFRONT
+int regcomp(regex_t *, const char *, int);
+#endif
+#ifdef __REG_WIDE_T
+MODULE_SCOPE int __REG_WIDE_COMPILE(regex_t *, const __REG_WIDE_T *, size_t, int);
+#endif
+#ifndef __REG_NOCHAR
+int re_exec(regex_t *, const char *, size_t, rm_detail_t *, size_t, regmatch_t [], int);
+#endif
+#ifndef __REG_NOFRONT
+int regexec(regex_t *, const char *, size_t, regmatch_t [], int);
+#endif
+#ifdef __REG_WIDE_T
+MODULE_SCOPE int __REG_WIDE_EXEC(regex_t *, const __REG_WIDE_T *, size_t, rm_detail_t *, size_t, regmatch_t [], int);
+#endif
+MODULE_SCOPE void regfree(regex_t *);
+MODULE_SCOPE size_t regerror(int, const regex_t *, char *, size_t);
+>>>>>>> upstream/master
 /* automatically gathered by fwd; do not hand-edit */
 /* =====^!^===== end forwards =====^!^===== */
 

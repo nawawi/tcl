@@ -121,7 +121,11 @@ FileCopyRename(
     i++;
     if ((objc - i) < 2) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_WrongNumArgs(interp, 1, objv, 
+=======
+	Tcl_WrongNumArgs(interp, 1, objv,
+>>>>>>> upstream/master
 =======
 	Tcl_WrongNumArgs(interp, 1, objv,
 >>>>>>> upstream/master

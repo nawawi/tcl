@@ -280,7 +280,11 @@ test oo-1.18.2 {Bug 21c144f0f5} -setup {
     }
 } -cleanup {
     interp delete slave
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> upstream/master
 test oo-1.19 {basic test of OO functionality: teardown order} -body {
     oo::object create o
     namespace delete [info object namespace o]
@@ -638,6 +642,60 @@ test oo-3.9 {Bug 2944404: deleting the object in the destructor} -setup {
 } -cleanup {
     cls destroy
 } -result {in destructor}
+<<<<<<< HEAD
+=======
+test oo-3.10 {Bug 3d96b7076e: killing the object's class in a method call} -setup {
+    oo::class create Super
+} -body {
+    # Only reliably failed in a memdebug build
+    oo::class create Cls {
+	superclass Super
+	method mthd {} {
+	    [self class] destroy
+	    return ok
+	}
+    }
+    [Cls new] mthd
+} -cleanup {
+    Super destroy
+} -result ok
+test oo-3.11 {Bug 3d96b7076e: killing the object's class in a method call} -setup {
+    oo::class create Super
+    oo::class create Sub {
+	superclass Super
+    }
+} -body {
+    # Only reliably failed in a memdebug build
+    oo::class create Cls {
+	superclass Super
+	method mthd {} {
+	    oo::objdefine [self] class Sub
+	    Cls destroy
+	    return ok
+	}
+    }
+    [Cls new] mthd
+} -cleanup {
+    Super destroy
+} -result ok
+test oo-3.12 {Bug 3d96b7076e: killing the object's class in a method call} -setup {
+    oo::class create Super
+} -body {
+    # Only reliably failed in a memdebug build
+    oo::class create Cls {
+	superclass Super
+	method mthd {} {
+	    [self class] destroy
+	    return ok
+	}
+    }
+    set o [Super new]
+    oo::objdefine $o mixin Cls
+    $o mthd
+} -cleanup {
+    Super destroy
+} -result ok
+>>>>>>> upstream/master
 
 test oo-4.1 {basic test of OO functionality: export} {
     set o [oo::object new]
@@ -1571,7 +1629,10 @@ test oo-12.7 {OO: filters} -setup {
 } -result {foo {{::Aclass outerfoo} {::Aclass InnerFoo}}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test oo-12.8 {OO: filters and destructors} -setup {
@@ -1603,6 +1664,9 @@ test oo-12.8 {OO: filters and destructors} -setup {
     Aclass destroy
 } -result {{in constructor} {::Aclass bar} {in method} {::oo::object destroy} {in destructor}}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1947,7 +2011,11 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
 } -body {
     set obj1 [FooClass new]
     oo::objdefine $obj1 {
+<<<<<<< HEAD
 	variable var 
+=======
+	variable var
+>>>>>>> upstream/master
 	method m {} {
 	    set var foo
 	}
@@ -2577,7 +2645,11 @@ test oo-20.10 {OO: variable and varname methods refer to same things} -setup {
 test oo-20.11 {OO: variable mustn't crash when recursing} -body {
     oo::class create A {
 	constructor {name} {
+<<<<<<< HEAD
 	    my variable np_name 
+=======
+	    my variable np_name
+>>>>>>> upstream/master
 	    set np_name $name
 	}
 	method copy {nm} {
@@ -2592,7 +2664,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
 			lappend objs [$ref copy {}]
 		    }
 		    $cpy prop $var $objs
+<<<<<<< HEAD
 		} else { 
+=======
+		} else {
+>>>>>>> upstream/master
 		    $cpy prop $var $val
 		}
 	    }
@@ -3629,6 +3705,22 @@ test oo-35.2 {Bug 9d61624b3d: Empty superclass must not cause crash} -setup {
     unset -nocomplain result
     fruitMetaclass destroy
 } -result {::appleClass ::orange ::oo::class ::oo::class 1 1 ::appleClass ::pear}
+<<<<<<< HEAD
+=======
+test oo-35.3 {Bug 593baa032c: superclass list teardown} {
+    # Bug makes this crash, especially with mem-debugging on
+    oo::class create B {}
+    oo::class create D {superclass B}
+    namespace eval [info object namespace D] [list [namespace which B] destroy]
+} {}
+test oo-35.4 {Bug 593baa032c: mixins list teardown} {
+    # Bug makes this crash, especially with mem-debugging on
+    oo::class create B {}
+    oo::class create D {mixin B}
+    namespace eval [info object namespace D] [list [namespace which B] destroy]
+} {}
+
+>>>>>>> upstream/master
 
 cleanupTests
 return

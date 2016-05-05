@@ -62,6 +62,7 @@
 #undef TCL_FEATURE_KEEPALIVE_NAGLE
 
 /*
+<<<<<<< HEAD
  * Make sure to remove the redirection defines set in tclWinPort.h that is in
  * use in other sections of the core, except for us.
  */
@@ -71,6 +72,8 @@
 #undef setsockopt
 
 /*
+=======
+>>>>>>> upstream/master
  * Helper macros to make parts of this file clearer. The macros do exactly
  * what they say on the tin. :-) They also only ever refer to their arguments
  * once, and so can be used without regard to side effects.
@@ -90,7 +93,11 @@
  */
 
 static int initialized = 0;
+<<<<<<< HEAD
 static const TCHAR classname[] = TEXT("TclSocket");
+=======
+static const TCHAR className[] = TEXT("TclSocket");
+>>>>>>> upstream/master
 TCL_DECLARE_MUTEX(socketMutex)
 
 /*
@@ -689,6 +696,7 @@ WaitForConnect(
 	 * A non blocking socket waiting for an asyncronous connect
 	 * returns directly the error EWOULDBLOCK
 	 */
+<<<<<<< HEAD
 
 	if (statePtr->flags & TCP_NONBLOCKING) {
 	    *errorCodePtr = EWOULDBLOCK;
@@ -699,6 +707,18 @@ WaitForConnect(
 	 * Wait until something happens.
 	 */
 
+=======
+
+	if (statePtr->flags & TCP_NONBLOCKING) {
+	    *errorCodePtr = EWOULDBLOCK;
+	    return -1;
+	}
+
+	/*
+	 * Wait until something happens.
+	 */
+
+>>>>>>> upstream/master
 	WaitForSingleObject(tsdPtr->readyEvent, INFINITE);
     }
 }
@@ -996,6 +1016,7 @@ TcpCloseProc(
 	 * socket is SO_DONTLINGER, which does a graceful shutdown in the
 	 * background.
 	 */
+<<<<<<< HEAD
 
 	while ( statePtr->sockets != NULL ) {
 	    TcpFdList *thisfd = statePtr->sockets;
@@ -1040,6 +1061,52 @@ TcpCloseProc(
      * fear of damaging the list.
      */
 
+=======
+
+	while ( statePtr->sockets != NULL ) {
+	    TcpFdList *thisfd = statePtr->sockets;
+	    statePtr->sockets = thisfd->next;
+
+	    if (closesocket(thisfd->fd) == SOCKET_ERROR) {
+		TclWinConvertError((DWORD) WSAGetLastError());
+		errorCode = Tcl_GetErrno();
+	    }
+	    ckfree(thisfd);
+	}
+    }
+
+    if (statePtr->addrlist != NULL) {
+        freeaddrinfo(statePtr->addrlist);
+    }
+    if (statePtr->myaddrlist != NULL) {
+        freeaddrinfo(statePtr->myaddrlist);
+    }
+
+    /*
+     * Clear an eventual tsd info list pointer.
+     * This may be called, if an async socket connect fails or is closed
+     * between connect and thread action callback.
+     */
+    if (tsdPtr->pendingTcpState != NULL
+	    && tsdPtr->pendingTcpState == statePtr) {
+
+	/* get infoPtr lock, because this concerns the notifier thread */
+	WaitForSingleObject(tsdPtr->socketListLock, INFINITE);
+
+	tsdPtr->pendingTcpState = NULL;
+
+	/* Free list lock */
+	SetEvent(tsdPtr->socketListLock);
+    }
+
+    /*
+     * TIP #218. Removed the code removing the structure from the global
+     * socket list. This is now done by the thread action callbacks, and only
+     * there. This happens before this code is called. We can free without
+     * fear of damaging the list.
+     */
+
+>>>>>>> upstream/master
     ckfree(statePtr);
     return errorCode;
 }
@@ -1550,6 +1617,7 @@ TcpWatchProc(
 	if (mask & TCL_WRITABLE) {
 	    statePtr->watchEvents |= (FD_WRITE|FD_CLOSE);
 	}
+<<<<<<< HEAD
 
 	/*
 	 * If there are any conditions already set, then tell the notifier to
@@ -1584,6 +1652,91 @@ TcpWatchProc(
 
 	/* ARGSUSED */
 static int
+TcpGetHandleProc(
+    ClientData instanceData,	/* The socket state. */
+    int direction,		/* Not used. */
+    ClientData *handlePtr)	/* Where to store the handle. */
+{
+    TcpState *statePtr = instanceData;
+
+    *handlePtr = INT2PTR(statePtr->sockets->fd);
+    return TCL_OK;
+=======
+
+	/*
+	 * If there are any conditions already set, then tell the notifier to
+	 * poll rather than block.
+	 */
+
+	if (statePtr->readyEvents & statePtr->watchEvents) {
+	    Tcl_Time blockTime = { 0, 0 };
+
+	    Tcl_SetMaxBlockTime(&blockTime);
+	}
+    }
+>>>>>>> upstream/master
+}
+
+
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * TcpConnect --
+ *
+ *	This function opens a new socket in client mode.
+ *
+ *	This might be called in 3 circumstances:
+ *	-   By a regular socket command
+ *	-   By the event handler to continue an asynchroneous connect
+ *	-   By a blocking socket function (gets/puts) to terminate the
+ *	    connect synchroneously
+ *
+ * Results:
+ *      TCL_OK, if the socket was successfully connected or an asynchronous
+ *      connection is in progress. If an error occurs, TCL_ERROR is returned
+ *      and an error message is left in interp.
+ *
+ * Side effects:
+ *	Opens a socket.
+ *
+ * Remarks:
+ *	A single host name may resolve to more than one IP address, e.g. for
+ *	an IPv4/IPv6 dual stack host. For handling asyncronously connecting
+ *	sockets in the background for such hosts, this function can act as a
+ *	coroutine. On the first call, it sets up the control variables for the
+ *	two nested loops over the local and remote addresses. Once the first
+ *	connection attempt is in progress, it sets up itself as a writable
+ *	event handler for that socket, and returns. When the callback occurs,
+ *	control is transferred to the "reenter" label, right after the initial
+ *	return and the loops resume as if they had never been interrupted.
+ *	For syncronously connecting sockets, the loops work the usual way.
+=======
+ * TcpGetHandleProc --
+ *
+ *	Called from Tcl_GetChannelHandle to retrieve OS handles from inside a
+ *	TCP socket based channel.
+ *
+ * Results:
+ *	Returns TCL_OK with the fd in handlePtr, or TCL_ERROR if there is no
+ *	handle for the specified direction.
+ *
+ * Side effects:
+ *	None.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+	/* ARGSUSED */
+static int
+<<<<<<< HEAD
+TcpConnect(
+    Tcl_Interp *interp,		/* For error reporting; can be NULL. */
+    TcpState *statePtr)
+{
+=======
 TcpGetHandleProc(
     ClientData instanceData,	/* The socket state. */
     int direction,		/* Not used. */
@@ -1638,6 +1791,7 @@ TcpConnect(
     Tcl_Interp *interp,		/* For error reporting; can be NULL. */
     TcpState *statePtr)
 {
+>>>>>>> upstream/master
     DWORD error;
     /*
      * We are started with async connect and the connect notification
@@ -2061,7 +2215,10 @@ Tcl_OpenTcpServer(
     char channelName[SOCK_CHAN_LENGTH];
     u_long flag = 1;		/* Indicates nonblocking mode. */
     const char *errorMsg = NULL;
+<<<<<<< HEAD
     ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+=======
+>>>>>>> upstream/master
 
     if (TclpHasSockets(interp) != TCL_OK) {
 	return NULL;
@@ -2091,6 +2248,7 @@ Tcl_OpenTcpServer(
 	if (sock == INVALID_SOCKET) {
 	    TclWinConvertError((DWORD) WSAGetLastError());
 	    continue;
+<<<<<<< HEAD
 	}
 
 	/*
@@ -2344,10 +2502,717 @@ InitSockets(void)
 	if (!RegisterClass(&windowClass)) {
 	    TclWinConvertError(GetLastError());
 	    goto initFailure;
+=======
+>>>>>>> upstream/master
+	}
+
+	/*
+	 * Win-NT has a misfeature that sockets are inherited in child
+	 * processes by default. Turn off the inherit bit.
+	 */
+
+	SetHandleInformation((HANDLE) sock, HANDLE_FLAG_INHERIT, 0);
+
+	/*
+	 * Set kernel space buffering
+	 */
+
+	TclSockMinimumBuffers((void *)sock, TCP_BUFFER_SIZE);
+
+	/*
+	 * Make sure we use the same port when opening two server sockets
+	 * for IPv4 and IPv6.
+	 *
+	 * As sockaddr_in6 uses the same offset and size for the port
+	 * member as sockaddr_in, we can handle both through the IPv4 API.
+	 */
+
+	if (port == 0 && chosenport != 0) {
+	    ((struct sockaddr_in *) addrPtr->ai_addr)->sin_port =
+		htons(chosenport);
+	}
+
+	/*
+	 * Bind to the specified port. Note that we must not call
+	 * setsockopt with SO_REUSEADDR because Microsoft allows addresses
+	 * to be reused even if they are still in use.
+	 *
+	 * Bind should not be affected by the socket having already been
+	 * set into nonblocking mode. If there is trouble, this is one
+	 * place to look for bugs.
+	 */
+
+	if (bind(sock, addrPtr->ai_addr, addrPtr->ai_addrlen)
+	    == SOCKET_ERROR) {
+	    TclWinConvertError((DWORD) WSAGetLastError());
+	    closesocket(sock);
+	    continue;
+	}
+	if (port == 0 && chosenport == 0) {
+	    address sockname;
+	    socklen_t namelen = sizeof(sockname);
+
+	    /*
+	     * Synchronize port numbers when binding to port 0 of multiple
+	     * addresses.
+	     */
+
+	    if (getsockname(sock, &sockname.sa, &namelen) >= 0) {
+		chosenport = ntohs(sockname.sa4.sin_port);
+	    }
+	}
+
+	/*
+	 * Set the maximum number of pending connect requests to the max
+	 * value allowed on each platform (Win32 and Win32s may be
+	 * different, and there may be differences between TCP/IP stacks).
+	 */
+
+	if (listen(sock, SOMAXCONN) == SOCKET_ERROR) {
+	    TclWinConvertError((DWORD) WSAGetLastError());
+	    closesocket(sock);
+	    continue;
+	}
+
+	if (statePtr == NULL) {
+	    /*
+	     * Add this socket to the global list of sockets.
+	     */
+	    statePtr = NewSocketInfo(sock);
+	} else {
+	    AddSocketInfoFd( statePtr, sock );
+	}
+    }
+
+error:
+    if (addrlist != NULL) {
+	freeaddrinfo(addrlist);
+    }
+
+    if (statePtr != NULL) {
+	ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+
+	statePtr->acceptProc = acceptProc;
+	statePtr->acceptProcData = acceptProcData;
+	sprintf(channelName, SOCK_TEMPLATE, statePtr);
+	statePtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
+		statePtr, 0);
+	/*
+	 * Set up the select mask for connection request events.
+	 */
+
+	statePtr->selectEvents = FD_ACCEPT;
+
+	/*
+	 * Register for interest in events in the select mask. Note that this
+	 * automatically places the socket into non-blocking mode.
+	 */
+
+	ioctlsocket(sock, (long) FIONBIO, &flag);
+	SendMessage(tsdPtr->hwnd, SOCKET_SELECT, (WPARAM) SELECT,
+		    (LPARAM) statePtr);
+	if (Tcl_SetChannelOption(interp, statePtr->channel, "-eofchar", "")
+	    == TCL_ERROR) {
+	    Tcl_Close(NULL, statePtr->channel);
+	    return NULL;
+	}
+	return statePtr->channel;
+    }
+
+    if (interp != NULL) {
+        Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"couldn't open socket: %s",
+		(errorMsg ? errorMsg : Tcl_PosixError(interp))));
+    }
+
+    if (sock != INVALID_SOCKET) {
+	closesocket(sock);
+    }
+    return NULL;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TcpAccept --
+ *	Accept a TCP socket connection.	 This is called by the event loop.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Creates a new connection socket. Calls the registered callback for the
+ *	connection acceptance mechanism.
+ *
+ *----------------------------------------------------------------------
+ */
+
+	/* ARGSUSED */
+static void
+TcpAccept(
+    TcpFdList *fds,	/* Server socket that accepted newSocket. */
+    SOCKET newSocket,   /* Newly accepted socket. */
+    address addr)       /* Address of new socket. */
+{
+    TcpState *newInfoPtr;
+    TcpState *statePtr = fds->statePtr;
+    int len = sizeof(addr);
+    char channelName[SOCK_CHAN_LENGTH];
+    char host[NI_MAXHOST], port[NI_MAXSERV];
+    ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+
+    /*
+     * Win-NT has a misfeature that sockets are inherited in child processes
+     * by default. Turn off the inherit bit.
+     */
+
+    SetHandleInformation((HANDLE) newSocket, HANDLE_FLAG_INHERIT, 0);
+
+    /*
+     * Add this socket to the global list of sockets.
+     */
+
+    newInfoPtr = NewSocketInfo(newSocket);
+
+    /*
+     * Select on read/write events and create the channel.
+     */
+
+    newInfoPtr->selectEvents = (FD_READ | FD_WRITE | FD_CLOSE);
+    SendMessage(tsdPtr->hwnd, SOCKET_SELECT, (WPARAM) SELECT,
+	    (LPARAM) newInfoPtr);
+
+    sprintf(channelName, SOCK_TEMPLATE, newInfoPtr);
+    newInfoPtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
+	    newInfoPtr, (TCL_READABLE | TCL_WRITABLE));
+    if (Tcl_SetChannelOption(NULL, newInfoPtr->channel, "-translation",
+	    "auto crlf") == TCL_ERROR) {
+	Tcl_Close(NULL, newInfoPtr->channel);
+	return;
+    }
+    if (Tcl_SetChannelOption(NULL, newInfoPtr->channel, "-eofchar", "")
+	    == TCL_ERROR) {
+	Tcl_Close(NULL, newInfoPtr->channel);
+	return;
+    }
+
+    /*
+     * Invoke the accept callback function.
+     */
+
+    if (statePtr->acceptProc != NULL) {
+	getnameinfo(&(addr.sa), len, host, sizeof(host), port, sizeof(port),
+                    NI_NUMERICHOST|NI_NUMERICSERV);
+	statePtr->acceptProc(statePtr->acceptProcData, newInfoPtr->channel,
+			    host, atoi(port));
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * InitSockets --
+ *
+ *	Registers the event window for the socket notifier code.
+ *
+ *	Assumes socketMutex is held.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Register a new window class and creates a
+ *	window for use in asynchronous socket notification.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+InitSockets(void)
+{
+    DWORD id;
+    ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+
+    if (!initialized) {
+	initialized = 1;
+	TclCreateLateExitHandler(SocketExitHandler, NULL);
+
+	/*
+	 * Create the async notification window with a new class. We must
+	 * create a new class to avoid a Windows 95 bug that causes us to get
+	 * the wrong message number for socket events if the message window is
+	 * a subclass of a static control.
+	 */
+
+	windowClass.style = 0;
+	windowClass.cbClsExtra = 0;
+	windowClass.cbWndExtra = 0;
+	windowClass.hInstance = TclWinGetTclInstance();
+	windowClass.hbrBackground = NULL;
+	windowClass.lpszMenuName = NULL;
+	windowClass.lpszClassName = className;
+	windowClass.lpfnWndProc = SocketProc;
+	windowClass.hIcon = NULL;
+	windowClass.hCursor = NULL;
+
+	if (!RegisterClass(&windowClass)) {
+	    TclWinConvertError(GetLastError());
+	    goto initFailure;
 	}
     }
 
     /*
+     * Check for per-thread initialization.
+     */
+
+    if (tsdPtr != NULL) {
+	return;
+    }
+
+    /*
+     * OK, this thread has never done anything with sockets before.  Construct
+     * a worker thread to handle asynchronous events related to sockets
+     * assigned to _this_ thread.
+     */
+
+    tsdPtr = TCL_TSD_INIT(&dataKey);
+    tsdPtr->pendingTcpState = NULL;
+    tsdPtr->socketList = NULL;
+    tsdPtr->hwnd       = NULL;
+    tsdPtr->threadId   = Tcl_GetCurrentThread();
+    tsdPtr->readyEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    if (tsdPtr->readyEvent == NULL) {
+	goto initFailure;
+    }
+    tsdPtr->socketListLock = CreateEvent(NULL, FALSE, TRUE, NULL);
+    if (tsdPtr->socketListLock == NULL) {
+	goto initFailure;
+    }
+    tsdPtr->socketThread = CreateThread(NULL, 256, SocketThread, tsdPtr, 0,
+	    &id);
+    if (tsdPtr->socketThread == NULL) {
+	goto initFailure;
+    }
+
+    SetThreadPriority(tsdPtr->socketThread, THREAD_PRIORITY_HIGHEST);
+
+    /*
+     * Wait for the thread to signal when the window has been created and if
+     * it is ready to go.
+     */
+
+    WaitForSingleObject(tsdPtr->readyEvent, INFINITE);
+
+    if (tsdPtr->hwnd == NULL) {
+	goto initFailure;	/* Trouble creating the window. */
+    }
+
+    Tcl_CreateEventSource(SocketSetupProc, SocketCheckProc, NULL);
+    return;
+
+  initFailure:
+    TclpFinalizeSockets();
+    initialized = -1;
+    return;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SocketsEnabled --
+ *
+ *	Check that the WinSock was successfully initialized.
+ *
+ * Warning:
+ *	This check was useful in times of Windows98 where WinSock may
+ *	not be available. This is not the case any more.
+ *	This function may be removed with TCL 9.0
+ *
+ * Results:
+ *	1 if it is.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+    /* ARGSUSED */
+static int
+SocketsEnabled(void)
+{
+    int enabled;
+
+    Tcl_MutexLock(&socketMutex);
+    enabled = (initialized == 1);
+    Tcl_MutexUnlock(&socketMutex);
+    return enabled;
+}
+
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SocketExitHandler --
+ *
+ *	Callback invoked during exit clean up to delete the socket
+ *	communication window.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+    /* ARGSUSED */
+static void
+SocketExitHandler(
+    ClientData clientData)		/* Not used. */
+{
+    Tcl_MutexLock(&socketMutex);
+
+    /*
+     * Make sure the socket event handling window is cleaned-up for, at
+     * most, this thread.
+     */
+
+    TclpFinalizeSockets();
+    UnregisterClass(className, TclWinGetTclInstance());
+    initialized = 0;
+    Tcl_MutexUnlock(&socketMutex);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SocketSetupProc --
+ *
+ *	This function is invoked before Tcl_DoOneEvent blocks waiting for an
+ *	event.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Adjusts the block time if needed.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+SocketSetupProc(
+    ClientData data,		/* Not used. */
+    int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
+{
+    TcpState *statePtr;
+    Tcl_Time blockTime = { 0, 0 };
+    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+
+    if (!(flags & TCL_FILE_EVENTS)) {
+	return;
+    }
+
+    /*
+     * Check to see if there is a ready socket.	 If so, poll.
+     */
+    WaitForSingleObject(tsdPtr->socketListLock, INFINITE);
+    for (statePtr = tsdPtr->socketList; statePtr != NULL;
+	    statePtr = statePtr->nextPtr) {
+	if (statePtr->readyEvents &
+	    (statePtr->watchEvents | FD_CONNECT | FD_ACCEPT)
+	) {
+	    Tcl_SetMaxBlockTime(&blockTime);
+	    break;
+	}
+    }
+    SetEvent(tsdPtr->socketListLock);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SocketCheckProc --
+ *
+ *	This function is called by Tcl_DoOneEvent to check the socket event
+ *	source for events.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	May queue an event.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+SocketCheckProc(
+    ClientData data,		/* Not used. */
+    int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
+{
+    TcpState *statePtr;
+    SocketEvent *evPtr;
+    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+
+    if (!(flags & TCL_FILE_EVENTS)) {
+	return;
+    }
+
+    /*
+     * Queue events for any ready sockets that don't already have events
+     * queued (caused by persistent states that won't generate WinSock
+     * events).
+     */
+
+    WaitForSingleObject(tsdPtr->socketListLock, INFINITE);
+    for (statePtr = tsdPtr->socketList; statePtr != NULL;
+	    statePtr = statePtr->nextPtr) {
+	if ((statePtr->readyEvents &
+		(statePtr->watchEvents | FD_CONNECT | FD_ACCEPT))
+	    && !(statePtr->flags & SOCKET_PENDING)
+	) {
+	    statePtr->flags |= SOCKET_PENDING;
+	    evPtr = ckalloc(sizeof(SocketEvent));
+	    evPtr->header.proc = SocketEventProc;
+	    evPtr->socket = statePtr->sockets->fd;
+	    Tcl_QueueEvent((Tcl_Event *) evPtr, TCL_QUEUE_TAIL);
+	}
+    }
+    SetEvent(tsdPtr->socketListLock);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * SocketEventProc --
+ *
+ *	This function is called by Tcl_ServiceEvent when a socket event
+ *	reaches the front of the event queue. This function is responsible for
+ *	notifying the generic channel code.
+ *
+ * Results:
+ *	Returns 1 if the event was handled, meaning it should be removed from
+ *	the queue. Returns 0 if the event was not handled, meaning it should
+ *	stay on the queue. The only time the event isn't handled is if the
+ *	TCL_FILE_EVENTS flag bit isn't set.
+ *
+ * Side effects:
+ *	Whatever the channel callback functions do.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+SocketEventProc(
+    Tcl_Event *evPtr,		/* Event to service. */
+    int flags)			/* Flags that indicate what events to handle,
+				 * such as TCL_FILE_EVENTS. */
+{
+    TcpState *statePtr;
+    SocketEvent *eventPtr = (SocketEvent *) evPtr;
+    int mask = 0, events;
+    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    TcpFdList *fds;
+    SOCKET newSocket;
+    address addr;
+    int len;
+
+    if (!(flags & TCL_FILE_EVENTS)) {
+	return 0;
+    }
+
+    /*
+     * Find the specified socket on the socket list.
+     */
+
+    WaitForSingleObject(tsdPtr->socketListLock, INFINITE);
+    for (statePtr = tsdPtr->socketList; statePtr != NULL;
+	    statePtr = statePtr->nextPtr) {
+	if (statePtr->sockets->fd == eventPtr->socket) {
+	    break;
+	}
+    }
+
+    /*
+     * Discard events that have gone stale.
+     */
+
+    if (!statePtr) {
+        SetEvent(tsdPtr->socketListLock);
+	return 1;
+    }
+
+    /*
+     * Clear flag that (this) event is pending
+     */
+
+    statePtr->flags &= ~SOCKET_PENDING;
+
+    /*
+     * Continue async connect if pending and ready
+     */
+
+    if ( statePtr->readyEvents & FD_CONNECT ) {
+	if ( statePtr->flags & TCP_ASYNC_PENDING ) {
+
+	    /*
+	     * Do one step and save eventual connect error
+	     */
+
+	    SetEvent(tsdPtr->socketListLock);
+	    WaitForConnect(statePtr,NULL);
+
+	} else {
+
+	    /*
+	     * No async connect reenter pending. Just clear event.
+	     */
+
+	    statePtr->readyEvents &= ~(FD_CONNECT);
+	    SetEvent(tsdPtr->socketListLock);
+	}
+	return 1;
+    }
+
+    /*
+     * Handle connection requests directly.
+     */
+    if (statePtr->readyEvents & FD_ACCEPT) {
+	for (fds = statePtr->sockets; fds != NULL; fds = fds->next) {
+
+	    /*
+	    * Accept the incoming connection request.
+	    */
+	    len = sizeof(address);
+
+	    newSocket = accept(fds->fd, &(addr.sa), &len);
+
+	    /* On Tcl server sockets with multiple OS fds we loop over the fds trying
+	     * an accept() on each, so we expect INVALID_SOCKET.  There are also other
+	     * network stack conditions that can result in FD_ACCEPT but a subsequent
+	     * failure on accept() by the time we get around to it.
+	     * Access to sockets (acceptEventCount, readyEvents) in socketList
+	     * is still protected by the lock (prevents reintroduction of
+	     * SF Tcl Bug 3056775.
+	     */
+
+	    if (newSocket == INVALID_SOCKET) {
+		/* int err = WSAGetLastError(); */
+		continue;
+	    }
+
+	    /*
+	     * It is possible that more than one FD_ACCEPT has been sent, so an extra
+	     * count must be kept. Decrement the count, and reset the readyEvent bit
+	     * if the count is no longer > 0.
+	     */
+	    statePtr->acceptEventCount--;
+
+	    if (statePtr->acceptEventCount <= 0) {
+		statePtr->readyEvents &= ~(FD_ACCEPT);
+	    }
+
+	    SetEvent(tsdPtr->socketListLock);
+
+	    /* Caution: TcpAccept() has the side-effect of evaluating the server
+	     * accept script (via AcceptCallbackProc() in tclIOCmd.c), which can
+	     * close the server socket and invalidate statePtr and fds.
+	     * If TcpAccept() accepts a socket we must return immediately and let
+	     * SocketCheckProc queue additional FD_ACCEPT events.
+	     */
+	    TcpAccept(fds, newSocket, addr);
+	    return 1;
+	}
+
+	/* Loop terminated with no sockets accepted; clear the ready mask so
+	 * we can detect the next connection request. Note that connection
+	 * requests are level triggered, so if there is a request already
+	 * pending, a new event will be generated.
+	 */
+	statePtr->acceptEventCount = 0;
+	statePtr->readyEvents &= ~(FD_ACCEPT);
+
+	SetEvent(tsdPtr->socketListLock);
+	return 1;
+    }
+
+    SetEvent(tsdPtr->socketListLock);
+
+    /*
+     * Mask off unwanted events and compute the read/write mask so we can
+     * notify the channel.
+     */
+
+    events = statePtr->readyEvents & statePtr->watchEvents;
+
+    if (events & FD_CLOSE) {
+	/*
+	 * If the socket was closed and the channel is still interested in
+	 * read events, then we need to ensure that we keep polling for this
+	 * event until someone does something with the channel. Note that we
+	 * do this before calling Tcl_NotifyChannel so we don't have to watch
+	 * out for the channel being deleted out from under us. This may cause
+	 * a redundant trip through the event loop, but it's simpler than
+	 * trying to do unwind protection.
+	 */
+
+	Tcl_Time blockTime = { 0, 0 };
+
+	Tcl_SetMaxBlockTime(&blockTime);
+	mask |= TCL_READABLE|TCL_WRITABLE;
+    } else if (events & FD_READ) {
+
+	/*
+	 * Throw the readable event if an async connect failed.
+	 */
+
+	if ( statePtr->flags & TCP_ASYNC_FAILED ) {
+
+	    mask |= TCL_READABLE;
+
+	} else {
+	    fd_set readFds;
+	    struct timeval timeout;
+
+	    /*
+	     * We must check to see if data is really available, since someone
+	     * could have consumed the data in the meantime. Turn off async
+	     * notification so select will work correctly. If the socket is
+	     * still readable, notify the channel driver, otherwise reset the
+	     * async select handler and keep waiting.
+	     */
+
+	    SendMessage(tsdPtr->hwnd, SOCKET_SELECT,
+		    (WPARAM) UNSELECT, (LPARAM) statePtr);
+
+	    FD_ZERO(&readFds);
+	    FD_SET(statePtr->sockets->fd, &readFds);
+	    timeout.tv_usec = 0;
+	    timeout.tv_sec = 0;
+
+	    if (select(0, &readFds, NULL, NULL, &timeout) != 0) {
+		mask |= TCL_READABLE;
+	    } else {
+		statePtr->readyEvents &= ~(FD_READ);
+		SendMessage(tsdPtr->hwnd, SOCKET_SELECT,
+			(WPARAM) SELECT, (LPARAM) statePtr);
+	    }
+	}
+    }
+
+    /*
+     * writable event
+     */
+
+    if (events & FD_WRITE) {
+	mask |= TCL_WRITABLE;
+    }
+
+    /*
+<<<<<<< HEAD
      * Check for per-thread initialization.
      */
 
@@ -2798,6 +3663,8 @@ SocketEventProc(
     }
 
     /*
+=======
+>>>>>>> upstream/master
      * Call registered event procedures
      */
 
@@ -2992,7 +3859,11 @@ SocketThread(
      * Create a dummy window receiving socket events.
      */
 
+<<<<<<< HEAD
     tsdPtr->hwnd = CreateWindow(classname, classname, WS_TILED, 0, 0, 0, 0,
+=======
+    tsdPtr->hwnd = CreateWindow(className, className, WS_TILED, 0, 0, 0, 0,
+>>>>>>> upstream/master
 	    NULL, NULL, windowClass.hInstance, arg);
 
     /*

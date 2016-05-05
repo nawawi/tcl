@@ -931,7 +931,11 @@ catch {rename foo {}}
 
 # cleanup
 ::tcltest::cleanupTests
+<<<<<<< HEAD
 return 
+=======
+return
+>>>>>>> upstream/master
 
 # Local Variables:
 # mode: tcl

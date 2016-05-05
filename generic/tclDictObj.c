@@ -3052,7 +3052,11 @@ DictFilterCmd(
 	    if (Tcl_ObjSetVar2(interp, keyVarObj, NULL, keyObj,
 		    TCL_LEAVE_ERR_MSG) == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master
@@ -3063,7 +3067,11 @@ DictFilterCmd(
 	    if (Tcl_ObjSetVar2(interp, valueVarObj, NULL, valueObj,
 		    TCL_LEAVE_ERR_MSG) == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master

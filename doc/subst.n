@@ -5,7 +5,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH subst n 7.4 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS
@@ -33,7 +37,11 @@ For example, if \fB\-nocommands\fR is specified, command substitution
 is not performed:  open and close brackets are treated as ordinary characters
 with no special interpretation.
 .PP
+<<<<<<< HEAD
 Note that the substitution of one kind can include substitution of 
+=======
+Note that the substitution of one kind can include substitution of
+>>>>>>> upstream/master
 other kinds.  For example, even when the \fB\-novariables\fR option
 is specified, command substitution is performed without restriction.
 This means that any variable substitution necessary to complete the

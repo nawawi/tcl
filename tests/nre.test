@@ -29,9 +29,15 @@ if {[testConstraint testnrelevels]} {
 	namespace path ::tcl::mathop
 	#
 	# [testnrelevels] returns a 6-list with: C-stack depth, iPtr->numlevels,
+<<<<<<< HEAD
 	# cmdFrame level, callFrame level, tosPtr and callback depth 
 	#
 	variable last [testnrelevels] 
+=======
+	# cmdFrame level, callFrame level, tosPtr and callback depth
+	#
+	variable last [testnrelevels]
+>>>>>>> upstream/master
 	proc depthDiff {} {
 	    variable last
 	    set depth [testnrelevels]
@@ -64,6 +70,13 @@ if {[testConstraint testnrelevels]} {
     namespace import testnre::*
 }
 
+<<<<<<< HEAD
+=======
+test nre-0.1 {levels while unwinding} {
+    testnreunwind
+} {0 0 0}
+
+>>>>>>> upstream/master
 test nre-1.1 {self-recursive procs} -setup {
     proc a i [makebody {a $i}]
 } -body {
@@ -323,7 +336,11 @@ test nre-8.1 {nre and {*}} -body {
 } -cleanup {
     rename inner {}
     rename outer {}
+<<<<<<< HEAD
 } -result {1 1 1} 
+=======
+} -result {1 1 1}
+>>>>>>> upstream/master
 test nre-8.2 {nre and {*}, [Bug 2415422]} -body {
     # force an expansion that grows the evaluation stack, check that nre
     # adapts the bcFramePtr. This causes an NRE assertion to fail if it is not

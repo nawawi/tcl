@@ -939,11 +939,19 @@ Tcl_Exit(
 				 * for normal return, 1 for error return. */
 {
     TCL_NORETURN1 Tcl_ExitProc *currentAppExitPtr;
+<<<<<<< HEAD
 
     Tcl_MutexLock(&exitMutex);
     currentAppExitPtr = appExitPtr;
     Tcl_MutexUnlock(&exitMutex);
 
+=======
+
+    Tcl_MutexLock(&exitMutex);
+    currentAppExitPtr = appExitPtr;
+    Tcl_MutexUnlock(&exitMutex);
+
+>>>>>>> upstream/master
     if (currentAppExitPtr) {
 	/*
 	 * Warning: this code SHOULD NOT return, as there is code that depends
@@ -1042,6 +1050,12 @@ TclInitSubsystems(void)
 					 * thread local storage */
 #if USE_TCLALLOC
 	    TclInitAlloc();		/* Process wide mutex init */
+<<<<<<< HEAD
+=======
+#endif
+#if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
+	    TclpInitAllocCache();
+>>>>>>> upstream/master
 #endif
 #ifdef TCL_MEM_DEBUG
 	    TclInitDbCkalloc();		/* Process wide mutex init */

@@ -762,7 +762,11 @@ Tcl_ZlibStreamInit(
      */
 
     if (interp != NULL) {
+<<<<<<< HEAD
 	if (Tcl_Eval(interp, "::incr ::tcl::zlib::cmdcounter") != TCL_OK) {
+=======
+	if (Tcl_EvalEx(interp, "::incr ::tcl::zlib::cmdcounter", -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 	    goto error;
 	}
 	Tcl_DStringInit(&cmdname);
@@ -1164,6 +1168,17 @@ Tcl_ZlibStreamPut(
 	zshPtr->stream.next_in = Tcl_GetByteArrayFromObj(data, &size);
 	zshPtr->stream.avail_in = size;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Must not do a zero-length compress. [Bug 25842c161]
+	 */
+
+	if (size == 0) {
+	    return TCL_OK;
+	}
+
+>>>>>>> upstream/master
 	if (HaveDictToSet(zshPtr)) {
 	    e = SetDeflateDictionary(&zshPtr->stream, zshPtr->compDictObj);
 	    if (e != Z_OK) {
@@ -1186,6 +1201,7 @@ Tcl_ZlibStreamPut(
 	zshPtr->stream.next_out = (Bytef *) dataTmp;
 
 	e = deflate(&zshPtr->stream, flush);
+<<<<<<< HEAD
 	if ((e==Z_OK || e==Z_BUF_ERROR) && (zshPtr->stream.avail_out == 0)) {
 	    if (outSize - zshPtr->stream.avail_out > 0) {
 		/*
@@ -1206,12 +1222,33 @@ Tcl_ZlibStreamPut(
 					 * output... */
 		ckfree(dataTmp);
 		dataTmp = ckalloc(outSize);
+=======
+	while (e == Z_BUF_ERROR || (flush == Z_FINISH && e == Z_OK)) {
+	    /*
+	     * Output buffer too small to hold the data being generated or we
+	     * are doing the end-of-stream flush (which can spit out masses of
+	     * data). This means we need to put a new buffer into place after
+	     * saving the old generated data to the outData list.
+	     */
+
+	    obj = Tcl_NewByteArrayObj((unsigned char *) dataTmp, outSize);
+	    Tcl_ListObjAppendElement(NULL, zshPtr->outData, obj);
+
+	    if (outSize < 0xFFFF) {
+		outSize = 0xFFFF;	/* There may be *lots* of data left to
+					 * output... */
+		dataTmp = ckrealloc(dataTmp, outSize);
+>>>>>>> upstream/master
 	    }
 	    zshPtr->stream.avail_out = outSize;
 	    zshPtr->stream.next_out = (Bytef *) dataTmp;
 
 	    e = deflate(&zshPtr->stream, flush);
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 	if (e != Z_OK && !(flush==Z_FINISH && e==Z_STREAM_END)) {
 	    if (zshPtr->interp) {
 		ConvertError(zshPtr->interp, e, zshPtr->stream.adler);
@@ -3106,6 +3143,67 @@ ZlibTransformOutput(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+=======
+ * ZlibTransformFlush --
+ *
+ *	How to perform a flush of a compressing transform.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+ZlibTransformFlush(
+    Tcl_Interp *interp,
+    ZlibChannelData *cd,
+    int flushType)
+{
+    int e, len;
+
+    cd->outStream.avail_in = 0;
+    do {
+	/*
+	 * Get the bytes to go out of the compression engine.
+	 */
+
+	cd->outStream.next_out = (Bytef *) cd->outBuffer;
+	cd->outStream.avail_out = cd->outAllocated;
+
+	e = deflate(&cd->outStream, flushType);
+	if (e != Z_OK && e != Z_BUF_ERROR) {
+	    ConvertError(interp, e, cd->outStream.adler);
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * Write the bytes we've received to the next layer.
+	 */
+
+	len = cd->outStream.next_out - (Bytef *) cd->outBuffer;
+	if (len > 0 && Tcl_WriteRaw(cd->parent, cd->outBuffer, len) < 0) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "problem flushing channel: %s",
+		    Tcl_PosixError(interp)));
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * If we get to this point, either we're in the Z_OK or the
+	 * Z_BUF_ERROR state. In the former case, we're done. In the latter
+	 * case, it's because there's more bytes to go than would fit in the
+	 * buffer we provided, and we need to go round again to get some more.
+	 *
+	 * We also stop the loop if we would have done a zero-length write.
+	 * Those can cause problems at the OS level.
+	 */
+    } while (len > 0 && e == Z_BUF_ERROR);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+>>>>>>> upstream/master
  * ZlibTransformSetOption --
  *
  *	Writing side of [fconfigure] on our channel.
@@ -3178,6 +3276,7 @@ ZlibTransformSetOption(			/* not used */
 	     * Try to actually do the flush now.
 	     */
 
+<<<<<<< HEAD
 	    cd->outStream.avail_in = 0;
 	    while (1) {
 		int e;
@@ -3204,6 +3303,9 @@ ZlibTransformSetOption(			/* not used */
 		}
 	    }
 	    return TCL_OK;
+=======
+	    return ZlibTransformFlush(interp, cd, flushType);
+>>>>>>> upstream/master
 	}
     } else {
 	if (optionName && strcmp(optionName, "-limit") == 0) {
@@ -3816,7 +3918,11 @@ TclZlibInit(
      * commands.
      */
 
+<<<<<<< HEAD
     Tcl_Eval(interp, "namespace eval ::tcl::zlib {variable cmdcounter 0}");
+=======
+    Tcl_EvalEx(interp, "namespace eval ::tcl::zlib {variable cmdcounter 0}", -1, 0);
+>>>>>>> upstream/master
 
     /*
      * Create the public scripted interface to this file's functionality.

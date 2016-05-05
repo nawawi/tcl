@@ -58,6 +58,11 @@ static const struct {
 static Class *		AllocClass(Tcl_Interp *interp, Object *useThisObj);
 static Object *		AllocObject(Tcl_Interp *interp, const char *nameStr,
 			    const char *nsNameStr);
+<<<<<<< HEAD
+=======
+static void		ClearMixins(Class *clsPtr);
+static void		ClearSuperclasses(Class *clsPtr);
+>>>>>>> upstream/master
 static int		CloneClassMethod(Tcl_Interp *interp, Class *clsPtr,
 			    Method *mPtr, Tcl_Obj *namePtr,
 			    Method **newMPtrPtr);
@@ -896,6 +901,58 @@ ObjectRenamedTrace(
 /*
  * ----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+=======
+ * ClearMixins, ClearSuperclasses --
+ *
+ *	Utility functions for correctly clearing the list of mixins or
+ *	superclasses of a class. Will ckfree() the list storage.
+ *
+ * ----------------------------------------------------------------------
+ */
+
+static void
+ClearMixins(
+    Class *clsPtr)
+{
+    int i;
+    Class *mixinPtr;
+
+    if (clsPtr->mixins.num == 0) {
+	return;
+    }
+
+    FOREACH(mixinPtr, clsPtr->mixins) {
+	TclOORemoveFromMixinSubs(clsPtr, mixinPtr);
+    }
+    ckfree(clsPtr->mixins.list);
+    clsPtr->mixins.list = NULL;
+    clsPtr->mixins.num = 0;
+}
+
+static void
+ClearSuperclasses(
+    Class *clsPtr)
+{
+    int i;
+    Class *superPtr;
+
+    if (clsPtr->superclasses.num == 0) {
+	return;
+    }
+
+    FOREACH(superPtr, clsPtr->superclasses) {
+	TclOORemoveFromSubclasses(clsPtr, superPtr);
+    }
+    ckfree(clsPtr->superclasses.list);
+    clsPtr->superclasses.list = NULL;
+    clsPtr->superclasses.num = 0;
+}
+
+/*
+ * ----------------------------------------------------------------------
+ *
+>>>>>>> upstream/master
  * ReleaseClassContents --
  *
  *	Tear down the special class data structure, including deleting all
@@ -951,6 +1008,19 @@ ReleaseClassContents(
     }
     if (!IsRootClass(oPtr)) {
 	FOREACH(instancePtr, clsPtr->instances) {
+<<<<<<< HEAD
+=======
+	    int j;
+	    if (instancePtr->selfCls == clsPtr) {
+		instancePtr->flags |= CLASS_GONE;
+	    }
+	    for(j=0 ; j<instancePtr->mixins.num ; j++) {
+		Class *mixin = instancePtr->mixins.list[j];
+		if (mixin == clsPtr) {
+		    instancePtr->mixins.list[j] = NULL;
+		}
+	    }
+>>>>>>> upstream/master
 	    if (instancePtr != NULL && !IsRoot(instancePtr)) {
 		AddRef(instancePtr);
 	    }
@@ -962,13 +1032,20 @@ ReleaseClassContents(
      */
 
     FOREACH(mixinSubclassPtr, clsPtr->mixinSubs) {
+<<<<<<< HEAD
 	if (mixinSubclassPtr == NULL) {
 	    continue;
 	}
+=======
+>>>>>>> upstream/master
 	if (!Deleted(mixinSubclassPtr->thisPtr)) {
 	    Tcl_DeleteCommandFromToken(interp,
 		    mixinSubclassPtr->thisPtr->command);
 	}
+<<<<<<< HEAD
+=======
+	ClearMixins(mixinSubclassPtr);
+>>>>>>> upstream/master
 	DelRef(mixinSubclassPtr->thisPtr);
 	DelRef(mixinSubclassPtr);
     }
@@ -983,12 +1060,20 @@ ReleaseClassContents(
      */
 
     FOREACH(subclassPtr, clsPtr->subclasses) {
+<<<<<<< HEAD
 	if (subclassPtr == NULL || IsRoot(subclassPtr)) {
+=======
+	if (IsRoot(subclassPtr)) {
+>>>>>>> upstream/master
 	    continue;
 	}
 	if (!Deleted(subclassPtr->thisPtr)) {
 	    Tcl_DeleteCommandFromToken(interp, subclassPtr->thisPtr->command);
 	}
+<<<<<<< HEAD
+=======
+	ClearSuperclasses(subclassPtr);
+>>>>>>> upstream/master
 	DelRef(subclassPtr->thisPtr);
 	DelRef(subclassPtr);
     }
@@ -1131,12 +1216,22 @@ ObjectNamespaceDeleted(
      * methods on the object.
      */
 
+<<<<<<< HEAD
     if (!IsRootObject(oPtr)) {
+=======
+    if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
+>>>>>>> upstream/master
 	TclOORemoveFromInstances(oPtr, oPtr->selfCls);
     }
 
     FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
 	TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+	if (mixinPtr) {
+	    TclOORemoveFromInstances(oPtr, mixinPtr);
+	}
+>>>>>>> upstream/master
     }
     if (i) {
 	ckfree(oPtr->mixins.list);
@@ -1182,8 +1277,16 @@ ObjectNamespaceDeleted(
 	oPtr->metadataPtr = NULL;
     }
 
+<<<<<<< HEAD
     if (clsPtr != NULL) {
 	Class *superPtr;
+=======
+    /*
+     * If this was a class, there's additional deletion work to do.
+     */
+
+    if (clsPtr != NULL) {
+>>>>>>> upstream/master
 	Tcl_ObjectMetadataType *metadataTypePtr;
 	ClientData value;
 
@@ -1203,6 +1306,7 @@ ObjectNamespaceDeleted(
 	    ckfree(clsPtr->filters.list);
 	    clsPtr->filters.num = 0;
 	}
+<<<<<<< HEAD
 	FOREACH(mixinPtr, clsPtr->mixins) {
 	    if (!Deleted(mixinPtr->thisPtr)) {
 		TclOORemoveFromMixinSubs(clsPtr, mixinPtr);
@@ -1221,6 +1325,13 @@ ObjectNamespaceDeleted(
 	    ckfree(clsPtr->superclasses.list);
 	    clsPtr->superclasses.num = 0;
 	}
+=======
+
+	ClearMixins(clsPtr);
+
+	ClearSuperclasses(clsPtr);
+
+>>>>>>> upstream/master
 	if (clsPtr->subclasses.list) {
 	    ckfree(clsPtr->subclasses.list);
 	    clsPtr->subclasses.num = 0;
@@ -1362,9 +1473,13 @@ TclOORemoveFromSubclasses(
     return;
 
   removeSubclass:
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->subclasses.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 	superPtr->subclasses.num--;
 	if (i < superPtr->subclasses.num) {
 	    superPtr->subclasses.list[i] =
@@ -1435,9 +1550,13 @@ TclOORemoveFromMixinSubs(
     return;
 
   removeSubclass:
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->mixinSubs.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 	superPtr->mixinSubs.num--;
 	if (i < superPtr->mixinSubs.num) {
 	    superPtr->mixinSubs.list[i] =
@@ -1908,13 +2027,21 @@ Tcl_CopyObjectInstance(
      */
 
     FOREACH(mixinPtr, o2Ptr->mixins) {
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 	    TclOORemoveFromInstances(o2Ptr, mixinPtr);
 	}
     }
     DUPLICATE(o2Ptr->mixins, oPtr->mixins, Class *);
     FOREACH(mixinPtr, o2Ptr->mixins) {
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 	    TclOOAddToInstances(o2Ptr, mixinPtr);
 	}
     }

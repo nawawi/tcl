@@ -196,6 +196,12 @@ InfoObjectClassCmd(
 	}
 
 	FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
+=======
+	    if (!mixinPtr) {
+		continue;
+	    }
+>>>>>>> upstream/master
 	    if (TclOOIsReachable(o2clsPtr, mixinPtr)) {
 		Tcl_SetObjResult(interp, Tcl_NewIntObj(1));
 		return TCL_OK;
@@ -467,6 +473,12 @@ InfoObjectIsACmd(
 	    Class *mixinPtr;
 
 	    FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
+=======
+		if (!mixinPtr) {
+		    continue;
+		}
+>>>>>>> upstream/master
 		if (TclOOIsReachable(o2Ptr->classPtr, mixinPtr)) {
 		    result = 1;
 		    break;
@@ -665,6 +677,12 @@ InfoObjectMixinsCmd(
 
     resultObj = Tcl_NewObj();
     FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 	Tcl_ListObjAppendElement(NULL, resultObj,
 		TclOOObjectName(interp, mixinPtr->thisPtr));
     }
@@ -1281,6 +1299,12 @@ InfoClassMixinsCmd(
 
     resultObj = Tcl_NewObj();
     FOREACH(mixinPtr, clsPtr->mixins) {
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 	Tcl_ListObjAppendElement(NULL, resultObj,
 		TclOOObjectName(interp, mixinPtr->thisPtr));
     }

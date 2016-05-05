@@ -323,12 +323,24 @@ static int		TestparsevarObjCmd(ClientData dummy,
 static int		TestparsevarnameObjCmd(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
+<<<<<<< HEAD
 static int		TestregexpObjCmd(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
 static int		TestreturnObjCmd(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
+=======
+static int		TestpreferstableObjCmd(ClientData dummy,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[]);
+static int		TestregexpObjCmd(ClientData dummy,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[]);
+static int		TestreturnObjCmd(ClientData dummy,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[]);
+>>>>>>> upstream/master
 static void		TestregexpXflags(const char *string,
 			    int length, int *cflagsPtr, int *eflagsPtr);
 #ifndef TCL_NO_DEPRECATED
@@ -412,6 +424,7 @@ static int		TestNumUtfCharsCmd(ClientData clientData,
 static int		TestHashSystemHashCmd(ClientData clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
+<<<<<<< HEAD
 static int		TestNRELevels(ClientData clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
@@ -424,6 +437,26 @@ static int		TestcpuidCmd(ClientData dummy,
 			    Tcl_Obj *const objv[]);
 #endif
 
+=======
+
+static int              NREUnwind_callback(ClientData data[], Tcl_Interp *interp,
+                            int result);
+static int		TestNREUnwind(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[]);
+static int		TestNRELevels(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[]);
+static int		TestInterpResolverCmd(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[]);
+#if defined(HAVE_CPUID) || defined(_WIN32)
+static int		TestcpuidCmd(ClientData dummy,
+			    Tcl_Interp* interp, int objc,
+			    Tcl_Obj *const objv[]);
+#endif
+
+>>>>>>> upstream/master
 static const Tcl_Filesystem testReportingFilesystem = {
     "reporting",
     sizeof(Tcl_Filesystem),
@@ -647,6 +680,11 @@ Tcltest_Init(
 	    NULL, NULL);
     Tcl_CreateObjCommand(interp, "testparsevarname", TestparsevarnameObjCmd,
 	    NULL, NULL);
+<<<<<<< HEAD
+=======
+    Tcl_CreateObjCommand(interp, "testpreferstable", TestpreferstableObjCmd,
+	    NULL, NULL);
+>>>>>>> upstream/master
     Tcl_CreateObjCommand(interp, "testregexp", TestregexpObjCmd,
 	    NULL, NULL);
     Tcl_CreateObjCommand(interp, "testreturn", TestreturnObjCmd,
@@ -696,12 +734,23 @@ Tcltest_Init(
     Tcl_CreateMathFunc(interp, "T3", 2, t3ArgTypes, TestMathFunc2,
 	    NULL);
 #endif /* TCL_NO_DEPRECATED */
+<<<<<<< HEAD
 
     Tcl_CreateObjCommand(interp, "testnrelevels", TestNRELevels,
 	    NULL, NULL);
     Tcl_CreateObjCommand(interp, "testinterpresolver", TestInterpResolverCmd,
 	    NULL, NULL);
 
+=======
+
+    Tcl_CreateObjCommand(interp, "testnreunwind", TestNREUnwind,
+	    NULL, NULL);
+    Tcl_CreateObjCommand(interp, "testnrelevels", TestNRELevels,
+	    NULL, NULL);
+    Tcl_CreateObjCommand(interp, "testinterpresolver", TestInterpResolverCmd,
+	    NULL, NULL);
+
+>>>>>>> upstream/master
     if (TclObjTest_Init(interp) != TCL_OK) {
 	return TCL_ERROR;
     }
@@ -912,6 +961,7 @@ TestasyncCmd(
 	    }
 	}
         Tcl_MutexUnlock(&asyncTestMutex);
+<<<<<<< HEAD
     } else {
 	Tcl_AppendResult(interp, "bad option \"", argv[1],
 		"\": must be create, delete, int, mark, or marklater", NULL);
@@ -921,6 +971,17 @@ TestasyncCmd(
 	Tcl_AppendResult(interp, "bad option \"", argv[1],
 		"\": must be create, delete, int, or mark", NULL);
 	return TCL_ERROR;
+=======
+    } else {
+	Tcl_AppendResult(interp, "bad option \"", argv[1],
+		"\": must be create, delete, int, mark, or marklater", NULL);
+	return TCL_ERROR;
+#else /* !TCL_THREADS */
+    } else {
+	Tcl_AppendResult(interp, "bad option \"", argv[1],
+		"\": must be create, delete, int, or mark", NULL);
+	return TCL_ERROR;
+>>>>>>> upstream/master
 #endif
     }
     return TCL_OK;
@@ -958,7 +1019,7 @@ AsyncHandlerProc(
     listArgv[3] = NULL;
     cmd = Tcl_Merge(3, listArgv);
     if (interp != NULL) {
-	code = Tcl_Eval(interp, cmd);
+	code = Tcl_EvalEx(interp, cmd, -1, 0);
     } else {
 	/*
 	 * this should not happen, but by definition of how async handlers are
@@ -1241,7 +1302,11 @@ TestcmdtraceCmd(
     if (strcmp(argv[1], "tracetest") == 0) {
 	Tcl_DStringInit(&buffer);
 	cmdTrace = Tcl_CreateTrace(interp, 50000, CmdTraceProc, &buffer);
+<<<<<<< HEAD
 	result = Tcl_Eval(interp, argv[2]);
+=======
+	result = Tcl_EvalEx(interp, argv[2], -1, 0);
+>>>>>>> upstream/master
 	if (result == TCL_OK) {
 	    Tcl_ResetResult(interp);
 	    Tcl_AppendResult(interp, Tcl_DStringValue(&buffer), NULL);
@@ -1254,6 +1319,7 @@ TestcmdtraceCmd(
 	 * called. Note that this trace procedure removes itself as a further
 	 * check of the robustness of the trace proc calling code in
 	 * TclNRExecuteByteCode.
+<<<<<<< HEAD
 	 */
 
 	cmdTrace = Tcl_CreateTrace(interp, 50000, CmdTraceDeleteProc, NULL);
@@ -1275,6 +1341,29 @@ TestcmdtraceCmd(
 	 * to test return codes other than TCL_OK from the trace engine.
 	 */
 
+=======
+	 */
+
+	cmdTrace = Tcl_CreateTrace(interp, 50000, CmdTraceDeleteProc, NULL);
+	Tcl_EvalEx(interp, argv[2], -1, 0);
+    } else if (strcmp(argv[1], "leveltest") == 0) {
+	Interp *iPtr = (Interp *) interp;
+	Tcl_DStringInit(&buffer);
+	cmdTrace = Tcl_CreateTrace(interp, iPtr->numLevels + 4, CmdTraceProc,
+		&buffer);
+	result = Tcl_EvalEx(interp, argv[2], -1, 0);
+	if (result == TCL_OK) {
+	    Tcl_ResetResult(interp);
+	    Tcl_AppendResult(interp, Tcl_DStringValue(&buffer), NULL);
+	}
+	Tcl_DeleteTrace(interp, cmdTrace);
+	Tcl_DStringFree(&buffer);
+    } else if (strcmp(argv[1], "resulttest") == 0) {
+	/* Create an object-based trace, then eval a script. This is used
+	 * to test return codes other than TCL_OK from the trace engine.
+	 */
+
+>>>>>>> upstream/master
 	static int deleteCalled;
 
 	deleteCalled = 0;
@@ -1987,7 +2076,7 @@ EncodingToUtfProc(
     TclEncoding *encodingPtr;
 
     encodingPtr = (TclEncoding *) clientData;
-    Tcl_GlobalEval(encodingPtr->interp, encodingPtr->toUtfCmd);
+    Tcl_EvalEx(encodingPtr->interp,encodingPtr->toUtfCmd,-1,TCL_EVAL_GLOBAL);
 
     len = strlen(Tcl_GetStringResult(encodingPtr->interp));
     if (len > dstLen) {
@@ -2019,7 +2108,7 @@ EncodingFromUtfProc(
     TclEncoding *encodingPtr;
 
     encodingPtr = (TclEncoding *) clientData;
-    Tcl_GlobalEval(encodingPtr->interp, encodingPtr->fromUtfCmd);
+    Tcl_EvalEx(encodingPtr->interp, encodingPtr->fromUtfCmd,-1,TCL_EVAL_GLOBAL);
 
     len = strlen(Tcl_GetStringResult(encodingPtr->interp));
     if (len > dstLen) {
@@ -3411,6 +3500,7 @@ TestMathFunc2(
 	} else if (args[1].type == TCL_DOUBLE) {
 	    double d1 = args[1].doubleValue;
 
+<<<<<<< HEAD
 	    resultPtr->type = TCL_DOUBLE;
 	    resultPtr->doubleValue = ((d0 > d1)? d0 : d1);
 	} else if (args[1].type == TCL_WIDE_INT) {
@@ -3418,6 +3508,15 @@ TestMathFunc2(
 
 	    resultPtr->type = TCL_DOUBLE;
 	    resultPtr->doubleValue = ((d0 > d1)? d0 : d1);
+=======
+	    resultPtr->type = TCL_DOUBLE;
+	    resultPtr->doubleValue = ((d0 > d1)? d0 : d1);
+	} else if (args[1].type == TCL_WIDE_INT) {
+	    double d1 = Tcl_WideAsDouble(args[1].wideValue);
+
+	    resultPtr->type = TCL_DOUBLE;
+	    resultPtr->doubleValue = ((d0 > d1)? d0 : d1);
+>>>>>>> upstream/master
 	} else {
 	    Tcl_SetResult(interp, "T3: wrong type for arg 2", TCL_STATIC);
 	    result = TCL_ERROR;
@@ -3786,6 +3885,36 @@ TestparsevarnameObjCmd(
 /*
  *----------------------------------------------------------------------
  *
+ * TestpreferstableObjCmd --
+ *
+ *	This procedure implements the "testpreferstable" command.  It is
+ *	used for being able to test the "package" command even when the
+ *  environment variable TCL_PKG_PREFER_LATEST is set in your environment.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+TestpreferstableObjCmd(
+    ClientData clientData,	/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* The argument objects. */
+{
+    Interp *iPtr = (Interp *) interp;
+    iPtr->packagePrefer = PKG_PREFER_STABLE;
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
  * TestregexpObjCmd --
  *
  *	This procedure implements the "testregexp" command. It is used to give
@@ -4105,6 +4234,40 @@ TestregexpXflags(
     *cflagsPtr = cflags;
     *eflagsPtr = eflags;
 }
+<<<<<<< HEAD
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TestreturnObjCmd --
+ *
+ *	This procedure implements the "testreturn" command. It is
+ *	used to verify that a
+ *		return TCL_RETURN;
+ *	has same behavior as
+ *		return Tcl_SetReturnOptions(interp, Tcl_NewObj());
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+	/* ARGSUSED */
+static int
+TestreturnObjCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    return TCL_RETURN;
+}
+=======
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -4507,7 +4670,11 @@ TestfeventCmd(
 	    return TCL_ERROR;
 	}
 	if (interp2 != NULL) {
+<<<<<<< HEAD
 	    code = Tcl_GlobalEval(interp2, argv[2]);
+=======
+	    code = Tcl_EvalEx(interp2, argv[2], -1, TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 	    Tcl_SetObjResult(interp, Tcl_GetObjResult(interp2));
 	    return code;
 	} else {
@@ -5853,11 +6020,19 @@ TestChannelEventCmd(
 		    "\": must be readable, writable, or none", NULL);
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 
 	esPtr = ckalloc(sizeof(EventScriptRecord));
 	esPtr->nextPtr = statePtr->scriptRecordPtr;
 	statePtr->scriptRecordPtr = esPtr;
 
+=======
+
+	esPtr = ckalloc(sizeof(EventScriptRecord));
+	esPtr->nextPtr = statePtr->scriptRecordPtr;
+	statePtr->scriptRecordPtr = esPtr;
+
+>>>>>>> upstream/master
 	esPtr->chanPtr = chanPtr;
 	esPtr->interp = interp;
 	esPtr->mask = mask;
@@ -6846,6 +7021,54 @@ TestgetintCmd(
 }
 
 static int
+<<<<<<< HEAD
+=======
+NREUnwind_callback(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    int none;
+
+    if (data[0] == INT2PTR(-1)) {
+        Tcl_NRAddCallback(interp, NREUnwind_callback, &none, INT2PTR(-1),
+                INT2PTR(-1), NULL);
+    } else if (data[1] == INT2PTR(-1)) {
+        Tcl_NRAddCallback(interp, NREUnwind_callback, data[0], &none,
+                INT2PTR(-1), NULL);
+    } else if (data[2] == INT2PTR(-1)) {
+        Tcl_NRAddCallback(interp, NREUnwind_callback, data[0], data[1],
+                &none, NULL);
+    } else {
+        Tcl_Obj *idata[3];
+        idata[0] = Tcl_NewIntObj((int) ((char *) data[1] - (char *) data[0]));
+        idata[1] = Tcl_NewIntObj((int) ((char *) data[2] - (char *) data[0]));
+        idata[2] = Tcl_NewIntObj((int) ((char *) &none   - (char *) data[0]));
+        Tcl_SetObjResult(interp, Tcl_NewListObj(3, idata));
+    }
+    return TCL_OK;
+}
+
+static int
+TestNREUnwind(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    /*
+     * Insure that callbacks effectively run at the proper level during the
+     * unwinding of the NRE stack.
+     */
+
+    Tcl_NRAddCallback(interp, NREUnwind_callback, INT2PTR(-1), INT2PTR(-1),
+            INT2PTR(-1), NULL);
+    return TCL_OK;
+}
+
+
+static int
+>>>>>>> upstream/master
 TestNRELevels(
     ClientData clientData,
     Tcl_Interp *interp,

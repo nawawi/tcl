@@ -727,7 +727,11 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 
 	CFLAGS_DEBUG=-g
 	CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall -Wdeclaration-after-statement"
+=======
+	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
 	LDFLAGS_DEBUG=
 	LDFLAGS_OPTIMIZE=
 
@@ -826,12 +830,18 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	    esac
 	    if test ! -d "${PATH64}" ; then
+<<<<<<< HEAD
 		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK to enable 64bit mode])
 		AC_MSG_WARN([Ensure latest Platform SDK is installed])
 		do64bit="no"
 	    else
 		AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
 	    fi
+=======
+		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
+	    fi
+	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
+>>>>>>> upstream/master
 	fi
 
 	LIBS="netapi32.lib kernel32.lib user32.lib advapi32.lib userenv.lib ws2_32.lib"
@@ -1129,6 +1139,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 #------------------------------------------------------------------------
 
 AC_DEFUN([SC_WITH_TCL], [
+<<<<<<< HEAD
     if test -d ../../tcl8.6$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.6$1/win
     else
@@ -1136,6 +1147,15 @@ AC_DEFUN([SC_WITH_TCL], [
     fi
 
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.6 binaries from DIR],
+=======
+    if test -d ../../tcl8.7$1/win;  then
+	TCL_BIN_DEFAULT=../../tcl8.7$1/win
+    else
+	TCL_BIN_DEFAULT=../../tcl8.7/win
+    fi
+
+    AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
+>>>>>>> upstream/master
 	    TCL_BIN_DIR=$withval, TCL_BIN_DIR=`cd $TCL_BIN_DEFAULT; pwd`)
     if test ! -d $TCL_BIN_DIR; then
 	AC_MSG_ERROR(Tcl directory $TCL_BIN_DIR does not exist)

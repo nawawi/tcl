@@ -37,7 +37,11 @@ test unixforkevent-1.1 {fork and test writeable event} \
 	viewFile result.txt $myFolder
     } \
     -result {writable} \
+<<<<<<< HEAD
     -cleanup { 
+=======
+    -cleanup {
+>>>>>>> upstream/master
 	catch { removeFolder $myFolder }
     }
 

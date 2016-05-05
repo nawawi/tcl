@@ -5,7 +5,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH "http" n 2.7 http "Tcl Bundled Packages"
 .so man.macros
 .BS
@@ -60,7 +64,7 @@ a custom \fBsocket\fR command, via \fB::http::register\fR.
 .PP
 The \fB::http::geturl\fR procedure does a HTTP transaction.
 Its \fIoptions \fR determine whether a GET, POST, or HEAD transaction
-is performed.  
+is performed.
 The return value of \fB::http::geturl\fR is a token for the transaction.
 The value is also the name of an array in the ::http namespace
 that contains state information about the transaction.  The elements
@@ -90,7 +94,11 @@ flags and values that define the configuration:
 \fB\-accept\fR \fImimetypes\fR
 .
 The Accept header of the request.  The default is */*, which means that
+<<<<<<< HEAD
 all types of documents are accepted.  Otherwise you can supply a 
+=======
+all types of documents are accepted.  Otherwise you can supply a
+>>>>>>> upstream/master
 comma-separated list of mime type patterns that you are
 willing to receive.  For example,
 .QW "image/gif, image/jpeg, text/*" .
@@ -132,7 +140,11 @@ The value of the User-Agent header in the HTTP request.  The default is
 .QW "\fBTcl http client package 2.7\fR" .
 .RE
 .TP
+<<<<<<< HEAD
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR? 
+=======
+\fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
+>>>>>>> upstream/master
 .
 The \fB::http::geturl\fR command is the main procedure in the package.
 The \fB\-query\fR option causes a POST operation and
@@ -235,12 +247,21 @@ multiple requests.  Default is 0.
 Force the HTTP request method to \fItype\fR. \fB::http::geturl\fR will
 auto-select GET, POST or HEAD based on other options, but this option
 enables choices like PUT and DELETE for webdav support.
+<<<<<<< HEAD
 .TP
 \fB\-myaddr\fR \fIaddress\fR
 .
 Pass an specific local address to the underlying \fBsocket\fR call in case
 multiple interfaces are available.
 .TP
+=======
+.TP
+\fB\-myaddr\fR \fIaddress\fR
+.
+Pass an specific local address to the underlying \fBsocket\fR call in case
+multiple interfaces are available.
+.TP
+>>>>>>> upstream/master
 \fB\-progress\fR \fIcallback\fR
 .
 The \fIcallback\fR is made after each transfer of data from the URL.
@@ -275,7 +296,11 @@ do the formatting.
 \fB\-queryblocksize\fR \fIsize\fR
 .
 The block size used when posting query data to the URL.
+<<<<<<< HEAD
 At most 
+=======
+At most
+>>>>>>> upstream/master
 \fIsize\fR
 bytes are written at once.  After each block, a call to the
 \fB\-queryprogress\fR
@@ -380,6 +405,7 @@ code (200, 404, etc.) from the \fBhttp\fR element of the state array.
 This is a convenience procedure that returns the \fBcurrentsize\fR
 element of the state array, which represents the number of bytes
 received from the URL in the \fB::http::geturl\fR call.
+<<<<<<< HEAD
 .TP
 \fB::http::meta\fR \fItoken\fR
 .
@@ -387,6 +413,15 @@ This is a convenience procedure that returns the \fBmeta\fR
 element of the state array which contains the HTTP response
 headers. See below for an explanation of this element.
 .TP
+=======
+.TP
+\fB::http::meta\fR \fItoken\fR
+.
+This is a convenience procedure that returns the \fBmeta\fR
+element of the state array which contains the HTTP response
+headers. See below for an explanation of this element.
+.TP
+>>>>>>> upstream/master
 \fB::http::cleanup\fR \fItoken\fR
 .
 This procedure cleans up the state associated with the connection

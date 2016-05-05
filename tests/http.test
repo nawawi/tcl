@@ -373,6 +373,7 @@ test http-3.27 {http::geturl: -headers override -type} -body {
     http::cleanup $token
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -386,11 +387,16 @@ Content-Type {text/plain;charset=utf-8}
 Accept \*/\*
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
 Content-Type {text/plain;charset=utf-8}
 Accept \*/\*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 Accept-Encoding .*
 Content-Length 5}
@@ -402,6 +408,7 @@ test http-3.28 {http::geturl: -headers override -type default} -body {
     http::cleanup $token
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -415,11 +422,16 @@ Content-Type {text/plain;charset=utf-8}
 Accept \*/\*
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
 Content-Type {text/plain;charset=utf-8}
 Accept \*/\*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 Accept-Encoding .*
 Content-Length 5}
@@ -451,7 +463,10 @@ test http-3.31 {http::geturl fragment without path} -body {
 } -result 200
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 # Bug c11a51c482
@@ -470,6 +485,9 @@ Content-Type application/x-www-form-urlencoded
 Content-Length 5}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

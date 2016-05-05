@@ -38,6 +38,7 @@ static struct {
  * Declarations for local functions defined in this file:
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 static char *		EnvTraceProc(ClientData clientData, Tcl_Interp *interp,
 			    const char *name1, const char *name2, int flags);
@@ -51,11 +52,17 @@ MODULE_SCOPE void	TclUnsetEnv(const char *name);
 #endif
 =======
 
+=======
+
+>>>>>>> upstream/master
 static char *		EnvTraceProc(ClientData clientData, Tcl_Interp *interp,
 			    const char *name1, const char *name2, int flags);
 static void		ReplaceString(const char *oldStr, char *newStr);
 MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
 MODULE_SCOPE void	TclUnsetEnv(const char *name);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*
@@ -455,7 +462,11 @@ TclUnsetEnv(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(_WIN32) || defined(__CYGWIN__)
+=======
+#if defined(_WIN32)
+>>>>>>> upstream/master
 =======
 #if defined(_WIN32)
 >>>>>>> upstream/master
@@ -573,7 +584,8 @@ TclGetEnv(
  *	array.
  *
  * Results:
- *	Always returns NULL to indicate success.
+ *	Returns NULL to indicate success, or an error-message if the array
+ *	element being handled doesn't exist.
  *
  * Side effects:
  *	Environment variable changes get propagated. If the whole "env" array
@@ -631,8 +643,12 @@ EnvTraceProc(
 	const char *value = TclGetEnv(name2, &valueString);
 
 	if (value == NULL) {
+<<<<<<< HEAD
 	    Tcl_UnsetVar2(interp, name1, name2, 0);
 	    return NULL;
+=======
+	    return (char *) "no such variable";
+>>>>>>> upstream/master
 	}
 	Tcl_SetVar2(interp, name1, name2, value, 0);
 	Tcl_DStringFree(&valueString);
@@ -758,6 +774,7 @@ TclFinalizeEnvironment(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(__CYGWIN__)
 
 /*
@@ -850,6 +867,8 @@ TclCygwinPutenv(
 }
 #endif /* __CYGWIN__ */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 /*

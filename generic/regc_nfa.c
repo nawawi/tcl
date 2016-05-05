@@ -293,7 +293,11 @@ newarc(
 	    }
 	}
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
     /* no dup, so create the arc */
     createarc(nfa, t, co, from, to);
 }
@@ -384,12 +388,21 @@ allocarc(
 	if (nfa->v->spaceused >= REG_MAX_COMPILE_SPACE) {
 	    NERR(REG_ETOOBIG);
 	    return NULL;
+<<<<<<< HEAD
 	}
 	newAb = (struct arcbatch *) MALLOC(sizeof(struct arcbatch));
 	if (newAb == NULL) {
 	    NERR(REG_ESPACE);
 	    return NULL;
 	}
+=======
+	}
+	newAb = (struct arcbatch *) MALLOC(sizeof(struct arcbatch));
+	if (newAb == NULL) {
+	    NERR(REG_ESPACE);
+	    return NULL;
+	}
+>>>>>>> upstream/master
 	nfa->v->spaceused += sizeof(struct arcbatch);
 	newAb->next = s->oas.next;
 	s->oas.next = newAb;
@@ -578,6 +591,7 @@ cparc(
     struct arc *oa,
     struct state *from,
     struct state *to)
+<<<<<<< HEAD
 {
     newarc(nfa, oa->type, oa->co, from, to);
 }
@@ -735,6 +749,165 @@ sortouts_cmp(
 }
 
 /*
+=======
+{
+    newarc(nfa, oa->type, oa->co, from, to);
+}
+
+/*
+ * sortins - sort the in arcs of a state by from/color/type
+ */
+static void
+sortins(
+    struct nfa * nfa,
+    struct state * s)
+{
+    struct arc **sortarray;
+    struct arc *a;
+    int n = s->nins;
+    int i;
+
+    if (n <= 1) {
+	return;		/* nothing to do */
+    }
+    /* make an array of arc pointers ... */
+    sortarray = (struct arc **) MALLOC(n * sizeof(struct arc *));
+    if (sortarray == NULL) {
+	NERR(REG_ESPACE);
+	return;
+    }
+    i = 0;
+    for (a = s->ins; a != NULL; a = a->inchain) {
+	sortarray[i++] = a;
+    }
+    assert(i == n);
+    /* ... sort the array */
+    qsort(sortarray, n, sizeof(struct arc *), sortins_cmp);
+    /* ... and rebuild arc list in order */
+    /* it seems worth special-casing first and last items to simplify loop */
+    a = sortarray[0];
+    s->ins = a;
+    a->inchain = sortarray[1];
+    a->inchainRev = NULL;
+    for (i = 1; i < n - 1; i++) {
+	a = sortarray[i];
+	a->inchain = sortarray[i + 1];
+	a->inchainRev = sortarray[i - 1];
+    }
+    a = sortarray[i];
+    a->inchain = NULL;
+    a->inchainRev = sortarray[i - 1];
+    FREE(sortarray);
+}
+
+static int
+sortins_cmp(
+    const void *a,
+    const void *b)
+{
+    const struct arc *aa = *((const struct arc * const *) a);
+    const struct arc *bb = *((const struct arc * const *) b);
+
+    /* we check the fields in the order they are most likely to be different */
+    if (aa->from->no < bb->from->no) {
+	return -1;
+    }
+    if (aa->from->no > bb->from->no) {
+ 	return 1;
+    }
+    if (aa->co < bb->co) {
+ 	return -1;
+    }
+    if (aa->co > bb->co) {
+ 	return 1;
+    }
+    if (aa->type < bb->type) {
+ 	return -1;
+    }
+    if (aa->type > bb->type) {
+ 	return 1;
+    }
+    return 0;
+}
+
+/*
+ * sortouts - sort the out arcs of a state by to/color/type
+ */
+static void
+sortouts(
+    struct nfa * nfa,
+    struct state * s)
+{
+    struct arc **sortarray;
+    struct arc *a;
+    int	n = s->nouts;
+    int	i;
+
+    if (n <= 1) {
+	return;					/* nothing to do */
+    }
+    /* make an array of arc pointers ... */
+    sortarray = (struct arc **) MALLOC(n * sizeof(struct arc *));
+    if (sortarray == NULL) {
+	NERR(REG_ESPACE);
+	return;
+    }
+    i = 0;
+    for (a = s->outs; a != NULL; a = a->outchain) {
+	sortarray[i++] = a;
+    }
+    assert(i == n);
+    /* ... sort the array */
+    qsort(sortarray, n, sizeof(struct arc *), sortouts_cmp);
+    /* ... and rebuild arc list in order */
+    /* it seems worth special-casing first and last items to simplify loop */
+    a = sortarray[0];
+    s->outs = a;
+    a->outchain = sortarray[1];
+    a->outchainRev = NULL;
+    for (i = 1; i < n - 1; i++) {
+	a = sortarray[i];
+	a->outchain = sortarray[i + 1];
+	a->outchainRev = sortarray[i - 1];
+    }
+    a = sortarray[i];
+    a->outchain = NULL;
+    a->outchainRev = sortarray[i - 1];
+    FREE(sortarray);
+}
+
+static int
+sortouts_cmp(
+    const void *a,
+    const void *b)
+{
+    const struct arc *aa = *((const struct arc * const *) a);
+    const struct arc *bb = *((const struct arc * const *) b);
+
+    /* we check the fields in the order they are most likely to be different */
+    if (aa->to->no < bb->to->no) {
+	return -1;
+    }
+    if (aa->to->no > bb->to->no) {
+	return 1;
+    }
+    if (aa->co < bb->co) {
+	return -1;
+    }
+    if (aa->co > bb->co) {
+	return 1;
+    }
+    if (aa->type < bb->type) {
+	return -1;
+    }
+    if (aa->type > bb->type) {
+	return 1;
+    }
+    return 0;
+}
+
+/*
+>>>>>>> upstream/master
  * Common decision logic about whether to use arc-by-arc operations or
  * sort/merge.  If there's just a few source arcs we cannot recoup the
  * cost of sorting the destination arc list, no matter how large it is.
@@ -752,12 +925,18 @@ sortouts_cmp(
  * for duplicate suppression, which makes it easier to just make new
  * ones to exploit the suppression built into newarc.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
  *
  * However, if we have a whole lot of arcs to deal with, retail duplicate
  * checks become too slow.  In that case we proceed by sorting and merging
  * the arc lists, and then we can indeed just update the arcs in-place.
  *
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  ^ static void moveins(struct nfa *, struct state *, struct state *);
  */
@@ -1128,6 +1307,7 @@ copyouts(
 	 */
 	struct arc *oa;
 	struct arc *na;
+<<<<<<< HEAD
 
 	/*
 	 * Because we bypass newarc() in this code path, we'd better include a
@@ -1171,6 +1351,51 @@ copyouts(
 	    /* newState does not have anything matching oa */
 	    struct arc *a = oa;
 
+=======
+
+	/*
+	 * Because we bypass newarc() in this code path, we'd better include a
+	 * cancel check.
+	 */
+	if (CANCEL_REQUESTED(nfa->v->re)) {
+	    NERR(REG_CANCEL);
+	    return;
+	}
+
+	sortouts(nfa, oldState);
+	sortouts(nfa, newState);
+	if (NISERR()) {
+	    return;		/* might have failed to sort */
+	}
+	oa = oldState->outs;
+	na = newState->outs;
+	while (oa != NULL && na != NULL) {
+	    struct arc *a = oa;
+
+	    switch (sortouts_cmp(&oa, &na)) {
+		case -1:
+		    /* newState does not have anything matching oa */
+		    oa = oa->outchain;
+		    createarc(nfa, a->type, a->co, newState, a->to);
+		    break;
+		case 0:
+		    /* match, advance in both lists */
+		    oa = oa->outchain;
+		    na = na->outchain;
+		    break;
+		case +1:
+		    /* advance only na; oa might have a match later */
+		    na = na->outchain;
+		    break;
+		default:
+		    assert(NOTREACHED);
+	    }
+	}
+	while (oa != NULL) {
+	    /* newState does not have anything matching oa */
+	    struct arc *a = oa;
+
+>>>>>>> upstream/master
 	    oa = oa->outchain;
 	    createarc(nfa, a->type, a->co, newState, a->to);
 	}
@@ -1444,7 +1669,11 @@ optimize(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  - pullback - pull back constraints backward to (with luck) eliminate them
+=======
+ - pullback - pull back constraints backward to eliminate them
+>>>>>>> upstream/master
 =======
  - pullback - pull back constraints backward to eliminate them
 >>>>>>> upstream/master
@@ -1494,6 +1723,7 @@ pullback(
 	}
 	if (progress && f != NULL) {
 	    dumpnfa(nfa, f);
+<<<<<<< HEAD
 	}
     } while (progress && !NISERR());
     if (NISERR()) {
@@ -1513,6 +1743,27 @@ pullback(
 	    newarc(nfa, PLAIN, nfa->bos[a->co], a->from, a->to);
 	    freearc(nfa, a);
 	}
+=======
+	}
+    } while (progress && !NISERR());
+    if (NISERR()) {
+	return;
+    }
+
+    /*
+     * Any ^ constraints we were able to pull to the start state can now be
+     * replaced by PLAIN arcs referencing the BOS or BOL colors.  There should
+     * be no other ^ or BEHIND arcs left in the NFA, though we do not check
+     * that here (compact() will fail if so).
+     */
+    for (a=nfa->pre->outs ; a!=NULL ; a=nexta) {
+	nexta = a->outchain;
+	if (a->type == '^') {
+	    assert(a->co == 0 || a->co == 1);
+	    newarc(nfa, PLAIN, nfa->bos[a->co], a->from, a->to);
+	    freearc(nfa, a);
+	}
+>>>>>>> upstream/master
     }
 }
 
@@ -1628,7 +1879,11 @@ pull(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  - pushfwd - push forward constraints forward to (with luck) eliminate them
+=======
+ - pushfwd - push forward constraints forward to eliminate them
+>>>>>>> upstream/master
 =======
  - pushfwd - push forward constraints forward to eliminate them
 >>>>>>> upstream/master
@@ -1677,6 +1932,7 @@ pushfwd(
 	}
 	if (progress && f != NULL) {
 	    dumpnfa(nfa, f);
+<<<<<<< HEAD
 	}
     } while (progress && !NISERR());
     if (NISERR()) {
@@ -1696,6 +1952,27 @@ pushfwd(
 	    newarc(nfa, PLAIN, nfa->eos[a->co], a->from, a->to);
 	    freearc(nfa, a);
 	}
+=======
+	}
+    } while (progress && !NISERR());
+    if (NISERR()) {
+	return;
+    }
+
+    /*
+     * Any $ constraints we were able to push to the post state can now be
+     * replaced by PLAIN arcs referencing the EOS or EOL colors.  There should
+     * be no other $ or AHEAD arcs left in the NFA, though we do not check
+     * that here (compact() will fail if so).
+     */
+    for (a = nfa->post->ins; a != NULL; a = nexta) {
+	nexta = a->inchain;
+	if (a->type == '$') {
+	    assert(a->co == 0 || a->co == 1);
+	    newarc(nfa, PLAIN, nfa->eos[a->co], a->from, a->to);
+	    freearc(nfa, a);
+	}
+>>>>>>> upstream/master
     }
 }
 
@@ -2031,7 +2308,11 @@ fixempties(
 		    arcarray[arccount++] = a;
 		}
 	    }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
   	    /* Reset the tmp fields as we walk back */
   	    nexts = s2->tmp;
   	    s2->tmp = NULL;
@@ -2053,7 +2334,11 @@ fixempties(
 	}
 	inarcsorig[s->no] = a;
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
     FREE(arcarray);
     FREE(inarcsorig);
 
@@ -2204,7 +2489,11 @@ fixconstraintloops(
  	    dropstate(nfa, s);
 	}
     }
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> upstream/master
     /* Nothing to do if no remaining constraint arcs */
     if (NISERR() || !hasconstraints) {
 	return;
@@ -2807,7 +3096,11 @@ analyze(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  - compact - compact an NFA
+=======
+ - compact - construct the compact representation of an NFA
+>>>>>>> upstream/master
 =======
  - compact - construct the compact representation of an NFA
 >>>>>>> upstream/master
@@ -2843,10 +3136,17 @@ compact(
 	}
 	if (cnfa->states != NULL) {
 	    FREE(cnfa->states);
+<<<<<<< HEAD
 	}
 	if (cnfa->arcs != NULL) {
 	    FREE(cnfa->arcs);
 	}
+=======
+	}
+	if (cnfa->arcs != NULL) {
+	    FREE(cnfa->arcs);
+	}
+>>>>>>> upstream/master
 	NERR(REG_ESPACE);
 	return;
     }
@@ -2906,8 +3206,11 @@ compact(
 /*
  - carcsort - sort compacted-NFA arcs by color
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Really dumb algorithm, but if the list is long enough for that to matter,
  * you're in real trouble anyway.
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  ^ static void carcsort(struct carc *, struct carc *);
@@ -2929,7 +3232,11 @@ carc_cmp(
 {
     const struct carc *aa = (const struct carc *) a;
     const struct carc *bb = (const struct carc *) b;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
     if (aa->co < bb->co) {
 	return -1;
     }

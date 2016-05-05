@@ -145,7 +145,11 @@ TclCompileGlobalCmd(
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
+=======
+	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
 >>>>>>> upstream/master
@@ -1216,6 +1220,7 @@ TclCompileListCmd(
     if (listObj != NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int len;
 	const char *bytes = Tcl_GetStringFromObj(listObj, &len);
 
@@ -1230,6 +1235,9 @@ TclCompileListCmd(
 	    TclEmitOpcode(	INST_LIST_LENGTH,	envPtr);
 	    TclEmitOpcode(	INST_POP,		envPtr);
 	}
+=======
+	TclEmitPush(TclAddLiteralObj(envPtr, listObj, NULL), envPtr);
+>>>>>>> upstream/master
 =======
 	TclEmitPush(TclAddLiteralObj(envPtr, listObj, NULL), envPtr);
 >>>>>>> upstream/master
@@ -1514,11 +1522,35 @@ TclCompileLreplaceCmd(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if(idx2 != INDEX_END && idx2 < idx1) {
 =======
     if(idx2 != INDEX_END && idx2 >= 0 && idx2 < idx1) {
 >>>>>>> upstream/master
 	idx2 = idx1-1;
+=======
+    /*
+     * idx1, idx2 are now in canonical form:
+     *
+     *  - integer:	[0,len+1]
+     *  - end index:    INDEX_END
+     *  - -ive offset:  INDEX_END-[len-1,0]
+     *  - +ive offset:  INDEX_END+1
+     */
+
+    /*
+     * Compilation fails when one index is end-based but the other isn't.
+     * Fixing this will require more bytecodes, but this is a workaround for
+     * now. [Bug 47ac84309b]
+     */
+
+    if ((idx1 <= INDEX_END) != (idx2 <= INDEX_END)) {
+	return TCL_ERROR;
+    }
+
+    if (idx2 != INDEX_END && idx2 >= 0 && idx2 < idx1) {
+	idx2 = idx1 - 1;
+>>>>>>> upstream/master
     }
 
     /*
@@ -1540,6 +1572,12 @@ TclCompileLreplaceCmd(
 	    idx1 = 0;
 	    goto dropEnd;
 	} else {
+<<<<<<< HEAD
+=======
+	    if (idx2 < idx1) {
+		idx2 = idx1 - 1;
+	    }
+>>>>>>> upstream/master
 	    if (idx1 > 0) {
 		tmpObj = Tcl_NewIntObj(idx1);
 		Tcl_IncrRefCount(tmpObj);
@@ -1567,9 +1605,13 @@ TclCompileLreplaceCmd(
 	idx1 = 0;
 	goto replaceTail;
     } else {
+<<<<<<< HEAD
 	if (idx1 > 0 && idx2 > 0 && idx2 < idx1) {
 	    idx2 = idx1 - 1;
 	} else if (idx1 < 0 && idx2 < 0 && idx2 < idx1) {
+=======
+	if (idx2 < idx1) {
+>>>>>>> upstream/master
 	    idx2 = idx1 - 1;
 	}
 	if (idx1 > 0) {
@@ -1585,7 +1627,11 @@ TclCompileLreplaceCmd(
      * operate on.
      */
 
+<<<<<<< HEAD
   dropAll:
+=======
+  dropAll:			/* This just ensures the arg is a list. */
+>>>>>>> upstream/master
     TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
     TclEmitOpcode(		INST_POP,			envPtr);
     PushStringLiteral(envPtr,	"");
@@ -1598,12 +1644,30 @@ TclCompileLreplaceCmd(
 
   dropRange:
     if (tmpObj != NULL) {
+<<<<<<< HEAD
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
 	TclEmitOpcode(		INST_GT,			envPtr);
 	offset = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
+=======
+	/*
+	 * Emit bytecode to check the list length.
+	 */
+
+	TclEmitOpcode(		INST_DUP,			envPtr);
+	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
+	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
+	TclEmitOpcode(		INST_GE,			envPtr);
+	offset = CurrentOffset(envPtr);
+	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
+
+	/*
+	 * Emit an error if we've been given an empty list.
+	 */
+
+>>>>>>> upstream/master
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	offset2 = CurrentOffset(envPtr);
@@ -1654,6 +1718,7 @@ TclCompileLreplaceCmd(
 
   replaceRange:
     if (tmpObj != NULL) {
+<<<<<<< HEAD
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
@@ -1664,6 +1729,32 @@ TclCompileLreplaceCmd(
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	offset2 = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
+=======
+	/*
+	 * Emit bytecode to check the list length.
+	 */
+
+	TclEmitOpcode(		INST_DUP,			envPtr);
+	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
+
+	/*
+	 * Check the list length vs idx1.
+	 */
+
+	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
+	TclEmitOpcode(		INST_GE,			envPtr);
+	offset = CurrentOffset(envPtr);
+	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
+
+	/*
+	 * Emit an error if we've been given an empty list.
+	 */
+
+	TclEmitOpcode(		INST_DUP,			envPtr);
+	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
+	offset2 = CurrentOffset(envPtr);
+	TclEmitInstInt1(	INST_JUMP_FALSE1, 0,		envPtr);
+>>>>>>> upstream/master
 	TclEmitPush(TclAddLiteralObj(envPtr, Tcl_ObjPrintf(
 		"list doesn't contain element %d", idx1), NULL), envPtr);
 	CompileReturnInternal(envPtr, INST_RETURN_IMM, TCL_ERROR, 0,
@@ -2920,7 +3011,11 @@ TclCompileVariableCmd(
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
+=======
+	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
 >>>>>>> upstream/master
@@ -2999,10 +3094,19 @@ IndexTailVarIfKnown(
     } else {
 	full = 0;
 	lastTokenPtr = varTokenPtr + n;
+<<<<<<< HEAD
 	if (!TclWordKnownAtCompileTime(lastTokenPtr, tailPtr)) {
 	    Tcl_DecrRefCount(tailPtr);
 	    return -1;
 	}
+=======
+
+	if (lastTokenPtr->type != TCL_TOKEN_TEXT) {
+	    Tcl_DecrRefCount(tailPtr);
+	    return -1;
+	}
+	Tcl_SetStringObj(tailPtr, lastTokenPtr->start, lastTokenPtr->size);
+>>>>>>> upstream/master
     }
 
     tailName = TclGetStringFromObj(tailPtr, &len);

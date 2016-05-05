@@ -21,9 +21,21 @@
  * Prototypes for procedures defined later in this file:
  */
 
+<<<<<<< HEAD
 static Tcl_Obj *	DisassembleByteCodeAsDicts(Tcl_Obj *objPtr);
 static int		FormatInstruction(ByteCode *codePtr,
 			    const unsigned char *pc, Tcl_Obj *bufferObj);
+=======
+static Tcl_Obj *	DisassembleByteCodeAsDicts(Tcl_Interp *interp,
+			    Tcl_Obj *objPtr);
+static Tcl_Obj *	DisassembleByteCodeObj(Tcl_Interp *interp,
+			    Tcl_Obj *objPtr);
+static int		FormatInstruction(ByteCode *codePtr,
+			    const unsigned char *pc, Tcl_Obj *bufferObj);
+static void		GetLocationInformation(Tcl_Interp *interp,
+			    Proc *procPtr, Tcl_Obj **fileObjPtr,
+			    int *linePtr);
+>>>>>>> upstream/master
 static void		PrintSourceToObj(Tcl_Obj *appendObj,
 			    const char *stringPtr, int maxChars);
 static void		UpdateStringOfInstName(Tcl_Obj *objPtr);
@@ -48,6 +60,60 @@ static const Tcl_ObjType tclInstNameType = {
 #define BYTECODE(objPtr)					\
     ((ByteCode *) (objPtr)->internalRep.twoPtrValue.ptr1)
 
+<<<<<<< HEAD
+=======
+/*
+ *----------------------------------------------------------------------
+ *
+ * GetLocationInformation --
+ *
+ *	This procedure looks up the information about where a procedure was
+ *	originally declared.
+ *
+ * Results:
+ *	Writes to the variables pointed at by fileObjPtr and linePtr.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+GetLocationInformation(
+    Tcl_Interp *interp,		/* Where to look up the location
+				 * information. */
+    Proc *procPtr,		/* What to look up the information for. */
+    Tcl_Obj **fileObjPtr,	/* Where to write the information about what
+				 * file the code came from. Will be written
+				 * to, either with the object (assume shared!)
+				 * that describes what the file was, or with
+				 * NULL if the information is not
+				 * available. */
+    int *linePtr)		/* Where to write the information about what
+				 * line number represented the start of the
+				 * code in question. Will be written to,
+				 * either with the line number or with -1 if
+				 * the information is not available. */
+{
+    Interp *iPtr = (Interp *) interp;
+    Tcl_HashEntry *hePtr;
+    CmdFrame *cfPtr;
+
+    *fileObjPtr = NULL;
+    *linePtr = -1;
+    if (iPtr != NULL && procPtr != NULL) {
+	hePtr = Tcl_FindHashEntry(iPtr->linePBodyPtr, procPtr);
+	if (hePtr != NULL && (cfPtr = Tcl_GetHashValue(hePtr)) != NULL) {
+	    *linePtr = cfPtr->line[0];
+	    if (cfPtr->type == TCL_LOCATION_SOURCE) {
+		*fileObjPtr = cfPtr->data.eval.path;
+	    }
+	}
+    }
+}
+
+>>>>>>> upstream/master
 #ifdef TCL_COMPILE_DEBUG
 /*
  *----------------------------------------------------------------------
@@ -68,10 +134,17 @@ static const Tcl_ObjType tclInstNameType = {
 
 void
 TclPrintByteCodeObj(
+<<<<<<< HEAD
     Tcl_Interp *interp,		/* Used only for Tcl_GetStringFromObj. */
     Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
 {
     Tcl_Obj *bufPtr = TclDisassembleByteCodeObj(objPtr);
+=======
+    Tcl_Interp *interp,		/* Used only for getting location info. */
+    Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
+{
+    Tcl_Obj *bufPtr = DisassembleByteCodeObj(interp, objPtr);
+>>>>>>> upstream/master
 
     fprintf(stdout, "\n%s", TclGetString(bufPtr));
     Tcl_DecrRefCount(bufPtr);
@@ -176,7 +249,11 @@ TclPrintSource(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclDisassembleByteCodeObj --
+=======
+ * DisassembleByteCodeObj --
+>>>>>>> upstream/master
  *
  *	Given an object which is of bytecode type, return a disassembled
  *	version of the bytecode (in a new refcount 0 object). No guarantees
@@ -185,17 +262,29 @@ TclPrintSource(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 Tcl_Obj *
 TclDisassembleByteCodeObj(
+=======
+static Tcl_Obj *
+DisassembleByteCodeObj(
+    Tcl_Interp *interp,
+>>>>>>> upstream/master
     Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
 {
     ByteCode *codePtr = BYTECODE(objPtr);
     unsigned char *codeStart, *codeLimit, *pc;
     unsigned char *codeDeltaNext, *codeLengthNext;
     unsigned char *srcDeltaNext, *srcLengthNext;
+<<<<<<< HEAD
     int codeOffset, codeLen, srcOffset, srcLen, numCmds, delta, i;
     Interp *iPtr = (Interp *) *codePtr->interpHandle;
     Tcl_Obj *bufferObj;
+=======
+    int codeOffset, codeLen, srcOffset, srcLen, numCmds, delta, i, line;
+    Interp *iPtr = (Interp *) *codePtr->interpHandle;
+    Tcl_Obj *bufferObj, *fileObj;
+>>>>>>> upstream/master
     char ptrBuf1[20], ptrBuf2[20];
 
     TclNewObj(bufferObj);
@@ -220,6 +309,14 @@ TclDisassembleByteCodeObj(
     Tcl_AppendToObj(bufferObj, "  Source ", -1);
     PrintSourceToObj(bufferObj, codePtr->source,
 	    TclMin(codePtr->numSrcBytes, 55));
+<<<<<<< HEAD
+=======
+    GetLocationInformation(interp, codePtr->procPtr, &fileObj, &line);
+    if (line > -1 && fileObj != NULL) {
+	Tcl_AppendPrintfToObj(bufferObj, "\n  File \"%s\" Line %d",
+		Tcl_GetString(fileObj), line);
+    }
+>>>>>>> upstream/master
     Tcl_AppendPrintfToObj(bufferObj,
 	    "\n  Cmds %d, src %d, inst %d, litObjs %u, aux %d, stkDepth %u, code/src %.2f\n",
 	    numCmds, codePtr->numSrcBytes, codePtr->numCodeBytes,
@@ -307,7 +404,11 @@ TclDisassembleByteCodeObj(
 			rangePtr->catchOffset);
 		break;
 	    default:
+<<<<<<< HEAD
 		Tcl_Panic("TclDisassembleByteCodeObj: bad ExceptionRange type %d",
+=======
+		Tcl_Panic("DisassembleByteCodeObj: bad ExceptionRange type %d",
+>>>>>>> upstream/master
 			rangePtr->type);
 	    }
 	}
@@ -861,6 +962,7 @@ PrintSourceToObj(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_AppendToObj(appendObj, "\"", -1);
     if (*p != '\0') {
 	Tcl_AppendToObj(appendObj, "...", -1);
@@ -868,11 +970,16 @@ PrintSourceToObj(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     if (*p != '\0') {
 	Tcl_AppendToObj(appendObj, "...", -1);
     }
     Tcl_AppendToObj(appendObj, "\"", -1);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -894,14 +1001,26 @@ PrintSourceToObj(
 
 static Tcl_Obj *
 DisassembleByteCodeAsDicts(
+<<<<<<< HEAD
+=======
+    Tcl_Interp *interp,		/* Used for looking up the CmdFrame for the
+				 * procedure, if one exists. */
+>>>>>>> upstream/master
     Tcl_Obj *objPtr)		/* The bytecode-holding value to take apart */
 {
     ByteCode *codePtr = BYTECODE(objPtr);
     Tcl_Obj *description, *literals, *variables, *instructions, *inst;
+<<<<<<< HEAD
     Tcl_Obj *aux, *exn, *commands;
     unsigned char *pc, *opnd, *codeOffPtr, *codeLenPtr, *srcOffPtr, *srcLenPtr;
     int codeOffset, codeLength, sourceOffset, sourceLength;
     int i, val;
+=======
+    Tcl_Obj *aux, *exn, *commands, *file;
+    unsigned char *pc, *opnd, *codeOffPtr, *codeLenPtr, *srcOffPtr, *srcLenPtr;
+    int codeOffset, codeLength, sourceOffset, sourceLength;
+    int i, val, line;
+>>>>>>> upstream/master
 
     /*
      * Get the literals from the bytecode.
@@ -1165,6 +1284,16 @@ DisassembleByteCodeAsDicts(
 #undef Decode
 
     /*
+<<<<<<< HEAD
+=======
+     * Get the source file and line number information from the CmdFrame
+     * system if it is available.
+     */
+
+    GetLocationInformation(interp, codePtr->procPtr, &file, &line);
+
+    /*
+>>>>>>> upstream/master
      * Build the overall result.
      */
 
@@ -1187,6 +1316,18 @@ DisassembleByteCodeAsDicts(
 	    Tcl_NewIntObj(codePtr->maxStackDepth));
     Tcl_DictObjPut(NULL, description, Tcl_NewStringObj("exceptdepth", -1),
 	    Tcl_NewIntObj(codePtr->maxExceptDepth));
+<<<<<<< HEAD
+=======
+    if (line > -1) {
+	Tcl_DictObjPut(NULL, description,
+		Tcl_NewStringObj("initiallinenumber", -1),
+		Tcl_NewIntObj(line));
+    }
+    if (file) {
+	Tcl_DictObjPut(NULL, description,
+		Tcl_NewStringObj("sourcefile", -1), file);
+    }
+>>>>>>> upstream/master
     return description;
 }
 
@@ -1416,9 +1557,17 @@ Tcl_DisassembleObjCmd(
 	return TCL_ERROR;
     }
     if (PTR2INT(clientData)) {
+<<<<<<< HEAD
 	Tcl_SetObjResult(interp, DisassembleByteCodeAsDicts(codeObjPtr));
     } else {
 	Tcl_SetObjResult(interp, TclDisassembleByteCodeObj(codeObjPtr));
+=======
+	Tcl_SetObjResult(interp,
+		DisassembleByteCodeAsDicts(interp, codeObjPtr));
+    } else {
+	Tcl_SetObjResult(interp,
+		DisassembleByteCodeObj(interp, codeObjPtr));
+>>>>>>> upstream/master
     }
     return TCL_OK;
 }

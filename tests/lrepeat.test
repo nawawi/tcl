@@ -40,7 +40,11 @@ test lrepeat-1.4 {error cases} {
 	lrepeat -3 1
     }
     -returnCodes 1
+<<<<<<< HEAD
     -result {bad count "-3": must be integer >= 0} 
+=======
+    -result {bad count "-3": must be integer >= 0}
+>>>>>>> upstream/master
 }
 test lrepeat-1.5 {Accept zero repetitions (TIP 323)} {
     -body {
@@ -53,7 +57,11 @@ test lrepeat-1.6 {error cases} {
 	lrepeat 3.5 1
     }
     -returnCodes 1
+<<<<<<< HEAD
     -result {expected integer but got "3.5"} 
+=======
+    -result {expected integer but got "3.5"}
+>>>>>>> upstream/master
 }
 test lrepeat-1.7 {Accept zero repetitions (TIP 323)} {
     -body {

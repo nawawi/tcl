@@ -203,6 +203,11 @@ proc httpdRespond { sock } {
 	    append html </body></html>
 	}
     }
+<<<<<<< HEAD
+=======
+
+    # Catch errors from premature client closes
+>>>>>>> upstream/master
 
     # Catch errors from premature client closes
     

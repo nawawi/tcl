@@ -3,7 +3,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH regexp n 8.3 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS
@@ -51,7 +55,11 @@ the \fB(?x)\fR embedded option (see the \fBre_syntax\fR manual page).
 .TP 15
 \fB\-indices\fR
 .
+<<<<<<< HEAD
 Changes what is stored in the \fImatchVar\fR and \fIsubMatchVar\fRs. 
+=======
+Changes what is stored in the \fImatchVar\fR and \fIsubMatchVar\fRs.
+>>>>>>> upstream/master
 Instead of storing the matching characters from \fIstring\fR,
 each variable
 will contain a list of two decimal strings giving the indices
@@ -133,7 +141,11 @@ regular expression.  Examples are:
 \fB\-start\fR \fIindex\fR
 .
 Specifies a character index offset into the string to start
+<<<<<<< HEAD
 matching the regular expression at.  
+=======
+matching the regular expression at.
+>>>>>>> upstream/master
 The \fIindex\fR value is interpreted in the same manner
 as the \fIindex\fR argument to \fBstring index\fR.
 When using this switch,

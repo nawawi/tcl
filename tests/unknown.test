@@ -58,7 +58,11 @@ test unknown-4.1 {errors in "unknown" procedure} {
 catch {rename unknown {}}
 catch {rename unknown.old unknown}
 cleanupTests
+<<<<<<< HEAD
 return 
+=======
+return
+>>>>>>> upstream/master
 
 # Local Variables:
 # mode: tcl

@@ -1294,7 +1294,11 @@ TclProcessReturn(
             if (Tcl_IsShared(iPtr->errorStack)) {
                 Tcl_Obj *newObj;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1631,10 +1635,15 @@ TclNoErrorStack(
 {
     Tcl_Obj **keys = GetKeys();
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 =======
 
 >>>>>>> upstream/master
+    Tcl_DictObjRemove(interp, options, keys[KEY_ERRORSTACK]);
+    return options;
+=======
+
     Tcl_DictObjRemove(interp, options, keys[KEY_ERRORSTACK]);
     return options;
 }
@@ -1642,6 +1651,54 @@ TclNoErrorStack(
 /*
  *-------------------------------------------------------------------------
  *
+ * Tcl_SetReturnOptions --
+ *
+ *	Accepts an interp and a dictionary of return options, and sets the
+ *	return options of the interp to match the dictionary.
+ *
+ * Results:
+ *	A standard status code. Usually TCL_OK, but TCL_ERROR if an invalid
+ *	option value was found in the dictionary. If a -level value of 0 is in
+ *	the dictionary, then the -code value in the dictionary will be
+ *	returned (TCL_OK default).
+ *
+ * Side effects:
+ *	Sets the state of the interp.
+ *
+ *-------------------------------------------------------------------------
+ */
+
+int
+Tcl_SetReturnOptions(
+    Tcl_Interp *interp,
+    Tcl_Obj *options)
+{
+    int objc, level, code;
+    Tcl_Obj **objv, *mergedOpts;
+
+    Tcl_IncrRefCount(options);
+    if (TCL_ERROR == TclListObjGetElements(interp, options, &objc, &objv)
+	    || (objc % 2)) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                "expected dict but got \"%s\"", TclGetString(options)));
+	Tcl_SetErrorCode(interp, "TCL", "RESULT", "ILLEGAL_OPTIONS", NULL);
+	code = TCL_ERROR;
+    } else if (TCL_ERROR == TclMergeReturnOptions(interp, objc, objv,
+	    &mergedOpts, &code, &level)) {
+	code = TCL_ERROR;
+    } else {
+	code = TclProcessReturn(interp, code, level, mergedOpts);
+    }
+
+    Tcl_DecrRefCount(options);
+    return code;
+>>>>>>> upstream/master
+}
+
+/*
+ *-------------------------------------------------------------------------
+ *
+<<<<<<< HEAD
  * Tcl_SetReturnOptions --
  *
  *	Accepts an interp and a dictionary of return options, and sets the
@@ -1694,6 +1751,14 @@ Tcl_SetReturnOptions(
  *	Used when one interp has caused another interp to evaluate a script
  *	and then wants to transfer the results back to itself.
  *
+=======
+ * Tcl_TransferResult --
+ *
+ *	Copy the result (and error information) from one interp to another.
+ *	Used when one interp has caused another interp to evaluate a script
+ *	and then wants to transfer the results back to itself.
+ *
+>>>>>>> upstream/master
  *	This routine copies the string reps of the result and error
  *	information. It does not simply increment the refcounts of the result
  *	and error information objects themselves. It is not legal to exchange

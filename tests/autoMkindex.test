@@ -180,7 +180,11 @@ test autoMkindex-3.1 {slaveHook} -setup {
 } -cleanup {
     # Reset initCommands to avoid trashing other tests
     AutoMkindexTestReset
+<<<<<<< HEAD
 } -result 1 
+=======
+} -result 1
+>>>>>>> upstream/master
 # The auto_mkindex_parser::command is used to register commands that create
 # new commands.
 test autoMkindex-3.2 {auto_mkindex_parser::command} -setup {

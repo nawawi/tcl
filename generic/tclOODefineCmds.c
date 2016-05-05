@@ -323,7 +323,13 @@ TclOOObjectSetMixins(
     if (numMixins == 0) {
 	if (oPtr->mixins.num != 0) {
 	    FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
 		TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+		if (mixinPtr) {
+		    TclOORemoveFromInstances(oPtr, mixinPtr);
+		}
+>>>>>>> upstream/master
 	    }
 	    ckfree(oPtr->mixins.list);
 	    oPtr->mixins.num = 0;
@@ -332,7 +338,11 @@ TclOOObjectSetMixins(
     } else {
 	if (oPtr->mixins.num != 0) {
 	    FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
 		if (mixinPtr != oPtr->selfCls) {
+=======
+		if (mixinPtr && mixinPtr != oPtr->selfCls) {
+>>>>>>> upstream/master
 		    TclOORemoveFromInstances(oPtr, mixinPtr);
 		}
 	    }
@@ -887,6 +897,10 @@ TclOODefineObjCmd(
 	    Tcl_GetCommandFullName(interp, cmd, obj2Ptr);
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 	Tcl_ListObjReplace(NULL, objPtr, 1, 0, objc-3, objv+3);
 	Tcl_ListObjGetElements(NULL, objPtr, &dummy, &objs);
 
@@ -1001,6 +1015,10 @@ TclOOObjDefObjCmd(
 	    Tcl_GetCommandFullName(interp, cmd, obj2Ptr);
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 	Tcl_ListObjReplace(NULL, objPtr, 1, 0, objc-3, objv+3);
 	Tcl_ListObjGetElements(NULL, objPtr, &dummy, &objs);
 
@@ -1115,6 +1133,10 @@ TclOODefineSelfObjCmd(
 	    Tcl_GetCommandFullName(interp, cmd, obj2Ptr);
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 	Tcl_ListObjReplace(NULL, objPtr, 1, 0, objc-2, objv+2);
 	Tcl_ListObjGetElements(NULL, objPtr, &dummy, &objs);
 
@@ -1210,6 +1232,12 @@ TclOODefineClassObjCmd(
 	TclOORemoveFromInstances(oPtr, oPtr->selfCls);
 	oPtr->selfCls = clsPtr;
 	TclOOAddToInstances(oPtr, oPtr->selfCls);
+<<<<<<< HEAD
+=======
+	if (!(clsPtr->thisPtr->flags & OBJECT_DELETED)) {
+	    oPtr->flags &= ~CLASS_GONE;
+	}
+>>>>>>> upstream/master
 	if (oPtr->classPtr != NULL) {
 	    BumpGlobalEpoch(interp, oPtr->classPtr);
 	} else {
@@ -2506,8 +2534,15 @@ ObjMixinGet(
 
     resultObj = Tcl_NewObj();
     FOREACH(mixinPtr, oPtr->mixins) {
+<<<<<<< HEAD
 	Tcl_ListObjAppendElement(NULL, resultObj,
 		TclOOObjectName(interp, mixinPtr->thisPtr));
+=======
+	if (mixinPtr) {
+	    Tcl_ListObjAppendElement(NULL, resultObj,
+		    TclOOObjectName(interp, mixinPtr->thisPtr));
+	}
+>>>>>>> upstream/master
     }
     Tcl_SetObjResult(interp, resultObj);
     return TCL_OK;

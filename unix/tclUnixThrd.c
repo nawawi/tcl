@@ -20,6 +20,7 @@ typedef struct ThreadSpecificData {
 } ThreadSpecificData;
 
 static Tcl_ThreadDataKey dataKey;
+<<<<<<< HEAD
 
 /*
  * This is the number of milliseconds to wait between internal retries in
@@ -33,6 +34,8 @@ static Tcl_ThreadDataKey dataKey;
 #ifndef TCL_MUTEX_LOCK_SLEEP_TIME
 #  define TCL_MUTEX_LOCK_SLEEP_TIME	(25)
 #endif
+=======
+>>>>>>> upstream/master
 
 /*
  * masterLock is used to serialize creation of mutexes, condition variables,
@@ -57,6 +60,7 @@ static pthread_mutex_t initLock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t allocLock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t *allocLockPtr = &allocLock;
 
+<<<<<<< HEAD
 /*
  * The mutexLock serializes Tcl_MutexLock. This is necessary to prevent
  * races when finalizing a mutex that some other thread may want to lock.
@@ -71,6 +75,8 @@ static pthread_mutex_t mutexLock = PTHREAD_MUTEX_INITIALIZER;
 #define MASTER_LOCK	pthread_mutex_lock(&masterLock)
 #define MASTER_UNLOCK	pthread_mutex_unlock(&masterLock)
 
+=======
+>>>>>>> upstream/master
 #endif /* TCL_THREADS */
 
 /*
@@ -272,7 +278,11 @@ TclpInitLock(void)
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
  *
  *	This procedure is used to destroy all private resources used in this
  *	file.
@@ -286,6 +296,7 @@ TclpInitLock(void)
  *
  *----------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 void
 TclFinalizeLock(void)
@@ -297,6 +308,19 @@ TclFinalizeLock(void)
      * destruction: masterLock, allocLock, and initLock.
      */
 
+=======
+
+void
+TclFinalizeLock(void)
+{
+#ifdef TCL_THREADS
+    /*
+     * You do not need to destroy mutexes that were created with the
+     * PTHREAD_MUTEX_INITIALIZER macro. These mutexes do not need any
+     * destruction: masterLock, allocLock, and initLock.
+     */
+
+>>>>>>> upstream/master
     pthread_mutex_unlock(&initLock);
 #endif
 }
@@ -380,7 +404,6 @@ TclpMasterUnlock(void)
     pthread_mutex_unlock(&masterLock);
 #endif
 }
-
 
 /*
  *----------------------------------------------------------------------
@@ -441,10 +464,13 @@ Tcl_MutexLock(
 {
     pthread_mutex_t *pmutexPtr;
 
+<<<<<<< HEAD
 retry:
 
+=======
+>>>>>>> upstream/master
     if (*mutexPtr == NULL) {
-	MASTER_LOCK;
+	pthread_mutex_lock(&masterLock);
 	if (*mutexPtr == NULL) {
 	    /*
 	     * Double inside master lock check to avoid a race condition.
@@ -455,7 +481,7 @@ retry:
 	    *mutexPtr = (Tcl_Mutex)pmutexPtr;
 	    TclRememberMutex(mutexPtr);
 	}
-	MASTER_UNLOCK;
+	pthread_mutex_unlock(&masterLock);
     }
     while (1) {
 	pthread_mutex_lock(&mutexLock);
@@ -576,7 +602,7 @@ Tcl_ConditionWait(
     struct timespec ptime;
 
     if (*condPtr == NULL) {
-	MASTER_LOCK;
+	pthread_mutex_lock(&masterLock);
 
 	/*
 	 * Double check inside mutex to avoid race, then initialize condition
@@ -589,7 +615,7 @@ Tcl_ConditionWait(
 	    *condPtr = (Tcl_Condition) pcondPtr;
 	    TclRememberCondition(condPtr);
 	}
-	MASTER_UNLOCK;
+	pthread_mutex_unlock(&masterLock);
     }
     pmutexPtr = *((pthread_mutex_t **)mutexPtr);
     pcondPtr = *((pthread_cond_t **)condPtr);
@@ -704,6 +730,7 @@ TclpReaddir(
 {
     return TclOSreaddir(dir);
 }
+<<<<<<< HEAD
 
 #undef TclpInetNtoa
 char *
@@ -761,6 +788,72 @@ TclpFreeAllocMutex(
     }
     pthread_mutex_destroy(&lockPtr->plock);
     free(lockPtr);
+=======
+
+#undef TclpInetNtoa
+char *
+TclpInetNtoa(
+    struct in_addr addr)
+{
+#ifdef TCL_THREADS
+    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    unsigned char *b = (unsigned char*) &addr.s_addr;
+
+    sprintf(tsdPtr->nabuf, "%u.%u.%u.%u", b[0], b[1], b[2], b[3]);
+    return tsdPtr->nabuf;
+#else
+    return inet_ntoa(addr);
+#endif
+}
+
+#ifdef TCL_THREADS
+/*
+ * Additions by AOL for specialized thread memory allocator.
+ */
+
+#ifdef USE_THREAD_ALLOC
+static pthread_key_t key;
+
+typedef struct allocMutex {
+    Tcl_Mutex tlock;
+    pthread_mutex_t plock;
+} allocMutex;
+
+Tcl_Mutex *
+TclpNewAllocMutex(void)
+{
+    struct allocMutex *lockPtr;
+    register pthread_mutex_t *plockPtr;
+
+    lockPtr = malloc(sizeof(struct allocMutex));
+    if (lockPtr == NULL) {
+	Tcl_Panic("could not allocate lock");
+    }
+    plockPtr = &lockPtr->plock;
+    lockPtr->tlock = (Tcl_Mutex) plockPtr;
+    pthread_mutex_init(&lockPtr->plock, NULL);
+    return &lockPtr->tlock;
+}
+
+void
+TclpFreeAllocMutex(
+    Tcl_Mutex *mutex)		/* The alloc mutex to free. */
+{
+    allocMutex* lockPtr = (allocMutex*) mutex;
+    if (!lockPtr) {
+	return;
+    }
+    pthread_mutex_destroy(&lockPtr->plock);
+    free(lockPtr);
+}
+
+void
+TclpInitAllocCache(void)
+{
+    pthread_mutex_lock(allocLockPtr);
+    pthread_key_create(&key, TclpFreeAllocCache);
+    pthread_mutex_unlock(allocLockPtr);
+>>>>>>> upstream/master
 }
 
 void
@@ -775,6 +868,7 @@ TclpFreeAllocCache(
 	TclFreeAllocCache(ptr);
 	pthread_setspecific(key, NULL);
 
+<<<<<<< HEAD
     } else if (initialized) {
 	/*
 	 * Called by us in TclFinalizeThreadAlloc() during the library
@@ -783,12 +877,17 @@ TclpFreeAllocCache(
 
 	pthread_key_delete(key);
 	initialized = 0;
+=======
+    } else {
+	pthread_key_delete(key);
+>>>>>>> upstream/master
     }
 }
 
 void *
 TclpGetAllocCache(void)
 {
+<<<<<<< HEAD
     if (!initialized) {
 	pthread_mutex_lock(allocLockPtr);
 	if (!initialized) {
@@ -797,6 +896,8 @@ TclpGetAllocCache(void)
 	}
 	pthread_mutex_unlock(allocLockPtr);
     }
+=======
+>>>>>>> upstream/master
     return pthread_getspecific(key);
 }
 

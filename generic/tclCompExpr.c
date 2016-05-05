@@ -564,13 +564,21 @@ ParseExpr(
 {
     OpNode *nodes = NULL;	/* Pointer to the OpNode storage array where
 				 * we build the parse tree. */
+<<<<<<< HEAD
     int nodesAvailable = 64;	/* Initial size of the storage array. This
+=======
+    unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
+>>>>>>> upstream/master
 				 * value establishes a minimum tree memory
 				 * cost of only about 1 kibyte, and is large
 				 * enough for most expressions to parse with
 				 * no need for array growth and
 				 * reallocation. */
+<<<<<<< HEAD
     int nodesUsed = 0;		/* Number of OpNodes filled. */
+=======
+    unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
+>>>>>>> upstream/master
     int scanned = 0;		/* Capture number of byte scanned by parsing
 				 * routines. */
     int lastParsed;		/* Stores info about what the lexeme parsed
@@ -662,7 +670,11 @@ ParseExpr(
 	 */
 
 	if (nodesUsed >= nodesAvailable) {
+<<<<<<< HEAD
 	    int size = nodesUsed * 2;
+=======
+	    unsigned int size = nodesUsed * 2;
+>>>>>>> upstream/master
 	    OpNode *newPtr = NULL;
 
 	    do {
@@ -2181,7 +2193,10 @@ ExecConstantExprTree(
     CompileEnv *envPtr;
     ByteCode *byteCodePtr;
     int code;
+<<<<<<< HEAD
     Tcl_Obj *byteCodeObj = Tcl_NewObj();
+=======
+>>>>>>> upstream/master
     NRE_callback *rootPtr = TOP_CB(interp);
 
     /*
@@ -2195,6 +2210,7 @@ ExecConstantExprTree(
     CompileExprTree(interp, nodes, index, litObjvPtr, NULL, NULL, envPtr,
 	    0 /* optimize */);
     TclEmitOpcode(INST_DONE, envPtr);
+<<<<<<< HEAD
     Tcl_IncrRefCount(byteCodeObj);
     TclInitByteCodeObj(byteCodeObj, envPtr);
     TclFreeCompileEnv(envPtr);
@@ -2203,6 +2219,14 @@ ExecConstantExprTree(
     TclNRExecuteByteCode(interp, byteCodePtr);
     code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
     Tcl_DecrRefCount(byteCodeObj);
+=======
+    byteCodePtr = TclInitByteCode(envPtr);
+    TclFreeCompileEnv(envPtr);
+    TclStackFree(interp, envPtr);
+    TclNRExecuteByteCode(interp, byteCodePtr);
+    code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
+    TclReleaseByteCode(byteCodePtr);
+>>>>>>> upstream/master
     return code;
 }
 

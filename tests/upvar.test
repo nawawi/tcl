@@ -352,6 +352,7 @@ test upvar-8.11 {upvar will not create a variable that looks like an array} -set
     array set upvarArray {}
     upvar 0 upvarArray(elem) upvarArrayElemAlias(elem)
 } -returnCodes 1 -match glob -result *
+<<<<<<< HEAD
 
 test upvar-9.1 {Tcl_UpVar2 procedure} testupvar {
     list [catch {testupvar xyz a {} x global} msg] $msg
@@ -439,6 +440,95 @@ namespace eval test_ns_0 {
 }
 set ::x test_global
 
+=======
+
+test upvar-9.1 {Tcl_UpVar2 procedure} testupvar {
+    list [catch {testupvar xyz a {} x global} msg] $msg
+} {1 {bad level "xyz"}}
+test upvar-9.2 {Tcl_UpVar2 procedure} testupvar {
+    catch {unset a}
+    catch {unset x}
+    set a 44
+    list [catch "testupvar #0 a 1 x global" msg] $msg
+} {1 {can't access "a(1)": variable isn't array}}
+test upvar-9.3 {Tcl_UpVar2 procedure} testupvar {
+    proc foo {} {
+	testupvar 1 a {} x local
+	set x
+    }
+    catch {unset a}
+    catch {unset x}
+    set a 44
+    foo
+} {44}
+test upvar-9.4 {Tcl_UpVar2 procedure} testupvar {
+    proc foo {} {
+	testupvar 1 a {} _up_ global
+	list [catch {set x} msg] $msg
+    }
+    catch {unset a}
+    catch {unset _up_}
+    set a 44
+    concat [foo] $_up_
+} {1 {can't read "x": no such variable} 44}
+test upvar-9.5 {Tcl_UpVar2 procedure} testupvar {
+    proc foo {} {
+	testupvar 1 a b x local
+	set x
+    }
+    catch {unset a}
+    catch {unset x}
+    set a(b) 1234
+    foo
+} {1234}
+test upvar-9.6 {Tcl_UpVar procedure} testupvar {
+    proc foo {} {
+	testupvar 1 a x local
+	set x
+    }
+    catch {unset a}
+    catch {unset x}
+    set a xyzzy
+    foo
+} {xyzzy}
+test upvar-9.7 {Tcl_UpVar procedure} testupvar {
+    proc foo {} {
+	testupvar #0 a(b) x local
+	set x
+    }
+    catch {unset a}
+    catch {unset x}
+    set a(b) 1234
+    foo
+} {1234}
+catch {unset a}
+
+test upvar-10.1 {CompileWord OBOE} -setup {
+    proc linenumber {} {dict get [info frame -1] line}
+} -body {
+    apply {n {
+        upvar 1 {*}{
+        } [return [incr n -[linenumber]]] x
+    }} [linenumber]
+} -cleanup {
+    rename linenumber {}
+} -result 1
+
+#
+# Tests for 'namespace upvar'. As the implementation is essentially the same as
+# for 'upvar', we only test that the variables are linked correctly, i.e., we
+# assume that the behaviour of variables once the link is established has
+# already been tested above.
+#
+
+# Clear out any namespaces called test_ns_*
+catch {namespace delete {*}[namespace children :: test_ns_*]}
+namespace eval test_ns_0 {
+    variable x test_ns_0
+}
+set ::x test_global
+
+>>>>>>> upstream/master
 test upvar-NS-1.1 {nsupvar links to correct variable} -body {
     namespace eval test_ns_1 {
 	namespace upvar ::test_ns_0 x w
@@ -452,6 +542,7 @@ test upvar-NS-1.2 {nsupvar links to correct variable} -body {
 	proc a {} {
 	    namespace upvar ::test_ns_0 x w
 	    set w
+<<<<<<< HEAD
 	}
 	return [a]
     }
@@ -490,12 +581,31 @@ test upvar-NS-1.5 {nsupvar links to correct variable} -body {
 test upvar-NS-1.6 {nsupvar links to correct variable} -body {
     namespace eval test_ns_1 {
 	namespace eval test_ns_0 {}
+=======
+	}
+	return [a]
+    }
+} -result {test_ns_0} -cleanup {
+    namespace delete test_ns_1
+}
+test upvar-NS-1.3 {nsupvar links to correct variable} -body {
+    namespace eval test_ns_1 {
+	namespace upvar test_ns_0 x w
+	set w
+    }
+} -returnCodes error -cleanup {
+    namespace delete test_ns_1
+} -result {namespace "test_ns_0" not found in "::test_ns_1"}
+test upvar-NS-1.4 {nsupvar links to correct variable} -body {
+    namespace eval test_ns_1 {
+>>>>>>> upstream/master
 	proc a {} {
 	    namespace upvar test_ns_0 x w
 	    set w
 	}
 	return [a]
     }
+<<<<<<< HEAD
 } -cleanup {
     namespace delete test_ns_1
 } -result {can't read "w": no such variable} -returnCodes error
@@ -511,6 +621,51 @@ test upvar-NS-1.7 {nsupvar links to correct variable} -body {
     namespace delete test_ns_1
 } -result {test_ns_1::test_ns_0}
 test upvar-NS-1.8 {nsupvar links to correct variable} -body {
+=======
+} -returnCodes error -cleanup {
+    namespace delete test_ns_1
+} -result {namespace "test_ns_0" not found in "::test_ns_1"}
+
+test upvar-NS-1.5 {nsupvar links to correct variable} -body {
+    namespace eval test_ns_1 {
+	namespace eval test_ns_0 {}
+	namespace upvar test_ns_0 x w
+	set w
+    }
+} -cleanup {
+    namespace delete test_ns_1
+} -result {can't read "w": no such variable} -returnCodes error
+test upvar-NS-1.6 {nsupvar links to correct variable} -body {
+    namespace eval test_ns_1 {
+	namespace eval test_ns_0 {}
+	proc a {} {
+	    namespace upvar test_ns_0 x w
+	    set w
+	}
+	return [a]
+    }
+} -cleanup {
+    namespace delete test_ns_1
+} -result {can't read "w": no such variable} -returnCodes error
+test upvar-NS-1.7 {nsupvar links to correct variable} -body {
+>>>>>>> upstream/master
+    namespace eval test_ns_1 {
+	namespace eval test_ns_0 {
+	    variable x test_ns_1::test_ns_0
+	}
+<<<<<<< HEAD
+	proc a {} {
+	    namespace upvar test_ns_0 x w
+	    set w
+	}
+=======
+	namespace upvar test_ns_0 x w
+	set w
+    }
+} -cleanup {
+    namespace delete test_ns_1
+} -result {test_ns_1::test_ns_0}
+test upvar-NS-1.8 {nsupvar links to correct variable} -body {
     namespace eval test_ns_1 {
 	namespace eval test_ns_0 {
 	    variable x test_ns_1::test_ns_0
@@ -519,6 +674,7 @@ test upvar-NS-1.8 {nsupvar links to correct variable} -body {
 	    namespace upvar test_ns_0 x w
 	    set w
 	}
+>>>>>>> upstream/master
 	return [a]
     }
 } -cleanup {

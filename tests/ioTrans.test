@@ -1318,7 +1318,11 @@ proc inthread {chan script args} {
     # forwarded channel operations.
 
     set ::tres ""
+<<<<<<< HEAD
     thread::send -async $tid {	
+=======
+    thread::send -async $tid {
+>>>>>>> upstream/master
 	after 50
 	catch {s} res;	# This runs the script, 's' was defined at (*)
 	thread::send -async $mid [list set ::tres $res]

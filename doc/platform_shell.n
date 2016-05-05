@@ -3,7 +3,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH "platform::shell" n 1.1.4 platform::shell "Tcl Bundled Packages"
 .so man.macros
 .BS

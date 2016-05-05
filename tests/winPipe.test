@@ -34,14 +34,18 @@ testConstraint testexcept   [llength [info commands testexcept]]
 
 set big bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n
 append big $big
-append big $big	
+append big $big
 append big $big
 append big $big
 append big $big
 append big $big
 
 set path(little) [makeFile {} little]
+<<<<<<< HEAD
 set f [open $path(little) w] 
+=======
+set f [open $path(little) w]
+>>>>>>> upstream/master
 puts -nonewline $f "little"
 close $f
 

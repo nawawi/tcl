@@ -7,7 +7,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH "tcltest" n 2.3 tcltest "Tcl Bundled Packages"
 .so man.macros
 .BS
@@ -118,7 +122,11 @@ all \fIoption\fRs begin with
 .TP
 \fBloadTestedCommands\fR
 .
+<<<<<<< HEAD
 Evaluates in the caller's context the script specified by 
+=======
+Evaluates in the caller's context the script specified by
+>>>>>>> upstream/master
 \fBconfigure \-load\fR or \fBconfigure \-loadfile\fR.
 Returns the result of that script evaluation, including any error
 raised by the script.  Use this command and the related
@@ -486,7 +494,11 @@ test, typically test failure messages.  Good \fIdescription\fR values
 should briefly explain the purpose of the test to users of a test suite.
 The name of a Tcl or C function being tested should be included in the
 description for regression tests.  If the test case exists to reproduce
+<<<<<<< HEAD
 a bug, include the bug ID in the description. 
+=======
+a bug, include the bug ID in the description.
+>>>>>>> upstream/master
 .PP
 Valid attributes and associated values are:
 .TP
@@ -508,8 +520,13 @@ should be accomplished by the \fB\-constraints\fR option, not by
 conditional evaluation of \fBtest\fR.  In that way, the same
 number of tests are always reported by the test suite, though
 the number skipped may change based on the testing environment.
+<<<<<<< HEAD
 The default value is an empty list.  
 See \fBTEST CONSTRAINTS\fR below for a list of built-in constraints 
+=======
+The default value is an empty list.
+See \fBTEST CONSTRAINTS\fR below for a list of built-in constraints
+>>>>>>> upstream/master
 and information on how to add your own constraints.
 .TP
 \fB\-setup \fIscript\fR
@@ -521,7 +538,11 @@ is an empty script.
 .TP
 \fB\-body \fIscript\fR
 .
+<<<<<<< HEAD
 The \fB\-body\fR attribute indicates the \fIscript\fR to run to carry out the 
+=======
+The \fB\-body\fR attribute indicates the \fIscript\fR to run to carry out the
+>>>>>>> upstream/master
 test, which must return a result that can be checked for correctness.
 If evaluation of \fIscript\fR raises an error, the test will fail
 (unless the \fB\-returnCodes\fR option is used to state that an error
@@ -561,7 +582,11 @@ processed for comparison.
 \fB\-errorOutput \fIexpectedValue\fR
 .
 The \fB\-errorOutput\fR attribute supplies the \fIexpectedValue\fR against
+<<<<<<< HEAD
 which any output sent to \fBstderr\fR or \fBerrorChannel\fR during 
+=======
+which any output sent to \fBstderr\fR or \fBerrorChannel\fR during
+>>>>>>> upstream/master
 evaluation of the script(s) will be compared. Note that only output
 printed using the global \fBputs\fR command is used for comparison.  If
 \fB\-errorOutput\fR is not specified, output sent to \fBstderr\fR and
@@ -661,7 +686,11 @@ This test can only be run on a Mac or Unix platform.
 \fItempNotWin\fR
 .
 This test can not be run on Windows.  This flag is used to temporarily
+<<<<<<< HEAD
 disable a test. 
+=======
+disable a test.
+>>>>>>> upstream/master
 .TP
 \fItempNotMac\fR
 .
@@ -671,17 +700,29 @@ to temporarily disable a test.
 \fIunixCrash\fR
 .
 This test crashes if it is run on Unix.  This flag is used to temporarily
+<<<<<<< HEAD
 disable a test. 
+=======
+disable a test.
+>>>>>>> upstream/master
 .TP
 \fIwinCrash\fR
 .
 This test crashes if it is run on Windows.  This flag is used to temporarily
+<<<<<<< HEAD
 disable a test. 
+=======
+disable a test.
+>>>>>>> upstream/master
 .TP
 \fImacCrash\fR
 .
 This test crashes if it is run on a Mac.  This flag is used to temporarily
+<<<<<<< HEAD
 disable a test. 
+=======
+disable a test.
+>>>>>>> upstream/master
 .TP
 \fIemptyTest\fR
 .
@@ -702,17 +743,29 @@ This test can only be run in some known development environment.
 Some tests are inherently non-portable because they depend on things
 like word length, file system configuration, window manager, etc.
 This constraint has value false to cause tests to be skipped unless
+<<<<<<< HEAD
 the user specifies otherwise.  
+=======
+the user specifies otherwise.
+>>>>>>> upstream/master
 .TP
 \fIuserInteraction\fR
 .
 This test requires interaction from the user.  This constraint has
 value false to causes tests to be skipped unless the user specifies
+<<<<<<< HEAD
 otherwise.  
 .TP
 \fIinteractive\fR
 .
 This test can only be run in if the interpreter is in interactive mode 
+=======
+otherwise.
+.TP
+\fIinteractive\fR
+.
+This test can only be run in if the interpreter is in interactive mode
+>>>>>>> upstream/master
 (when the global tcl_interactive variable is set to 1).
 .TP
 \fInonBlockFiles\fR
@@ -772,6 +825,7 @@ up a configuration with
           -limitconstraints true \e
           -verbose pass
 .CE
+<<<<<<< HEAD
 .PP
 to run exactly those tests that exercise known bugs, and discover
 whether any of them pass, indicating the bug had been fixed.
@@ -1002,6 +1056,238 @@ for writing, and the resulting channel will be set as the value
 of \fBerrorChannel\fR.
 .SH "CREATING TEST SUITES WITH TCLTEST"
 .PP
+=======
+.PP
+to run exactly those tests that exercise known bugs, and discover
+whether any of them pass, indicating the bug had been fixed.
+.SS "RUNNING ALL TESTS"
+.PP
+The single command \fBrunAllTests\fR is evaluated to run an entire
+test suite, spanning many files and directories.  The configuration
+options of \fBtcltest\fR control the precise operations.  The
+\fBrunAllTests\fR command begins by printing a summary of its
+configuration to \fBoutputChannel\fR.
+.PP
+Test files to be evaluated are sought in the directory
+\fBconfigure \-testdir\fR.  The list of files in that directory
+that match any of the patterns in \fBconfigure \-file\fR and
+match none of the patterns in \fBconfigure \-notfile\fR is generated
+and sorted.  Then each file will be evaluated in turn.  If
+\fBconfigure \-singleproc\fR is true, then each file will
+be \fBsource\fRd in the caller's context.  If it is false,
+then a copy of \fBinterpreter\fR will be \fBexec\fR'd to
+evaluate each file.  The multi-process operation is useful
+when testing can cause errors so severe that a process
+terminates.  Although such an error may terminate a child
+process evaluating one file, the master process can continue
+with the rest of the test suite.  In multi-process operation,
+the configuration of \fBtcltest\fR in the master process is
+passed to the child processes as command line arguments,
+with the exception of \fBconfigure \-outfile\fR.  The
+\fBrunAllTests\fR command in the
+master process collects all output from the child processes
+and collates their results into one master report.  Any
+reports of individual test failures, or messages requested
+by a \fBconfigure \-verbose\fR setting are passed directly
+on to \fBoutputChannel\fR by the master process.
+.PP
+After evaluating all selected test files, a summary of the
+results is printed to \fBoutputChannel\fR.  The summary
+includes the total number of \fBtest\fRs evaluated, broken
+down into those skipped, those passed, and those failed.
+The summary also notes the number of files evaluated, and the names
+of any files with failing tests or errors.  A list of
+the constraints that caused tests to be skipped, and the
+number of tests skipped for each is also printed.  Also,
+messages are printed if it appears that evaluation of
+a test file has caused any temporary files to be left
+behind in \fBconfigure \-tmpdir\fR.
+.PP
+Having completed and summarized all selected test files,
+\fBrunAllTests\fR then recursively acts on subdirectories
+of \fBconfigure \-testdir\fR.  All subdirectories that
+match any of the patterns in \fBconfigure \-relateddir\fR
+and do not match any of the patterns in
+\fBconfigure \-asidefromdir\fR are examined.  If
+a file named \fBall.tcl\fR is found in such a directory,
+it will be \fBsource\fRd in the caller's context.
+Whether or not an examined directory contains an
+\fBall.tcl\fR file, its subdirectories are also scanned
+against the \fBconfigure \-relateddir\fR and
+\fBconfigure \-asidefromdir\fR patterns.  In this way,
+many directories in a directory tree can have all their
+test files evaluated by a single \fBrunAllTests\fR
+command.
+.SH "CONFIGURABLE OPTIONS"
+The \fBconfigure\fR command is used to set and query the configurable
+options of \fBtcltest\fR.  The valid options are:
+.TP
+\fB\-singleproc \fIboolean\fR
+.
+Controls whether or not \fBrunAllTests\fR spawns a child process for
+each test file.  No spawning when \fIboolean\fR is true.  Default
+value is false.
+.TP
+\fB\-debug \fIlevel\fR
+.
+Sets the debug level to \fIlevel\fR, an integer value indicating how
+much debugging information should be printed to \fBstdout\fR.  Note that
+debug messages always go to \fBstdout\fR, independent of the value of
+\fBconfigure \-outfile\fR.  Default value is 0.  Levels are defined as:
+.RS
+.IP 0 4
+Do not display any debug information.
+.IP 1
+Display information regarding whether a test is skipped because it
+does not match any of the tests that were specified using by
+\fBconfigure \-match\fR (userSpecifiedNonMatch) or matches any of
+the tests specified by \fBconfigure \-skip\fR (userSpecifiedSkip).  Also
+print warnings about possible lack of cleanup or balance in test files.
+Also print warnings about any re-use of test names.
+.IP 2
+Display the flag array parsed by the command line processor, the
+contents of the global \fBenv\fR array, and all user-defined variables
+that exist in the current namespace as they are used.
+.IP 3
+Display information regarding what individual procs in the test
+harness are doing.
+.RE
+.TP
+\fB\-verbose \fIlevel\fR
+.
+Sets the type of output verbosity desired to \fIlevel\fR,
+a list of zero or more of the elements \fBbody\fR, \fBpass\fR,
+\fBskip\fR, \fBstart\fR, \fBerror\fR and \fBline\fR.  Default value
+is
+.QW "\fBbody error\fR" .
+Levels are defined as:
+.RS
+.IP "body (\fBb\fR)"
+Display the body of failed tests
+.IP "pass (\fBp\fR)"
+Print output when a test passes
+.IP "skip (\fBs\fR)"
+Print output when a test is skipped
+.IP "start (\fBt\fR)"
+Print output whenever a test starts
+.IP "error (\fBe\fR)"
+Print errorInfo and errorCode, if they exist, when a test return code
+does not match its expected return code
+.IP "line (\fBl\fR)"
+Print source file line information of failed tests
+.PP
+The single letter abbreviations noted above are also recognized
+so that
+.QW "\fBconfigure \-verbose pt\fR"
+is the same as
+.QW "\fBconfigure \-verbose {pass start}\fR" .
+.RE
+.TP
+\fB\-preservecore \fIlevel\fR
+.
+Sets the core preservation level to \fIlevel\fR.  This level
+determines how stringent checks for core files are.  Default
+value is 0.  Levels are defined as:
+.RS
+.IP 0
+No checking \(em do not check for core files at the end of each test
+command, but do check for them in \fBrunAllTests\fR after all
+test files have been evaluated.
+.IP 1
+Also check for core files at the end of each \fBtest\fR command.
+.IP 2
+Check for core files at all times described above, and save a
+copy of each core file produced in \fBconfigure \-tmpdir\fR.
+.RE
+.TP
+\fB\-limitconstraints \fIboolean\fR
+.
+Sets the mode by which \fBtest\fR honors constraints as described
+in \fBTESTS\fR above.  Default value is false.
+.TP
+\fB\-constraints \fIlist\fR
+.
+Sets all the constraints in \fIlist\fR to true.  Also used in
+combination with \fBconfigure \-limitconstraints true\fR to control an
+alternative constraint mode as described in \fBTESTS\fR above.
+Default value is an empty list.
+.TP
+\fB\-tmpdir \fIdirectory\fR
+.
+Sets the temporary directory to be used by \fBmakeFile\fR,
+\fBmakeDirectory\fR, \fBviewFile\fR, \fBremoveFile\fR,
+and \fBremoveDirectory\fR as the default directory where
+temporary files and directories created by test files should
+be created.  Default value is \fBworkingDirectory\fR.
+.TP
+\fB\-testdir \fIdirectory\fR
+.
+Sets the directory searched by \fBrunAllTests\fR for test files
+and subdirectories.  Default value is \fBworkingDirectory\fR.
+.TP
+\fB\-file \fIpatternList\fR
+.
+Sets the list of patterns used by \fBrunAllTests\fR to determine
+what test files to evaluate.  Default value is
+.QW \fB*.test\fR .
+.TP
+\fB\-notfile \fIpatternList\fR
+.
+Sets the list of patterns used by \fBrunAllTests\fR to determine
+what test files to skip.  Default value is
+.QW \fBl.*.test\fR ,
+so that any SCCS lock files are skipped.
+.TP
+\fB\-relateddir \fIpatternList\fR
+.
+Sets the list of patterns used by \fBrunAllTests\fR to determine
+what subdirectories to search for an \fBall.tcl\fR file.  Default
+value is
+.QW \fB*\fR .
+.TP
+\fB\-asidefromdir \fIpatternList\fR
+.
+Sets the list of patterns used by \fBrunAllTests\fR to determine
+what subdirectories to skip when searching for an \fBall.tcl\fR file.
+Default value is an empty list.
+.TP
+\fB\-match \fIpatternList\fR
+.
+Set the list of patterns used by \fBtest\fR to determine whether
+a test should be run.  Default value is
+.QW \fB*\fR .
+.TP
+\fB\-skip \fIpatternList\fR
+.
+Set the list of patterns used by \fBtest\fR to determine whether
+a test should be skipped.  Default value is an empty list.
+.TP
+\fB\-load \fIscript\fR
+.
+Sets a script to be evaluated by \fBloadTestedCommands\fR.
+Default value is an empty script.
+.TP
+\fB\-loadfile \fIfilename\fR
+.
+Sets the filename from which to read a script to be evaluated
+by \fBloadTestedCommands\fR.  This is an alternative to
+\fB\-load\fR.  They cannot be used together.
+.TP
+\fB\-outfile \fIfilename\fR
+.
+Sets the file to which all output produced by tcltest should be
+written.  A file named \fIfilename\fR will be \fBopen\fRed for writing,
+and the resulting channel will be set as the value of \fBoutputChannel\fR.
+.TP
+\fB\-errfile \fIfilename\fR
+.
+Sets the file to which all error output produced by tcltest
+should be written.  A file named \fIfilename\fR will be \fBopen\fRed
+for writing, and the resulting channel will be set as the value
+of \fBerrorChannel\fR.
+.SH "CREATING TEST SUITES WITH TCLTEST"
+.PP
+>>>>>>> upstream/master
 The fundamental element of a test suite is the individual \fBtest\fR
 command.  We begin with several examples.
 .IP [1]
@@ -1055,6 +1341,7 @@ Test with a constraint.
 } -result $::tcl_platform(user)
 .CE
 .RE
+<<<<<<< HEAD
 .PP
 At the next higher layer of organization, several \fBtest\fR commands
 are gathered together into a single test file.  Test files should have
@@ -1066,6 +1353,19 @@ thumb to have one test file for each source code file of your project.
 It is good practice to edit the test file and the source code file
 together, keeping tests synchronized with code changes.
 .PP 
+=======
+.PP
+At the next higher layer of organization, several \fBtest\fR commands
+are gathered together into a single test file.  Test files should have
+names with the
+.QW \fB.test\fR
+extension, because that is the default pattern
+used by \fBrunAllTests\fR to find test files.  It is a good rule of
+thumb to have one test file for each source code file of your project.
+It is good practice to edit the test file and the source code file
+together, keeping tests synchronized with code changes.
+.PP
+>>>>>>> upstream/master
 Most of the code in the test file should be the \fBtest\fR commands.
 Use constraints to skip tests, rather than conditional evaluation
 of \fBtest\fR.
@@ -1199,7 +1499,11 @@ to establish a configuration from command line arguments.
 There are two known issues related to nested evaluations of \fBtest\fR.
 The first issue relates to the stack level in which test scripts are
 executed.  Tests nested within other tests may be executed at the same
+<<<<<<< HEAD
 stack level as the outermost test.  For example, in the following code: 
+=======
+stack level as the outermost test.  For example, in the following code:
+>>>>>>> upstream/master
 .PP
 .CS
 \fBtest\fR level-1.1 {level 1} {
@@ -1211,7 +1515,7 @@ stack level as the outermost test.  For example, in the following code:
 .CE
 .PP
 any script executed in level-2.1 may be executed at the same stack
-level as the script defined for level-1.1.  
+level as the script defined for level-1.1.
 .PP
 In addition, while two \fBtest\fRs have been run, results will only
 be reported by \fBcleanupTests\fR for tests at the same level as
@@ -1241,7 +1545,11 @@ script is being run.  Errors thrown by C procedures or printed
 directly from C applications will not be caught by the \fBtest\fR command.
 Therefore, usage of the \fB\-output\fR and \fB\-errorOutput\fR
 options to \fBtest\fR is useful only for pure Tcl applications
+<<<<<<< HEAD
 that use \fBputs\fR to produce output. 
+=======
+that use \fBputs\fR to produce output.
+>>>>>>> upstream/master
 .SH KEYWORDS
 test, test harness, test suite
 .\" Local Variables:

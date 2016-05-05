@@ -3,7 +3,11 @@
 '\"
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH zlib n 8.6 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS
@@ -81,7 +85,11 @@ named by the \fBfilename\fR field was modified. Suitable for use with
 The type of the uncompressed data (\fBbinary\fR or \fBtext\fR) if known.
 .RE
 .TP
+<<<<<<< HEAD
 \fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR? 
+=======
+\fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR?
+>>>>>>> upstream/master
 .
 Return the compressed contents of binary string \fIstring\fR in gzip format.
 If \fB\-level\fR is given, \fIlevel\fR gives the compression level to use

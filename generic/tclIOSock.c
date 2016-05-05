@@ -24,7 +24,11 @@ static Tcl_ThreadDataKey dataKey;
 static const char *gai_strerror(int code) {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 <<<<<<< HEAD
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -175,7 +179,11 @@ TclCreateSocketAddress(
     char *native = NULL, portbuf[TCL_INTEGER_SPACE], *portstring;
     const char *family = NULL;
     Tcl_DString ds;
+<<<<<<< HEAD
     int result, i;
+=======
+    int result;
+>>>>>>> upstream/master
 
     if (host != NULL) {
 	native = Tcl_UtfToExternalDString(NULL, host, -1, &ds);
@@ -192,17 +200,23 @@ TclCreateSocketAddress(
         portstring = portbuf;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
 
     /* 
 =======
+=======
+>>>>>>> upstream/master
 
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
 
     /*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      * Magic variable to enforce a certain address family - to be superseded
      * by a TIP that adds explicit switches to [socket]
@@ -241,7 +255,11 @@ TclCreateSocketAddress(
     if (willBind) {
 	hints.ai_flags |= AI_PASSIVE;
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -295,6 +313,7 @@ TclCreateSocketAddress(
 	    *addrlist = v4head;
 	}
     }
+<<<<<<< HEAD
     i = 0;
     for (p = *addrlist; p != NULL; p = p->ai_next) {
 	i++;
@@ -303,6 +322,8 @@ TclCreateSocketAddress(
     
 =======
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return 1;
 }

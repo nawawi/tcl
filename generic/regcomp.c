@@ -1121,17 +1121,23 @@ parseqatom(
      *
      * In the no-backrefs case, we want this:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
      *
      * [lp] ---> [s] ---prefix---> [begin] ---atom---> [end] ---rest---> [rp]
      *
      * where prefix is some repetitions of atom.  In the general case we need
      *
+<<<<<<< HEAD
 =======
      *
      * [lp] ---> [s] ---prefix---> [begin] ---atom---> [end] ---rest---> [rp]
      *
      * where prefix is some repetitions of atom.  In the general case we need
      *
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      * [lp] ---> [s] ---iterator---> [s2] ---rest---> [rp]
      *

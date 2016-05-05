@@ -143,7 +143,11 @@ RegisterCommand(
     if (cmdTablePtr->exportIt) {
 	sprintf(buf, "namespace eval %s { namespace export %s }",
 		namespace, cmdTablePtr->cmdName);
+<<<<<<< HEAD
 	if (Tcl_Eval(interp, buf) != TCL_OK) {
+=======
+	if (Tcl_EvalEx(interp, buf, -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
     }

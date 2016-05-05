@@ -29,10 +29,14 @@ _CRTIMP unsigned int __cdecl _controlfp (unsigned int unNew, unsigned int unMask
  */
 
 static CRITICAL_SECTION masterLock;
+<<<<<<< HEAD
 static int init = 0;
 #define MASTER_LOCK TclpMasterLock()
 #define MASTER_UNLOCK TclpMasterUnlock()
 
+=======
+static int initialized = 0;
+>>>>>>> upstream/master
 
 /*
  * This is the master lock used to serialize initialization and finalization
@@ -122,7 +126,10 @@ typedef struct WinCondition {
  */
 
 #ifdef USE_THREAD_ALLOC
+<<<<<<< HEAD
 static int once;
+=======
+>>>>>>> upstream/master
 static DWORD tlsKey;
 
 typedef struct allocMutex {
@@ -230,6 +237,7 @@ TclpThreadCreate(
     *idPtr = 0; /* must initialize as Tcl_Thread is a pointer and
                  * on WIN64 sizeof void* != sizeof unsigned
 		 */
+<<<<<<< HEAD
 
 #if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
     tHandle = (HANDLE) _beginthreadex(NULL, (unsigned) stackSize,
@@ -240,6 +248,18 @@ TclpThreadCreate(
 	    TclWinThreadStart, winThreadPtr, 0, (LPDWORD)idPtr);
 #endif
 
+=======
+
+#if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
+    tHandle = (HANDLE) _beginthreadex(NULL, (unsigned) stackSize,
+	    (Tcl_ThreadCreateProc*) TclWinThreadStart, winThreadPtr,
+	    0, (unsigned *)idPtr);
+#else
+    tHandle = CreateThread(NULL, (DWORD) stackSize,
+	    TclWinThreadStart, winThreadPtr, 0, (LPDWORD)idPtr);
+#endif
+
+>>>>>>> upstream/master
     if (tHandle == NULL) {
 	LeaveCriticalSection(&joinLock);
 	return TCL_ERROR;
@@ -360,7 +380,7 @@ Tcl_GetCurrentThread(void)
 void
 TclpInitLock(void)
 {
-    if (!init) {
+    if (!initialized) {
 	/*
 	 * There is a fundamental race here that is solved by creating the
 	 * first Tcl interpreter in a single threaded environment. Once the
@@ -368,7 +388,11 @@ TclpInitLock(void)
 	 * that create interpreters in parallel.
 	 */
 
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 	InitializeCriticalSection(&joinLock);
 	InitializeCriticalSection(&initLock);
 	InitializeCriticalSection(&masterLock);
@@ -422,7 +446,7 @@ TclpInitUnlock(void)
 void
 TclpMasterLock(void)
 {
-    if (!init) {
+    if (!initialized) {
 	/*
 	 * There is a fundamental race here that is solved by creating the
 	 * first Tcl interpreter in a single threaded environment. Once the
@@ -430,7 +454,11 @@ TclpMasterLock(void)
 	 * that create interpreters in parallel.
 	 */
 
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 	InitializeCriticalSection(&joinLock);
 	InitializeCriticalSection(&initLock);
 	InitializeCriticalSection(&masterLock);
@@ -497,7 +525,11 @@ Tcl_GetAllocMutex(void)
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
  *
  *	This procedure is used to destroy all private resources used in this
  *	file.
@@ -515,7 +547,11 @@ Tcl_GetAllocMutex(void)
 void
 TclFinalizeLock(void)
 {
+<<<<<<< HEAD
     MASTER_LOCK;
+=======
+    TclpMasterLock();
+>>>>>>> upstream/master
     DeleteCriticalSection(&joinLock);
 
     /*
@@ -523,7 +559,11 @@ TclFinalizeLock(void)
      */
 
     DeleteCriticalSection(&masterLock);
+<<<<<<< HEAD
     init = 0;
+=======
+    initialized = 0;
+>>>>>>> upstream/master
 
 #ifdef TCL_THREADS
     if (allocOnce) {
@@ -570,7 +610,7 @@ Tcl_MutexLock(
     CRITICAL_SECTION *csPtr;
 
     if (*mutexPtr == NULL) {
-	MASTER_LOCK;
+	TclpMasterLock();
 
 	/*
 	 * Double inside master lock check to avoid a race.
@@ -582,7 +622,7 @@ Tcl_MutexLock(
 	    *mutexPtr = (Tcl_Mutex)csPtr;
 	    TclRememberMutex(mutexPtr);
 	}
-	MASTER_UNLOCK;
+	TclpMasterUnlock();
     }
     csPtr = *((CRITICAL_SECTION **)mutexPtr);
     EnterCriticalSection(csPtr);
@@ -684,7 +724,7 @@ Tcl_ConditionWait(
      */
 
     if (tsdPtr->flags == WIN_THREAD_UNINIT) {
-	MASTER_LOCK;
+	TclpMasterLock();
 
 	/*
 	 * Create the per-thread event and queue pointers.
@@ -698,7 +738,7 @@ Tcl_ConditionWait(
 	    tsdPtr->flags = WIN_THREAD_RUNNING;
 	    doExit = 1;
 	}
-	MASTER_UNLOCK;
+	TclpMasterUnlock();
 
 	if (doExit) {
 	    /*
@@ -713,7 +753,7 @@ Tcl_ConditionWait(
     }
 
     if (*condPtr == NULL) {
-	MASTER_LOCK;
+	TclpMasterLock();
 
 	/*
 	 * Initialize the per-condition queue pointers and Mutex.
@@ -727,7 +767,7 @@ Tcl_ConditionWait(
 	    *condPtr = (Tcl_Condition) winCondPtr;
 	    TclRememberCondition(condPtr);
 	}
-	MASTER_UNLOCK;
+	TclpMasterUnlock();
     }
     csPtr = *((CRITICAL_SECTION **)mutexPtr);
     winCondPtr = *((WinCondition **)condPtr);
@@ -971,10 +1011,28 @@ TclpFreeAllocMutex(
     free(lockPtr);
 }
 
+<<<<<<< HEAD
+=======
+void
+TclpInitAllocCache(void)
+{
+    /*
+     * We need to make sure that TclpFreeAllocCache is called on each
+     * thread that calls this, but only on threads that call this.
+     */
+
+    tlsKey = TlsAlloc();
+    if (tlsKey == TLS_OUT_OF_INDEXES) {
+	Tcl_Panic("could not allocate thread local storage");
+    }
+}
+
+>>>>>>> upstream/master
 void *
 TclpGetAllocCache(void)
 {
     void *result;
+<<<<<<< HEAD
 
     if (!once) {
 	/*
@@ -989,6 +1047,8 @@ TclpGetAllocCache(void)
 	}
     }
 
+=======
+>>>>>>> upstream/master
     result = TlsGetValue(tlsKey);
     if ((result == NULL) && (GetLastError() != NO_ERROR)) {
 	Tcl_Panic("TlsGetValue failed from TclpGetAllocCache");
@@ -1024,7 +1084,11 @@ TclpFreeAllocCache(
 	if (!success) {
 	    Tcl_Panic("TlsSetValue failed from TclpFreeAllocCache");
 	}
+<<<<<<< HEAD
     } else if (once) {
+=======
+    } else {
+>>>>>>> upstream/master
 	/*
 	 * Called by us in TclFinalizeThreadAlloc() during the library
 	 * finalization initiated from Tcl_Finalize()
@@ -1034,9 +1098,13 @@ TclpFreeAllocCache(
 	if (!success) {
 	    Tcl_Panic("TlsFree failed from TclpFreeAllocCache");
 	}
+<<<<<<< HEAD
 	once = 0; /* reset for next time. */
     }
 
+=======
+    }
+>>>>>>> upstream/master
 }
 #endif /* USE_THREAD_ALLOC */
 

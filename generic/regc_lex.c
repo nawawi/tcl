@@ -131,11 +131,19 @@ prefixes(
 	    break;
 	}
     }
+<<<<<<< HEAD
 
     /*
      * BREs and EREs don't get embedded options.
      */
 
+=======
+
+    /*
+     * BREs and EREs don't get embedded options.
+     */
+
+>>>>>>> upstream/master
     if ((v->cflags&REG_ADVANCED) != REG_ADVANCED) {
 	return;
     }
@@ -256,20 +264,48 @@ static const chr brbacks[] = {	/* \s within brackets */
     CHR('s'), CHR('p'), CHR('a'), CHR('c'), CHR('e'),
     CHR(':'), CHR(']')
 };
+<<<<<<< HEAD
 static const chr backw[] = {	/* \w */
     CHR('['), CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
     CHR(':'), CHR(']'), CHR('_'), CHR(']')
+=======
+
+#define PUNCT_CONN \
+	CHR('_'), \
+	0x203f /* UNDERTIE */, \
+	0x2040 /* CHARACTER TIE */,\
+	0x2054 /* INVERTED UNDERTIE */,\
+	0xfe33 /* PRESENTATION FORM FOR VERTICAL LOW LINE */, \
+	0xfe34 /* PRESENTATION FORM FOR VERTICAL WAVY LOW LINE */, \
+	0xfe4d /* DASHED LOW LINE */, \
+	0xfe4e /* CENTRELINE LOW LINE */, \
+	0xfe4f /* WAVY LOW LINE */, \
+	0xff3f /* FULLWIDTH LOW LINE */
+
+static const chr backw[] = {	/* \w */
+    CHR('['), CHR('['), CHR(':'),
+    CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
+    CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
+>>>>>>> upstream/master
 };
 static const chr backW[] = {	/* \W */
     CHR('['), CHR('^'), CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
+<<<<<<< HEAD
     CHR(':'), CHR(']'), CHR('_'), CHR(']')
+=======
+    CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
+>>>>>>> upstream/master
 };
 static const chr brbackw[] = {	/* \w within brackets */
     CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
+<<<<<<< HEAD
     CHR(':'), CHR(']'), CHR('_')
+=======
+    CHR(':'), CHR(']'), PUNCT_CONN
+>>>>>>> upstream/master
 };
 
 /*
@@ -366,6 +402,7 @@ next(
 	}
 	assert(NOTREACHED);
     }
+<<<<<<< HEAD
 
     /*
      * Okay, time to actually get a character.
@@ -373,6 +410,15 @@ next(
 
     c = *v->now++;
 
+=======
+
+    /*
+     * Okay, time to actually get a character.
+     */
+
+    c = *v->now++;
+
+>>>>>>> upstream/master
     /*
      * Deal with the easy contexts, punt EREs to code below.
      */
@@ -514,6 +560,7 @@ next(
 	    default:		/* oops */
 		v->now--;
 		RETV(PLAIN, c);
+<<<<<<< HEAD
 		break;
 	    }
 	    assert(NOTREACHED);
@@ -617,6 +664,111 @@ next(
 	    case CHR(':'):	/* non-capturing paren */
 		RETV('(', 0);
 		break;
+=======
+		break;
+	    }
+	    assert(NOTREACHED);
+	    break;
+	default:
+	    RETV(PLAIN, c);
+	    break;
+	}
+	assert(NOTREACHED);
+	break;
+    case L_CEL:			/* collating elements are easy */
+	if (c == CHR('.') && NEXT1(']')) {
+	    v->now++;
+	    INTOCON(L_BRACK);
+	    RETV(END, '.');
+	} else {
+	    RETV(PLAIN, c);
+	}
+	break;
+    case L_ECL:			/* ditto equivalence classes */
+	if (c == CHR('=') && NEXT1(']')) {
+	    v->now++;
+	    INTOCON(L_BRACK);
+	    RETV(END, '=');
+	} else {
+	    RETV(PLAIN, c);
+	}
+	break;
+    case L_CCL:			/* ditto character classes */
+	if (c == CHR(':') && NEXT1(']')) {
+	    v->now++;
+	    INTOCON(L_BRACK);
+	    RETV(END, ':');
+	} else {
+	    RETV(PLAIN, c);
+	}
+	break;
+    default:
+	assert(NOTREACHED);
+	break;
+    }
+
+    /*
+     * That got rid of everything except EREs and AREs.
+     */
+
+    assert(INCON(L_ERE));
+
+    /*
+     * Deal with EREs and AREs, except for backslashes.
+     */
+
+    switch (c) {
+    case CHR('|'):
+	RET('|');
+	break;
+    case CHR('*'):
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    v->now++;
+	    NOTE(REG_UNONPOSIX);
+	    RETV('*', 0);
+	}
+	RETV('*', 1);
+	break;
+    case CHR('+'):
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    v->now++;
+	    NOTE(REG_UNONPOSIX);
+	    RETV('+', 0);
+	}
+	RETV('+', 1);
+	break;
+    case CHR('?'):
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    v->now++;
+	    NOTE(REG_UNONPOSIX);
+	    RETV('?', 0);
+	}
+	RETV('?', 1);
+	break;
+    case CHR('{'):		/* bounds start or plain character */
+	if (v->cflags&REG_EXPANDED) {
+	    skip(v);
+	}
+	if (ATEOS() || !iscdigit(*v->now)) {
+	    NOTE(REG_UBRACES);
+	    NOTE(REG_UUNSPEC);
+	    RETV(PLAIN, c);
+	} else {
+	    NOTE(REG_UBOUNDS);
+	    INTOCON(L_EBND);
+	    RET('{');
+	}
+	assert(NOTREACHED);
+	break;
+    case CHR('('):		/* parenthesis, or advanced extension */
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    NOTE(REG_UNONPOSIX);
+	    v->now++;
+	    switch (*v->now++) {
+	    case CHR(':'):	/* non-capturing paren */
+		RETV('(', 0);
+		break;
+>>>>>>> upstream/master
 	    case CHR('#'):	/* comment */
 		while (!ATEOS() && *v->now != CHR(')')) {
 		    v->now++;
@@ -645,6 +797,7 @@ next(
 	    RETV('(', 0);	/* all parens non-capturing */
 	} else {
 	    RETV('(', 1);
+<<<<<<< HEAD
 	}
 	break;
     case CHR(')'):
@@ -665,6 +818,28 @@ next(
 	    NOTE(REG_UNONPOSIX);
 	    RET((c == CHR('<')) ? '<' : '>');
 	}
+=======
+	}
+	break;
+    case CHR(')'):
+	if (LASTTYPE('(')) {
+	    NOTE(REG_UUNSPEC);
+	}
+	RETV(')', c);
+	break;
+    case CHR('['):		/* easy except for [[:<:]] and [[:>:]] */
+	if (HAVE(6) &&	*(v->now+0) == CHR('[') &&
+		*(v->now+1) == CHR(':') &&
+		(*(v->now+2) == CHR('<') || *(v->now+2) == CHR('>')) &&
+		*(v->now+3) == CHR(':') &&
+		*(v->now+4) == CHR(']') &&
+		*(v->now+5) == CHR(']')) {
+	    c = *(v->now+2);
+	    v->now += 6;
+	    NOTE(REG_UNONPOSIX);
+	    RET((c == CHR('<')) ? '<' : '>');
+	}
+>>>>>>> upstream/master
 	INTOCON(L_BRACK);
 	if (NEXT1('^')) {
 	    v->now++;

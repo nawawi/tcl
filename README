@@ -1,5 +1,9 @@
 README:  Tcl
+<<<<<<< HEAD
     This is the Tcl 8.6.4 source distribution.
+=======
+    This is the Tcl 8.7a0 source distribution.
+>>>>>>> upstream/master
 	http://sourceforge.net/projects/tcl/files/Tcl/
     You can get any source release of Tcl from the URL above.
 
@@ -49,7 +53,11 @@ and selling it either in whole or in part.  See the file
 
 Extensive documentation is available at our website.
 The home page for this release, including new features, is
+<<<<<<< HEAD
 	http://www.tcl.tk/software/tcltk/8.6.html
+=======
+	http://www.tcl.tk/software/tcltk/8.7.html
+>>>>>>> upstream/master
 
 Detailed release notes can be found at the file distributions page
 by clicking on the relevant version.
@@ -61,9 +69,15 @@ Information about Tcl itself can be found at
 There have been many Tcl books on the market.  Many are mentioned in the Wiki:
 	http://wiki.tcl.tk/_/ref?N=25206
 
+<<<<<<< HEAD
 To view the complete set of reference manual entries for Tcl 8.6 online,
 visit the URL:
 	http://www.tcl.tk/man/tcl8.6/
+=======
+To view the complete set of reference manual entries for Tcl 8.7 online,
+visit the URL:
+	http://www.tcl.tk/man/tcl8.7/
+>>>>>>> upstream/master
 
 2a. Unix Documentation
 ----------------------

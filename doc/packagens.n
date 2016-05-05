@@ -1,7 +1,11 @@
 '\"
 '\" Copyright (c) 1998-2000 by Scriptics Corporation.
 '\" All rights reserved.
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 .TH pkg::create n 8.3 Tcl "Tcl Built-In Commands"
 .so man.macros
 .BS

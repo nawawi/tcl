@@ -772,6 +772,7 @@ TclParseAllWhiteSpace(
  *
  *----------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 int
 TclParseHex(
@@ -784,6 +785,20 @@ TclParseHex(
     int result = 0;
     register const char *p = src;
 
+=======
+
+int
+TclParseHex(
+    const char *src,		/* First character to parse. */
+    int numBytes,		/* Max number of byes to scan */
+    int *resultPtr)	/* Points to storage provided by caller where
+				 * the character resulting from the
+				 * conversion is to be written. */
+{
+    int result = 0;
+    register const char *p = src;
+
+>>>>>>> upstream/master
     while (numBytes--) {
 	unsigned char digit = UCHAR(*p);
 
@@ -1454,6 +1469,7 @@ Tcl_ParseVarName(
 	    if (parsePtr->interp != NULL) {
 		Tcl_SetObjResult(parsePtr->interp, Tcl_NewStringObj(
 			"missing close-brace for variable name", -1));
+<<<<<<< HEAD
 	    }
 	    parsePtr->errorType = TCL_PARSE_MISSING_VAR_BRACE;
 	    parsePtr->term = tokenPtr->start-1;
@@ -1486,6 +1502,40 @@ Tcl_ParseVarName(
 	    }
 	    break;
 	}
+=======
+	    }
+	    parsePtr->errorType = TCL_PARSE_MISSING_VAR_BRACE;
+	    parsePtr->term = tokenPtr->start-1;
+	    parsePtr->incomplete = 1;
+	    goto error;
+	}
+	tokenPtr->size = src - tokenPtr->start;
+	tokenPtr[-1].size = src - tokenPtr[-1].start;
+	parsePtr->numTokens++;
+	src++;
+    } else {
+	tokenPtr->type = TCL_TOKEN_TEXT;
+	tokenPtr->start = src;
+	tokenPtr->numComponents = 0;
+
+	while (numBytes) {
+	    if (TclIsBareword(*src)) {
+		src += 1;
+		numBytes -= 1;
+		continue;
+	    }
+	    if ((src[0] == ':') && (numBytes != 1) && (src[1] == ':')) {
+		src += 2;
+		numBytes -= 2;
+		while (numBytes && (*src == ':')) {
+		    src++;
+		    numBytes--;
+		}
+		continue;
+	    }
+	    break;
+	}
+>>>>>>> upstream/master
 
 	/*
 	 * Support for empty array names here.
@@ -1577,12 +1627,21 @@ Tcl_ParseVar(
     register Tcl_Obj *objPtr;
     int code;
     Tcl_Parse *parsePtr = TclStackAlloc(interp, sizeof(Tcl_Parse));
+<<<<<<< HEAD
 
     if (Tcl_ParseVarName(interp, start, -1, parsePtr, 0) != TCL_OK) {
 	TclStackFree(interp, parsePtr);
 	return NULL;
     }
 
+=======
+
+    if (Tcl_ParseVarName(interp, start, -1, parsePtr, 0) != TCL_OK) {
+	TclStackFree(interp, parsePtr);
+	return NULL;
+    }
+
+>>>>>>> upstream/master
     if (termPtr != NULL) {
 	*termPtr = start + parsePtr->tokenPtr->size;
     }
@@ -1910,13 +1969,17 @@ Tcl_ParseQuotedString(
  *
  * TclSubstParse --
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
  *
  *	Token parser used by the [subst] command. Parses the string made up of
  *	'numBytes' bytes starting at 'bytes'. Parsing is controlled by the
  *	flags argument to provide support for the -nobackslashes, -nocommands,
  *	and -novariables options, as represented by the flag values
  *	TCL_SUBST_BACKSLASHES, TCL_SUBST_COMMANDS, TCL_SUBST_VARIABLES.
+<<<<<<< HEAD
 >>>>>>> upstream/master
  *
  *	Token parser used by the [subst] command. Parses the string made up of
@@ -1925,6 +1988,9 @@ Tcl_ParseQuotedString(
  *	and -novariables options, as represented by the flag values
  *	TCL_SUBST_BACKSLASHES, TCL_SUBST_COMMANDS, TCL_SUBST_VARIABLES.
  *	
+=======
+ *
+>>>>>>> upstream/master
  * Results:
  *	None.
  *

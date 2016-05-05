@@ -11,6 +11,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 # The following variables are used to determine which characters are
+<<<<<<< HEAD
 # interpreted as white space.
 
 if {$::tcl_platform(platform) eq "windows"} {
@@ -20,6 +21,15 @@ if {$::tcl_platform(platform) eq "windows"} {
 } else {
     # Motif style - any unicode word char (number, letter, or underscore)
     set ::tcl_wordchars {\w}
+=======
+# interpreted as word characters. See bug [f1253530cdd8]. Will
+# probably be removed in Tcl 9.
+
+if {![info exists ::tcl_wordchars]} {
+    set ::tcl_wordchars {\w}
+}
+if {![info exists ::tcl_nonwordchars]} {
+>>>>>>> upstream/master
     set ::tcl_nonwordchars {\W}
 }
 

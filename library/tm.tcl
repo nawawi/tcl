@@ -354,7 +354,11 @@ proc ::tcl::tm::Defaults {} {
 #	Calls 'path add' to paths to the list of module search paths.
 
 proc ::tcl::tm::roots {paths} {
+<<<<<<< HEAD
     lassign [split [package present Tcl] .] major minor
+=======
+    regexp {^(\d+)\.(\d+)} [package present Tcl] - major minor
+>>>>>>> upstream/master
     foreach pa $paths {
 	set p [file join $pa tcl$major]
 	for {set n $minor} {$n >= 0} {incr n -1} {

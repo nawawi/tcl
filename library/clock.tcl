@@ -112,6 +112,10 @@ proc ::tcl::clock::Initialize {} {
     ::msgcat::mcpackageconfig set mcfolder [file join $LibDir msgs]
     ::msgcat::mcpackageconfig set unknowncmd ""
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
+>>>>>>> upstream/master
 =======
     ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
 >>>>>>> upstream/master
@@ -1319,6 +1323,9 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 	[dict get $date localSeconds] % 86400
     }]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
     # Parse the date.  The parser will return a list comprising date, time,
     # time zone, relative month/day/seconds, relative weekday, ordinal month.
@@ -1336,6 +1343,7 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 	    "unable to convert date-time string \"$string\": $message"
     }
 
+<<<<<<< HEAD
 =======
 
     # Parse the date.  The parser will return a list comprising date, time,
@@ -1354,6 +1362,8 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 	    "unable to convert date-time string \"$string\": $message"
     }
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     # If the caller supplied a date in the string, update the 'date' dict with
     # the value. If the caller didn't specify a time with the date, default to
@@ -4271,7 +4281,11 @@ proc ::tcl::clock::add { clockval args } {
              ?-gmt boolean? ?-locale LOCALE? ?-timezone ZONE?\""
     }
     if { [catch { expr {wide($clockval)} } result] } {
+<<<<<<< HEAD
 	return -code error $result
+=======
+	return -code error "expected integer but got \"$clockval\""
+>>>>>>> upstream/master
     }
 
     set offsets {}
@@ -4310,9 +4324,12 @@ proc ::tcl::clock::add { clockval args } {
 	    -errorcode [list CLOCK gmtWithTimezone] \
 	    "cannot use -gmt and -timezone in same call"
     }
+<<<<<<< HEAD
     if { [catch { expr { wide($clockval) } } result] } {
 	return -code error "expected integer but got \"$clockval\""
     }
+=======
+>>>>>>> upstream/master
     if { ![string is boolean -strict $gmt] } {
 	return -code error "expected boolean value but got \"$gmt\""
     } elseif { $gmt } {
@@ -4349,6 +4366,14 @@ proc ::tcl::clock::add { clockval args } {
 			    $changeover]
 		}
 
+<<<<<<< HEAD
+=======
+		weekdays - weekday {
+		    set clockval [AddWeekDays $quantity $clockval $timezone \
+			    $changeover]
+		}
+
+>>>>>>> upstream/master
 		hours - hour {
 		    set clockval [expr { 3600 * $quantity + $clockval }]
 		}
@@ -4448,6 +4473,59 @@ proc ::tcl::clock::AddMonths { months clockval timezone changeover } {
 
 #----------------------------------------------------------------------
 #
+<<<<<<< HEAD
+=======
+# AddWeekDays --
+#
+#	Add a given number of week days (skipping Saturdays and Sundays)
+#	to a given clock value in a given time zone.
+#
+# Parameters:
+#	days - Number of days to add (may be negative)
+#	clockval - Seconds since the epoch before the operation
+#	timezone - Time zone in which the operation is to be performed
+#	changeover - Julian Day on which the Gregorian calendar was adopted
+#		     in the target locale.
+#
+# Results:
+#	Returns the new clock value as a number of seconds since the epoch.
+#
+# Side effects:
+#	None.
+#
+#----------------------------------------------------------------------
+
+proc ::tcl::clock::AddWeekDays { days clockval timezone changeover } {
+
+    if {$days == 0} {
+        return $clockval
+    }
+
+    set day [format $clockval -format %u]
+
+    set weeks  [expr {$days / 5}]
+    set rdays  [expr {$days % 5}]
+    set toAdd  [expr {7 * $weeks + $rdays}]
+    set resDay [expr {$day + ($toAdd % 7)}]
+
+    # Adjust if we start from a weekend
+    if {$day > 5} {
+	set adj [expr {5 - $day}]
+	incr toAdd  $adj
+	incr resDay $adj
+    }
+
+    # Adjust if we end up on a weekend
+    if {$resDay > 5} {
+	incr toAdd 2
+    }
+
+    AddDays $toAdd $clockval $timezone $changeover
+}
+
+#----------------------------------------------------------------------
+#
+>>>>>>> upstream/master
 # AddDays --
 #
 #	Add a given number of days to a given clock value in a given time
@@ -4500,7 +4578,10 @@ proc ::tcl::clock::AddDays { days clockval timezone changeover } {
 #----------------------------------------------------------------------
 #
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 # ChangeCurrentLocale --
 #
 #        The global locale was changed within msgcat.
@@ -4536,6 +4617,9 @@ proc ::tcl::clock::ChangeCurrentLocale {args} {
 
 #----------------------------------------------------------------------
 #
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # ClearCaches --
 #

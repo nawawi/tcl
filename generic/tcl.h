@@ -38,8 +38,13 @@ extern "C" {
  * update the version numbers:
  *
  * library/init.tcl	(1 LOC patch)
+<<<<<<< HEAD
  * unix/configure.in	(2 LOC Major, 2 LOC minor, 1 LOC patch)
  * win/configure.in	(as above)
+=======
+ * unix/configure.ac	(2 LOC Major, 2 LOC minor, 1 LOC patch)
+ * win/configure.ac	(as above)
+>>>>>>> upstream/master
  * win/tcl.m4		(not patchlevel)
  * win/makefile.bc	(not patchlevel) 2 LOC
  * README		(sections 0 and 2, with and without separator)
@@ -54,12 +59,21 @@ extern "C" {
  */
 
 #define TCL_MAJOR_VERSION   8
+<<<<<<< HEAD
 #define TCL_MINOR_VERSION   6
 #define TCL_RELEASE_LEVEL   TCL_FINAL_RELEASE
 #define TCL_RELEASE_SERIAL  4
 
 #define TCL_VERSION	    "8.6"
 #define TCL_PATCH_LEVEL	    "8.6.4"
+=======
+#define TCL_MINOR_VERSION   7
+#define TCL_RELEASE_LEVEL   TCL_ALPHA_RELEASE
+#define TCL_RELEASE_SERIAL  0
+
+#define TCL_VERSION	    "8.7"
+#define TCL_PATCH_LEVEL	    "8.7a0"
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------------
@@ -1163,6 +1177,7 @@ typedef int (Tcl_CompareHashKeysProc) (void *keyPtr, Tcl_HashEntry *hPtr);
 typedef Tcl_HashEntry * (Tcl_AllocHashEntryProc) (Tcl_HashTable *tablePtr,
 	void *keyPtr);
 typedef void (Tcl_FreeHashEntryProc) (Tcl_HashEntry *hPtr);
+<<<<<<< HEAD
 
 /*
  * This flag controls whether the hash table stores the hash of a key, or
@@ -1175,6 +1190,8 @@ typedef void (Tcl_FreeHashEntryProc) (Tcl_HashEntry *hPtr);
 #ifndef TCL_HASH_KEY_STORE_HASH
 #   define TCL_HASH_KEY_STORE_HASH 1
 #endif
+=======
+>>>>>>> upstream/master
 
 /*
  * Structure definition for an entry in a hash table. No-one outside Tcl
@@ -1185,6 +1202,7 @@ struct Tcl_HashEntry {
     Tcl_HashEntry *nextPtr;	/* Pointer to next entry in this hash bucket,
 				 * or NULL for end of chain. */
     Tcl_HashTable *tablePtr;	/* Pointer to table containing entry. */
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
     void *hash;			/* Hash value, stored as pointer to ensure
 				 * that the offsets of the fields in this
@@ -1194,6 +1212,11 @@ struct Tcl_HashEntry {
 				 * entry in this entry's chain: used for
 				 * deleting the entry. */
 #endif
+=======
+    void *hash;			/* Hash value, stored as pointer to ensure
+				 * that the offsets of the fields in this
+				 * structure are not changed. */
+>>>>>>> upstream/master
     ClientData clientData;	/* Application stores something here with
 				 * Tcl_SetHashValue. */
     union {			/* Key has one of these forms: */
@@ -2278,6 +2301,7 @@ typedef unsigned int mp_digit;
  * Definitions needed for Tcl_ParseArgvObj routines.
  * Based on tkArgv.c.
  * Modifications from the original are copyright (c) Sam Bromley 2006
+<<<<<<< HEAD
  */
 
 typedef struct {
@@ -2381,6 +2405,111 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 #define TCL_LOAD_LAZY 2
 
 /*
+=======
+ */
+
+typedef struct {
+    int type;			/* Indicates the option type; see below. */
+    const char *keyStr;		/* The key string that flags the option in the
+				 * argv array. */
+    void *srcPtr;		/* Value to be used in setting dst; usage
+				 * depends on type.*/
+    void *dstPtr;		/* Address of value to be modified; usage
+				 * depends on type.*/
+    const char *helpStr;	/* Documentation message describing this
+				 * option. */
+    ClientData clientData;	/* Word to pass to function callbacks. */
+} Tcl_ArgvInfo;
+
+/*
+ * Legal values for the type field of a Tcl_ArgInfo: see the user
+ * documentation for details.
+ */
+
+#define TCL_ARGV_CONSTANT	15
+#define TCL_ARGV_INT		16
+#define TCL_ARGV_STRING		17
+#define TCL_ARGV_REST		18
+#define TCL_ARGV_FLOAT		19
+#define TCL_ARGV_FUNC		20
+#define TCL_ARGV_GENFUNC	21
+#define TCL_ARGV_HELP		22
+#define TCL_ARGV_END		23
+
+/*
+ * Types of callback functions for the TCL_ARGV_FUNC and TCL_ARGV_GENFUNC
+ * argument types:
+ */
+
+typedef int (Tcl_ArgvFuncProc)(ClientData clientData, Tcl_Obj *objPtr,
+	void *dstPtr);
+typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
+	int objc, Tcl_Obj *const *objv, void *dstPtr);
+
+/*
+ * Shorthand for commonly used argTable entries.
+ */
+
+#define TCL_ARGV_AUTO_HELP \
+    {TCL_ARGV_HELP,	"-help",	NULL,	NULL, \
+	    "Print summary of command-line options and abort", NULL}
+#define TCL_ARGV_AUTO_REST \
+    {TCL_ARGV_REST,	"--",		NULL,	NULL, \
+	    "Marks the end of the options", NULL}
+#define TCL_ARGV_TABLE_END \
+    {TCL_ARGV_END, NULL, NULL, NULL, NULL, NULL}
+
+/*
+ *----------------------------------------------------------------------------
+ * Definitions needed for Tcl_Zlib routines. [TIP #234]
+ *
+ * Constants for the format flags describing what sort of data format is
+ * desired/expected for the Tcl_ZlibDeflate, Tcl_ZlibInflate and
+ * Tcl_ZlibStreamInit functions.
+ */
+
+#define TCL_ZLIB_FORMAT_RAW	1
+#define TCL_ZLIB_FORMAT_ZLIB	2
+#define TCL_ZLIB_FORMAT_GZIP	4
+#define TCL_ZLIB_FORMAT_AUTO	8
+
+/*
+ * Constants that describe whether the stream is to operate in compressing or
+ * decompressing mode.
+ */
+
+#define TCL_ZLIB_STREAM_DEFLATE	16
+#define TCL_ZLIB_STREAM_INFLATE	32
+
+/*
+ * Constants giving compression levels. Use of TCL_ZLIB_COMPRESS_DEFAULT is
+ * recommended.
+ */
+
+#define TCL_ZLIB_COMPRESS_NONE	0
+#define TCL_ZLIB_COMPRESS_FAST	1
+#define TCL_ZLIB_COMPRESS_BEST	9
+#define TCL_ZLIB_COMPRESS_DEFAULT (-1)
+
+/*
+ * Constants for types of flushing, used with Tcl_ZlibFlush.
+ */
+
+#define TCL_ZLIB_NO_FLUSH	0
+#define TCL_ZLIB_FLUSH		2
+#define TCL_ZLIB_FULLFLUSH	3
+#define TCL_ZLIB_FINALIZE	4
+
+/*
+ *----------------------------------------------------------------------------
+ * Definitions needed for the Tcl_LoadFile function. [TIP #416]
+ */
+
+#define TCL_LOAD_GLOBAL 1
+#define TCL_LOAD_LAZY 2
+
+/*
+>>>>>>> upstream/master
  *----------------------------------------------------------------------------
  * Single public declaration for NRE.
  */

@@ -944,7 +944,11 @@ ReflectClose(
 			(Tcl_FreeProc *) FreeReflectedTransform);
 		return errorCode;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -962,7 +966,11 @@ ReflectClose(
 			(Tcl_FreeProc *) FreeReflectedTransform);
 		return errorCode;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -1186,7 +1194,11 @@ ReflectInput(
 
 	    rtPtr->eofPending = 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

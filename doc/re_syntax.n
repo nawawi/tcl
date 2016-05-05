@@ -685,6 +685,7 @@ subexpressions.
 .PP
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that the quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
 force longest and shortest preference, respectively, on a
 subexpression or a whole RE.
@@ -692,6 +693,11 @@ subexpression or a whole RE.
 The quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
 force longest and shortest preference, respectively, on a
 subexpression or a whole RE.
+=======
+The quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
+force longest and shortest preference, respectively, on a
+subexpression or a whole RE.
+>>>>>>> upstream/master
 =======
 The quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
 force longest and shortest preference, respectively, on a
@@ -722,6 +728,9 @@ and the remaining quantifiers are overridden to be non-greedy by the preceding
 non-greedy quantifier.
 .RE
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

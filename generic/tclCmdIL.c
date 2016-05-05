@@ -2390,7 +2390,14 @@ Tcl_LinsertObjCmd(
 
 	Tcl_ListObjAppendElement(NULL, listPtr, objv[3]);
     } else {
+<<<<<<< HEAD
 	Tcl_ListObjReplace(NULL, listPtr, index, 0, (objc-3), &(objv[3]));
+=======
+	if (TCL_OK != Tcl_ListObjReplace(interp, listPtr, index, 0,
+		(objc-3), &(objv[3]))) {
+	    return TCL_ERROR;
+	}
+>>>>>>> upstream/master
     }
 
     /*
@@ -2752,7 +2759,11 @@ Tcl_LreplaceObjCmd(
      * (to allow for replacing the last elem).
      */
 
+<<<<<<< HEAD
     if ((first >= listLen) && (listLen > 0)) {
+=======
+    if ((first > listLen) && (listLen > 0)) {
+>>>>>>> upstream/master
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"list doesn't contain element %s", TclGetString(objv[2])));
 	Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LREPLACE", "BADIDX",
@@ -2776,6 +2787,7 @@ Tcl_LreplaceObjCmd(
     listPtr = objv[1];
     if (Tcl_IsShared(listPtr)) {
 	listPtr = TclListObjCopy(NULL, listPtr);
+<<<<<<< HEAD
     }
 
     /*
@@ -2789,6 +2801,24 @@ Tcl_LreplaceObjCmd(
     Tcl_ListObjReplace(NULL, listPtr, first, numToDelete, objc-4, objv+4);
 
     /*
+=======
+    }
+
+    /*
+     * Note that we call Tcl_ListObjReplace even when numToDelete == 0 and
+     * objc == 4. In this case, the list value of listPtr is not changed (no
+     * elements are removed or added), but by making the call we are assured
+     * we end up with a list in canonical form. Resist any temptation to
+     * optimize this case away.
+     */
+
+    if (TCL_OK != Tcl_ListObjReplace(interp, listPtr, first, numToDelete,
+	    objc-4, objv+4)) {
+	return TCL_ERROR;
+    }
+
+    /*
+>>>>>>> upstream/master
      * Set the interpreter's object result.
      */
 
