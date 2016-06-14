@@ -1155,7 +1155,7 @@ void
 TclCleanupByteCode(
 =======
 TclPreserveByteCode(
-    register ByteCode *codePtr)	
+    register ByteCode *codePtr)
 {
     codePtr->refCount++;
 }
