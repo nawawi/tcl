@@ -3,7 +3,11 @@
 #	This file contains the declarations for the functions in 'libtommath'
 #	that are contained within the Tcl library.  This file is used to
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	generate the 'tclTomMathDecls.h' and 'tclTomMathStub.c' files.
+=======
+#	generate the 'tclTomMathDecls.h' and 'tclStubInit.c' files.
+>>>>>>> upstream/master
 =======
 #	generate the 'tclTomMathDecls.h' and 'tclStubInit.c' files.
 >>>>>>> upstream/master

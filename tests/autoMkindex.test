@@ -181,7 +181,11 @@ test autoMkindex-3.1 {slaveHook} -setup {
     # Reset initCommands to avoid trashing other tests
     AutoMkindexTestReset
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result 1 
+=======
+} -result 1
+>>>>>>> upstream/master
 =======
 } -result 1
 >>>>>>> upstream/master

@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -23,6 +27,7 @@ dde \- Execute a Dynamic Data Exchange command
 .sp
 .VS 8.6
 \fBdde execute\fR ?\fB\-async\fR? ?\fB\-binary\fR? \fIservice topic data\fR
+<<<<<<< HEAD
 .sp
 \fBdde poke\fR ?\fB\-binary\fR? \fIservice topic item data\fR
 .VE 8.6
@@ -31,6 +36,16 @@ dde \- Execute a Dynamic Data Exchange command
 .sp
 \fBdde services \fIservice topic\fR
 .sp
+=======
+.sp
+\fBdde poke\fR ?\fB\-binary\fR? \fIservice topic item data\fR
+.VE 8.6
+.sp
+\fBdde request\fR ?\fB\-binary\fR? \fIservice topic item\fR
+.sp
+\fBdde services \fIservice topic\fR
+.sp
+>>>>>>> upstream/master
 \fBdde eval\fR ?\fB\-async\fR? \fItopic cmd \fR?\fIarg arg ...\fR?
 .BE
 
@@ -90,7 +105,11 @@ the command returns immediately with no error.
 Without the \fB\-binary\fR option all data will be sent in unicode. For
 dde clients which don't implement the CF_UNICODE clipboard format, this
 <<<<<<< HEAD
+<<<<<<< HEAD
 will automatically be translated to the system encoding. You can use 
+=======
+will automatically be translated to the system encoding. You can use
+>>>>>>> upstream/master
 =======
 will automatically be translated to the system encoding. You can use
 >>>>>>> upstream/master
@@ -111,7 +130,11 @@ application.
 Without the \fB\-binary\fR option all data will be sent in unicode. For
 dde clients which don't implement the CF_UNICODE clipboard format, this
 <<<<<<< HEAD
+<<<<<<< HEAD
 will automatically be translated to the system encoding. You can use 
+=======
+will automatically be translated to the system encoding. You can use
+>>>>>>> upstream/master
 =======
 will automatically be translated to the system encoding. You can use
 >>>>>>> upstream/master

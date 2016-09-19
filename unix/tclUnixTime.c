@@ -23,7 +23,11 @@
  */
 
 static Tcl_ThreadDataKey tmKey;
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     struct tm gmtime_buf;
     struct tm localtime_buf;
 } ThreadSpecificData;

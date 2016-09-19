@@ -71,8 +71,12 @@ typedef struct ThreadSpecificData {
  * Prototypes for functions defined later in this file.
  */
 
+<<<<<<< HEAD
 static int		EvalFileCallback(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	EvalFileCallback;
+>>>>>>> upstream/master
 static FilesystemRecord*FsGetFirstFilesystem(void);
 static void		FsThrExitProc(ClientData cd);
 static Tcl_Obj *	FsListMounts(Tcl_Obj *pathPtr, const char *pattern);
@@ -545,8 +549,13 @@ TclFSCwdPointerEquals(
 	int len1, len2;
 	const char *str1, *str2;
 
+<<<<<<< HEAD
 	str1 = Tcl_GetStringFromObj(tsdPtr->cwdPathPtr, &len1);
 	str2 = Tcl_GetStringFromObj(*pathPtrPtr, &len2);
+=======
+	str1 = TclGetStringFromObj(tsdPtr->cwdPathPtr, &len1);
+	str2 = TclGetStringFromObj(*pathPtrPtr, &len2);
+>>>>>>> upstream/master
 	if ((len1 == len2) && !memcmp(str1, str2, len1)) {
 	    /*
 	     * They are equal, but different objects. Update so they will be
@@ -689,7 +698,11 @@ FsUpdateCwd(
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&fsDataKey);
 
     if (cwdObj != NULL) {
+<<<<<<< HEAD
 	str = Tcl_GetStringFromObj(cwdObj, &len);
+=======
+	str = TclGetStringFromObj(cwdObj, &len);
+>>>>>>> upstream/master
     }
 
     Tcl_MutexLock(&cwdMutex);
@@ -1225,8 +1238,13 @@ FsAddMountsToGlobResult(
 	    if (norm != NULL) {
 		const char *path, *mount;
 
+<<<<<<< HEAD
 		mount = Tcl_GetStringFromObj(mElt, &mlen);
 		path = Tcl_GetStringFromObj(norm, &len);
+=======
+		mount = TclGetStringFromObj(mElt, &mlen);
+		path = TclGetStringFromObj(norm, &len);
+>>>>>>> upstream/master
 		if (path[len-1] == '/') {
 		    /*
 		     * Deal with the root of the volume.
@@ -1817,7 +1835,11 @@ Tcl_FSEvalFileEx(
     oldScriptFile = iPtr->scriptFile;
     iPtr->scriptFile = pathPtr;
     Tcl_IncrRefCount(iPtr->scriptFile);
+<<<<<<< HEAD
     string = Tcl_GetStringFromObj(objPtr, &length);
+=======
+    string = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 
     /*
      * TIP #280 Force the evaluator to open a frame for a sourced file.
@@ -1844,7 +1866,11 @@ Tcl_FSEvalFileEx(
 	 * Record information telling where the error occurred.
 	 */
 
+<<<<<<< HEAD
 	const char *pathString = Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	const char *pathString = TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 	int limit = 150;
 	int overflow = (length > limit);
 
@@ -1995,7 +2021,11 @@ EvalFileCallback(
 	 */
 
 	int length;
+<<<<<<< HEAD
 	const char *pathString = Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	const char *pathString = TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 	const int limit = 150;
 	int overflow = (length > limit);
 
@@ -2847,8 +2877,13 @@ Tcl_FSGetCwd(
 	    int len1, len2;
 	    const char *str1, *str2;
 
+<<<<<<< HEAD
 	    str1 = Tcl_GetStringFromObj(tsdPtr->cwdPathPtr, &len1);
 	    str2 = Tcl_GetStringFromObj(norm, &len2);
+=======
+	    str1 = TclGetStringFromObj(tsdPtr->cwdPathPtr, &len1);
+	    str2 = TclGetStringFromObj(norm, &len2);
+>>>>>>> upstream/master
 	    if ((len1 == len2) && (strcmp(str1, str2) == 0)) {
 		/*
 		 * If the paths were equal, we can be more efficient and
@@ -3645,6 +3680,7 @@ DivertUnloadFile(
  * Results:
  *	Returns a pointer to the symbol if found. If not found, returns NULL
  *	and leaves an error message in the interpreter result.
+<<<<<<< HEAD
  *
  * This function was once filesystem-specific, but has been made portable by
  * having TclpDlopen return a structure that includes procedure pointers.
@@ -3672,6 +3708,35 @@ Tcl_FindSymbol(
  *----------------------------------------------------------------------
  */
 
+=======
+ *
+ * This function was once filesystem-specific, but has been made portable by
+ * having TclpDlopen return a structure that includes procedure pointers.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void *
+Tcl_FindSymbol(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    Tcl_LoadHandle loadHandle,	/* Handle to the loaded library */
+    const char *symbol)		/* Name of the symbol to resolve */
+{
+    return loadHandle->findSymbolProcPtr(interp, loadHandle, symbol);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_FSUnloadFile --
+ *
+ *	Unloads a library given its handle. Checks first that the library
+ *	supports unloading.
+ *
+ *----------------------------------------------------------------------
+ */
+
+>>>>>>> upstream/master
 int
 Tcl_FSUnloadFile(
     Tcl_Interp *interp,		/* Tcl interpreter */
@@ -3772,6 +3837,7 @@ TclFSUnloadTempFile(
 	 * Remove the temporary file we created. Note, we may crash here
 	 * because encodings have been taken down already.
 	 */
+<<<<<<< HEAD
 
 	if (tvdlPtr->divertedFilesystem->deleteFileProc(tvdlPtr->divertedFile)
 		!= TCL_OK) {
@@ -3792,6 +3858,28 @@ TclFSUnloadTempFile(
 	     */
 	}
 
+=======
+
+	if (tvdlPtr->divertedFilesystem->deleteFileProc(tvdlPtr->divertedFile)
+		!= TCL_OK) {
+	    /*
+	     * The above may have failed because the filesystem, or something
+	     * it depends upon (e.g. encodings) have been taken down because
+	     * Tcl is exiting.
+	     *
+	     * We may need to work out how to delete this file more robustly
+	     * (or give the filesystem the information it needs to delete the
+	     * file more robustly).
+	     *
+	     * In particular, one problem might be that the filesystem cannot
+	     * extract the information it needs from the above path object
+	     * because Tcl's entire filesystem apparatus (the code in this
+	     * file) has been finalized, and it refuses to pass the internal
+	     * representation to the filesystem.
+	     */
+	}
+
+>>>>>>> upstream/master
 	/*
 	 * And free up the allocations. This will also of course remove a
 	 * refCount from the Tcl_Filesystem to which this file belongs, which
@@ -3818,6 +3906,7 @@ TclFSUnloadTempFile(
  *	of the symbolic link given by 'pathPtr', or NULL if the symbolic link
  *	could not be read. The result is owned by the caller, which should
  *	call Tcl_DecrRefCount when the result is no longer needed.
+<<<<<<< HEAD
  *
  *	If toPtr is non-NULL, then the result is toPtr if the link action was
  *	successful, or NULL if not. In this case the result has no additional
@@ -3834,6 +3923,24 @@ TclFSUnloadTempFile(
  * Side effects:
  *	See readlink() documentation. A new filesystem link object may appear.
  *
+=======
+ *
+ *	If toPtr is non-NULL, then the result is toPtr if the link action was
+ *	successful, or NULL if not. In this case the result has no additional
+ *	reference count, and need not be freed. The actual action to perform
+ *	is given by the 'linkAction' flags, which is an or'd combination of:
+ *
+ *		TCL_CREATE_SYMBOLIC_LINK
+ *		TCL_CREATE_HARD_LINK
+ *
+ *	Note that most filesystems will not support linking across to
+ *	different filesystems, so this function will usually fail unless toPtr
+ *	is in the same FS as pathPtr.
+ *
+ * Side effects:
+ *	See readlink() documentation. A new filesystem link object may appear.
+ *
+>>>>>>> upstream/master
  *---------------------------------------------------------------------------
  */
 
@@ -4116,7 +4223,11 @@ TclGetPathType(
 				 * caller. */
 {
     int pathLen;
+<<<<<<< HEAD
     const char *path = Tcl_GetStringFromObj(pathPtr, &pathLen);
+=======
+    const char *path = TclGetStringFromObj(pathPtr, &pathLen);
+>>>>>>> upstream/master
     Tcl_PathType type;
 
     type = TclFSNonnativePathType(path, pathLen, filesystemPtrPtr,
@@ -4228,7 +4339,11 @@ TclFSNonnativePathType(
 
 		    numVolumes--;
 		    Tcl_ListObjIndex(NULL, thisFsVolumes, numVolumes, &vol);
+<<<<<<< HEAD
 		    strVol = Tcl_GetStringFromObj(vol,&len);
+=======
+		    strVol = TclGetStringFromObj(vol,&len);
+>>>>>>> upstream/master
 		    if (pathLen < len) {
 			continue;
 		    }
@@ -4575,8 +4690,13 @@ Tcl_FSRemoveDirectory(
 	    Tcl_Obj *normPath = Tcl_FSGetNormalizedPath(NULL, pathPtr);
 
 	    if (normPath != NULL) {
+<<<<<<< HEAD
 		normPathStr = Tcl_GetStringFromObj(normPath, &normLen);
 		cwdStr = Tcl_GetStringFromObj(cwdPtr, &cwdLen);
+=======
+		normPathStr = TclGetStringFromObj(normPath, &normLen);
+		cwdStr = TclGetStringFromObj(cwdPtr, &cwdLen);
+>>>>>>> upstream/master
 		if ((cwdLen >= normLen) && (strncmp(normPathStr, cwdStr,
 			(size_t) normLen) == 0)) {
 		    /*

@@ -13,6 +13,7 @@
 
 #undef STATIC_BUILD
 #include "tcl.h"
+<<<<<<< HEAD
 
 /*
  * TCL_STORAGE_CLASS is set unconditionally to DLLEXPORT because the
@@ -22,6 +23,8 @@
 #undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLEXPORT
 
+=======
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -40,7 +43,11 @@
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkge_Init(
     Tcl_Interp *interp)		/* Interpreter in which the package is to be
 				 * made available. */

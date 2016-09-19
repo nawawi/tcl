@@ -4,7 +4,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -21,7 +25,11 @@ lset \- Change an element in a list
 .PP
 The \fBlset\fR command accepts a parameter, \fIvarName\fR, which
 <<<<<<< HEAD
+<<<<<<< HEAD
 it interprets as the name of a variable containing a Tcl list. 
+=======
+it interprets as the name of a variable containing a Tcl list.
+>>>>>>> upstream/master
 =======
 it interprets as the name of a variable containing a Tcl list.
 >>>>>>> upstream/master
@@ -49,7 +57,11 @@ In this case, \fInewValue\fR replaces the old value of the variable
 When presented with a single index, the \fBlset\fR command
 treats the content of the \fIvarName\fR variable as a Tcl list.
 <<<<<<< HEAD
+<<<<<<< HEAD
 It addresses the \fIindex\fR'th element in it 
+=======
+It addresses the \fIindex\fR'th element in it
+>>>>>>> upstream/master
 =======
 It addresses the \fIindex\fR'th element in it
 >>>>>>> upstream/master
@@ -149,7 +161,11 @@ The indicated return value also becomes the new value of \fIx\fR.
 .CE
 .SH "SEE ALSO"
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

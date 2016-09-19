@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -117,7 +121,11 @@ In this setup \fBGetData\fR will be called with the channel as an
 argument whenever $chan becomes readable. The \fBread\fR call will
 read whatever binary data is currently available without blocking.
 <<<<<<< HEAD
+<<<<<<< HEAD
 Here the channel has the fileevent removed when an end of file 
+=======
+Here the channel has the fileevent removed when an end of file
+>>>>>>> upstream/master
 =======
 Here the channel has the fileevent removed when an end of file
 >>>>>>> upstream/master
@@ -132,6 +140,7 @@ proc GetData {chan} {
         fileevent $chan readable {}
     }
 }
+<<<<<<< HEAD
 
 fconfigure $chan -blocking 0 -encoding binary
 \fBfileevent\fR $chan readable [list GetData $chan]
@@ -150,6 +159,26 @@ proc GetData {chan} {
     }
 }
 
+=======
+
+fconfigure $chan -blocking 0 -encoding binary
+\fBfileevent\fR $chan readable [list GetData $chan]
+.CE
+.PP
+The next example demonstrates use of \fBgets\fR to read line-oriented
+data.
+.PP
+.CS
+proc GetData {chan} {
+    if {[gets $chan line] >= 0} {
+        puts $line
+    }
+    if {[eof $chan]} {
+        close $chan
+    }
+}
+
+>>>>>>> upstream/master
 fconfigure $chan -blocking 0 -buffering line -translation crlf
 \fBfileevent\fR $chan readable [list GetData $chan]
 .CE

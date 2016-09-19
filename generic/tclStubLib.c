@@ -24,6 +24,7 @@ const TclIntStubs *tclIntStubsPtr = NULL;
 const TclIntPlatStubs *tclIntPlatStubsPtr = NULL;
 
 /*
+<<<<<<< HEAD
  * Use our own isDigit to avoid linking to libc on windows
  */
 
@@ -31,6 +32,12 @@ static int isDigit(const int c)
 {
     return (c >= '0' && c <= '9');
 }
+=======
+ * Use our own ISDIGIT to avoid linking to libc on windows
+ */
+
+#define ISDIGIT(c) (((unsigned)((c)-'0')) <= 9)
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -54,7 +61,12 @@ MODULE_SCOPE const char *
 Tcl_InitStubs(
     Tcl_Interp *interp,
     const char *version,
+<<<<<<< HEAD
     int exact)
+=======
+    int exact,
+    int magic)
+>>>>>>> upstream/master
 {
     Interp *iPtr = (Interp *) interp;
     const char *actualVersion = NULL;
@@ -67,8 +79,13 @@ Tcl_InitStubs(
      * times. [Bug 615304]
      */
 
+<<<<<<< HEAD
     if (!stubsPtr || (stubsPtr->magic != TCL_STUB_MAGIC)) {
 	iPtr->result = "interpreter uses an incompatible stubs mechanism";
+=======
+    if (!stubsPtr || (stubsPtr->magic != (((exact&0xff00) >= 0x900) ? magic : TCL_STUB_MAGIC))) {
+	iPtr->result = (char *)"interpreter uses an incompatible stubs mechanism";
+>>>>>>> upstream/master
 	iPtr->freeProc = TCL_STATIC;
 	return NULL;
     }
@@ -77,12 +94,20 @@ Tcl_InitStubs(
     if (actualVersion == NULL) {
 	return NULL;
     }
+<<<<<<< HEAD
     if (exact) {
+=======
+    if (exact&1) {
+>>>>>>> upstream/master
 	const char *p = version;
 	int count = 0;
 
 	while (*p) {
+<<<<<<< HEAD
 	    count += !isDigit(*p++);
+=======
+	    count += !ISDIGIT(*p++);
+>>>>>>> upstream/master
 	}
 	if (count == 1) {
 	    const char *q = actualVersion;
@@ -91,7 +116,11 @@ Tcl_InitStubs(
 	    while (*p && (*p == *q)) {
 		p++; q++;
 	    }
+<<<<<<< HEAD
 	    if (*p || isDigit(*q)) {
+=======
+	    if (*p || ISDIGIT(*q)) {
+>>>>>>> upstream/master
 		/* Construct error message */
 		stubsPtr->tcl_PkgRequireEx(interp, "Tcl", version, 1, NULL);
 		return NULL;

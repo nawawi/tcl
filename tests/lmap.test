@@ -221,15 +221,21 @@ test lmap-4.14 {lmap errors} -returnCodes error -body {
 unset -nocomplain a
 test lmap-4.15 {lmap errors} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     apply {{} { 
 	set a(0) 44
 	list [catch {lmap a {1 2 3} {}} msg o] $msg $::errorInfo 
     }} 
 =======
+=======
+>>>>>>> upstream/master
     apply {{} {
 	set a(0) 44
 	list [catch {lmap a {1 2 3} {}} msg o] $msg $::errorInfo
     }}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } {1 {can't set "a": variable is array} {can't set "a": variable is array
     while executing

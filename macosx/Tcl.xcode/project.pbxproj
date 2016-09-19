@@ -770,7 +770,11 @@
 		F96D43D108F272B8004A47F5 /* checkLibraryDoc.tcl */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; path = checkLibraryDoc.tcl; sourceTree = "<group>"; };
 		F96D43D208F272B8004A47F5 /* configure */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
 <<<<<<< HEAD
+<<<<<<< HEAD
 		F96D43D308F272B8004A47F5 /* configure.in */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.in; sourceTree = "<group>"; };
+=======
+		F96D43D308F272B8004A47F5 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.ac; sourceTree = "<group>"; };
+>>>>>>> upstream/master
 =======
 		F96D43D308F272B8004A47F5 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.ac; sourceTree = "<group>"; };
 >>>>>>> upstream/master
@@ -797,7 +801,11 @@
 		F96D444008F272B9004A47F5 /* aclocal.m4 */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = aclocal.m4; sourceTree = "<group>"; };
 		F96D444108F272B9004A47F5 /* configure */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
 <<<<<<< HEAD
+<<<<<<< HEAD
 		F96D444208F272B9004A47F5 /* configure.in */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.in; sourceTree = "<group>"; };
+=======
+		F96D444208F272B9004A47F5 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.ac; sourceTree = "<group>"; };
+>>>>>>> upstream/master
 =======
 		F96D444208F272B9004A47F5 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.ac; sourceTree = "<group>"; };
 >>>>>>> upstream/master
@@ -845,7 +853,11 @@
 		F96D447308F272BA004A47F5 /* coffbase.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = coffbase.txt; sourceTree = "<group>"; };
 		F96D447408F272BA004A47F5 /* configure */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
 <<<<<<< HEAD
+<<<<<<< HEAD
 		F96D447508F272BA004A47F5 /* configure.in */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.in; sourceTree = "<group>"; };
+=======
+		F96D447508F272BA004A47F5 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.ac; sourceTree = "<group>"; };
+>>>>>>> upstream/master
 =======
 		F96D447508F272BA004A47F5 /* configure.ac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; fileEncoding = 4; path = configure.ac; sourceTree = "<group>"; };
 >>>>>>> upstream/master
@@ -1679,7 +1691,11 @@
 				F96D43D108F272B8004A47F5 /* checkLibraryDoc.tcl */,
 				F96D43D208F272B8004A47F5 /* configure */,
 <<<<<<< HEAD
+<<<<<<< HEAD
 				F96D43D308F272B8004A47F5 /* configure.in */,
+=======
+				F96D43D308F272B8004A47F5 /* configure.ac */,
+>>>>>>> upstream/master
 =======
 				F96D43D308F272B8004A47F5 /* configure.ac */,
 >>>>>>> upstream/master
@@ -1714,7 +1730,11 @@
 				F96D444008F272B9004A47F5 /* aclocal.m4 */,
 				F96D444108F272B9004A47F5 /* configure */,
 <<<<<<< HEAD
+<<<<<<< HEAD
 				F96D444208F272B9004A47F5 /* configure.in */,
+=======
+				F96D444208F272B9004A47F5 /* configure.ac */,
+>>>>>>> upstream/master
 =======
 				F96D444208F272B9004A47F5 /* configure.ac */,
 >>>>>>> upstream/master
@@ -1779,7 +1799,11 @@
 				F96D447308F272BA004A47F5 /* coffbase.txt */,
 				F96D447408F272BA004A47F5 /* configure */,
 <<<<<<< HEAD
+<<<<<<< HEAD
 				F96D447508F272BA004A47F5 /* configure.in */,
+=======
+				F96D447508F272BA004A47F5 /* configure.ac */,
+>>>>>>> upstream/master
 =======
 				F96D447508F272BA004A47F5 /* configure.ac */,
 >>>>>>> upstream/master
@@ -1971,7 +1995,11 @@
 			inputPaths = (
 				"$(TCL_SRCROOT)/macosx/configure.ac",
 <<<<<<< HEAD
+<<<<<<< HEAD
 				"$(TCL_SRCROOT)/unix/configure.in",
+=======
+				"$(TCL_SRCROOT)/unix/configure.ac",
+>>>>>>> upstream/master
 =======
 				"$(TCL_SRCROOT)/unix/configure.ac",
 >>>>>>> upstream/master
@@ -1988,7 +2016,11 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 <<<<<<< HEAD
+<<<<<<< HEAD
 			shellScript = "## tcl configure shell script phase\n\ncd \"${TCL_SRCROOT}\"/macosx &&\nif [ configure.ac -nt configure -o ../unix/configure.in -nt configure -o ../unix/tcl.m4 -nt configure -o ../unix/aclocal.m4 -nt configure ]; then\n    echo \"Running autoconf & autoheader in tcl/macosx\"\n    rm -rf autom4te.cache\n    ${AUTOCONF:-${DEVELOPER_DIR}/usr/bin/autoconf} && ${AUTOHEADER:-${DEVELOPER_DIR}/usr/bin/autoheader} || exit $?\n    rm -rf autom4te.cache\nfi\n\ncd \"${DERIVED_FILE_DIR}\" && mkdir -p tcl && cd tcl &&\nif [ \"${TCL_SRCROOT}\"/macosx/configure -nt config.status ]; then\n    echo \"Configuring Tcl\"\n    CC=$(xcrun -find ${GCC} || echo ${GCC})\n    \"${TCL_SRCROOT}\"/macosx/configure --cache-file=../config.cache --prefix=${PREFIX} --bindir=${BINDIR} --libdir=${LIBDIR} --mandir=${MANDIR} --includedir=${INCLUDEDIR} --disable-shared CC=${CC} LD=${CC} ${CONFIGURE_ARGS}\nelse\n    ./config.status\nfi\n";
+=======
+			shellScript = "## tcl configure shell script phase\n\ncd \"${TCL_SRCROOT}\"/macosx &&\nif [ configure.ac -nt configure -o ../unix/configure.ac -nt configure -o ../unix/tcl.m4 -nt configure -o ../unix/aclocal.m4 -nt configure ]; then\n    echo \"Running autoconf & autoheader in tcl/macosx\"\n    rm -rf autom4te.cache\n    ${AUTOCONF:-${DEVELOPER_DIR}/usr/bin/autoconf} && ${AUTOHEADER:-${DEVELOPER_DIR}/usr/bin/autoheader} || exit $?\n    rm -rf autom4te.cache\nfi\n\ncd \"${DERIVED_FILE_DIR}\" && mkdir -p tcl && cd tcl &&\nif [ \"${TCL_SRCROOT}\"/macosx/configure -nt config.status ]; then\n    echo \"Configuring Tcl\"\n    CC=$(xcrun -find ${GCC} || echo ${GCC})\n    \"${TCL_SRCROOT}\"/macosx/configure --cache-file=../config.cache --prefix=${PREFIX} --bindir=${BINDIR} --libdir=${LIBDIR} --mandir=${MANDIR} --includedir=${INCLUDEDIR} --disable-shared CC=${CC} LD=${CC} ${CONFIGURE_ARGS}\nelse\n    ./config.status\nfi\n";
+>>>>>>> upstream/master
 =======
 			shellScript = "## tcl configure shell script phase\n\ncd \"${TCL_SRCROOT}\"/macosx &&\nif [ configure.ac -nt configure -o ../unix/configure.ac -nt configure -o ../unix/tcl.m4 -nt configure -o ../unix/aclocal.m4 -nt configure ]; then\n    echo \"Running autoconf & autoheader in tcl/macosx\"\n    rm -rf autom4te.cache\n    ${AUTOCONF:-${DEVELOPER_DIR}/usr/bin/autoconf} && ${AUTOHEADER:-${DEVELOPER_DIR}/usr/bin/autoheader} || exit $?\n    rm -rf autom4te.cache\nfi\n\ncd \"${DERIVED_FILE_DIR}\" && mkdir -p tcl && cd tcl &&\nif [ \"${TCL_SRCROOT}\"/macosx/configure -nt config.status ]; then\n    echo \"Configuring Tcl\"\n    CC=$(xcrun -find ${GCC} || echo ${GCC})\n    \"${TCL_SRCROOT}\"/macosx/configure --cache-file=../config.cache --prefix=${PREFIX} --bindir=${BINDIR} --libdir=${LIBDIR} --mandir=${MANDIR} --includedir=${INCLUDEDIR} --disable-shared CC=${CC} LD=${CC} ${CONFIGURE_ARGS}\nelse\n    ./config.status\nfi\n";
 >>>>>>> upstream/master

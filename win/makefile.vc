@@ -1103,10 +1103,13 @@ install-libraries: tclConfig install-msgs install-tzdata
 	@if not exist "$(SCRIPT_INSTALL_DIR)\..\tcl8$(NULL)" \
 		$(MKDIR) "$(SCRIPT_INSTALL_DIR)\..\tcl8"
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@if not exist "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.2$(NULL)" \
 		$(MKDIR) "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.2"
 	@if not exist "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.3$(NULL)" \
 		$(MKDIR) "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.3"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	@if not exist "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.4$(NULL)" \

@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -38,7 +42,11 @@ is not performed:  open and close brackets are treated as ordinary characters
 with no special interpretation.
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that the substitution of one kind can include substitution of 
+=======
+Note that the substitution of one kind can include substitution of
+>>>>>>> upstream/master
 =======
 Note that the substitution of one kind can include substitution of
 >>>>>>> upstream/master

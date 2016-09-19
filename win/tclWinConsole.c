@@ -49,7 +49,11 @@ TCL_DECLARE_MUTEX(consoleMutex)
  * threads.
  */
 
+<<<<<<< HEAD
 typedef struct ConsoleThreadInfo {
+=======
+typedef struct {
+>>>>>>> upstream/master
     HANDLE thread;		/* Handle to reader or writer thread. */
     HANDLE readyEvent;		/* Manual-reset event to signal _to_ the main
 				 * thread when the worker thread has finished
@@ -112,7 +116,7 @@ typedef struct ConsoleInfo {
 				/* Data consumed by reader thread. */
 } ConsoleInfo;
 
-typedef struct ThreadSpecificData {
+typedef struct {
     /*
      * The following pointer refers to the head of the list of consoles that
      * are being watched for file events.
@@ -128,7 +132,11 @@ static Tcl_ThreadDataKey dataKey;
  * console events are generated.
  */
 
+<<<<<<< HEAD
 typedef struct ConsoleEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Event header;		/* Information that is standard for all
 				 * events. */
     ConsoleInfo *infoPtr;	/* Pointer to console info structure. Note

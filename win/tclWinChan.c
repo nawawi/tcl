@@ -43,7 +43,7 @@ typedef struct FileInfo {
 				 * pending on the channel. */
 } FileInfo;
 
-typedef struct ThreadSpecificData {
+typedef struct {
     /*
      * List of all file channels currently open.
      */
@@ -58,7 +58,11 @@ static Tcl_ThreadDataKey dataKey;
  * events are generated.
  */
 
+<<<<<<< HEAD
 typedef struct FileEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Event header;		/* Information that is standard for all
 				 * events. */
     FileInfo *infoPtr;		/* Pointer to file info structure. Note that
@@ -96,7 +100,11 @@ static int		FileTruncateProc(ClientData instanceData,
 			    Tcl_WideInt length);
 static DWORD		FileGetType(HANDLE handle);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		NativeIsComPort(CONST TCHAR *nativeName);
+=======
+static int		NativeIsComPort(const TCHAR *nativeName);
+>>>>>>> upstream/master
 =======
 static int		NativeIsComPort(const TCHAR *nativeName);
 >>>>>>> upstream/master

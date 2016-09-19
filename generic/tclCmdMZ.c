@@ -19,6 +19,7 @@
 #include "tclInt.h"
 #include "tclRegexp.h"
 #include "tclStringTrim.h"
+<<<<<<< HEAD
 
 static inline Tcl_Obj *	During(Tcl_Interp *interp, int resultCode,
 			    Tcl_Obj *oldOptions, Tcl_Obj *errorInfo);
@@ -33,6 +34,18 @@ static int		TryPostHandler(ClientData data[], Tcl_Interp *interp,
 static int		UniCharIsAscii(int character);
 static int		UniCharIsHexDigit(int character);
 
+=======
+
+static inline Tcl_Obj *	During(Tcl_Interp *interp, int resultCode,
+			    Tcl_Obj *oldOptions, Tcl_Obj *errorInfo);
+static Tcl_NRPostProc	SwitchPostProc;
+static Tcl_NRPostProc	TryPostBody;
+static Tcl_NRPostProc	TryPostFinal;
+static Tcl_NRPostProc	TryPostHandler;
+static int		UniCharIsAscii(int character);
+static int		UniCharIsHexDigit(int character);
+
+>>>>>>> upstream/master
 /*
  * Default set of characters to trim in [string trim] and friends. This is a
  * UTF-8 literal string containing all Unicode space characters [TIP #413]
@@ -1019,9 +1032,15 @@ TclNRSourceObjCmd(
 
 /*
  *----------------------------------------------------------------------
+<<<<<<< HEAD
  *
  * Tcl_SplitObjCmd --
  *
+=======
+ *
+ * Tcl_SplitObjCmd --
+ *
+>>>>>>> upstream/master
  *	This procedure is invoked to process the "split" Tcl command. See the
  *	user documentation for details on what it does.
  *
@@ -1214,10 +1233,17 @@ StringFirstCmd(
 	/*
 	 * Reread to prevent shimmering problems.
 	 */
+<<<<<<< HEAD
 
 	needleStr = Tcl_GetUnicodeFromObj(objv[1], &needleLen);
 	haystackStr = Tcl_GetUnicodeFromObj(objv[2], &haystackLen);
 
+=======
+
+	needleStr = Tcl_GetUnicodeFromObj(objv[1], &needleLen);
+	haystackStr = Tcl_GetUnicodeFromObj(objv[2], &haystackLen);
+
+>>>>>>> upstream/master
 	if (start >= haystackLen) {
 	    goto str_first_done;
 	} else if (start > 0) {
@@ -1258,6 +1284,7 @@ StringFirstCmd(
      * Compute the character index of the matching string by counting the
      * number of characters before the match.
      */
+<<<<<<< HEAD
 
     if ((match != -1) && (objc == 4)) {
 	match += start;
@@ -1671,6 +1698,441 @@ StringIsCmd(
 
 	    break;
 	}
+=======
+
+    if ((match != -1) && (objc == 4)) {
+	match += start;
+    }
+
+  str_first_done:
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(match));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringLastCmd --
+ *
+ *	This procedure is invoked to process the "string last" Tcl command.
+ *	See the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringLastCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    Tcl_UniChar *needleStr, *haystackStr, *p;
+    int match, start, needleLen, haystackLen;
+
+    if (objc < 3 || objc > 4) {
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"needleString haystackString ?startIndex?");
+	return TCL_ERROR;
+    }
+
+    /*
+     * We are searching haystackString for the sequence needleString.
+     */
+
+    match = -1;
+    start = 0;
+    haystackLen = -1;
+
+    needleStr = Tcl_GetUnicodeFromObj(objv[1], &needleLen);
+    haystackStr = Tcl_GetUnicodeFromObj(objv[2], &haystackLen);
+
+    if (objc == 4) {
+	/*
+	 * If a startIndex is specified, we will need to restrict the string
+	 * range to that char index in the string
+	 */
+
+	if (TclGetIntForIndexM(interp, objv[3], haystackLen-1,
+		&start) != TCL_OK){
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * Reread to prevent shimmering problems.
+	 */
+
+	needleStr = Tcl_GetUnicodeFromObj(objv[1], &needleLen);
+	haystackStr = Tcl_GetUnicodeFromObj(objv[2], &haystackLen);
+
+	if (start < 0) {
+	    goto str_last_done;
+	} else if (start < haystackLen) {
+	    p = haystackStr + start + 1 - needleLen;
+	} else {
+	    p = haystackStr + haystackLen - needleLen;
+	}
+    } else {
+	p = haystackStr + haystackLen - needleLen;
+    }
+
+    /*
+     * If the length of the needle is more than the length of the haystack, it
+     * cannot be contained in there so we can avoid searching. [Bug 2960021]
+     */
+
+    if (needleLen > 0 && needleLen <= haystackLen) {
+	for (; p >= haystackStr; p--) {
+	    /*
+	     * Scan backwards to find the first character.
+	     */
+
+	    if ((*p == *needleStr) && !memcmp(needleStr, p,
+		    sizeof(Tcl_UniChar) * (size_t)needleLen)) {
+		match = p - haystackStr;
+		break;
+	    }
+	}
+    }
+
+  str_last_done:
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(match));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringIndexCmd --
+ *
+ *	This procedure is invoked to process the "string index" Tcl command.
+ *	See the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringIndexCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    int length, index;
+
+    if (objc != 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "string charIndex");
+	return TCL_ERROR;
+    }
+
+    /*
+     * Get the char length to calulate what 'end' means.
+     */
+
+    length = Tcl_GetCharLength(objv[1]);
+    if (TclGetIntForIndexM(interp, objv[2], length-1, &index) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    if ((index >= 0) && (index < length)) {
+	Tcl_UniChar ch = Tcl_GetUniChar(objv[1], index);
+
+	/*
+	 * If we have a ByteArray object, we're careful to generate a new
+	 * bytearray for a result.
+	 */
+
+	if (TclIsPureByteArray(objv[1])) {
+	    unsigned char uch = (unsigned char) ch;
+
+	    Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(&uch, 1));
+	} else {
+	    char buf[TCL_UTF_MAX];
+
+	    length = Tcl_UniCharToUtf(ch, buf);
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(buf, length));
+	}
+    }
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringIsCmd --
+ *
+ *	This procedure is invoked to process the "string is" Tcl command. See
+ *	the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringIsCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    const char *string1, *end, *stop;
+    Tcl_UniChar ch;
+    int (*chcomp)(int) = NULL;	/* The UniChar comparison function. */
+    int i, failat = 0, result = 1, strict = 0, index, length1, length2;
+    Tcl_Obj *objPtr, *failVarObj = NULL;
+    Tcl_WideInt w;
+
+    static const char *const isClasses[] = {
+	"alnum",	"alpha",	"ascii",	"control",
+	"boolean",	"digit",	"double",	"entier",
+	"false",	"graph",	"integer",	"list",
+	"lower",	"print",	"punct",	"space",
+	"true",		"upper",	"wideinteger",	"wordchar",
+	"xdigit",	NULL
+    };
+    enum isClasses {
+	STR_IS_ALNUM,	STR_IS_ALPHA,	STR_IS_ASCII,	STR_IS_CONTROL,
+	STR_IS_BOOL,	STR_IS_DIGIT,	STR_IS_DOUBLE,	STR_IS_ENTIER,
+	STR_IS_FALSE,	STR_IS_GRAPH,	STR_IS_INT,	STR_IS_LIST,
+	STR_IS_LOWER,	STR_IS_PRINT,	STR_IS_PUNCT,	STR_IS_SPACE,
+	STR_IS_TRUE,	STR_IS_UPPER,	STR_IS_WIDE,	STR_IS_WORD,
+	STR_IS_XDIGIT
+    };
+    static const char *const isOptions[] = {
+	"-strict", "-failindex", NULL
+    };
+    enum isOptions {
+	OPT_STRICT, OPT_FAILIDX
+    };
+
+    if (objc < 3 || objc > 6) {
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"class ?-strict? ?-failindex var? str");
+	return TCL_ERROR;
+    }
+    if (Tcl_GetIndexFromObj(interp, objv[1], isClasses, "class", 0,
+	    &index) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    if (objc != 3) {
+	for (i = 2; i < objc-1; i++) {
+	    int idx2;
+
+	    if (Tcl_GetIndexFromObj(interp, objv[i], isOptions, "option", 0,
+		    &idx2) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+	    switch ((enum isOptions) idx2) {
+	    case OPT_STRICT:
+		strict = 1;
+		break;
+	    case OPT_FAILIDX:
+		if (i+1 >= objc-1) {
+		    Tcl_WrongNumArgs(interp, 2, objv,
+			    "?-strict? ?-failindex var? str");
+		    return TCL_ERROR;
+		}
+		failVarObj = objv[++i];
+		break;
+	    }
+	}
+    }
+
+    /*
+     * We get the objPtr so that we can short-cut for some classes by checking
+     * the object type (int and double), but we need the string otherwise,
+     * because we don't want any conversion of type occuring (as, for example,
+     * Tcl_Get*FromObj would do).
+     */
+
+    objPtr = objv[objc-1];
+
+    /*
+     * When entering here, result == 1 and failat == 0.
+     */
+
+    switch ((enum isClasses) index) {
+    case STR_IS_ALNUM:
+	chcomp = Tcl_UniCharIsAlnum;
+	break;
+    case STR_IS_ALPHA:
+	chcomp = Tcl_UniCharIsAlpha;
+	break;
+    case STR_IS_ASCII:
+	chcomp = UniCharIsAscii;
+	break;
+    case STR_IS_BOOL:
+    case STR_IS_TRUE:
+    case STR_IS_FALSE:
+	if ((objPtr->typePtr != &tclBooleanType)
+		&& (TCL_OK != TclSetBooleanFromAny(NULL, objPtr))) {
+	    if (strict) {
+		result = 0;
+	    } else {
+		string1 = TclGetStringFromObj(objPtr, &length1);
+		result = length1 == 0;
+	    }
+	} else if (((index == STR_IS_TRUE) &&
+		objPtr->internalRep.longValue == 0)
+	    || ((index == STR_IS_FALSE) &&
+		objPtr->internalRep.longValue != 0)) {
+	    result = 0;
+	}
+	break;
+    case STR_IS_CONTROL:
+	chcomp = Tcl_UniCharIsControl;
+	break;
+    case STR_IS_DIGIT:
+	chcomp = Tcl_UniCharIsDigit;
+	break;
+    case STR_IS_DOUBLE: {
+	/* TODO */
+	if ((objPtr->typePtr == &tclDoubleType) ||
+		(objPtr->typePtr == &tclIntType) ||
+#ifndef TCL_WIDE_INT_IS_LONG
+		(objPtr->typePtr == &tclWideIntType) ||
+#endif
+		(objPtr->typePtr == &tclBignumType)) {
+	    break;
+	}
+	string1 = TclGetStringFromObj(objPtr, &length1);
+	if (length1 == 0) {
+	    if (strict) {
+		result = 0;
+	    }
+	    goto str_is_done;
+	}
+	end = string1 + length1;
+	if (TclParseNumber(NULL, objPtr, NULL, NULL, -1,
+		(const char **) &stop, 0) != TCL_OK) {
+	    result = 0;
+	    failat = 0;
+	} else {
+	    failat = stop - string1;
+	    if (stop < end) {
+		result = 0;
+		TclFreeIntRep(objPtr);
+	    }
+	}
+	break;
+    }
+    case STR_IS_GRAPH:
+	chcomp = Tcl_UniCharIsGraph;
+	break;
+    case STR_IS_INT:
+	if (TCL_OK == TclGetIntFromObj(NULL, objPtr, &i)) {
+	    break;
+	}
+	goto failedIntParse;
+    case STR_IS_ENTIER:
+	if ((objPtr->typePtr == &tclIntType) ||
+#ifndef TCL_WIDE_INT_IS_LONG
+		(objPtr->typePtr == &tclWideIntType) ||
+#endif
+		(objPtr->typePtr == &tclBignumType)) {
+	    break;
+	}
+	string1 = TclGetStringFromObj(objPtr, &length1);
+	if (length1 == 0) {
+	    if (strict) {
+		result = 0;
+	    }
+	    goto str_is_done;
+	}
+>>>>>>> upstream/master
+	end = string1 + length1;
+	if (TclParseNumber(NULL, objPtr, NULL, NULL, -1,
+		(const char **) &stop, TCL_PARSE_INTEGER_ONLY) == TCL_OK) {
+	    if (stop == end) {
+		/*
+<<<<<<< HEAD
+		 * Entire string parses as an integer, but rejected by
+		 * Tcl_Get(Wide)IntFromObj() so we must have overflowed the
+		 * target type, and our convention is to return failure at
+		 * index -1 in that situation.
+		 */
+
+		failat = -1;
+=======
+		 * Entire string parses as an integer.
+		 */
+
+		break;
+>>>>>>> upstream/master
+	    } else {
+		/*
+		 * Some prefix parsed as an integer, but not the whole string,
+		 * so return failure index as the point where parsing stopped.
+		 * Clear out the internal rep, since keeping it would leave
+		 * *objPtr in an inconsistent state.
+		 */
+
+<<<<<<< HEAD
+		failat = stop - string1;
+		TclFreeIntRep(objPtr);
+	    }
+	} else {
+	    /*
+	     * No prefix is a valid integer. Fail at beginning.
+	     */
+
+=======
+		result = 0;
+		failat = stop - string1;
+		TclFreeIntRep(objPtr);
+	    }
+	} else {
+	    /*
+	     * No prefix is a valid integer. Fail at beginning.
+	     */
+
+	    result = 0;
+	    failat = 0;
+	}
+	break;
+    case STR_IS_WIDE:
+	if (TCL_OK == Tcl_GetWideIntFromObj(NULL, objPtr, &w)) {
+	    break;
+	}
+
+    failedIntParse:
+	string1 = TclGetStringFromObj(objPtr, &length1);
+	if (length1 == 0) {
+	    if (strict) {
+		result = 0;
+	    }
+	    goto str_is_done;
+	}
+	result = 0;
+	if (failVarObj == NULL) {
+	    /*
+	     * Don't bother computing the failure point if we're not going to
+	     * return it.
+	     */
+
+	    break;
+	}
 	end = string1 + length1;
 	if (TclParseNumber(NULL, objPtr, NULL, NULL, -1,
 		(const char **) &stop, TCL_PARSE_INTEGER_ONLY) == TCL_OK) {
@@ -1699,6 +2161,7 @@ StringIsCmd(
 	     * No prefix is a valid integer. Fail at beginning.
 	     */
 
+>>>>>>> upstream/master
 	    failat = 0;
 	}
 	break;
@@ -1967,6 +2430,7 @@ StringMapCmd(
      */
 
     resultPtr = Tcl_NewUnicodeObj(ustring1, 0);
+<<<<<<< HEAD
 
     if (mapElemc == 2) {
 	/*
@@ -1976,6 +2440,17 @@ StringMapCmd(
 	 * larger strings.
 	 */
 
+=======
+
+    if (mapElemc == 2) {
+	/*
+	 * Special case for one map pair which avoids the extra for loop and
+	 * extra calls to get Unicode data. The algorithm is otherwise
+	 * identical to the multi-pair case. This will be >30% faster on
+	 * larger strings.
+	 */
+
+>>>>>>> upstream/master
 	int mapLen;
 	Tcl_UniChar *mapString, u2lc;
 

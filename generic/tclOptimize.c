@@ -233,7 +233,11 @@ ConvertZeroEffectToNOP(
 			TclGetUInt1AtPtr(currentInstPtr + 1));
 		int numBytes;
 
+<<<<<<< HEAD
 		(void) Tcl_GetStringFromObj(litPtr, &numBytes);
+=======
+		(void) TclGetStringFromObj(litPtr, &numBytes);
+>>>>>>> upstream/master
 		if (numBytes == 0) {
 		    blank = size + InstLength(nextInst);
 		}
@@ -248,7 +252,11 @@ ConvertZeroEffectToNOP(
 			TclGetUInt4AtPtr(currentInstPtr + 1));
 		int numBytes;
 
+<<<<<<< HEAD
 		(void) Tcl_GetStringFromObj(litPtr, &numBytes);
+=======
+		(void) TclGetStringFromObj(litPtr, &numBytes);
+>>>>>>> upstream/master
 		if (numBytes == 0) {
 		    blank = size + InstLength(nextInst);
 		}

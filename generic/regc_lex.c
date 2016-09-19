@@ -132,16 +132,23 @@ prefixes(
 	}
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
     /*
      * BREs and EREs don't get embedded options.
      */
+<<<<<<< HEAD
 
 =======
 
     /*
      * BREs and EREs don't get embedded options.
      */
+
+>>>>>>> upstream/master
+=======
 
 >>>>>>> upstream/master
     if ((v->cflags&REG_ADVANCED) != REG_ADVANCED) {
@@ -265,11 +272,14 @@ static const chr brbacks[] = {	/* \s within brackets */
     CHR(':'), CHR(']')
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const chr backw[] = {	/* \w */
     CHR('['), CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
     CHR(':'), CHR(']'), CHR('_'), CHR(']')
 =======
+=======
+>>>>>>> upstream/master
 
 #define PUNCT_CONN \
 	CHR('_'), \
@@ -287,13 +297,20 @@ static const chr backw[] = {	/* \w */
     CHR('['), CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
     CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 };
 static const chr backW[] = {	/* \W */
     CHR('['), CHR('^'), CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
 <<<<<<< HEAD
+<<<<<<< HEAD
     CHR(':'), CHR(']'), CHR('_'), CHR(']')
+=======
+    CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
+>>>>>>> upstream/master
 =======
     CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
 >>>>>>> upstream/master
@@ -302,7 +319,11 @@ static const chr brbackw[] = {	/* \w within brackets */
     CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
 <<<<<<< HEAD
+<<<<<<< HEAD
     CHR(':'), CHR(']'), CHR('_')
+=======
+    CHR(':'), CHR(']'), PUNCT_CONN
+>>>>>>> upstream/master
 =======
     CHR(':'), CHR(']'), PUNCT_CONN
 >>>>>>> upstream/master
@@ -399,6 +420,7 @@ next(
 	case L_CCL:
 	    FAILW(REG_EBRACK);
 	    break;
+<<<<<<< HEAD
 	}
 	assert(NOTREACHED);
     }
@@ -769,6 +791,262 @@ next(
 		RETV('(', 0);
 		break;
 >>>>>>> upstream/master
+=======
+	}
+	assert(NOTREACHED);
+    }
+
+    /*
+     * Okay, time to actually get a character.
+     */
+
+    c = *v->now++;
+
+    /*
+     * Deal with the easy contexts, punt EREs to code below.
+     */
+
+    switch (v->lexcon) {
+    case L_BRE:			/* punt BREs to separate function */
+	return brenext(v, c);
+	break;
+    case L_ERE:			/* see below */
+	break;
+    case L_Q:			/* literal strings are easy */
+	RETV(PLAIN, c);
+	break;
+    case L_BBND:		/* bounds are fairly simple */
+    case L_EBND:
+	switch (c) {
+	case CHR('0'): case CHR('1'): case CHR('2'): case CHR('3'):
+	case CHR('4'): case CHR('5'): case CHR('6'): case CHR('7'):
+	case CHR('8'): case CHR('9'):
+	    RETV(DIGIT, (chr)DIGITVAL(c));
+	    break;
+	case CHR(','):
+	    RET(',');
+	    break;
+	case CHR('}'):		/* ERE bound ends with } */
+	    if (INCON(L_EBND)) {
+		INTOCON(L_ERE);
+		if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+		    v->now++;
+		    NOTE(REG_UNONPOSIX);
+		    RETV('}', 0);
+		}
+		RETV('}', 1);
+	    } else {
+		FAILW(REG_BADBR);
+	    }
+	    break;
+	case CHR('\\'):		/* BRE bound ends with \} */
+	    if (INCON(L_BBND) && NEXT1('}')) {
+		v->now++;
+		INTOCON(L_BRE);
+		RET('}');
+	    } else {
+		FAILW(REG_BADBR);
+	    }
+	    break;
+	default:
+	    FAILW(REG_BADBR);
+	    break;
+	}
+	assert(NOTREACHED);
+	break;
+    case L_BRACK:		/* brackets are not too hard */
+	switch (c) {
+	case CHR(']'):
+	    if (LASTTYPE('[')) {
+		RETV(PLAIN, c);
+	    } else {
+		INTOCON((v->cflags&REG_EXTENDED) ? L_ERE : L_BRE);
+		RET(']');
+	    }
+	    break;
+	case CHR('\\'):
+	    NOTE(REG_UBBS);
+	    if (!(v->cflags&REG_ADVF)) {
+		RETV(PLAIN, c);
+	    }
+	    NOTE(REG_UNONPOSIX);
+	    if (ATEOS()) {
+		FAILW(REG_EESCAPE);
+	    }
+	    (DISCARD)lexescape(v);
+	    switch (v->nexttype) {	/* not all escapes okay here */
+	    case PLAIN:
+		return 1;
+		break;
+	    case CCLASS:
+		switch (v->nextvalue) {
+		case 'd':
+		    lexnest(v, brbackd, ENDOF(brbackd));
+		    break;
+		case 's':
+		    lexnest(v, brbacks, ENDOF(brbacks));
+		    break;
+		case 'w':
+		    lexnest(v, brbackw, ENDOF(brbackw));
+		    break;
+		default:
+		    FAILW(REG_EESCAPE);
+		    break;
+		}
+
+		/*
+		 * lexnest() done, back up and try again.
+		 */
+
+		v->nexttype = v->lasttype;
+		return next(v);
+		break;
+	    }
+
+	    /*
+	     * Not one of the acceptable escapes.
+	     */
+
+	    FAILW(REG_EESCAPE);
+	    break;
+	case CHR('-'):
+	    if (LASTTYPE('[') || NEXT1(']')) {
+		RETV(PLAIN, c);
+	    } else {
+		RETV(RANGE, c);
+	    }
+	    break;
+	case CHR('['):
+	    if (ATEOS()) {
+		FAILW(REG_EBRACK);
+	    }
+	    switch (*v->now++) {
+	    case CHR('.'):
+		INTOCON(L_CEL);
+
+		/*
+		 * Might or might not be locale-specific.
+		 */
+
+		RET(COLLEL);
+		break;
+	    case CHR('='):
+		INTOCON(L_ECL);
+		NOTE(REG_ULOCALE);
+		RET(ECLASS);
+		break;
+	    case CHR(':'):
+		INTOCON(L_CCL);
+		NOTE(REG_ULOCALE);
+		RET(CCLASS);
+		break;
+	    default:		/* oops */
+		v->now--;
+		RETV(PLAIN, c);
+		break;
+	    }
+	    assert(NOTREACHED);
+	    break;
+	default:
+	    RETV(PLAIN, c);
+	    break;
+	}
+	assert(NOTREACHED);
+	break;
+    case L_CEL:			/* collating elements are easy */
+	if (c == CHR('.') && NEXT1(']')) {
+	    v->now++;
+	    INTOCON(L_BRACK);
+	    RETV(END, '.');
+	} else {
+	    RETV(PLAIN, c);
+	}
+	break;
+    case L_ECL:			/* ditto equivalence classes */
+	if (c == CHR('=') && NEXT1(']')) {
+	    v->now++;
+	    INTOCON(L_BRACK);
+	    RETV(END, '=');
+	} else {
+	    RETV(PLAIN, c);
+	}
+	break;
+    case L_CCL:			/* ditto character classes */
+	if (c == CHR(':') && NEXT1(']')) {
+	    v->now++;
+	    INTOCON(L_BRACK);
+	    RETV(END, ':');
+	} else {
+	    RETV(PLAIN, c);
+	}
+	break;
+    default:
+	assert(NOTREACHED);
+	break;
+    }
+
+    /*
+     * That got rid of everything except EREs and AREs.
+     */
+
+    assert(INCON(L_ERE));
+
+    /*
+     * Deal with EREs and AREs, except for backslashes.
+     */
+
+    switch (c) {
+    case CHR('|'):
+	RET('|');
+	break;
+    case CHR('*'):
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    v->now++;
+	    NOTE(REG_UNONPOSIX);
+	    RETV('*', 0);
+	}
+	RETV('*', 1);
+	break;
+    case CHR('+'):
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    v->now++;
+	    NOTE(REG_UNONPOSIX);
+	    RETV('+', 0);
+	}
+	RETV('+', 1);
+	break;
+    case CHR('?'):
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    v->now++;
+	    NOTE(REG_UNONPOSIX);
+	    RETV('?', 0);
+	}
+	RETV('?', 1);
+	break;
+    case CHR('{'):		/* bounds start or plain character */
+	if (v->cflags&REG_EXPANDED) {
+	    skip(v);
+	}
+	if (ATEOS() || !iscdigit(*v->now)) {
+	    NOTE(REG_UBRACES);
+	    NOTE(REG_UUNSPEC);
+	    RETV(PLAIN, c);
+	} else {
+	    NOTE(REG_UBOUNDS);
+	    INTOCON(L_EBND);
+	    RET('{');
+	}
+	assert(NOTREACHED);
+	break;
+    case CHR('('):		/* parenthesis, or advanced extension */
+	if ((v->cflags&REG_ADVF) && NEXT1('?')) {
+	    NOTE(REG_UNONPOSIX);
+	    v->now++;
+	    switch (*v->now++) {
+	    case CHR(':'):	/* non-capturing paren */
+		RETV('(', 0);
+		break;
+>>>>>>> upstream/master
 	    case CHR('#'):	/* comment */
 		while (!ATEOS() && *v->now != CHR(')')) {
 		    v->now++;
@@ -792,6 +1070,7 @@ next(
 		break;
 	    }
 	    assert(NOTREACHED);
+<<<<<<< HEAD
 	}
 	if (v->cflags&REG_NOSUB) {
 	    RETV('(', 0);	/* all parens non-capturing */
@@ -819,6 +1098,33 @@ next(
 	    RET((c == CHR('<')) ? '<' : '>');
 	}
 =======
+	}
+	break;
+    case CHR(')'):
+	if (LASTTYPE('(')) {
+	    NOTE(REG_UUNSPEC);
+	}
+	RETV(')', c);
+	break;
+    case CHR('['):		/* easy except for [[:<:]] and [[:>:]] */
+	if (HAVE(6) &&	*(v->now+0) == CHR('[') &&
+		*(v->now+1) == CHR(':') &&
+		(*(v->now+2) == CHR('<') || *(v->now+2) == CHR('>')) &&
+		*(v->now+3) == CHR(':') &&
+		*(v->now+4) == CHR(']') &&
+		*(v->now+5) == CHR(']')) {
+	    c = *(v->now+2);
+	    v->now += 6;
+	    NOTE(REG_UNONPOSIX);
+	    RET((c == CHR('<')) ? '<' : '>');
+	}
+>>>>>>> upstream/master
+=======
+	}
+	if (v->cflags&REG_NOSUB) {
+	    RETV('(', 0);	/* all parens non-capturing */
+	} else {
+	    RETV('(', 1);
 	}
 	break;
     case CHR(')'):
@@ -899,11 +1205,19 @@ next(
 	v->nexttype = v->lasttype;
 	return next(v);
     }
+<<<<<<< HEAD
 
     /*
      * Otherwise, lexescape has already done the work.
      */
 
+=======
+
+    /*
+     * Otherwise, lexescape has already done the work.
+     */
+
+>>>>>>> upstream/master
     return !ISERR();
 }
 
@@ -952,6 +1266,7 @@ lexescape(
 	NOTE(REG_UUNPORT);
 	if (ATEOS()) {
 	    FAILW(REG_EESCAPE);
+<<<<<<< HEAD
 	}
 	RETV(PLAIN, (chr)(*v->now++ & 037));
 	break;
@@ -1068,6 +1383,124 @@ lexescape(
 	v->now = save;
 
 	/*
+=======
+	}
+	RETV(PLAIN, (chr)(*v->now++ & 037));
+	break;
+    case CHR('d'):
+	NOTE(REG_ULOCALE);
+	RETV(CCLASS, 'd');
+	break;
+    case CHR('D'):
+	NOTE(REG_ULOCALE);
+	RETV(CCLASS, 'D');
+	break;
+    case CHR('e'):
+	NOTE(REG_UUNPORT);
+	RETV(PLAIN, chrnamed(v, esc, ENDOF(esc), CHR('\033')));
+	break;
+    case CHR('f'):
+	RETV(PLAIN, CHR('\f'));
+	break;
+    case CHR('m'):
+	RET('<');
+	break;
+    case CHR('M'):
+	RET('>');
+	break;
+    case CHR('n'):
+	RETV(PLAIN, CHR('\n'));
+	break;
+    case CHR('r'):
+	RETV(PLAIN, CHR('\r'));
+	break;
+    case CHR('s'):
+	NOTE(REG_ULOCALE);
+	RETV(CCLASS, 's');
+	break;
+    case CHR('S'):
+	NOTE(REG_ULOCALE);
+	RETV(CCLASS, 'S');
+	break;
+    case CHR('t'):
+	RETV(PLAIN, CHR('\t'));
+	break;
+    case CHR('u'):
+	c = (uchr) lexdigits(v, 16, 1, 4);
+	if (ISERR()) {
+	    FAILW(REG_EESCAPE);
+	}
+	RETV(PLAIN, c);
+	break;
+    case CHR('U'):
+	i = lexdigits(v, 16, 1, 8);
+	if (ISERR()) {
+	    FAILW(REG_EESCAPE);
+	}
+	if (i > 0xFFFF) {
+	    /* TODO: output a Surrogate pair
+	     */
+	    i = 0xFFFD;
+	}
+	RETV(PLAIN, (uchr) i);
+	break;
+    case CHR('v'):
+	RETV(PLAIN, CHR('\v'));
+	break;
+    case CHR('w'):
+	NOTE(REG_ULOCALE);
+	RETV(CCLASS, 'w');
+	break;
+    case CHR('W'):
+	NOTE(REG_ULOCALE);
+	RETV(CCLASS, 'W');
+	break;
+    case CHR('x'):
+	NOTE(REG_UUNPORT);
+	c = (uchr) lexdigits(v, 16, 1, 2);
+	if (ISERR()) {
+	    FAILW(REG_EESCAPE);
+	}
+	RETV(PLAIN, c);
+	break;
+    case CHR('y'):
+	NOTE(REG_ULOCALE);
+	RETV(WBDRY, 0);
+	break;
+    case CHR('Y'):
+	NOTE(REG_ULOCALE);
+	RETV(NWBDRY, 0);
+	break;
+    case CHR('Z'):
+	RETV(SEND, 0);
+	break;
+    case CHR('1'): case CHR('2'): case CHR('3'): case CHR('4'):
+    case CHR('5'): case CHR('6'): case CHR('7'): case CHR('8'):
+    case CHR('9'):
+	save = v->now;
+	v->now--;		/* put first digit back */
+	c = (uchr) lexdigits(v, 10, 1, 255);	/* REs >255 long outside spec */
+	if (ISERR()) {
+	    FAILW(REG_EESCAPE);
+	}
+
+	/*
+	 * Ugly heuristic (first test is "exactly 1 digit?")
+	 */
+
+	if (v->now - save == 0 || ((int) c > 0 && (int)c <= v->nsubexp)) {
+	    NOTE(REG_UBACKREF);
+	    RETV(BACKREF, (chr)c);
+	}
+
+	/*
+	 * Oops, doesn't look like it's a backref after all...
+	 */
+
+	v->now = save;
+
+	/*
+>>>>>>> upstream/master
 	 * And fall through into octal number.
 	 */
 
@@ -1206,6 +1639,7 @@ brenext(
     case CHR('$'):
 	if (v->cflags&REG_EXPANDED) {
 	    skip(v);
+<<<<<<< HEAD
 	}
 	if (ATEOS()) {
 	    RET('$');
@@ -1214,6 +1648,16 @@ brenext(
 	    NOTE(REG_UUNSPEC);
 	    RET('$');
 	}
+=======
+	}
+	if (ATEOS()) {
+	    RET('$');
+	}
+	if (NEXT2('\\', ')')) {
+	    NOTE(REG_UUNSPEC);
+	    RET('$');
+	}
+>>>>>>> upstream/master
 	RETV(PLAIN, c);
 	break;
     case CHR('\\'):

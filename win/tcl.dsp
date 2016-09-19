@@ -1425,7 +1425,11 @@ SOURCE=.\configure
 # Begin Source File
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 SOURCE=.\configure.in
+=======
+SOURCE=.\configure.ac
+>>>>>>> upstream/master
 =======
 SOURCE=.\configure.ac
 >>>>>>> upstream/master

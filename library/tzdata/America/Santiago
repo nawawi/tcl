@@ -119,8 +119,11 @@ set TZData(:America/Santiago) {
     {1398567600 -14400 0 CLT}
     {1410062400 -10800 1 CLST}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {1430017200 -10800 0 CLT}
 =======
+=======
+>>>>>>> upstream/master
     {1463281200 -14400 0 CLT}
     {1471147200 -10800 1 CLST}
     {1494730800 -14400 0 CLT}
@@ -289,5 +292,8 @@ set TZData(:America/Santiago) {
     {4058481600 -10800 1 CLST}
     {4082065200 -14400 0 CLT}
     {4089931200 -10800 1 CLST}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }

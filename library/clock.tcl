@@ -113,6 +113,10 @@ proc ::tcl::clock::Initialize {} {
     ::msgcat::mcpackageconfig set unknowncmd ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
+>>>>>>> upstream/master
 =======
     ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
 >>>>>>> upstream/master
@@ -1324,6 +1328,7 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
     }]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
@@ -1345,6 +1350,8 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
     # Parse the date.  The parser will return a list comprising date, time,
     # time zone, relative month/day/seconds, relative weekday, ordinal month.
@@ -1362,6 +1369,9 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 	    "unable to convert date-time string \"$string\": $message"
     }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4282,7 +4292,11 @@ proc ::tcl::clock::add { clockval args } {
     }
     if { [catch { expr {wide($clockval)} } result] } {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return -code error $result
+=======
+	return -code error "expected integer but got \"$clockval\""
+>>>>>>> upstream/master
 =======
 	return -code error "expected integer but got \"$clockval\""
 >>>>>>> upstream/master
@@ -4325,9 +4339,12 @@ proc ::tcl::clock::add { clockval args } {
 	    "cannot use -gmt and -timezone in same call"
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     if { [catch { expr { wide($clockval) } } result] } {
 	return -code error "expected integer but got \"$clockval\""
     }
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     if { ![string is boolean -strict $gmt] } {
@@ -4367,12 +4384,18 @@ proc ::tcl::clock::add { clockval args } {
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 		weekdays - weekday {
 		    set clockval [AddWeekDays $quantity $clockval $timezone \
 			    $changeover]
 		}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 		hours - hour {
 		    set clockval [expr { 3600 * $quantity + $clockval }]
@@ -4474,7 +4497,10 @@ proc ::tcl::clock::AddMonths { months clockval timezone changeover } {
 #----------------------------------------------------------------------
 #
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 # AddWeekDays --
 #
 #	Add a given number of week days (skipping Saturdays and Sundays)
@@ -4525,6 +4551,9 @@ proc ::tcl::clock::AddWeekDays { days clockval timezone changeover } {
 
 #----------------------------------------------------------------------
 #
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # AddDays --
 #
@@ -4579,7 +4608,10 @@ proc ::tcl::clock::AddDays { days clockval timezone changeover } {
 #
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 # ChangeCurrentLocale --
@@ -4618,6 +4650,9 @@ proc ::tcl::clock::ChangeCurrentLocale {args} {
 #----------------------------------------------------------------------
 #
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

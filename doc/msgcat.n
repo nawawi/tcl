@@ -4,7 +4,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -235,9 +239,15 @@ Note that this routine is only called if the concerned package did not set a pac
 .
 The calling package clears all its state within the \fBmsgcat\fR package including all settings and translations.
 .VE "TIP 412"
+<<<<<<< HEAD
 .PP
 .SH "LOCALE SPECIFICATION"
 .PP
+=======
+.PP
+.SH "LOCALE SPECIFICATION"
+.PP
+>>>>>>> upstream/master
 The locale is specified to \fBmsgcat\fR by a locale string
 passed to \fB::msgcat::mclocale\fR.
 The locale string consists of
@@ -264,7 +274,11 @@ language[_country][.codeset][@modifier]
 .PP
 to extract its parts.  The initial locale is then set by calling
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB::msgcat::mclocale\fR with the argument 
+=======
+\fB::msgcat::mclocale\fR with the argument
+>>>>>>> upstream/master
 =======
 \fB::msgcat::mclocale\fR with the argument
 >>>>>>> upstream/master
@@ -393,7 +407,11 @@ the package. For example, a short \fBes.msg\fR might contain:
 .CS
 namespace eval ::mypackage {
 <<<<<<< HEAD
+<<<<<<< HEAD
     \fB::msgcat::mcflset\fR "Free Beer!" "Cerveza Gracias!"
+=======
+    \fB::msgcat::mcflset\fR "Free Beer" "Cerveza Gratis"
+>>>>>>> upstream/master
 =======
     \fB::msgcat::mcflset\fR "Free Beer" "Cerveza Gratis"
 >>>>>>> upstream/master

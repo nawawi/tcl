@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -193,6 +197,7 @@ will return a string equivalent to \fBalpha\e000\e000bravoc\fR,
 .CS
 \fBbinary format\fR a* [encoding convertto utf-8 \eu20ac]
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CE
 will return a string equivalent to \fB\e342\e202\e254\fR (which is the
 UTF-8 byte sequence for a Euro-currency character) and
@@ -212,12 +217,23 @@ UTF-8 byte sequence for a Euro-currency character) and
 .CS
 \fBbinary format\fR a* [encoding convertto iso8859-15 \eu20ac]
 .CE
+=======
+.CE
+will return a string equivalent to \fB\e342\e202\e254\fR (which is the
+UTF-8 byte sequence for a Euro-currency character) and
+.CS
+\fBbinary format\fR a* [encoding convertto iso8859-15 \eu20ac]
+.CE
+>>>>>>> upstream/master
 will return a string equivalent to \fB\e244\fR (which is the ISO
 8859\-15 byte sequence for a Euro-currency character). Contrast these
 last two with:
 .CS
 \fBbinary format\fR a* \eu20ac
 .CE
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 which returns a string equivalent to \fB\e254\fR (i.e. \fB\exac\fR) by
 truncating the high-bits of the character, and which is probably not
@@ -320,7 +336,11 @@ example,
 \fBbinary format\fR s3 {3 -3 258 1}
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -335,7 +355,11 @@ example,
 \fBbinary format\fR S3 {3 -3 258 1}
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -358,7 +382,11 @@ example,
 \fBbinary format\fR i3 {3 -3 65536 1}
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -372,6 +400,7 @@ For example,
 .CS
 \fBbinary format\fR I3 {3 -3 65536 1}
 .CE
+<<<<<<< HEAD
 <<<<<<< HEAD
 will return a string equivalent to 
 =======
@@ -408,6 +437,40 @@ For example,
 .CE
 will return the string \fBBigEndian\fR
 .RE
+=======
+will return a string equivalent to
+\fB\ex00\ex00\ex00\ex03\exff\exff\exff\exfd\ex00\ex01\ex00\ex00\fR
+.RE
+.IP \fBn\fR 5
+This form (mnemonically \fInumber\fR or \fInormal\fR) is the same as
+\fBi\fR and \fBI\fR except that it stores the 32-bit integers in the
+output string in the native byte order of the machine where the Tcl
+script is running.
+To determine what the native byte order of the machine is, refer to
+the \fBbyteOrder\fR element of the \fBtcl_platform\fR array.
+.IP \fBw\fR 5
+This form is the same as \fBc\fR except that it stores one or more
+64-bit integers in little-endian byte order in the output string.  The
+low-order 64-bits of each integer are stored as an eight-byte value at
+the cursor position with the least significant byte stored first.  For
+example,
+.RS
+.CS
+\fBbinary format\fR w 7810179016327718216
+.CE
+will return the string \fBHelloTcl\fR
+.RE
+.IP \fBW\fR 5
+This form is the same as \fBw\fR except that it stores one or more one
+or more 64-bit integers in big-endian byte order in the output string.
+For example,
+.RS
+.CS
+\fBbinary format\fR Wc 4785469626960341345 110
+.CE
+will return the string \fBBigEndian\fR
+.RE
+>>>>>>> upstream/master
 .IP \fBm\fR 5
 This form (mnemonically the mirror of \fBw\fR) is the same as \fBw\fR
 and \fBW\fR except that it stores the 64-bit integers in the output
@@ -433,7 +496,11 @@ on a Windows system running on an Intel Pentium processor,
 \fBbinary format\fR f2 {1.6 3.4}
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -458,7 +525,11 @@ Windows system running on an Intel Pentium processor,
 \fBbinary format\fR d1 {1.6}
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -551,6 +622,7 @@ scan subcommand:
 \fBbinary scan\fR $bytes s3s first second
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
 .PP
 This command (provided the binary string in the variable \fIbytes\fR
 is long enough) assigns a list of three integers to the variable
@@ -573,6 +645,9 @@ can't read "second": no such variable
 .PP
 =======
 .PP
+=======
+.PP
+>>>>>>> upstream/master
 This command (provided the binary string in the variable \fIbytes\fR
 is long enough) assigns a list of three integers to the variable
 \fIfirst\fR and assigns a single value to the variable \fIsecond\fR.
@@ -592,6 +667,9 @@ will print (assuming neither variable is set previously):
 can't read "second": no such variable
 .CE
 .PP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 It is \fIimportant\fR to note that the \fBc\fR, \fBs\fR, and \fBS\fR
 (and \fBi\fR and \fBI\fR on 64bit systems) will be scanned into
@@ -629,6 +707,7 @@ For example,
 .CS
 \fBbinary scan\fR abcde\e000fghi a6a10 var1 var2
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CE
 will return \fB1\fR with the string equivalent to \fBabcde\e000\fR
 stored in \fIvar1\fR and \fIvar2\fR left unmodified, and
@@ -638,12 +717,18 @@ set var2 [encoding convertfrom utf-8 $var1]
 .CE
 =======
 .CE
+=======
+.CE
+>>>>>>> upstream/master
 will return \fB1\fR with the string equivalent to \fBabcde\e000\fR
 stored in \fIvar1\fR and \fIvar2\fR left unmodified, and
 .CS
 \fBbinary scan\fR \e342\e202\e254 a* var1
 set var2 [encoding convertfrom utf-8 $var1]
 .CE
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 will store a Euro-currency character in \fIvar2\fR.
 .RE
@@ -761,7 +846,11 @@ order.  For example,
 .CE
 will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 stored in \fIvar2\fR. 
+=======
+stored in \fIvar2\fR.
+>>>>>>> upstream/master
 =======
 stored in \fIvar2\fR.
 >>>>>>> upstream/master
@@ -800,6 +889,7 @@ order.  For example,
 .CS
 set str \ex00\ex00\ex00\ex05\ex00\ex00\ex00\ex07\exff\exff\exff\exf0
 \fBbinary scan\fR $str I2I* var1 var2
+<<<<<<< HEAD
 <<<<<<< HEAD
 .CE
 will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
@@ -844,6 +934,12 @@ stored in \fIvar2\fR.
 will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
 stored in \fIvar2\fR.
 .RE
+=======
+.CE
+will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
+stored in \fIvar2\fR.
+.RE
+>>>>>>> upstream/master
 .IP \fBn\fR 5
 The data is interpreted as \fIcount\fR 32-bit signed integers
 represented in the native byte order of the machine running the Tcl
@@ -878,6 +974,9 @@ set str \ex00\ex00\ex00\ex05\ex00\ex00\ex00\ex07\exff\exff\exff\exf0
 will return \fB2\fR with \fB21474836487\fR stored in \fIvar1\fR and \fB\-16\fR
 stored in \fIvar2\fR.
 .RE
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .IP \fBm\fR 5
 The data is interpreted as \fIcount\fR 64-bit signed integers

@@ -12,6 +12,7 @@
 
 # The following variables are used to determine which characters are
 <<<<<<< HEAD
+<<<<<<< HEAD
 # interpreted as white space.
 
 if {$::tcl_platform(platform) eq "windows"} {
@@ -22,6 +23,8 @@ if {$::tcl_platform(platform) eq "windows"} {
     # Motif style - any unicode word char (number, letter, or underscore)
     set ::tcl_wordchars {\w}
 =======
+=======
+>>>>>>> upstream/master
 # interpreted as word characters. See bug [f1253530cdd8]. Will
 # probably be removed in Tcl 9.
 
@@ -29,6 +32,9 @@ if {![info exists ::tcl_wordchars]} {
     set ::tcl_wordchars {\w}
 }
 if {![info exists ::tcl_nonwordchars]} {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set ::tcl_nonwordchars {\W}
 }

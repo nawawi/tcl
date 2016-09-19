@@ -30,10 +30,14 @@ _CRTIMP unsigned int __cdecl _controlfp (unsigned int unNew, unsigned int unMask
 
 static CRITICAL_SECTION masterLock;
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int init = 0;
 #define MASTER_LOCK TclpMasterLock()
 #define MASTER_UNLOCK TclpMasterUnlock()
 
+=======
+static int initialized = 0;
+>>>>>>> upstream/master
 =======
 static int initialized = 0;
 >>>>>>> upstream/master
@@ -114,7 +118,11 @@ static Tcl_ThreadDataKey dataKey;
  * the queue.
  */
 
+<<<<<<< HEAD
 typedef struct WinCondition {
+=======
+typedef struct {
+>>>>>>> upstream/master
     CRITICAL_SECTION condLock;	/* Lock to serialize queuing on the
 				 * condition. */
     struct ThreadSpecificData *firstPtr;	/* Queue pointers */
@@ -127,12 +135,18 @@ typedef struct WinCondition {
 
 #ifdef USE_THREAD_ALLOC
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int once;
 =======
 >>>>>>> upstream/master
 static DWORD tlsKey;
 
 typedef struct allocMutex {
+=======
+static DWORD tlsKey;
+
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Mutex	     tlock;
     CRITICAL_SECTION wlock;
 } allocMutex;
@@ -143,17 +157,69 @@ typedef struct allocMutex {
  * to TclWinThreadStart.
  */
 
+<<<<<<< HEAD
 typedef struct WinThread {
+=======
+typedef struct {
+>>>>>>> upstream/master
   LPTHREAD_START_ROUTINE lpStartAddress; /* Original startup routine */
   LPVOID lpParameter;		/* Original startup data */
   unsigned int fpControl;	/* Floating point control word from the
 				 * main thread */
 } WinThread;
+<<<<<<< HEAD
+=======
 
 
 /*
  *----------------------------------------------------------------------
  *
+ * TclWinThreadStart --
+ *
+ *	This procedure is the entry point for all new threads created
+ *	by Tcl on Windows.
+ *
+ * Results:
+ *	Various, depending on the result of the wrapped thread start
+ *	routine.
+ *
+ * Side effects:
+ *	Arbitrary, since user code is executed.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static DWORD WINAPI
+TclWinThreadStart(
+    LPVOID lpParameter)		/* The WinThread structure pointer passed
+				 * from TclpThreadCreate */
+{
+    WinThread *winThreadPtr = (WinThread *) lpParameter;
+    LPTHREAD_START_ROUTINE lpOrigStartAddress;
+    LPVOID lpOrigParameter;
+
+    if (!winThreadPtr) {
+	return TCL_ERROR;
+    }
+
+    _controlfp(winThreadPtr->fpControl, _MCW_EM | _MCW_RC | 0x03000000 /* _MCW_DN */
+#if !defined(_WIN64)
+	    | _MCW_PC
+#endif
+    );
+>>>>>>> upstream/master
+
+    lpOrigStartAddress = winThreadPtr->lpStartAddress;
+    lpOrigParameter = winThreadPtr->lpParameter;
+
+    ckfree((char *)winThreadPtr);
+    return lpOrigStartAddress(lpOrigParameter);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
  * TclWinThreadStart --
  *
  *	This procedure is the entry point for all new threads created
@@ -201,6 +267,8 @@ TclWinThreadStart(
 /*
  *----------------------------------------------------------------------
  *
+=======
+>>>>>>> upstream/master
  * TclpThreadCreate --
  *
  *	This procedure creates a new thread.
@@ -238,6 +306,7 @@ TclpThreadCreate(
                  * on WIN64 sizeof void* != sizeof unsigned
 		 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
     tHandle = (HANDLE) _beginthreadex(NULL, (unsigned) stackSize,
@@ -248,6 +317,18 @@ TclpThreadCreate(
 	    TclWinThreadStart, winThreadPtr, 0, (LPDWORD)idPtr);
 #endif
 
+=======
+
+#if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
+    tHandle = (HANDLE) _beginthreadex(NULL, (unsigned) stackSize,
+	    (Tcl_ThreadCreateProc*) TclWinThreadStart, winThreadPtr,
+	    0, (unsigned *)idPtr);
+#else
+    tHandle = CreateThread(NULL, (DWORD) stackSize,
+	    TclWinThreadStart, winThreadPtr, 0, (LPDWORD)idPtr);
+#endif
+
+>>>>>>> upstream/master
 =======
 
 #if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
@@ -389,7 +470,11 @@ TclpInitLock(void)
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 =======
 	initialized = 1;
 >>>>>>> upstream/master
@@ -455,7 +540,11 @@ TclpMasterLock(void)
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 =======
 	initialized = 1;
 >>>>>>> upstream/master
@@ -526,7 +615,11 @@ Tcl_GetAllocMutex(void)
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
 =======
  * TclFinalizeLock
 >>>>>>> upstream/master
@@ -548,7 +641,11 @@ void
 TclFinalizeLock(void)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     MASTER_LOCK;
+=======
+    TclpMasterLock();
+>>>>>>> upstream/master
 =======
     TclpMasterLock();
 >>>>>>> upstream/master
@@ -560,7 +657,11 @@ TclFinalizeLock(void)
 
     DeleteCriticalSection(&masterLock);
 <<<<<<< HEAD
+<<<<<<< HEAD
     init = 0;
+=======
+    initialized = 0;
+>>>>>>> upstream/master
 =======
     initialized = 0;
 >>>>>>> upstream/master
@@ -987,9 +1088,15 @@ TclpFinalizeCondition(
 Tcl_Mutex *
 TclpNewAllocMutex(void)
 {
+<<<<<<< HEAD
     struct allocMutex *lockPtr;
 
     lockPtr = malloc(sizeof(struct allocMutex));
+=======
+    allocMutex *lockPtr;
+
+    lockPtr = malloc(sizeof(allocMutex));
+>>>>>>> upstream/master
     if (lockPtr == NULL) {
 	Tcl_Panic("could not allocate lock");
     }
@@ -1012,7 +1119,10 @@ TclpFreeAllocMutex(
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 void
 TclpInitAllocCache(void)
 {
@@ -1027,11 +1137,15 @@ TclpInitAllocCache(void)
     }
 }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 void *
 TclpGetAllocCache(void)
 {
     void *result;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     if (!once) {
@@ -1047,6 +1161,8 @@ TclpGetAllocCache(void)
 	}
     }
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     result = TlsGetValue(tlsKey);
@@ -1085,7 +1201,11 @@ TclpFreeAllocCache(
 	    Tcl_Panic("TlsSetValue failed from TclpFreeAllocCache");
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else if (once) {
+=======
+    } else {
+>>>>>>> upstream/master
 =======
     } else {
 >>>>>>> upstream/master
@@ -1099,9 +1219,13 @@ TclpFreeAllocCache(
 	    Tcl_Panic("TlsFree failed from TclpFreeAllocCache");
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	once = 0; /* reset for next time. */
     }
 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master

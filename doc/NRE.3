@@ -4,7 +4,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -50,7 +54,11 @@ Implementation of a command that will be called whenever \fIcmdName\fR
 is invoked as a command in the unoptimized way.
 .AP Tcl_ObjCmdProc *nreProc in
 <<<<<<< HEAD
+<<<<<<< HEAD
 Implementation of a command that will be called whenever \fIcmdName\fR 
+=======
+Implementation of a command that will be called whenever \fIcmdName\fR
+>>>>>>> upstream/master
 =======
 Implementation of a command that will be called whenever \fIcmdName\fR
 >>>>>>> upstream/master
@@ -92,7 +100,11 @@ to the function designated by \fIpostProcPtr\fR when it is invoked.
 .BE
 .SH DESCRIPTION
 <<<<<<< HEAD
+<<<<<<< HEAD
 .PP 
+=======
+.PP
+>>>>>>> upstream/master
 =======
 .PP
 >>>>>>> upstream/master
@@ -102,7 +114,11 @@ and scripts, without consuming space on the C stack. The non-recursive
 evaluation is done by installing a \fItrampoline\fR, a small piece of
 code that invokes a command or script, and then executes a series of
 <<<<<<< HEAD
+<<<<<<< HEAD
 callbacks when the command or script returns. 
+=======
+callbacks when the command or script returns.
+>>>>>>> upstream/master
 =======
 callbacks when the command or script returns.
 >>>>>>> upstream/master
@@ -166,7 +182,11 @@ The remaining arguments are as for \fBTcl_NREvalObjv\fR.
 all accept a \fIflags\fR parameter, which is an OR-ed-together set of
 bits to control evaluation. At the present time, the only supported flag
 <<<<<<< HEAD
+<<<<<<< HEAD
 available to callers is \fBTCL_EVAL_GLOBAL\fR. 
+=======
+available to callers is \fBTCL_EVAL_GLOBAL\fR.
+>>>>>>> upstream/master
 =======
 available to callers is \fBTCL_EVAL_GLOBAL\fR.
 >>>>>>> upstream/master
@@ -276,7 +296,11 @@ int
     Tcl_Obj *const objv[])
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     return \fBTcl_NRCallObjProc\fR(interp, \fITheCmdNRObjProc\fR, 
+=======
+    return \fBTcl_NRCallObjProc\fR(interp, \fITheCmdNRObjProc\fR,
+>>>>>>> upstream/master
 =======
     return \fBTcl_NRCallObjProc\fR(interp, \fITheCmdNRObjProc\fR,
 >>>>>>> upstream/master

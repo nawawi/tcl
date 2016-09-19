@@ -194,6 +194,12 @@ typedef struct Object {
 #define DESTRUCTOR_CALLED 2	/* Flag to say that the destructor has been
 				 * called. */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#define CLASS_GONE	4	/* Indicates that the class of this object has
+				 * been deleted, and so the object should not
+				 * attempt to remove itself from its class. */
+>>>>>>> upstream/master
 =======
 #define CLASS_GONE	4	/* Indicates that the class of this object has
 				 * been deleted, and so the object should not

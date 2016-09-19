@@ -1430,7 +1430,11 @@ test expr-23.74.3 {INST_EXPON: Bug 2798543} {
 } 0
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -5782,7 +5786,11 @@ test expr-32.1 {expr mod basics} {
     0 -1 0 -1 -2 \
     ]
 <<<<<<< HEAD
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -6785,7 +6793,11 @@ test expr-39.16 {Tcl_ExprLongObj handles overflows} \
     } \
     -result {1 {integer value too large to represent*}}
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

@@ -322,11 +322,19 @@ TclDefaultBgErrorHandlerObjCmd(
 	Tcl_WrongNumArgs(interp, 1, objv, "msg options");
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
 
     /*
      * Check for a valid return options dictionary.
      */
 
+=======
+
+    /*
+     * Check for a valid return options dictionary.
+     */
+
+>>>>>>> upstream/master
     TclNewLiteralStringObj(keyPtr, "-level");
     Tcl_IncrRefCount(keyPtr);
     result = Tcl_DictObjGet(NULL, objv[2], keyPtr, &valuePtr);
@@ -940,11 +948,19 @@ Tcl_Exit(
 {
     TCL_NORETURN1 Tcl_ExitProc *currentAppExitPtr;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     Tcl_MutexLock(&exitMutex);
     currentAppExitPtr = appExitPtr;
     Tcl_MutexUnlock(&exitMutex);
 
+=======
+
+    Tcl_MutexLock(&exitMutex);
+    currentAppExitPtr = appExitPtr;
+    Tcl_MutexUnlock(&exitMutex);
+
+>>>>>>> upstream/master
 =======
 
     Tcl_MutexLock(&exitMutex);
@@ -1051,6 +1067,12 @@ TclInitSubsystems(void)
 #if USE_TCLALLOC
 	    TclInitAlloc();		/* Process wide mutex init */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif
+#if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
+	    TclpInitAllocCache();
+>>>>>>> upstream/master
 =======
 #endif
 #if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
@@ -1118,6 +1140,7 @@ Tcl_Finalize(void)
      */
 
     (void) TCL_TSD_INIT(&dataKey);
+<<<<<<< HEAD
 
     /*
      * Clean up after the current thread now, after exit handlers. In
@@ -1132,6 +1155,22 @@ Tcl_Finalize(void)
      * Now invoke late (process-wide) exit handlers.
      */
 
+=======
+
+    /*
+     * Clean up after the current thread now, after exit handlers. In
+     * particular, the testexithandler command sets up something that writes
+     * to standard output, which gets closed. Note that there is no
+     * thread-local storage or IO subsystem after this call.
+     */
+
+    Tcl_FinalizeThread();
+
+    /*
+     * Now invoke late (process-wide) exit handlers.
+     */
+
+>>>>>>> upstream/master
     Tcl_MutexLock(&exitMutex);
     for (exitPtr = firstLateExitPtr; exitPtr != NULL;
 	    exitPtr = firstLateExitPtr) {
@@ -1476,6 +1515,11 @@ VwaitVarProc(
     int *donePtr = clientData;
 
     *donePtr = 1;
+<<<<<<< HEAD
+=======
+    Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
+	    VwaitVarProc, clientData);
+>>>>>>> upstream/master
     return NULL;
 }
 

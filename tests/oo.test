@@ -281,7 +281,11 @@ test oo-1.18.2 {Bug 21c144f0f5} -setup {
 } -cleanup {
     interp delete slave
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> upstream/master
 =======
 }
 >>>>>>> upstream/master
@@ -643,7 +647,10 @@ test oo-3.9 {Bug 2944404: deleting the object in the destructor} -setup {
     cls destroy
 } -result {in destructor}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test oo-3.10 {Bug 3d96b7076e: killing the object's class in a method call} -setup {
     oo::class create Super
 } -body {
@@ -695,6 +702,9 @@ test oo-3.12 {Bug 3d96b7076e: killing the object's class in a method call} -setu
 } -cleanup {
     Super destroy
 } -result ok
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test oo-4.1 {basic test of OO functionality: export} {
@@ -1630,7 +1640,10 @@ test oo-12.7 {OO: filters} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1665,6 +1678,9 @@ test oo-12.8 {OO: filters and destructors} -setup {
 } -result {{in constructor} {::Aclass bar} {in method} {::oo::object destroy} {in destructor}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2012,7 +2028,11 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
     set obj1 [FooClass new]
     oo::objdefine $obj1 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	variable var 
+=======
+	variable var
+>>>>>>> upstream/master
 =======
 	variable var
 >>>>>>> upstream/master
@@ -2043,6 +2063,15 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
 test oo-16.1 {OO: object introspection} -body {
     info object
 } -returnCodes 1 -result "wrong \# args: should be \"info object subcommand ?arg ...?\""
+<<<<<<< HEAD
+=======
+test oo-16.1.1 {OO: object introspection} -body {
+    catch {info object} m o
+    dict get $o -errorinfo
+} -result "wrong \# args: should be \"info object subcommand ?arg ...?\"
+    while executing
+\"info object\""
+>>>>>>> upstream/master
 test oo-16.2 {OO: object introspection} -body {
     info object class NOTANOBJECT
 } -returnCodes 1 -result {NOTANOBJECT does not refer to an object}
@@ -2182,6 +2211,15 @@ test oo-16.14 {OO: object introspection: TIP #436} -setup {
 test oo-17.1 {OO: class introspection} -body {
     info class
 } -returnCodes 1 -result "wrong \# args: should be \"info class subcommand ?arg ...?\""
+<<<<<<< HEAD
+=======
+test oo-17.1.1 {OO: class introspection} -body {
+    catch {info class} m o
+    dict get $o -errorinfo
+} -result "wrong \# args: should be \"info class subcommand ?arg ...?\"
+    while executing
+\"info class\""
+>>>>>>> upstream/master
 test oo-17.2 {OO: class introspection} -body {
     info class superclass NOTANOBJECT
 } -returnCodes 1 -result {NOTANOBJECT does not refer to an object}
@@ -2646,7 +2684,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
     oo::class create A {
 	constructor {name} {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    my variable np_name 
+=======
+	    my variable np_name
+>>>>>>> upstream/master
 =======
 	    my variable np_name
 >>>>>>> upstream/master
@@ -2665,7 +2707,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
 		    }
 		    $cpy prop $var $objs
 <<<<<<< HEAD
+<<<<<<< HEAD
 		} else { 
+=======
+		} else {
+>>>>>>> upstream/master
 =======
 		} else {
 >>>>>>> upstream/master
@@ -3446,6 +3492,41 @@ test oo-27.22 {variables declaration uniqueifies: Bug 3396896} -setup {
 } -cleanup {
     foo destroy
 } -result {v t}
+<<<<<<< HEAD
+=======
+test oo-27.23 {variable resolver leakage: Bug 1493a43044} -setup {
+    oo::class create Super
+    oo::class create Master {
+	superclass Super
+	variable member1 member2
+	constructor {} {
+	    set member1 master1
+	    set member2 master2
+	}
+	method getChild {} {
+	    Child new [self]
+	}
+    }
+    oo::class create Child {
+	superclass Super
+	variable member1 result
+	constructor {m} {
+	    set [namespace current]::member1 child1
+	    set ns [info object namespace $m]
+	    namespace upvar $ns member1 l1 member2 l2
+	    upvar 1 member1 l3 member2 l4
+	    [format namespace] upvar $ns member1 l5 member2 l6
+	    [format upvar] 1 member1 l7 member2 l8
+	    set result [list $l1 $l2 $l3 $l4 $l5 $l6 $l7 $l8]
+	}
+	method result {} {return $result}
+    }
+} -body {
+    [[Master new] getChild] result
+} -cleanup {
+    Super destroy
+} -result {master1 master2 master1 master2 master1 master2 master1 master2}
+>>>>>>> upstream/master
 
 # A feature that's not supported because the mechanism may change without
 # warning, but is supposed to work...
@@ -3706,7 +3787,10 @@ test oo-35.2 {Bug 9d61624b3d: Empty superclass must not cause crash} -setup {
     fruitMetaclass destroy
 } -result {::appleClass ::orange ::oo::class ::oo::class 1 1 ::appleClass ::pear}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test oo-35.3 {Bug 593baa032c: superclass list teardown} {
     # Bug makes this crash, especially with mem-debugging on
     oo::class create B {}
@@ -3720,6 +3804,9 @@ test oo-35.4 {Bug 593baa032c: mixins list teardown} {
     namespace eval [info object namespace D] [list [namespace which B] destroy]
 } {}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 cleanupTests

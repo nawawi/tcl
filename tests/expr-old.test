@@ -1121,7 +1121,11 @@ test expr-old-37.25 {Tcl_ExprDouble and NaN} \
 	list [catch {testexprdouble 0.0/0.0} result] $result
     } {1 {domain error: argument not in valid range}}
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

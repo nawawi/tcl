@@ -91,7 +91,7 @@ typedef struct IdleHandler {
  * The structure defined below is used in this file only.
  */
 
-typedef struct ThreadSpecificData {
+typedef struct {
     TimerHandler *firstTimerHandlerPtr;	/* First event in queue. */
     int lastTimerId;		/* Timer identifier of most recently created
 				 * timer. */
@@ -900,10 +900,17 @@ Tcl_AfterObjCmd(
 	} else {
 	    commandPtr = Tcl_ConcatObj(objc-2, objv+2);;
 	}
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(commandPtr, &length);
 	for (afterPtr = assocPtr->firstAfterPtr;  afterPtr != NULL;
 		afterPtr = afterPtr->nextPtr) {
 	    tempCommand = Tcl_GetStringFromObj(afterPtr->commandPtr,
+=======
+	command = TclGetStringFromObj(commandPtr, &length);
+	for (afterPtr = assocPtr->firstAfterPtr;  afterPtr != NULL;
+		afterPtr = afterPtr->nextPtr) {
+	    tempCommand = TclGetStringFromObj(afterPtr->commandPtr,
+>>>>>>> upstream/master
 		    &tempLength);
 	    if ((length == tempLength)
 		    && !memcmp(command, tempCommand, (unsigned) length)) {

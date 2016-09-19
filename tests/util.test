@@ -209,7 +209,11 @@ test util-4.6 {Tcl_ConcatObj - utf-8 sequence with "whitespace" char} {
 test util-4.7 {Tcl_ConcatObj - refCount safety} testconcatobj {
     # Check for Bug #1447328 (actually, bugs in its original "fix"). One of the
 <<<<<<< HEAD
+<<<<<<< HEAD
     # symptoms was Bug #2055782. 
+=======
+    # symptoms was Bug #2055782.
+>>>>>>> upstream/master
 =======
     # symptoms was Bug #2055782.
 >>>>>>> upstream/master
@@ -571,7 +575,11 @@ test util-9.1.3 {TclGetIntForIndex} {
 test util-9.2.0 {TclGetIntForIndex} {
     string index abcd end
 <<<<<<< HEAD
+<<<<<<< HEAD
 } d 
+=======
+} d
+>>>>>>> upstream/master
 =======
 } d
 >>>>>>> upstream/master
@@ -4016,7 +4024,11 @@ test util-17.1 {bankers' rounding [Bug 3349507]} {ieeeFloatingPoint} {
     set r
 } [list {*}{
 <<<<<<< HEAD
+<<<<<<< HEAD
     0x43fffffffffffffc 0xc3fffffffffffffc 
+=======
+    0x43fffffffffffffc 0xc3fffffffffffffc
+>>>>>>> upstream/master
 =======
     0x43fffffffffffffc 0xc3fffffffffffffc
 >>>>>>> upstream/master

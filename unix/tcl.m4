@@ -1097,7 +1097,11 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     AS_IF([test "$GCC" = yes], [
 	CFLAGS_OPTIMIZE=-O2
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall"
+=======
+	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
 >>>>>>> upstream/master
@@ -2055,7 +2059,11 @@ dnl # preprocessing tests use only CPPFLAGS.
         MAKE_LIB='${SHLIB_LD} -o [$]@ ${OBJS} ${SHLIB_LD_LIBS} ${TCL_SHLIB_LD_EXTRAS} ${TK_SHLIB_LD_EXTRAS} ${LD_SEARCH_FLAGS}'
         AS_IF([test "${SHLIB_SUFFIX}" = ".dll"], [
 <<<<<<< HEAD
+<<<<<<< HEAD
             INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)"'
+=======
+            INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)";if test -f $(LIB_FILE).a; then $(INSTALL_DATA) $(LIB_FILE).a "$(LIB_INSTALL_DIR)"; fi;'
+>>>>>>> upstream/master
 =======
             INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)";if test -f $(LIB_FILE).a; then $(INSTALL_DATA) $(LIB_FILE).a "$(LIB_INSTALL_DIR)"; fi;'
 >>>>>>> upstream/master
@@ -2071,6 +2079,7 @@ dnl # preprocessing tests use only CPPFLAGS.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(LIB_INSTALL_DIR)/$(LIB_FILE)"'
 =======
 >>>>>>> upstream/master
@@ -2088,16 +2097,22 @@ dnl # preprocessing tests use only CPPFLAGS.
         INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(LIB_INSTALL_DIR)/$(LIB_FILE)"'
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
         ], [
             MAKE_LIB='${STLIB_LD} [$]@ ${OBJS} ; ${RANLIB} [$]@'
         ])
         INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(LIB_INSTALL_DIR)/$(LIB_FILE)"'
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ])
 
     # Stub lib does not depend on shared/static configuration
     AS_IF([test "$RANLIB" = ""], [
         MAKE_STUB_LIB='${STLIB_LD} [$]@ ${STUB_LIB_OBJS}'
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2118,10 +2133,15 @@ dnl # preprocessing tests use only CPPFLAGS.
     INSTALL_STUB_LIB='$(INSTALL_LIBRARY) $(STUB_LIB_FILE) "$(LIB_INSTALL_DIR)/$(STUB_LIB_FILE)"'
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     ], [
         MAKE_STUB_LIB='${STLIB_LD} [$]@ ${STUB_LIB_OBJS} ; ${RANLIB} [$]@'
     ])
     INSTALL_STUB_LIB='$(INSTALL_LIBRARY) $(STUB_LIB_FILE) "$(LIB_INSTALL_DIR)/$(STUB_LIB_FILE)"'
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     # Define TCL_LIBS now that we know what DL_LIBS is.

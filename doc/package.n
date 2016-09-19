@@ -4,7 +4,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -288,8 +292,13 @@ error.
 When an interpreter is created, its initial selection mode value is set to
 .QW stable
 <<<<<<< HEAD
+<<<<<<< HEAD
 unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR
 is set.  If that environment variable is defined (with any value) then
+=======
+unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR is set
+(to any value) or the Tcl package itself is unstable. Otherwise
+>>>>>>> upstream/master
 =======
 unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR is set
 (to any value) or the Tcl package itself is unstable. Otherwise

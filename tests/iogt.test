@@ -6,7 +6,11 @@
 # See the file "license.terms" for information on usage and redistribution of
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 # 
+=======
+#
+>>>>>>> upstream/master
 =======
 #
 >>>>>>> upstream/master
@@ -21,12 +25,21 @@ if {[catch {package require tcltest 2.1}]} {
 
 ::tcltest::loadTestedCommands
 catch [list package require -exact Tcltest [info patchlevel]]
+<<<<<<< HEAD
 
 namespace eval ::tcl::test::iogt {
     namespace import ::tcltest::*
 
 testConstraint testchannel [llength [info commands testchannel]]
 
+=======
+
+namespace eval ::tcl::test::iogt {
+    namespace import ::tcltest::*
+
+testConstraint testchannel [llength [info commands testchannel]]
+
+>>>>>>> upstream/master
 set path(dummy) [makeFile {abcdefghijklmnopqrstuvwxyz0123456789,./?><;'\|":[]\}\{`~!@#$%^&*()_+-=
 } dummy]
 
@@ -677,9 +690,15 @@ test iogt-4.0 {fileevent readable, after transform} -setup {
 	variable stop
 	audit_flow trail -attach $sock
 	rblocks_t rbuf trail 23 -attach $sock
+<<<<<<< HEAD
 
 	fileevent $sock readable [namespace code [list Get $sock]]
 
+=======
+
+	fileevent $sock readable [namespace code [list Get $sock]]
+
+>>>>>>> upstream/master
 	flush $sock;		# Now, or fcopy will error us out
 	# But the 1 second delay should be enough to initialize everything
 	# else here.

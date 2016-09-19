@@ -32,6 +32,7 @@
 #   undef CBF_FAIL_POKES
 #   define CBF_FAIL_POKES 0
 #endif
+<<<<<<< HEAD
 
 /*
  * TCL_STORAGE_CLASS is set unconditionally to DLLEXPORT because the Dde_Init
@@ -42,6 +43,8 @@
 
 #undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLEXPORT
+=======
+>>>>>>> upstream/master
 
 /*
  * The following structure is used to keep track of the interpreters
@@ -69,15 +72,25 @@ typedef struct Conversation {
     Tcl_Obj *returnPackagePtr;	/* The result package for this conversation. */
 } Conversation;
 
+<<<<<<< HEAD
 typedef struct DdeEnumServices {
+=======
+struct DdeEnumServices {
+>>>>>>> upstream/master
     Tcl_Interp *interp;
     int result;
     ATOM service;
     ATOM topic;
     HWND hwnd;
+<<<<<<< HEAD
 } DdeEnumServices;
 
 typedef struct ThreadSpecificData {
+=======
+};
+
+typedef struct {
+>>>>>>> upstream/master
     Conversation *currentConversations;
 				/* A list of conversations currently being
 				 * processed. */
@@ -135,8 +148,13 @@ static int		DdeObjCmd(ClientData clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
 
+<<<<<<< HEAD
 EXTERN int		Dde_Init(Tcl_Interp *interp);
 EXTERN int		Dde_SafeInit(Tcl_Interp *interp);
+=======
+DLLEXPORT int	Dde_Init(Tcl_Interp *interp);
+DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -399,7 +417,11 @@ DdeSetServerName(
 		Tcl_DString ds;
 
 		Tcl_ListObjIndex(interp, srvPtrPtr[n], 1, &namePtr);
+<<<<<<< HEAD
 	    Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
+=======
+		Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
+>>>>>>> upstream/master
 		if (_tcscmp(actualName, (TCHAR *)Tcl_DStringValue(&ds)) == 0) {
 		    suffix++;
 		    Tcl_DStringFree(&ds);
@@ -722,6 +744,7 @@ DdeServerProc(
 	    }
 	}
 	return (HDDEDATA) TRUE;
+<<<<<<< HEAD
 
     case XTYP_REQUEST:
 	/*
@@ -730,6 +753,16 @@ DdeServerProc(
 	 * execute.
 	 */
 
+=======
+
+    case XTYP_REQUEST:
+	/*
+	 * This could be either a request for a value of a Tcl variable, or it
+	 * could be the send command requesting the results of the last
+	 * execute.
+	 */
+
+>>>>>>> upstream/master
 	if ((uFmt != CF_TEXT) && (uFmt != CF_UNICODETEXT)) {
 	    return (HDDEDATA) FALSE;
 	}
@@ -755,6 +788,7 @@ DdeServerProc(
 		if (uFmt == CF_TEXT) {
 		    returnString =
 			    Tcl_GetStringFromObj(convPtr->returnPackagePtr, &len);
+<<<<<<< HEAD
 		} else {
 		    returnString = (char *)
 			    Tcl_GetUnicodeFromObj(convPtr->returnPackagePtr, &len);
@@ -766,6 +800,19 @@ DdeServerProc(
 		if (Tcl_IsSafe(convPtr->riPtr->interp)) {
 		    ddeReturn = NULL;
 		} else {
+=======
+		} else {
+		    returnString = (char *)
+			    Tcl_GetUnicodeFromObj(convPtr->returnPackagePtr, &len);
+		    len = sizeof(TCHAR) * len + 1;
+		}
+		ddeReturn = DdeCreateDataHandle(ddeInstance, (BYTE *)returnString,
+			(DWORD) len+1, 0, ddeItem, uFmt, 0);
+	    } else {
+		if (Tcl_IsSafe(convPtr->riPtr->interp)) {
+		    ddeReturn = NULL;
+		} else {
+>>>>>>> upstream/master
 		    Tcl_DString ds;
 		    Tcl_Obj *variableObjPtr;
 		    Tcl_WinTCharToUtf(utilString, -1, &ds);
@@ -793,6 +840,7 @@ DdeServerProc(
 	    Tcl_DStringFree(&dString);
 	}
 	return ddeReturn;
+<<<<<<< HEAD
 
 #if !CBF_FAIL_POKES
     case XTYP_POKE:
@@ -802,6 +850,17 @@ DdeServerProc(
 	 */
 	ddeReturn = DDE_FNOTPROCESSED;
 
+=======
+
+#if !CBF_FAIL_POKES
+    case XTYP_POKE:
+	/*
+	 * This is a poke for a Tcl variable, only implemented in
+	 * debug/UNICODE mode.
+	 */
+	ddeReturn = DDE_FNOTPROCESSED;
+
+>>>>>>> upstream/master
 	if ((uFmt != CF_TEXT) && (uFmt != CF_UNICODETEXT)) {
 	    return ddeReturn;
 	}
@@ -1055,6 +1114,7 @@ DdeCreateClient(
     /*
      * Register and create the callback window.
      */
+<<<<<<< HEAD
 
     RegisterClassEx(&wc);
     es->hwnd = CreateWindowEx(0, szDdeClientClassName, szDdeClientWindowName,
@@ -1089,6 +1149,42 @@ DdeClientWindowProc(
     }
 }
 
+=======
+
+    RegisterClassEx(&wc);
+    es->hwnd = CreateWindowEx(0, szDdeClientClassName, szDdeClientWindowName,
+	    WS_POPUP, 0, 0, 0, 0, NULL, NULL, NULL, (LPVOID)es);
+    return TCL_OK;
+}
+
+static LRESULT CALLBACK
+DdeClientWindowProc(
+    HWND hwnd,			/* What window is the message for */
+    UINT uMsg,			/* The type of message received */
+    WPARAM wParam,
+    LPARAM lParam)		/* (Potentially) our local handle */
+{
+    switch (uMsg) {
+    case WM_CREATE: {
+	LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
+	struct DdeEnumServices *es =
+		(struct DdeEnumServices *) lpcs->lpCreateParams;
+
+#ifdef _WIN64
+	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) es);
+#else
+	SetWindowLong(hwnd, GWL_USERDATA, (LONG) es);
+#endif
+	return (LRESULT) 0L;
+    }
+    case WM_DDE_ACK:
+	return DdeServicesOnAck(hwnd, wParam, lParam);
+    default:
+	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
+}
+
+>>>>>>> upstream/master
 static LRESULT
 DdeServicesOnAck(
     HWND hwnd,
@@ -1660,6 +1756,7 @@ DdeObjCmd(
     case DDE_SERVICES:
 	result = DdeGetServicesList(interp, serviceName, topicName);
 	break;
+<<<<<<< HEAD
 
     case DDE_EVAL: {
 	RegisteredInterp *riPtr;
@@ -1685,6 +1782,33 @@ DdeObjCmd(
 	 * bytecode structure would be referring to deallocated objects.
 	 */
 
+=======
+
+    case DDE_EVAL: {
+	RegisteredInterp *riPtr;
+	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+
+	if (serviceName == NULL) {
+	    Tcl_SetObjResult(interp,
+		    Tcl_NewStringObj("invalid service name \"\"", -1));
+	    Tcl_SetErrorCode(interp, "TCL", "DDE", "NO_SERVER", NULL);
+	    result = TCL_ERROR;
+	    goto cleanup;
+	}
+
+	objc -= firstArg + 1;
+	objv += firstArg + 1;
+
+	/*
+	 * See if the target interpreter is local. If so, execute the command
+	 * directly without going through the DDE server. Don't exchange
+	 * objects between interps. The target interp could compile an object,
+	 * producing a bytecode structure that refers to other objects owned
+	 * by the target interp. If the target interp is then deleted, the
+	 * bytecode structure would be referring to deallocated objects.
+	 */
+
+>>>>>>> upstream/master
 	for (riPtr = tsdPtr->interpListPtr; riPtr != NULL;
 		riPtr = riPtr->nextPtr) {
 	    if (_tcsicmp(serviceName, riPtr->name) == 0) {
@@ -1726,6 +1850,7 @@ DdeObjCmd(
 		    objPtr = objv[0];
 		else {
 		    objPtr = Tcl_ConcatObj(objc, objv);
+<<<<<<< HEAD
 		}
 		if (riPtr->handlerPtr != NULL) {
 		    /* add the dde request data to the handler proc list */
@@ -1841,6 +1966,122 @@ DdeObjCmd(
 		    Tcl_DecrRefCount(resultPtr);
 		    goto invalidServerResponse;
 		}
+=======
+		}
+		if (riPtr->handlerPtr != NULL) {
+		    /* add the dde request data to the handler proc list */
+		    /*
+		     *result = Tcl_ListObjReplace(sendInterp, objPtr, 0, 0, 1,
+		     *	    &(riPtr->handlerPtr));
+		     */
+		    Tcl_Obj *cmdPtr = Tcl_DuplicateObj(riPtr->handlerPtr);
+		    result = Tcl_ListObjAppendElement(sendInterp, cmdPtr,
+			    objPtr);
+		    if (result == TCL_OK) {
+			objPtr = cmdPtr;
+		    }
+		}
+	    }
+	    if (result == TCL_OK) {
+		Tcl_IncrRefCount(objPtr);
+		result = Tcl_EvalObjEx(sendInterp, objPtr, TCL_EVAL_GLOBAL);
+		Tcl_DecrRefCount(objPtr);
+	    }
+	    if (interp != sendInterp) {
+		if (result == TCL_ERROR) {
+		    /*
+		     * An error occurred, so transfer error information from
+		     * the destination interpreter back to our interpreter.
+		     */
+
+		    Tcl_ResetResult(interp);
+		    objPtr = Tcl_GetVar2Ex(sendInterp, "errorInfo", NULL,
+			    TCL_GLOBAL_ONLY);
+		    if (objPtr) {
+			Tcl_AppendObjToErrorInfo(interp, objPtr);
+		    }
+
+		    objPtr = Tcl_GetVar2Ex(sendInterp, "errorCode", NULL,
+			    TCL_GLOBAL_ONLY);
+		    if (objPtr) {
+			Tcl_SetObjErrorCode(interp, objPtr);
+		    }
+		}
+		Tcl_SetObjResult(interp, Tcl_GetObjResult(sendInterp));
+	    }
+	    Tcl_Release(riPtr);
+	    Tcl_Release(sendInterp);
+	} else {
+	    /*
+	     * This is a non-local request. Send the script to the server and
+	     * poll it for a result.
+	     */
+
+	    if (MakeDdeConnection(interp, serviceName, &hConv) != TCL_OK) {
+	    invalidServerResponse:
+		Tcl_SetObjResult(interp,
+			Tcl_NewStringObj("invalid data returned from server", -1));
+		Tcl_SetErrorCode(interp, "TCL", "DDE", "BAD_RESPONSE", NULL);
+		result = TCL_ERROR;
+		goto cleanup;
+	    }
+
+	    objPtr = Tcl_ConcatObj(objc, objv);
+	    string = (const char *) Tcl_GetUnicodeFromObj(objPtr, &length);
+	    ddeItemData = DdeCreateDataHandle(ddeInstance,
+		    (BYTE *) string, (DWORD) 2*length+2, 0, 0, CF_UNICODETEXT, 0);
+
+	    if (flags & DDE_FLAG_ASYNC) {
+		ddeData = DdeClientTransaction((LPBYTE) ddeItemData,
+			0xFFFFFFFF, hConv, 0,
+			CF_UNICODETEXT, XTYP_EXECUTE, TIMEOUT_ASYNC, &ddeResult);
+		DdeAbandonTransaction(ddeInstance, hConv, ddeResult);
+	    } else {
+		ddeData = DdeClientTransaction((LPBYTE) ddeItemData,
+			0xFFFFFFFF, hConv, 0,
+			CF_UNICODETEXT, XTYP_EXECUTE, 30000, NULL);
+		if (ddeData != 0) {
+		    ddeCookie = DdeCreateStringHandle(ddeInstance,
+			    TCL_DDE_EXECUTE_RESULT, CP_WINUNICODE);
+		    ddeData = DdeClientTransaction(NULL, 0, hConv, ddeCookie,
+			    CF_UNICODETEXT, XTYP_REQUEST, 30000, NULL);
+		}
+	    }
+
+	    Tcl_DecrRefCount(objPtr);
+
+	    if (ddeData == 0) {
+		SetDdeError(interp);
+		result = TCL_ERROR;
+		goto cleanup;
+	    }
+
+	    if (!(flags & DDE_FLAG_ASYNC)) {
+		Tcl_Obj *resultPtr;
+		Tcl_UniChar *ddeDataString;
+
+		/*
+		 * The return handle has a two or four element list in it. The
+		 * first element is the return code (TCL_OK, TCL_ERROR, etc.).
+		 * The second is the result of the script. If the return code
+		 * is TCL_ERROR, then the third element is the value of the
+		 * variable "errorCode", and the fourth is the value of the
+		 * variable "errorInfo".
+		 */
+
+		resultPtr = Tcl_NewObj();
+		length = DdeGetData(ddeData, NULL, 0, 0);
+		ddeDataString = ckalloc(length);
+		DdeGetData(ddeData, (BYTE *) ddeDataString, (DWORD) length, 0);
+		length = (length >> 1) - 1;
+		resultPtr = Tcl_NewUnicodeObj(ddeDataString, length);
+		ckfree(ddeDataString);
+
+		if (Tcl_ListObjIndex(NULL, resultPtr, 0, &objPtr) != TCL_OK) {
+		    Tcl_DecrRefCount(resultPtr);
+		    goto invalidServerResponse;
+		}
+>>>>>>> upstream/master
 		if (Tcl_GetIntFromObj(NULL, objPtr, &result) != TCL_OK) {
 		    Tcl_DecrRefCount(resultPtr);
 		    goto invalidServerResponse;
@@ -1853,9 +2094,13 @@ DdeObjCmd(
 			Tcl_DecrRefCount(resultPtr);
 			goto invalidServerResponse;
 		    }
+<<<<<<< HEAD
 		    length = -1;
 		    string = Tcl_GetStringFromObj(objPtr, &length);
 		    Tcl_AddObjErrorInfo(interp, string, length);
+=======
+		    Tcl_AppendObjToErrorInfo(interp, objPtr);
+>>>>>>> upstream/master
 
 		    Tcl_ListObjIndex(NULL, resultPtr, 2, &objPtr);
 		    Tcl_SetObjErrorCode(interp, objPtr);

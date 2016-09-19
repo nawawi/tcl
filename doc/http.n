@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -95,7 +99,11 @@ flags and values that define the configuration:
 .
 The Accept header of the request.  The default is */*, which means that
 <<<<<<< HEAD
+<<<<<<< HEAD
 all types of documents are accepted.  Otherwise you can supply a 
+=======
+all types of documents are accepted.  Otherwise you can supply a
+>>>>>>> upstream/master
 =======
 all types of documents are accepted.  Otherwise you can supply a
 >>>>>>> upstream/master
@@ -141,7 +149,11 @@ The value of the User-Agent header in the HTTP request.  The default is
 .RE
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR? 
+=======
+\fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
+>>>>>>> upstream/master
 =======
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
 >>>>>>> upstream/master
@@ -236,6 +248,7 @@ HTTP request:
 Pragma: no-cache
 .CE
 .RE
+<<<<<<< HEAD
 .TP
 \fB\-keepalive\fR \fIboolean\fR
 .
@@ -256,11 +269,28 @@ multiple interfaces are available.
 .TP
 =======
 .TP
+=======
+.TP
+\fB\-keepalive\fR \fIboolean\fR
+.
+If true, attempt to keep the connection open for servicing
+multiple requests.  Default is 0.
+.TP
+\fB\-method\fR \fItype\fR
+.
+Force the HTTP request method to \fItype\fR. \fB::http::geturl\fR will
+auto-select GET, POST or HEAD based on other options, but this option
+enables choices like PUT and DELETE for webdav support.
+.TP
+>>>>>>> upstream/master
 \fB\-myaddr\fR \fIaddress\fR
 .
 Pass an specific local address to the underlying \fBsocket\fR call in case
 multiple interfaces are available.
 .TP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 \fB\-progress\fR \fIcallback\fR
 .
@@ -297,7 +327,11 @@ do the formatting.
 .
 The block size used when posting query data to the URL.
 <<<<<<< HEAD
+<<<<<<< HEAD
 At most 
+=======
+At most
+>>>>>>> upstream/master
 =======
 At most
 >>>>>>> upstream/master
@@ -406,6 +440,9 @@ This is a convenience procedure that returns the \fBcurrentsize\fR
 element of the state array, which represents the number of bytes
 received from the URL in the \fB::http::geturl\fR call.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 .TP
 \fB::http::meta\fR \fItoken\fR
 .
@@ -413,6 +450,7 @@ This is a convenience procedure that returns the \fBmeta\fR
 element of the state array which contains the HTTP response
 headers. See below for an explanation of this element.
 .TP
+<<<<<<< HEAD
 =======
 .TP
 \fB::http::meta\fR \fItoken\fR
@@ -421,6 +459,8 @@ This is a convenience procedure that returns the \fBmeta\fR
 element of the state array which contains the HTTP response
 headers. See below for an explanation of this element.
 .TP
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 \fB::http::cleanup\fR \fItoken\fR
 .

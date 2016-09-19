@@ -438,7 +438,11 @@ GenerateHeader(
     if (GetValue(interp, dictObj, "comment", &value) != TCL_OK) {
 	goto error;
     } else if (value != NULL) {
+<<<<<<< HEAD
 	valueStr = Tcl_GetStringFromObj(value, &len);
+=======
+	valueStr = TclGetStringFromObj(value, &len);
+>>>>>>> upstream/master
 	Tcl_UtfToExternal(NULL, latin1enc, valueStr, len, 0, NULL,
 		headerPtr->nativeCommentBuf, MAX_COMMENT_LEN-1, NULL, &len,
 		NULL);
@@ -459,7 +463,11 @@ GenerateHeader(
     if (GetValue(interp, dictObj, "filename", &value) != TCL_OK) {
 	goto error;
     } else if (value != NULL) {
+<<<<<<< HEAD
 	valueStr = Tcl_GetStringFromObj(value, &len);
+=======
+	valueStr = TclGetStringFromObj(value, &len);
+>>>>>>> upstream/master
 	Tcl_UtfToExternal(NULL, latin1enc, valueStr, len, 0, NULL,
 		headerPtr->nativeFilenameBuf, MAXPATHLEN-1, NULL, &len, NULL);
 	headerPtr->nativeFilenameBuf[len] = '\0';
@@ -763,7 +771,11 @@ Tcl_ZlibStreamInit(
 
     if (interp != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (Tcl_Eval(interp, "::incr ::tcl::zlib::cmdcounter") != TCL_OK) {
+=======
+	if (Tcl_EvalEx(interp, "::incr ::tcl::zlib::cmdcounter", -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 =======
 	if (Tcl_EvalEx(interp, "::incr ::tcl::zlib::cmdcounter", -1, 0) != TCL_OK) {
 >>>>>>> upstream/master
@@ -1169,7 +1181,10 @@ Tcl_ZlibStreamPut(
 	zshPtr->stream.avail_in = size;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 	/*
 	 * Must not do a zero-length compress. [Bug 25842c161]
 	 */
@@ -1178,6 +1193,9 @@ Tcl_ZlibStreamPut(
 	    return TCL_OK;
 	}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if (HaveDictToSet(zshPtr)) {
 	    e = SetDeflateDictionary(&zshPtr->stream, zshPtr->compDictObj);
@@ -1202,6 +1220,7 @@ Tcl_ZlibStreamPut(
 
 	e = deflate(&zshPtr->stream, flush);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if ((e==Z_OK || e==Z_BUF_ERROR) && (zshPtr->stream.avail_out == 0)) {
 	    if (outSize - zshPtr->stream.avail_out > 0) {
 		/*
@@ -1223,6 +1242,8 @@ Tcl_ZlibStreamPut(
 		ckfree(dataTmp);
 		dataTmp = ckalloc(outSize);
 =======
+=======
+>>>>>>> upstream/master
 	while (e == Z_BUF_ERROR || (flush == Z_FINISH && e == Z_OK)) {
 	    /*
 	     * Output buffer too small to hold the data being generated or we
@@ -1238,6 +1259,9 @@ Tcl_ZlibStreamPut(
 		outSize = 0xFFFF;	/* There may be *lots* of data left to
 					 * output... */
 		dataTmp = ckrealloc(dataTmp, outSize);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    }
 	    zshPtr->stream.avail_out = outSize;
@@ -1246,6 +1270,10 @@ Tcl_ZlibStreamPut(
 	    e = deflate(&zshPtr->stream, flush);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2939,9 +2967,15 @@ ZlibTransformClose(
 		}
 	    }
 	} while (e != Z_STREAM_END);
+<<<<<<< HEAD
 	e = deflateEnd(&cd->outStream);
     } else {
 	e = inflateEnd(&cd->inStream);
+=======
+	(void) deflateEnd(&cd->outStream);
+    } else {
+	(void) inflateEnd(&cd->inStream);
+>>>>>>> upstream/master
     }
 
     /*
@@ -3144,7 +3178,10 @@ ZlibTransformOutput(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
  * ZlibTransformFlush --
  *
  *	How to perform a flush of a compressing transform.
@@ -3203,6 +3240,9 @@ ZlibTransformFlush(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  * ZlibTransformSetOption --
  *
@@ -3277,6 +3317,7 @@ ZlibTransformSetOption(			/* not used */
 	     */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    cd->outStream.avail_in = 0;
 	    while (1) {
 		int e;
@@ -3303,6 +3344,9 @@ ZlibTransformSetOption(			/* not used */
 		}
 	    }
 	    return TCL_OK;
+=======
+	    return ZlibTransformFlush(interp, cd, flushType);
+>>>>>>> upstream/master
 =======
 	    return ZlibTransformFlush(interp, cd, flushType);
 >>>>>>> upstream/master
@@ -3409,10 +3453,20 @@ ZlibTransformGetOption(
 		Tcl_DStringAppendElement(dsPtr, "");
 	    }
 	} else {
+<<<<<<< HEAD
 	    int len;
 	    const char *str = Tcl_GetStringFromObj(cd->compDictObj, &len);
 
 	    Tcl_DStringAppend(dsPtr, str, len);
+=======
+	    if (cd->compDictObj) {
+		int len;
+		const char *str = TclGetStringFromObj(cd->compDictObj, &len);
+
+		Tcl_DStringAppend(dsPtr, str, len);
+	    }
+	    return TCL_OK;
+>>>>>>> upstream/master
 	}
     }
 
@@ -3614,7 +3668,10 @@ ZlibStackChannelTransform(
     ZlibChannelData *cd = ckalloc(sizeof(ZlibChannelData));
     Tcl_Channel chan;
     int wbits = 0;
+<<<<<<< HEAD
     int e;
+=======
+>>>>>>> upstream/master
 
     if (mode != TCL_ZLIB_STREAM_DEFLATE && mode != TCL_ZLIB_STREAM_INFLATE) {
 	Tcl_Panic("unknown mode: %d", mode);
@@ -3668,19 +3725,28 @@ ZlibStackChannelTransform(
      */
 
     if (mode == TCL_ZLIB_STREAM_INFLATE) {
+<<<<<<< HEAD
 	e = inflateInit2(&cd->inStream, wbits);
 	if (e != Z_OK) {
+=======
+	if (inflateInit2(&cd->inStream, wbits) != Z_OK) {
+>>>>>>> upstream/master
 	    goto error;
 	}
 	cd->inAllocated = DEFAULT_BUFFER_SIZE;
 	cd->inBuffer = ckalloc(cd->inAllocated);
 	if (cd->flags & IN_HEADER) {
+<<<<<<< HEAD
 	    e = inflateGetHeader(&cd->inStream, &cd->inHeader.header);
 	    if (e != Z_OK) {
+=======
+	    if (inflateGetHeader(&cd->inStream, &cd->inHeader.header) != Z_OK) {
+>>>>>>> upstream/master
 		goto error;
 	    }
 	}
 	if (cd->format == TCL_ZLIB_FORMAT_RAW && cd->compDictObj) {
+<<<<<<< HEAD
 	    e = SetInflateDictionary(&cd->inStream, cd->compDictObj);
 	    if (e != Z_OK) {
 		goto error;
@@ -3692,19 +3758,36 @@ ZlibStackChannelTransform(
 	e = deflateInit2(&cd->outStream, level, Z_DEFLATED, wbits,
 		MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY);
 	if (e != Z_OK) {
+=======
+	    if (SetInflateDictionary(&cd->inStream, cd->compDictObj) != Z_OK) {
+		goto error;
+	    }
+	}
+    } else {
+	if (deflateInit2(&cd->outStream, level, Z_DEFLATED, wbits,
+		MAX_MEM_LEVEL, Z_DEFAULT_STRATEGY) != Z_OK) {
+>>>>>>> upstream/master
 	    goto error;
 	}
 	cd->outAllocated = DEFAULT_BUFFER_SIZE;
 	cd->outBuffer = ckalloc(cd->outAllocated);
 	if (cd->flags & OUT_HEADER) {
+<<<<<<< HEAD
 	    e = deflateSetHeader(&cd->outStream, &cd->outHeader.header);
 	    if (e != Z_OK) {
+=======
+	    if (deflateSetHeader(&cd->outStream, &cd->outHeader.header) != Z_OK) {
+>>>>>>> upstream/master
 		goto error;
 	    }
 	}
 	if (cd->compDictObj) {
+<<<<<<< HEAD
 	    e = SetDeflateDictionary(&cd->outStream, cd->compDictObj);
 	    if (e != Z_OK) {
+=======
+	    if (SetDeflateDictionary(&cd->outStream, cd->compDictObj) != Z_OK) {
+>>>>>>> upstream/master
 		goto error;
 	    }
 	}
@@ -3919,7 +4002,11 @@ TclZlibInit(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Eval(interp, "namespace eval ::tcl::zlib {variable cmdcounter 0}");
+=======
+    Tcl_EvalEx(interp, "namespace eval ::tcl::zlib {variable cmdcounter 0}", -1, 0);
+>>>>>>> upstream/master
 =======
     Tcl_EvalEx(interp, "namespace eval ::tcl::zlib {variable cmdcounter 0}", -1, 0);
 >>>>>>> upstream/master

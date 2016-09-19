@@ -2500,7 +2500,11 @@ BinaryEncode64(
 	    }
 	    break;
 	case OPT_WRAPCHAR:
+<<<<<<< HEAD
 	    wrapchar = Tcl_GetStringFromObj(objv[i+1], &wrapcharlen);
+=======
+	    wrapchar = TclGetStringFromObj(objv[i+1], &wrapcharlen);
+>>>>>>> upstream/master
 	    if (wrapcharlen == 0) {
 		maxlen = 0;
 	    }

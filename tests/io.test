@@ -44,6 +44,10 @@ testConstraint testfevent       [llength [info commands testfevent]]
 testConstraint testchannelevent [llength [info commands testchannelevent]]
 testConstraint testmainthread   [llength [info commands testmainthread]]
 testConstraint thread [expr {0 == [catch {package require Thread 2.7-}]}]
+<<<<<<< HEAD
+=======
+testConstraint testobj		[llength [info commands testobj]]
+>>>>>>> upstream/master
 
 # You need a *very* special environment to do some tests.  In
 # particular, many file systems do not support large-files...
@@ -124,15 +128,21 @@ test io-1.8 {Tcl_WriteChars: WriteChars} {
     # go into an infinite loop.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     set f [open $path(test2) w] 
     fconfigure      $f -encoding iso2022-jp 
     puts -nonewline $f [format %s%c [string repeat " " 4] 12399] 
     close           $f 
 =======
+=======
+>>>>>>> upstream/master
     set f [open $path(test2) w]
     fconfigure      $f -encoding iso2022-jp
     puts -nonewline $f [format %s%c [string repeat " " 4] 12399]
     close           $f
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     contents $path(test2)
 } "    \x1b\$B\$O\x1b(B"
@@ -200,7 +210,11 @@ test io-1.9 {Tcl_WriteChars: WriteChars} {
 test io-2.1 {WriteBytes} {
     # loop until all bytes are written
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -226,7 +240,11 @@ test io-2.3 {WriteBytes: flush on line} {
     # a \n, entire buffer gets flushed.  Logical behavior would be to flush
     # only up to the \n.
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -250,7 +268,11 @@ test io-2.4 {WriteBytes: reset sawLF after each buffer} {
 test io-3.1 {WriteChars: compatibility with WriteBytes} {
     # loop until all bytes are written
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -276,7 +298,11 @@ test io-3.3 {WriteChars: compatibility with WriteBytes: flush on line} {
     # a \n, entire buffer gets flushed.  Logical behavior would be to flush
     # only up to the \n.
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -292,7 +318,11 @@ test io-3.4 {WriteChars: loop over stage buffer} {
 
     set f [open $path(test1) w]
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 16 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 16
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 16
 >>>>>>> upstream/master
@@ -308,7 +338,11 @@ test io-3.5 {WriteChars: saved != 0} {
 
     set f [open $path(test1) w]
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 17 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -343,7 +377,11 @@ test io-3.7 {WriteChars: (bufPtr->nextAdded > bufPtr->length)} {
 
     set f [open $path(test1) w]
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 17 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -417,7 +455,11 @@ test io-4.5 {TranslateOutputEOL: crlf} {
 test io-5.1 {CheckFlush: not full} {
     set f [open $path(test1) w]
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f 
+=======
+    fconfigure $f
+>>>>>>> upstream/master
 =======
     fconfigure $f
 >>>>>>> upstream/master
@@ -809,7 +851,11 @@ test io-6.32 {Tcl_GetsObj: crlf mode: buffer exhausted, more data} {testchannel}
 test io-6.33 {Tcl_GetsObj: crlf mode: buffer exhausted, at eof} {
     # eol still equals dstEnd
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -825,8 +871,13 @@ test io-6.33 {Tcl_GetsObj: crlf mode: buffer exhausted, at eof} {
 } [list 16 "123456789012345\r" 1]
 test io-6.34 {Tcl_GetsObj: crlf mode: buffer exhausted, not followed by \n} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
     
+=======
+    # not (*eol == '\n')
+
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 
@@ -947,7 +998,11 @@ test io-6.43 {Tcl_GetsObj: input saw cr} {stdio testchannel openpipe fileevent} 
 } [list "bbbbbbbbbbbbbbb" 15 "123456789abcdef" 1 4 "abcd" 0 3 "efg"]
 test io-6.44 {Tcl_GetsObj: input saw cr, not followed by cr} {stdio testchannel openpipe fileevent} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
+=======
+    # not (*eol == '\n')
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 >>>>>>> upstream/master
@@ -1015,7 +1070,11 @@ test io-6.47 {Tcl_GetsObj: auto mode: \r at end of buffer, peek for \n} {testcha
 test io-6.48 {Tcl_GetsObj: auto mode: \r at end of buffer, no more avail} {testchannel} {
     # PeekAhead() did not get any, so (eol >= dstEnd)
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1032,7 +1091,11 @@ test io-6.48 {Tcl_GetsObj: auto mode: \r at end of buffer, no more avail} {testc
 test io-6.49 {Tcl_GetsObj: auto mode: \r followed by \n} {testchannel} {
     # if (*eol == '\n') {skip++}
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1047,8 +1110,13 @@ test io-6.49 {Tcl_GetsObj: auto mode: \r followed by \n} {testchannel} {
 } [list "123456" 0 8 "78901"]
 test io-6.50 {Tcl_GetsObj: auto mode: \r not followed by \n} {testchannel} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
     
+=======
+    # not (*eol == '\n')
+
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 
@@ -1065,7 +1133,11 @@ test io-6.50 {Tcl_GetsObj: auto mode: \r not followed by \n} {testchannel} {
 test io-6.51 {Tcl_GetsObj: auto mode: \n} {
     # else if (*eol == '\n') {goto gotoeol;}
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1162,7 +1234,11 @@ test io-7.1 {FilterInputBytes: split up character at end of buffer} {
 test io-7.2 {FilterInputBytes: split up character in middle of buffer} {
     # (bufPtr->nextAdded < bufPtr->bufLength)
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1291,7 +1367,11 @@ test io-8.5 {PeekAhead: don't peek if last read was short} {stdio testchannel op
 } {15 abcdefghijklmno 1}
 test io-8.6 {PeekAhead: change to non-blocking mode} {stdio testchannel openpipe fileevent} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0) 
+=======
+    # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
+>>>>>>> upstream/master
 =======
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
 >>>>>>> upstream/master
@@ -2142,7 +2222,11 @@ test io-20.1 {Tcl_CreateChannel: initial settings} {
 	close $a
     set x
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {ascii}    
+=======
+} {ascii}
+>>>>>>> upstream/master
 =======
 } {ascii}
 >>>>>>> upstream/master
@@ -4067,7 +4151,11 @@ test io-31.31 {Tcl_Write crlf on block boundary, Tcl_Gets crlf} {
     close $f
     set f [open $path(test1) r]
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation crlf 
+=======
+    fconfigure $f -translation crlf
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation crlf
 >>>>>>> upstream/master
@@ -4194,6 +4282,7 @@ test io-32.11 {Tcl_Read from a pipe} {stdio openpipe} {
     file delete $path(pipe)
     set f1 [open $path(pipe) w]
 <<<<<<< HEAD
+<<<<<<< HEAD
     puts $f1 {puts [gets stdin]}
     puts $f1 {puts [gets stdin]}
     close $f1
@@ -4259,10 +4348,55 @@ test io-32.11.2 {Tcl_Read from a pipe} {stdio openpipe} {
     file delete $path(pipe)
     set f1 [open $path(pipe) w]
     puts $f1 {chan configure stdout -translation crlf}
+=======
+>>>>>>> upstream/master
     puts $f1 {puts [gets stdin]}
     puts $f1 {puts [gets stdin]}
     close $f1
     set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+<<<<<<< HEAD
+=======
+    puts $f1 hello
+    flush $f1
+    set x ""
+    lappend x [read $f1 6]
+    puts $f1 hello
+    flush $f1
+    lappend x [read $f1]
+    close $f1
+    set x
+} {{hello
+} {hello
+}}
+test io-32.11.1 {Tcl_Read from a pipe} {stdio openpipe} {
+    file delete $path(pipe)
+    set f1 [open $path(pipe) w]
+    puts $f1 {chan configure stdout -translation crlf}
+    puts $f1 {puts [gets stdin]}
+    puts $f1 {puts [gets stdin]}
+    close $f1
+    set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+    puts $f1 hello
+    flush $f1
+    set x ""
+    lappend x [read $f1 6]
+    puts $f1 hello
+    flush $f1
+    lappend x [read $f1]
+    close $f1
+    set x
+} {{hello
+} {hello
+}}
+test io-32.11.2 {Tcl_Read from a pipe} {stdio openpipe} {
+    file delete $path(pipe)
+    set f1 [open $path(pipe) w]
+    puts $f1 {chan configure stdout -translation crlf}
+    puts $f1 {puts [gets stdin]}
+    puts $f1 {puts [gets stdin]}
+    close $f1
+    set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+>>>>>>> upstream/master
     puts $f1 hello
     flush $f1
     set x ""
@@ -4396,6 +4530,13 @@ test io-33.4 {Tcl_Gets with long line} {
     close $f
     set x
 } {abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}
+set f [open $path(test3) w]
+puts -nonewline $f "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+puts -nonewline $f "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+puts -nonewline $f "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+puts -nonewline $f "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+puts $f "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+close $f
 test io-33.5 {Tcl_Gets with long line} {
     set f [open $path(test3)]
     set x [gets $f y]
@@ -5579,7 +5720,11 @@ test io-39.14 {Tcl_SetChannelOption: -encoding, binary & utf-8} {
     file delete $path(test1)
     set f [open $path(test1) w]
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding {} 
+=======
+    fconfigure $f -encoding {}
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding {}
 >>>>>>> upstream/master
@@ -7097,6 +7242,8 @@ test io-52.5 {TclCopyChannel, all} {fcopy} {
     fconfigure $f2 -translation lf -blocking 0
     fcopy $f1 $f2 -size -1 ;# -1 means 'copy all', same as if no -size specified.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
     set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
     close $f1
     close $f2
@@ -7114,7 +7261,6 @@ test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
     fconfigure $f1 -translation lf -blocking 0
     fconfigure $f2 -translation lf -blocking 0
     fcopy $f1 $f2 -size -2 ;# < 0 behaves like -1, copy all
-=======
 >>>>>>> upstream/master
     set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
     close $f1
@@ -7126,6 +7272,34 @@ test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
     }
     set result
 } {0 0 ok}
+<<<<<<< HEAD
+test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
+=======
+test io-52.5b {TclCopyChannel, all, wrap to negative value} {fcopy} {
+>>>>>>> upstream/master
+    file delete $path(test1)
+    set f1 [open $thisScript]
+    set f2 [open $path(test1) w]
+    fconfigure $f1 -translation lf -blocking 0
+    fconfigure $f2 -translation lf -blocking 0
+<<<<<<< HEAD
+    fcopy $f1 $f2 -size -2 ;# < 0 behaves like -1, copy all
+=======
+>>>>>>> upstream/master
+=======
+    fcopy $f1 $f2 -size 3221176172 ;# Wrapped to < 0, behaves like -1, copy all
+>>>>>>> upstream/master
+    set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
+    close $f1
+    close $f2
+    set s1 [file size $thisScript]
+    set s2 [file size $path(test1)]
+    if {"$s1" == "$s2"} {
+        lappend result ok
+    }
+    set result
+} {0 0 ok}
+<<<<<<< HEAD
 <<<<<<< HEAD
 test io-52.5b {TclCopyChannel, all, wrap to negative value} {fcopy} {
 =======
@@ -7174,6 +7348,12 @@ test io-52.5b {TclCopyChannel, all, wrap to negative value} {fcopy} {
     }
     set result
 } {0 0 ok}
+test io-52.6 {TclCopyChannel} {fcopy} {
+    file delete $path(test1)
+    set f1 [open $thisScript]
+    set f2 [open $path(test1) w]
+>>>>>>> upstream/master
+=======
 test io-52.6 {TclCopyChannel} {fcopy} {
     file delete $path(test1)
     set f1 [open $thisScript]
@@ -7261,6 +7441,7 @@ test io-52.9 {TclCopyChannel & encodings} {fcopy} {
 
     set in  [open $path(kyrillic.txt) r]
     set out [open $path(utf8-rp.txt) w]
+<<<<<<< HEAD
 
     fconfigure $in  -encoding koi8-r -translation lf
     fconfigure $out -encoding utf-8 -translation lf
@@ -7278,6 +7459,25 @@ test io-52.10 {TclCopyChannel & encodings} {fcopy} {
     # encoding to binary (=> implies that the
     # internal utf-8 is written)
 
+=======
+
+    fconfigure $in  -encoding koi8-r -translation lf
+    fconfigure $out -encoding utf-8 -translation lf
+
+    puts -nonewline $out [read $in]
+
+    close $in
+    close $out
+
+    list [file size $path(kyrillic.txt)] \
+	    [file size $path(utf8-fcopy.txt)] \
+	    [file size $path(utf8-rp.txt)]
+} {3 5 5}
+test io-52.10 {TclCopyChannel & encodings} {fcopy} {
+    # encoding to binary (=> implies that the
+    # internal utf-8 is written)
+
+>>>>>>> upstream/master
     set in  [open $path(kyrillic.txt) r]
     set out [open $path(utf8-fcopy.txt) w]
 
@@ -7291,7 +7491,16 @@ test io-52.10 {TclCopyChannel & encodings} {fcopy} {
 
     file size $path(utf8-fcopy.txt)
 } 5
+<<<<<<< HEAD
 test io-52.11 {TclCopyChannel & encodings} {fcopy} {
+=======
+test io-52.11 {TclCopyChannel & encodings} -setup {
+    set out [open $path(utf8-fcopy.txt) w]
+    fconfigure $out -encoding utf-8 -translation lf
+    puts $out "\u0410\u0410"
+    close $out
+} -constraints {fcopy} -body {
+>>>>>>> upstream/master
     # binary to encoding => the input has to be
     # in utf-8 to make sense to the encoder
 
@@ -7307,7 +7516,11 @@ test io-52.11 {TclCopyChannel & encodings} {fcopy} {
     close $out
 
     file size $path(kyrillic.txt)
+<<<<<<< HEAD
 } 3
+=======
+} -result 3
+>>>>>>> upstream/master
 
 test io-52.12 {coverage of -translation auto} {
     file delete $path(test1) $path(test2)
@@ -8396,6 +8609,7 @@ test io-59.1 {Thread reference of channels} {testmainthread testchannel} {
     # channel is moved from thread to thread) can be done only in the
     # extension which fully implements the moving of channels between
     # threads, i.e. 'Threads'.
+<<<<<<< HEAD
 
     set f [open $path(longfile) r]
     set result [testchannel mthread $f]
@@ -8403,6 +8617,16 @@ test io-59.1 {Thread reference of channels} {testmainthread testchannel} {
     string equal $result [testmainthread]
 } {1}
 <<<<<<< HEAD
+
+test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring} {
+    # This test will hang in older revisions of the core.
+=======
+
+    set f [open $path(longfile) r]
+    set result [testchannel mthread $f]
+    close $f
+    string equal $result [testmainthread]
+} {1}
 
 test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring} {
     # This test will hang in older revisions of the core.
@@ -8430,6 +8654,63 @@ test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring}
     set result ""
     vwait [namespace which -variable x]
 
+    # cut of the remainder of the error stack, especially the filename
+    set result [lreplace $result 3 3 [lindex [split [lindex $result 3] \n] 0]]
+    list $x $result
+} {1 {gets {} catch {error writing "stdout": invalid argument}}}
+
+test io-61.1 {Reset eof state after changing the eof char} -setup {
+    set datafile [makeFile {} eofchar]
+    set f [open $datafile w]
+    fconfigure $f -translation binary
+    puts -nonewline $f [string repeat "Ho hum\n" 11]
+    puts $f =
+    set line [string repeat "Ge gla " 4]
+    puts -nonewline $f [string repeat [string trimright $line]\n 834]
+    close $f
+} -body {
+    set f [open $datafile r]
+    fconfigure $f -eofchar =
+    set res {}
+    lappend res [read $f; tell $f]
+    fconfigure $f -eofchar {}
+    lappend res [read $f 1]
+    lappend res [read $f; tell $f]
+    # Any seek zaps the internals into a good state.
+    #seek $f 0 start
+    #seek $f 0 current
+    #lappend res [read $f; tell $f]
+    close $f
+    set res
+} -cleanup {
+    removeFile eofchar
+} -result {77 = 23431}
+>>>>>>> upstream/master
+
+    set out [open $path(script) w]
+    puts $out {
+	puts [testbytestring \xe2]
+	exit 1
+    }
+    proc readit {pipe} {
+	variable x
+	variable result
+	if {[eof $pipe]} {
+	    set x [catch {close $pipe} line]
+	    lappend result catch $line
+	} else {
+	    gets $pipe line
+	    lappend result gets $line
+	}
+    }
+    close $out
+    set pipe [open "|[list [interpreter] $path(script)]" r]
+    fileevent $pipe readable [namespace code [list readit $pipe]]
+    variable x ""
+    set result ""
+    vwait [namespace which -variable x]
+
+<<<<<<< HEAD
 =======
 
 test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring} {
@@ -8501,6 +8782,17 @@ test io-70.0 {Cutting & Splicing channels} {testchannel} {
     set f [makeFile {... dummy ...} cutsplice]
     set c [open $f r]
 
+=======
+# Test the cutting and splicing of channels, this is incidentially the
+# attach/detach facility of package Thread, but __without any
+# safeguards__. It can also be used to emulate transfer of channels
+# between threads, and is used for that here.
+
+test io-70.0 {Cutting & Splicing channels} {testchannel} {
+    set f [makeFile {... dummy ...} cutsplice]
+    set c [open $f r]
+
+>>>>>>> upstream/master
     set     res {}
     lappend res [catch {seek $c 0 start}]
     testchannel cut $c
@@ -8510,6 +8802,7 @@ test io-70.0 {Cutting & Splicing channels} {testchannel} {
 
     lappend res [catch {seek $c 0 start}]
     close $c
+<<<<<<< HEAD
 
     removeFile cutsplice
 
@@ -8517,6 +8810,305 @@ test io-70.0 {Cutting & Splicing channels} {testchannel} {
 } {0 1 0}
 
 
+test io-70.1 {Transfer channel} {testchannel thread} {
+    set f [makeFile {... dummy ...} cutsplice]
+    set c [open $f r]
+
+    set     res {}
+    lappend res [catch {seek $c 0 start}]
+    testchannel cut $c
+    lappend res [catch {seek $c 0 start}]
+
+    set tid [thread::create -preserved]
+    thread::send $tid [list set c $c]
+    thread::send $tid {load {} Tcltest}
+    lappend res [thread::send $tid {
+	testchannel splice $c
+	set res [catch {seek $c 0 start}]
+	close $c
+	set res
+    }]
+
+    thread::release $tid
+=======
+
+>>>>>>> upstream/master
+    removeFile cutsplice
+
+    set res
+} {0 1 0}
+<<<<<<< HEAD
+
+# ### ### ### ######### ######### #########
+
+foreach {n msg expected} {
+     0 {}                                 {}
+     1 {{message only}}                   {{message only}}
+     2 {-options x}                       {-options x}
+     3 {-options {x y} {the message}}     {-options {x y} {the message}}
+
+     4 {-code 1     -level 0 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+     5 {-code 0     -level 0 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+     6 {-code 1     -level 5 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+     7 {-code 0     -level 5 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+     8 {-code error -level 0 -f ba snarf} {-code error -level 0 -f ba snarf}
+     9 {-code ok    -level 0 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    10 {-code error -level 5 -f ba snarf} {-code error -level 0 -f ba snarf}
+    11 {-code ok    -level 5 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    12 {-code boss  -level 0 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    13 {-code boss  -level 5 -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    14 {-code 1     -level 0 -f ba}       {-code 1     -level 0 -f ba}
+    15 {-code 0     -level 0 -f ba}       {-code 1     -level 0 -f ba}
+    16 {-code 1     -level 5 -f ba}       {-code 1     -level 0 -f ba}
+    17 {-code 0     -level 5 -f ba}       {-code 1     -level 0 -f ba}
+    18 {-code error -level 0 -f ba}       {-code error -level 0 -f ba}
+    19 {-code ok    -level 0 -f ba}       {-code 1     -level 0 -f ba}
+    20 {-code error -level 5 -f ba}       {-code error -level 0 -f ba}
+    21 {-code ok    -level 5 -f ba}       {-code 1     -level 0 -f ba}
+    22 {-code boss  -level 0 -f ba}       {-code 1     -level 0 -f ba}
+    23 {-code boss  -level 5 -f ba}       {-code 1     -level 0 -f ba}
+    24 {-code 1     -level X -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    25 {-code 0     -level X -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    26 {-code error -level X -f ba snarf} {-code error -level 0 -f ba snarf}
+    27 {-code ok    -level X -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    28 {-code boss  -level X -f ba snarf} {-code 1     -level 0 -f ba snarf}
+    29 {-code 1     -level X -f ba}       {-code 1     -level 0 -f ba}
+    30 {-code 0     -level X -f ba}       {-code 1     -level 0 -f ba}
+    31 {-code error -level X -f ba}       {-code error -level 0 -f ba}
+    32 {-code ok    -level X -f ba}       {-code 1     -level 0 -f ba}
+    33 {-code boss  -level X -f ba}       {-code 1     -level 0 -f ba}
+
+    34 {-code 1 -code 1     -level 0 -f ba snarf} {-code 1 -code 1     -level 0 -f ba snarf}
+    35 {-code 1 -code 0     -level 0 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    36 {-code 1 -code 1     -level 5 -f ba snarf} {-code 1 -code 1     -level 0 -f ba snarf}
+    37 {-code 1 -code 0     -level 5 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    38 {-code 1 -code error -level 0 -f ba snarf} {-code 1 -code error -level 0 -f ba snarf}
+    39 {-code 1 -code ok    -level 0 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    40 {-code 1 -code error -level 5 -f ba snarf} {-code 1 -code error -level 0 -f ba snarf}
+    41 {-code 1 -code ok    -level 5 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    42 {-code 1 -code boss  -level 0 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    43 {-code 1 -code boss  -level 5 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    44 {-code 1 -code 1     -level 0 -f ba}       {-code 1 -code 1     -level 0 -f ba}
+    45 {-code 1 -code 0     -level 0 -f ba}       {-code 1             -level 0 -f ba}
+    46 {-code 1 -code 1     -level 5 -f ba}       {-code 1 -code 1     -level 0 -f ba}
+    47 {-code 1 -code 0     -level 5 -f ba}       {-code 1             -level 0 -f ba}
+    48 {-code 1 -code error -level 0 -f ba}       {-code 1 -code error -level 0 -f ba}
+    49 {-code 1 -code ok    -level 0 -f ba}       {-code 1             -level 0 -f ba}
+    50 {-code 1 -code error -level 5 -f ba}       {-code 1 -code error -level 0 -f ba}
+    51 {-code 1 -code ok    -level 5 -f ba}       {-code 1             -level 0 -f ba}
+    52 {-code 1 -code boss  -level 0 -f ba}       {-code 1             -level 0 -f ba}
+    53 {-code 1 -code boss  -level 5 -f ba}       {-code 1             -level 0 -f ba}
+    54 {-code 1 -code 1     -level X -f ba snarf} {-code 1 -code 1     -level 0 -f ba snarf}
+    55 {-code 1 -code 0     -level X -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    56 {-code 1 -code error -level X -f ba snarf} {-code 1 -code error -level 0 -f ba snarf}
+    57 {-code 1 -code ok    -level X -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    58 {-code 1 -code boss  -level X -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    59 {-code 1 -code 1     -level X -f ba}       {-code 1 -code 1     -level 0 -f ba}
+    60 {-code 1 -code 0     -level X -f ba}       {-code 1             -level 0 -f ba}
+    61 {-code 1 -code error -level X -f ba}       {-code 1 -code error -level 0 -f ba}
+    62 {-code 1 -code ok    -level X -f ba}       {-code 1             -level 0 -f ba}
+    63 {-code 1 -code boss  -level X -f ba}       {-code 1             -level 0 -f ba}
+
+    64 {-code 0 -code 1     -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    65 {-code 0 -code 0     -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    66 {-code 0 -code 1     -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    67 {-code 0 -code 0     -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    68 {-code 0 -code error -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    69 {-code 0 -code ok    -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    70 {-code 0 -code error -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    71 {-code 0 -code ok    -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    72 {-code 0 -code boss  -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    73 {-code 0 -code boss  -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    74 {-code 0 -code 1     -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    75 {-code 0 -code 0     -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    76 {-code 0 -code 1     -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    77 {-code 0 -code 0     -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    78 {-code 0 -code error -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    79 {-code 0 -code ok    -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    80 {-code 0 -code error -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    81 {-code 0 -code ok    -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    82 {-code 0 -code boss  -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    83 {-code 0 -code boss  -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    84 {-code 0 -code 1     -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    85 {-code 0 -code 0     -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    86 {-code 0 -code error -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    87 {-code 0 -code ok    -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    88 {-code 0 -code boss  -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    89 {-code 0 -code 1     -level X -f ba}       {-code 1 -level 0 -f ba}
+    90 {-code 0 -code 0     -level X -f ba}       {-code 1 -level 0 -f ba}
+    91 {-code 0 -code error -level X -f ba}       {-code 1 -level 0 -f ba}
+    92 {-code 0 -code ok    -level X -f ba}       {-code 1 -level 0 -f ba}
+    93 {-code 0 -code boss  -level X -f ba}       {-code 1 -level 0 -f ba}
+
+    94 {-code 1     -code 1 -level 0 -f ba snarf} {-code 1 -code 1     -level 0 -f ba snarf}
+    95 {-code 0     -code 1 -level 0 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    96 {-code 1     -code 1 -level 5 -f ba snarf} {-code 1 -code 1     -level 0 -f ba snarf}
+    97 {-code 0     -code 1 -level 5 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    98 {-code error -code 1 -level 0 -f ba snarf} {-code error -code 1 -level 0 -f ba snarf}
+    99 {-code ok    -code 1 -level 0 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    a0 {-code error -code 1 -level 5 -f ba snarf} {-code error -code 1 -level 0 -f ba snarf}
+    a1 {-code ok    -code 1 -level 5 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    a2 {-code boss  -code 1 -level 0 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    a3 {-code boss  -code 1 -level 5 -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    a4 {-code 1     -code 1 -level 0 -f ba}       {-code 1 -code 1     -level 0 -f ba}
+    a5 {-code 0     -code 1 -level 0 -f ba}       {-code 1             -level 0 -f ba}
+    a6 {-code 1     -code 1 -level 5 -f ba}       {-code 1 -code 1     -level 0 -f ba}
+    a7 {-code 0     -code 1 -level 5 -f ba}       {-code 1             -level 0 -f ba}
+    a8 {-code error -code 1 -level 0 -f ba}       {-code error -code 1 -level 0 -f ba}
+    a9 {-code ok    -code 1 -level 0 -f ba}       {-code 1             -level 0 -f ba}
+    b0 {-code error -code 1 -level 5 -f ba}       {-code error -code 1 -level 0 -f ba}
+    b1 {-code ok    -code 1 -level 5 -f ba}       {-code 1             -level 0 -f ba}
+    b2 {-code boss  -code 1 -level 0 -f ba}       {-code 1             -level 0 -f ba}
+    b3 {-code boss  -code 1 -level 5 -f ba}       {-code 1             -level 0 -f ba}
+    b4 {-code 1     -code 1 -level X -f ba snarf} {-code 1 -code 1     -level 0 -f ba snarf}
+    b5 {-code 0     -code 1 -level X -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    b6 {-code error -code 1 -level X -f ba snarf} {-code error -code 1 -level 0 -f ba snarf}
+    b7 {-code ok    -code 1 -level X -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    b8 {-code boss  -code 1 -level X -f ba snarf} {-code 1             -level 0 -f ba snarf}
+    b9 {-code 1     -code 1 -level X -f ba}       {-code 1 -code 1     -level 0 -f ba}
+    c0 {-code 0     -code 1 -level X -f ba}       {-code 1             -level 0 -f ba}
+    c1 {-code error -code 1 -level X -f ba}       {-code error -code 1 -level 0 -f ba}
+    c2 {-code ok    -code 1 -level X -f ba}       {-code 1             -level 0 -f ba}
+    c3 {-code boss  -code 1 -level X -f ba}       {-code 1             -level 0 -f ba}
+
+    c4 {-code 1     -code 0 -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    c5 {-code 0     -code 0 -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    c6 {-code 1     -code 0 -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    c7 {-code 0     -code 0 -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    c8 {-code error -code 0 -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    c9 {-code ok    -code 0 -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    d0 {-code error -code 0 -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    d1 {-code ok    -code 0 -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    d2 {-code boss  -code 0 -level 0 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    d3 {-code boss  -code 0 -level 5 -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    d4 {-code 1     -code 0 -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    d5 {-code 0     -code 0 -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    d6 {-code 1     -code 0 -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    d7 {-code 0     -code 0 -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    d8 {-code error -code 0 -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    d9 {-code ok    -code 0 -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    e0 {-code error -code 0 -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    e1 {-code ok    -code 0 -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    e2 {-code boss  -code 0 -level 0 -f ba}       {-code 1 -level 0 -f ba}
+    e3 {-code boss  -code 0 -level 5 -f ba}       {-code 1 -level 0 -f ba}
+    e4 {-code 1     -code 0 -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    e5 {-code 0     -code 0 -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    e6 {-code error -code 0 -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    e7 {-code ok    -code 0 -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    e8 {-code boss  -code 0 -level X -f ba snarf} {-code 1 -level 0 -f ba snarf}
+    e9 {-code 1     -code 0 -level X -f ba}       {-code 1 -level 0 -f ba}
+    f0 {-code 0     -code 0 -level X -f ba}       {-code 1 -level 0 -f ba}
+    f1 {-code error -code 0 -level X -f ba}       {-code 1 -level 0 -f ba}
+    f2 {-code ok    -code 0 -level X -f ba}       {-code 1 -level 0 -f ba}
+    f3 {-code boss  -code 0 -level X -f ba}       {-code 1 -level 0 -f ba}
+} {
+    test io-71.$n {Tcl_SetChannelError} {testchannel} {
+
+	set f [makeFile {... dummy ...} cutsplice]
+	set c [open $f r]
+
+	set res [testchannel setchannelerror $c [lrange $msg 0 end]]
+	close $c
+	removeFile cutsplice
+
+	set res
+    } [lrange $expected 0 end]
+
+    test io-72.$n {Tcl_SetChannelErrorInterp} {testchannel} {
+
+	set f [makeFile {... dummy ...} cutsplice]
+	set c [open $f r]
+
+	set res [testchannel setchannelerrorinterp $c [lrange $msg 0 end]]
+	close $c
+	removeFile cutsplice
+
+	set res
+    } [lrange $expected 0 end]
+}
+=======
+>>>>>>> upstream/master
+
+test io-73.1 {channel Tcl_Obj SetChannelFromAny} {} {
+    # Test for Bug 1847044 - don't spoil type unless we have a valid channel
+    catch {close [lreplace [list a] 0 end]}
+} {1}
+
+<<<<<<< HEAD
+test io-73.2 {channel Tcl_Obj SetChannelFromAny, bug 2407783} -setup {
+    # Invalidate intrep of 'channel' Tcl_Obj when transiting between interpreters.
+    set f [open [info script] r]
+} -body {
+    interp create foo
+    seek $f 0
+    set code [catch {interp eval foo [list seek $f 0]} msg]
+    # The string map converts the changing channel handle to a fixed string
+    list $code [string map [list $f @@] $msg]
+} -cleanup {
+    close $f
+} -result {1 {can not find channel named "@@"}}
+
+test io-73.3 {[5adc350683] [gets] after EOF} -setup {
+    set fn [makeFile {} io-73.3]
+    set rfd [open $fn r]
+    set wfd [open $fn a]
+    chan configure $wfd -buffering line
+    read $rfd
+} -body {
+    set result [eof $rfd]
+    puts $wfd "more data"
+    lappend result [eof $rfd]
+    lappend result [gets $rfd]
+    lappend result [eof $rfd]
+    lappend result [gets $rfd]
+    lappend result [eof $rfd]
+} -cleanup {
+    close $wfd
+    close $rfd
+    removeFile io-73.3
+} -result {1 1 {more data} 0 {} 1}
+
+test io-73.4 {[5adc350683] [read] after EOF} -setup {
+    set fn [makeFile {} io-73.4]
+    set rfd [open $fn r]
+    set wfd [open $fn a]
+    chan configure $wfd -buffering line
+    read $rfd
+} -body {
+    set result [eof $rfd]
+    puts $wfd "more data"
+    lappend result [eof $rfd]
+    lappend result [read $rfd]
+    lappend result [eof $rfd]
+} -cleanup {
+    close $wfd
+    close $rfd
+    removeFile io-73.4
+} -result {1 1 {more data
+} 1}
+
+test io-73.5 {effect of eof on encoding end flags} -setup {
+    set fn [makeFile {} io-73.5]
+    set rfd [open $fn r]
+    set wfd [open $fn a]
+    chan configure $wfd -buffering none -translation binary
+    chan configure $rfd -buffersize 5 -encoding utf-8
+    read $rfd
+} -body {
+    set result [eof $rfd]
+    puts -nonewline $wfd "more\u00c2\u00a0data"
+    lappend result [eof $rfd]
+    lappend result [read $rfd]
+    lappend result [eof $rfd]
+} -cleanup {
+    close $wfd
+    close $rfd
+    removeFile io-73.5
+} -result [list 1 1 more\u00a0data 1]
+
+# ### ### ### ######### ######### #########
+
+=======
 test io-70.1 {Transfer channel} {testchannel thread} {
     set f [makeFile {... dummy ...} cutsplice]
     set c [open $f r]
@@ -8806,8 +9398,27 @@ test io-73.5 {effect of eof on encoding end flags} -setup {
     removeFile io-73.5
 } -result [list 1 1 more\u00a0data 1]
 
+test io-74.1 {[104f2885bb] improper cache validity check} -setup {
+    set fn [makeFile {} io-74.1]
+    set rfd [open $fn r]
+    testobj freeallvars
+    interp create slave
+} -constraints testobj -body {
+    teststringobj set 1 [string range $rfd 0 end]
+    read [teststringobj get 1]		
+    testobj duplicate 1 2
+    interp transfer {} $rfd slave
+    catch {read [teststringobj get 1]}
+    read [teststringobj get 2]		
+} -cleanup {
+    interp delete slave
+    testobj freeallvars
+    removeFile io-74.1
+} -returnCodes error -match glob -result {can not find channel named "*"}
+
 # ### ### ### ######### ######### #########
 
+>>>>>>> upstream/master
 # cleanup
 foreach file [list fooBar longfile script script2 output test1 pipe my_script \
 	test2 test3 cat stdout kyrillic.txt utf8-fcopy.txt utf8-rp.txt] {

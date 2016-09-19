@@ -46,6 +46,10 @@ makeFile {
 
 cd [temporaryDirectory]
 testConstraint exec [llength [info commands exec]]
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 # test -help
 # Child processes because -help [exit]s.
 test tcltest-1.1 {tcltest -help} {exec} {
@@ -1508,6 +1512,7 @@ proc matchNegative { expected actual } {
       }
    }
    return $match
+<<<<<<< HEAD
 }
 
 test tcltest-24.0 {
@@ -1828,5 +1833,331 @@ test tcltest-26.2 {Bug/RFE 1017151} -setup {
 cleanupTests
 }
 
+=======
+}
+
+test tcltest-24.0 {
+	customMatch: syntax
+} -body {
+	list [catch {customMatch} result] $result
+} -result [list 1 "wrong # args: should be \"customMatch mode script\""]
+
+test tcltest-24.1 {
+	customMatch: syntax
+} -body {
+	list [catch {customMatch foo} result] $result
+} -result [list 1 "wrong # args: should be \"customMatch mode script\""]
+
+test tcltest-24.2 {
+	customMatch: syntax
+} -body {
+	list [catch {customMatch foo bar baz} result] $result
+} -result [list 1 "wrong # args: should be \"customMatch mode script\""]
+
+test tcltest-24.3 {
+	customMatch: argument checking
+} -body {
+	list [catch {customMatch bad "a \{ b"} result] $result
+} -result [list 1 "invalid customMatch script; can't evaluate after completion"]
+
+test tcltest-24.4 {
+	test: valid -match values
+} -body {
+	list [catch {
+		test tcltest-24.4.0 {} \
+			-match [namespace current]::noSuchMode
+	} result] $result
+} -match glob -result {1 *bad -match value*}
+
+test tcltest-24.5 {
+	test: valid -match values
+} -setup {
+	customMatch [namespace current]::alwaysMatch "format 1 ;#"
+} -body {
+	list [catch {
+		test tcltest-24.5.0 {} \
+			-match [namespace current]::noSuchMode
+	} result] $result
+} -match glob -result {1 *bad -match value*: must be *alwaysMatch,*}
+
+test tcltest-24.6 {
+	customMatch: -match script that always matches
+} -setup {
+	customMatch [namespace current]::alwaysMatch "format 1 ;#"
+	set v [verbose]
+} -body {
+	verbose {}
+	test tcltest-24.6.0 {} -match [namespace current]::alwaysMatch \
+		-body {format 1} -result 0
+} -cleanup {
+	verbose $v
+} -result {} -output {} -errorOutput {}
+
+test tcltest-24.7 {
+	customMatch: replace default -exact matching
+} -setup {
+	set saveExactMatchScript $::tcltest::CustomMatch(exact)
+	customMatch exact "format 1 ;#"
+	set v [verbose]
+} -body {
+	verbose {}
+	test tcltest-24.7.0 {} -body {format 1} -result 0
+} -cleanup {
+	verbose $v
+	customMatch exact $saveExactMatchScript
+	unset saveExactMatchScript
+} -result {} -output {}
+
+test tcltest-24.9 {
+	customMatch: error during match
+} -setup {
+	proc errorDuringMatch args {return -code error "match returned error"}
+	customMatch [namespace current]::errorDuringMatch \
+		[namespace code errorDuringMatch]
+	set v [verbose]
+	set fail $::tcltest::currentFailure
+} -body {
+	verbose {}
+	test tcltest-24.9.0 {} -match [namespace current]::errorDuringMatch
+} -cleanup {
+	verbose $v
+	set ::tcltest::currentFailure $fail
+} -match glob -result {} -output {*FAILED*match returned error*}
+
+test tcltest-24.10 {
+	customMatch: bad return from match command
+} -setup {
+	proc nonBooleanReturn args {return foo}
+	customMatch nonBooleanReturn [namespace code nonBooleanReturn]
+	set v [verbose]
+	set fail $::tcltest::currentFailure
+} -body {
+	verbose {}
+	test tcltest-24.10.0 {} -match nonBooleanReturn
+} -cleanup {
+	verbose $v
+	set ::tcltest::currentFailure $fail
+} -match glob -result {} -output {*FAILED*expected boolean value*}
+
+test tcltest-24.11 {
+	test: -match exact
+} -body {
+	set result {A B C}
+} -match exact -result {A B C}
+
+test tcltest-24.12 {
+	test: -match exact	match command eval in ::, not caller namespace
+} -setup {
+	set saveExactMatchScript $::tcltest::CustomMatch(exact)
+	customMatch exact [list string equal]
+	set v [verbose]
+	proc string args {error {called [string] in caller namespace}}
+} -body {
+	verbose {}
+	test tcltest-24.12.0 {} -body {format 1} -result 1
+} -cleanup {
+	rename string {}
+	verbose $v
+	customMatch exact $saveExactMatchScript
+	unset saveExactMatchScript
+} -match exact -result {} -output {}
+
+test tcltest-24.13 {
+	test: -match exact	failure
+} -setup {
+	set saveExactMatchScript $::tcltest::CustomMatch(exact)
+	customMatch exact [list string equal]
+	set v [verbose]
+	set fail $::tcltest::currentFailure
+} -body {
+	verbose {}
+	test tcltest-24.13.0 {} -body {format 1} -result 0
+} -cleanup {
+	set ::tcltest::currentFailure $fail
+	verbose $v
+	customMatch exact $saveExactMatchScript
+	unset saveExactMatchScript
+} -match glob -result {} -output {*FAILED*Result was:
+1*(exact matching):
+0*}
+
+test tcltest-24.14 {
+	test: -match glob
+} -body {
+	set result {A B C}
+} -match glob -result {A B*}
+
+test tcltest-24.15 {
+	test: -match glob	failure
+} -setup {
+	set v [verbose]
+	set fail $::tcltest::currentFailure
+} -body {
+	verbose {}
+	test tcltest-24.15.0 {} -match glob -body {format {A B C}} \
+		-result {A B* }
+} -cleanup {
+	set ::tcltest::currentFailure $fail
+	verbose $v
+} -match glob -result {} -output {*FAILED*Result was:
+*(glob matching):
+*}
+
+test tcltest-24.16 {
+	test: -match regexp
+} -body {
+	set result {A B C}
+} -match regexp -result {A B.*}
+
+test tcltest-24.17 {
+	test: -match regexp	failure
+} -setup {
+	set fail $::tcltest::currentFailure
+	set v [verbose]
+} -body {
+	verbose {}
+	test tcltest-24.17.0 {} -match regexp -body {format {A B C}} \
+		-result {A B.* X}
+} -cleanup {
+	set ::tcltest::currentFailure $fail
+	verbose $v
+} -match glob -result {} -output {*FAILED*Result was:
+*(regexp matching):
+*}
+
+test tcltest-24.18 {
+	test: -match custom	forget namespace qualification
+} -setup {
+	set fail $::tcltest::currentFailure
+	set v [verbose]
+	customMatch negative matchNegative
+} -body {
+	verbose {}
+	test tcltest-24.18.0 {} -match negative -body {format {A B C}} \
+		-result {A B X}
+} -cleanup {
+	set ::tcltest::currentFailure $fail
+	verbose $v
+} -match glob -result {} -output {*FAILED*Error testing result:*}
+
+test tcltest-24.19 {
+	test: -match custom
+} -setup {
+	set v [verbose]
+	customMatch negative [namespace code matchNegative]
+} -body {
+	verbose {}
+	test tcltest-24.19.0 {} -match negative -body {format {A B C}} \
+		-result {A B X}
+} -cleanup {
+	verbose $v
+} -match exact -result {} -output {}
+
+test tcltest-24.20 {
+	test: -match custom	failure
+} -setup {
+	set fail $::tcltest::currentFailure
+	set v [verbose]
+	customMatch negative [namespace code matchNegative]
+} -body {
+	verbose {}
+	test tcltest-24.20.0 {} -match negative -body {format {A B C}} \
+		-result {A B C}
+} -cleanup {
+	set ::tcltest::currentFailure $fail
+	verbose $v
+} -match glob -result {} -output {*FAILED*Result was:
+*(negative matching):
+*}
+
+test tcltest-25.1 {
+	constraint of setup/cleanup (Bug 589859)
+} -setup {
+	set foo 0
+} -body {
+	# Buggy tcltest will generate result of 2
+	test tcltest-25.1.0 {} -constraints knownBug -setup {
+	    incr foo
+	} -body {
+	    incr foo
+	} -cleanup {
+	    incr foo
+	} -match glob -result *
+	set foo
+} -cleanup {
+	unset foo
+} -result 0
+
+test tcltest-25.2 {
+	puts -nonewline (Bug 612786)
+} -body {
+	puts -nonewline stdout bla
+	puts -nonewline stdout bla
+} -output {blabla}
+
+test tcltest-25.3 {
+	reported return code (Bug 611922)
+} -setup {
+	set fail $::tcltest::currentFailure
+	set v [verbose]
+} -body {
+	verbose {}
+	test tcltest-25.3.0 {} -body {
+	    error foo
+	}
+} -cleanup {
+	set ::tcltest::currentFailure $fail
+	verbose $v
+} -match glob -output {*generated error; Return code was: 1*}
+
+test tcltest-26.1 {Bug/RFE 1017151} -setup {
+    makeFile {
+	package require tcltest
+	set ::errorInfo "Should never see this"
+	tcltest::test tcltest-26.1.0 {
+	    no errorInfo when only return code mismatch
+	} -body {
+	    set x 1
+	} -returnCodes error -result 1
+	tcltest::cleanupTests
+    } test.tcl
+} -body {
+    slave msg [file join [temporaryDirectory] test.tcl]
+    return $msg
+} -cleanup {
+    removeFile test.tcl
+} -match glob -result {*
+---- Return code should have been one of: 1
+==== tcltest-26.1.0 FAILED*}
+
+test tcltest-26.2 {Bug/RFE 1017151} -setup {
+    makeFile {
+	package require tcltest
+	set ::errorInfo "Should never see this"
+	tcltest::test tcltest-26.2.0 {do not mask body errorInfo} -body {
+	    error "body error"
+	} -cleanup {
+	    error "cleanup error"
+	} -result 1
+	tcltest::cleanupTests
+    } test.tcl
+} -body {
+    slave msg [file join [temporaryDirectory] test.tcl]
+    return $msg
+} -cleanup {
+    removeFile test.tcl
+} -match glob -result {*
+---- errorInfo: body error
+*
+---- errorInfo(cleanup): cleanup error*}
+
+cleanupTests
+}
+
+>>>>>>> upstream/master
 namespace delete ::tcltest::test
 return
+
+# Local Variables:
+# mode: tcl
+# End:

@@ -583,7 +583,38 @@ test event-11.6 {Tcl_VwaitCmd procedure: round robin scheduling, same source} {
     removeFile $test2file
     list $x $y $z
 } {3 3 done}
+test event-11.7 {Bug 16828b3744} {
+    after idle {
+	set ::t::v 1
+	namespace delete ::t
+    }
+    namespace eval ::t {
+	vwait ::t::v
+    }
+} {}
+test event-11.8 {Bug 16828b3744} -setup {
+    oo::class create A {
+	variable continue
 
+<<<<<<< HEAD
+=======
+	method start {} {
+           after idle [self] destroy
+
+           set continue 0
+           vwait [namespace current]::continue
+	}
+	destructor {
+           set continue 1
+	}
+    }
+} -body {
+    [A new] start
+} -cleanup {
+    A destroy
+} -result {}
+
+>>>>>>> upstream/master
 test event-12.1 {Tcl_UpdateCmd procedure} -returnCodes error -body {
     update a b
 } -result {wrong # args: should be "update ?idletasks?"}
@@ -604,6 +635,7 @@ test event-12.3 {Tcl_UpdateCmd procedure} -setup {
     update idletasks
     list $x $y $z
 } -cleanup {
+<<<<<<< HEAD
     foreach i [after info] {
 	after cancel $i
     }
@@ -612,6 +644,16 @@ test event-12.4 {Tcl_UpdateCmd procedure} -setup {
     foreach i [after info] {
 	after cancel $i
     }
+=======
+    foreach i [after info] {
+	after cancel $i
+    }
+} -result {before after {after, y = after}}
+test event-12.4 {Tcl_UpdateCmd procedure} -setup {
+    foreach i [after info] {
+	after cancel $i
+    }
+>>>>>>> upstream/master
 } -body {
     after 10; update; # On Mac make sure update won't take long
     after 200 {set x x-done}

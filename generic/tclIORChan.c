@@ -1610,8 +1610,11 @@ ReflectWatch(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     rcPtr->interest = mask;
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     /*
@@ -1637,6 +1640,10 @@ ReflectWatch(
     Tcl_Preserve(rcPtr);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    rcPtr->interest = mask;
+>>>>>>> upstream/master
 =======
     rcPtr->interest = mask;
 >>>>>>> upstream/master
@@ -1954,7 +1961,11 @@ ReflectGetOption(
         goto error;
     } else {
 	int len;
+<<<<<<< HEAD
 	const char *str = Tcl_GetStringFromObj(resObj, &len);
+=======
+	const char *str = TclGetStringFromObj(resObj, &len);
+>>>>>>> upstream/master
 
 	if (len) {
 	    TclDStringAppendLiteral(dsPtr, " ");
@@ -2327,7 +2338,11 @@ InvokeTclMethod(
 
 	    if (result != TCL_ERROR) {
 		int cmdLen;
+<<<<<<< HEAD
 		const char *cmdString = Tcl_GetStringFromObj(cmd, &cmdLen);
+=======
+		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
+>>>>>>> upstream/master
 
 		Tcl_IncrRefCount(cmd);
 		Tcl_ResetResult(rcPtr->interp);
@@ -3091,6 +3106,10 @@ ForwardProc(
 
         Tcl_Preserve(rcPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	rcPtr->interest = paramPtr->watch.mask;
+>>>>>>> upstream/master
 =======
 	rcPtr->interest = paramPtr->watch.mask;
 >>>>>>> upstream/master
@@ -3185,7 +3204,11 @@ ForwardProc(
 		ForwardSetDynamicError(paramPtr, buf);
 	    } else {
 		int len;
+<<<<<<< HEAD
 		const char *str = Tcl_GetStringFromObj(resObj, &len);
+=======
+		const char *str = TclGetStringFromObj(resObj, &len);
+>>>>>>> upstream/master
 
 		if (len) {
 		    TclDStringAppendLiteral(paramPtr->getOpt.value, " ");
@@ -3284,7 +3307,11 @@ ForwardSetObjError(
     Tcl_Obj *obj)
 {
     int len;
+<<<<<<< HEAD
     const char *msgStr = Tcl_GetStringFromObj(obj, &len);
+=======
+    const char *msgStr = TclGetStringFromObj(obj, &len);
+>>>>>>> upstream/master
 
     len++;
     ForwardSetDynamicError(paramPtr, ckalloc(len));

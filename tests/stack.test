@@ -9,6 +9,9 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 package require tcltest 2
 namespace import ::tcltest::*
@@ -30,6 +33,7 @@ test stack-2.1 {maxNestingDepth reached on infinite recursion} -body {
 	interp alias {} unknown {} notaknownproc
 	catch { unknown } msg
 	puts $msg
+<<<<<<< HEAD
     }
 } -result {too many nested evaluations (infinite loop?)}
     
@@ -55,6 +59,11 @@ test stack-2.1 {maxNestingDepth reached on infinite recursion} -body {
 	interp alias {} unknown {} notaknownproc
 	catch { unknown } msg
 	puts $msg
+    }
+} -result {too many nested evaluations (infinite loop?)}
+
+>>>>>>> upstream/master
+=======
     }
 } -result {too many nested evaluations (infinite loop?)}
 

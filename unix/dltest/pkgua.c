@@ -11,6 +11,7 @@
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
 
+<<<<<<< HEAD
 #undef STATIC_BUILD
 #include "tcl.h"
 
@@ -23,6 +24,11 @@
 #define TCL_STORAGE_CLASS DLLEXPORT
 
 /*
+=======
+#include "tcl.h"
+
+/*
+>>>>>>> upstream/master
  * Prototypes for procedures defined later in this file:
  */
 
@@ -78,7 +84,11 @@ PkguaInterpToTokens(
     int newEntry;
     Tcl_Command *cmdTokens;
     Tcl_HashEntry *entryPtr =
+<<<<<<< HEAD
 	    Tcl_CreateHashEntry(&interpTokenMap, (char *) interp, &newEntry);
+=======
+	    Tcl_CreateHashEntry(&interpTokenMap, interp, &newEntry);
+>>>>>>> upstream/master
 
     if (newEntry) {
 	cmdTokens = (Tcl_Command *)
@@ -98,7 +108,11 @@ PkguaDeleteTokens(
     Tcl_Interp *interp)
 {
     Tcl_HashEntry *entryPtr =
+<<<<<<< HEAD
 	    Tcl_FindHashEntry(&interpTokenMap, (char *) interp);
+=======
+	    Tcl_FindHashEntry(&interpTokenMap, interp);
+>>>>>>> upstream/master
 
     if (entryPtr) {
 	Tcl_Free((char *) Tcl_GetHashValue(entryPtr));
@@ -200,7 +214,11 @@ PkguaQuoteObjCmd(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkgua_Init(
     Tcl_Interp *interp)		/* Interpreter in which the package is to be
 				 * made available. */
@@ -224,7 +242,11 @@ Pkgua_Init(
 	return code;
     }
 
+<<<<<<< HEAD
     Tcl_SetVar(interp, "::pkgua_loaded", ".", TCL_APPEND_VALUE);
+=======
+    Tcl_SetVar2(interp, "::pkgua_loaded", NULL, ".", TCL_APPEND_VALUE);
+>>>>>>> upstream/master
 
     cmdTokens = PkguaInterpToTokens(interp);
     cmdTokens[cmdIndex++] =
@@ -253,7 +275,11 @@ Pkgua_Init(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkgua_SafeInit(
     Tcl_Interp *interp)		/* Interpreter in which the package is to be
 				 * made available. */
@@ -278,7 +304,11 @@ Pkgua_SafeInit(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkgua_Unload(
     Tcl_Interp *interp,		/* Interpreter from which the package is to be
 				 * unloaded. */
@@ -299,7 +329,11 @@ Pkgua_Unload(
 
     PkguaDeleteTokens(interp);
 
+<<<<<<< HEAD
     Tcl_SetVar(interp, "::pkgua_detached", ".", TCL_APPEND_VALUE);
+=======
+    Tcl_SetVar2(interp, "::pkgua_detached", NULL, ".", TCL_APPEND_VALUE);
+>>>>>>> upstream/master
 
     if (flags == TCL_UNLOAD_DETACH_FROM_PROCESS) {
 	/*
@@ -309,7 +343,11 @@ Pkgua_Unload(
 	 */
 
 	PkguaFreeTokensHashTable();
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "::pkgua_unloaded", ".", TCL_APPEND_VALUE);
+=======
+	Tcl_SetVar2(interp, "::pkgua_unloaded", NULL, ".", TCL_APPEND_VALUE);
+>>>>>>> upstream/master
     }
     return TCL_OK;
 }
@@ -331,7 +369,11 @@ Pkgua_Unload(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkgua_SafeUnload(
     Tcl_Interp *interp,		/* Interpreter from which the package is to be
 				 * unloaded. */

@@ -99,10 +99,13 @@ call chain) and is responsible for returning the result of \fBnext\fR.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Filters are not invoked when processing an invocation of the \fBunknown\fR
 method because of a failure to locate a method implementation, or when
 invoking either constructors or destructors.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -114,6 +117,9 @@ when invoking either constructors or destructors. (Note however that the
 normal when it is called.)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -157,7 +163,11 @@ in the superclass, args = a x 1 2 3 y b
 in the superclass, args = pureSynthesis
 after chaining from subclass
 <<<<<<< HEAD
+<<<<<<< HEAD
 before chaining from subclass, args = 
+=======
+before chaining from subclass, args =
+>>>>>>> upstream/master
 =======
 before chaining from subclass, args =
 >>>>>>> upstream/master

@@ -48,7 +48,17 @@ MODULE_SCOPE int 	tclTraceCompile;
 
 MODULE_SCOPE int 	tclTraceExec;
 #endif
+<<<<<<< HEAD
 
+/*
+ * The type of lambda expressions. Note that every lambda will *always* have a
+ * string representation.
+ */
+=======
+>>>>>>> upstream/master
+
+MODULE_SCOPE const Tcl_ObjType tclLambdaType;
+
 /*
  * The type of lambda expressions. Note that every lambda will *always* have a
  * string representation.
@@ -136,7 +146,11 @@ typedef struct ExceptionAux {
 				 * targeted to the place where this loop
 				 * exception will be bound to. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *breakTargets;		/* The offsets of the INST_JUMP4 instructions
+=======
+    unsigned int *breakTargets;	/* The offsets of the INST_JUMP4 instructions
+>>>>>>> upstream/master
 =======
     unsigned int *breakTargets;	/* The offsets of the INST_JUMP4 instructions
 >>>>>>> upstream/master
@@ -150,7 +164,11 @@ typedef struct ExceptionAux {
 				 * targeted to the place where this loop
 				 * exception will be bound to. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *continueTargets;	/* The offsets of the INST_JUMP4 instructions
+=======
+    unsigned int *continueTargets; /* The offsets of the INST_JUMP4 instructions
+>>>>>>> upstream/master
 =======
     unsigned int *continueTargets; /* The offsets of the INST_JUMP4 instructions
 >>>>>>> upstream/master
@@ -653,6 +671,9 @@ typedef struct ByteCode {
 
 #define INST_LIST_INDEX_MULTI		94
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 /*
  * TIP #33 - 'lset' command. Code gen also required a Forth-like
@@ -678,6 +699,7 @@ typedef struct ByteCode {
 #define INST_INVOKE_EXPANDED		102
 
 /*
+<<<<<<< HEAD
 =======
 
 /*
@@ -704,6 +726,8 @@ typedef struct ByteCode {
 #define INST_INVOKE_EXPANDED		102
 
 /*
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  * TIP #57 - 'lassign' command. Code generation requires immediate
  *	     LINDEX and LRANGE operators.
@@ -742,8 +766,129 @@ typedef struct ByteCode {
  */
 
 #define INST_JUMP_TABLE			121
+<<<<<<< HEAD
+=======
 
 /*
+ * Instructions to support compilation of global, variable, upvar and
+ * [namespace upvar].
+ */
+
+#define INST_UPVAR			122
+#define INST_NSUPVAR			123
+#define INST_VARIABLE			124
+
+/* Instruction to support compiling syntax error to bytecode */
+
+#define INST_SYNTAX			125
+>>>>>>> upstream/master
+
+/* Instruction to reverse N items on top of stack */
+
+#define INST_REVERSE			126
+
+/* regexp instruction */
+
+#define INST_REGEXP			127
+
+/* For [info exists] compilation */
+#define INST_EXIST_SCALAR		128
+#define INST_EXIST_ARRAY		129
+#define INST_EXIST_ARRAY_STK		130
+#define INST_EXIST_STK			131
+
+/* For [subst] compilation */
+#define INST_NOP			132
+#define INST_RETURN_CODE_BRANCH		133
+
+/* For [unset] compilation */
+#define INST_UNSET_SCALAR		134
+#define INST_UNSET_ARRAY		135
+#define INST_UNSET_ARRAY_STK		136
+#define INST_UNSET_STK			137
+
+/* For [dict with], [dict exists], [dict create] and [dict merge] */
+#define INST_DICT_EXPAND		138
+#define INST_DICT_RECOMBINE_STK		139
+#define INST_DICT_RECOMBINE_IMM		140
+#define INST_DICT_EXISTS		141
+#define INST_DICT_VERIFY		142
+
+/* For [string map] and [regsub] compilation */
+#define INST_STR_MAP			143
+#define INST_STR_FIND			144
+#define INST_STR_FIND_LAST		145
+#define INST_STR_RANGE_IMM		146
+#define INST_STR_RANGE			147
+
+/* For operations to do with coroutines and other NRE-manipulators */
+#define INST_YIELD			148
+#define INST_COROUTINE_NAME		149
+#define INST_TAILCALL			150
+
+/* For compilation of basic information operations */
+#define INST_NS_CURRENT			151
+#define INST_INFO_LEVEL_NUM		152
+#define INST_INFO_LEVEL_ARGS		153
+#define INST_RESOLVE_COMMAND		154
+
+/* For compilation relating to TclOO */
+#define INST_TCLOO_SELF			155
+#define INST_TCLOO_CLASS		156
+#define INST_TCLOO_NS			157
+#define INST_TCLOO_IS_OBJECT		158
+
+/* For compilation of [array] subcommands */
+#define INST_ARRAY_EXISTS_STK		159
+#define INST_ARRAY_EXISTS_IMM		160
+#define INST_ARRAY_MAKE_STK		161
+#define INST_ARRAY_MAKE_IMM		162
+
+#define INST_INVOKE_REPLACE		163
+
+#define INST_LIST_CONCAT		164
+
+#define INST_EXPAND_DROP		165
+
+/* New foreach implementation */
+#define INST_FOREACH_START              166
+#define INST_FOREACH_STEP               167
+#define INST_FOREACH_END                168
+#define INST_LMAP_COLLECT               169
+
+/* For compilation of [string trim] and related */
+#define INST_STR_TRIM			170
+#define INST_STR_TRIM_LEFT		171
+#define INST_STR_TRIM_RIGHT		172
+
+#define INST_CONCAT_STK			173
+
+#define INST_STR_UPPER			174
+#define INST_STR_LOWER			175
+#define INST_STR_TITLE			176
+#define INST_STR_REPLACE		177
+
+#define INST_ORIGIN_COMMAND		178
+
+#define INST_TCLOO_NEXT			179
+#define INST_TCLOO_NEXT_CLASS		180
+
+#define INST_YIELD_TO_INVOKE		181
+
+#define INST_NUM_TYPE			182
+#define INST_TRY_CVT_TO_BOOLEAN		183
+#define INST_STR_CLASS			184
+
+#define INST_LAPPEND_LIST		185
+#define INST_LAPPEND_LIST_ARRAY		186
+#define INST_LAPPEND_LIST_ARRAY_STK	187
+#define INST_LAPPEND_LIST_STK		188
+
+/* The last opcode */
+#define LAST_INST_OPCODE		188
+
+/*
+<<<<<<< HEAD
  * Instructions to support compilation of global, variable, upvar and
  * [namespace upvar].
  */
@@ -861,6 +1006,8 @@ typedef struct ByteCode {
 #define LAST_INST_OPCODE		188
 
 /*
+=======
+>>>>>>> upstream/master
  * Table describing the Tcl bytecode instructions: their name (for displaying
  * code), total number of code bytes required (including operand bytes), and a
  * description of the type of each operand. These operand types include signed
@@ -1032,12 +1179,15 @@ typedef struct ForeachInfo {
 } ForeachInfo;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULE_SCOPE const AuxDataType tclForeachInfoType;
 MODULE_SCOPE const AuxDataType tclNewForeachInfoType;
 
 #define FOREACHINFO(envPtr, index) \
     ((ForeachInfo*)((envPtr)->auxDataArrayPtr[TclGetUInt4AtPtr(index)].clientData))
 =======
+=======
+>>>>>>> upstream/master
 /*
  * Structure used to hold information about a switch command that is needed
  * during program execution. These structures are stored in CompileEnv and
@@ -1053,6 +1203,8 @@ MODULE_SCOPE const AuxDataType tclJumptableInfoType;
 
 #define JUMPTABLEINFO(envPtr, index) \
     ((JumptableInfo*)((envPtr)->auxDataArrayPtr[TclGetUInt4AtPtr(index)].clientData))
+<<<<<<< HEAD
+=======
 
 /*
  * Structure used to hold information about a [dict update] command that is
@@ -1085,6 +1237,54 @@ typedef struct {
 
 /*
  *----------------------------------------------------------------
+ * Procedures exported by tclBasic.c to be used within the engine.
+ *----------------------------------------------------------------
+ */
+
+MODULE_SCOPE Tcl_ObjCmdProc	TclNRInterpCoroutine;
+
+/*
+ *----------------------------------------------------------------
+ * Procedures exported by the engine to be used by tclBasic.c
+ *----------------------------------------------------------------
+ */
+
+MODULE_SCOPE ByteCode *	TclCompileObj(Tcl_Interp *interp, Tcl_Obj *objPtr,
+			    const CmdFrame *invoker, int word);
+>>>>>>> upstream/master
+
+/*
+ * Structure used to hold information about a [dict update] command that is
+ * needed during program execution. These structures are stored in CompileEnv
+ * and ByteCode structures as auxiliary data.
+ */
+
+typedef struct {
+    int length;			/* Size of array */
+    int varIndices[1];		/* Array of variable indices to manage when
+				 * processing the start and end of a [dict
+				 * update]. There is really more than one
+				 * entry, and the structure is allocated to
+				 * take account of this. MUST BE LAST FIELD IN
+				 * STRUCTURE. */
+} DictUpdateInfo;
+
+/*
+ * ClientData type used by the math operator commands.
+ */
+
+typedef struct {
+    const char *op;		/* Do not call it 'operator': C++ reserved */
+    const char *expected;
+    union {
+	int numArgs;
+	int identity;
+    } i;
+} TclOpCmdClientData;
+
+/*
+ *----------------------------------------------------------------
+<<<<<<< HEAD
  * Procedures exported by tclBasic.c to be used within the engine.
  *----------------------------------------------------------------
  */
@@ -1185,6 +1385,16 @@ MODULE_SCOPE int	TclAttemptCompileProc(Tcl_Interp *interp,
 MODULE_SCOPE void	TclCleanupByteCode(ByteCode *codePtr);
 =======
 >>>>>>> upstream/master
+=======
+ * Procedures shared among Tcl bytecode compilation and execution modules but
+ * not used outside:
+ *----------------------------------------------------------------
+ */
+
+MODULE_SCOPE int	TclAttemptCompileProc(Tcl_Interp *interp,
+			    Tcl_Parse *parsePtr, int depth, Command *cmdPtr,
+			    CompileEnv *envPtr);
+>>>>>>> upstream/master
 MODULE_SCOPE void	TclCleanupStackForBreakContinue(CompileEnv *envPtr,
 			    ExceptionAux *auxPtr);
 MODULE_SCOPE void	TclCompileCmdWord(Tcl_Interp *interp,
@@ -1230,7 +1440,10 @@ MODULE_SCOPE int	TclNRExecuteByteCode(Tcl_Interp *interp,
 			    ByteCode *codePtr);
 MODULE_SCOPE Tcl_Obj *	TclFetchLiteral(CompileEnv *envPtr, unsigned int index);
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULE_SCOPE void	TclFinalizeAuxDataTypeTable(void);
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 MODULE_SCOPE int	TclFindCompiledLocal(const char *name, int nameChars,
@@ -1241,9 +1454,15 @@ MODULE_SCOPE int	TclFixupForwardJump(CompileEnv *envPtr,
 MODULE_SCOPE void	TclFreeCompileEnv(CompileEnv *envPtr);
 MODULE_SCOPE void	TclFreeJumpFixupArray(JumpFixupArray *fixupArrayPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULE_SCOPE void	TclInitAuxDataTypeTable(void);
 MODULE_SCOPE void	TclInitByteCodeObj(Tcl_Obj *objPtr,
 			    CompileEnv *envPtr);
+=======
+MODULE_SCOPE ByteCode *	TclInitByteCode(CompileEnv *envPtr);
+MODULE_SCOPE ByteCode *	TclInitByteCodeObj(Tcl_Obj *objPtr,
+			    const Tcl_ObjType *typePtr, CompileEnv *envPtr);
+>>>>>>> upstream/master
 =======
 MODULE_SCOPE ByteCode *	TclInitByteCode(CompileEnv *envPtr);
 MODULE_SCOPE ByteCode *	TclInitByteCodeObj(Tcl_Obj *objPtr,
@@ -1286,6 +1505,11 @@ MODULE_SCOPE void	TclPushVarName(Tcl_Interp *interp,
 			    int flags, int *localIndexPtr,
 			    int *isScalarPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+MODULE_SCOPE void	TclPreserveByteCode(ByteCode *codePtr);
+MODULE_SCOPE void	TclReleaseByteCode(ByteCode *codePtr);
+>>>>>>> upstream/master
 =======
 MODULE_SCOPE void	TclPreserveByteCode(ByteCode *codePtr);
 MODULE_SCOPE void	TclReleaseByteCode(ByteCode *codePtr);
@@ -1332,6 +1556,7 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 
 /*
  * Simplified form to access AuxData.
+<<<<<<< HEAD
 <<<<<<< HEAD
  *
  * ClientData TclFetchAuxData(CompileEng *envPtr, int index);
@@ -1422,6 +1647,81 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
  * stack level: INST_DONE or INST_POP, so that the maxStackdepth is always
  * updated.
  *
+=======
+ *
+ * ClientData TclFetchAuxData(CompileEng *envPtr, int index);
+ */
+
+#define TclFetchAuxData(envPtr, index) \
+    (envPtr)->auxDataArrayPtr[(index)].clientData
+
+#define LITERAL_ON_HEAP		0x01
+#define LITERAL_CMD_NAME	0x02
+
+/*
+ * Form of TclRegisterLiteral with flags == 0. In that case, it is safe to
+ * cast away constness, and it is cleanest to do that here, all in one place.
+ *
+ * int TclRegisterNewLiteral(CompileEnv *envPtr, const char *bytes,
+ *			     int length);
+ */
+
+#define TclRegisterNewLiteral(envPtr, bytes, length) \
+    TclRegisterLiteral(envPtr, (char *)(bytes), length, /*flags*/ 0)
+
+/*
+ * Form of TclRegisterLiteral with flags == LITERAL_CMD_NAME. In that case, it
+ * is safe to cast away constness, and it is cleanest to do that here, all in
+ * one place.
+ *
+ * int TclRegisterNewNSLiteral(CompileEnv *envPtr, const char *bytes,
+ *			       int length);
+ */
+
+#define TclRegisterNewCmdLiteral(envPtr, bytes, length) \
+    TclRegisterLiteral(envPtr, (char *)(bytes), length, LITERAL_CMD_NAME)
+
+/*
+ * Macro used to manually adjust the stack requirements; used in cases where
+ * the stack effect cannot be computed from the opcode and its operands, but
+ * is still known at compile time.
+ *
+ * void TclAdjustStackDepth(int delta, CompileEnv *envPtr);
+ */
+
+#define TclAdjustStackDepth(delta, envPtr) \
+    do {								\
+	if ((delta) < 0) {						\
+	    if ((envPtr)->maxStackDepth < (envPtr)->currStackDepth) {	\
+		(envPtr)->maxStackDepth = (envPtr)->currStackDepth;	\
+	    }								\
+	}								\
+	(envPtr)->currStackDepth += (delta);				\
+    } while (0)
+
+#define TclGetStackDepth(envPtr)		\
+    ((envPtr)->currStackDepth)
+
+#define TclSetStackDepth(depth, envPtr)		\
+    (envPtr)->currStackDepth = (depth)
+
+#define TclCheckStackDepth(depth, envPtr)				\
+    do {								\
+	int dd = (depth);						\
+	if (dd != (envPtr)->currStackDepth) {				\
+	    Tcl_Panic("bad stack depth computations: is %i, should be %i", \
+		    (envPtr)->currStackDepth, dd);		\
+	}								\
+    } while (0)
+
+/*
+ * Macro used to update the stack requirements. It is called by the macros
+ * TclEmitOpCode, TclEmitInst1 and TclEmitInst4.
+ * Remark that the very last instruction of a bytecode always reduces the
+ * stack level: INST_DONE or INST_POP, so that the maxStackdepth is always
+ * updated.
+ *
+>>>>>>> upstream/master
  * void TclUpdateStackReqs(unsigned char op, int i, CompileEnv *envPtr);
  */
 
@@ -1633,6 +1933,7 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 #   define TclGetInt1AtPtr(p) ((int) *((char *) p))
 #elif defined(HAVE_SIGNED_CHAR)
 #   define TclGetInt1AtPtr(p) ((int) *((signed char *) p))
+<<<<<<< HEAD
 #else
 #   define TclGetInt1AtPtr(p) \
     (((int) *((char *) p)) | ((*(p) & 0200) ? (-256) : 0))
@@ -1868,6 +2169,85 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 #endif
 
 =======
+=======
+#else
+#   define TclGetInt1AtPtr(p) \
+    (((int) *((char *) p)) | ((*(p) & 0200) ? (-256) : 0))
+#endif
+
+#define TclGetInt4AtPtr(p) \
+    (((int) TclGetInt1AtPtr(p) << 24) |				\
+		     (*((p)+1) << 16) |				\
+		     (*((p)+2) <<  8) |				\
+		     (*((p)+3)))
+
+#define TclGetUInt1AtPtr(p) \
+    ((unsigned int) *(p))
+#define TclGetUInt4AtPtr(p) \
+    ((unsigned int) (*(p)     << 24) |				\
+		    (*((p)+1) << 16) |				\
+		    (*((p)+2) <<  8) |				\
+		    (*((p)+3)))
+
+/*
+ * Macros used to compute the minimum and maximum of two integers. The ANSI C
+ * "prototypes" for these macros are:
+ *
+ * int TclMin(int i, int j);
+ * int TclMax(int i, int j);
+ */
+
+#define TclMin(i, j)	((((int) i) < ((int) j))? (i) : (j))
+#define TclMax(i, j)	((((int) i) > ((int) j))? (i) : (j))
+
+/*
+ * Convenience macros for use when compiling bodies of commands. The ANSI C
+ * "prototype" for these macros are:
+ *
+ * static void		BODY(Tcl_Token *tokenPtr, int word);
+ */
+
+#define BODY(tokenPtr, word)						\
+    SetLineInformation((word));						\
+    TclCompileCmdWord(interp, (tokenPtr)+1, (tokenPtr)->numComponents,	\
+	    envPtr)
+
+/*
+ * Convenience macro for use when compiling tokens to be pushed. The ANSI C
+ * "prototype" for this macro is:
+ *
+ * static void		CompileTokens(CompileEnv *envPtr, Tcl_Token *tokenPtr,
+ *			    Tcl_Interp *interp);
+ */
+
+#define CompileTokens(envPtr, tokenPtr, interp) \
+    TclCompileTokens((interp), (tokenPtr)+1, (tokenPtr)->numComponents, \
+	    (envPtr));
+/*
+ * Convenience macros for use when pushing literals. The ANSI C "prototype" for
+ * these macros are:
+ *
+ * static void		PushLiteral(CompileEnv *envPtr,
+ *			    const char *string, int length);
+ * static void		PushStringLiteral(CompileEnv *envPtr,
+ *			    const char *string);
+ */
+
+#define PushLiteral(envPtr, string, length) \
+    TclEmitPush(TclRegisterNewLiteral((envPtr), (string), (length)), (envPtr))
+#define PushStringLiteral(envPtr, string) \
+    PushLiteral((envPtr), (string), (int) (sizeof(string "") - 1))
+
+/*
+ * Macro to advance to the next token; it is more mnemonic than the address
+ * arithmetic that it replaces. The ANSI C "prototype" for this macro is:
+ *
+ * static Tcl_Token *	TokenAfter(Tcl_Token *tokenPtr);
+ */
+
+#define TokenAfter(tokenPtr) \
+    ((tokenPtr) + ((tokenPtr)->numComponents + 1))
+>>>>>>> upstream/master
 
 /*
  * Macro to get the offset to the next instruction to be issued. The ANSI C
@@ -1902,11 +2282,19 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 	CurrentOffset(envPtr) - (envPtr)->exceptArrayPtr[(index)].codeOffset))
 #define ExceptionRangeTarget(envPtr, index, targetType) \
     ((envPtr)->exceptArrayPtr[(index)].targetType = CurrentOffset(envPtr))
+<<<<<<< HEAD
 
 /*
  * Check if there is an LVT for compiled locals
  */
 
+=======
+
+/*
+ * Check if there is an LVT for compiled locals
+ */
+
+>>>>>>> upstream/master
 #define EnvHasLVT(envPtr) \
     (envPtr->procPtr || envPtr->iPtr->varFramePtr->localCachePtr)
 
@@ -2024,6 +2412,9 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 #define unlikely(x) (x)
 #endif
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #define TCL_DTRACE_PROC_ENTRY_ENABLED()	    unlikely(TCL_PROC_ENTRY_ENABLED())
 #define TCL_DTRACE_PROC_RETURN_ENABLED()    unlikely(TCL_PROC_RETURN_ENABLED())

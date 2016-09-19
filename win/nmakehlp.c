@@ -607,8 +607,13 @@ SubstituteFile(
 	if (sp != NULL) {
 	    while (fgets(szBuffer, cbBuffer, sp) != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		char *ks, *ke, *vs, *ve;
 		ks = szBuffer;
+=======
+		unsigned char *ks, *ke, *vs, *ve;
+		ks = (unsigned char*)szBuffer;
+>>>>>>> upstream/master
 =======
 		unsigned char *ks, *ke, *vs, *ve;
 		ks = (unsigned char*)szBuffer;
@@ -622,7 +627,11 @@ SubstituteFile(
 		while (ve && *ve && !(*ve == '\r' || *ve == '\n')) ++ve;
 		*ke = 0, *ve = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		list_insert(&substPtr, ks, vs);
+=======
+		list_insert(&substPtr, (char*)ks, (char*)vs);
+>>>>>>> upstream/master
 =======
 		list_insert(&substPtr, (char*)ks, (char*)vs);
 >>>>>>> upstream/master

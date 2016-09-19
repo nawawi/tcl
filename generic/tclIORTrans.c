@@ -945,7 +945,11 @@ ReflectClose(
 		return errorCode;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -967,7 +971,11 @@ ReflectClose(
 		return errorCode;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -1195,7 +1203,11 @@ ReflectInput(
 	    rtPtr->eofPending = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2067,7 +2079,11 @@ InvokeTclMethod(
 	    if (result != TCL_ERROR) {
 		Tcl_Obj *cmd = Tcl_NewListObj(cmdc, rtPtr->argv);
 		int cmdLen;
+<<<<<<< HEAD
 		const char *cmdString = Tcl_GetStringFromObj(cmd, &cmdLen);
+=======
+		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
+>>>>>>> upstream/master
 
 		Tcl_IncrRefCount(cmd);
 		Tcl_ResetResult(rtPtr->interp);
@@ -2831,7 +2847,11 @@ ForwardSetObjError(
     Tcl_Obj *obj)
 {
     int len;
+<<<<<<< HEAD
     const char *msgStr = Tcl_GetStringFromObj(obj, &len);
+=======
+    const char *msgStr = TclGetStringFromObj(obj, &len);
+>>>>>>> upstream/master
 
     len++;
     ForwardSetDynamicError(paramPtr, ckalloc(len));

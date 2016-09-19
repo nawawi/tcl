@@ -122,7 +122,11 @@ FileCopyRename(
     if ((objc - i) < 2) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_WrongNumArgs(interp, 1, objv, 
+=======
+	Tcl_WrongNumArgs(interp, 1, objv,
+>>>>>>> upstream/master
 =======
 	Tcl_WrongNumArgs(interp, 1, objv,
 >>>>>>> upstream/master
@@ -1083,6 +1087,7 @@ TclFileAttrsCmd(
 		    "bad option \"%s\", there are no file attributes in this"
 		    " filesystem", TclGetString(objv[0])));
 	    Tcl_SetErrorCode(interp, "TCL","OPERATION","FATTR","NONE", NULL);
+<<<<<<< HEAD
 	    goto end;
 	}
 
@@ -1092,6 +1097,14 @@ TclFileAttrsCmd(
 	}
 	if (attributeStringsAllocated != NULL) {
 	    TclFreeIntRep(objv[0]);
+=======
+	    goto end;
+	}
+
+	if (Tcl_GetIndexFromObj(interp, objv[0], attributeStrings,
+		"option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
+	    goto end;
+>>>>>>> upstream/master
 	}
 	if (Tcl_FSFileAttrsGet(interp, index, filePtr,
 		&objPtr) != TCL_OK) {
@@ -1115,12 +1128,18 @@ TclFileAttrsCmd(
 
 	for (i = 0; i < objc ; i += 2) {
 	    if (Tcl_GetIndexFromObj(interp, objv[i], attributeStrings,
+<<<<<<< HEAD
 		    "option", 0, &index) != TCL_OK) {
 		goto end;
 	    }
 	    if (attributeStringsAllocated != NULL) {
 		TclFreeIntRep(objv[i]);
 	    }
+=======
+		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
+		goto end;
+	    }
+>>>>>>> upstream/master
 	    if (i + 1 == objc) {
 		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 			"value for \"%s\" missing", TclGetString(objv[i])));

@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -53,7 +57,11 @@ If \fIindex\fR is negative or greater than or equal to the number
 of elements in \fIvalue\fR, then an empty
 string is returned.
 <<<<<<< HEAD
+<<<<<<< HEAD
 The interpretation of each simple \fIindex\fR value is the same as 
+=======
+The interpretation of each simple \fIindex\fR value is the same as
+>>>>>>> upstream/master
 =======
 The interpretation of each simple \fIindex\fR value is the same as
 >>>>>>> upstream/master
@@ -124,7 +132,11 @@ set idx 3
 .CE
 .SH "SEE ALSO"
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

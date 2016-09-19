@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -140,7 +144,11 @@ without truncation for conversion to a formatted substring.
 If it is \fBh\fR it specifies that an integer value is
 truncated to a 16-bit range before converting.  This option is rarely useful.
 <<<<<<< HEAD
+<<<<<<< HEAD
 If it is \fBl\fR it specifies that the integer value is 
+=======
+If it is \fBl\fR it specifies that the integer value is
+>>>>>>> upstream/master
 =======
 If it is \fBl\fR it specifies that the integer value is
 >>>>>>> upstream/master
@@ -187,8 +195,13 @@ No conversion; just insert string.
 .TP 10
 \fBf\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 Convert number to signed decimal string of 
 the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by 
+=======
+Convert number to signed decimal string of
+the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by
+>>>>>>> upstream/master
 =======
 Convert number to signed decimal string of
 the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by
@@ -198,8 +211,13 @@ If the precision is 0 then no decimal point is output.
 .TP 10
 \fBe\fR or \fBE\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 Convert number to scientific notation in the 
 form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined 
+=======
+Convert number to scientific notation in the
+form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined
+>>>>>>> upstream/master
 =======
 Convert number to scientific notation in the
 form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined
@@ -211,8 +229,13 @@ printed instead of \fBe\fR.
 .TP 10
 \fBg\fR or \fBG\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 If the exponent is less than \-4 or greater than or equal to the 
 precision, then convert number as for \fB%e\fR or 
+=======
+If the exponent is less than \-4 or greater than or equal to the
+precision, then convert number as for \fB%e\fR or
+>>>>>>> upstream/master
 =======
 If the exponent is less than \-4 or greater than or equal to the
 precision, then convert number as for \fB%e\fR or
@@ -282,6 +305,7 @@ Print a small table of powers of three:
 # Set up the column widths
 set w1 5
 set w2 10
+<<<<<<< HEAD
 
 # Make a nice header (with separator) for the table first
 set sep +-[string repeat - $w1]-+-[string repeat - $w2]-+
@@ -289,6 +313,15 @@ puts $sep
 puts [\fBformat\fR "| %-*s | %-*s |" $w1 "Index" $w2 "Power"]
 puts $sep
 
+=======
+
+# Make a nice header (with separator) for the table first
+set sep +-[string repeat - $w1]-+-[string repeat - $w2]-+
+puts $sep
+puts [\fBformat\fR "| %-*s | %-*s |" $w1 "Index" $w2 "Power"]
+puts $sep
+
+>>>>>>> upstream/master
 # Print the contents of the table
 set p 1
 for {set i 0} {$i<=20} {incr i} {

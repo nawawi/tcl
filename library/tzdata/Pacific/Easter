@@ -98,8 +98,11 @@ set TZData(:Pacific/Easter) {
     {1398567600 -21600 0 EAST}
     {1410062400 -18000 1 EASST}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {1430017200 -18000 0 EAST}
 =======
+=======
+>>>>>>> upstream/master
     {1463281200 -21600 0 EAST}
     {1471147200 -18000 1 EASST}
     {1494730800 -21600 0 EAST}
@@ -268,5 +271,8 @@ set TZData(:Pacific/Easter) {
     {4058481600 -18000 1 EASST}
     {4082065200 -21600 0 EAST}
     {4089931200 -18000 1 EASST}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }

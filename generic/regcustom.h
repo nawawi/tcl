@@ -70,8 +70,11 @@
 #define	__REG_WIDE_T	Tcl_UniChar
 #define	__REG_REGOFF_T	long	/* Not really right, but good enough... */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define	__REG_VOID_T	void
 #define	__REG_CONST	const
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 /* Names and declarations */

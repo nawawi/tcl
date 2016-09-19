@@ -100,7 +100,11 @@ test proc-1.7 {Tcl_ProcObjCmd, check that formal parameter names are not array e
     catch {rename p ""}
 } -returnCodes error -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc p {a(1) a(2)} { 
+=======
+    proc p {a(1) a(2)} {
+>>>>>>> upstream/master
 =======
     proc p {a(1) a(2)} {
 >>>>>>> upstream/master
@@ -112,7 +116,11 @@ test proc-1.8 {Tcl_ProcObjCmd, check that formal parameter names are simple name
     catch {rename p ""}
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc p {b:a b::a} { 
+=======
+    proc p {b:a b::a} {
+>>>>>>> upstream/master
 =======
     proc p {b:a b::a} {
 >>>>>>> upstream/master
@@ -338,7 +346,11 @@ test proc-5.1 {Bytecompiling noop; test for correct argument substitution} -body
     catch {rename p ""}
     catch {rename t ""}
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {aba}    
+=======
+} -result {aba}
+>>>>>>> upstream/master
 =======
 } -result {aba}
 >>>>>>> upstream/master

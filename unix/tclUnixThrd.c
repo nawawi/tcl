@@ -15,11 +15,16 @@
 
 #ifdef TCL_THREADS
 
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     char nabuf[16];
 } ThreadSpecificData;
 
 static Tcl_ThreadDataKey dataKey;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 /*
@@ -34,6 +39,8 @@ static Tcl_ThreadDataKey dataKey;
 #ifndef TCL_MUTEX_LOCK_SLEEP_TIME
 #  define TCL_MUTEX_LOCK_SLEEP_TIME	(25)
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -61,6 +68,7 @@ static pthread_mutex_t allocLock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t *allocLockPtr = &allocLock;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*
  * The mutexLock serializes Tcl_MutexLock. This is necessary to prevent
  * races when finalizing a mutex that some other thread may want to lock.
@@ -75,6 +83,8 @@ static pthread_mutex_t mutexLock = PTHREAD_MUTEX_INITIALIZER;
 #define MASTER_LOCK	pthread_mutex_lock(&masterLock)
 #define MASTER_UNLOCK	pthread_mutex_unlock(&masterLock)
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #endif /* TCL_THREADS */
@@ -279,7 +289,11 @@ TclpInitLock(void)
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
 =======
  * TclFinalizeLock
 >>>>>>> upstream/master
@@ -297,6 +311,9 @@ TclpInitLock(void)
  *----------------------------------------------------------------------
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 void
 TclFinalizeLock(void)
@@ -308,6 +325,7 @@ TclFinalizeLock(void)
      * destruction: masterLock, allocLock, and initLock.
      */
 
+<<<<<<< HEAD
 =======
 
 void
@@ -320,6 +338,8 @@ TclFinalizeLock(void)
      * destruction: masterLock, allocLock, and initLock.
      */
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     pthread_mutex_unlock(&initLock);
 #endif
@@ -465,8 +485,11 @@ Tcl_MutexLock(
     pthread_mutex_t *pmutexPtr;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 retry:
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     if (*mutexPtr == NULL) {
@@ -482,6 +505,7 @@ retry:
 	    TclRememberMutex(mutexPtr);
 	}
 	pthread_mutex_unlock(&masterLock);
+<<<<<<< HEAD
     }
     while (1) {
 	pthread_mutex_lock(&mutexLock);
@@ -508,6 +532,8 @@ retry:
 #else
 	Tcl_Sleep(TCL_MUTEX_LOCK_SLEEP_TIME);
 #endif
+=======
+>>>>>>> upstream/master
     }
 }
 
@@ -568,6 +594,7 @@ TclpFinalizeMutex(
 	*mutexPtr = NULL;
     }
 }
+<<<<<<< HEAD
 
 /*
  *----------------------------------------------------------------------
@@ -805,10 +832,34 @@ TclpInetNtoa(
     return inet_ntoa(addr);
 #endif
 }
+=======
+>>>>>>> upstream/master
 
 #ifdef TCL_THREADS
 /*
+<<<<<<< HEAD
  * Additions by AOL for specialized thread memory allocator.
+=======
+ *----------------------------------------------------------------------
+ *
+ * Tcl_ConditionWait --
+ *
+ *	This procedure is invoked to wait on a condition variable. The mutex
+ *	is automically released as part of the wait, and automatically grabbed
+ *	when the condition is signaled.
+ *
+ *	The mutex must be held when this procedure is called.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	May block the current thread. The mutex is aquired when this returns.
+ *	Will allocate memory for a pthread_mutex_t and initialize this the
+ *	first time this Tcl_Mutex is used.
+ *
+ *----------------------------------------------------------------------
+>>>>>>> upstream/master
  */
 
 #ifdef USE_THREAD_ALLOC
@@ -836,8 +887,15 @@ TclpNewAllocMutex(void)
 }
 
 void
+<<<<<<< HEAD
 TclpFreeAllocMutex(
     Tcl_Mutex *mutex)		/* The alloc mutex to free. */
+=======
+Tcl_ConditionWait(
+    Tcl_Condition *condPtr,	/* Really (pthread_cond_t **) */
+    Tcl_Mutex *mutexPtr,	/* Really (pthread_mutex_t **) */
+    const Tcl_Time *timePtr) /* Timeout on waiting period */
+>>>>>>> upstream/master
 {
     allocMutex* lockPtr = (allocMutex*) mutex;
     if (!lockPtr) {
@@ -847,6 +905,7 @@ TclpFreeAllocMutex(
     free(lockPtr);
 }
 
+<<<<<<< HEAD
 void
 TclpInitAllocCache(void)
 {
@@ -898,6 +957,277 @@ TclpGetAllocCache(void)
     }
 =======
 >>>>>>> upstream/master
+    return pthread_getspecific(key);
+}
+
+void
+TclpSetAllocCache(
+    void *arg)
+=======
+    if (*condPtr == NULL) {
+	pthread_mutex_lock(&masterLock);
+
+	/*
+	 * Double check inside mutex to avoid race, then initialize condition
+	 * variable if necessary.
+	 */
+
+	if (*condPtr == NULL) {
+	    pcondPtr = ckalloc(sizeof(pthread_cond_t));
+	    pthread_cond_init(pcondPtr, NULL);
+	    *condPtr = (Tcl_Condition) pcondPtr;
+	    TclRememberCondition(condPtr);
+	}
+	pthread_mutex_unlock(&masterLock);
+    }
+    pmutexPtr = *((pthread_mutex_t **)mutexPtr);
+    pcondPtr = *((pthread_cond_t **)condPtr);
+    if (timePtr == NULL) {
+	pthread_cond_wait(pcondPtr, pmutexPtr);
+    } else {
+	Tcl_Time now;
+
+	/*
+	 * Make sure to take into account the microsecond component of the
+	 * current time, including possible overflow situations. [Bug #411603]
+	 */
+
+	Tcl_GetTime(&now);
+	ptime.tv_sec = timePtr->sec + now.sec +
+	    (timePtr->usec + now.usec) / 1000000;
+	ptime.tv_nsec = 1000 * ((timePtr->usec + now.usec) % 1000000);
+	pthread_cond_timedwait(pcondPtr, pmutexPtr, &ptime);
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_ConditionNotify --
+ *
+ *	This procedure is invoked to signal a condition variable.
+ *
+ *	The mutex must be held during this call to avoid races, but this
+ *	interface does not enforce that.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	May unblock another thread.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+Tcl_ConditionNotify(
+    Tcl_Condition *condPtr)
+>>>>>>> upstream/master
+{
+    pthread_setspecific(key, arg);
+}
+#endif /* USE_THREAD_ALLOC */
+
+void *
+TclpThreadCreateKey(void)
+{
+    pthread_key_t *ptkeyPtr;
+
+    ptkeyPtr = TclpSysAlloc(sizeof *ptkeyPtr, 0);
+    if (NULL == ptkeyPtr) {
+	Tcl_Panic("unable to allocate thread key!");
+    }
+
+    if (pthread_key_create(ptkeyPtr, NULL)) {
+	Tcl_Panic("unable to create pthread key!");
+    }
+
+    return ptkeyPtr;
+}
+<<<<<<< HEAD
+
+void
+TclpThreadDeleteKey(
+    void *keyPtr)
+{
+    pthread_key_t *ptkeyPtr = keyPtr;
+
+    if (pthread_key_delete(*ptkeyPtr)) {
+	Tcl_Panic("unable to delete key!");
+    }
+
+    TclpSysFree(keyPtr);
+}
+
+void
+TclpThreadSetMasterTSD(
+    void *tsdKeyPtr,
+    void *ptr)
+{
+    pthread_key_t *ptkeyPtr = tsdKeyPtr;
+
+    if (pthread_setspecific(*ptkeyPtr, ptr)) {
+	Tcl_Panic("unable to set master TSD value");
+=======
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclpFinalizeCondition --
+ *
+ *	This procedure is invoked to clean up a condition variable. This is
+ *	only safe to call at the end of time.
+ *
+ *	This assumes the Master Lock is held.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The condition variable is deallocated.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+TclpFinalizeCondition(
+    Tcl_Condition *condPtr)
+{
+    pthread_cond_t *pcondPtr = *(pthread_cond_t **)condPtr;
+
+    if (pcondPtr != NULL) {
+	pthread_cond_destroy(pcondPtr);
+	ckfree(pcondPtr);
+	*condPtr = NULL;
+>>>>>>> upstream/master
+    }
+}
+#endif /* TCL_THREADS */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclpReaddir, TclpInetNtoa --
+ *
+ *	These procedures replace core C versions to be used in a threaded
+ *	environment.
+ *
+ * Results:
+ *	See documentation of C functions.
+ *
+ * Side effects:
+ *	See documentation of C functions.
+ *
+ * Notes:
+ *	TclpReaddir is no longer used by the core (see 1095909), but it
+ *	appears in the internal stubs table (see #589526).
+ *
+ *----------------------------------------------------------------------
+ */
+
+Tcl_DirEntry *
+TclpReaddir(
+    DIR * dir)
+{
+    return TclOSreaddir(dir);
+}
+
+<<<<<<< HEAD
+void *
+TclpThreadGetMasterTSD(
+    void *tsdKeyPtr)
+{
+    pthread_key_t *ptkeyPtr = tsdKeyPtr;
+
+    return pthread_getspecific(*ptkeyPtr);
+}
+
+=======
+#undef TclpInetNtoa
+char *
+TclpInetNtoa(
+    struct in_addr addr)
+{
+#ifdef TCL_THREADS
+    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    unsigned char *b = (unsigned char*) &addr.s_addr;
+
+    sprintf(tsdPtr->nabuf, "%u.%u.%u.%u", b[0], b[1], b[2], b[3]);
+    return tsdPtr->nabuf;
+#else
+    return inet_ntoa(addr);
+#endif
+}
+
+#ifdef TCL_THREADS
+/*
+ * Additions by AOL for specialized thread memory allocator.
+ */
+
+#ifdef USE_THREAD_ALLOC
+static pthread_key_t key;
+
+typedef struct {
+    Tcl_Mutex tlock;
+    pthread_mutex_t plock;
+} allocMutex;
+
+Tcl_Mutex *
+TclpNewAllocMutex(void)
+{
+    allocMutex *lockPtr;
+    register pthread_mutex_t *plockPtr;
+
+    lockPtr = malloc(sizeof(allocMutex));
+    if (lockPtr == NULL) {
+	Tcl_Panic("could not allocate lock");
+    }
+    plockPtr = &lockPtr->plock;
+    lockPtr->tlock = (Tcl_Mutex) plockPtr;
+    pthread_mutex_init(&lockPtr->plock, NULL);
+    return &lockPtr->tlock;
+}
+
+void
+TclpFreeAllocMutex(
+    Tcl_Mutex *mutex)		/* The alloc mutex to free. */
+{
+    allocMutex* lockPtr = (allocMutex*) mutex;
+    if (!lockPtr) {
+	return;
+    }
+    pthread_mutex_destroy(&lockPtr->plock);
+    free(lockPtr);
+}
+
+void
+TclpInitAllocCache(void)
+{
+    pthread_mutex_lock(allocLockPtr);
+    pthread_key_create(&key, TclpFreeAllocCache);
+    pthread_mutex_unlock(allocLockPtr);
+}
+
+void
+TclpFreeAllocCache(
+    void *ptr)
+{
+    if (ptr != NULL) {
+	/*
+	 * Called by the pthread lib when a thread exits
+	 */
+
+	TclFreeAllocCache(ptr);
+	pthread_setspecific(key, NULL);
+
+    } else {
+	pthread_key_delete(key);
+    }
+}
+
+void *
+TclpGetAllocCache(void)
+{
     return pthread_getspecific(key);
 }
 
@@ -960,6 +1290,7 @@ TclpThreadGetMasterTSD(
     return pthread_getspecific(*ptkeyPtr);
 }
 
+>>>>>>> upstream/master
 #endif /* TCL_THREADS */
 
 /*

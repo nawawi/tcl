@@ -18,12 +18,18 @@ if {"::tcltest" ni [namespace children]} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 ::tcltest::loadTestedCommands
 catch [list package require -exact Tcltest [info patchlevel]]
 
 testConstraint testpreferstable [llength [info commands testpreferstable]]
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Do all this in a slave interp to avoid garbaging the package list
 set i [interp create]
@@ -578,7 +584,12 @@ test package-3.44 {Tcl_PkgRequire: exact version matching (1578344)} -setup {
     package forget demo
 } -result {version conflict for package "demo": have 1.2.3, need exactly 1.2}
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -setup {
+=======
+test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
+    testpreferstable
+>>>>>>> upstream/master
 =======
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
     testpreferstable
@@ -1247,15 +1258,21 @@ proc prefer {args} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-13.0 {package prefer defaults} {
     prefer
 } stable
 =======
+=======
+>>>>>>> upstream/master
 test package-13.0 {package prefer defaults} -constraints testpreferstable -setup {
     testpreferstable
 } -body {
     prefer
 } -result stable
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test package-13.1 {package prefer defaults} -body {
     set ::env(TCL_PKG_PREFER_LATEST) stable	;# value not relevant!
@@ -1272,6 +1289,7 @@ test package-14.1 {bogus argument} -returnCodes error -body {
 } -result {bad preference "foo": must be latest or stable}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-15.0 {set, keep} {package prefer stable} stable
 test package-15.1 {set stable, keep} {prefer stable} {stable stable}
 test package-15.2 {set latest, change} {prefer latest} {stable latest}
@@ -1282,6 +1300,8 @@ test package-15.4 {set stable, rejected} {
     prefer latest stable
 } {stable latest latest}
 =======
+=======
+>>>>>>> upstream/master
 test package-15.0 {set, keep} -constraints testpreferstable -setup {
     testpreferstable
 } -body {package prefer stable} -result stable
@@ -1301,6 +1321,9 @@ test package-15.4 {set stable, rejected} -constraints testpreferstable -setup {
 } -body {
     prefer latest stable
 } -result {stable latest latest}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 rename prefer {}

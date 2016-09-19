@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -42,7 +46,11 @@ If the next character in \fIformat\fR is a blank or tab then it
 matches any number of white space characters in \fIstring\fR (including
 zero).
 <<<<<<< HEAD
+<<<<<<< HEAD
 Otherwise, if it is not a \fB%\fR character then it 
+=======
+Otherwise, if it is not a \fB%\fR character then it
+>>>>>>> upstream/master
 =======
 Otherwise, if it is not a \fB%\fR character then it
 >>>>>>> upstream/master
@@ -61,7 +69,11 @@ When \fBscan\fR finds a conversion specifier in \fIformat\fR, it
 first skips any white-space characters in \fIstring\fR (unless the
 conversion character is \fB[\fR or \fBc\fR).
 <<<<<<< HEAD
+<<<<<<< HEAD
 Then it converts the next input characters according to the 
+=======
+Then it converts the next input characters according to the
+>>>>>>> upstream/master
 =======
 Then it converts the next input characters according to the
 >>>>>>> upstream/master
@@ -108,7 +120,11 @@ truncated as required by the size modifier value.
 \fBo\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 The input substring must be an octal integer. It is read in and the 
+=======
+The input substring must be an octal integer. It is read in and the
+>>>>>>> upstream/master
 =======
 The input substring must be an octal integer. It is read in and the
 >>>>>>> upstream/master
@@ -147,7 +163,11 @@ truncated as required by the size modifier value.
 \fBc\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 A single character is read in and its Unicode value is stored in 
+=======
+A single character is read in and its Unicode value is stored in
+>>>>>>> upstream/master
 =======
 A single character is read in and its Unicode value is stored in
 >>>>>>> upstream/master
@@ -158,7 +178,11 @@ substring may be a white-space character.
 \fBs\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 The input substring consists of all the characters up to the next 
+=======
+The input substring consists of all the characters up to the next
+>>>>>>> upstream/master
 =======
 The input substring consists of all the characters up to the next
 >>>>>>> upstream/master
@@ -167,7 +191,11 @@ white-space character; the characters are copied to the variable.
 \fBe\fR or \fBf\fR or \fBg\fR or \fBE\fR or \fBG\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 The input substring must be a floating-point number consisting 
+=======
+The input substring must be a floating-point number consisting
+>>>>>>> upstream/master
 =======
 The input substring must be a floating-point number consisting
 >>>>>>> upstream/master
@@ -215,7 +243,11 @@ as many decimal digits as possible for \fB%d\fR, as
 many octal digits as possible for \fB%o\fR, and so on).
 The input substring for a given conversion terminates either when a
 <<<<<<< HEAD
+<<<<<<< HEAD
 white-space character is encountered or when the maximum substring 
+=======
+white-space character is encountered or when the maximum substring
+>>>>>>> upstream/master
 =======
 white-space character is encountered or when the maximum substring
 >>>>>>> upstream/master

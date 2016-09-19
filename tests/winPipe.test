@@ -42,7 +42,11 @@ append big $big
 
 set path(little) [makeFile {} little]
 <<<<<<< HEAD
+<<<<<<< HEAD
 set f [open $path(little) w] 
+=======
+set f [open $path(little) w]
+>>>>>>> upstream/master
 =======
 set f [open $path(little) w]
 >>>>>>> upstream/master

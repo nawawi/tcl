@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -63,7 +67,11 @@ configured to be nonblocking: \fBfconfigure\fI channelId \fB\-blocking
 must be taken when using \fBread\fR on blocking serial ports:
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBread \fIchannelId numChars\fR 
+=======
+\fBread \fIchannelId numChars\fR
+>>>>>>> upstream/master
 =======
 \fBread \fIchannelId numChars\fR
 >>>>>>> upstream/master
@@ -72,7 +80,11 @@ In this form \fBread\fR blocks until \fInumChars\fR have been received
 from the serial port.
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBread \fIchannelId\fR 
+=======
+\fBread \fIchannelId\fR
+>>>>>>> upstream/master
 =======
 \fBread \fIchannelId\fR
 >>>>>>> upstream/master

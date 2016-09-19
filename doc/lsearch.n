@@ -7,7 +7,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -116,7 +120,11 @@ The list elements are to be compared as integers.
 .
 Causes comparisons to be handled in a case-insensitive manner.  Has no
 <<<<<<< HEAD
+<<<<<<< HEAD
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or 
+=======
+effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
+>>>>>>> upstream/master
 =======
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
 >>>>>>> upstream/master
@@ -218,7 +226,11 @@ It is also possible to search inside elements:
 .CE
 .SH "SEE ALSO"
 <<<<<<< HEAD
+<<<<<<< HEAD
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n), 
+=======
+foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
+>>>>>>> upstream/master
 =======
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
 >>>>>>> upstream/master

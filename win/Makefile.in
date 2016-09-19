@@ -82,12 +82,21 @@ CFLAGS_OPTIMIZE	= @CFLAGS_OPTIMIZE@
 #CFLAGS = 		$(CFLAGS_OPTIMIZE)
 #CFLAGS = 		$(CFLAGS_DEBUG) $(CFLAGS_OPTIMIZE)
 CFLAGS = 		@CFLAGS@ @CFLAGS_DEFAULT@ -DUNICODE -D_UNICODE
+<<<<<<< HEAD
 
 # To compile without backward compatibility and deprecated code uncomment the
 # following
 NO_DEPRECATED_FLAGS	=
 #NO_DEPRECATED_FLAGS	= -DTCL_NO_DEPRECATED
 
+=======
+
+# To compile without backward compatibility and deprecated code uncomment the
+# following
+NO_DEPRECATED_FLAGS	=
+#NO_DEPRECATED_FLAGS	= -DTCL_NO_DEPRECATED
+
+>>>>>>> upstream/master
 # To enable compilation debugging reverse the comment characters on one of the
 # following lines.
 COMPILE_DEBUG_FLAGS =
@@ -416,12 +425,21 @@ TCL_OBJS = ${GENERIC_OBJS} $(TOMMATH_OBJS) ${WIN_OBJS} @ZLIB_OBJS@
 TCL_DOCS = "$(ROOT_DIR_NATIVE)"/doc/*.[13n]
 
 all: binaries libraries doc packages
+<<<<<<< HEAD
 
 tcltest: $(TCLSH) $(TEST_DLL_FILE)
 
 <<<<<<< HEAD
 binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ $(DDE_DLL_FILE) $(REG_DLL_FILE) $(TCLSH)
 =======
+binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions $(TCLSH)
+
+winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
+>>>>>>> upstream/master
+=======
+
+tcltest: $(TCLSH) $(TEST_DLL_FILE)
+
 binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions $(TCLSH)
 
 winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
@@ -470,6 +488,7 @@ ${TEST_DLL_FILE}: ${TCL_STUB_LIB_FILE} ${TCLTEST_OBJS}
 	@$(RM) ${TEST_DLL_FILE} ${TEST_LIB_FILE}
 	@MAKE_DLL@ ${TCLTEST_OBJS} $(TCL_STUB_LIB_FILE) $(SHLIB_LD_LIBS)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # use pre-built zlib1.dll
 ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
@@ -480,6 +499,8 @@ ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
 	fi;
 
 =======
+=======
+>>>>>>> upstream/master
 
 # use pre-built zlib1.dll
 ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
@@ -489,6 +510,9 @@ ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
 		$(COPY) $(ZLIB_DIR)/win32/${ZLIB_DLL_FILE} ${ZLIB_DLL_FILE}; \
 	fi;
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Add the object extension to the implicit rules. By default .obj is not
 # automatically added.
@@ -698,6 +722,7 @@ install-msgs:
 	    "$(ROOT_DIR)/library/msgs" "$(SCRIPT_INSTALL_DIR)/msgs"
 
 install-doc: doc
+<<<<<<< HEAD
 
 # Optional target to install private headers
 install-private-headers: libraries
@@ -718,6 +743,28 @@ install-private-headers: libraries
 	    $(COPY) "$$i" "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
 	    done;
 
+=======
+
+# Optional target to install private headers
+install-private-headers: libraries
+	@for i in $(PRIVATE_INCLUDE_INSTALL_DIR); \
+	    do \
+	    if [ ! -d $$i ] ; then \
+		echo "Making directory $$i"; \
+		$(MKDIR) $$i; \
+		else true; \
+		fi; \
+	    done;
+	@echo "Installing private header files";
+	@for i in "$(GENERIC_DIR)/tclInt.h" "$(GENERIC_DIR)/tclIntDecls.h" \
+		"$(GENERIC_DIR)/tclIntPlatDecls.h" "$(GENERIC_DIR)/tclPort.h" \
+		"$(GENERIC_DIR)/tclOOInt.h" "$(GENERIC_DIR)/tclOOIntDecls.h" \
+		"$(WIN_DIR)/tclWinPort.h" ; \
+	    do \
+	    $(COPY) "$$i" "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
+	    done;
+
+>>>>>>> upstream/master
 # Specifying TESTFLAGS on the command line is the standard way to pass args to
 # tcltest, i.e.:
 #	% make test TESTFLAGS="-verbose bps -file fileName.test"
@@ -857,12 +904,21 @@ $(GENERIC_DIR)/tclStubInit.c: $(GENERIC_DIR)/tcl.decls \
 
 genstubs:
 	$(TCL_EXE) "$(ROOT_DIR_NATIVE)/tools/genStubs.tcl" \
+<<<<<<< HEAD
 	    "$(GENERIC_DIR_NATIVE)" \
 	    "$(GENERIC_DIR_NATIVE)/tcl.decls" \
 	    "$(GENERIC_DIR_NATIVE)/tclInt.decls" \
 	    "$(GENERIC_DIR_NATIVE)/tclTomMath.decls"
 	$(TCL_EXE) "$(ROOT_DIR_NATIVE)/tools/genStubs.tcl" \
 	    "$(GENERIC_DIR_NATIVE)" \
+=======
+	    "$(GENERIC_DIR_NATIVE)" \
+	    "$(GENERIC_DIR_NATIVE)/tcl.decls" \
+	    "$(GENERIC_DIR_NATIVE)/tclInt.decls" \
+	    "$(GENERIC_DIR_NATIVE)/tclTomMath.decls"
+	$(TCL_EXE) "$(ROOT_DIR_NATIVE)/tools/genStubs.tcl" \
+	    "$(GENERIC_DIR_NATIVE)" \
+>>>>>>> upstream/master
 	    "$(GENERIC_DIR_NATIVE)/tclOO.decls"
 
 #

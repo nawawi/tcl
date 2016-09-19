@@ -729,7 +729,10 @@ test stringComp-14.3 {Bug 0dca3bfa8f} {
     }} abcde
 } 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test stringComp-14.4 {Bug 1af8de570511} {
     apply {{x y} {
 	# Generate an unshared string value
@@ -740,6 +743,9 @@ test stringComp-14.4 {Bug 1af8de570511} {
 	string replace $val[unset val] 1 1 $y
     }} 4 x
 } 0x00
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 ## string tolower

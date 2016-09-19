@@ -614,7 +614,11 @@ NewTestThread(
 
     Tcl_Preserve(tsdPtr->interp);
 <<<<<<< HEAD
+<<<<<<< HEAD
     result = Tcl_Eval(tsdPtr->interp, threadEvalScript);
+=======
+    result = Tcl_EvalEx(tsdPtr->interp, threadEvalScript, -1, 0);
+>>>>>>> upstream/master
 =======
     result = Tcl_EvalEx(tsdPtr->interp, threadEvalScript, -1, 0);
 >>>>>>> upstream/master
@@ -658,10 +662,15 @@ ThreadErrorProc(
     const char *errorInfo, *argv[3];
     char *script;
     char buf[TCL_DOUBLE_SPACE+1];
+<<<<<<< HEAD
+
+    sprintf(buf, "%" TCL_LL_MODIFIER "d", (Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
+=======
+>>>>>>> upstream/master
 
     sprintf(buf, "%" TCL_LL_MODIFIER "d", (Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
 
-    errorInfo = Tcl_GetVar(interp, "errorInfo", TCL_GLOBAL_ONLY);
+    errorInfo = Tcl_GetVar2(interp, "errorInfo", NULL, TCL_GLOBAL_ONLY);
     if (errorProcString == NULL) {
 	errChannel = Tcl_GetStdChannel(TCL_STDERR);
 	Tcl_WriteChars(errChannel, "Error from thread ", -1);
@@ -839,7 +848,11 @@ ThreadSend(
     if (threadId == Tcl_GetCurrentThread()) {
 	Tcl_MutexUnlock(&threadMutex);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return Tcl_GlobalEval(interp, script);
+=======
+	return Tcl_EvalEx(interp, script,-1,TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 =======
 	return Tcl_EvalEx(interp, script,-1,TCL_EVAL_GLOBAL);
 >>>>>>> upstream/master
@@ -1038,14 +1051,18 @@ ThreadEventProc(
 	Tcl_ResetResult(interp);
 	Tcl_CreateThreadExitHandler(ThreadFreeProc, threadEventPtr->script);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	code = Tcl_GlobalEval(interp, threadEventPtr->script);
+=======
+	code = Tcl_EvalEx(interp, threadEventPtr->script,-1,TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 =======
 	code = Tcl_EvalEx(interp, threadEventPtr->script,-1,TCL_EVAL_GLOBAL);
 >>>>>>> upstream/master
 	Tcl_DeleteThreadExitHandler(ThreadFreeProc, threadEventPtr->script);
 	if (code != TCL_OK) {
-	    errorCode = Tcl_GetVar(interp, "errorCode", TCL_GLOBAL_ONLY);
-	    errorInfo = Tcl_GetVar(interp, "errorInfo", TCL_GLOBAL_ONLY);
+	    errorCode = Tcl_GetVar2(interp, "errorCode", NULL, TCL_GLOBAL_ONLY);
+	    errorInfo = Tcl_GetVar2(interp, "errorInfo", NULL, TCL_GLOBAL_ONLY);
 	} else {
 	    errorCode = errorInfo = NULL;
 	}

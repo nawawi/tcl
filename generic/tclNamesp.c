@@ -2883,9 +2883,15 @@ GetNamespaceFromObj(
 	resNamePtr = objPtr->internalRep.twoPtrValue.ptr1;
 	nsPtr = resNamePtr->nsPtr;
 	refNsPtr = resNamePtr->refNsPtr;
+<<<<<<< HEAD
 	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp) &&
 		(!refNsPtr || ((interp == refNsPtr->interp) &&
 		(refNsPtr== (Namespace *) Tcl_GetCurrentNamespace(interp))))){
+=======
+	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp)
+		&& (!refNsPtr || (refNsPtr ==
+		(Namespace *) TclGetCurrentNamespace(interp)))) {
+>>>>>>> upstream/master
 	    *nsPtrPtr = (Tcl_Namespace *) nsPtr;
 	    return TCL_OK;
 	}
@@ -3354,6 +3360,7 @@ NRNamespaceEvalCmd(
     (void) TclPushStackFrame(interp, (Tcl_CallFrame **) framePtrPtr,
 	    namespacePtr, /*isProcCallFrame*/ 0);
 
+<<<<<<< HEAD
     if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	framePtr->objc = objc;
 	framePtr->objv = objv;
@@ -3362,6 +3369,9 @@ NRNamespaceEvalCmd(
 		- iPtr->ensembleRewrite.numInsertedObjs;
 	framePtr->objv = iPtr->ensembleRewrite.sourceObjs;
     }
+=======
+    framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
+>>>>>>> upstream/master
 
     if (objc == 3) {
 	/*
@@ -3768,7 +3778,10 @@ NRNamespaceInscopeCmd(
 {
     Tcl_Namespace *namespacePtr;
     CallFrame *framePtr, **framePtrPtr;
+<<<<<<< HEAD
     register Interp *iPtr = (Interp *) interp;
+=======
+>>>>>>> upstream/master
     int i;
     Tcl_Obj *cmdObjPtr;
 
@@ -3794,6 +3807,7 @@ NRNamespaceInscopeCmd(
     (void) TclPushStackFrame(interp, (Tcl_CallFrame **) framePtrPtr,
 	    namespacePtr, /*isProcCallFrame*/ 0);
 
+<<<<<<< HEAD
     if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	framePtr->objc = objc;
 	framePtr->objv = objv;
@@ -3802,6 +3816,9 @@ NRNamespaceInscopeCmd(
 		- iPtr->ensembleRewrite.numInsertedObjs;
 	framePtr->objv = iPtr->ensembleRewrite.sourceObjs;
     }
+=======
+    framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
+>>>>>>> upstream/master
 
     /*
      * Execute the command. If there is just one argument, just treat it as a
@@ -4553,8 +4570,13 @@ NamespaceUpvarCmd(
 	savedNsPtr = (Tcl_Namespace *) iPtr->varFramePtr->nsPtr;
 	iPtr->varFramePtr->nsPtr = (Namespace *) nsPtr;
 	otherPtr = TclObjLookupVarEx(interp, objv[0], NULL,
+<<<<<<< HEAD
 		(TCL_NAMESPACE_ONLY | TCL_LEAVE_ERR_MSG), "access",
 		/*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
+=======
+		(TCL_NAMESPACE_ONLY|TCL_LEAVE_ERR_MSG|TCL_AVOID_RESOLVERS),
+		"access", /*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
+>>>>>>> upstream/master
 	iPtr->varFramePtr->nsPtr = (Namespace *) savedNsPtr;
 	if (otherPtr == NULL) {
 	    return TCL_ERROR;
@@ -4794,7 +4816,11 @@ SetNsNameFromAny(
     if ((name[0] == ':') && (name[1] == ':')) {
 	resNamePtr->refNsPtr = NULL;
     } else {
+<<<<<<< HEAD
 	resNamePtr->refNsPtr = (Namespace *) Tcl_GetCurrentNamespace(interp);
+=======
+	resNamePtr->refNsPtr = (Namespace *) TclGetCurrentNamespace(interp);
+>>>>>>> upstream/master
     }
     resNamePtr->refCount = 1;
     TclFreeIntRep(objPtr);

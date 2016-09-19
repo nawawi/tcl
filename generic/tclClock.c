@@ -1499,7 +1499,23 @@ GetJulianDayFromEraYearMonthDay(
      * Try an initial conversion in the Gregorian calendar.
      */
 
+<<<<<<< HEAD
     ym1o4 = ym1 / 4;
+=======
+#if 0 /* BUG http://core.tcl.tk/tcl/tktview?name=da340d4f32 */
+    ym1o4 = ym1 / 4;
+#else
+    /*
+     * Have to make sure quotient is truncated towards 0 when negative.
+     * See above bug for details. The casts are necessary.
+     */
+    if (ym1 >= 0)
+        ym1o4 = ym1 / 4;
+    else {
+        ym1o4 = - (int) (((unsigned int) -ym1) / 4);
+    }
+#endif
+>>>>>>> upstream/master
     if (ym1 % 4 < 0) {
 	ym1o4--;
     }
@@ -2006,7 +2022,11 @@ static void
 TzsetIfNecessary(void)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     static char *tzWas = NULL;	/* Previous value of TZ, protected by
+=======
+    static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
+>>>>>>> upstream/master
 =======
     static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
 >>>>>>> upstream/master
@@ -2016,14 +2036,20 @@ TzsetIfNecessary(void)
     Tcl_MutexLock(&clockMutex);
     tzIsNow = getenv("TZ");
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (tzIsNow != NULL && (tzWas == NULL || strcmp(tzIsNow, tzWas) != 0)) {
 	tzset();
 	if (tzWas != NULL) {
 =======
+=======
+>>>>>>> upstream/master
     if (tzIsNow != NULL && (tzWas == NULL || tzWas == INT2PTR(-1)
 	    || strcmp(tzIsNow, tzWas) != 0)) {
 	tzset();
 	if (tzWas != NULL && tzWas != INT2PTR(-1)) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    ckfree(tzWas);
 	}
@@ -2032,7 +2058,11 @@ TzsetIfNecessary(void)
     } else if (tzIsNow == NULL && tzWas != NULL) {
 	tzset();
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ckfree(tzWas);
+=======
+	if (tzWas != INT2PTR(-1)) ckfree(tzWas);
+>>>>>>> upstream/master
 =======
 	if (tzWas != INT2PTR(-1)) ckfree(tzWas);
 >>>>>>> upstream/master

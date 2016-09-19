@@ -1968,7 +1968,11 @@ Tcl_ConcatObj(
 	if (TclListObjIsCanonical(objPtr)) {
 	    continue;
 	}
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(objPtr, &length);
+=======
+	TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 	if (length > 0) {
 	    break;
 	}
@@ -1982,13 +1986,19 @@ Tcl_ConcatObj(
 	    }
 	    if (resPtr) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_ListObjAppendList(NULL, resPtr, objPtr);
 =======
+=======
+>>>>>>> upstream/master
 		if (TCL_OK != Tcl_ListObjAppendList(NULL, resPtr, objPtr)) {
 		    /* Abandon ship! */
 		    Tcl_DecrRefCount(resPtr);
 		    goto slow;
 		}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    } else {
 		resPtr = TclListObjCopy(NULL, objPtr);
@@ -2001,6 +2011,10 @@ Tcl_ConcatObj(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  slow:
+>>>>>>> upstream/master
 =======
   slow:
 >>>>>>> upstream/master
@@ -2549,6 +2563,9 @@ TclStringMatchObj(
     if ((strObj->typePtr == &tclStringType) || (strObj->typePtr == NULL)) {
 	Tcl_UniChar *udata, *uptn;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 	udata = Tcl_GetUnicodeFromObj(strObj, &length);
 	uptn  = Tcl_GetUnicodeFromObj(ptnObj, &plen);
@@ -2627,6 +2644,7 @@ Tcl_DStringAppend(
 	length = strlen(bytes);
     }
     newSize = length + dsPtr->length;
+<<<<<<< HEAD
 
 =======
 
@@ -2724,6 +2742,36 @@ Tcl_DStringAppend(
 	    dsPtr->string = newString;
 	} else {
 	    dsPtr->string = ckrealloc(dsPtr->string, dsPtr->spaceAvl);
+=======
+
+    /*
+     * Allocate a larger buffer for the string if the current one isn't large
+     * enough. Allocate extra space in the new buffer so that there will be
+     * room to grow before we have to allocate again.
+     */
+
+    if (newSize >= dsPtr->spaceAvl) {
+	dsPtr->spaceAvl = newSize * 2;
+	if (dsPtr->string == dsPtr->staticSpace) {
+	    char *newString = ckalloc(dsPtr->spaceAvl);
+
+	    memcpy(newString, dsPtr->string, (size_t) dsPtr->length);
+	    dsPtr->string = newString;
+	} else {
+	    int offset = -1;
+
+	    /* See [16896d49fd] */
+	    if (bytes >= dsPtr->string
+		    && bytes <= dsPtr->string + dsPtr->length) {
+		offset = bytes - dsPtr->string;
+	    }
+
+	    dsPtr->string = ckrealloc(dsPtr->string, dsPtr->spaceAvl);
+
+	    if (offset >= 0) {
+		bytes = dsPtr->string + offset;
+	    }
+>>>>>>> upstream/master
 	}
     }
 
@@ -2754,7 +2802,11 @@ TclDStringAppendObj(
     Tcl_Obj *objPtr)
 {
     int length;
+<<<<<<< HEAD
     char *bytes = Tcl_GetStringFromObj(objPtr, &length);
+=======
+    char *bytes = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 
     return Tcl_DStringAppend(dsPtr, bytes, length);
 }
@@ -2814,7 +2866,23 @@ Tcl_DStringAppendElement(
 	    memcpy(newString, dsPtr->string, (size_t) dsPtr->length);
 	    dsPtr->string = newString;
 	} else {
+<<<<<<< HEAD
 	    dsPtr->string = ckrealloc(dsPtr->string, dsPtr->spaceAvl);
+=======
+	    int offset = -1;
+
+	    /* See [16896d49fd] */
+	    if (element >= dsPtr->string
+		    && element <= dsPtr->string + dsPtr->length) {
+		offset = element - dsPtr->string;
+	    }
+
+	    dsPtr->string = ckrealloc(dsPtr->string, dsPtr->spaceAvl);
+
+	    if (offset >= 0) {
+		element = dsPtr->string + offset;
+	    }
+>>>>>>> upstream/master
 	}
 	dst = dsPtr->string + dsPtr->length;
     }
@@ -3212,6 +3280,7 @@ Tcl_PrintDouble(
     char *end;
     int *precisionPtr = Tcl_GetThreadData(&precisionKey, (int) sizeof(int));
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /*
      * Handle NaN.
@@ -3232,6 +3301,8 @@ Tcl_PrintDouble(
 	 */
 
 =======
+=======
+>>>>>>> upstream/master
 
     /*
      * Handle NaN.
@@ -3251,6 +3322,9 @@ Tcl_PrintDouble(
 	 * Remember to copy the terminating NUL too.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if (value < 0) {
 	    memcpy(dst, "-Inf", 5);
@@ -3772,7 +3846,10 @@ UpdateStringOfEndOffset(
 	buffer[len++] = '-';
 	len += TclFormatInt(buffer+len, -(objPtr->internalRep.longValue));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     }
     objPtr->bytes = ckalloc((unsigned) len+1);
     memcpy(objPtr->bytes, buffer, (unsigned) len+1);
@@ -3812,6 +3889,7 @@ SetEndOffsetFromAny(
 
     if (objPtr->typePtr == &tclEndOffsetType) {
 	return TCL_OK;
+<<<<<<< HEAD
 >>>>>>> upstream/master
     }
     objPtr->bytes = ckalloc((unsigned) len+1);
@@ -3856,6 +3934,10 @@ SetEndOffsetFromAny(
     }
 
 =======
+>>>>>>> upstream/master
+=======
+    }
+
 >>>>>>> upstream/master
     /*
      * Check for a string rep of the right form.
@@ -4132,7 +4214,11 @@ TclSetProcessGlobalValue(
     } else {
 	Tcl_CreateExitHandler(FreeProcessGlobalValue, pgvPtr);
     }
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(newValue, &pgvPtr->numBytes);
+=======
+    bytes = TclGetStringFromObj(newValue, &pgvPtr->numBytes);
+>>>>>>> upstream/master
     pgvPtr->value = ckalloc(pgvPtr->numBytes + 1);
     memcpy(pgvPtr->value, bytes, (unsigned) pgvPtr->numBytes + 1);
     if (pgvPtr->encoding) {

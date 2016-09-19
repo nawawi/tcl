@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -29,7 +33,11 @@ in the list returned by \fBinfo locals\fR).
 If \fIvarname\fR contains namespace qualifiers, the local variable's name is
 the unqualified name of the global variable, as determined by the
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBnamespace tail\fR command. 
+=======
+\fBnamespace tail\fR command.
+>>>>>>> upstream/master
 =======
 \fBnamespace tail\fR command.
 >>>>>>> upstream/master

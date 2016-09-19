@@ -143,7 +143,11 @@ static int		TraceVarEx(Tcl_Interp *interp, const char *part1,
  * trace procs
  */
 
+<<<<<<< HEAD
 typedef struct StringTraceData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     ClientData clientData;	/* Client data from Tcl_CreateTrace */
     Tcl_CmdTraceProc *proc;	/* Trace function from Tcl_CreateTrace */
 } StringTraceData;
@@ -278,7 +282,11 @@ Tcl_TraceObjCmd(
 
 	opsList = Tcl_NewObj();
 	Tcl_IncrRefCount(opsList);
+<<<<<<< HEAD
 	flagOps = Tcl_GetStringFromObj(objv[3], &numFlags);
+=======
+	flagOps = TclGetStringFromObj(objv[3], &numFlags);
+>>>>>>> upstream/master
 	if (numFlags == 0) {
 	    Tcl_DecrRefCount(opsList);
 	    goto badVarOps;
@@ -462,7 +470,11 @@ TraceExecutionObjCmd(
 		break;
 	    }
 	}
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(objv[5], &commandLength);
+=======
+	command = TclGetStringFromObj(objv[5], &commandLength);
+>>>>>>> upstream/master
 	length = (size_t) commandLength;
 	if ((enum traceOptions) optionIndex == TRACE_ADD) {
 	    TraceCommandInfo *tcmdPtr = ckalloc(
@@ -701,7 +713,11 @@ TraceCommandObjCmd(
 	    }
 	}
 
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(objv[5], &commandLength);
+=======
+	command = TclGetStringFromObj(objv[5], &commandLength);
+>>>>>>> upstream/master
 	length = (size_t) commandLength;
 	if ((enum traceOptions) optionIndex == TRACE_ADD) {
 	    TraceCommandInfo *tcmdPtr = ckalloc(
@@ -904,7 +920,11 @@ TraceVariableObjCmd(
 		break;
 	    }
 	}
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(objv[5], &commandLength);
+=======
+	command = TclGetStringFromObj(objv[5], &commandLength);
+>>>>>>> upstream/master
 	length = (size_t) commandLength;
 	if ((enum traceOptions) optionIndex == TRACE_ADD) {
 	    CombinedTraceVarInfo *ctvarPtr = ckalloc(
@@ -1890,7 +1910,12 @@ TraceExecutionProc(
 	     */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    traceCode = Tcl_Eval(interp, Tcl_DStringValue(&cmd));
+=======
+	    traceCode = Tcl_EvalEx(interp, Tcl_DStringValue(&cmd),
+		    Tcl_DStringLength(&cmd), 0);
+>>>>>>> upstream/master
 =======
 	    traceCode = Tcl_EvalEx(interp, Tcl_DStringValue(&cmd),
 		    Tcl_DStringLength(&cmd), 0);

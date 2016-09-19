@@ -85,12 +85,15 @@ static const unsigned char totalBytes[256] = {
 #endif
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 /*
  * Functions used only in this module.
  */
 
 static int		UtfCount(int ch);
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -111,8 +114,13 @@ static int		UtfCount(int ch);
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 INLINE static int
 UtfCount(
+=======
+int
+TclUtfCount(
+>>>>>>> upstream/master
 =======
 int
 TclUtfCount(
@@ -152,7 +160,11 @@ TclUtfCount(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 INLINE int
+=======
+int
+>>>>>>> upstream/master
 =======
 int
 >>>>>>> upstream/master
@@ -842,7 +854,11 @@ Tcl_UtfToUpper(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (bytes < UtfCount(upChar)) {
+=======
+	if (bytes < TclUtfCount(upChar)) {
+>>>>>>> upstream/master
 =======
 	if (bytes < TclUtfCount(upChar)) {
 >>>>>>> upstream/master
@@ -899,7 +915,11 @@ Tcl_UtfToLower(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (bytes < UtfCount(lowChar)) {
+=======
+	if (bytes < TclUtfCount(lowChar)) {
+>>>>>>> upstream/master
 =======
 	if (bytes < TclUtfCount(lowChar)) {
 >>>>>>> upstream/master
@@ -1772,6 +1792,7 @@ Tcl_UniCharCaseMatch(
 		 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if ((p != '[') && (p != '?') && (p != '\\')) {
 		    if (nocase) {
 			while (*uniStr && (p != *uniStr)
@@ -1967,6 +1988,8 @@ TclUniCharMatch(
 		if ((p != '[') && (p != '?') && (p != '\\')) {
 		    if (nocase) {
 =======
+=======
+>>>>>>> upstream/master
 		if ((p != '[') && (p != '?') && (p != '\\')) {
 		    if (nocase) {
 			while (*uniStr && (p != *uniStr)
@@ -2161,6 +2184,9 @@ TclUniCharMatch(
 
 		if ((p != '[') && (p != '?') && (p != '\\')) {
 		    if (nocase) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 			while ((string < stringEnd) && (p != *string)
 				&& (p != Tcl_UniCharToLower(*string))) {

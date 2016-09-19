@@ -39,12 +39,16 @@ static struct {
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 static char *		EnvTraceProc(ClientData clientData, Tcl_Interp *interp,
 			    const char *name1, const char *name2, int flags);
 static void		ReplaceString(const char *oldStr, char *newStr);
 MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
 MODULE_SCOPE void	TclUnsetEnv(const char *name);
+<<<<<<< HEAD
 
 #if defined(__CYGWIN__)
     static void TclCygwinPutenv(char *string);
@@ -61,6 +65,8 @@ static void		ReplaceString(const char *oldStr, char *newStr);
 MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
 MODULE_SCOPE void	TclUnsetEnv(const char *name);
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -463,7 +469,11 @@ TclUnsetEnv(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(_WIN32) || defined(__CYGWIN__)
+=======
+#if defined(_WIN32)
+>>>>>>> upstream/master
 =======
 #if defined(_WIN32)
 >>>>>>> upstream/master
@@ -644,8 +654,12 @@ EnvTraceProc(
 
 	if (value == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_UnsetVar2(interp, name1, name2, 0);
 	    return NULL;
+=======
+	    return (char *) "no such variable";
+>>>>>>> upstream/master
 =======
 	    return (char *) "no such variable";
 >>>>>>> upstream/master
@@ -775,6 +789,7 @@ TclFinalizeEnvironment(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(__CYGWIN__)
 
 /*
@@ -867,6 +882,8 @@ TclCygwinPutenv(
 }
 #endif /* __CYGWIN__ */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

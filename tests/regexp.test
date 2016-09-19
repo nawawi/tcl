@@ -743,15 +743,21 @@ test regexp-19.2 {regsub null replacement} {
 test regexp-20.1 {regsub shared object shimmering} {
     # Bug #461322
 <<<<<<< HEAD
+<<<<<<< HEAD
     set a abcdefghijklmnopqurstuvwxyz 
     set b $a 
     set c abcdefghijklmnopqurstuvwxyz0123456789 
     regsub $a $c $b d 
 =======
+=======
+>>>>>>> upstream/master
     set a abcdefghijklmnopqurstuvwxyz
     set b $a
     set c abcdefghijklmnopqurstuvwxyz0123456789
     regsub $a $c $b d
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     list $d [string length $d] [string bytelength $d]
 } [list abcdefghijklmnopqurstuvwxyz0123456789 37 37]

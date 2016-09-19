@@ -25,7 +25,11 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define TCLOO_VERSION "1.0.3"
+=======
+#define TCLOO_VERSION "1.0.4"
+>>>>>>> upstream/master
 =======
 #define TCLOO_VERSION "1.0.4"
 >>>>>>> upstream/master

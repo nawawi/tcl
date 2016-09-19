@@ -146,7 +146,11 @@ TclCompileGlobalCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
+=======
+	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
 >>>>>>> upstream/master
@@ -1221,6 +1225,7 @@ TclCompileListCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int len;
 	const char *bytes = Tcl_GetStringFromObj(listObj, &len);
 
@@ -1235,6 +1240,9 @@ TclCompileListCmd(
 	    TclEmitOpcode(	INST_LIST_LENGTH,	envPtr);
 	    TclEmitOpcode(	INST_POP,		envPtr);
 	}
+=======
+	TclEmitPush(TclAddLiteralObj(envPtr, listObj, NULL), envPtr);
+>>>>>>> upstream/master
 =======
 	TclEmitPush(TclAddLiteralObj(envPtr, listObj, NULL), envPtr);
 >>>>>>> upstream/master
@@ -1523,12 +1531,15 @@ TclCompileLreplaceCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if(idx2 != INDEX_END && idx2 < idx1) {
 =======
     if(idx2 != INDEX_END && idx2 >= 0 && idx2 < idx1) {
 >>>>>>> upstream/master
 	idx2 = idx1-1;
 =======
+=======
+>>>>>>> upstream/master
     /*
      * idx1, idx2 are now in canonical form:
      *
@@ -1550,6 +1561,9 @@ TclCompileLreplaceCmd(
 
     if (idx2 != INDEX_END && idx2 >= 0 && idx2 < idx1) {
 	idx2 = idx1 - 1;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
 
@@ -1573,6 +1587,12 @@ TclCompileLreplaceCmd(
 	    goto dropEnd;
 	} else {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    if (idx2 < idx1) {
+		idx2 = idx1 - 1;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (idx2 < idx1) {
 		idx2 = idx1 - 1;
@@ -1606,9 +1626,13 @@ TclCompileLreplaceCmd(
 	goto replaceTail;
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (idx1 > 0 && idx2 > 0 && idx2 < idx1) {
 	    idx2 = idx1 - 1;
 	} else if (idx1 < 0 && idx2 < 0 && idx2 < idx1) {
+=======
+	if (idx2 < idx1) {
+>>>>>>> upstream/master
 =======
 	if (idx2 < idx1) {
 >>>>>>> upstream/master
@@ -1628,7 +1652,11 @@ TclCompileLreplaceCmd(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   dropAll:
+=======
+  dropAll:			/* This just ensures the arg is a list. */
+>>>>>>> upstream/master
 =======
   dropAll:			/* This just ensures the arg is a list. */
 >>>>>>> upstream/master
@@ -1645,6 +1673,7 @@ TclCompileLreplaceCmd(
   dropRange:
     if (tmpObj != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
@@ -1652,6 +1681,8 @@ TclCompileLreplaceCmd(
 	offset = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
 =======
+=======
+>>>>>>> upstream/master
 	/*
 	 * Emit bytecode to check the list length.
 	 */
@@ -1667,6 +1698,9 @@ TclCompileLreplaceCmd(
 	 * Emit an error if we've been given an empty list.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
@@ -1719,6 +1753,7 @@ TclCompileLreplaceCmd(
   replaceRange:
     if (tmpObj != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
@@ -1730,6 +1765,8 @@ TclCompileLreplaceCmd(
 	offset2 = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
 =======
+=======
+>>>>>>> upstream/master
 	/*
 	 * Emit bytecode to check the list length.
 	 */
@@ -1754,6 +1791,9 @@ TclCompileLreplaceCmd(
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	offset2 = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_FALSE1, 0,		envPtr);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	TclEmitPush(TclAddLiteralObj(envPtr, Tcl_ObjPrintf(
 		"list doesn't contain element %d", idx1), NULL), envPtr);
@@ -2528,7 +2568,11 @@ TclCompileRegsubCmd(
      * replacement "simple"?
      */
 
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(patternObj, &len);
+=======
+    bytes = TclGetStringFromObj(patternObj, &len);
+>>>>>>> upstream/master
     if (TclReToGlob(NULL, bytes, len, &pattern, &exact, &quantified)
 	    != TCL_OK || exact || quantified) {
 	goto done;
@@ -2576,7 +2620,11 @@ TclCompileRegsubCmd(
     result = TCL_OK;
     bytes = Tcl_DStringValue(&pattern) + 1;
     PushLiteral(envPtr,	bytes, len);
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(replacementObj, &len);
+=======
+    bytes = TclGetStringFromObj(replacementObj, &len);
+>>>>>>> upstream/master
     PushLiteral(envPtr,	bytes, len);
     CompileWord(envPtr,	stringTokenPtr, interp, parsePtr->numWords-2);
     TclEmitOpcode(	INST_STR_MAP,	envPtr);
@@ -3012,7 +3060,11 @@ TclCompileVariableCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
+=======
+	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
 >>>>>>> upstream/master
@@ -3095,17 +3147,23 @@ IndexTailVarIfKnown(
 	full = 0;
 	lastTokenPtr = varTokenPtr + n;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!TclWordKnownAtCompileTime(lastTokenPtr, tailPtr)) {
 	    Tcl_DecrRefCount(tailPtr);
 	    return -1;
 	}
 =======
+=======
+>>>>>>> upstream/master
 
 	if (lastTokenPtr->type != TCL_TOKEN_TEXT) {
 	    Tcl_DecrRefCount(tailPtr);
 	    return -1;
 	}
 	Tcl_SetStringObj(tailPtr, lastTokenPtr->start, lastTokenPtr->size);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
 

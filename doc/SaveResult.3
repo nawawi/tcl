@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -23,6 +27,7 @@ Tcl_InterpState
 .sp
 int
 \fBTcl_RestoreInterpState\fR(\fIinterp, state\fR)
+<<<<<<< HEAD
 .sp
 \fBTcl_DiscardInterpState\fR(\fIstate\fR)
 .sp
@@ -30,6 +35,15 @@ int
 .sp
 \fBTcl_RestoreResult\fR(\fIinterp, savedPtr\fR)
 .sp
+=======
+.sp
+\fBTcl_DiscardInterpState\fR(\fIstate\fR)
+.sp
+\fBTcl_SaveResult\fR(\fIinterp, savedPtr\fR)
+.sp
+\fBTcl_RestoreResult\fR(\fIinterp, savedPtr\fR)
+.sp
+>>>>>>> upstream/master
 \fBTcl_DiscardResult\fR(\fIsavedPtr\fR)
 .SH ARGUMENTS
 .AS Tcl_InterpState savedPtr
@@ -72,7 +86,11 @@ any new code should only make use of the more powerful routines.
 The older, weaker routines \fBTcl_SaveResult\fR, \fBTcl_RestoreResult\fR,
 and \fBTcl_DiscardResult\fR continue to exist only for the sake
 <<<<<<< HEAD
+<<<<<<< HEAD
 of existing programs that may already be using them.  
+=======
+of existing programs that may already be using them.
+>>>>>>> upstream/master
 =======
 of existing programs that may already be using them.
 >>>>>>> upstream/master
@@ -124,7 +142,11 @@ Once \fBTcl_SaveResult\fR is called to save the interpreter
 result, either \fBTcl_RestoreResult\fR or
 \fBTcl_DiscardResult\fR must be called to properly clean up the
 <<<<<<< HEAD
+<<<<<<< HEAD
 memory associated with the saved state.  
+=======
+memory associated with the saved state.
+>>>>>>> upstream/master
 =======
 memory associated with the saved state.
 >>>>>>> upstream/master

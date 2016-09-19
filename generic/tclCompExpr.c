@@ -565,7 +565,11 @@ ParseExpr(
     OpNode *nodes = NULL;	/* Pointer to the OpNode storage array where
 				 * we build the parse tree. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesAvailable = 64;	/* Initial size of the storage array. This
+=======
+    unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
+>>>>>>> upstream/master
 =======
     unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
 >>>>>>> upstream/master
@@ -575,7 +579,11 @@ ParseExpr(
 				 * no need for array growth and
 				 * reallocation. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesUsed = 0;		/* Number of OpNodes filled. */
+=======
+    unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
+>>>>>>> upstream/master
 =======
     unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
 >>>>>>> upstream/master
@@ -671,7 +679,11 @@ ParseExpr(
 
 	if (nodesUsed >= nodesAvailable) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    int size = nodesUsed * 2;
+=======
+	    unsigned int size = nodesUsed * 2;
+>>>>>>> upstream/master
 =======
 	    unsigned int size = nodesUsed * 2;
 >>>>>>> upstream/master
@@ -2194,7 +2206,10 @@ ExecConstantExprTree(
     ByteCode *byteCodePtr;
     int code;
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Obj *byteCodeObj = Tcl_NewObj();
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     NRE_callback *rootPtr = TOP_CB(interp);
@@ -2211,6 +2226,7 @@ ExecConstantExprTree(
 	    0 /* optimize */);
     TclEmitOpcode(INST_DONE, envPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_IncrRefCount(byteCodeObj);
     TclInitByteCodeObj(byteCodeObj, envPtr);
     TclFreeCompileEnv(envPtr);
@@ -2220,12 +2236,17 @@ ExecConstantExprTree(
     code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
     Tcl_DecrRefCount(byteCodeObj);
 =======
+=======
+>>>>>>> upstream/master
     byteCodePtr = TclInitByteCode(envPtr);
     TclFreeCompileEnv(envPtr);
     TclStackFree(interp, envPtr);
     TclNRExecuteByteCode(interp, byteCodePtr);
     code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
     TclReleaseByteCode(byteCodePtr);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return code;
 }

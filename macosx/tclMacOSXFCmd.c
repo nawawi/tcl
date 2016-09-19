@@ -106,7 +106,11 @@ typedef	struct finderinfo {
     u_int32_t extendedFileInfo[4];
 } __attribute__ ((__packed__)) finderinfo;
 
+<<<<<<< HEAD
 typedef struct fileinfobuf {
+=======
+typedef struct {
+>>>>>>> upstream/master
     u_int32_t info_length;
     u_int32_t data[8];
 } fileinfobuf;
@@ -640,7 +644,11 @@ SetOSTypeFromAny(
     Tcl_DString ds;
     Tcl_Encoding encoding = Tcl_GetEncoding(NULL, "macRoman");
 
+<<<<<<< HEAD
     string = Tcl_GetStringFromObj(objPtr, &length);
+=======
+    string = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
     Tcl_UtfToExternalDString(encoding, string, length, &ds);
 
     if (Tcl_DStringLength(&ds) > 4) {

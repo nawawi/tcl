@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -225,7 +229,11 @@ The Tk console text widget does not provide real standard IO capabilities.
 Under Tk, when redirecting from standard input, all applications will see an
 immediate end-of-file; information redirected to standard output or standard
 <<<<<<< HEAD
+<<<<<<< HEAD
 error will be discarded.  
+=======
+error will be discarded.
+>>>>>>> upstream/master
 =======
 error will be discarded.
 >>>>>>> upstream/master
@@ -240,7 +248,11 @@ path name with forward slashes will not automatically be converted to use
 the backslash character.  If an argument contains forward slashes as the
 path separator, it may or may not be recognized as a path name, depending on
 <<<<<<< HEAD
+<<<<<<< HEAD
 the program.  
+=======
+the program.
+>>>>>>> upstream/master
 =======
 the program.
 >>>>>>> upstream/master
@@ -283,8 +295,14 @@ limitation as \fBexec\fR wants to communicate over pipes.  The Expect
 extension addresses this issue when communicating with a TUI application.
 .PP
 When attempting to execute an application, \fBexec\fR first searches for
+<<<<<<< HEAD
 the name as it was specified.  Then, in order, \fB.com\fR, \fB.exe\fR, and
 \fB.bat\fR are appended to the end of the specified name and it searches
+=======
+the name as it was specified.  Then, in order,
+\fB.com\fR, \fB.exe\fR, \fB.bat\fR and \fB.cmd\fR
+are appended to the end of the specified name and it searches
+>>>>>>> upstream/master
 for the longer name.  If a directory name was not specified as part of the
 application name, the following directories are automatically searched in
 order when attempting to locate the application:

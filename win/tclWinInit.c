@@ -214,7 +214,11 @@ TclpInitLibraryPath(
 	    TclGetProcessGlobalValue(&sourceLibraryDir));
 
     *encodingPtr = NULL;
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(pathPtr, lengthPtr);
+=======
+    bytes = TclGetStringFromObj(pathPtr, lengthPtr);
+>>>>>>> upstream/master
     *valuePtr = ckalloc((*lengthPtr) + 1);
     memcpy(*valuePtr, bytes, (size_t)(*lengthPtr)+1);
     Tcl_DecrRefCount(pathPtr);

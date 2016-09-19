@@ -25,7 +25,11 @@ static const char *gai_strerror(int code) {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -180,7 +184,11 @@ TclCreateSocketAddress(
     const char *family = NULL;
     Tcl_DString ds;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int result, i;
+=======
+    int result;
+>>>>>>> upstream/master
 =======
     int result;
 >>>>>>> upstream/master
@@ -201,6 +209,7 @@ TclCreateSocketAddress(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -209,12 +218,17 @@ TclCreateSocketAddress(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
 
     /*
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -223,7 +237,11 @@ TclCreateSocketAddress(
      */
 
     if (interp != NULL) {
+<<<<<<< HEAD
         family = Tcl_GetVar(interp, "::tcl::unsupported::socketAF", 0);
+=======
+        family = Tcl_GetVar2(interp, "::tcl::unsupported::socketAF", NULL, 0);
+>>>>>>> upstream/master
         if (family != NULL) {
             if (strcmp(family, "inet") == 0) {
                 hints.ai_family = AF_INET;
@@ -256,7 +274,11 @@ TclCreateSocketAddress(
 	hints.ai_flags |= AI_PASSIVE;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -314,6 +336,7 @@ TclCreateSocketAddress(
 	}
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     i = 0;
     for (p = *addrlist; p != NULL; p = p->ai_next) {
 	i++;
@@ -322,6 +345,8 @@ TclCreateSocketAddress(
     
 =======
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

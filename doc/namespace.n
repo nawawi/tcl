@@ -304,7 +304,11 @@ Sets or returns the unknown command handler for the current namespace.
 The handler is invoked when a command called from within the namespace
 cannot be found in the current namespace, the namespace's path nor in
 <<<<<<< HEAD
+<<<<<<< HEAD
 the global namespace. 
+=======
+the global namespace.
+>>>>>>> upstream/master
 =======
 the global namespace.
 >>>>>>> upstream/master

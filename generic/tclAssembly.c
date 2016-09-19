@@ -867,7 +867,11 @@ CompileAssembleObj(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	FreeAssembleCodeInternalRep(objPtr);
+=======
+	TclFreeIntRep(objPtr);
+>>>>>>> upstream/master
 =======
 	TclFreeIntRep(objPtr);
 >>>>>>> upstream/master
@@ -896,8 +900,12 @@ CompileAssembleObj(
 
     TclEmitOpcode(INST_DONE, &compEnv);
 <<<<<<< HEAD
+<<<<<<< HEAD
     TclInitByteCodeObj(objPtr, &compEnv);
     objPtr->typePtr = &assembleCodeType;
+=======
+    codePtr = TclInitByteCodeObj(objPtr, &assembleCodeType, &compEnv);
+>>>>>>> upstream/master
 =======
     codePtr = TclInitByteCodeObj(objPtr, &assembleCodeType, &compEnv);
 >>>>>>> upstream/master
@@ -908,7 +916,10 @@ CompileAssembleObj(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     codePtr = objPtr->internalRep.twoPtrValue.ptr1;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     if (iPtr->varFramePtr->localCachePtr) {
@@ -1312,7 +1323,11 @@ AssembleOneLine(
 	if (GetNextOperand(assemEnvPtr, &tokenPtr, &operand1Obj) != TCL_OK) {
 	    goto cleanup;
 	}
+<<<<<<< HEAD
 	operand1 = Tcl_GetStringFromObj(operand1Obj, &operand1Len);
+=======
+	operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
+>>>>>>> upstream/master
 	litIndex = TclRegisterNewLiteral(envPtr, operand1, operand1Len);
 	BBEmitInst1or4(assemEnvPtr, tblIdx, litIndex, 0);
 	break;
@@ -1461,7 +1476,11 @@ AssembleOneLine(
 		&operand1Obj) != TCL_OK) {
 	    goto cleanup;
 	} else {
+<<<<<<< HEAD
 	    operand1 = Tcl_GetStringFromObj(operand1Obj, &operand1Len);
+=======
+	    operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
+>>>>>>> upstream/master
 	    litIndex = TclRegisterNewLiteral(envPtr, operand1, operand1Len);
 
 	    /*
@@ -2301,7 +2320,11 @@ FindLocalVar(
     if (GetNextOperand(assemEnvPtr, tokenPtrPtr, &varNameObj) != TCL_OK) {
 	return -1;
     }
+<<<<<<< HEAD
     varNameStr = Tcl_GetStringFromObj(varNameObj, &varNameLen);
+=======
+    varNameStr = TclGetStringFromObj(varNameObj, &varNameLen);
+>>>>>>> upstream/master
     if (CheckNamespaceQualifiers(interp, varNameStr, varNameLen)) {
 	Tcl_DecrRefCount(varNameObj);
 	return -1;
@@ -4327,11 +4350,15 @@ FreeAssembleCodeInternalRep(
     ByteCode *codePtr = objPtr->internalRep.twoPtrValue.ptr1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     codePtr->refCount--;
     if (codePtr->refCount <= 0) {
 	TclCleanupByteCode(codePtr);
     }
     objPtr->typePtr = NULL;
+=======
+    TclReleaseByteCode(codePtr);
+>>>>>>> upstream/master
 =======
     TclReleaseByteCode(codePtr);
 >>>>>>> upstream/master

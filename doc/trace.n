@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -77,6 +81,7 @@ deletes the command, or a rename trace which itself renames the
 command will not cause further trace evaluations to occur.
 Both \fIoldName\fR and \fInewName\fR are fully qualified with any namespace(s)
 in which they appear.
+<<<<<<< HEAD
 .RE
 .TP
 \fBtrace add execution\fR \fIname ops commandPrefix\fR
@@ -189,6 +194,120 @@ The behavior of execution traces is currently undefined for a command
 \fIname\fR imported into another namespace.
 .RE
 .TP
+=======
+.RE
+.TP
+\fBtrace add execution\fR \fIname ops commandPrefix\fR
+.
+Arrange for \fIcommandPrefix\fR to be executed (with additional arguments)
+whenever command \fIname\fR is executed, with traces occurring at the points
+indicated by the list \fIops\fR.  \fIName\fR will be resolved using the usual
+namespace resolution rules used by commands.  If the command does not exist,
+an error will be thrown.
+.RS
+.PP
+\fIOps\fR indicates which operations are of interest, and is a list of
+one or more of the following items:
+.TP
+\fBenter\fR
+Invoke \fIcommandPrefix\fR whenever the command \fIname\fR is executed,
+just before the actual execution takes place.
+.TP
+\fBleave\fR
+Invoke \fIcommandPrefix\fR whenever the command \fIname\fR is executed,
+just after the actual execution takes place.
+.TP
+\fBenterstep\fR
+.
+Invoke \fIcommandPrefix\fR for every Tcl command which is executed from the
+start of the execution of the procedure \fIname\fR until that
+procedure finishes. \fICommandPrefix\fR is invoked just before the actual
+execution of the Tcl command being reported takes place.  For example
+if we have
+.QW "proc foo {} { puts \N'34'hello\N'34' }" ,
+then an \fIenterstep\fR trace would be invoked just before
+.QW "\fIputs \N'34'hello\N'34'\fR"
+is executed.
+Setting an \fIenterstep\fR trace on a command \fIname\fR that does not refer
+to a procedure will not result in an error and is simply ignored.
+.TP
+\fBleavestep\fR
+.
+Invoke \fIcommandPrefix\fR for every Tcl command which is executed from the
+start of the execution of the procedure \fIname\fR until that
+procedure finishes. \fICommandPrefix\fR is invoked just after the actual
+execution of the Tcl command being reported takes place.
+Setting a \fIleavestep\fR trace on a command \fIname\fR that does not refer to
+a procedure will not result in an error and is simply ignored.
+.PP
+When the trace triggers, depending on the operations being traced, a
+number of arguments are appended to \fIcommandPrefix\fR so that the actual
+command is as follows:
+.PP
+For \fBenter\fR and \fBenterstep\fR operations:
+.PP
+.CS
+\fIcommandPrefix command-string op\fR
+.CE
+.PP
+\fICommand-string\fR gives the complete current command being
+executed (the traced command for a \fBenter\fR operation, an
+arbitrary command for a \fBenterstep\fR operation), including
+all arguments in their fully expanded form.
+\fIOp\fR indicates what operation is being performed on the
+command execution, and is one of \fBenter\fR or \fBenterstep\fR as
+defined above.  The trace operation can be used to stop the
+command from executing, by deleting the command in question.  Of
+course when the command is subsequently executed, an
+.QW "invalid command"
+error will occur.
+.PP
+For \fBleave\fR and \fBleavestep\fR operations:
+.PP
+.CS
+\fIcommandPrefix command-string code result op\fR
+.CE
+.PP
+\fICommand-string\fR gives the complete current command being
+executed (the traced command for a \fBenter\fR operation, an
+arbitrary command for a \fBenterstep\fR operation), including
+all arguments in their fully expanded form.
+\fICode\fR gives the result code of that execution, and \fIresult\fR
+the result string.
+\fIOp\fR indicates what operation is being performed on the
+command execution, and is one of \fBleave\fR or \fBleavestep\fR as
+defined above.
+Note that the creation of many \fBenterstep\fR or
+\fBleavestep\fR traces can lead to unintuitive results, since the
+invoked commands from one trace can themselves lead to further
+command invocations for other traces.
+.PP
+\fICommandPrefix\fR executes in the same context as the code that invoked
+the traced operation: thus the \fIcommandPrefix\fR, if invoked from a
+procedure, will have access to the same local variables as code in the
+procedure. This context may be different than the context in which the trace
+was created. If \fIcommandPrefix\fR invokes a procedure (which it normally
+does) then the procedure will have to use \fBupvar\fR or \fBuplevel\fR
+commands if it wishes to access the local variables of the code which invoked
+the trace operation.
+.PP
+While \fIcommandPrefix\fR is executing during an execution trace, traces
+on \fIname\fR are temporarily disabled. This allows the \fIcommandPrefix\fR
+to execute \fIname\fR in its body without invoking any other traces again.
+If an error occurs while executing the \fIcommandPrefix\fR, then the
+command \fIname\fR as a whole will return that same error.
+.PP
+When multiple traces are set on \fIname\fR, then for \fIenter\fR
+and \fIenterstep\fR operations, the traced commands are invoked
+in the reverse order of how the traces were originally created;
+and for \fIleave\fR and \fIleavestep\fR operations, the traced
+commands are invoked in the original order of creation.
+.PP
+The behavior of execution traces is currently undefined for a command
+\fIname\fR imported into another namespace.
+.RE
+.TP
+>>>>>>> upstream/master
 \fBtrace add variable\fI name ops commandPrefix\fR
 Arrange for \fIcommandPrefix\fR to be executed whenever variable \fIname\fR
 is accessed in one of the ways given by the list \fIops\fR.  \fIName\fR may

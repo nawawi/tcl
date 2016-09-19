@@ -147,7 +147,11 @@ test filesystem-1.10 {link normalisation: double link} -constraints {
 } -cleanup {
     file delete dir2.link
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result ok 
+=======
+} -result ok
+>>>>>>> upstream/master
 =======
 } -result ok
 >>>>>>> upstream/master
@@ -879,7 +883,11 @@ test filesystem-9.5 {path objects and file tail and object rep} -setup {
     return $res
 } -cleanup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     file delete -force dgp 
+=======
+    file delete -force dgp
+>>>>>>> upstream/master
 =======
     file delete -force dgp
 >>>>>>> upstream/master

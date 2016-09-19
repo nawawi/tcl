@@ -4,7 +4,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -18,7 +22,11 @@ Tcl_CancelEval, Tcl_Canceled \- cancel Tcl scripts
 \fB#include <tcl.h>\fR
 int
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBTcl_CancelEval\fR(\fIinterp, clientData, flags\fR)
+=======
+\fBTcl_CancelEval\fR(\fIinterp, resultObjPtr, clientData, flags\fR)
+>>>>>>> upstream/master
 =======
 \fBTcl_CancelEval\fR(\fIinterp, resultObjPtr, clientData, flags\fR)
 >>>>>>> upstream/master
@@ -27,9 +35,12 @@ int
 \fBTcl_Canceled\fR(\fIinterp, flags\fR)
 .SH ARGUMENTS
 <<<<<<< HEAD
+<<<<<<< HEAD
 .AP Tcl_Interp *interp in
 Interpreter in which to cancel the script.
 =======
+=======
+>>>>>>> upstream/master
 .AS Tcl_Interp *interp
 .AP Tcl_Interp *interp in
 Interpreter in which to cancel the script.
@@ -37,6 +48,9 @@ Interpreter in which to cancel the script.
 Error message to use in the cancellation, or NULL to use a default message. If
 not NULL, this object will have its reference count decremented before
 \fBTcl_CancelEval\fR returns.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .AP int flags in
 ORed combination of flag bits that specify additional options.
@@ -45,7 +59,11 @@ supported.  For \fBTcl_Canceled\fR, only \fBTCL_LEAVE_ERR_MSG\fR and
 \fBTCL_CANCEL_UNWIND\fR are currently supported.
 .AP ClientData clientData in
 <<<<<<< HEAD
+<<<<<<< HEAD
 Currently, reserved for future use.
+=======
+Currently reserved for future use.
+>>>>>>> upstream/master
 =======
 Currently reserved for future use.
 >>>>>>> upstream/master
@@ -64,6 +82,7 @@ Extensions can use this function to check to see if they should abort a long
 running command.  This function is thread sensitive and may only be called
 from the thread the interpreter was created in.
 <<<<<<< HEAD
+<<<<<<< HEAD
 .SH "FLAG BITS"
 Any ORed combination of the following values may be used for the
 \fIflags\fR argument to procedures such as \fBTcl_CancelEval\fR:
@@ -78,6 +97,8 @@ interpreter is being unwound.
 .TP 23
 \fBTCL_LEAVE_ERR_MSG\fR
 =======
+=======
+>>>>>>> upstream/master
 .SS "FLAG BITS"
 Any ORed combination of the following values may be used for the
 \fIflags\fR argument to procedures such as \fBTcl_CancelEval\fR:
@@ -93,6 +114,9 @@ interpreter is being unwound.
 .TP 20
 \fBTCL_LEAVE_ERR_MSG\fR
 .
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 This flag is only used by \fBTcl_Canceled\fR; it is ignored by
 other procedures.  If an error is returned and this bit is set in
@@ -102,6 +126,10 @@ result, where it can be retrieved with \fBTcl_GetObjResult\fR or
 message is left and the interpreter's result will not be modified.
 .SH "SEE ALSO"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+interp(n), Tcl_Eval(3),
+>>>>>>> upstream/master
 =======
 interp(n), Tcl_Eval(3),
 >>>>>>> upstream/master

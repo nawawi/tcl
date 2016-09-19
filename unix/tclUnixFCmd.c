@@ -565,7 +565,11 @@ TclUnixCopyFile(
 #endif /* DJGPP */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define DEFAULT_COPY_BLOCK_SIZE 4069
+=======
+#define DEFAULT_COPY_BLOCK_SIZE 4096
+>>>>>>> upstream/master
 =======
 #define DEFAULT_COPY_BLOCK_SIZE 4096
 >>>>>>> upstream/master
@@ -1513,7 +1517,7 @@ SetGroupAttribute(
 	const char *string;
 	int length;
 
-	string = Tcl_GetStringFromObj(attributePtr, &length);
+	string = TclGetStringFromObj(attributePtr, &length);
 
 	native = Tcl_UtfToExternalDString(NULL, string, length, &ds);
 	groupPtr = TclpGetGrNam(native); /* INTL: Native. */
@@ -1580,7 +1584,7 @@ SetOwnerAttribute(
 	const char *string;
 	int length;
 
-	string = Tcl_GetStringFromObj(attributePtr, &length);
+	string = TclGetStringFromObj(attributePtr, &length);
 
 	native = Tcl_UtfToExternalDString(NULL, string, length, &ds);
 	pwPtr = TclpGetPwNam(native);			/* INTL: Native. */
@@ -1952,7 +1956,11 @@ TclpObjNormalizePath(
     const char *currentPathEndPosition;
     int pathLen;
     char cur;
+<<<<<<< HEAD
     const char *path = Tcl_GetStringFromObj(pathPtr, &pathLen);
+=======
+    const char *path = TclGetStringFromObj(pathPtr, &pathLen);
+>>>>>>> upstream/master
     Tcl_DString ds;
     const char *nativePath;
 #ifndef NO_REALPATH
@@ -2188,7 +2196,11 @@ TclUnixOpenTemporaryFile(
      */
 
     if (dirObj) {
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(dirObj, &len);
+=======
+	string = TclGetStringFromObj(dirObj, &len);
+>>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &template);
     } else {
 	Tcl_DStringInit(&template);
@@ -2198,7 +2210,11 @@ TclUnixOpenTemporaryFile(
     TclDStringAppendLiteral(&template, "/");
 
     if (basenameObj) {
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(basenameObj, &len);
+=======
+	string = TclGetStringFromObj(basenameObj, &len);
+>>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &tmp);
 	TclDStringAppendDString(&template, &tmp);
 	Tcl_DStringFree(&tmp);
@@ -2210,7 +2226,11 @@ TclUnixOpenTemporaryFile(
 
 #ifdef HAVE_MKSTEMPS
     if (extensionObj) {
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(extensionObj, &len);
+=======
+	string = TclGetStringFromObj(extensionObj, &len);
+>>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &tmp);
 	TclDStringAppendDString(&template, &tmp);
 	fd = mkstemps(Tcl_DStringValue(&template), Tcl_DStringLength(&tmp));

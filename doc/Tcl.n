@@ -194,7 +194,11 @@ Backslash
 \e\fIooo\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 The digits \fIooo\fR (one, two, or three of them) give a eight-bit octal 
+=======
+The digits \fIooo\fR (one, two, or three of them) give a eight-bit octal
+>>>>>>> upstream/master
 =======
 The digits \fIooo\fR (one, two, or three of them) give a eight-bit octal
 >>>>>>> upstream/master
@@ -219,7 +223,11 @@ inserted.  The upper bits of the Unicode character will be 0 (i.e., the
 character will be in the range U+000000\(enU+00FFFF).
 .TP 7
 <<<<<<< HEAD
+<<<<<<< HEAD
 \e\fBU\fIhhhhhhhh\fR 
+=======
+\e\fBU\fIhhhhhhhh\fR
+>>>>>>> upstream/master
 =======
 \e\fBU\fIhhhhhhhh\fR
 >>>>>>> upstream/master

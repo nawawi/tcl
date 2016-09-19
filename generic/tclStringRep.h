@@ -46,7 +46,11 @@
  * tcl.h, but do not do that unless you are sure what you're doing!
  */
 
+<<<<<<< HEAD
 typedef struct String {
+=======
+typedef struct {
+>>>>>>> upstream/master
     int numChars;		/* The number of chars in the string. -1 means
 				 * this value has not been calculated. >= 0
 				 * means that there is a valid Unicode rep, or

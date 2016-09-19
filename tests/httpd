@@ -204,7 +204,10 @@ proc httpdRespond { sock } {
 	}
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
     # Catch errors from premature client closes
 >>>>>>> upstream/master

@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -129,6 +133,7 @@ patterns, and not intermingled with the patterns.
 .PP
 The \fBswitch\fR command can match against variables and not just
 literals, as shown here (the result is \fI2\fR):
+<<<<<<< HEAD
 .PP
 .CS
 set foo "abc"
@@ -167,6 +172,46 @@ last) is taken.  This example has a result of \fI3\fR:
 }
 .CE
 .PP
+=======
+.PP
+.CS
+set foo "abc"
+\fBswitch\fR abc a \- b {expr {1}} $foo {expr {2}} default {expr {3}}
+.CE
+.PP
+Using glob matching and the fall-through body is an alternative to
+writing regular expressions with alternations, as can be seen here
+(this returns \fI1\fR):
+.PP
+.CS
+\fBswitch\fR \-glob aaab {
+    a*b     \-
+    b       {expr {1}}
+    a*      {expr {2}}
+    default {expr {3}}
+}
+.CE
+.PP
+Whenever nothing matches, the \fBdefault\fR clause (which must be
+last) is taken.  This example has a result of \fI3\fR:
+.PP
+.CS
+\fBswitch\fR xyz {
+    a \-
+    b {
+        # Correct Comment Placement
+        expr {1}
+    }
+    c {
+        expr {2}
+    }
+    default {
+        expr {3}
+    }
+}
+.CE
+.PP
+>>>>>>> upstream/master
 When matching against regular expressions, information about what
 exactly matched is easily obtained using the \fB\-matchvar\fR option:
 .PP

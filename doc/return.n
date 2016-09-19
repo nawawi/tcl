@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -29,7 +33,11 @@ In its simplest usage, the \fBreturn\fR command is used without options
 in the body of a procedure to immediately return control to the caller
 of the procedure.  If a \fIresult\fR argument is provided, its value
 <<<<<<< HEAD
+<<<<<<< HEAD
 becomes the result of the procedure passed back to the caller.  
+=======
+becomes the result of the procedure passed back to the caller.
+>>>>>>> upstream/master
 =======
 becomes the result of the procedure passed back to the caller.
 >>>>>>> upstream/master
@@ -123,7 +131,11 @@ presented as a Tcl list for further processing by programs.
 If no \fB\-errorcode\fR option is provided to \fBreturn\fR when
 the \fB\-code error\fR option is provided, Tcl will set the value
 <<<<<<< HEAD
+<<<<<<< HEAD
 of the \fB\-errorcode\fR entry in the return options dictionary 
+=======
+of the \fB\-errorcode\fR entry in the return options dictionary
+>>>>>>> upstream/master
 =======
 of the \fB\-errorcode\fR entry in the return options dictionary
 >>>>>>> upstream/master
@@ -137,7 +149,11 @@ of the \fB\-code\fR option is \fBTCL_ERROR\fR.  Then \fIinfo\fR is the initial
 stack trace, meant to provide to a human reader additional information
 about the context in which the error occurred.  The stack trace will
 <<<<<<< HEAD
+<<<<<<< HEAD
 also be stored in the global variable \fBerrorInfo\fR.  
+=======
+also be stored in the global variable \fBerrorInfo\fR.
+>>>>>>> upstream/master
 =======
 also be stored in the global variable \fBerrorInfo\fR.
 >>>>>>> upstream/master
@@ -215,7 +231,11 @@ their documented interpretation in loops.
 Procedure invocation also involves evaluation of a script, the body
 of the procedure.  Procedure invocation provides special treatment
 <<<<<<< HEAD
+<<<<<<< HEAD
 when evaluation of the procedure body returns the return code 
+=======
+when evaluation of the procedure body returns the return code
+>>>>>>> upstream/master
 =======
 when evaluation of the procedure body returns the return code
 >>>>>>> upstream/master
@@ -252,7 +272,11 @@ procedure, interrupting the procedure body.
 proc printOneLine {} {
     puts "line 1"    ;# This line will be printed.
 <<<<<<< HEAD
+<<<<<<< HEAD
     \fBreturn\fR		
+=======
+    \fBreturn\fR
+>>>>>>> upstream/master
 =======
     \fBreturn\fR
 >>>>>>> upstream/master

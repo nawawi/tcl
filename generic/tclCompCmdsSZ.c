@@ -294,7 +294,11 @@ TclCompileStringCatCmd(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -320,6 +324,7 @@ TclCompileStringCatCmd(
 	    Tcl_DecrRefCount(obj);
 	    if (folded) {
 		int len;
+<<<<<<< HEAD
 		const char *bytes = Tcl_GetStringFromObj(folded, &len);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -328,6 +333,10 @@ TclCompileStringCatCmd(
 
 >>>>>>> upstream/master
 =======
+
+>>>>>>> upstream/master
+=======
+		const char *bytes = TclGetStringFromObj(folded, &len);
 
 >>>>>>> upstream/master
 		PushLiteral(envPtr, bytes, len);
@@ -346,6 +355,7 @@ TclCompileStringCatCmd(
     }
     if (folded) {
 	int len;
+<<<<<<< HEAD
 	const char *bytes = Tcl_GetStringFromObj(folded, &len);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -354,6 +364,10 @@ TclCompileStringCatCmd(
 
 >>>>>>> upstream/master
 =======
+
+>>>>>>> upstream/master
+=======
+	const char *bytes = TclGetStringFromObj(folded, &len);
 
 >>>>>>> upstream/master
 	PushLiteral(envPtr, bytes, len);
@@ -972,12 +986,20 @@ TclCompileStringMapCmd(
      * correct semantics for mapping.
      */
 
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(objv[0], &len);
+=======
+    bytes = TclGetStringFromObj(objv[0], &len);
+>>>>>>> upstream/master
     if (len == 0) {
 	CompileWord(envPtr, stringTokenPtr, interp, 2);
     } else {
 	PushLiteral(envPtr, bytes, len);
+<<<<<<< HEAD
 	bytes = Tcl_GetStringFromObj(objv[1], &len);
+=======
+	bytes = TclGetStringFromObj(objv[1], &len);
+>>>>>>> upstream/master
 	PushLiteral(envPtr, bytes, len);
 	CompileWord(envPtr, stringTokenPtr, interp, 2);
 	OP(STR_MAP);
@@ -1029,7 +1051,11 @@ TclCompileStringRangeCmd(
      * Push the operands onto the stack and then the substring operation.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      */    
+=======
+     */
+>>>>>>> upstream/master
 =======
      */
 >>>>>>> upstream/master
@@ -2061,7 +2087,11 @@ IssueSwitchChainedTests(
 				 * is present. */
     JumpFixup *fixupArray;	/* Array of forward-jump fixup records. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *fixupTargetArray;	/* Array of places for fixups to point at. */
+=======
+    unsigned int *fixupTargetArray; /* Array of places for fixups to point at. */
+>>>>>>> upstream/master
 =======
     unsigned int *fixupTargetArray; /* Array of places for fixups to point at. */
 >>>>>>> upstream/master
@@ -2220,7 +2250,11 @@ IssueSwitchChainedTests(
 	/*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Now do the actual compilation. Note that we do not use BODY() 
+=======
+	 * Now do the actual compilation. Note that we do not use BODY()
+>>>>>>> upstream/master
 =======
 	 * Now do the actual compilation. Note that we do not use BODY()
 >>>>>>> upstream/master
@@ -2686,7 +2720,11 @@ TclCompileThrowCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     codeIsList = codeKnown && (TCL_OK == 
+=======
+    codeIsList = codeKnown && (TCL_OK ==
+>>>>>>> upstream/master
 =======
     codeIsList = codeKnown && (TCL_OK ==
 >>>>>>> upstream/master
@@ -2877,7 +2915,11 @@ TclCompileTryCmd(
 	    }
 	    if (objc > 0) {
 		int len;
+<<<<<<< HEAD
 		const char *varname = Tcl_GetStringFromObj(objv[0], &len);
+=======
+		const char *varname = TclGetStringFromObj(objv[0], &len);
+>>>>>>> upstream/master
 
 		resultVarIndices[i] = LocalScalar(varname, len, envPtr);
 		if (resultVarIndices[i] < 0) {
@@ -2889,7 +2931,11 @@ TclCompileTryCmd(
 	    }
 	    if (objc == 2) {
 		int len;
+<<<<<<< HEAD
 		const char *varname = Tcl_GetStringFromObj(objv[1], &len);
+=======
+		const char *varname = TclGetStringFromObj(objv[1], &len);
+>>>>>>> upstream/master
 
 		optionVarIndices[i] = LocalScalar(varname, len, envPtr);
 		if (optionVarIndices[i] < 0) {
@@ -3092,7 +3138,11 @@ IssueTryClausesInstructions(
 	    OP4(			DICT_GET, 1);
 	    TclAdjustStackDepth(-1, envPtr);
 	    OP44(			LIST_RANGE_IMM, 0, len-1);
+<<<<<<< HEAD
 	    p = Tcl_GetStringFromObj(matchClauses[i], &len);
+=======
+	    p = TclGetStringFromObj(matchClauses[i], &len);
+>>>>>>> upstream/master
 	    PushLiteral(envPtr, p, len);
 	    OP(				STR_EQ);
 	    JUMP4(			JUMP_FALSE, notECJumpSource);
@@ -3303,7 +3353,11 @@ IssueTryClausesFinallyInstructions(
 	    OP4(			DICT_GET, 1);
 	    TclAdjustStackDepth(-1, envPtr);
 	    OP44(			LIST_RANGE_IMM, 0, len-1);
+<<<<<<< HEAD
 	    p = Tcl_GetStringFromObj(matchClauses[i], &len);
+=======
+	    p = TclGetStringFromObj(matchClauses[i], &len);
+>>>>>>> upstream/master
 	    PushLiteral(envPtr, p, len);
 	    OP(				STR_EQ);
 	    JUMP4(			JUMP_FALSE, notECJumpSource);
@@ -3631,7 +3685,11 @@ TclCompileUnsetCmd(
 	    const char *bytes;
 	    int len;
 
+<<<<<<< HEAD
 	    bytes = Tcl_GetStringFromObj(leadingWord, &len);
+=======
+	    bytes = TclGetStringFromObj(leadingWord, &len);
+>>>>>>> upstream/master
 	    if (i == 1 && len == 11 && !strncmp("-nocomplain", bytes, 11)) {
 		flags = 0;
 		haveFlags++;

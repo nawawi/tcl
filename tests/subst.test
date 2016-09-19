@@ -92,6 +92,7 @@ test subst-5.4 {command substitutions} {
 test subst-5.5 {command substitutions} {
     set a 0
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [catch {subst {[set a 1}} msg] $a $msg 
 } {1 0 {missing close-bracket}}
 test subst-5.6 {command substitutions} {
@@ -102,6 +103,8 @@ test subst-5.7 {command substitutions} {
     set a 0
     list [catch {subst {0[set a 1; set a 2}} msg] $a $msg 
 =======
+=======
+>>>>>>> upstream/master
     list [catch {subst {[set a 1}} msg] $a $msg
 } {1 0 {missing close-bracket}}
 test subst-5.6 {command substitutions} {
@@ -111,12 +114,16 @@ test subst-5.6 {command substitutions} {
 test subst-5.7 {command substitutions} {
     set a 0
     list [catch {subst {0[set a 1; set a 2}} msg] $a $msg
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } {1 1 {missing close-bracket}}
 
 # repeat the tests above simulating cmd line input
 test subst-5.8 {command substitutions} {
     set script {[subst {[set a 1}]}
+<<<<<<< HEAD
 <<<<<<< HEAD
     list [catch {exec [info nameofexecutable] << $script} msg] $msg 
 } {1 {missing close-bracket}}
@@ -128,6 +135,8 @@ test subst-5.10 {command substitutions} {
     set script {[subst {0[set a 1; set a 2}]}
     list [catch {exec [info nameofexecutable] << $script} msg] $msg 
 =======
+=======
+>>>>>>> upstream/master
     list [catch {exec [info nameofexecutable] << $script} msg] $msg
 } {1 {missing close-bracket}}
 test subst-5.9 {command substitutions} {
@@ -137,6 +146,9 @@ test subst-5.9 {command substitutions} {
 test subst-5.10 {command substitutions} {
     set script {[subst {0[set a 1; set a 2}]}
     list [catch {exec [info nameofexecutable] << $script} msg] $msg
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } {1 {missing close-bracket}}
 
@@ -191,7 +203,11 @@ test subst-8.6 {return in a subst} -returnCodes error -body {
 } -result {missing close-bracket}
 test subst-8.7 {return in a subst, parse error} -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
     subst {foo [return {x} ; set a {}"" ; stuff] bar} 
+=======
+    subst {foo [return {x} ; set a {}"" ; stuff] bar}
+>>>>>>> upstream/master
 =======
     subst {foo [return {x} ; set a {}"" ; stuff] bar}
 >>>>>>> upstream/master

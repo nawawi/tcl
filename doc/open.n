@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -73,7 +77,11 @@ All of the legal \fIaccess\fR values above may have the character
 \fBb\fR added as the second or third character in the value to
 indicate that the opened channel should be configured as if with the
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for 
+=======
+\fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for
+>>>>>>> upstream/master
 =======
 \fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for
 >>>>>>> upstream/master
@@ -242,6 +250,7 @@ The result is unpredictable.
 The \fB\-ttycontrol\fR option cannot be queried.
 .TP
 \fB\-ttystatus\fR
+<<<<<<< HEAD
 .
 (Windows and Unix). The \fB\-ttystatus\fR option can only be
 queried.  It returns the current modem status and handshake input signals
@@ -259,6 +268,25 @@ XON and XOFF characters.
 .TP
 \fB\-pollinterval\fR \fImsec\fR
 .
+=======
+.
+(Windows and Unix). The \fB\-ttystatus\fR option can only be
+queried.  It returns the current modem status and handshake input signals
+(see below).
+The result is a list of signal,value pairs with a fixed order,
+e.g. \fB{CTS 1 DSR 0 RING 1 DCD 0}\fR.
+The \fIsignal\fR names are returned upper case.
+.TP
+\fB\-xchar\fR \fI{xonChar xoffChar}\fR
+.
+(Windows and Unix). This option is used to query or change the software
+handshake characters. Normally the operating system default should be
+DC1 (0x11) and DC3 (0x13) representing the ASCII standard
+XON and XOFF characters.
+.TP
+\fB\-pollinterval\fR \fImsec\fR
+.
+>>>>>>> upstream/master
 (Windows only). This option is used to set the maximum time between
 polling for fileevents.
 This affects the time interval between checking for events throughout the Tcl
@@ -391,7 +419,11 @@ application are competing for the console at the same time.  If the command
 pipeline is started from a script, so that Tcl is not accessing the console,
 or if the command pipeline does not use standard input or output, but is
 <<<<<<< HEAD
+<<<<<<< HEAD
 redirected from or to a file, then the above problems do not occur.  
+=======
+redirected from or to a file, then the above problems do not occur.
+>>>>>>> upstream/master
 =======
 redirected from or to a file, then the above problems do not occur.
 >>>>>>> upstream/master
@@ -415,7 +447,11 @@ both Tcl and the child application are competing for the console at the
 same time.  If the command pipeline is started from a script, so that Tcl is
 not accessing the console, or if the command pipeline does not use standard
 <<<<<<< HEAD
+<<<<<<< HEAD
 input, but is redirected from a file, then the above problem does not occur.  
+=======
+input, but is redirected from a file, then the above problem does not occur.
+>>>>>>> upstream/master
 =======
 input, but is redirected from a file, then the above problem does not occur.
 >>>>>>> upstream/master

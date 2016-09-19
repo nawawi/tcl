@@ -21,7 +21,11 @@ proc ulam2 {n} {
 	dup;		# max n
 	jump start;     # max n
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -35,7 +39,11 @@ proc ulam2 {n} {
 	pop;            # n
 	dup;            # n n
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -45,17 +53,23 @@ proc ulam2 {n} {
 	mod;            # max n n%2
 	jumpTrue odd;   # max n
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	push 2;         # max n 2
 	div;            # max n/2 -> max n
 	jump start;     # max n
 	
 =======
+=======
+>>>>>>> upstream/master
 
 	push 2;         # max n 2
 	div;            # max n/2 -> max n
 	jump start;     # max n
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	label odd;	# max n
 	push 3;         # max n 3
@@ -63,7 +77,11 @@ proc ulam2 {n} {
 	push 1;         # max 3*n 1
 	add;            # max 3*n+1
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -73,7 +91,11 @@ proc ulam2 {n} {
 	neq;		# max n n>1
 	jumpTrue loop;	# max n
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -85,7 +107,11 @@ set tcl_traceCompile 2; ulam2 1; set tcl_traceCompile 0
 proc test1 {n} {
     for {set i 1} {$i <= $n} {incr i} {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ulam1 $i  
+=======
+	ulam1 $i
+>>>>>>> upstream/master
 =======
 	ulam1 $i
 >>>>>>> upstream/master
@@ -94,7 +120,11 @@ proc test1 {n} {
 proc test2 {n} {
     for {set i 1} {$i <= $n} {incr i} {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ulam2 $i  
+=======
+	ulam2 $i
+>>>>>>> upstream/master
 =======
 	ulam2 $i
 >>>>>>> upstream/master
@@ -108,7 +138,11 @@ for {set j 0} {$j < 10} {incr j} {
     set after [clock microseconds]
     puts "compiled: [expr {1e-6 * ($after - $before)}]"
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -119,6 +153,9 @@ for {set j 0} {$j < 10} {incr j} {
     puts "assembled: [expr {1e-6 * ($after - $before)}]"
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

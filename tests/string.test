@@ -220,7 +220,11 @@ test string-4.14 {string first, negative start index} {
 test string-4.15 {string first, ability to two-byte encoded utf-8 chars} {
     # Test for a bug in Tcl 8.3 where test for all-single-byte-encoded
 <<<<<<< HEAD
+<<<<<<< HEAD
     # strings was incorrect, leading to an index returned by [string first] 
+=======
+    # strings was incorrect, leading to an index returned by [string first]
+>>>>>>> upstream/master
 =======
     # strings was incorrect, leading to an index returned by [string first]
 >>>>>>> upstream/master
@@ -424,7 +428,11 @@ test string-6.37 {string is double, false on int overflow} -setup {
 # string-6.38 removed, underflow on input is no longer an error.
 test string-6.39 {string is double, false} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     # This test is non-portable because IRIX thinks 
+=======
+    # This test is non-portable because IRIX thinks
+>>>>>>> upstream/master
 =======
     # This test is non-portable because IRIX thinks
 >>>>>>> upstream/master
@@ -1842,7 +1850,11 @@ proc MemStress {args} {
     foreach body $args {
         set end 0
 <<<<<<< HEAD
+<<<<<<< HEAD
         for {set i 0} {$i < 5} {incr i} { 
+=======
+        for {set i 0} {$i < 5} {incr i} {
+>>>>>>> upstream/master
 =======
         for {set i 0} {$i < 5} {incr i} {
 >>>>>>> upstream/master

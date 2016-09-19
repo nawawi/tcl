@@ -73,7 +73,11 @@ tests that should not be run in one or more of those cases, please use
 the constraints mechanism to skip those tests.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 4. Incompatibilities of package tcltest 2.1 with 
+=======
+4. Incompatibilities of package tcltest 2.1 with
+>>>>>>> upstream/master
 =======
 4. Incompatibilities of package tcltest 2.1 with
 >>>>>>> upstream/master
@@ -82,7 +86,11 @@ the constraints mechanism to skip those tests.
 
 1) Global variables such as VERBOSE, TESTS, and testConfig of the
 <<<<<<< HEAD
+<<<<<<< HEAD
    old machinery correspond to the [configure -verbose], 
+=======
+   old machinery correspond to the [configure -verbose],
+>>>>>>> upstream/master
 =======
    old machinery correspond to the [configure -verbose],
 >>>>>>> upstream/master

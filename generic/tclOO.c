@@ -59,6 +59,11 @@ static Class *		AllocClass(Tcl_Interp *interp, Object *useThisObj);
 static Object *		AllocObject(Tcl_Interp *interp, const char *nameStr,
 			    const char *nsNameStr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+static void		ClearMixins(Class *clsPtr);
+static void		ClearSuperclasses(Class *clsPtr);
+>>>>>>> upstream/master
 =======
 static void		ClearMixins(Class *clsPtr);
 static void		ClearSuperclasses(Class *clsPtr);
@@ -71,12 +76,18 @@ static int		CloneObjectMethod(Tcl_Interp *interp, Object *oPtr,
 static void		DeletedDefineNamespace(ClientData clientData);
 static void		DeletedObjdefNamespace(ClientData clientData);
 static void		DeletedHelpersNamespace(ClientData clientData);
+<<<<<<< HEAD
 static int		FinalizeAlloc(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeNext(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeObjectCall(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	FinalizeAlloc;
+static Tcl_NRPostProc	FinalizeNext;
+static Tcl_NRPostProc	FinalizeObjectCall;
+>>>>>>> upstream/master
 static int		InitFoundation(Tcl_Interp *interp);
 static void		KillFoundation(ClientData clientData,
 			    Tcl_Interp *interp);
@@ -272,7 +283,11 @@ TclOOInit(
      * to be fully provided.
      */
 
+<<<<<<< HEAD
     if (Tcl_Eval(interp, initScript) != TCL_OK) {
+=======
+    if (Tcl_EvalEx(interp, initScript, -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
 
@@ -466,7 +481,11 @@ InitFoundation(
     if (TclOODefineSlots(fPtr) != TCL_OK) {
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
     return Tcl_Eval(interp, slotScript);
+=======
+    return Tcl_EvalEx(interp, slotScript, -1, 0);
+>>>>>>> upstream/master
 }
 
 /*
@@ -902,7 +921,10 @@ ObjectRenamedTrace(
  * ----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
  * ClearMixins, ClearSuperclasses --
  *
  *	Utility functions for correctly clearing the list of mixins or
@@ -952,6 +974,9 @@ ClearSuperclasses(
 /*
  * ----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  * ReleaseClassContents --
  *
@@ -1009,7 +1034,10 @@ ReleaseClassContents(
     if (!IsRootClass(oPtr)) {
 	FOREACH(instancePtr, clsPtr->instances) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 	    int j;
 	    if (instancePtr->selfCls == clsPtr) {
 		instancePtr->flags |= CLASS_GONE;
@@ -1020,6 +1048,9 @@ ReleaseClassContents(
 		    instancePtr->mixins.list[j] = NULL;
 		}
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    if (instancePtr != NULL && !IsRoot(instancePtr)) {
 		AddRef(instancePtr);
@@ -1033,9 +1064,12 @@ ReleaseClassContents(
 
     FOREACH(mixinSubclassPtr, clsPtr->mixinSubs) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinSubclassPtr == NULL) {
 	    continue;
 	}
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	if (!Deleted(mixinSubclassPtr->thisPtr)) {
@@ -1043,6 +1077,10 @@ ReleaseClassContents(
 		    mixinSubclassPtr->thisPtr->command);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	ClearMixins(mixinSubclassPtr);
+>>>>>>> upstream/master
 =======
 	ClearMixins(mixinSubclassPtr);
 >>>>>>> upstream/master
@@ -1061,7 +1099,11 @@ ReleaseClassContents(
 
     FOREACH(subclassPtr, clsPtr->subclasses) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (subclassPtr == NULL || IsRoot(subclassPtr)) {
+=======
+	if (IsRoot(subclassPtr)) {
+>>>>>>> upstream/master
 =======
 	if (IsRoot(subclassPtr)) {
 >>>>>>> upstream/master
@@ -1071,6 +1113,10 @@ ReleaseClassContents(
 	    Tcl_DeleteCommandFromToken(interp, subclassPtr->thisPtr->command);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	ClearSuperclasses(subclassPtr);
+>>>>>>> upstream/master
 =======
 	ClearSuperclasses(subclassPtr);
 >>>>>>> upstream/master
@@ -1217,7 +1263,11 @@ ObjectNamespaceDeleted(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!IsRootObject(oPtr)) {
+=======
+    if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
+>>>>>>> upstream/master
 =======
     if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
 >>>>>>> upstream/master
@@ -1226,7 +1276,13 @@ ObjectNamespaceDeleted(
 
     FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+	if (mixinPtr) {
+	    TclOORemoveFromInstances(oPtr, mixinPtr);
+	}
+>>>>>>> upstream/master
 =======
 	if (mixinPtr) {
 	    TclOORemoveFromInstances(oPtr, mixinPtr);
@@ -1278,14 +1334,20 @@ ObjectNamespaceDeleted(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (clsPtr != NULL) {
 	Class *superPtr;
 =======
+=======
+>>>>>>> upstream/master
     /*
      * If this was a class, there's additional deletion work to do.
      */
 
     if (clsPtr != NULL) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	Tcl_ObjectMetadataType *metadataTypePtr;
 	ClientData value;
@@ -1307,6 +1369,7 @@ ObjectNamespaceDeleted(
 	    clsPtr->filters.num = 0;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	FOREACH(mixinPtr, clsPtr->mixins) {
 	    if (!Deleted(mixinPtr->thisPtr)) {
 		TclOORemoveFromMixinSubs(clsPtr, mixinPtr);
@@ -1326,11 +1389,16 @@ ObjectNamespaceDeleted(
 	    clsPtr->superclasses.num = 0;
 	}
 =======
+=======
+>>>>>>> upstream/master
 
 	ClearMixins(clsPtr);
 
 	ClearSuperclasses(clsPtr);
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if (clsPtr->subclasses.list) {
 	    ckfree(clsPtr->subclasses.list);
@@ -1474,9 +1542,13 @@ TclOORemoveFromSubclasses(
 
   removeSubclass:
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->subclasses.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 =======
     if (!Deleted(superPtr->thisPtr)) {
 >>>>>>> upstream/master
@@ -1551,9 +1623,13 @@ TclOORemoveFromMixinSubs(
 
   removeSubclass:
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->mixinSubs.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 =======
     if (!Deleted(superPtr->thisPtr)) {
 >>>>>>> upstream/master
@@ -1758,7 +1834,11 @@ Tcl_NewObjectInstance(
 		TclOOGetCallContext(oPtr, NULL, CONSTRUCTOR, NULL);
 
 	if (contextPtr != NULL) {
+<<<<<<< HEAD
 	    int result;
+=======
+	    int isRoot, result;
+>>>>>>> upstream/master
 	    Tcl_InterpState state;
 
 	    state = Tcl_SaveInterpState(interp, TCL_OK);
@@ -1769,6 +1849,7 @@ Tcl_NewObjectInstance(
 	     * Adjust the ensmble tracking record if necessary. [Bug 3514761]
 	     */
 
+<<<<<<< HEAD
 	    if (((Interp*) interp)->ensembleRewrite.sourceObjs) {
 		((Interp*) interp)->ensembleRewrite.numInsertedObjs += skip-1;
 		((Interp*) interp)->ensembleRewrite.numRemovedObjs += skip-1;
@@ -1776,6 +1857,16 @@ Tcl_NewObjectInstance(
 	    result = Tcl_NRCallObjProc(interp, TclOOInvokeContext, contextPtr,
 		    objc, objv);
 
+=======
+	    isRoot = TclInitRewriteEnsemble(interp, skip, skip, objv);
+	    result = Tcl_NRCallObjProc(interp, TclOOInvokeContext, contextPtr,
+		    objc, objv);
+
+	    if (isRoot) {
+		TclResetRewriteEnsemble(interp, 1);
+	    }
+
+>>>>>>> upstream/master
 	    /*
 	     * It's an error if the object was whacked in the constructor.
 	     * Force this if it isn't already an error (don't want to lose
@@ -1898,9 +1989,14 @@ TclNRNewObjectInstance(
      * Adjust the ensmble tracking record if necessary. [Bug 3514761]
      */
 
+<<<<<<< HEAD
     if (((Interp *) interp)->ensembleRewrite.sourceObjs) {
 	((Interp *) interp)->ensembleRewrite.numInsertedObjs += skip - 1;
 	((Interp *) interp)->ensembleRewrite.numRemovedObjs += skip - 1;
+=======
+    if (TclInitRewriteEnsemble(interp, skip, skip, objv)) {
+	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
+>>>>>>> upstream/master
     }
 
     /*
@@ -2028,7 +2124,11 @@ Tcl_CopyObjectInstance(
 
     FOREACH(mixinPtr, o2Ptr->mixins) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 =======
 	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
 >>>>>>> upstream/master
@@ -2038,7 +2138,11 @@ Tcl_CopyObjectInstance(
     DUPLICATE(o2Ptr->mixins, oPtr->mixins, Class *);
     FOREACH(mixinPtr, o2Ptr->mixins) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 =======
 	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
 >>>>>>> upstream/master

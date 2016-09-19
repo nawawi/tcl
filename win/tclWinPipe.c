@@ -897,7 +897,11 @@ TclpGetPid(
  *
  *	The complete Windows search path is searched to find the specified
  *	executable. If an executable by the given name is not found,
+<<<<<<< HEAD
  *	automatically tries appending ".com", ".exe", and ".bat" to the
+=======
+ *	automatically tries appending standard extensions to the
+>>>>>>> upstream/master
  *	executable name.
  *
  * Results:
@@ -1292,7 +1296,11 @@ ApplicationType(
     Tcl_DString nameBuf, ds;
     const TCHAR *nativeName;
     TCHAR nativeFullPath[MAX_PATH];
+<<<<<<< HEAD
     static const char extensions[][5] = {"", ".com", ".exe", ".bat"};
+=======
+    static const char extensions[][5] = {"", ".com", ".exe", ".bat", ".cmd"};
+>>>>>>> upstream/master
 
     /*
      * Look for the program as an external program. First try the name as it
@@ -1337,7 +1345,12 @@ ApplicationType(
 	Tcl_DStringFree(&ds);
 
 	ext = strrchr(fullName, '.');
+<<<<<<< HEAD
 	if ((ext != NULL) && (strcasecmp(ext, ".bat") == 0)) {
+=======
+	if ((ext != NULL) && 
+            (strcasecmp(ext, ".cmd") == 0 || strcasecmp(ext, ".bat") == 0)) {
+>>>>>>> upstream/master
 	    applType = APPL_DOS;
 	    break;
 	}

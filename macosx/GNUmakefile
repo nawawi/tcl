@@ -93,7 +93,11 @@ PRODUCT_NAME		:= Tcl
 
 UNIX_DIR		:= ${CURDIR}/../unix
 <<<<<<< HEAD
+<<<<<<< HEAD
 VERSION			:= $(shell awk -F= '/^TCL_VERSION/ {print $$2; nextfile}' ${UNIX_DIR}/configure.in)
+=======
+VERSION			:= $(shell awk -F= '/^TCL_VERSION/ {print $$2; nextfile}' ${UNIX_DIR}/configure.ac)
+>>>>>>> upstream/master
 =======
 VERSION			:= $(shell awk -F= '/^TCL_VERSION/ {print $$2; nextfile}' ${UNIX_DIR}/configure.ac)
 >>>>>>> upstream/master

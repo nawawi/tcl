@@ -72,6 +72,10 @@ MODULE_SCOPE int	TclWinSymLinkCopyDirectory(const TCHAR *LinkOriginal,
 			    const TCHAR *LinkCopy);
 MODULE_SCOPE int	TclWinSymLinkDelete(const TCHAR *LinkOriginal,
 			    int linkOnly);
+<<<<<<< HEAD
+=======
+MODULE_SCOPE int        TclWinFileOwned(Tcl_Obj *);
+>>>>>>> upstream/master
 #if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
 MODULE_SCOPE void	TclWinFreeAllocCache(void);
 MODULE_SCOPE void	TclFreeAllocCache(void *);

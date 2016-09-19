@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -30,6 +34,7 @@ if no \fIarg\fRs are supplied, the result is an empty string.
 Although \fBconcat\fR will concatenate lists, flattening them in the process
 (so giving the following interactive session):
 .PP
+<<<<<<< HEAD
 .CS
 \fI%\fR \fBconcat\fR a b {c d e} {f {g h}}
 \fIa b c d e f {g h}\fR
@@ -43,6 +48,21 @@ session:
 \fIa b {c d e} f\fR
 .CE
 .PP
+=======
+.CS
+\fI%\fR \fBconcat\fR a b {c d e} {f {g h}}
+\fIa b c d e f {g h}\fR
+.CE
+.PP
+it will also concatenate things that are not lists, as can be seen from this
+session:
+.PP
+.CS
+\fI%\fR \fBconcat\fR " a b {c   " d "  e} f"
+\fIa b {c d e} f\fR
+.CE
+.PP
+>>>>>>> upstream/master
 Note also that the concatenation does not remove spaces from the middle of
 values, as can be seen here:
 .PP

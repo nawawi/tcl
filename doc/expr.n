@@ -6,7 +6,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -225,6 +229,7 @@ of the \fBpow\fR function (after any type conversions.)
 All of the binary operators but exponentiation group left-to-right
 within the same precedence level; exponentiation groups right-to-left.  For example, the command
 .PP
+<<<<<<< HEAD
 .CS
 \fBexpr\fR {4*2 < 7}
 .CE
@@ -235,6 +240,18 @@ returns 0, while
 \fBexpr\fR {2**3**2}
 .CE
 .PP
+=======
+.CS
+\fBexpr\fR {4*2 < 7}
+.CE
+.PP
+returns 0, while
+.PP
+.CS
+\fBexpr\fR {2**3**2}
+.CE
+.PP
+>>>>>>> upstream/master
 returns 512.
 .PP
 The \fB&&\fR, \fB||\fR, and \fB?:\fR operators have
@@ -403,7 +420,11 @@ Either they are enclosed in braces or, if not,
 their variable and command substitutions yield numbers or strings
 that do not themselves require substitutions.
 <<<<<<< HEAD
+<<<<<<< HEAD
 However, because a few unbraced expressions 
+=======
+However, because a few unbraced expressions
+>>>>>>> upstream/master
 =======
 However, because a few unbraced expressions
 >>>>>>> upstream/master

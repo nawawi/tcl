@@ -70,6 +70,7 @@ static inline void	DeleteChainTable(struct Dict *dict);
 static inline Tcl_HashEntry *CreateChainEntry(struct Dict *dict,
 			    Tcl_Obj *keyPtr, int *newPtr);
 static inline int	DeleteChainEntry(struct Dict *dict, Tcl_Obj *keyPtr);
+<<<<<<< HEAD
 static int		FinalizeDictUpdate(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeDictWith(ClientData data[],
@@ -82,6 +83,14 @@ static int		DictForLoopCallback(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		DictMapLoopCallback(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	FinalizeDictUpdate;
+static Tcl_NRPostProc	FinalizeDictWith;
+static Tcl_ObjCmdProc	DictForNRCmd;
+static Tcl_ObjCmdProc	DictMapNRCmd;
+static Tcl_NRPostProc	DictForLoopCallback;
+static Tcl_NRPostProc	DictMapLoopCallback;
+>>>>>>> upstream/master
 
 /*
  * Table of dict subcommand names and implementations.
@@ -3053,7 +3062,11 @@ DictFilterCmd(
 		    TCL_LEAVE_ERR_MSG) == NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master
@@ -3068,7 +3081,11 @@ DictFilterCmd(
 		    TCL_LEAVE_ERR_MSG) == NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master

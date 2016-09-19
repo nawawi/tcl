@@ -281,7 +281,10 @@ EXTERN int		TclBN_mp_set_int(mp_int *a, unsigned long i);
 EXTERN int		TclBN_mp_cnt_lsb(const mp_int *a);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 /* 64 */
@@ -293,6 +296,9 @@ EXTERN void		TclBNInitBignumFromWideInt(mp_int *bignum,
 EXTERN void		TclBNInitBignumFromWideUInt(mp_int *bignum,
 				Tcl_WideUInt initVal);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -367,6 +373,12 @@ typedef struct TclTomMathStubs {
     int (*tclBN_mp_cnt_lsb) (const mp_int *a); /* 63 */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    void (*tclBNInitBignumFromLong) (mp_int *bignum, long initVal); /* 64 */
+    void (*tclBNInitBignumFromWideInt) (mp_int *bignum, Tcl_WideInt initVal); /* 65 */
+    void (*tclBNInitBignumFromWideUInt) (mp_int *bignum, Tcl_WideUInt initVal); /* 66 */
+>>>>>>> upstream/master
 =======
     void (*tclBNInitBignumFromLong) (mp_int *bignum, long initVal); /* 64 */
     void (*tclBNInitBignumFromWideInt) (mp_int *bignum, Tcl_WideInt initVal); /* 65 */
@@ -521,7 +533,10 @@ extern const TclTomMathStubs *tclTomMathStubsPtr;
 	(tclTomMathStubsPtr->tclBN_mp_cnt_lsb) /* 63 */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #define TclBNInitBignumFromLong \
@@ -531,6 +546,9 @@ extern const TclTomMathStubs *tclTomMathStubsPtr;
 #define TclBNInitBignumFromWideUInt \
 	(tclTomMathStubsPtr->tclBNInitBignumFromWideUInt) /* 66 */
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

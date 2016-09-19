@@ -324,7 +324,13 @@ TclOOObjectSetMixins(
 	if (oPtr->mixins.num != 0) {
 	    FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+		if (mixinPtr) {
+		    TclOORemoveFromInstances(oPtr, mixinPtr);
+		}
+>>>>>>> upstream/master
 =======
 		if (mixinPtr) {
 		    TclOORemoveFromInstances(oPtr, mixinPtr);
@@ -339,7 +345,11 @@ TclOOObjectSetMixins(
 	if (oPtr->mixins.num != 0) {
 	    FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (mixinPtr != oPtr->selfCls) {
+=======
+		if (mixinPtr && mixinPtr != oPtr->selfCls) {
+>>>>>>> upstream/master
 =======
 		if (mixinPtr && mixinPtr != oPtr->selfCls) {
 >>>>>>> upstream/master
@@ -533,7 +543,11 @@ TclOOUnknownDefinition(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     soughtStr = Tcl_GetStringFromObj(objv[1], &soughtLen);
+=======
+    soughtStr = TclGetStringFromObj(objv[1], &soughtLen);
+>>>>>>> upstream/master
     if (soughtLen == 0) {
 	goto noMatch;
     }
@@ -593,7 +607,11 @@ FindCommand(
     Tcl_Namespace *const namespacePtr)
 {
     int length;
+<<<<<<< HEAD
     const char *nameStr, *string = Tcl_GetStringFromObj(stringObj, &length);
+=======
+    const char *nameStr, *string = TclGetStringFromObj(stringObj, &length);
+>>>>>>> upstream/master
     register Namespace *const nsPtr = (Namespace *) namespacePtr;
     FOREACH_HASH_DECLS;
     Tcl_Command cmd, cmd2;
@@ -782,7 +800,11 @@ GenerateErrorInfo(
     int length;
     Tcl_Obj *realNameObj = Tcl_ObjectDeleted((Tcl_Object) oPtr)
 	    ? savedNameObj : TclOOObjectName(interp, oPtr);
+<<<<<<< HEAD
     const char *objName = Tcl_GetStringFromObj(realNameObj, &length);
+=======
+    const char *objName = TclGetStringFromObj(realNameObj, &length);
+>>>>>>> upstream/master
     int limit = OBJNAME_LENGTH_IN_ERRORINFO_LIMIT;
     int overflow = (length > limit);
 
@@ -855,9 +877,14 @@ TclOODefineObjCmd(
 	TclDecrRefCount(objNameObj);
     } else {
 	Tcl_Obj *objPtr, *obj2Ptr, **objs;
+<<<<<<< HEAD
 	Interp *iPtr = (Interp *) interp;
 	Tcl_Command cmd;
 	int dummy;
+=======
+	Tcl_Command cmd;
+	int isRoot, dummy;
+>>>>>>> upstream/master
 
 	/*
 	 * More than one argument: fire them through the ensemble processing
@@ -869,6 +896,7 @@ TclOODefineObjCmd(
 	 * the moment. Ugly!
 	 */
 
+<<<<<<< HEAD
 	if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	    iPtr->ensembleRewrite.sourceObjs = objv;
 	    iPtr->ensembleRewrite.numRemovedObjs = 3;
@@ -881,6 +909,9 @@ TclOODefineObjCmd(
 		iPtr->ensembleRewrite.numInsertedObjs -= 2;
 	    }
 	}
+=======
+	isRoot = TclInitRewriteEnsemble(interp, 3, 1, objv);
+>>>>>>> upstream/master
 
 	/*
 	 * Build the list of arguments using a Tcl_Obj as a workspace. See
@@ -898,6 +929,10 @@ TclOODefineObjCmd(
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 =======
 	/* TODO: overflow? */
 >>>>>>> upstream/master
@@ -905,6 +940,12 @@ TclOODefineObjCmd(
 	Tcl_ListObjGetElements(NULL, objPtr, &dummy, &objs);
 
 	result = Tcl_EvalObjv(interp, objc-2, objs, TCL_EVAL_INVOKE);
+<<<<<<< HEAD
+=======
+	if (isRoot) {
+	    TclResetRewriteEnsemble(interp, 1);
+	}
+>>>>>>> upstream/master
 	Tcl_DecrRefCount(objPtr);
     }
     DelRef(oPtr);
@@ -938,7 +979,11 @@ TclOOObjDefObjCmd(
     Tcl_Obj *const *objv)
 {
     Foundation *fPtr = TclOOGetFoundation(interp);
+<<<<<<< HEAD
     int result;
+=======
+    int isRoot, result;
+>>>>>>> upstream/master
     Object *oPtr;
 
     if (objc < 3) {
@@ -973,7 +1018,10 @@ TclOOObjDefObjCmd(
 	TclDecrRefCount(objNameObj);
     } else {
 	Tcl_Obj *objPtr, *obj2Ptr, **objs;
+<<<<<<< HEAD
 	Interp *iPtr = (Interp *) interp;
+=======
+>>>>>>> upstream/master
 	Tcl_Command cmd;
 	int dummy;
 
@@ -987,6 +1035,7 @@ TclOOObjDefObjCmd(
 	 * the moment. Ugly!
 	 */
 
+<<<<<<< HEAD
 	if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	    iPtr->ensembleRewrite.sourceObjs = objv;
 	    iPtr->ensembleRewrite.numRemovedObjs = 3;
@@ -999,6 +1048,9 @@ TclOOObjDefObjCmd(
 		iPtr->ensembleRewrite.numInsertedObjs -= 2;
 	    }
 	}
+=======
+	isRoot = TclInitRewriteEnsemble(interp, 3, 1, objv);
+>>>>>>> upstream/master
 
 	/*
 	 * Build the list of arguments using a Tcl_Obj as a workspace. See
@@ -1016,6 +1068,10 @@ TclOOObjDefObjCmd(
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 =======
 	/* TODO: overflow? */
 >>>>>>> upstream/master
@@ -1023,6 +1079,13 @@ TclOOObjDefObjCmd(
 	Tcl_ListObjGetElements(NULL, objPtr, &dummy, &objs);
 
 	result = Tcl_EvalObjv(interp, objc-2, objs, TCL_EVAL_INVOKE);
+<<<<<<< HEAD
+=======
+
+	if (isRoot) {
+	    TclResetRewriteEnsemble(interp, 1);
+	}
+>>>>>>> upstream/master
 	Tcl_DecrRefCount(objPtr);
     }
     DelRef(oPtr);
@@ -1091,9 +1154,14 @@ TclOODefineSelfObjCmd(
 	TclDecrRefCount(objNameObj);
     } else {
 	Tcl_Obj *objPtr, *obj2Ptr, **objs;
+<<<<<<< HEAD
 	Interp *iPtr = (Interp *) interp;
 	Tcl_Command cmd;
 	int dummy;
+=======
+	Tcl_Command cmd;
+	int isRoot, dummy;
+>>>>>>> upstream/master
 
 	/*
 	 * More than one argument: fire them through the ensemble processing
@@ -1105,6 +1173,7 @@ TclOODefineSelfObjCmd(
 	 * the moment. Ugly!
 	 */
 
+<<<<<<< HEAD
 	if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	    iPtr->ensembleRewrite.sourceObjs = objv;
 	    iPtr->ensembleRewrite.numRemovedObjs = 2;
@@ -1117,6 +1186,9 @@ TclOODefineSelfObjCmd(
 		iPtr->ensembleRewrite.numInsertedObjs -= 1;
 	    }
 	}
+=======
+	isRoot = TclInitRewriteEnsemble(interp, 2, 1, objv);
+>>>>>>> upstream/master
 
 	/*
 	 * Build the list of arguments using a Tcl_Obj as a workspace. See
@@ -1134,6 +1206,10 @@ TclOODefineSelfObjCmd(
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 =======
 	/* TODO: overflow? */
 >>>>>>> upstream/master
@@ -1141,6 +1217,12 @@ TclOODefineSelfObjCmd(
 	Tcl_ListObjGetElements(NULL, objPtr, &dummy, &objs);
 
 	result = Tcl_EvalObjv(interp, objc-1, objs, TCL_EVAL_INVOKE);
+<<<<<<< HEAD
+=======
+	if (isRoot) {
+	    TclResetRewriteEnsemble(interp, 1);
+	}
+>>>>>>> upstream/master
 	Tcl_DecrRefCount(objPtr);
     }
     DelRef(oPtr);
@@ -1233,6 +1315,12 @@ TclOODefineClassObjCmd(
 	oPtr->selfCls = clsPtr;
 	TclOOAddToInstances(oPtr, oPtr->selfCls);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!(clsPtr->thisPtr->flags & OBJECT_DELETED)) {
+	    oPtr->flags &= ~CLASS_GONE;
+	}
+>>>>>>> upstream/master
 =======
 	if (!(clsPtr->thisPtr->flags & OBJECT_DELETED)) {
 	    oPtr->flags &= ~CLASS_GONE;
@@ -1285,7 +1373,11 @@ TclOODefineConstructorObjCmd(
     }
     clsPtr = oPtr->classPtr;
 
+<<<<<<< HEAD
     Tcl_GetStringFromObj(objv[2], &bodyLength);
+=======
+    TclGetStringFromObj(objv[2], &bodyLength);
+>>>>>>> upstream/master
     if (bodyLength > 0) {
 	/*
 	 * Create the method structure.
@@ -1404,7 +1496,11 @@ TclOODefineDestructorObjCmd(
     }
     clsPtr = oPtr->classPtr;
 
+<<<<<<< HEAD
     Tcl_GetStringFromObj(objv[1], &bodyLength);
+=======
+    TclGetStringFromObj(objv[1], &bodyLength);
+>>>>>>> upstream/master
     if (bodyLength > 0) {
 	/*
 	 * Create the method structure.
@@ -2535,13 +2631,19 @@ ObjMixinGet(
     resultObj = Tcl_NewObj();
     FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_ListObjAppendElement(NULL, resultObj,
 		TclOOObjectName(interp, mixinPtr->thisPtr));
 =======
+=======
+>>>>>>> upstream/master
 	if (mixinPtr) {
 	    Tcl_ListObjAppendElement(NULL, resultObj,
 		    TclOOObjectName(interp, mixinPtr->thisPtr));
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
     Tcl_SetObjResult(interp, resultObj);

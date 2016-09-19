@@ -12,6 +12,12 @@
  */
 
 #include "tclInt.h"
+<<<<<<< HEAD
+=======
+#ifdef _WIN32
+#   include "tclWinInt.h"
+#endif
+>>>>>>> upstream/master
 #include <locale.h>
 
 /*
@@ -645,6 +651,7 @@ EncodingDirsObjCmd(
     if (objc == 2) {
 	Tcl_SetObjResult(interp, Tcl_GetEncodingSearchPath());
 	return TCL_OK;
+<<<<<<< HEAD
     }
 
     dirListObj = objv[2];
@@ -656,6 +663,19 @@ EncodingDirsObjCmd(
 		NULL);
 	return TCL_ERROR;
     }
+=======
+    }
+
+    dirListObj = objv[2];
+    if (Tcl_SetEncodingSearchPath(dirListObj) == TCL_ERROR) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"expected directory list but got \"%s\"",
+		TclGetString(dirListObj)));
+	Tcl_SetErrorCode(interp, "TCL", "OPERATION", "ENCODING", "BADPATH",
+		NULL);
+	return TCL_ERROR;
+    }
+>>>>>>> upstream/master
     Tcl_SetObjResult(interp, dirListObj);
     return TCL_OK;
 }
@@ -1139,6 +1159,7 @@ BadFileSubcommand(
  *
  *----------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 static int
 FileAttrAccessTimeCmd(
@@ -1251,6 +1272,139 @@ FileAttrModifyTimeCmd(
 	    return TCL_ERROR;
 	}
 
+=======
+
+static int
+FileAttrAccessTimeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+    struct utimbuf tval;
+
+    if (objc < 2 || objc > 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name ?time?");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+#if defined(_WIN32)
+    /* We use a value of 0 to indicate the access time not available */
+    if (buf.st_atime == 0) {
+        Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                             "could not get access time for file \"%s\"",
+                             TclGetString(objv[1])));
+        return TCL_ERROR;
+    }
+#endif
+
+    if (objc == 3) {
+	/*
+	 * Need separate variable for reading longs from an object on 64-bit
+	 * platforms. [Bug 698146]
+	 */
+
+	long newTime;
+
+	if (TclGetLongFromObj(interp, objv[2], &newTime) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+
+	tval.actime = newTime;
+	tval.modtime = buf.st_mtime;
+
+	if (Tcl_FSUtime(objv[1], &tval) != 0) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "could not set access time for file \"%s\": %s",
+		    TclGetString(objv[1]), Tcl_PosixError(interp)));
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * Do another stat to ensure that the we return the new recognized
+	 * atime - hopefully the same as the one we sent in. However, fs's
+	 * like FAT don't even know what atime is.
+	 */
+
+	if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+    }
+
+    Tcl_SetObjResult(interp, Tcl_NewLongObj((long) buf.st_atime));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrModifyTimeCmd --
+ *
+ *	This function is invoked to process the "file mtime" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	May update the modification time on the file, if requested by the
+ *	user.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrModifyTimeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+    struct utimbuf tval;
+
+    if (objc < 2 || objc > 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name ?time?");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+#if defined(_WIN32)
+    /* We use a value of 0 to indicate the modification time not available */
+    if (buf.st_mtime == 0) {
+        Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                             "could not get modification time for file \"%s\"",
+                             TclGetString(objv[1])));
+        return TCL_ERROR;
+    }
+#endif
+    if (objc == 3) {
+	/*
+	 * Need separate variable for reading longs from an object on 64-bit
+	 * platforms. [Bug 698146]
+	 */
+
+	long newTime;
+
+	if (TclGetLongFromObj(interp, objv[2], &newTime) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+
+	tval.actime = buf.st_atime;
+	tval.modtime = newTime;
+
+	if (Tcl_FSUtime(objv[1], &tval) != 0) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "could not set modification time for file \"%s\": %s",
+		    TclGetString(objv[1]), Tcl_PosixError(interp)));
+	    return TCL_ERROR;
+	}
+
+>>>>>>> upstream/master
 	/*
 	 * Do another stat to ensure that the we return the new recognized
 	 * mtime - hopefully the same as the one we sent in.
@@ -1574,13 +1728,23 @@ FileAttrIsOwnedCmd(
     int objc,
     Tcl_Obj *const objv[])
 {
+<<<<<<< HEAD
     Tcl_StatBuf buf;
+=======
+#ifdef __CYGWIN__
+#define geteuid() (short)(geteuid)() 
+#endif
+#if !defined(_WIN32)
+    Tcl_StatBuf buf;
+#endif
+>>>>>>> upstream/master
     int value = 0;
 
     if (objc != 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "name");
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
     if (GetStatBuf(NULL, objv[1], Tcl_FSStat, &buf) == TCL_OK) {
 	/*
 	 * For Windows, there are no user ids associated with a file, so we
@@ -1596,6 +1760,15 @@ FileAttrIsOwnedCmd(
 	value = (geteuid() == buf.st_uid);
 #endif
     }
+=======
+#if defined(_WIN32)
+    value = TclWinFileOwned(objv[1]);
+#else
+    if (GetStatBuf(NULL, objv[1], Tcl_FSStat, &buf) == TCL_OK) {
+	value = (geteuid() == buf.st_uid);
+    }
+#endif
+>>>>>>> upstream/master
     Tcl_SetObjResult(interp, Tcl_NewBooleanObj(value));
     return TCL_OK;
 }

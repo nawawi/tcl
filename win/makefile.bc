@@ -124,8 +124,13 @@ CFG_ENCODING	= \"cp1252\"
 NAMEPREFIX	= tcl
 STUBPREFIX	= $(NAMEPREFIX)stub
 <<<<<<< HEAD
+<<<<<<< HEAD
 DOTVERSION	= 8.6
 VERSION		= 86
+=======
+DOTVERSION	= 8.7
+VERSION		= 87
+>>>>>>> upstream/master
 =======
 DOTVERSION	= 8.7
 VERSION		= 87

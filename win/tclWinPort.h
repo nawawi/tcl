@@ -24,6 +24,7 @@
  *
  * WINVER = 0x0500 means Windows 2000 and above
  */
+<<<<<<< HEAD
 
 #ifndef WINVER
 #   define WINVER 0x0501
@@ -62,6 +63,46 @@ typedef DWORD_PTR * PDWORD_PTR;
 #endif /* CHECK_UNICODE_CALLS */
 
 /*
+=======
+
+#ifndef WINVER
+#   define WINVER 0x0501
+#endif
+#ifndef _WIN32_WINNT
+#   define _WIN32_WINNT 0x0501
+#endif
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+
+/* Compatibility to older visual studio / windows platform SDK */
+#if !defined(MAXULONG_PTR)
+typedef DWORD DWORD_PTR;
+typedef DWORD_PTR * PDWORD_PTR;
+#endif
+
+/*
+ * Ask for the winsock function typedefs, also.
+ */
+#define INCL_WINSOCK_API_TYPEDEFS   1
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#ifdef HAVE_WSPIAPI_H
+#   include <wspiapi.h>
+#endif
+
+#ifdef CHECK_UNICODE_CALLS
+#   define _UNICODE
+#   define UNICODE
+#   define __TCHAR_DEFINED
+    typedef float *_TCHAR;
+#   define _TCHAR_DEFINED
+    typedef float *TCHAR;
+#endif /* CHECK_UNICODE_CALLS */
+
+/*
+>>>>>>> upstream/master
  *  Pull in the typedef of TCHAR for windows.
  */
 #include <tchar.h>
@@ -360,6 +401,23 @@ typedef DWORD_PTR * PDWORD_PTR;
 #   define S_IFLNK        0120000  /* Symbolic Link */
 #endif
 
+<<<<<<< HEAD
+=======
+/* 
+ * Windows compilers do not define S_IFBLK. However, Tcl uses it in
+ * GetTypeFromMode to identify blockSpecial devices based on the
+ * value in the statsbuf st_mode field. We have no other way to pass this
+ * from NativeStat on Windows so are forced to define it here.
+ * The definition here is essentially what is seen on Linux and MingW.
+ * XXX - the root problem is Tcl using Unix definitions instead of
+ * abstracting the structure into a platform independent one. Sigh - perhaps
+ * Tcl 9
+ */
+#ifndef S_IFBLK
+#   define S_IFBLK (S_IFDIR | S_IFCHR)
+#endif
+
+>>>>>>> upstream/master
 #ifndef S_ISREG
 #   ifdef S_IFREG
 #       define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)

@@ -124,7 +124,11 @@ Pkga_QuoteObjCmd(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkga_Init(
     Tcl_Interp *interp)		/* Interpreter in which the package is to be
 				 * made available. */

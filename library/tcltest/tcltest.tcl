@@ -2709,7 +2709,11 @@ proc tcltest::GetMatchingDirectories {rootdir} {
 	DebugPuts 1 "No test directories remain after applying match\
 		and skip patterns!"
     }
+<<<<<<< HEAD
     return $matchDirs
+=======
+    return [lsort $matchDirs]
+>>>>>>> upstream/master
 }
 
 # tcltest::runAllTests --

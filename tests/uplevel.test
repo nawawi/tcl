@@ -102,7 +102,10 @@ test uplevel-4.4 {error: not enough args} -returnCodes error -body {
     }}
 } -result {wrong # args: should be "uplevel ?level? command ?arg ...?"}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test uplevel-4.5 {level parsing} {
     apply {{} {uplevel 0 {}}}
 } {}
@@ -202,6 +205,9 @@ test uplevel-4.36 {level parsing} -body {
 
 
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 proc a2 {} {
@@ -241,7 +247,11 @@ test uplevel-7.1 {var access, no LVT in either level} -setup {
 } -body {
     namespace eval foo {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x 2 
+=======
+	set x 2
+>>>>>>> upstream/master
 =======
 	set x 2
 >>>>>>> upstream/master
@@ -264,7 +274,11 @@ test uplevel-7.2 {var access, no LVT in upper level} -setup {
 } -body {
     proc foo {} {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x 2 
+=======
+	set x 2
+>>>>>>> upstream/master
 =======
 	set x 2
 >>>>>>> upstream/master
@@ -292,7 +306,11 @@ test uplevel-7.3 {var access, LVT in upper level} -setup {
 } -body {
     proc foo {} {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x 2 
+=======
+	set x 2
+>>>>>>> upstream/master
 =======
 	set x 2
 >>>>>>> upstream/master

@@ -144,7 +144,11 @@ RegisterCommand(
 	sprintf(buf, "namespace eval %s { namespace export %s }",
 		namespace, cmdTablePtr->cmdName);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (Tcl_Eval(interp, buf) != TCL_OK) {
+=======
+	if (Tcl_EvalEx(interp, buf, -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 =======
 	if (Tcl_EvalEx(interp, buf, -1, 0) != TCL_OK) {
 >>>>>>> upstream/master

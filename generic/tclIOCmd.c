@@ -17,7 +17,11 @@
 
 typedef struct AcceptCallback {
 <<<<<<< HEAD
+<<<<<<< HEAD
     char *script;		/* Script to invoke. */
+=======
+    Tcl_Obj *script;		/* Script to invoke. */
+>>>>>>> upstream/master
 =======
     Tcl_Obj *script;		/* Script to invoke. */
 >>>>>>> upstream/master
@@ -42,8 +46,12 @@ static Tcl_ThreadDataKey dataKey;
 
 static void		FinalizeIOCmdTSD(ClientData clientData);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		AcceptCallbackProc(ClientData callbackData,
 			    Tcl_Channel chan, char *address, int port);
+=======
+static Tcl_TcpAcceptProc AcceptCallbackProc;
+>>>>>>> upstream/master
 =======
 static Tcl_TcpAcceptProc AcceptCallbackProc;
 >>>>>>> upstream/master
@@ -623,6 +631,7 @@ Tcl_TellObjCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     /*
      * Try to find a channel with the right name and permissions in the IO
      * channel table of this interpreter.
@@ -648,6 +657,33 @@ Tcl_TellObjCmd(
 	return TCL_ERROR;
     }
 
+=======
+    /*
+     * Try to find a channel with the right name and permissions in the IO
+     * channel table of this interpreter.
+     */
+
+    if (TclGetChannelFromObj(interp, objv[1], &chan, NULL, 0) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    TclChannelPreserve(chan);
+    newLoc = Tcl_Tell(chan);
+
+    /*
+     * TIP #219.
+     * Capture error messages put by the driver into the bypass area and put
+     * them into the regular interpreter result.
+     */
+
+
+    code  = TclChanCaughtErrorBypass(interp, chan);
+    TclChannelRelease(chan);
+    if (code) {
+	return TCL_ERROR;
+    }
+
+>>>>>>> upstream/master
     Tcl_SetObjResult(interp, Tcl_NewWideIntObj(newLoc));
     return TCL_OK;
 }
@@ -1382,6 +1418,7 @@ AcceptCallbackProc(
 
     if (acceptCallbackPtr->interp != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	char portBuf[TCL_INTEGER_SPACE];
 	char *script = acceptCallbackPtr->script;
 	Tcl_Interp *interp = acceptCallbackPtr->interp;
@@ -1392,6 +1429,8 @@ AcceptCallbackProc(
 
 	TclFormatInt(portBuf, port);
 =======
+=======
+>>>>>>> upstream/master
 	Tcl_Interp *interp = acceptCallbackPtr->interp;
 	Tcl_Obj *script, *objv[2];
 	int result = TCL_OK;
@@ -1408,6 +1447,9 @@ AcceptCallbackProc(
 	Tcl_DecrRefCount(objv[1]);
 
 	Tcl_Preserve(interp);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	Tcl_RegisterChannel(interp, chan);
 
@@ -1419,8 +1461,14 @@ AcceptCallbackProc(
 	Tcl_RegisterChannel(NULL, chan);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	result = Tcl_VarEval(interp, script, " ", Tcl_GetChannelName(chan),
 		" ", address, " ", portBuf, NULL);
+=======
+	result = Tcl_EvalObjEx(interp, script, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
+	Tcl_DecrRefCount(script);
+
+>>>>>>> upstream/master
 =======
 	result = Tcl_EvalObjEx(interp, script, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
 	Tcl_DecrRefCount(script);
@@ -1430,6 +1478,7 @@ AcceptCallbackProc(
 	    Tcl_BackgroundException(interp, result);
 	    Tcl_UnregisterChannel(interp, chan);
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	/*
@@ -1441,11 +1490,23 @@ AcceptCallbackProc(
 
 	Tcl_Release(interp);
 	Tcl_Release(script);
+=======
+
+	/*
+	 * Decrement the artificially bumped refcount. After this it is not
+	 * safe anymore to use "chan", because it may now be deleted.
+	 */
+
+	Tcl_UnregisterChannel(NULL, chan);
+
+	Tcl_Release(interp);
+>>>>>>> upstream/master
     } else {
 	/*
 	 * The interpreter has been deleted, so there is no useful way to use
 	 * the client socket - just close it.
 	 */
+<<<<<<< HEAD
 
 =======
 
@@ -1462,6 +1523,9 @@ AcceptCallbackProc(
 	 * The interpreter has been deleted, so there is no useful way to use
 	 * the client socket - just close it.
 	 */
+
+>>>>>>> upstream/master
+=======
 
 >>>>>>> upstream/master
 	Tcl_Close(NULL, chan);
@@ -1502,7 +1566,11 @@ TcpServerCloseProc(
 		acceptCallbackPtr);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_EventuallyFree(acceptCallbackPtr->script, TCL_DYNAMIC);
+=======
+    Tcl_DecrRefCount(acceptCallbackPtr->script);
+>>>>>>> upstream/master
 =======
     Tcl_DecrRefCount(acceptCallbackPtr->script);
 >>>>>>> upstream/master
@@ -1541,7 +1609,12 @@ Tcl_SocketObjCmd(
     };
     int optionIndex, a, server = 0, port, myport = 0, async = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *host, *script = NULL, *myaddr = NULL;
+=======
+    const char *host, *myaddr = NULL;
+    Tcl_Obj *script = NULL;
+>>>>>>> upstream/master
 =======
     const char *host, *myaddr = NULL;
     Tcl_Obj *script = NULL;
@@ -1593,6 +1666,9 @@ Tcl_SocketObjCmd(
 	    if (TclSockGetPort(interp, myPortName, "tcp", &myport) != TCL_OK) {
 		return TCL_ERROR;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    }
 	    break;
 	}
@@ -1602,6 +1678,7 @@ Tcl_SocketObjCmd(
 			"cannot set -async option for server sockets", -1));
 		return TCL_ERROR;
 	    }
+<<<<<<< HEAD
 =======
 	    }
 	    break;
@@ -1623,6 +1700,16 @@ Tcl_SocketObjCmd(
 <<<<<<< HEAD
 	    script = TclGetString(objv[a]);
 =======
+	    script = objv[a];
+>>>>>>> upstream/master
+=======
+	    server = 1;
+	    a++;
+	    if (a >= objc) {
+		Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			"no argument given for -server option", -1));
+		return TCL_ERROR;
+	    }
 	    script = objv[a];
 >>>>>>> upstream/master
 	    break;
@@ -1666,6 +1753,7 @@ Tcl_SocketObjCmd(
 	AcceptCallback *acceptCallbackPtr =
 		ckalloc(sizeof(AcceptCallback));
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unsigned len = strlen(script) + 1;
 	char *copyScript = ckalloc(len);
 
@@ -1676,12 +1764,21 @@ Tcl_SocketObjCmd(
 	Tcl_IncrRefCount(script);
 	acceptCallbackPtr->script = script;
 >>>>>>> upstream/master
+=======
+
+	Tcl_IncrRefCount(script);
+	acceptCallbackPtr->script = script;
+>>>>>>> upstream/master
 	acceptCallbackPtr->interp = interp;
 	chan = Tcl_OpenTcpServer(interp, port, host, AcceptCallbackProc,
 		acceptCallbackPtr);
 	if (chan == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    ckfree(copyScript);
+=======
+	    Tcl_DecrRefCount(script);
+>>>>>>> upstream/master
 =======
 	    Tcl_DecrRefCount(script);
 >>>>>>> upstream/master

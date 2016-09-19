@@ -30,8 +30,13 @@ set TZData(:Asia/Yekaterinburg) {
     {686095200 14400 0 SVET}
     {695772000 18000 0 YEKMMTT}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {701805600 21600 1 YEKST}
     {717526800 18000 0 YEKT}
+=======
+    {701816400 21600 1 YEKST}
+    {717541200 18000 0 YEKT}
+>>>>>>> upstream/master
 =======
     {701816400 21600 1 YEKST}
     {717541200 18000 0 YEKT}

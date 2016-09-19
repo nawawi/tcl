@@ -1782,7 +1782,10 @@ test socket_$af-13.1 {Testing use of shared socket between two threads} -body {
         set i 0
         vwait x
         close $f
+<<<<<<< HEAD
 	thread::wait
+=======
+>>>>>>> upstream/master
     }]]
     set port [thread::send $serverthread {set listen}]
     set s [socket $localhost $port]

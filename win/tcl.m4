@@ -167,6 +167,7 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		    AC_MSG_ERROR([${with_tkconfig} directory doesn't contain tkConfig.sh])
 		fi
 	    fi
+<<<<<<< HEAD
 
 	    # then check for a private Tk library
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
@@ -209,6 +210,50 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		done
 	    fi
 
+=======
+
+	    # then check for a private Tk library
+	    if test x"${ac_cv_c_tkconfig}" = x ; then
+		for i in \
+			../tk \
+			`ls -dr ../tk[[8-9]].[[0-9]].[[0-9]]* 2>/dev/null` \
+			`ls -dr ../tk[[8-9]].[[0-9]] 2>/dev/null` \
+			`ls -dr ../tk[[8-9]].[[0-9]]* 2>/dev/null` \
+			../../tk \
+			`ls -dr ../../tk[[8-9]].[[0-9]].[[0-9]]* 2>/dev/null` \
+			`ls -dr ../../tk[[8-9]].[[0-9]] 2>/dev/null` \
+			`ls -dr ../../tk[[8-9]].[[0-9]]* 2>/dev/null` \
+			../../../tk \
+			`ls -dr ../../../tk[[8-9]].[[0-9]].[[0-9]]* 2>/dev/null` \
+			`ls -dr ../../../tk[[8-9]].[[0-9]] 2>/dev/null` \
+			`ls -dr ../../../tk[[8-9]].[[0-9]]* 2>/dev/null` ; do
+		    if test -f "$i/win/tkConfig.sh" ; then
+			ac_cv_c_tkconfig="`(cd $i/win; pwd)`"
+			break
+		    fi
+		done
+	    fi
+
+	    # check in a few common install locations
+	    if test x"${ac_cv_c_tkconfig}" = x ; then
+		for i in `ls -d ${libdir} 2>/dev/null` \
+			`ls -d ${exec_prefix}/lib 2>/dev/null` \
+			`ls -d ${prefix}/lib 2>/dev/null` \
+			`ls -d /cygdrive/c/Tcl/lib 2>/dev/null` \
+			`ls -d /cygdrive/c/Progra~1/Tcl/lib 2>/dev/null` \
+			`ls -d /c/Tcl/lib 2>/dev/null` \
+			`ls -d /c/Progra~1/Tcl/lib 2>/dev/null` \
+			`ls -d C:/Tcl/lib 2>/dev/null` \
+			`ls -d C:/Progra~1/Tcl/lib 2>/dev/null` \
+			; do
+		    if test -f "$i/tkConfig.sh" ; then
+			ac_cv_c_tkconfig="`(cd $i; pwd)`"
+			break
+		    fi
+		done
+	    fi
+
+>>>>>>> upstream/master
 	    # check in a few other private locations
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
 		for i in \
@@ -262,6 +307,7 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
 	. "${TCL_BIN_DIR}/tclConfig.sh"
     else
         AC_MSG_RESULT([could not find ${TCL_BIN_DIR}/tclConfig.sh])
+<<<<<<< HEAD
     fi
 
     #
@@ -291,6 +337,37 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
     eval "TCL_STUB_LIB_FLAG=\"${TCL_STUB_LIB_FLAG}\""
     eval "TCL_STUB_LIB_SPEC=\"${TCL_STUB_LIB_SPEC}\""
 
+=======
+    fi
+
+    #
+    # If the TCL_BIN_DIR is the build directory (not the install directory),
+    # then set the common variable name to the value of the build variables.
+    # For example, the variable TCL_LIB_SPEC will be set to the value
+    # of TCL_BUILD_LIB_SPEC. An extension should make use of TCL_LIB_SPEC
+    # instead of TCL_BUILD_LIB_SPEC since it will work with both an
+    # installed and uninstalled version of Tcl.
+    #
+
+    if test -f $TCL_BIN_DIR/Makefile ; then
+        TCL_LIB_SPEC=${TCL_BUILD_LIB_SPEC}
+        TCL_STUB_LIB_SPEC=${TCL_BUILD_STUB_LIB_SPEC}
+        TCL_STUB_LIB_PATH=${TCL_BUILD_STUB_LIB_PATH}
+    fi
+
+    #
+    # eval is required to do the TCL_DBGX substitution
+    #
+
+    eval "TCL_LIB_FILE=\"${TCL_LIB_FILE}\""
+    eval "TCL_LIB_FLAG=\"${TCL_LIB_FLAG}\""
+    eval "TCL_LIB_SPEC=\"${TCL_LIB_SPEC}\""
+
+    eval "TCL_STUB_LIB_FILE=\"${TCL_STUB_LIB_FILE}\""
+    eval "TCL_STUB_LIB_FLAG=\"${TCL_STUB_LIB_FLAG}\""
+    eval "TCL_STUB_LIB_SPEC=\"${TCL_STUB_LIB_SPEC}\""
+
+>>>>>>> upstream/master
     AC_SUBST(TCL_VERSION)
     AC_SUBST(TCL_BIN_DIR)
     AC_SUBST(TCL_SRC_DIR)
@@ -465,6 +542,7 @@ AC_DEFUN([SC_ENABLE_SYMBOLS], [
 	if test "$tcl_ok" = "yes"; then
 	    AC_MSG_RESULT([yes (standard debugging)])
 	fi
+<<<<<<< HEAD
     fi
     AC_SUBST(CFLAGS_DEFAULT)
     AC_SUBST(LDFLAGS_DEFAULT)
@@ -478,6 +556,21 @@ AC_DEFUN([SC_ENABLE_SYMBOLS], [
 	AC_DEFINE(TCL_COMPILE_STATS, 1, [Are bytecode statistics enabled?])
     fi
 
+=======
+    fi
+    AC_SUBST(CFLAGS_DEFAULT)
+    AC_SUBST(LDFLAGS_DEFAULT)
+
+    if test "$tcl_ok" = "mem" -o "$tcl_ok" = "all"; then
+	AC_DEFINE(TCL_MEM_DEBUG, 1, [Is memory debugging enabled?])
+    fi
+
+    if test "$tcl_ok" = "compile" -o "$tcl_ok" = "all"; then
+	AC_DEFINE(TCL_COMPILE_DEBUG, 1, [Is bytecode debugging enabled?])
+	AC_DEFINE(TCL_COMPILE_STATS, 1, [Are bytecode statistics enabled?])
+    fi
+
+>>>>>>> upstream/master
     if test "$tcl_ok" != "yes" -a "$tcl_ok" != "no"; then
 	if test "$tcl_ok" = "all"; then
 	    AC_MSG_RESULT([enabled symbols mem compile debugging])
@@ -648,6 +741,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	)
 	if test "$ac_cv_win32" != "yes"; then
 	    AC_MSG_ERROR([${CC} cannot produce win32 executables.])
+<<<<<<< HEAD
 	fi
 
 	hold_cflags=$CFLAGS; CFLAGS="$CFLAGS -mwindows -municode -Dmain=xxmain"
@@ -667,6 +761,27 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	else
 	    extra_cflags="$extra_cflags -DTCL_BROKEN_MAINARGS"
 	fi
+=======
+	fi
+
+	hold_cflags=$CFLAGS; CFLAGS="$CFLAGS -mwindows -municode -Dmain=xxmain"
+	AC_CACHE_CHECK(for working -municode linker flag,
+	    ac_cv_municode,
+	AC_TRY_LINK([
+	#include <windows.h>
+	int APIENTRY wWinMain(HINSTANCE a, HINSTANCE b, LPWSTR c, int d) {return 0;}
+	],
+	[],
+	    ac_cv_municode=yes,
+	    ac_cv_municode=no)
+	)
+	CFLAGS=$hold_cflags
+	if test "$ac_cv_municode" = "yes" ; then
+	    extra_ldflags="$extra_ldflags -municode"
+	else
+	    extra_cflags="$extra_cflags -DTCL_BROKEN_MAINARGS"
+	fi
+>>>>>>> upstream/master
     fi
 
     AC_MSG_CHECKING([compiler flags])
@@ -728,7 +843,11 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	CFLAGS_DEBUG=-g
 	CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall -Wdeclaration-after-statement"
+=======
+	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
 >>>>>>> upstream/master
@@ -830,6 +949,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	    esac
 	    if test ! -d "${PATH64}" ; then
+<<<<<<< HEAD
 <<<<<<< HEAD
 		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK to enable 64bit mode])
 		AC_MSG_WARN([Ensure latest Platform SDK is installed])
@@ -939,6 +1059,108 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    fi
 	fi
 
+=======
+		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
+	    fi
+	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
+	fi
+
+	LIBS="netapi32.lib kernel32.lib user32.lib advapi32.lib userenv.lib ws2_32.lib"
+
+	case "x`echo \${VisualStudioVersion}`" in
+		x1[[4-9]]*)
+		    LIBS="$LIBS ucrt.lib"
+		    ;;
+		*)
+		    ;;
+	esac
+
+	if test "$do64bit" != "no" ; then
+	    # The space-based-path will work for the Makefile, but will
+	    # not work if AC_TRY_COMPILE is called.  TEA has the
+	    # TEA_PATH_NOSPACE to avoid this issue.
+	    # Check if _WIN64 is already recognized, and if so we don't
+	    # need to modify CC.
+	    AC_CHECK_DECL([_WIN64], [],
+			  [CC="\"${PATH64}/cl.exe\" -I\"${MSSDK}/Include\" \
+			 -I\"${MSSDK}/Include/crt\" \
+			 -I\"${MSSDK}/Include/crt/sys\""])
+	    RC="\"${MSSDK}/bin/rc.exe\""
+	    CFLAGS_DEBUG="-nologo -Zi -Od ${runtime}d"
+	    # Do not use -O2 for Win64 - this has proved buggy in code gen.
+	    CFLAGS_OPTIMIZE="-nologo -O1 ${runtime}"
+	    lflags="${lflags} -nologo -MACHINE:${MACHINE} -LIBPATH:\"${MSSDK}/Lib/${MACHINE}\""
+	    LINKBIN="\"${PATH64}/link.exe\""
+	    # Avoid 'unresolved external symbol __security_cookie' errors.
+	    # c.f. http://support.microsoft.com/?id=894573
+	    LIBS="$LIBS bufferoverflowU.lib"
+	else
+	    RC="rc"
+	    # -Od - no optimization
+	    # -WX - warnings as errors
+	    CFLAGS_DEBUG="-nologo -Z7 -Od -WX ${runtime}d"
+	    # -O2 - create fast code (/Og /Oi /Ot /Oy /Ob2 /Gs /GF /Gy)
+	    CFLAGS_OPTIMIZE="-nologo -O2 ${runtime}"
+	    lflags="${lflags} -nologo"
+	    LINKBIN="link"
+	fi
+
+	if test "$doWince" != "no" ; then
+	    # Set defaults for common evc4/PPC2003 setup
+	    # Currently Tcl requires 300+, possibly 420+ for sockets
+	    CEVERSION=420; 		# could be 211 300 301 400 420 ...
+	    TARGETCPU=ARMV4;	# could be ARMV4 ARM MIPS SH3 X86 ...
+	    ARCH=ARM;		# could be ARM MIPS X86EM ...
+	    PLATFORM="Pocket PC 2003"; # or "Pocket PC 2002"
+	    if test "$doWince" != "yes"; then
+		# If !yes then the user specified something
+		# Reset ARCH to allow user to skip specifying it
+		ARCH=
+		eval `echo $doWince | awk -F "," '{ \
+	if (length([$]1)) { printf "CEVERSION=\"%s\"\n", [$]1; \
+	if ([$]1 < 400)	  { printf "PLATFORM=\"Pocket PC 2002\"\n" } }; \
+	if (length([$]2)) { printf "TARGETCPU=\"%s\"\n", toupper([$]2) }; \
+	if (length([$]3)) { printf "ARCH=\"%s\"\n", toupper([$]3) }; \
+	if (length([$]4)) { printf "PLATFORM=\"%s\"\n", [$]4 }; \
+		}'`
+		if test "x${ARCH}" = "x" ; then
+		    ARCH=$TARGETCPU;
+		fi
+	    fi
+	    OSVERSION=WCE$CEVERSION;
+	    if test "x${WCEROOT}" = "x" ; then
+		WCEROOT="C:/Program Files/Microsoft eMbedded C++ 4.0"
+		if test ! -d "${WCEROOT}" ; then
+		    WCEROOT="C:/Program Files/Microsoft eMbedded Tools"
+		fi
+	    fi
+	    if test "x${SDKROOT}" = "x" ; then
+		SDKROOT="C:/Program Files/Windows CE Tools"
+		if test ! -d "${SDKROOT}" ; then
+		    SDKROOT="C:/Windows CE Tools"
+		fi
+	    fi
+	    # The space-based-path will work for the Makefile, but will
+	    # not work if AC_TRY_COMPILE is called.
+	    WCEROOT=`echo "$WCEROOT" | sed -e 's!\\\!/!g'`
+	    SDKROOT=`echo "$SDKROOT" | sed -e 's!\\\!/!g'`
+	    CELIB_DIR=`echo "$CELIB_DIR" | sed -e 's!\\\!/!g'`
+	    if test ! -d "${CELIB_DIR}/inc"; then
+		AC_MSG_ERROR([Invalid celib directory "${CELIB_DIR}"])
+	    fi
+	    if test ! -d "${SDKROOT}/${OSVERSION}/${PLATFORM}/Lib/${TARGETCPU}"\
+		-o ! -d "${WCEROOT}/EVC/${OSVERSION}/bin"; then
+		AC_MSG_ERROR([could not find PocketPC SDK or target compiler to enable WinCE mode [$CEVERSION,$TARGETCPU,$ARCH,$PLATFORM]])
+	    else
+		CEINCLUDE="${SDKROOT}/${OSVERSION}/${PLATFORM}/include"
+		if test -d "${CEINCLUDE}/${TARGETCPU}" ; then
+		    CEINCLUDE="${CEINCLUDE}/${TARGETCPU}"
+		fi
+		CELIBPATH="${SDKROOT}/${OSVERSION}/${PLATFORM}/Lib/${TARGETCPU}"
+	    fi
+	fi
+
+>>>>>>> upstream/master
 	if test "$doWince" != "no" ; then
 	    CEBINROOT="${WCEROOT}/EVC/${OSVERSION}/bin"
 	    if test "${TARGETCPU}" = "X86"; then
@@ -1140,6 +1362,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 
 AC_DEFUN([SC_WITH_TCL], [
 <<<<<<< HEAD
+<<<<<<< HEAD
     if test -d ../../tcl8.6$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.6$1/win
     else
@@ -1148,6 +1371,8 @@ AC_DEFUN([SC_WITH_TCL], [
 
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.6 binaries from DIR],
 =======
+=======
+>>>>>>> upstream/master
     if test -d ../../tcl8.7$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.7$1/win
     else
@@ -1155,6 +1380,9 @@ AC_DEFUN([SC_WITH_TCL], [
     fi
 
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    TCL_BIN_DIR=$withval, TCL_BIN_DIR=`cd $TCL_BIN_DEFAULT; pwd`)
     if test ! -d $TCL_BIN_DIR; then

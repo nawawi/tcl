@@ -112,7 +112,11 @@ typedef enum {
     PROMPT_CONTINUE		/* Print prompt for command continuation */
 } PromptType;
 
+<<<<<<< HEAD
 typedef struct InteractiveState {
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Channel input;		/* The standard input channel from which lines
 				 * are read. */
     int tty;			/* Non-zero means standard input is a
@@ -246,7 +250,11 @@ Tcl_SourceRCFile(
     const char *fileName;
     Tcl_Channel chan;
 
+<<<<<<< HEAD
     fileName = Tcl_GetVar(interp, "tcl_rcFileName", TCL_GLOBAL_ONLY);
+=======
+    fileName = Tcl_GetVar2(interp, "tcl_rcFileName", NULL, TCL_GLOBAL_ONLY);
+>>>>>>> upstream/master
     if (fileName != NULL) {
 	Tcl_Channel c;
 	const char *fullName;
@@ -266,14 +274,26 @@ Tcl_SourceRCFile(
 
 	    c = Tcl_OpenFileChannel(NULL, fullName, "r", 0);
 	    if (c != NULL) {
+<<<<<<< HEAD
 		Tcl_Close(NULL, c);
 		if (Tcl_EvalFile(interp, fullName) != TCL_OK) {
+=======
+		Tcl_Obj *fullNameObj = Tcl_NewStringObj(fullName, -1);
+
+		Tcl_Close(NULL, c);
+		Tcl_IncrRefCount(fullNameObj);
+		if (Tcl_FSEvalFileEx(interp, fullNameObj, NULL) != TCL_OK) {
+>>>>>>> upstream/master
 		    chan = Tcl_GetStdChannel(TCL_STDERR);
 		    if (chan) {
 			Tcl_WriteObj(chan, Tcl_GetObjResult(interp));
 			Tcl_WriteChars(chan, "\n", 1);
 		    }
 		}
+<<<<<<< HEAD
+=======
+		Tcl_DecrRefCount(fullNameObj);
+>>>>>>> upstream/master
 	    }
 	}
 	Tcl_DStringFree(&temp);
@@ -283,7 +303,11 @@ Tcl_SourceRCFile(
 
 /*----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * Tcl_Main, Tcl_MainEx --
+=======
+ * Tcl_MainEx --
+>>>>>>> upstream/master
  *
  *	Main program for tclsh and most other Tcl-based applications.
  *
@@ -363,9 +387,15 @@ Tcl_MainEx(
     Tcl_SetVar2Ex(interp, "argv0", NULL, appName, TCL_GLOBAL_ONLY);
     argc--;
     argv++;
+<<<<<<< HEAD
 
     Tcl_SetVar2Ex(interp, "argc", NULL, Tcl_NewIntObj(argc), TCL_GLOBAL_ONLY);
 
+=======
+
+    Tcl_SetVar2Ex(interp, "argc", NULL, Tcl_NewIntObj(argc), TCL_GLOBAL_ONLY);
+
+>>>>>>> upstream/master
     argvPtr = Tcl_NewListObj(0, NULL);
     while (argc--) {
 	Tcl_ListObjAppendElement(NULL, argvPtr, NewNativeObj(*argv++, -1));
@@ -423,12 +453,21 @@ Tcl_MainEx(
 	    if (chan) {
 		Tcl_Obj *options = Tcl_GetReturnOptions(interp, code);
 		Tcl_Obj *keyPtr, *valuePtr;
+<<<<<<< HEAD
 
 		TclNewLiteralStringObj(keyPtr, "-errorinfo");
 		Tcl_IncrRefCount(keyPtr);
 		Tcl_DictObjGet(NULL, options, keyPtr, &valuePtr);
 		Tcl_DecrRefCount(keyPtr);
 
+=======
+
+		TclNewLiteralStringObj(keyPtr, "-errorinfo");
+		Tcl_IncrRefCount(keyPtr);
+		Tcl_DictObjGet(NULL, options, keyPtr, &valuePtr);
+		Tcl_DecrRefCount(keyPtr);
+
+>>>>>>> upstream/master
 		if (valuePtr) {
 		    Tcl_WriteObj(chan, valuePtr);
 		}
@@ -532,7 +571,11 @@ Tcl_MainEx(
 	     * error messages troubles deeper in, so lop it back off.
 	     */
 
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(is.commandPtr, &length);
+=======
+	    TclGetStringFromObj(is.commandPtr, &length);
+>>>>>>> upstream/master
 	    Tcl_SetObjLength(is.commandPtr, --length);
 	    code = Tcl_RecordAndEvalObj(interp, is.commandPtr,
 		    TCL_EVAL_GLOBAL);
@@ -549,7 +592,11 @@ Tcl_MainEx(
 	    } else if (is.tty) {
 		resultPtr = Tcl_GetObjResult(interp);
 		Tcl_IncrRefCount(resultPtr);
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(resultPtr, &length);
+=======
+		TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
 		chan = Tcl_GetStdChannel(TCL_STDOUT);
 		if ((length > 0) && chan) {
 		    Tcl_WriteObj(chan, resultPtr);
@@ -609,6 +656,7 @@ Tcl_MainEx(
     }
     if (is.commandPtr != NULL) {
 	Tcl_DecrRefCount(is.commandPtr);
+<<<<<<< HEAD
     }
 
     /*
@@ -626,6 +674,25 @@ Tcl_MainEx(
     }
 
     /*
+=======
+    }
+
+    /*
+     * Rather than calling exit, invoke the "exit" command so that users can
+     * replace "exit" with some other command to do additional cleanup on
+     * exit. The Tcl_EvalObjEx call should never return.
+     */
+
+    if (!Tcl_InterpDeleted(interp) && !Tcl_LimitExceeded(interp)) {
+	Tcl_Obj *cmd = Tcl_ObjPrintf("exit %d", exitCode);
+
+	Tcl_IncrRefCount(cmd);
+	Tcl_EvalObjEx(interp, cmd, TCL_EVAL_GLOBAL);
+	Tcl_DecrRefCount(cmd);
+    }
+
+    /*
+>>>>>>> upstream/master
      * If Tcl_EvalObjEx returns, trying to eval [exit], something unusual is
      * happening. Maybe interp has been deleted; maybe [exit] was redefined,
      * maybe we've blown up because of an exceeded limit. We still want to
@@ -801,6 +868,7 @@ StdinProc(
 	Tcl_DecrRefCount(commandPtr);
 	commandPtr = Tcl_DuplicateObj(commandPtr);
 	Tcl_IncrRefCount(commandPtr);
+<<<<<<< HEAD
     }
     Tcl_AppendToObj(commandPtr, "\n", 1);
     if (!TclObjCommandComplete(commandPtr)) {
@@ -809,6 +877,16 @@ StdinProc(
     }
     isPtr->prompt = PROMPT_START;
     Tcl_GetStringFromObj(commandPtr, &length);
+=======
+    }
+    Tcl_AppendToObj(commandPtr, "\n", 1);
+    if (!TclObjCommandComplete(commandPtr)) {
+	isPtr->prompt = PROMPT_CONTINUE;
+	goto prompt;
+    }
+    isPtr->prompt = PROMPT_START;
+    TclGetStringFromObj(commandPtr, &length);
+>>>>>>> upstream/master
     Tcl_SetObjLength(commandPtr, --length);
 
     /*
@@ -839,7 +917,11 @@ StdinProc(
 	chan = Tcl_GetStdChannel(TCL_STDOUT);
 
 	Tcl_IncrRefCount(resultPtr);
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(resultPtr, &length);
+=======
+	TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
 	if ((length > 0) && (chan != NULL)) {
 	    Tcl_WriteObj(chan, resultPtr);
 	    Tcl_WriteChars(chan, "\n", 1);

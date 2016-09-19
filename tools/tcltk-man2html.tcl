@@ -668,11 +668,15 @@ try {
 	    # ... but try to extract (name, version) from subdir contents
 	    try {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		try {
 		    set f [open [file join $pkgsDir $dir configure.in]]
 		} trap {POSIX ENOENT} {} {
 		    set f [open [file join $pkgsDir $dir configure.ac]]
 		}
+=======
+		set f [open [file join $pkgsDir $dir configure.ac]]
+>>>>>>> upstream/master
 =======
 		set f [open [file join $pkgsDir $dir configure.ac]]
 >>>>>>> upstream/master

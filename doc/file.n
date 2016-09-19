@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -39,9 +43,15 @@ generated.  On Windows, FAT file systems do not support access time.
 \fBfile attributes \fIname\fR
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile attributes \fIname\fR ?\fBoption\fR?
 .TP
 \fBfile attributes \fIname\fR ?\fBoption value option value...\fR?
+=======
+\fBfile attributes \fIname\fR ?\fIoption\fR?
+.TP
+\fBfile attributes \fIname\fR ?\fIoption value option value...\fR?
+>>>>>>> upstream/master
 =======
 \fBfile attributes \fIname\fR ?\fIoption\fR?
 .TP
@@ -152,7 +162,11 @@ returned.  For example,
 .CE
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 returns \fBc:/\fR. 
+=======
+returns \fBc:/\fR.
+>>>>>>> upstream/master
 =======
 returns \fBc:/\fR.
 >>>>>>> upstream/master
@@ -176,7 +190,13 @@ returns \fB/home\fR (or something similar).
 \fBfile executable \fIname\fR
 .
 Returns \fB1\fR if file \fIname\fR is executable by the current user,
+<<<<<<< HEAD
 \fB0\fR otherwise.
+=======
+\fB0\fR otherwise. On Windows, which does not have an executable attribute,
+the command treats all directories and any files with extensions
+\fBexe\fR, \fBcom\fR, \fBcmd\fR or \fBbat\fR as executable.
+>>>>>>> upstream/master
 .TP
 \fBfile exists \fIname\fR
 .
@@ -218,7 +238,11 @@ Windows.
 .RE
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile link ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+=======
+\fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+>>>>>>> upstream/master
 =======
 \fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
 >>>>>>> upstream/master
@@ -274,7 +298,11 @@ do not support symbolic links this option behaves exactly the same
 as the \fBstat\fR option.
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile mkdir ?\fIdir\fR ...?
+=======
+\fBfile mkdir\fR ?\fIdir\fR ...?
+>>>>>>> upstream/master
 =======
 \fBfile mkdir\fR ?\fIdir\fR ...?
 >>>>>>> upstream/master
@@ -300,6 +328,7 @@ or set then an error is generated.
 Returns the platform-specific name of the file. This is useful if the
 filename is needed to pass to a platform-specific call, such as to a
 subprocess via \fBexec\fR under Windows (see \fBEXAMPLES\fR below).
+<<<<<<< HEAD
 .TP
 \fBfile normalize \fIname\fR
 .
@@ -325,6 +354,31 @@ links, not on the things that they point to).
 <<<<<<< HEAD
 \fBfile owned \fIname\fR 
 =======
+\fBfile owned \fIname\fR
+>>>>>>> upstream/master
+=======
+.TP
+\fBfile normalize \fIname\fR
+.
+Returns a unique normalized path representation for the file-system
+object (file, directory, link, etc), whose string value can be used as a
+unique identifier for it.  A normalized path is an absolute path which has
+all
+.QW ../
+and
+.QW ./
+removed.  Also it is one which is in the
+.QW standard
+format for the native platform.  On Unix, this means the segments
+leading up to the path must be free of symbolic links/aliases (but the
+very last path component may be a symbolic link), and on Windows it also
+means we want the long form with that form's case-dependence (which
+gives us a unique, case-dependent path).  The one exception concerning the
+last link in the path is necessary, because Tcl or the user may wish to
+operate on the actual symbolic link itself (for example \fBfile delete\fR,
+\fBfile rename\fR, \fBfile copy\fR are defined to operate on symbolic
+links, not on the things that they point to).
+.TP
 \fBfile owned \fIname\fR
 >>>>>>> upstream/master
 .
@@ -454,7 +508,11 @@ If the file does not belong to any filesystem, an error is generated.
 Returns all of the characters in the last filesystem component of
 \fIname\fR.  Any trailing directory separator in \fIname\fR is ignored.
 <<<<<<< HEAD
+<<<<<<< HEAD
 If \fIname\fR contains no separators then returns \fIname\fR.  So, 
+=======
+If \fIname\fR contains no separators then returns \fIname\fR.  So,
+>>>>>>> upstream/master
 =======
 If \fIname\fR contains no separators then returns \fIname\fR.  So,
 >>>>>>> upstream/master
@@ -488,7 +546,11 @@ Returns a string giving the type of file \fIname\fR, which will be one of
 .TP
 \fBfile volumes\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 . 
+=======
+.
+>>>>>>> upstream/master
 =======
 .
 >>>>>>> upstream/master
@@ -513,6 +575,7 @@ Returns \fB1\fR if file \fIname\fR is writable by the current user,
 .
 These commands always operate using the real user and group identifiers,
 <<<<<<< HEAD
+<<<<<<< HEAD
 not the effective ones. 
 =======
 not the effective ones.
@@ -524,6 +587,15 @@ The \fBfile owned\fR subcommand currently always reports that the current user
 is the owner of the file, without regard for what the operating system
 believes to be true, making an ownership test useless. This issue (#3613671)
 may be fixed in a future release of Tcl.
+=======
+not the effective ones.
+.TP
+\fBWindows\fR\0\0\0\0
+.
+The \fBfile owned\fR subcommand uses the user identifier (SID) of
+the process token, not the thread token which may be impersonating
+some other user.
+>>>>>>> upstream/master
 .SH EXAMPLES
 .PP
 This procedure shows how to search for C files in a given directory

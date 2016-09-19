@@ -256,6 +256,9 @@ if {[gets $f] ne "P6"} {
     error "not a raw\-bits PPM"
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 # Read lines until we have got non-comment lines
 # that supply us with three decimal values.
@@ -270,6 +273,7 @@ while {[llength $words] < 3} {
 # overall depth per channel. Assign to variables.
 lassign $words xSize ySize depth
 
+<<<<<<< HEAD
 =======
 
 # Read lines until we have got non-comment lines
@@ -285,6 +289,8 @@ while {[llength $words] < 3} {
 # overall depth per channel. Assign to variables.
 lassign $words xSize ySize depth
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Now switch to binary mode to pull in the data,
 # one byte per channel (red,green,blue) per pixel.

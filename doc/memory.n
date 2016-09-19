@@ -3,7 +3,11 @@
 '\" Copyright (c) 2000 by Scriptics Corporation.
 '\" All rights reserved.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -38,7 +42,11 @@ command mode.
 \fBmemory info\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 Returns a report containing the total allocations and frees since 
+=======
+Returns a report containing the total allocations and frees since
+>>>>>>> upstream/master
 =======
 Returns a report containing the total allocations and frees since
 >>>>>>> upstream/master
@@ -73,7 +81,11 @@ by \fBmemory active\fR and \fBmemory onexit\fR, the tag for each packet
 is printed along with other information about the packet.  The
 \fBmemory tag\fR command sets the tag value for subsequent calls
 <<<<<<< HEAD
+<<<<<<< HEAD
 to \fBckalloc\fR to be \fIstring\fR.  
+=======
+to \fBckalloc\fR to be \fIstring\fR.
+>>>>>>> upstream/master
 =======
 to \fBckalloc\fR to be \fIstring\fR.
 >>>>>>> upstream/master
@@ -104,7 +116,11 @@ of memory activity before a problem occurs, judicious use of this option
 can reduce the slowdown caused by tracing (and the amount of trace information
 produced), if you can identify a number of allocations that occur before
 <<<<<<< HEAD
+<<<<<<< HEAD
 the problem sets in.  The current number of memory allocations that have 
+=======
+the problem sets in.  The current number of memory allocations that have
+>>>>>>> upstream/master
 =======
 the problem sets in.  The current number of memory allocations that have
 >>>>>>> upstream/master

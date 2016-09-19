@@ -30,9 +30,15 @@ if {[testConstraint testnrelevels]} {
 	#
 	# [testnrelevels] returns a 6-list with: C-stack depth, iPtr->numlevels,
 <<<<<<< HEAD
+<<<<<<< HEAD
 	# cmdFrame level, callFrame level, tosPtr and callback depth 
 	#
 	variable last [testnrelevels] 
+=======
+	# cmdFrame level, callFrame level, tosPtr and callback depth
+	#
+	variable last [testnrelevels]
+>>>>>>> upstream/master
 =======
 	# cmdFrame level, callFrame level, tosPtr and callback depth
 	#
@@ -71,11 +77,17 @@ if {[testConstraint testnrelevels]} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test nre-0.1 {levels while unwinding} {
     testnreunwind
 } {0 0 0}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test nre-1.1 {self-recursive procs} -setup {
     proc a i [makebody {a $i}]
@@ -337,7 +349,11 @@ test nre-8.1 {nre and {*}} -body {
     rename inner {}
     rename outer {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {1 1 1} 
+=======
+} -result {1 1 1}
+>>>>>>> upstream/master
 =======
 } -result {1 1 1}
 >>>>>>> upstream/master

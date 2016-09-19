@@ -114,7 +114,11 @@ Pkgc_UnsafeObjCmd(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkgc_Init(
     Tcl_Interp *interp)		/* Interpreter in which the package is to be
 				 * made available. */
@@ -151,7 +155,11 @@ Pkgc_Init(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 Pkgc_SafeInit(
     Tcl_Interp *interp)		/* Interpreter in which the package is to be
 				 * made available. */

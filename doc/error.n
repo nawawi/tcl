@@ -5,7 +5,11 @@
 '\" See the file "license.terms" for information on usage and redistribution
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -33,7 +37,11 @@ return option.  If the \fIinfo\fR argument is present, it is
 used to initialize the \fB\-errorinfo\fR return options and
 the first increment of unwind information
 <<<<<<< HEAD
+<<<<<<< HEAD
 will not be added by the Tcl interpreter.  
+=======
+will not be added by the Tcl interpreter.
+>>>>>>> upstream/master
 =======
 will not be added by the Tcl interpreter.
 >>>>>>> upstream/master
@@ -46,6 +54,7 @@ if a caught error cannot be handled successfully, \fIinfo\fR can be used
 to return a stack trace reflecting the original point of occurrence
 of the error:
 .PP
+<<<<<<< HEAD
 .CS
 catch {...} errMsg
 set savedInfo $::errorInfo
@@ -59,6 +68,21 @@ should be used instead:
 .CS
 catch {...} errMsg options
 \&...
+=======
+.CS
+catch {...} errMsg
+set savedInfo $::errorInfo
+\&...
+\fBerror\fR $errMsg $savedInfo
+.CE
+.PP
+When working with Tcl 8.5 or later, the following code
+should be used instead:
+.PP
+.CS
+catch {...} errMsg options
+\&...
+>>>>>>> upstream/master
 return -options $options $errMsg
 .CE
 .PP

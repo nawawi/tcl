@@ -374,6 +374,7 @@ test http-3.27 {http::geturl: -headers override -type} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -389,12 +390,17 @@ Accept \*/\*
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
 Content-Type {text/plain;charset=utf-8}
 Accept \*/\*
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -409,6 +415,7 @@ test http-3.28 {http::geturl: -headers override -type default} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -424,12 +431,17 @@ Accept \*/\*
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
 Content-Type {text/plain;charset=utf-8}
 Accept \*/\*
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -464,7 +476,10 @@ test http-3.31 {http::geturl fragment without path} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -486,6 +501,9 @@ Content-Length 5}
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

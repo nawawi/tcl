@@ -70,6 +70,7 @@ static void		AddSimpleClassChainToCallContext(Class *classPtr,
 			    Class *const filterDecl);
 static int		CmpStr(const void *ptr1, const void *ptr2);
 static void		DupMethodNameRep(Tcl_Obj *srcPtr, Tcl_Obj *dstPtr);
+<<<<<<< HEAD
 static int		FinalizeMethodRefs(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static void		FreeMethodNameRep(Tcl_Obj *objPtr);
@@ -79,6 +80,14 @@ static int		ResetFilterFlags(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		SetFilterFlags(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	FinalizeMethodRefs;
+static void		FreeMethodNameRep(Tcl_Obj *objPtr);
+static inline int	IsStillValid(CallChain *callPtr, Object *oPtr,
+			    int flags, int reuseMask);
+static Tcl_NRPostProc	ResetFilterFlags;
+static Tcl_NRPostProc	SetFilterFlags;
+>>>>>>> upstream/master
 static inline void	StashCallChain(Tcl_Obj *objPtr, CallChain *callPtr);
 
 /*
