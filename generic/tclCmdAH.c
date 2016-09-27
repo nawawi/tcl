@@ -1732,7 +1732,7 @@ FileAttrIsOwnedCmd(
     Tcl_StatBuf buf;
 =======
 #ifdef __CYGWIN__
-#define geteuid() (short)(geteuid)() 
+#define geteuid() (short)(geteuid)()
 #endif
 #if !defined(_WIN32)
     Tcl_StatBuf buf;

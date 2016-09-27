@@ -1289,6 +1289,7 @@ typedef struct {
  *----------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 MODULE_SCOPE Tcl_ObjCmdProc	TclNRInterpCoroutine;
 
 /*
@@ -1395,6 +1396,11 @@ MODULE_SCOPE int	TclAttemptCompileProc(Tcl_Interp *interp,
 			    Tcl_Parse *parsePtr, int depth, Command *cmdPtr,
 			    CompileEnv *envPtr);
 >>>>>>> upstream/master
+=======
+MODULE_SCOPE int	TclAttemptCompileProc(Tcl_Interp *interp,
+			    Tcl_Parse *parsePtr, int depth, Command *cmdPtr,
+			    CompileEnv *envPtr);
+>>>>>>> upstream/master
 MODULE_SCOPE void	TclCleanupStackForBreakContinue(CompileEnv *envPtr,
 			    ExceptionAux *auxPtr);
 MODULE_SCOPE void	TclCompileCmdWord(Tcl_Interp *interp,
@@ -1423,7 +1429,11 @@ MODULE_SCOPE int	TclCreateAuxData(ClientData clientData,
 MODULE_SCOPE int	TclCreateExceptRange(ExceptionRangeType type,
 			    CompileEnv *envPtr);
 MODULE_SCOPE ExecEnv *	TclCreateExecEnv(Tcl_Interp *interp, int size);
+<<<<<<< HEAD
 MODULE_SCOPE Tcl_Obj *	TclCreateLiteral(Interp *iPtr, char *bytes,
+=======
+MODULE_SCOPE Tcl_Obj *	TclCreateLiteral(Interp *iPtr, const char *bytes,
+>>>>>>> upstream/master
 			    int length, unsigned int hash, int *newPtr,
 			    Namespace *nsPtr, int flags,
 			    LiteralEntry **globalPtrPtr);
@@ -1441,7 +1451,10 @@ MODULE_SCOPE int	TclNRExecuteByteCode(Tcl_Interp *interp,
 MODULE_SCOPE Tcl_Obj *	TclFetchLiteral(CompileEnv *envPtr, unsigned int index);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULE_SCOPE void	TclFinalizeAuxDataTypeTable(void);
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1455,9 +1468,15 @@ MODULE_SCOPE void	TclFreeCompileEnv(CompileEnv *envPtr);
 MODULE_SCOPE void	TclFreeJumpFixupArray(JumpFixupArray *fixupArrayPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULE_SCOPE void	TclInitAuxDataTypeTable(void);
 MODULE_SCOPE void	TclInitByteCodeObj(Tcl_Obj *objPtr,
 			    CompileEnv *envPtr);
+=======
+MODULE_SCOPE ByteCode *	TclInitByteCode(CompileEnv *envPtr);
+MODULE_SCOPE ByteCode *	TclInitByteCodeObj(Tcl_Obj *objPtr,
+			    const Tcl_ObjType *typePtr, CompileEnv *envPtr);
+>>>>>>> upstream/master
 =======
 MODULE_SCOPE ByteCode *	TclInitByteCode(CompileEnv *envPtr);
 MODULE_SCOPE ByteCode *	TclInitByteCodeObj(Tcl_Obj *objPtr,
@@ -1567,6 +1586,7 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 
 #define LITERAL_ON_HEAP		0x01
 #define LITERAL_CMD_NAME	0x02
+<<<<<<< HEAD
 
 /*
  * Form of TclRegisterLiteral with flags == 0. In that case, it is safe to
@@ -1606,6 +1626,9 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
 
 #define TclRegisterNewCmdLiteral(envPtr, bytes, length) \
     TclRegisterLiteral(envPtr, (char *)(bytes), length, LITERAL_CMD_NAME)
+=======
+#define LITERAL_UNSHARED	0x04
+>>>>>>> upstream/master
 
 /*
  * Macro used to manually adjust the stack requirements; used in cases where
@@ -2234,9 +2257,9 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
  */
 
 #define PushLiteral(envPtr, string, length) \
-    TclEmitPush(TclRegisterNewLiteral((envPtr), (string), (length)), (envPtr))
+    TclEmitPush(TclRegisterLiteral(envPtr, string, length, 0), (envPtr))
 #define PushStringLiteral(envPtr, string) \
-    PushLiteral((envPtr), (string), (int) (sizeof(string "") - 1))
+    PushLiteral(envPtr, string, (int) (sizeof(string "") - 1))
 
 /*
  * Macro to advance to the next token; it is more mnemonic than the address

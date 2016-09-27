@@ -402,8 +402,12 @@ typedef DWORD_PTR * PDWORD_PTR;
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* 
+=======
+/*
+>>>>>>> upstream/master
  * Windows compilers do not define S_IFBLK. However, Tcl uses it in
  * GetTypeFromMode to identify blockSpecial devices based on the
  * value in the statsbuf st_mode field. We have no other way to pass this

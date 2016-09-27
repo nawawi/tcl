@@ -11542,9 +11542,28 @@ TclSetCmdNameObj(
 
 	currNsPtr = iPtr->varFramePtr->nsPtr;
 
+<<<<<<< HEAD
 	resPtr->refNsPtr = currNsPtr;
 	resPtr->refNsId = currNsPtr->nsId;
 	resPtr->refNsCmdEpoch = currNsPtr->cmdRefEpoch;
+=======
+void
+TclSetCmdNameObj(
+    Tcl_Interp *interp,		/* Points to interpreter containing command
+				 * that should be cached in objPtr. */
+    register Tcl_Obj *objPtr,	/* Points to Tcl object to be changed to a
+				 * CmdName object. */
+    Command *cmdPtr)		/* Points to Command structure that the
+				 * CmdName object should refer to. */
+{
+    register ResolvedCmdName *resPtr;
+
+    if (objPtr->typePtr == &tclCmdNameType) {
+	resPtr = objPtr->internalRep.twoPtrValue.ptr1;
+	if (resPtr != NULL && resPtr->cmdPtr == cmdPtr) {
+	    return;
+	}
+>>>>>>> upstream/master
     }
 
     TclFreeIntRep(objPtr);

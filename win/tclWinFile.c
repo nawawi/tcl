@@ -3349,8 +3349,8 @@ TclWinFileOwned(
            case we are in all likelihood not the owner */
         return 0;
     }
-        
-    /* 
+
+    /*
      * Getting the current process SID is a multi-step process.
      * We make the assumption that if a call fails, this process is
      * so underprivileged it could not possibly own anything. Normally
@@ -3374,10 +3374,14 @@ TclWinFileOwned(
         LocalFree(secd);            /* Also frees ownerSid */
     if (buf)
         ckfree(buf);
-    
+
     return (owned != 0);        /* Convert non-0 to 1 */
 }
+<<<<<<< HEAD
     
+>>>>>>> upstream/master
+=======
+
 >>>>>>> upstream/master
 /*
  * Local Variables:

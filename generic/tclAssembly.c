@@ -1327,8 +1327,12 @@ AssembleOneLine(
 	operand1 = Tcl_GetStringFromObj(operand1Obj, &operand1Len);
 =======
 	operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	litIndex = TclRegisterNewLiteral(envPtr, operand1, operand1Len);
+=======
+	litIndex = TclRegisterLiteral(envPtr, operand1, operand1Len, 0);
+>>>>>>> upstream/master
 	BBEmitInst1or4(assemEnvPtr, tblIdx, litIndex, 0);
 	break;
 
@@ -1480,8 +1484,12 @@ AssembleOneLine(
 	    operand1 = Tcl_GetStringFromObj(operand1Obj, &operand1Len);
 =======
 	    operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	    litIndex = TclRegisterNewLiteral(envPtr, operand1, operand1Len);
+=======
+	    litIndex = TclRegisterLiteral(envPtr, operand1, operand1Len, 0);
+>>>>>>> upstream/master
 
 	    /*
 	     * Assumes that PUSH is the first slot!
@@ -3577,7 +3585,7 @@ StackCheckExit(
 	     * Emit a 'push' of the empty literal.
 	     */
 
-	    litIndex = TclRegisterNewLiteral(envPtr, "", 0);
+	    litIndex = TclRegisterLiteral(envPtr, "", 0, 0);
 
 	    /*
 	     * Assumes that 'push' is at slot 0 in TalInstructionTable.

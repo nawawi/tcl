@@ -1346,9 +1346,13 @@ ApplicationType(
 
 	ext = strrchr(fullName, '.');
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if ((ext != NULL) && (strcasecmp(ext, ".bat") == 0)) {
 =======
 	if ((ext != NULL) && 
+=======
+	if ((ext != NULL) &&
+>>>>>>> upstream/master
             (strcasecmp(ext, ".cmd") == 0 || strcasecmp(ext, ".bat") == 0)) {
 >>>>>>> upstream/master
 	    applType = APPL_DOS;

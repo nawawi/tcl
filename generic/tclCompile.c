@@ -2432,7 +2432,22 @@ static void
 ReleaseCmdWordData(
     ExtCmdLoc *eclPtr)
 {
+<<<<<<< HEAD
     int i;
+=======
+    int numBytes;
+    const char *bytes;
+    Command *cmdPtr;
+    int cmdLitIdx, extraLiteralFlags = LITERAL_CMD_NAME;
+
+    cmdPtr = (Command *) Tcl_GetCommandFromObj(interp, cmdObj);
+    if ((cmdPtr != NULL) && (cmdPtr->flags & CMD_VIA_RESOLVER)) {
+	extraLiteralFlags |= LITERAL_UNSHARED;
+    }
+
+    bytes = Tcl_GetStringFromObj(cmdObj, &numBytes);
+    cmdLitIdx = TclRegisterLiteral(envPtr, bytes, numBytes, extraLiteralFlags);
+>>>>>>> upstream/master
 
     if (eclPtr->type == TCL_LOCATION_SOURCE) {
 	Tcl_DecrRefCount(eclPtr->path);
@@ -2441,8 +2456,45 @@ ReleaseCmdWordData(
 	ckfree((char *) eclPtr->loc[i].line);
     }
 
+<<<<<<< HEAD
     if (eclPtr->loc != NULL) {
 	ckfree((char *) eclPtr->loc);
+=======
+void
+TclCompileInvocation(
+    Tcl_Interp *interp,
+    Tcl_Token *tokenPtr,
+    Tcl_Obj *cmdObj,
+    int numWords,
+    CompileEnv *envPtr)
+{
+    int wordIdx = 0, depth = TclGetStackDepth(envPtr);
+    DefineLineInformation;
+
+    if (cmdObj) {
+	CompileCmdLiteral(interp, cmdObj, envPtr);
+	wordIdx = 1;
+	tokenPtr = TokenAfter(tokenPtr);
+    }
+
+    for (; wordIdx < numWords; wordIdx++, tokenPtr = TokenAfter(tokenPtr)) {
+	int objIdx;
+
+	SetLineInformation(wordIdx);
+
+	if (tokenPtr->type != TCL_TOKEN_SIMPLE_WORD) {
+	    CompileTokens(envPtr, tokenPtr, interp);
+	    continue;
+	}
+
+	objIdx = TclRegisterLiteral(envPtr,
+		tokenPtr[1].start, tokenPtr[1].size, 0);
+	if (envPtr->clNext) {
+	    TclContinuationsEnterDerived(TclFetchLiteral(envPtr, objIdx),
+		    tokenPtr[1].start - envPtr->source, envPtr->clNext);
+	}
+	TclEmitPush(objIdx, envPtr);
+>>>>>>> upstream/master
     }
 
     ckfree((char *) eclPtr);
@@ -2503,6 +2555,7 @@ TclInitCompileEnv(
     envPtr->literalArrayEnd = COMPILEENV_INIT_NUM_OBJECTS;
     envPtr->mallocedLiteralArray = 0;
 
+<<<<<<< HEAD
     envPtr->exceptArrayPtr = envPtr->staticExceptArraySpace;
     envPtr->exceptAuxArrayPtr = envPtr->staticExAuxArraySpace;
     envPtr->exceptArrayNext = 0;
@@ -2514,6 +2567,16 @@ TclInitCompileEnv(
     envPtr->mallocedCmdMap = 0;
     envPtr->atCmdStart = 1;
     envPtr->expandCount = 0;
+=======
+	objIdx = TclRegisterLiteral(envPtr,
+		tokenPtr[1].start, tokenPtr[1].size, 0);
+	if (envPtr->clNext) {
+	    TclContinuationsEnterDerived(TclFetchLiteral(envPtr, objIdx),
+		    tokenPtr[1].start - envPtr->source, envPtr->clNext);
+	}
+	TclEmitPush(objIdx, envPtr);
+    }
+>>>>>>> upstream/master
 
     /*
      * TIP #280: Set up the extended command location information, based on
