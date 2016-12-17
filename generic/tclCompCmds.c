@@ -5413,6 +5413,7 @@ TclCompileFormatCmd(
 	 */
 
 	TclEmitInstInt1(INST_STR_CONCAT1, i, envPtr);
+<<<<<<< HEAD
     } else {
 	/*
 	 * EVIL HACK! Force there to be a string representation in the case
@@ -5425,6 +5426,8 @@ TclCompileFormatCmd(
 	PushStringLiteral(envPtr, "");
 	TclEmitOpcode(INST_STR_EQ, envPtr);
 	TclEmitOpcode(INST_POP, envPtr);
+=======
+>>>>>>> upstream/master
     }
     return TCL_OK;
 }

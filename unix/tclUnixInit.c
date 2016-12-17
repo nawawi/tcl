@@ -457,7 +457,7 @@ TclpInitPlatform(void)
 void
 TclpInitLibraryPath(
     char **valuePtr,
-    int *lengthPtr,
+    size_t *lengthPtr,
     Tcl_Encoding *encodingPtr)
 {
 #define LIBRARY_SIZE	    32
@@ -547,12 +547,19 @@ TclpInitLibraryPath(
 
     *encodingPtr = Tcl_GetEncoding(NULL, NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     str = TclGetStringFromObj(pathPtr, lengthPtr);
 >>>>>>> upstream/master
     *valuePtr = ckalloc((*lengthPtr) + 1);
     memcpy(*valuePtr, str, (size_t)(*lengthPtr)+1);
+=======
+    str = TclGetString(pathPtr);
+    *lengthPtr = pathPtr->length;
+    *valuePtr = ckalloc(*lengthPtr + 1);
+    memcpy(*valuePtr, str, *lengthPtr + 1);
+>>>>>>> upstream/master
     Tcl_DecrRefCount(pathPtr);
 }
 
@@ -769,7 +776,7 @@ TclpSetVariables(
 
     CFLocaleRef localeRef;
 
-    if (CFLocaleCopyCurrent != NULL && CFLocaleGetIdentifier != NULL &&
+    if (&CFLocaleCopyCurrent != NULL && &CFLocaleGetIdentifier != NULL &&
 	    (localeRef = CFLocaleCopyCurrent())) {
 	CFStringRef locale = CFLocaleGetIdentifier(localeRef);
 

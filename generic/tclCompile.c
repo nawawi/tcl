@@ -1411,7 +1411,7 @@ void
 TclReleaseByteCode(
     register ByteCode *codePtr)
 {
-    if (--codePtr->refCount) {
+    if (codePtr->refCount-- > 1) {
 	return;
     }
 
@@ -1973,14 +1973,14 @@ ReleaseCmdWordData(
 	Tcl_DecrRefCount(eclPtr->path);
     }
     for (i=0 ; i<eclPtr->nuloc ; i++) {
-	ckfree((char *) eclPtr->loc[i].line);
+	ckfree(eclPtr->loc[i].line);
     }
 
     if (eclPtr->loc != NULL) {
-	ckfree((char *) eclPtr->loc);
+	ckfree(eclPtr->loc);
     }
 
-    ckfree((char *) eclPtr);
+    ckfree(eclPtr);
 }
 
 /*
@@ -2445,7 +2445,7 @@ ReleaseCmdWordData(
 	extraLiteralFlags |= LITERAL_UNSHARED;
     }
 
-    bytes = Tcl_GetStringFromObj(cmdObj, &numBytes);
+    bytes = TclGetStringFromObj(cmdObj, &numBytes);
     cmdLitIdx = TclRegisterLiteral(envPtr, bytes, numBytes, extraLiteralFlags);
 >>>>>>> upstream/master
 

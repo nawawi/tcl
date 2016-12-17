@@ -172,7 +172,7 @@ TclpInitPlatform(void)
 void
 TclpInitLibraryPath(
     char **valuePtr,
-    int *lengthPtr,
+    size_t *lengthPtr,
     Tcl_Encoding *encodingPtr)
 {
 #define LIBRARY_SIZE	    64
@@ -215,12 +215,19 @@ TclpInitLibraryPath(
 
     *encodingPtr = NULL;
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     bytes = TclGetStringFromObj(pathPtr, lengthPtr);
 >>>>>>> upstream/master
     *valuePtr = ckalloc((*lengthPtr) + 1);
     memcpy(*valuePtr, bytes, (size_t)(*lengthPtr)+1);
+=======
+    bytes = TclGetString(pathPtr);
+    *lengthPtr = pathPtr->length;
+    *valuePtr = ckalloc(*lengthPtr + 1);
+    memcpy(*valuePtr, bytes, *lengthPtr + 1);
+>>>>>>> upstream/master
     Tcl_DecrRefCount(pathPtr);
 }
 
@@ -338,7 +345,7 @@ AppendEnvironment(
 static void
 InitializeDefaultLibraryDir(
     char **valuePtr,
-    int *lengthPtr,
+    size_t *lengthPtr,
     Tcl_Encoding *encodingPtr)
 {
     HMODULE hModule = TclWinGetTclInstance();
@@ -365,7 +372,7 @@ InitializeDefaultLibraryDir(
     *lengthPtr = strlen(name);
     *valuePtr = ckalloc(*lengthPtr + 1);
     *encodingPtr = NULL;
-    memcpy(*valuePtr, name, (size_t) *lengthPtr + 1);
+    memcpy(*valuePtr, name, *lengthPtr + 1);
 }
 
 /*
@@ -389,7 +396,7 @@ InitializeDefaultLibraryDir(
 static void
 InitializeSourceLibraryDir(
     char **valuePtr,
-    int *lengthPtr,
+    size_t *lengthPtr,
     Tcl_Encoding *encodingPtr)
 {
     HMODULE hModule = TclWinGetTclInstance();
@@ -416,7 +423,7 @@ InitializeSourceLibraryDir(
     *lengthPtr = strlen(name);
     *valuePtr = ckalloc(*lengthPtr + 1);
     *encodingPtr = NULL;
-    memcpy(*valuePtr, name, (size_t) *lengthPtr + 1);
+    memcpy(*valuePtr, name, *lengthPtr + 1);
 }
 
 /*

@@ -1525,11 +1525,16 @@ GetWinFileAttributes(
 	 * We test for, and fix that case, here.
 	 */
 
+<<<<<<< HEAD
 	int len;
 <<<<<<< HEAD
 	const char *str = Tcl_GetStringFromObj(fileName,&len);
 =======
 	const char *str = TclGetStringFromObj(fileName,&len);
+>>>>>>> upstream/master
+=======
+	const char *str = TclGetString(fileName);
+	size_t len = fileName->length;
 >>>>>>> upstream/master
 
 	if (len < 4) {
@@ -1615,14 +1620,19 @@ ConvertFileNameFormat(
     for (i = 0; i < pathc; i++) {
 	Tcl_Obj *elt;
 	char *pathv;
-	int pathLen;
+	size_t pathLen;
 
 	Tcl_ListObjIndex(NULL, splitPath, i, &elt);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	pathv = Tcl_GetStringFromObj(elt, &pathLen);
 =======
 	pathv = TclGetStringFromObj(elt, &pathLen);
+>>>>>>> upstream/master
+=======
+	pathv = TclGetString(elt);
+	pathLen = elt->length;
 >>>>>>> upstream/master
 	if ((pathv[0] == '/') || ((pathLen == 3) && (pathv[1] == ':'))
 		|| (strcmp(pathv, ".") == 0) || (strcmp(pathv, "..") == 0)) {
@@ -1647,7 +1657,6 @@ ConvertFileNameFormat(
 	    Tcl_DString dsTemp;
 	    const TCHAR *nativeName;
 	    const char *tempString;
-	    int tempLen;
 	    WIN32_FIND_DATA data;
 	    HANDLE handle;
 	    DWORD attr;
@@ -1662,11 +1671,16 @@ ConvertFileNameFormat(
 
 	    Tcl_DStringInit(&ds);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    tempString = Tcl_GetStringFromObj(tempPath,&tempLen);
 =======
 	    tempString = TclGetStringFromObj(tempPath,&tempLen);
 >>>>>>> upstream/master
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempLen, &ds);
+=======
+	    tempString = TclGetString(tempPath);
+	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);
+>>>>>>> upstream/master
 	    Tcl_DecrRefCount(tempPath);
 	    handle = FindFirstFile(nativeName, &data);
 	    if (handle == INVALID_HANDLE_VALUE) {

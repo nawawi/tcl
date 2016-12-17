@@ -11741,9 +11741,83 @@ TclEvalEx(
      * Add the callback in the caller's env, then instruct TEBC to yield.
      */
 
+<<<<<<< HEAD
     iPtr->execEnvPtr = corPtr->callerEEPtr;
     TclSetTailcall(interp, listPtr);
     iPtr->execEnvPtr = corPtr->eePtr;
+=======
+    iPtr->cmdFramePtr = NULL;
+    iPtr->linePBodyPtr = ckalloc(sizeof(Tcl_HashTable));
+    iPtr->lineBCPtr = ckalloc(sizeof(Tcl_HashTable));
+    iPtr->lineLAPtr = ckalloc(sizeof(Tcl_HashTable));
+    iPtr->lineLABCPtr = ckalloc(sizeof(Tcl_HashTable));
+    Tcl_InitHashTable(iPtr->linePBodyPtr, TCL_ONE_WORD_KEYS);
+    Tcl_InitHashTable(iPtr->lineBCPtr, TCL_ONE_WORD_KEYS);
+    Tcl_InitHashTable(iPtr->lineLAPtr, TCL_ONE_WORD_KEYS);
+    Tcl_InitHashTable(iPtr->lineLABCPtr, TCL_ONE_WORD_KEYS);
+    iPtr->scriptCLLocPtr = NULL;
+
+    iPtr->activeVarTracePtr = NULL;
+
+    iPtr->returnOpts = NULL;
+    iPtr->errorInfo = NULL;
+    TclNewLiteralStringObj(iPtr->eiVar, "::errorInfo");
+    Tcl_IncrRefCount(iPtr->eiVar);
+    iPtr->errorStack = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount(iPtr->errorStack);
+    iPtr->resetErrorStack = 1;
+    TclNewLiteralStringObj(iPtr->upLiteral,"UP");
+    Tcl_IncrRefCount(iPtr->upLiteral);
+    TclNewLiteralStringObj(iPtr->callLiteral,"CALL");
+    Tcl_IncrRefCount(iPtr->callLiteral);
+    TclNewLiteralStringObj(iPtr->innerLiteral,"INNER");
+    Tcl_IncrRefCount(iPtr->innerLiteral);
+    iPtr->innerContext = Tcl_NewListObj(0, NULL);
+    Tcl_IncrRefCount(iPtr->innerContext);
+    iPtr->errorCode = NULL;
+    TclNewLiteralStringObj(iPtr->ecVar, "::errorCode");
+    Tcl_IncrRefCount(iPtr->ecVar);
+    iPtr->returnLevel = 1;
+    iPtr->returnCode = TCL_OK;
+
+    iPtr->rootFramePtr = NULL;	/* Initialise as soon as :: is available */
+    iPtr->lookupNsPtr = NULL;
+
+    iPtr->appendResult = NULL;
+    iPtr->appendAvl = 0;
+    iPtr->appendUsed = 0;
+
+    Tcl_InitHashTable(&iPtr->packageTable, TCL_STRING_KEYS);
+    iPtr->packageUnknown = NULL;
+
+    /* TIP #268 */
+#if (TCL_RELEASE_LEVEL == TCL_FINAL_RELEASE)
+    if (getenv("TCL_PKG_PREFER_LATEST") == NULL) {
+	iPtr->packagePrefer = PKG_PREFER_STABLE;
+    } else
+#endif
+	iPtr->packagePrefer = PKG_PREFER_LATEST;
+
+    iPtr->cmdCount = 0;
+    TclInitLiteralTable(&iPtr->literalTable);
+    iPtr->compileEpoch = 1;
+    iPtr->compiledProcPtr = NULL;
+    iPtr->resolverPtr = NULL;
+    iPtr->evalFlags = 0;
+    iPtr->scriptFile = NULL;
+    iPtr->flags = 0;
+    iPtr->tracePtr = NULL;
+    iPtr->tracesForbiddingInline = 0;
+    iPtr->activeCmdTracePtr = NULL;
+    iPtr->activeInterpTracePtr = NULL;
+    iPtr->assocData = NULL;
+    iPtr->execEnvPtr = NULL;	/* Set after namespaces initialized. */
+    iPtr->emptyObjPtr = Tcl_NewObj();
+				/* Another empty object. */
+    Tcl_IncrRefCount(iPtr->emptyObjPtr);
+    iPtr->resultSpace[0] = 0;
+    iPtr->threadId = Tcl_GetCurrentThread();
+>>>>>>> upstream/master
 
     return TclNRYieldObjCmd(INT2PTR(CORO_ACTIVATE_YIELDM), interp, 1, objv);
 }
@@ -12388,6 +12462,7 @@ TclArgumentBCEnter(
      * have to save them at compile time.
      */
 
+<<<<<<< HEAD
     for (word = 1; word < objc; word++) {
 	if (ePtr->line[word] >= 0) {
 	    int isnew;
@@ -12401,6 +12476,17 @@ TclArgumentBCEnter(
 	    cfwPtr->word = word;
 	    cfwPtr->nextPtr = lastPtr;
 	    lastPtr = cfwPtr;
+=======
+    Tcl_PkgProvideEx(interp, "Tcl", TCL_PATCH_LEVEL, &tclStubs);
+
+    if (TclTommath_Init(interp) != TCL_OK) {
+	Tcl_Panic("%s", TclGetString(Tcl_GetObjResult(interp)));
+    }
+
+    if (TclOOInit(interp) != TCL_OK) {
+	Tcl_Panic("%s", TclGetString(Tcl_GetObjResult(interp)));
+    }
+>>>>>>> upstream/master
 
 	    if (isnew) {
 		/*
@@ -12408,6 +12494,7 @@ TclArgumentBCEnter(
 		 * location and initialize references.
 		 */
 
+<<<<<<< HEAD
 		cfwPtr->prevPtr = NULL;
 	    } else {
 		/*
@@ -12416,6 +12503,13 @@ TclArgumentBCEnter(
 		 * multiple location to a single Tcl_Obj*. Save the old
 		 * information in the new structure.
 		 */
+=======
+#ifdef HAVE_ZLIB
+    if (TclZlibInit(interp) != TCL_OK) {
+	Tcl_Panic("%s", TclGetString(Tcl_GetObjResult(interp)));
+    }
+#endif
+>>>>>>> upstream/master
 
 		cfwPtr->prevPtr = Tcl_GetHashValue(hPtr);
 	    }
@@ -12976,7 +13070,15 @@ TclNREvalObjEx(
 	return TclNREvalObjv(interp, objc, objv, flags, NULL);
     }
 
+<<<<<<< HEAD
     if (!(flags & TCL_EVAL_DIRECT)) {
+=======
+    Tcl_DeleteHashTable(iPtr->lineLAPtr);
+    ckfree(iPtr->lineLAPtr);
+    iPtr->lineLAPtr = NULL;
+
+    if (iPtr->lineLABCPtr->numEntries && !TclInExit()) {
+>>>>>>> upstream/master
 	/*
 	 * Let the compiler/engine subsystem do the evaluation.
 	 *
@@ -13619,8 +13721,26 @@ Tcl_AppendObjToErrorInfo(
 				 * pertains. */
     Tcl_Obj *objPtr)		/* Message to record. */
 {
+<<<<<<< HEAD
     int length;
     const char *message = TclGetStringFromObj(objPtr, &length);
+=======
+    Command *cmdPtr = clientData;
+    int i, result;
+    const char **argv =
+	    TclStackAlloc(interp, (unsigned)(objc + 1) * sizeof(char *));
+
+    for (i = 0; i < objc; i++) {
+	argv[i] = TclGetString(objv[i]);
+    }
+    argv[objc] = 0;
+
+    /*
+     * Invoke the command's string-based Tcl_CmdProc.
+     */
+
+    result = cmdPtr->proc(cmdPtr->clientData, interp, objc, argv);
+>>>>>>> upstream/master
 
     Tcl_IncrRefCount(objPtr);
     Tcl_AddObjErrorInfo(interp, message, length);
@@ -13726,6 +13846,7 @@ Tcl_AddObjErrorInfo(
 	}
 	Tcl_AppendToObj(iPtr->errorInfo, message, length);
     }
+<<<<<<< HEAD
 }
 
 /*
@@ -13745,6 +13866,19 @@ Tcl_AddObjErrorInfo(
  *
  *---------------------------------------------------------------------------
  */
+=======
+    Tcl_DStringAppend(&newFullName, newTail, -1);
+    cmdPtr->refCount++;
+    CallCommandTraces(iPtr, cmdPtr, TclGetString(oldFullName),
+	    Tcl_DStringValue(&newFullName), TCL_TRACE_RENAME);
+    Tcl_DStringFree(&newFullName);
+
+    /*
+     * The new command name is okay, so remove the command from its current
+     * namespace. This is like deleting the command, so bump the cmdEpoch to
+     * invalidate any cached references to the command.
+     */
+>>>>>>> upstream/master
 
 int
 Tcl_VarEvalVA(
@@ -14623,6 +14757,7 @@ ExprRandFunc(
      *	Computers in Physics 6(5):522-524, Sep/Oct 1992.
      */
 
+<<<<<<< HEAD
 #define RAND_IA		16807
 #define RAND_IM		2147483647
 #define RAND_IQ		127773
@@ -14633,6 +14768,15 @@ ExprRandFunc(
     iPtr->randSeed = RAND_IA*(iPtr->randSeed - tmp*RAND_IQ) - RAND_IR*tmp;
     if (iPtr->randSeed < 0) {
 	iPtr->randSeed += RAND_IM;
+=======
+void
+TclCleanupCommand(
+    register Command *cmdPtr)	/* Points to the Command structure to
+				 * be freed. */
+{
+    if (cmdPtr->refCount-- <= 1) {
+	ckfree(cmdPtr);
+>>>>>>> upstream/master
     }
 
     /*
@@ -14672,9 +14816,19 @@ ExprRoundFunc(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     if (type == TCL_NUMBER_DOUBLE) {
 	double fractPart, intPart;
 	long max = LONG_MAX, min = LONG_MIN;
+=======
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		    "argument to math function didn't have numeric value",
+		    -1));
+	    TclCheckBadOctal(interp, TclGetString(valuePtr));
+	    ckfree(args);
+	    return TCL_ERROR;
+	}
+>>>>>>> upstream/master
 
 	fractPart = modf(*((const double *) ptr), &intPart);
 	if (fractPart <= -0.5) {
@@ -16637,8 +16791,7 @@ TclArgumentRelease(
 	}
 	cfwPtr = Tcl_GetHashValue(hPtr);
 
-	cfwPtr->refCount--;
-	if (cfwPtr->refCount > 0) {
+	if (cfwPtr->refCount-- > 1) {
 	    continue;
 	}
 
@@ -18943,7 +19096,7 @@ MathFuncWrongNumArgs(
     int found,			/* Actual parameter count. */
     Tcl_Obj *const *objv)	/* Actual parameter vector. */
 {
-    const char *name = Tcl_GetString(objv[0]);
+    const char *name = TclGetString(objv[0]);
     const char *tail = name + strlen(name);
 
     while (tail > name+1) {
@@ -19876,7 +20029,7 @@ TclNRInterpCoroutine(
     if (!COR_IS_SUSPENDED(corPtr)) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
                 "coroutine \"%s\" is already running",
-                Tcl_GetString(objv[0])));
+                TclGetString(objv[0])));
 	Tcl_SetErrorCode(interp, "TCL", "COROUTINE", "BUSY", NULL);
 	return TCL_ERROR;
     }

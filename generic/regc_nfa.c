@@ -1115,7 +1115,7 @@ moveins(
 
 /*
  - copyins - copy in arcs of a state to another state
- ^ static VOID copyins(struct nfa *, struct state *, struct state *, int);
+ ^ static void copyins(struct nfa *, struct state *, struct state *, int);
  */
 static void
 copyins(
@@ -1538,8 +1538,57 @@ copyouts(
 	    /* newState does not have anything matching oa */
 	    struct arc *a = oa;
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+	    oa = oa->outchain;
+	    createarc(nfa, a->type, a->co, newState, a->to);
+	    freearc(nfa, a);
+	}
+    }
+
+    assert(oldState->nouts == 0);
+    assert(oldState->outs == NULL);
+}
+
+/*
+ - copyouts - copy out arcs of a state to another state
+ ^ static void copyouts(struct nfa *, struct state *, struct state *, int);
+ */
+static void
+copyouts(
+    struct nfa *nfa,
+    struct state *oldState,
+    struct state *newState)
+{
+    assert(oldState != newState);
+
+    if (!BULK_ARC_OP_USE_SORT(oldState->nouts, newState->nouts)) {
+	/* With not too many arcs, just do them one at a time */
+	struct arc *a;
+
+	for (a = oldState->outs; a != NULL; a = a->outchain) {
+	    cparc(nfa, a, newState, a->to);
+	}
+    } else {
+ 	/*
+	 * With many arcs, use a sort-merge approach.  Note that createarc()
+	 * will put new arcs onto the front of newState's chain, so it does
+	 * not break our walk through the sorted part of the chain.
+	 */
+	struct arc *oa;
+	struct arc *na;
+
+	/*
+	 * Because we bypass newarc() in this code path, we'd better include a
+	 * cancel check.
+	 */
+	if (CANCEL_REQUESTED(nfa->v->re)) {
+	    NERR(REG_CANCEL);
+	    return;
+	}
+>>>>>>> upstream/master
 
 	sortouts(nfa, oldState);
 	sortouts(nfa, newState);

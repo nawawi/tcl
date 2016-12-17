@@ -1940,18 +1940,42 @@ TclListObjSetElement(
     }
 
     listRepPtr = ListRepPtr(listPtr);
+<<<<<<< HEAD
     elemCount = listRepPtr->elemCount;
+=======
+    elemPtrs = &listRepPtr->elements;
+    numElems = listRepPtr->elemCount;
+
+    if (first < 0) {
+	first = 0;
+    }
+    if (first >= numElems) {
+	first = numElems;	/* So we'll insert after last element. */
+    }
+    if (count < 0) {
+	count = 0;
+    } else if (first > INT_MAX - count /* Handle integer overflow */
+	    || numElems < first+count) {
+>>>>>>> upstream/master
 
     /*
      * Ensure that the index is in bounds.
      */
 
+<<<<<<< HEAD
     if (index<0 || index>=elemCount) {
 	if (interp != NULL) {
 	    Tcl_SetObjResult(interp,
 		    Tcl_NewStringObj("list index out of range", -1));
 	    Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LSET", "BADINDEX",
 		    NULL);
+=======
+    if (objc > LIST_MAX - (numElems - count)) {
+	if (interp != NULL) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "max length of a Tcl list (%d elements) exceeded",
+		    LIST_MAX));
+>>>>>>> upstream/master
 	}
 	return TCL_ERROR;
     }
@@ -2861,7 +2885,7 @@ SetListFromAny(
 		while (--elemPtrs >= &listRepPtr->elements) {
 		    Tcl_DecrRefCount(*elemPtrs);
 		}
-		ckfree((char *) listRepPtr);
+		ckfree(listRepPtr);
 		return TCL_ERROR;
 	    }
 	    if (elemStart == limit) {

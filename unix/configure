@@ -36026,12 +36026,16 @@ else
 
 $as_echo "#define NO_WAIT3 1" >>confdefs.h
 
+<<<<<<< HEAD
 fi
 
 ac_fn_c_check_func "$LINENO" "uname" "ac_cv_func_uname"
 if test "x$ac_cv_func_uname" = xyes; then :
 
 else
+=======
+$as_echo "#define MP_PREC 4" >>confdefs.h
+>>>>>>> upstream/master
 
 $as_echo "#define NO_UNAME 1" >>confdefs.h
 

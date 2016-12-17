@@ -744,8 +744,14 @@ test stringComp-14.4 {Bug 1af8de570511} {
     }} 4 x
 } 0x00
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+test stringComp-14.5 {} {
+    string length [string replace [string repeat a\u00fe 2] 3 end {}]
+} 3
 >>>>>>> upstream/master
 
 ## string tolower

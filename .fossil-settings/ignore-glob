@@ -18,9 +18,28 @@
 */tcltest*
 */versions.vc
 <<<<<<< HEAD
+<<<<<<< HEAD
 unix/dltest.marker
 unix/tcl.pc
 =======
+=======
+libtommath/bn.ilg
+libtommath/bn.ind
+libtommath/pretty.build
+libtommath/tommath.src
+libtommath/*.pdf
+libtommath/*.pl
+libtommath/*.sh
+libtommath/tombc/*
+libtommath/pre_gen/*
+libtommath/pics/*
+libtommath/mtest/*
+libtommath/logs/*
+libtommath/etc/*
+libtommath/demo/*
+libtommath/*.out
+libtommath/*.tex
+>>>>>>> upstream/master
 unix/autoMkindex.tcl
 unix/dltest.marker
 unix/tcl.pc

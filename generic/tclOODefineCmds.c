@@ -2359,7 +2359,7 @@ ClassSuperSet(
 			"attempt to form circular dependency graph", -1));
 		Tcl_SetErrorCode(interp, "TCL", "OO", "CIRCULARITY", NULL);
 	    failedAfterAlloc:
-		ckfree((char *) superclasses);
+		ckfree(superclasses);
 		return TCL_ERROR;
 	    }
 	}
@@ -2376,7 +2376,7 @@ ClassSuperSet(
 	FOREACH(superPtr, oPtr->classPtr->superclasses) {
 	    TclOORemoveFromSubclasses(oPtr->classPtr, superPtr);
 	}
-	ckfree((char *) oPtr->classPtr->superclasses.list);
+	ckfree(oPtr->classPtr->superclasses.list);
     }
     oPtr->classPtr->superclasses.list = superclasses;
     oPtr->classPtr->superclasses.num = superc;
@@ -2465,7 +2465,7 @@ ClassVarsSet(
     }
 
     for (i=0 ; i<varc ; i++) {
-	const char *varName = Tcl_GetString(varv[i]);
+	const char *varName = TclGetString(varv[i]);
 
 	if (strstr(varName, "::") != NULL) {
 	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -2491,7 +2491,7 @@ ClassVarsSet(
     }
     if (i != varc) {
 	if (varc == 0) {
-	    ckfree((char *) oPtr->classPtr->variables.list);
+	    ckfree(oPtr->classPtr->variables.list);
 	} else if (i) {
 	    oPtr->classPtr->variables.list = (Tcl_Obj **)
 		    ckrealloc((char *) oPtr->classPtr->variables.list,
@@ -2757,7 +2757,7 @@ ObjVarsSet(
     }
 
     for (i=0 ; i<varc ; i++) {
-	const char *varName = Tcl_GetString(varv[i]);
+	const char *varName = TclGetString(varv[i]);
 
 	if (strstr(varName, "::") != NULL) {
 	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -2783,7 +2783,7 @@ ObjVarsSet(
     }
     if (i != varc) {
 	if (varc == 0) {
-	    ckfree((char *) oPtr->variables.list);
+	    ckfree(oPtr->variables.list);
 	} else if (i) {
 	    oPtr->variables.list = (Tcl_Obj **)
 		    ckrealloc((char *) oPtr->variables.list,
