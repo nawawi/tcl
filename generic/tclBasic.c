@@ -14435,6 +14435,7 @@ ExprAbsFunc(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     if (type == TCL_NUMBER_LONG) {
 	long l = *((const long *) ptr);
 
@@ -14463,6 +14464,16 @@ ExprAbsFunc(
     if (type == TCL_NUMBER_DOUBLE) {
 	double d = *((const double *) ptr);
 	static const double poszero = 0.0;
+=======
+    /*
+     * The code here is tricky. We can't delete the hash table entry before
+     * invoking the deletion callback because there are cases where the
+     * deletion callback needs to invoke the command (e.g. object systems such
+     * as OTcl). However, this means that the callback could try to delete or
+     * rename the command. The deleted flag allows us to detect these cases
+     * and skip nested deletes.
+     */
+>>>>>>> upstream/master
 
 	/*
 	 * We need to distinguish here between positive 0.0 and negative -0.0.
@@ -14476,8 +14487,20 @@ ExprAbsFunc(
 	} else if (d > -0.0) {
 	    goto unChanged;
 	}
+<<<<<<< HEAD
 	Tcl_SetObjResult(interp, Tcl_NewDoubleObj(-d));
 	return TCL_OK;
+=======
+
+	/*
+	 * Bump the command epoch counter. This will invalidate all cached
+	 * references that point to this command.
+	 */
+
+	cmdPtr->cmdEpoch++;
+
+	return 0;
+>>>>>>> upstream/master
     }
 
 #ifndef TCL_WIDE_INT_IS_LONG
@@ -14596,6 +14619,7 @@ ExprEntierFunc(
 	if ((d >= (double)LONG_MAX) || (d <= (double)LONG_MIN)) {
 	    mp_int big;
 
+<<<<<<< HEAD
 	    if (Tcl_InitBignumFromDouble(interp, d, &big) != TCL_OK) {
 		/* Infinity */
 		return TCL_ERROR;
@@ -14608,6 +14632,18 @@ ExprEntierFunc(
 	    Tcl_SetObjResult(interp, Tcl_NewLongObj(result));
 	    return TCL_OK;
 	}
+=======
+    if (cmdPtr->hPtr != NULL) {
+	Tcl_DeleteHashEntry(cmdPtr->hPtr);
+	cmdPtr->hPtr = NULL;
+
+	/*
+	 * Bump the command epoch counter. This will invalidate all cached
+	 * references that point to this command.
+	 */
+
+	cmdPtr->cmdEpoch++;
+>>>>>>> upstream/master
     }
 
     if (type != TCL_NUMBER_NAN) {
