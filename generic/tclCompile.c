@@ -987,7 +987,8 @@ TclSetByteCodeFromAny(
     Interp *iPtr = (Interp *) interp;
     CompileEnv compEnv;		/* Compilation environment structure allocated
 				 * in frame. */
-    int length, result = TCL_OK;
+    size_t length;
+    int result = TCL_OK;
     const char *stringPtr;
     Proc *procPtr = iPtr->compiledProcPtr;
     ContLineLoc *clLocPtr;
@@ -1002,9 +1003,14 @@ TclSetByteCodeFromAny(
     }
 #endif
 
+<<<<<<< HEAD
     stringPtr = TclGetStringFromObj(objPtr, &length);
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+    stringPtr = TclGetString(objPtr);
+    length = objPtr->length;
+>>>>>>> upstream/master
 
     /*
      * TIP #280: Pick up the CmdFrame in which the BC compiler was invoked and
@@ -3878,11 +3884,23 @@ CompileCommandTokens(
 		cmdPtr = NULL;
 	    }
 	}
+<<<<<<< HEAD
 	if (cmdPtr && !(cmdPtr->flags & CMD_COMPILES_EXPANDED)) {
 	    expand = ExpandRequested(parsePtr->tokenPtr, parsePtr->numWords);
 	    if (expand) {
 		/* We need to expand, but compileProc cannot. */
 		cmdPtr = NULL;
+=======
+
+	varNamePtr = &cachePtr->varName0;
+	for (i=0; i < cachePtr->numVars; varNamePtr++, i++) {
+	    if (*varNamePtr) {
+		localName = TclGetString(*varNamePtr);
+		len = (*varNamePtr)->length;
+		if ((len == nameBytes) && !strncmp(name, localName, len)) {
+		    return i;
+		}
+>>>>>>> upstream/master
 	    }
 	}
     }

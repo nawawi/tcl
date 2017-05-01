@@ -649,10 +649,10 @@ Tcltest_Init(
 	"-appinitprocclosestderr", "-appinitprocsetrcfile", NULL
     };
 
-    if (Tcl_InitStubs(interp, "8.5", 0) == NULL) {
+    if (Tcl_InitStubs(interp, "8.5-", 0) == NULL) {
 	return TCL_ERROR;
     }
-    if (Tcl_TomMath_InitStubs(interp, "8.5") == NULL) {
+    if (Tcl_TomMath_InitStubs(interp, "8.5-") == NULL) {
 	return TCL_ERROR;
     }
     if (Tcl_OOInitStubs(interp) == NULL) {
@@ -917,7 +917,7 @@ int
 Tcltest_SafeInit(
     Tcl_Interp *interp)		/* Interpreter for application. */
 {
-    if (Tcl_InitStubs(interp, "8.5", 0) == NULL) {
+    if (Tcl_InitStubs(interp, "8.5-", 0) == NULL) {
 	return TCL_ERROR;
     }
     return Procbodytest_SafeInit(interp);
@@ -8575,8 +8575,21 @@ TestFilesystemObjCmd(
     int objc,
     Tcl_Obj *const objv[])
 {
+<<<<<<< HEAD
     int res, boolVal;
     const char *msg;
+=======
+    char *argString;
+
+    /*
+     *  Put the arguments into a var args structure
+     *  Append all of the arguments together separated by spaces
+     */
+
+    argString = Tcl_Merge(argc-1, argv+1);
+    Tcl_Panic("%s", argString);
+    ckfree(argString);
+>>>>>>> upstream/master
 
     if (objc != 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "boolean");

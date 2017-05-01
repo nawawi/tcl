@@ -2428,7 +2428,7 @@ Tcl_DuplicateObj(
     TclDbNewObj(objPtr, file, line);
     objPtr->bytes = NULL;
 
-    objPtr->internalRep.longValue = (boolValue? 1 : 0);
+    objPtr->internalRep.longValue = (boolValue != 0);
     objPtr->typePtr = &tclIntType;
     return objPtr;
 }
@@ -3158,7 +3158,7 @@ Tcl_NewIntObj(
 {
     register Tcl_Obj *objPtr;
 
-    TclNewIntObj(objPtr, intValue);
+    TclNewLongObj(objPtr, intValue);
     return objPtr;
 }
 #endif /* if TCL_MEM_DEBUG */

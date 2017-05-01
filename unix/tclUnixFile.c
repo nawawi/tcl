@@ -262,7 +262,7 @@ TclpMatchInDirectory(
 	DIR *d;
 	Tcl_DirEntry *entryPtr;
 	const char *dirName;
-	int dirLength, nativeDirLen;
+	size_t dirLength, nativeDirLen;
 	int matchHidden, matchHiddenPat;
 	Tcl_StatBuf statBuf;
 	Tcl_DString ds;		/* native encoding of dir */
@@ -270,9 +270,14 @@ TclpMatchInDirectory(
 
 	Tcl_DStringInit(&dsOrig);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	dirName = Tcl_GetStringFromObj(fileNamePtr, &dirLength);
 =======
 	dirName = TclGetStringFromObj(fileNamePtr, &dirLength);
+>>>>>>> upstream/master
+=======
+	dirName = TclGetString(fileNamePtr);
+	dirLength = fileNamePtr->length;
 >>>>>>> upstream/master
 	Tcl_DStringAppend(&dsOrig, dirName, dirLength);
 
@@ -941,7 +946,6 @@ TclpObjLink(
 	 */
 
 	if (linkAction & TCL_CREATE_SYMBOLIC_LINK) {
-	    int targetLen;
 	    Tcl_DString ds;
 	    Tcl_Obj *transPtr;
 
@@ -956,11 +960,16 @@ TclpObjLink(
 		return NULL;
 	    }
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    target = Tcl_GetStringFromObj(transPtr, &targetLen);
 =======
 	    target = TclGetStringFromObj(transPtr, &targetLen);
 >>>>>>> upstream/master
 	    target = Tcl_UtfToExternalDString(NULL, target, targetLen, &ds);
+=======
+	    target = TclGetString(transPtr);
+	    target = Tcl_UtfToExternalDString(NULL, target, transPtr->length, &ds);
+>>>>>>> upstream/master
 	    Tcl_DecrRefCount(transPtr);
 
 	    if (symlink(target, src) != 0) {
@@ -1088,7 +1097,7 @@ TclNativeCreateNativeRep(
     const char *str;
     Tcl_DString ds;
     Tcl_Obj *validPathPtr;
-    int len;
+    size_t len;
 
     if (TclFSCwdIsNative()) {
 	/*
@@ -1114,9 +1123,14 @@ TclNativeCreateNativeRep(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(validPathPtr, &len);
 =======
     str = TclGetStringFromObj(validPathPtr, &len);
+>>>>>>> upstream/master
+=======
+    str = TclGetString(validPathPtr);
+    len = validPathPtr->length;
 >>>>>>> upstream/master
     Tcl_UtfToExternalDString(NULL, str, len, &ds);
     len = Tcl_DStringLength(&ds) + sizeof(char);

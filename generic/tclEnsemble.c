@@ -3592,7 +3592,7 @@ CompileToInvokedCommand(
     Tcl_Token *tokPtr;
     Tcl_Obj *objPtr, **words;
     char *bytes;
-    int length, i, numWords, cmdLit, extraLiteralFlags = LITERAL_CMD_NAME;
+    int i, numWords, cmdLit, extraLiteralFlags = LITERAL_CMD_NAME;
     DefineLineInformation;
 
     /*
@@ -3606,11 +3606,16 @@ CompileToInvokedCommand(
 	    i++, tokPtr = TokenAfter(tokPtr)) {
 	if (i > 0 && i < numWords+1) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    bytes = Tcl_GetStringFromObj(words[i-1], &length);
 =======
 	    bytes = TclGetStringFromObj(words[i-1], &length);
 >>>>>>> upstream/master
 	    PushLiteral(envPtr, bytes, length);
+=======
+	    bytes = TclGetString(words[i-1]);
+	    PushLiteral(envPtr, bytes, words[i-1]->length);
+>>>>>>> upstream/master
 	    continue;
 	}
 
@@ -3640,6 +3645,7 @@ CompileToInvokedCommand(
     Tcl_GetCommandFullName(interp, (Tcl_Command) cmdPtr, objPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(objPtr, &length);
 =======
     bytes = TclGetStringFromObj(objPtr, &length);
@@ -3651,6 +3657,13 @@ CompileToInvokedCommand(
 	extraLiteralFlags |= LITERAL_UNSHARED;
     }
     cmdLit = TclRegisterLiteral(envPtr, bytes, length, extraLiteralFlags);
+>>>>>>> upstream/master
+=======
+    bytes = TclGetString(objPtr);
+    if ((cmdPtr != NULL) && (cmdPtr->flags & CMD_VIA_RESOLVER)) {
+	extraLiteralFlags |= LITERAL_UNSHARED;
+    }
+    cmdLit = TclRegisterLiteral(envPtr, bytes, objPtr->length, extraLiteralFlags);
 >>>>>>> upstream/master
     TclSetCmdNameObj(interp, TclFetchLiteral(envPtr, cmdLit), cmdPtr);
     TclEmitPush(cmdLit, envPtr);

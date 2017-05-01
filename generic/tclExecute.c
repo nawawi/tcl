@@ -379,7 +379,7 @@ VarHashCreateVar(
 	    NEXT_INST_F(((condition)? TclGetInt4AtPtr(pc+1) : 5), (cleanup), 0); \
 	default:							\
 	    if ((condition) < 0) {					\
-		TclNewIntObj(objResultPtr, -1);				\
+		TclNewLongObj(objResultPtr, -1);				\
 	    } else {							\
 		objResultPtr = TCONST((condition) > 0);			\
 	    }								\
@@ -400,7 +400,7 @@ VarHashCreateVar(
 	    NEXT_INST_V(((condition)? TclGetInt4AtPtr(pc+1) : 5), (cleanup), 0); \
 	default:							\
 	    if ((condition) < 0) {					\
-		TclNewIntObj(objResultPtr, -1);				\
+		TclNewLongObj(objResultPtr, -1);				\
 	    } else {							\
 		objResultPtr = TCONST((condition) > 0);			\
 	    }								\
@@ -411,7 +411,7 @@ VarHashCreateVar(
 #define JUMP_PEEPHOLE_F(condition, pcAdjustment, cleanup) \
     do{									\
 	if ((condition) < 0) {						\
-	    TclNewIntObj(objResultPtr, -1);				\
+	    TclNewLongObj(objResultPtr, -1);				\
 	} else {							\
 	    objResultPtr = TCONST((condition) > 0);			\
 	}								\
@@ -420,7 +420,7 @@ VarHashCreateVar(
 #define JUMP_PEEPHOLE_V(condition, pcAdjustment, cleanup) \
     do{									\
 	if ((condition) < 0) {						\
-	    TclNewIntObj(objResultPtr, -1);				\
+	    TclNewLongObj(objResultPtr, -1);				\
 	} else {							\
 	    objResultPtr = TCONST((condition) > 0);			\
 	}								\
@@ -1616,11 +1616,10 @@ CompileExprObj(
 	 * TIP #280: No invoker (yet) - Expression compilation.
 	 */
 
-	int length;
-	const char *string = TclGetStringFromObj(objPtr, &length);
+	const char *string = TclGetString(objPtr);
 
-	TclInitCompileEnv(interp, &compEnv, string, length, NULL, 0);
-	TclCompileExpr(interp, string, length, &compEnv, 0);
+	TclInitCompileEnv(interp, &compEnv, string, objPtr->length, NULL, 0);
+	TclCompileExpr(interp, string, objPtr->length, &compEnv, 0);
 
 	/*
 	 * Successful compilation. If the expression yielded no instructions,
@@ -4670,7 +4669,7 @@ TEBCresume(
 	NEXT_INST_F(1, 0, 1);
     }
     case INST_INFO_LEVEL_NUM:
-	TclNewIntObj(objResultPtr, iPtr->varFramePtr->level);
+	TclNewLongObj(objResultPtr, iPtr->varFramePtr->level);
 	TRACE_WITH_OBJ(("=> "), objResultPtr);
 	NEXT_INST_F(1, 0, 1);
     case INST_INFO_LEVEL_ARGS: {
@@ -5039,7 +5038,7 @@ TEBCresume(
 	    TRACE_ERROR(interp);
 	    goto gotError;
 	}
-	TclNewIntObj(objResultPtr, length);
+	TclNewLongObj(objResultPtr, length);
 	TRACE_APPEND(("%d\n", length));
 	NEXT_INST_F(1, 1, 1);
 
@@ -5530,7 +5529,7 @@ TEBCresume(
     case INST_STR_LEN:
 	valuePtr = OBJ_AT_TOS;
 	length = Tcl_GetCharLength(valuePtr);
-	TclNewIntObj(objResultPtr, length);
+	TclNewLongObj(objResultPtr, length);
 	TRACE(("\"%.20s\" => %d\n", O2S(valuePtr), length));
 	NEXT_INST_F(1, 1, 1);
 
@@ -5963,7 +5962,7 @@ TEBCresume(
 
 	TRACE(("%.20s %.20s => %d\n",
 		O2S(OBJ_UNDER_TOS), O2S(OBJ_AT_TOS), match));
-	TclNewIntObj(objResultPtr, match);
+	TclNewLongObj(objResultPtr, match);
 	NEXT_INST_F(1, 2, 1);
 
     case INST_STR_FIND_LAST:
@@ -5971,7 +5970,7 @@ TEBCresume(
 
 	TRACE(("%.20s %.20s => %d\n",
 		O2S(OBJ_UNDER_TOS), O2S(OBJ_AT_TOS), match));
-	TclNewIntObj(objResultPtr, match);
+	TclNewLongObj(objResultPtr, match);
 	NEXT_INST_F(1, 2, 1);
 
     case INST_STR_CLASS:
@@ -6175,7 +6174,7 @@ TEBCresume(
 		type1 = TCL_NUMBER_WIDE;
 	    }
 	}
-	TclNewIntObj(objResultPtr, type1);
+	TclNewLongObj(objResultPtr, type1);
 	TRACE(("\"%.20s\" => %d\n", O2S(OBJ_AT_TOS), type1));
 	NEXT_INST_F(1, 1, 1);
 
@@ -6382,7 +6381,7 @@ TEBCresume(
 			if (l1 > 0L) {
 			    objResultPtr = TCONST(0);
 			} else {
-			    TclNewIntObj(objResultPtr, -1);
+			    TclNewLongObj(objResultPtr, -1);
 			}
 			TRACE(("%s\n", O2S(objResultPtr)));
 			NEXT_INST_F(1, 2, 1);
@@ -7337,6 +7336,7 @@ TEBCresume(
 	 * value.
 	 */
 
+<<<<<<< HEAD
 	if (valuePtr->bytes == NULL) {
 	    TRACE_APPEND(("numeric, same Tcl_Obj\n"));
 	    NEXT_INST_F(1, 0, 0);
@@ -7347,6 +7347,24 @@ TEBCresume(
 	     * to copy the intrep, but not the string, so we temporarily hide
 	     * the string so we do not copy it.
 	     */
+=======
+	TclNewObj(objPtr);
+	Tcl_IncrRefCount(objPtr);
+	iPtr->objResultPtr = objPtr;
+	NEXT_INST_F(1, 0, -1);
+
+    case INST_PUSH_RETURN_CODE:
+	TclNewLongObj(objResultPtr, result);
+	TRACE(("=> %u\n", result));
+	NEXT_INST_F(1, 0, 1);
+
+    case INST_PUSH_RETURN_OPTIONS:
+	DECACHE_STACK_INFO();
+	objResultPtr = Tcl_GetReturnOptions(interp, result);
+	CACHE_STACK_INFO();
+	TRACE_WITH_OBJ(("=> "), objResultPtr);
+	NEXT_INST_F(1, 0, 1);
+>>>>>>> upstream/master
 
 	    char *savedString = valuePtr->bytes;
 
