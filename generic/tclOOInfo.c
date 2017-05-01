@@ -198,6 +198,12 @@ InfoObjectClassCmd(
 	FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    if (!mixinPtr) {
+		continue;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (!mixinPtr) {
 		continue;
@@ -481,6 +487,12 @@ InfoObjectIsACmd(
 	    FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		if (!mixinPtr) {
+		    continue;
+		}
+>>>>>>> upstream/master
 =======
 		if (!mixinPtr) {
 		    continue;
@@ -691,6 +703,12 @@ InfoObjectMixinsCmd(
     FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 =======
 	if (!mixinPtr) {
 	    continue;
@@ -1319,6 +1337,12 @@ InfoClassMixinsCmd(
     FOREACH(mixinPtr, clsPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 =======
 	if (!mixinPtr) {
 	    continue;

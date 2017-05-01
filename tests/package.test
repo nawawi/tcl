@@ -19,7 +19,10 @@ if {"::tcltest" ni [namespace children]} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 ::tcltest::loadTestedCommands
@@ -28,6 +31,9 @@ catch [list package require -exact Tcltest [info patchlevel]]
 testConstraint testpreferstable [llength [info commands testpreferstable]]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -585,7 +591,12 @@ test package-3.44 {Tcl_PkgRequire: exact version matching (1578344)} -setup {
 } -result {version conflict for package "demo": have 1.2.3, need exactly 1.2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -setup {
+=======
+test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
+    testpreferstable
+>>>>>>> upstream/master
 =======
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
     testpreferstable
@@ -850,7 +861,11 @@ test package-4.52 {Tcl_PackageCmd procedure, "vsatisfies" option} {
 } {0}
 test package-4.53 {Tcl_PackageCmd procedure, "versions" option} -body {
     package foo
+<<<<<<< HEAD
 } -returnCodes error -result {bad option "foo": must be forget, ifneeded, names, prefer, present, provide, require, unknown, vcompare, versions, or vsatisfies}
+=======
+} -returnCodes error -result {bad option "foo": must be files, forget, ifneeded, names, prefer, present, provide, require, unknown, vcompare, versions, or vsatisfies}
+>>>>>>> upstream/master
 test package-4.54 {Tcl_PackageCmd procedure, "vsatisfies" option} -body {
     package vsatisfies 2.1 2.1-3.2-4.5
 } -returnCodes error -result {expected versionMin-versionMax but got "2.1-3.2-4.5"}
@@ -1259,10 +1274,13 @@ proc prefer {args} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-13.0 {package prefer defaults} {
     prefer
 } stable
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test package-13.0 {package prefer defaults} -constraints testpreferstable -setup {
@@ -1271,6 +1289,9 @@ test package-13.0 {package prefer defaults} -constraints testpreferstable -setup
     prefer
 } -result stable
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1290,6 +1311,7 @@ test package-14.1 {bogus argument} -returnCodes error -body {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-15.0 {set, keep} {package prefer stable} stable
 test package-15.1 {set stable, keep} {prefer stable} {stable stable}
 test package-15.2 {set latest, change} {prefer latest} {stable latest}
@@ -1300,6 +1322,8 @@ test package-15.4 {set stable, rejected} {
     prefer latest stable
 } {stable latest latest}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test package-15.0 {set, keep} -constraints testpreferstable -setup {
@@ -1322,6 +1346,9 @@ test package-15.4 {set stable, rejected} -constraints testpreferstable -setup {
     prefer latest stable
 } -result {stable latest latest}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

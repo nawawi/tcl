@@ -6,7 +6,11 @@
 .\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .\" 
+=======
+.\"
+>>>>>>> upstream/master
 =======
 .\"
 >>>>>>> upstream/master
@@ -453,7 +457,11 @@ in
 .IP \fIM\fB+\fIN\fR 10
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The char specified at the integral index that is the sum of 
+=======
+The char specified at the integral index that is the sum of
+>>>>>>> upstream/master
 =======
 The char specified at the integral index that is the sum of
 >>>>>>> upstream/master
@@ -469,7 +477,11 @@ in
 .IP \fIM\fB\-\fIN\fR 10
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The char specified at the integral index that is the difference of 
+=======
+The char specified at the integral index that is the difference of
+>>>>>>> upstream/master
 =======
 The char specified at the integral index that is the difference of
 >>>>>>> upstream/master

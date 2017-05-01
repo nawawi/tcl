@@ -4,17 +4,29 @@ namespace eval ::tcl::clock {
         "N"\
         "Pn"\
         "Wt"\
+<<<<<<< HEAD
         "\u015ar"\
+=======
+        "Śr"\
+>>>>>>> upstream/master
         "Cz"\
         "Pt"\
         "So"]
     ::msgcat::mcset pl DAYS_OF_WEEK_FULL [list \
         "niedziela"\
+<<<<<<< HEAD
         "poniedzia\u0142ek"\
         "wtorek"\
         "\u015broda"\
         "czwartek"\
         "pi\u0105tek"\
+=======
+        "poniedziałek"\
+        "wtorek"\
+        "środa"\
+        "czwartek"\
+        "piątek"\
+>>>>>>> upstream/master
         "sobota"]
     ::msgcat::mcset pl MONTHS_ABBREV [list \
         "sty"\
@@ -26,11 +38,16 @@ namespace eval ::tcl::clock {
         "lip"\
         "sie"\
         "wrz"\
+<<<<<<< HEAD
         "pa\u017a"\
+=======
+        "paź"\
+>>>>>>> upstream/master
         "lis"\
         "gru"\
         ""]
     ::msgcat::mcset pl MONTHS_FULL [list \
+<<<<<<< HEAD
         "stycze\u0144"\
         "luty"\
         "marzec"\
@@ -43,6 +60,20 @@ namespace eval ::tcl::clock {
         "pa\u017adziernik"\
         "listopad"\
         "grudzie\u0144"\
+=======
+        "styczeń"\
+        "luty"\
+        "marzec"\
+        "kwiecień"\
+        "maj"\
+        "czerwiec"\
+        "lipiec"\
+        "sierpień"\
+        "wrzesień"\
+        "październik"\
+        "listopad"\
+        "grudzień"\
+>>>>>>> upstream/master
         ""]
     ::msgcat::mcset pl BCE "p.n.e."
     ::msgcat::mcset pl CE "n.e."

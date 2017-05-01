@@ -397,8 +397,13 @@ test info-10.3 {info library option} -body {
 set tcl_library $savedLibrary; unset savedLibrary
 
 test info-11.1 {info loaded option} -body {
+<<<<<<< HEAD
     info loaded a b
 } -returnCodes error -result {wrong # args: should be "info loaded ?interp?"}
+=======
+    info loaded a b c
+} -returnCodes error -result {wrong # args: should be "info loaded ?interp? ?packageName?"}
+>>>>>>> upstream/master
 test info-11.2 {info loaded option} -body {
     info loaded {}; info loaded gorp
 } -returnCodes error -result {could not find interpreter "gorp"}
@@ -880,6 +885,7 @@ foreach var val {
     proc ::foo::bar {} {info frame 0}
     break
 }; unset var
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 test info-24.4 {info frame, interaction, foreach} -body {
@@ -2416,6 +2422,9 @@ test info-33.35 {{*}, literal, simple, bytecompiled} -body {
 unset -nocomplain res
 =======
 
+=======
+
+>>>>>>> upstream/master
 test info-24.4 {info frame, interaction, foreach} -body {
     reduce [foo::bar]
 } -cleanup {
@@ -3949,6 +3958,9 @@ test info-39.0 {Bug 4b61afd660} -setup {
     rename demo {}
     rename probe {}
 } -result 3
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup

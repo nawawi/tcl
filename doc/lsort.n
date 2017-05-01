@@ -8,7 +8,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -48,7 +52,12 @@ except (a) case is ignored except as a tie-breaker and (b) if two
 strings contain embedded numbers, the numbers compare as integers,
 not characters.  For example, in \fB\-dictionary\fR mode, \fBbigBoy\fR
 sorts between \fBbigbang\fR and \fBbigboy\fR, and \fBx10y\fR
+<<<<<<< HEAD
 sorts between \fBx9y\fR and \fBx11y\fR.
+=======
+sorts between \fBx9y\fR and \fBx11y\fR. Overrides the \fB\-nocase\fR
+option.
+>>>>>>> upstream/master
 .TP
 \fB\-integer\fR
 .
@@ -106,6 +115,7 @@ returns \fB{Second 18} {First 24} {Third 30}\fR,
 '\" This example is from the test suite!
 '\"
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CS
 \fBlsort\fR -index end-1 \e
         {{a 1 e i} {b 2 3 f g} {c 4 5 6 d h}}
@@ -122,6 +132,24 @@ and
 }
 .CE
 .PP
+=======
+.CS
+\fBlsort\fR -index end-1 \e
+        {{a 1 e i} {b 2 3 f g} {c 4 5 6 d h}}
+.CE
+.PP
+returns \fB{c 4 5 6 d h} {a 1 e i} {b 2 3 f g}\fR,
+and
+.PP
+.CS
+\fBlsort\fR -index {0 1} {
+    {{b i g} 12345}
+    {{d e m o} 34512}
+    {{c o d e} 54321}
+}
+.CE
+.PP
+>>>>>>> upstream/master
 =======
 .CS
 \fBlsort\fR -index end-1 \e
@@ -182,7 +210,11 @@ returns
 Causes comparisons to be handled in a case-insensitive manner.  Has no
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or 
+=======
+effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
+>>>>>>> upstream/master
 =======
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
 >>>>>>> upstream/master
@@ -197,7 +229,11 @@ If this option is specified, then only the last set of duplicate
 elements found in the list will be retained.  Note that duplicates are
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 determined relative to the comparison used in the sort.  Thus if 
+=======
+determined relative to the comparison used in the sort.  Thus if
+>>>>>>> upstream/master
 =======
 determined relative to the comparison used in the sort.  Thus if
 >>>>>>> upstream/master
@@ -310,7 +346,11 @@ More complex sorting using a comparison function:
 .SH "SEE ALSO"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

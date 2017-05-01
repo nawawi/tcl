@@ -325,7 +325,13 @@ TclOOObjectSetMixins(
 	    FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+		if (mixinPtr) {
+		    TclOORemoveFromInstances(oPtr, mixinPtr);
+		}
+>>>>>>> upstream/master
 =======
 		if (mixinPtr) {
 		    TclOORemoveFromInstances(oPtr, mixinPtr);
@@ -346,7 +352,11 @@ TclOOObjectSetMixins(
 	    FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		if (mixinPtr != oPtr->selfCls) {
+=======
+		if (mixinPtr && mixinPtr != oPtr->selfCls) {
+>>>>>>> upstream/master
 =======
 		if (mixinPtr && mixinPtr != oPtr->selfCls) {
 >>>>>>> upstream/master
@@ -544,7 +554,11 @@ TclOOUnknownDefinition(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     soughtStr = Tcl_GetStringFromObj(objv[1], &soughtLen);
+=======
+    soughtStr = TclGetStringFromObj(objv[1], &soughtLen);
+>>>>>>> upstream/master
 =======
     soughtStr = TclGetStringFromObj(objv[1], &soughtLen);
 >>>>>>> upstream/master
@@ -608,7 +622,11 @@ FindCommand(
 {
     int length;
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *nameStr, *string = Tcl_GetStringFromObj(stringObj, &length);
+=======
+    const char *nameStr, *string = TclGetStringFromObj(stringObj, &length);
+>>>>>>> upstream/master
 =======
     const char *nameStr, *string = TclGetStringFromObj(stringObj, &length);
 >>>>>>> upstream/master
@@ -801,7 +819,11 @@ GenerateErrorInfo(
     Tcl_Obj *realNameObj = Tcl_ObjectDeleted((Tcl_Object) oPtr)
 	    ? savedNameObj : TclOOObjectName(interp, oPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *objName = Tcl_GetStringFromObj(realNameObj, &length);
+=======
+    const char *objName = TclGetStringFromObj(realNameObj, &length);
+>>>>>>> upstream/master
 =======
     const char *objName = TclGetStringFromObj(realNameObj, &length);
 >>>>>>> upstream/master
@@ -878,9 +900,14 @@ TclOODefineObjCmd(
     } else {
 	Tcl_Obj *objPtr, *obj2Ptr, **objs;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Interp *iPtr = (Interp *) interp;
 	Tcl_Command cmd;
 	int dummy;
+=======
+	Tcl_Command cmd;
+	int isRoot, dummy;
+>>>>>>> upstream/master
 =======
 	Tcl_Command cmd;
 	int isRoot, dummy;
@@ -897,6 +924,7 @@ TclOODefineObjCmd(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	    iPtr->ensembleRewrite.sourceObjs = objv;
 	    iPtr->ensembleRewrite.numRemovedObjs = 3;
@@ -909,6 +937,9 @@ TclOODefineObjCmd(
 		iPtr->ensembleRewrite.numInsertedObjs -= 2;
 	    }
 	}
+=======
+	isRoot = TclInitRewriteEnsemble(interp, 3, 1, objv);
+>>>>>>> upstream/master
 =======
 	isRoot = TclInitRewriteEnsemble(interp, 3, 1, objv);
 >>>>>>> upstream/master
@@ -930,6 +961,10 @@ TclOODefineObjCmd(
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 =======
 	/* TODO: overflow? */
 >>>>>>> upstream/master
@@ -941,6 +976,12 @@ TclOODefineObjCmd(
 
 	result = Tcl_EvalObjv(interp, objc-2, objs, TCL_EVAL_INVOKE);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (isRoot) {
+	    TclResetRewriteEnsemble(interp, 1);
+	}
+>>>>>>> upstream/master
 =======
 	if (isRoot) {
 	    TclResetRewriteEnsemble(interp, 1);
@@ -980,7 +1021,11 @@ TclOOObjDefObjCmd(
 {
     Foundation *fPtr = TclOOGetFoundation(interp);
 <<<<<<< HEAD
+<<<<<<< HEAD
     int result;
+=======
+    int isRoot, result;
+>>>>>>> upstream/master
 =======
     int isRoot, result;
 >>>>>>> upstream/master
@@ -1019,7 +1064,10 @@ TclOOObjDefObjCmd(
     } else {
 	Tcl_Obj *objPtr, *obj2Ptr, **objs;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Interp *iPtr = (Interp *) interp;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	Tcl_Command cmd;
@@ -1036,6 +1084,7 @@ TclOOObjDefObjCmd(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	    iPtr->ensembleRewrite.sourceObjs = objv;
 	    iPtr->ensembleRewrite.numRemovedObjs = 3;
@@ -1048,6 +1097,9 @@ TclOOObjDefObjCmd(
 		iPtr->ensembleRewrite.numInsertedObjs -= 2;
 	    }
 	}
+=======
+	isRoot = TclInitRewriteEnsemble(interp, 3, 1, objv);
+>>>>>>> upstream/master
 =======
 	isRoot = TclInitRewriteEnsemble(interp, 3, 1, objv);
 >>>>>>> upstream/master
@@ -1069,6 +1121,10 @@ TclOOObjDefObjCmd(
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 =======
 	/* TODO: overflow? */
 >>>>>>> upstream/master
@@ -1080,11 +1136,17 @@ TclOOObjDefObjCmd(
 
 	result = Tcl_EvalObjv(interp, objc-2, objs, TCL_EVAL_INVOKE);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 	if (isRoot) {
 	    TclResetRewriteEnsemble(interp, 1);
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	Tcl_DecrRefCount(objPtr);
     }
@@ -1155,9 +1217,14 @@ TclOODefineSelfObjCmd(
     } else {
 	Tcl_Obj *objPtr, *obj2Ptr, **objs;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Interp *iPtr = (Interp *) interp;
 	Tcl_Command cmd;
 	int dummy;
+=======
+	Tcl_Command cmd;
+	int isRoot, dummy;
+>>>>>>> upstream/master
 =======
 	Tcl_Command cmd;
 	int isRoot, dummy;
@@ -1174,6 +1241,7 @@ TclOODefineSelfObjCmd(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	    iPtr->ensembleRewrite.sourceObjs = objv;
 	    iPtr->ensembleRewrite.numRemovedObjs = 2;
@@ -1186,6 +1254,9 @@ TclOODefineSelfObjCmd(
 		iPtr->ensembleRewrite.numInsertedObjs -= 1;
 	    }
 	}
+=======
+	isRoot = TclInitRewriteEnsemble(interp, 2, 1, objv);
+>>>>>>> upstream/master
 =======
 	isRoot = TclInitRewriteEnsemble(interp, 2, 1, objv);
 >>>>>>> upstream/master
@@ -1207,6 +1278,10 @@ TclOODefineSelfObjCmd(
 	Tcl_ListObjAppendElement(NULL, objPtr, obj2Ptr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	/* TODO: overflow? */
+>>>>>>> upstream/master
 =======
 	/* TODO: overflow? */
 >>>>>>> upstream/master
@@ -1218,6 +1293,12 @@ TclOODefineSelfObjCmd(
 
 	result = Tcl_EvalObjv(interp, objc-1, objs, TCL_EVAL_INVOKE);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (isRoot) {
+	    TclResetRewriteEnsemble(interp, 1);
+	}
+>>>>>>> upstream/master
 =======
 	if (isRoot) {
 	    TclResetRewriteEnsemble(interp, 1);
@@ -1316,6 +1397,12 @@ TclOODefineClassObjCmd(
 	TclOOAddToInstances(oPtr, oPtr->selfCls);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!(clsPtr->thisPtr->flags & OBJECT_DELETED)) {
+	    oPtr->flags &= ~CLASS_GONE;
+	}
+>>>>>>> upstream/master
 =======
 	if (!(clsPtr->thisPtr->flags & OBJECT_DELETED)) {
 	    oPtr->flags &= ~CLASS_GONE;
@@ -1374,7 +1461,11 @@ TclOODefineConstructorObjCmd(
     clsPtr = oPtr->classPtr;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_GetStringFromObj(objv[2], &bodyLength);
+=======
+    TclGetStringFromObj(objv[2], &bodyLength);
+>>>>>>> upstream/master
 =======
     TclGetStringFromObj(objv[2], &bodyLength);
 >>>>>>> upstream/master
@@ -1497,7 +1588,11 @@ TclOODefineDestructorObjCmd(
     clsPtr = oPtr->classPtr;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_GetStringFromObj(objv[1], &bodyLength);
+=======
+    TclGetStringFromObj(objv[1], &bodyLength);
+>>>>>>> upstream/master
 =======
     TclGetStringFromObj(objv[1], &bodyLength);
 >>>>>>> upstream/master
@@ -2632,9 +2727,12 @@ ObjMixinGet(
     FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_ListObjAppendElement(NULL, resultObj,
 		TclOOObjectName(interp, mixinPtr->thisPtr));
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	if (mixinPtr) {
@@ -2642,6 +2740,9 @@ ObjMixinGet(
 		    TclOOObjectName(interp, mixinPtr->thisPtr));
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

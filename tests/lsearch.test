@@ -406,6 +406,7 @@ test lsearch-17.2 {lsearch -index option, basic functionality} {
 test lsearch-17.3 {lsearch -index option, basic functionality} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lsearch -index 1 -glob {{ab cb} {ab bb} {ab ab}} b* 
 } 1
 test lsearch-17.4 {lsearch -index option, basic functionality} {
@@ -414,12 +415,17 @@ test lsearch-17.4 {lsearch -index option, basic functionality} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     lsearch -index 1 -glob {{ab cb} {ab bb} {ab ab}} b*
 } 1
 test lsearch-17.4 {lsearch -index option, basic functionality} {
     lsearch -index 1 -regexp {{ab cb} {ab bb} {ab ab}} {[cb]b}
 } 0
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -429,7 +435,11 @@ test lsearch-17.5 {lsearch -index option, basic functionality} {
 test lsearch-17.6 {lsearch -index option, basic functionality} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lsearch -all -index 1 -glob {{ab cb} {ab bb} {db bx}} b* 
+=======
+    lsearch -all -index 1 -glob {{ab cb} {ab bb} {db bx}} b*
+>>>>>>> upstream/master
 =======
     lsearch -all -index 1 -glob {{ab cb} {ab bb} {db bx}} b*
 >>>>>>> upstream/master
@@ -450,6 +460,7 @@ test lsearch-18.2 {lsearch -index option, list as index basic functionality} {
 test lsearch-18.3 {lsearch -index option, list as index basic functionality} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lsearch -index {1 1} -glob {{{ab cb} {ab bb} {ab ab}} {{ab cb} {ab bb} {ab ab}}} b* 
 } 0
 test lsearch-18.4 {lsearch -index option, list as index basic functionality} {
@@ -458,12 +469,17 @@ test lsearch-18.4 {lsearch -index option, list as index basic functionality} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     lsearch -index {1 1} -glob {{{ab cb} {ab bb} {ab ab}} {{ab cb} {ab bb} {ab ab}}} b*
 } 0
 test lsearch-18.4 {lsearch -index option, list as index basic functionality} {
     lsearch -index {0 1} -regexp {{{ab cb} {ab bb} {ab ab}} {{ab cb} {ab bb} {ab ab}}} {[cb]b}
 } 0
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -480,6 +496,7 @@ test lsearch-19.2 {lsearch -sunindices option} {
 test lsearch-19.3 {lsearch -sunindices option} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lsearch -subindices -index {1 1} -glob {{{ab cb} {ab bb} {ab ab}} {{ab cb} {ab bb} {ab ab}}} b* 
 } {0 1 1}
 test lsearch-19.4 {lsearch -sunindices option} {
@@ -488,12 +505,17 @@ test lsearch-19.4 {lsearch -sunindices option} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     lsearch -subindices -index {1 1} -glob {{{ab cb} {ab bb} {ab ab}} {{ab cb} {ab bb} {ab ab}}} b*
 } {0 1 1}
 test lsearch-19.4 {lsearch -sunindices option} {
     lsearch -subindices -index {0 1} -regexp {{{ab cb} {ab bb} {ab ab}} {{ab cb} {ab bb} {ab ab}}} {[cb]b}
 } {0 0 1}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

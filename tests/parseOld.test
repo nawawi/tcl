@@ -14,7 +14,11 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require tcltest
+=======
+package require tcltest 2
+>>>>>>> upstream/master
 =======
 package require tcltest 2
 >>>>>>> upstream/master
@@ -556,4 +560,7 @@ return
 # Local Variables:
 # mode: tcl
 # End:
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master

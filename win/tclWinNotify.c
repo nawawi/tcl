@@ -52,8 +52,14 @@ static Tcl_ThreadDataKey dataKey;
 static int notifierCount = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const TCHAR classname[] = TEXT("TclNotifier");
 TCL_DECLARE_MUTEX(notifierMutex)
+=======
+static const TCHAR className[] = TEXT("TclNotifier");
+static int initialized = 0;
+static CRITICAL_SECTION notifierMutex;
+>>>>>>> upstream/master
 =======
 static const TCHAR className[] = TEXT("TclNotifier");
 static int initialized = 0;
@@ -97,6 +103,7 @@ Tcl_InitNotifier(void)
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 	WNDCLASS class;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	/*
@@ -147,6 +154,40 @@ Tcl_InitNotifier(void)
 	LeaveCriticalSection(&notifierMutex);
 >>>>>>> upstream/master
 
+=======
+	TclpMasterLock();
+	if (!initialized) {
+	    initialized = 1;
+	    InitializeCriticalSection(&notifierMutex);
+	}
+	TclpMasterUnlock();
+
+	/*
+	 * Register Notifier window class if this is the first thread to use
+	 * this module.
+	 */
+
+	EnterCriticalSection(&notifierMutex);
+	if (notifierCount == 0) {
+	    class.style = 0;
+	    class.cbClsExtra = 0;
+	    class.cbWndExtra = 0;
+	    class.hInstance = TclWinGetTclInstance();
+	    class.hbrBackground = NULL;
+	    class.lpszMenuName = NULL;
+	    class.lpszClassName = className;
+	    class.lpfnWndProc = NotifierProc;
+	    class.hIcon = NULL;
+	    class.hCursor = NULL;
+
+	    if (!RegisterClass(&class)) {
+		Tcl_Panic("Unable to register TclNotifier window class");
+	    }
+	}
+	notifierCount++;
+	LeaveCriticalSection(&notifierMutex);
+
+>>>>>>> upstream/master
 =======
 	TclpMasterLock();
 	if (!initialized) {
@@ -243,6 +284,7 @@ Tcl_FinalizeNotifier(
 	/*
 	 * Clean up the timer and messaging window for this thread.
 	 */
+<<<<<<< HEAD
 
 	if (tsdPtr->hwnd) {
 	    KillTimer(tsdPtr->hwnd, INTERVAL_TIMER);
@@ -275,6 +317,19 @@ Tcl_FinalizeNotifier(
 =======
 
 >>>>>>> upstream/master
+=======
+
+	if (tsdPtr->hwnd) {
+	    KillTimer(tsdPtr->hwnd, INTERVAL_TIMER);
+	    DestroyWindow(tsdPtr->hwnd);
+	}
+
+	/*
+	 * If this is the last thread to use the notifier, unregister the
+	 * notifier window class.
+	 */
+
+>>>>>>> upstream/master
 	EnterCriticalSection(&notifierMutex);
 	if (notifierCount) {
 	    notifierCount--;
@@ -284,6 +339,9 @@ Tcl_FinalizeNotifier(
 	}
 	LeaveCriticalSection(&notifierMutex);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -450,7 +508,11 @@ Tcl_ServiceModeHook(
 	if (mode == TCL_SERVICE_ALL && !tsdPtr->hwnd) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    tsdPtr->hwnd = CreateWindow(classname, classname,
+=======
+	    tsdPtr->hwnd = CreateWindow(className, className,
+>>>>>>> upstream/master
 =======
 	    tsdPtr->hwnd = CreateWindow(className, className,
 >>>>>>> upstream/master

@@ -20,6 +20,10 @@
 #include "tclInt.h"
 #include "tommath.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#include "tclStringRep.h"
+>>>>>>> upstream/master
 =======
 #include "tclStringRep.h"
 >>>>>>> upstream/master
@@ -51,6 +55,7 @@ static int		TestobjCmd(ClientData dummy, Tcl_Interp *interp,
 static int		TeststringobjCmd(ClientData dummy, Tcl_Interp *interp,
 			    int objc, Tcl_Obj *const objv[]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 typedef struct TestString {
     int numChars;
@@ -62,6 +67,12 @@ typedef struct TestString {
 #define VARPTR_KEY "TCLOBJTEST_VARPTR"
 #define NUMBER_OF_OBJECT_VARS 20
 
+=======
+
+#define VARPTR_KEY "TCLOBJTEST_VARPTR"
+#define NUMBER_OF_OBJECT_VARS 20
+
+>>>>>>> upstream/master
 static void VarPtrDeleteProc(ClientData clientData, Tcl_Interp *interp)
 {
     register int i;
@@ -72,6 +83,7 @@ static void VarPtrDeleteProc(ClientData clientData, Tcl_Interp *interp)
     Tcl_DeleteAssocData(interp, VARPTR_KEY);
     ckfree(varPtr);
 }
+<<<<<<< HEAD
 
 =======
 
@@ -94,6 +106,13 @@ static Tcl_Obj **GetVarPtr(Tcl_Interp *interp)
 {
     Tcl_InterpDeleteProc *proc;
 
+=======
+
+static Tcl_Obj **GetVarPtr(Tcl_Interp *interp)
+{
+    Tcl_InterpDeleteProc *proc;
+
+>>>>>>> upstream/master
     return (Tcl_Obj **) Tcl_GetAssocData(interp, VARPTR_KEY, &proc);
 }
 
@@ -198,12 +217,16 @@ TestbignumobjCmd(
     if (Tcl_GetIndexFromObj(interp, objv[1], subcmds, "option", 0,
 	    &index) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     string = Tcl_GetString(objv[2]);
     if (GetVariableIndex(interp, string, &varIndex) != TCL_OK) {
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
 =======
 	return TCL_ERROR;
     }
@@ -211,6 +234,8 @@ TestbignumobjCmd(
     if (GetVariableIndex(interp, string, &varIndex) != TCL_OK) {
 	return TCL_ERROR;
     }
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     varPtr = GetVarPtr(interp);
 
@@ -269,6 +294,9 @@ TestbignumobjCmd(
 	if (Tcl_GetBignumFromObj(interp, varPtr[varIndex],
 		&bignumValue) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 	if (mp_init(&newValue) != MP_OKAY
@@ -279,6 +307,7 @@ TestbignumobjCmd(
 		    Tcl_NewStringObj("error in mp_mul_d", -1));
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 =======
 	    return TCL_ERROR;
 	}
@@ -290,6 +319,8 @@ TestbignumobjCmd(
 		    Tcl_NewStringObj("error in mp_mul_d", -1));
 	    return TCL_ERROR;
 	}
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	mp_clear(&bignumValue);
 	if (!Tcl_IsShared(varPtr[varIndex])) {
@@ -425,6 +456,7 @@ TestbooleanobjCmd(
 	if (Tcl_GetBooleanFromObj(interp, objv[3], &boolValue) != TCL_OK) {
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 
 	/*
 	 * If the object currently bound to the variable with index varIndex
@@ -434,6 +466,17 @@ TestbooleanobjCmd(
 	 * formerly-shared object's ref count. This is "copy on write".
 	 */
 
+=======
+
+	/*
+	 * If the object currently bound to the variable with index varIndex
+	 * has ref count 1 (i.e. the object is unshared) we can modify that
+	 * object directly. Otherwise, if RC>1 (i.e. the object is shared),
+	 * we must create a new object to modify/set and decrement the old
+	 * formerly-shared object's ref count. This is "copy on write".
+	 */
+
+>>>>>>> upstream/master
 	if ((varPtr[varIndex] != NULL) && !Tcl_IsShared(varPtr[varIndex])) {
 	    Tcl_SetBooleanObj(varPtr[varIndex], boolValue);
 	} else {
@@ -672,6 +715,7 @@ TestindexobjCmd(
     }
     argv[objc-4] = NULL;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /*
      * Tcl_GetIndexFromObj assumes that the table is statically-allocated so
@@ -690,6 +734,12 @@ TestindexobjCmd(
 
     result = Tcl_GetIndexFromObj((setError? interp : NULL), objv[3],
 	    argv, "token", (allowAbbrev? 0 : TCL_EXACT), &index);
+=======
+
+    result = Tcl_GetIndexFromObj((setError? interp : NULL), objv[3],
+	    argv, "token", INDEX_TEMP_TABLE|(allowAbbrev? 0 : TCL_EXACT),
+	    &index);
+>>>>>>> upstream/master
 =======
 
     result = Tcl_GetIndexFromObj((setError? interp : NULL), objv[3],
@@ -903,7 +953,10 @@ TestintobjCmd(
 		"bad option \"", Tcl_GetString(objv[1]),
 		"\": must be set, get, get2, mult10, or div10", NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     return TCL_OK;
@@ -960,6 +1013,7 @@ TestlistobjCmd(
     varPtr = GetVarPtr(interp);
     index = Tcl_GetString(objv[2]);
     if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	return TCL_ERROR;
     }
@@ -1059,6 +1113,8 @@ TestlistobjCmd(
     varPtr = GetVarPtr(interp);
     index = Tcl_GetString(objv[2]);
     if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
+=======
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     if (Tcl_GetIndexFromObj(interp, objv[1], subcommands, "command",
@@ -1180,17 +1236,23 @@ TestobjCmd(
 	index = Tcl_GetString(objv[2]);
 	if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 =======
 	    return TCL_ERROR;
 	}
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	typeName = Tcl_GetString(objv[3]);
 	if ((targetType = Tcl_GetObjType(typeName)) == NULL) {
@@ -1277,11 +1339,15 @@ TestobjCmd(
 	index = Tcl_GetString(objv[2]);
 	if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 	    return TCL_ERROR;
@@ -1294,6 +1360,9 @@ TestobjCmd(
 =======
 	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(varPtr[varIndex]->refCount));
 >>>>>>> upstream/master
+=======
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(varPtr[varIndex]->refCount));
+>>>>>>> upstream/master
     } else if (strcmp(subCmd, "type") == 0) {
 	if (objc != 3) {
 	    goto wrongNumArgs;
@@ -1301,11 +1370,19 @@ TestobjCmd(
 	index = Tcl_GetString(objv[2]);
 	if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    return TCL_ERROR;
 	}
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
+=======
+	    return TCL_ERROR;
+	}
+	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
+	    return TCL_ERROR;
+	}
+>>>>>>> upstream/master
 =======
 	    return TCL_ERROR;
 	}
@@ -1367,7 +1444,11 @@ TeststringobjCmd(
 #define MAX_STRINGS 11
     const char *index, *string, *strings[MAX_STRINGS+1];
 <<<<<<< HEAD
+<<<<<<< HEAD
     TestString *strPtr;
+=======
+    String *strPtr;
+>>>>>>> upstream/master
 =======
     String *strPtr;
 >>>>>>> upstream/master

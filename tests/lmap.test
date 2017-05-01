@@ -222,6 +222,7 @@ unset -nocomplain a
 test lmap-4.15 {lmap errors} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     apply {{} { 
 	set a(0) 44
 	list [catch {lmap a {1 2 3} {}} msg o] $msg $::errorInfo 
@@ -229,11 +230,16 @@ test lmap-4.15 {lmap errors} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     apply {{} {
 	set a(0) 44
 	list [catch {lmap a {1 2 3} {}} msg o] $msg $::errorInfo
     }}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -37,7 +37,11 @@ typedef struct BgError {
  * pending background errors for the interpreter.
  */
 
+<<<<<<< HEAD
 typedef struct ErrAssocData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Interp *interp;		/* Interpreter in which error occurred. */
     Tcl_Obj *cmdPrefix;		/* First word(s) of the handler command */
     BgError *firstBgPtr;	/* First in list of all background errors
@@ -305,6 +309,7 @@ HandleBgErrors(
  *
  *----------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 int
 TclDefaultBgErrorHandlerObjCmd(
@@ -329,11 +334,33 @@ TclDefaultBgErrorHandlerObjCmd(
      */
 
 =======
+=======
+
+int
+TclDefaultBgErrorHandlerObjCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    Tcl_Obj *keyPtr, *valuePtr;
+    Tcl_Obj *tempObjv[2];
+    int result, code, level;
+    Tcl_InterpState saved;
+
+    if (objc != 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "msg options");
+	return TCL_ERROR;
+    }
+>>>>>>> upstream/master
 
     /*
      * Check for a valid return options dictionary.
      */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     TclNewLiteralStringObj(keyPtr, "-level");
     Tcl_IncrRefCount(keyPtr);
@@ -420,6 +447,7 @@ TclDefaultBgErrorHandlerObjCmd(
     if (result == TCL_OK && valuePtr != NULL) {
 	Tcl_SetObjErrorCode(interp, valuePtr);
     }
+<<<<<<< HEAD
 
     TclNewLiteralStringObj(keyPtr, "-errorinfo");
     Tcl_IncrRefCount(keyPtr);
@@ -440,6 +468,28 @@ TclDefaultBgErrorHandlerObjCmd(
 
     saved = Tcl_SaveInterpState(interp, code);
 
+=======
+
+    TclNewLiteralStringObj(keyPtr, "-errorinfo");
+    Tcl_IncrRefCount(keyPtr);
+    result = Tcl_DictObjGet(NULL, objv[2], keyPtr, &valuePtr);
+    Tcl_DecrRefCount(keyPtr);
+    if (result == TCL_OK && valuePtr != NULL) {
+	Tcl_AppendObjToErrorInfo(interp, valuePtr);
+    }
+
+    if (code == TCL_ERROR) {
+	Tcl_SetObjResult(interp, tempObjv[1]);
+    }
+
+    /*
+     * Save interpreter state so we can restore it if multiple handler
+     * attempts are needed.
+     */
+
+    saved = Tcl_SaveInterpState(interp, code);
+
+>>>>>>> upstream/master
     /*
      * Invoke the bgerror command.
      */
@@ -949,11 +999,15 @@ Tcl_Exit(
     TCL_NORETURN1 Tcl_ExitProc *currentAppExitPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
     Tcl_MutexLock(&exitMutex);
     currentAppExitPtr = appExitPtr;
     Tcl_MutexUnlock(&exitMutex);
 
+<<<<<<< HEAD
 =======
 
     Tcl_MutexLock(&exitMutex);
@@ -967,6 +1021,8 @@ Tcl_Exit(
     currentAppExitPtr = appExitPtr;
     Tcl_MutexUnlock(&exitMutex);
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if (currentAppExitPtr) {
 	/*
@@ -1068,6 +1124,7 @@ TclInitSubsystems(void)
 	    TclInitAlloc();		/* Process wide mutex init */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 #endif
 #if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
@@ -1077,6 +1134,11 @@ TclInitSubsystems(void)
 #endif
 #if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
 	    TclpInitAllocCache();
+>>>>>>> upstream/master
+=======
+#endif
+#if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
+	    TclInitThreadAlloc();	/* Setup thread allocator caches */
 >>>>>>> upstream/master
 #endif
 #ifdef TCL_MEM_DEBUG
@@ -1141,6 +1203,7 @@ Tcl_Finalize(void)
 
     (void) TCL_TSD_INIT(&dataKey);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /*
      * Clean up after the current thread now, after exit handlers. In
@@ -1156,6 +1219,8 @@ Tcl_Finalize(void)
      */
 
 =======
+=======
+>>>>>>> upstream/master
 
     /*
      * Clean up after the current thread now, after exit handlers. In
@@ -1170,6 +1235,9 @@ Tcl_Finalize(void)
      * Now invoke late (process-wide) exit handlers.
      */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_MutexLock(&exitMutex);
     for (exitPtr = firstLateExitPtr; exitPtr != NULL;
@@ -1516,6 +1584,11 @@ VwaitVarProc(
 
     *donePtr = 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
+	    VwaitVarProc, clientData);
+>>>>>>> upstream/master
 =======
     Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 	    VwaitVarProc, clientData);

@@ -1384,7 +1384,11 @@ TclConvertElement(
      */
 
     if ((src == NULL) || (length == 0) || (*src == '\0' && length == -1)) {
+<<<<<<< HEAD
 	src = tclEmptyStringRep;
+=======
+	src = &tclEmptyString;
+>>>>>>> upstream/master
 	length = 0;
 	conversion = CONVERT_BRACE;
     }
@@ -1969,7 +1973,11 @@ Tcl_ConcatObj(
 	    continue;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(objPtr, &length);
+=======
+	TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 =======
 	TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
@@ -1987,8 +1995,11 @@ Tcl_ConcatObj(
 	    if (resPtr) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_ListObjAppendList(NULL, resPtr, objPtr);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 		if (TCL_OK != Tcl_ListObjAppendList(NULL, resPtr, objPtr)) {
@@ -1997,6 +2008,9 @@ Tcl_ConcatObj(
 		    goto slow;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2012,6 +2026,10 @@ Tcl_ConcatObj(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  slow:
+>>>>>>> upstream/master
 =======
   slow:
 >>>>>>> upstream/master
@@ -2564,6 +2582,9 @@ TclStringMatchObj(
 	Tcl_UniChar *udata, *uptn;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -2644,6 +2665,7 @@ Tcl_DStringAppend(
 	length = strlen(bytes);
     }
     newSize = length + dsPtr->length;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -2750,6 +2772,15 @@ Tcl_DStringAppend(
      * room to grow before we have to allocate again.
      */
 
+=======
+
+    /*
+     * Allocate a larger buffer for the string if the current one isn't large
+     * enough. Allocate extra space in the new buffer so that there will be
+     * room to grow before we have to allocate again.
+     */
+
+>>>>>>> upstream/master
     if (newSize >= dsPtr->spaceAvl) {
 	dsPtr->spaceAvl = newSize * 2;
 	if (dsPtr->string == dsPtr->staticSpace) {
@@ -2771,6 +2802,9 @@ Tcl_DStringAppend(
 	    if (offset >= 0) {
 		bytes = dsPtr->string + offset;
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	}
     }
@@ -2803,7 +2837,11 @@ TclDStringAppendObj(
 {
     int length;
 <<<<<<< HEAD
+<<<<<<< HEAD
     char *bytes = Tcl_GetStringFromObj(objPtr, &length);
+=======
+    char *bytes = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 =======
     char *bytes = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
@@ -2867,8 +2905,11 @@ Tcl_DStringAppendElement(
 	    dsPtr->string = newString;
 	} else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    dsPtr->string = ckrealloc(dsPtr->string, dsPtr->spaceAvl);
 =======
+=======
+>>>>>>> upstream/master
 	    int offset = -1;
 
 	    /* See [16896d49fd] */
@@ -2882,6 +2923,9 @@ Tcl_DStringAppendElement(
 	    if (offset >= 0) {
 		element = dsPtr->string + offset;
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	}
 	dst = dsPtr->string + dsPtr->length;
@@ -3027,7 +3071,10 @@ Tcl_DStringResult(
     Tcl_DString *dsPtr)		/* Dynamic string that is to become the
 				 * result of interp. */
 {
+<<<<<<< HEAD
     Tcl_ResetResult(interp);
+=======
+>>>>>>> upstream/master
     Tcl_SetObjResult(interp, TclDStringToObj(dsPtr));
 }
 
@@ -3057,6 +3104,14 @@ Tcl_DStringGetResult(
     Tcl_DString *dsPtr)		/* Dynamic string that is to become the result
 				 * of interp. */
 {
+#ifdef TCL_NO_DEPRECATED
+    Tcl_Obj *obj = Tcl_GetObjResult(interp);
+    const char *bytes = TclGetString(obj);
+
+    Tcl_DStringFree(dsPtr);
+    Tcl_DStringAppend(dsPtr, bytes, obj->length);
+    Tcl_ResetResult(interp);
+#else
     Interp *iPtr = (Interp *) interp;
 
     if (dsPtr->string != dsPtr->staticSpace) {
@@ -3065,7 +3120,11 @@ Tcl_DStringGetResult(
 
     /*
      * Do more efficient transfer when we know the result is a Tcl_Obj. When
+<<<<<<< HEAD
      * there's no st`ring result, we only have to deal with two cases:
+=======
+     * there's no string result, we only have to deal with two cases:
+>>>>>>> upstream/master
      *
      *  1. When the string rep is the empty string, when we don't copy but
      *     instead use the staticSpace in the DString to hold an empty string.
@@ -3080,7 +3139,11 @@ Tcl_DStringGetResult(
 
     if (!iPtr->result[0] && iPtr->objResultPtr
 	    && !Tcl_IsShared(iPtr->objResultPtr)) {
+<<<<<<< HEAD
 	if (iPtr->objResultPtr->bytes == tclEmptyStringRep) {
+=======
+	if (iPtr->objResultPtr->bytes == &tclEmptyString) {
+>>>>>>> upstream/master
 	    dsPtr->string = dsPtr->staticSpace;
 	    dsPtr->string[0] = 0;
 	    dsPtr->length = 0;
@@ -3090,7 +3153,11 @@ Tcl_DStringGetResult(
 	    dsPtr->length = iPtr->objResultPtr->length;
 	    dsPtr->spaceAvl = dsPtr->length + 1;
 	    TclFreeIntRep(iPtr->objResultPtr);
+<<<<<<< HEAD
 	    iPtr->objResultPtr->bytes = tclEmptyStringRep;
+=======
+	    iPtr->objResultPtr->bytes = &tclEmptyString;
+>>>>>>> upstream/master
 	    iPtr->objResultPtr->length = 0;
 	}
 	return;
@@ -3128,6 +3195,7 @@ Tcl_DStringGetResult(
 
     iPtr->result = iPtr->resultSpace;
     iPtr->resultSpace[0] = 0;
+#endif /* !TCL_NO_DEPRECATED */
 }
 
 /*
@@ -3193,11 +3261,94 @@ TclDStringToObj(
 /*
  *----------------------------------------------------------------------
  *
- * Tcl_DStringStartSublist --
+ * TclDStringToObj --
  *
+<<<<<<< HEAD
+ *	This function moves a dynamic string's contents to a new Tcl_Obj. Be
+ *	aware that this function does *not* check that the encoding of the
+ *	contents of the dynamic string is correct; this is the caller's
+ *	responsibility to enforce.
+=======
  *	This function adds the necessary information to a dynamic string
  *	(e.g. " {") to start a sublist. Future element appends will be in the
  *	sublist rather than the main list.
+>>>>>>> upstream/master
+ *
+ * Results:
+ *	The newly-allocated untyped (i.e., typePtr==NULL) Tcl_Obj with a
+ *	reference count of zero.
+ *
+ * Side effects:
+ *	The string is "moved" to the object. dsPtr is reinitialized to an
+ *	empty string; it does not need to be Tcl_DStringFree'd after this if
+ *	not used further.
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+Tcl_Obj *
+TclDStringToObj(
+    Tcl_DString *dsPtr)
+{
+    Tcl_Obj *result;
+
+    if (dsPtr->string == dsPtr->staticSpace) {
+	if (dsPtr->length == 0) {
+	    TclNewObj(result);
+	} else {
+	    /*
+	     * Static buffer, so must copy.
+	     */
+
+	    TclNewStringObj(result, dsPtr->string, dsPtr->length);
+	}
+    } else {
+	/*
+	 * Dynamic buffer, so transfer ownership and reset.
+	 */
+
+	TclNewObj(result);
+	result->bytes = dsPtr->string;
+	result->length = dsPtr->length;
+=======
+void
+Tcl_DStringStartSublist(
+    Tcl_DString *dsPtr)		/* Dynamic string. */
+{
+    if (TclNeedSpace(dsPtr->string, dsPtr->string + dsPtr->length)) {
+	TclDStringAppendLiteral(dsPtr, " {");
+    } else {
+	TclDStringAppendLiteral(dsPtr, "{");
+>>>>>>> upstream/master
+    }
+
+    /*
+     * Re-establish the DString as empty with no buffer allocated.
+     */
+
+    dsPtr->string = dsPtr->staticSpace;
+    dsPtr->spaceAvl = TCL_DSTRING_STATIC_SIZE;
+    dsPtr->length = 0;
+    dsPtr->staticSpace[0] = '\0';
+
+    return result;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_DStringStartSublist --
+ *
+<<<<<<< HEAD
+ *	This function adds the necessary information to a dynamic string
+ *	(e.g. " {") to start a sublist. Future element appends will be in the
+ *	sublist rather than the main list.
+=======
+ *	This function adds the necessary characters to a dynamic string to end
+ *	a sublist (e.g. "}"). Future element appends will be in the enclosing
+ *	(sub)list rather than the current sublist.
+>>>>>>> upstream/master
  *
  * Results:
  *	None.
@@ -3209,6 +3360,7 @@ TclDStringToObj(
  */
 
 void
+<<<<<<< HEAD
 Tcl_DStringStartSublist(
     Tcl_DString *dsPtr)		/* Dynamic string. */
 {
@@ -3217,6 +3369,12 @@ Tcl_DStringStartSublist(
     } else {
 	TclDStringAppendLiteral(dsPtr, "{");
     }
+=======
+Tcl_DStringEndSublist(
+    Tcl_DString *dsPtr)		/* Dynamic string. */
+{
+    TclDStringAppendLiteral(dsPtr, "}");
+>>>>>>> upstream/master
 }
 
 /*
@@ -3224,12 +3382,23 @@ Tcl_DStringStartSublist(
  *
  * Tcl_DStringEndSublist --
  *
+<<<<<<< HEAD
  *	This function adds the necessary characters to a dynamic string to end
  *	a sublist (e.g. "}"). Future element appends will be in the enclosing
  *	(sub)list rather than the current sublist.
  *
  * Results:
  *	None.
+=======
+ *	Given a floating-point value, this function converts it to an ASCII
+ *	string using.
+ *
+ * Results:
+ *	The ASCII equivalent of "value" is written at "dst". It is written
+ *	using the current precision, and it is guaranteed to contain a decimal
+ *	point or exponent, so that it looks like a floating-point value and
+ *	not an integer.
+>>>>>>> upstream/master
  *
  * Side effects:
  *	None.
@@ -3238,10 +3407,166 @@ Tcl_DStringStartSublist(
  */
 
 void
+<<<<<<< HEAD
 Tcl_DStringEndSublist(
     Tcl_DString *dsPtr)		/* Dynamic string. */
 {
     TclDStringAppendLiteral(dsPtr, "}");
+=======
+Tcl_PrintDouble(
+    Tcl_Interp *interp,		/* Interpreter whose tcl_precision variable
+				 * used to be used to control printing. It's
+				 * ignored now. */
+    double value,		/* Value to print as string. */
+    char *dst)			/* Where to store converted value; must have
+				 * at least TCL_DOUBLE_SPACE characters. */
+{
+    char *p, c;
+    int exponent;
+    int signum;
+    char *digits;
+    char *end;
+    int *precisionPtr = Tcl_GetThreadData(&precisionKey, sizeof(int));
+
+    /*
+     * Handle NaN.
+     */
+
+    if (TclIsNaN(value)) {
+	TclFormatNaN(value, dst);
+	return;
+    }
+
+    /*
+     * Handle infinities.
+     */
+
+    if (TclIsInfinite(value)) {
+	/*
+	 * Remember to copy the terminating NUL too.
+	 */
+
+	if (value < 0) {
+	    memcpy(dst, "-Inf", 5);
+	} else {
+	    memcpy(dst, "Inf", 4);
+	}
+	return;
+    }
+
+    /*
+     * Ordinary (normal and denormal) values.
+     */
+
+    if (*precisionPtr == 0) {
+	digits = TclDoubleDigits(value, -1, TCL_DD_SHORTEST,
+		&exponent, &signum, &end);
+    } else {
+	/*
+	 * There are at least two possible interpretations for tcl_precision.
+	 *
+	 * The first is, "choose the decimal representation having
+	 * $tcl_precision digits of significance that is nearest to the given
+	 * number, breaking ties by rounding to even, and then trimming
+	 * trailing zeros." This gives the greatest possible precision in the
+	 * decimal string, but offers the anomaly that [expr 0.1] will be
+	 * "0.10000000000000001".
+	 *
+	 * The second is "choose the decimal representation having at most
+	 * $tcl_precision digits of significance that is nearest to the given
+	 * number. If no such representation converts exactly to the given
+	 * number, choose the one that is closest, breaking ties by rounding
+	 * to even. If more than one such representation converts exactly to
+	 * the given number, choose the shortest, breaking ties in favour of
+	 * the nearest, breaking remaining ties in favour of the one ending in
+	 * an even digit."
+	 *
+	 * Tcl 8.4 implements the first of these, which gives rise to
+	 * anomalies in formatting:
+	 *
+	 *	% expr 0.1
+	 *	0.10000000000000001
+	 *	% expr 0.01
+	 *	0.01
+	 *	% expr 1e-7
+	 *	9.9999999999999995e-08
+	 *
+	 * For human readability, it appears better to choose the second rule,
+	 * and let [expr 0.1] return 0.1. But for 8.4 compatibility, we prefer
+	 * the first (the recommended zero value for tcl_precision avoids the
+	 * problem entirely).
+	 *
+	 * Uncomment TCL_DD_SHORTEN_FLAG in the next call to prefer the method
+	 * that allows floating point values to be shortened if it can be done
+	 * without loss of precision.
+	 */
+
+	digits = TclDoubleDigits(value, *precisionPtr,
+		TCL_DD_E_FORMAT /* | TCL_DD_SHORTEN_FLAG */,
+		&exponent, &signum, &end);
+    }
+    if (signum) {
+	*dst++ = '-';
+    }
+    p = digits;
+    if (exponent < -4 || exponent > 16) {
+	/*
+	 * E format for numbers < 1e-3 or >= 1e17.
+	 */
+
+	*dst++ = *p++;
+	c = *p;
+	if (c != '\0') {
+	    *dst++ = '.';
+	    while (c != '\0') {
+		*dst++ = c;
+		c = *++p;
+	    }
+	}
+
+	/*
+	 * Tcl 8.4 appears to format with at least a two-digit exponent;
+	 * preserve that behaviour when tcl_precision != 0
+	 */
+
+	if (*precisionPtr == 0) {
+	    sprintf(dst, "e%+d", exponent);
+	} else {
+	    sprintf(dst, "e%+03d", exponent);
+	}
+    } else {
+	/*
+	 * F format for others.
+	 */
+
+	if (exponent < 0) {
+	    *dst++ = '0';
+	}
+	c = *p;
+	while (exponent-- >= 0) {
+	    if (c != '\0') {
+		*dst++ = c;
+		c = *++p;
+	    } else {
+		*dst++ = '0';
+	    }
+	}
+	*dst++ = '.';
+	if (c == '\0') {
+	    *dst++ = '0';
+	} else {
+	    while (++exponent < -1) {
+		*dst++ = '0';
+	    }
+	    while (c != '\0') {
+		*dst++ = c;
+		c = *++p;
+	    }
+	}
+	*dst++ = '\0';
+    }
+    ckfree(digits);
+>>>>>>> upstream/master
 }
 
 /*
@@ -3249,6 +3574,7 @@ Tcl_DStringEndSublist(
  *
  * Tcl_PrintDouble --
  *
+<<<<<<< HEAD
  *	Given a floating-point value, this function converts it to an ASCII
  *	string using.
  *
@@ -3260,10 +3586,24 @@ Tcl_DStringEndSublist(
  *
  * Side effects:
  *	None.
+=======
+ *	This function is invoked whenever the variable "tcl_precision" is
+ *	written.
+ *
+ * Results:
+ *	Returns NULL if all went well, or an error message if the new value
+ *	for the variable doesn't make sense.
+ *
+ * Side effects:
+ *	If the new value doesn't make sense then this function undoes the
+ *	effect of the variable modification. Otherwise it modifies the format
+ *	string that's used by Tcl_PrintDouble.
+>>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 void
 Tcl_PrintDouble(
     Tcl_Interp *interp,		/* Interpreter whose tcl_precision variable
@@ -3281,11 +3621,26 @@ Tcl_PrintDouble(
     int *precisionPtr = Tcl_GetThreadData(&precisionKey, (int) sizeof(int));
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+	/* ARGSUSED */
+char *
+TclPrecTraceProc(
+    ClientData clientData,	/* Not used. */
+    Tcl_Interp *interp,		/* Interpreter containing variable. */
+    const char *name1,		/* Name of variable. */
+    const char *name2,		/* Second part of variable name. */
+    int flags)			/* Information about what happened. */
+{
+    Tcl_Obj *value;
+    int prec;
+    int *precisionPtr = Tcl_GetThreadData(&precisionKey, sizeof(int));
+>>>>>>> upstream/master
 
     /*
      * Handle NaN.
      */
 
+<<<<<<< HEAD
     if (TclIsNaN(value)) {
 	TclFormatNaN(value, dst);
 	return;
@@ -3522,6 +3877,45 @@ TclPrecTraceProc(
 	    || prec < 0 || prec > TCL_MAX_PREC) {
 	return (char *) "improper value for precision";
     }
+=======
+    if (flags & TCL_TRACE_UNSETS) {
+	if ((flags & TCL_TRACE_DESTROYED) && !Tcl_InterpDeleted(interp)) {
+	    Tcl_TraceVar2(interp, name1, name2,
+		    TCL_GLOBAL_ONLY|TCL_TRACE_READS|TCL_TRACE_WRITES
+		    |TCL_TRACE_UNSETS, TclPrecTraceProc, clientData);
+	}
+	return NULL;
+    }
+
+    /*
+     * When the variable is read, reset its value from our shared value. This
+     * is needed in case the variable was modified in some other interpreter
+     * so that this interpreter's value is out of date.
+     */
+
+
+    if (flags & TCL_TRACE_READS) {
+	Tcl_SetVar2Ex(interp, name1, name2, Tcl_NewIntObj(*precisionPtr),
+		flags & TCL_GLOBAL_ONLY);
+	return NULL;
+    }
+
+    /*
+     * The variable is being written. Check the new value and disallow it if
+     * it isn't reasonable or if this is a safe interpreter (we don't want
+     * safe interpreters messing up the precision of other interpreters).
+     */
+
+    if (Tcl_IsSafe(interp)) {
+	return (char *) "can't modify precision from a safe interpreter";
+    }
+    value = Tcl_GetVar2Ex(interp, name1, name2, flags & TCL_GLOBAL_ONLY);
+    if (value == NULL
+	    || Tcl_GetIntFromObj(NULL, value, &prec) != TCL_OK
+	    || prec < 0 || prec > TCL_MAX_PREC) {
+	return (char *) "improper value for precision";
+    }
+>>>>>>> upstream/master
     *precisionPtr = prec;
     return NULL;
 }
@@ -3737,7 +4131,11 @@ TclGetIntForIndex(
     int *indexPtr)		/* Location filled in with an integer
 				 * representing an index. */
 {
+<<<<<<< HEAD
     int length;
+=======
+    size_t length;
+>>>>>>> upstream/master
     char *opPtr;
     const char *bytes;
 
@@ -3755,7 +4153,12 @@ TclGetIntForIndex(
 	return TCL_OK;
     }
 
+<<<<<<< HEAD
     bytes = TclGetStringFromObj(objPtr, &length);
+=======
+    bytes = TclGetString(objPtr);
+    length = objPtr->length;
+>>>>>>> upstream/master
 
     /*
      * Leading whitespace is acceptable in an index.
@@ -3847,7 +4250,10 @@ UpdateStringOfEndOffset(
 	len += TclFormatInt(buffer+len, -(objPtr->internalRep.longValue));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     }
@@ -3889,6 +4295,7 @@ SetEndOffsetFromAny(
 
     if (objPtr->typePtr == &tclEndOffsetType) {
 	return TCL_OK;
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
     }
@@ -3934,6 +4341,10 @@ SetEndOffsetFromAny(
     }
 
 =======
+>>>>>>> upstream/master
+=======
+    }
+
 >>>>>>> upstream/master
 =======
     }
@@ -4216,9 +4627,14 @@ TclSetProcessGlobalValue(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(newValue, &pgvPtr->numBytes);
 =======
     bytes = TclGetStringFromObj(newValue, &pgvPtr->numBytes);
+>>>>>>> upstream/master
+=======
+    bytes = TclGetString(newValue);
+    pgvPtr->numBytes = newValue->length;
 >>>>>>> upstream/master
 =======
     bytes = TclGetString(newValue);

@@ -744,6 +744,7 @@ test regexp-20.1 {regsub shared object shimmering} {
     # Bug #461322
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set a abcdefghijklmnopqurstuvwxyz 
     set b $a 
     set c abcdefghijklmnopqurstuvwxyz0123456789 
@@ -751,11 +752,16 @@ test regexp-20.1 {regsub shared object shimmering} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     set a abcdefghijklmnopqurstuvwxyz
     set b $a
     set c abcdefghijklmnopqurstuvwxyz0123456789
     regsub $a $c $b d
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -1,6 +1,7 @@
 # created by tools/loadICU.tcl -- do not edit
 namespace eval ::tcl::clock {
     ::msgcat::mcset kok DAYS_OF_WEEK_FULL [list \
+<<<<<<< HEAD
         "\u0906\u0926\u093f\u0924\u094d\u092f\u0935\u093e\u0930"\
         "\u0938\u094b\u092e\u0935\u093e\u0930"\
         "\u092e\u0902\u0917\u0933\u093e\u0930"\
@@ -36,4 +37,41 @@ namespace eval ::tcl::clock {
         "\u0921\u093f\u0938\u0947\u0902\u092c\u0930"]
     ::msgcat::mcset kok AM "\u0915\u094d\u0930\u093f\u0938\u094d\u0924\u092a\u0942\u0930\u094d\u0935"
     ::msgcat::mcset kok PM "\u0915\u094d\u0930\u093f\u0938\u094d\u0924\u0936\u0916\u093e"
+=======
+        "आदित्यवार"\
+        "सोमवार"\
+        "मंगळार"\
+        "बुधवार"\
+        "गुरुवार"\
+        "शुक्रवार"\
+        "शनिवार"]
+    ::msgcat::mcset kok MONTHS_ABBREV [list \
+        "जानेवारी"\
+        "फेबृवारी"\
+        "मार्च"\
+        "एप्रिल"\
+        "मे"\
+        "जून"\
+        "जुलै"\
+        "ओगस्ट"\
+        "सेप्टेंबर"\
+        "ओक्टोबर"\
+        "नोव्हेंबर"\
+        "डिसेंबर"]
+    ::msgcat::mcset kok MONTHS_FULL [list \
+        "जानेवारी"\
+        "फेब्रुवारी"\
+        "मार्च"\
+        "एप्रिल"\
+        "मे"\
+        "जून"\
+        "जुलै"\
+        "ओगस्ट"\
+        "सेप्टेंबर"\
+        "ओक्टोबर"\
+        "नोव्हेंबर"\
+        "डिसेंबर"]
+    ::msgcat::mcset kok AM "क्रिस्तपूर्व"
+    ::msgcat::mcset kok PM "क्रिस्तशखा"
+>>>>>>> upstream/master
 }

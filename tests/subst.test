@@ -93,6 +93,7 @@ test subst-5.5 {command substitutions} {
     set a 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [catch {subst {[set a 1}} msg] $a $msg 
 } {1 0 {missing close-bracket}}
 test subst-5.6 {command substitutions} {
@@ -105,6 +106,8 @@ test subst-5.7 {command substitutions} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     list [catch {subst {[set a 1}} msg] $a $msg
 } {1 0 {missing close-bracket}}
 test subst-5.6 {command substitutions} {
@@ -115,6 +118,9 @@ test subst-5.7 {command substitutions} {
     set a 0
     list [catch {subst {0[set a 1; set a 2}} msg] $a $msg
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -125,6 +131,7 @@ test subst-5.8 {command substitutions} {
     set script {[subst {[set a 1}]}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [catch {exec [info nameofexecutable] << $script} msg] $msg 
 } {1 {missing close-bracket}}
 test subst-5.9 {command substitutions} {
@@ -137,6 +144,8 @@ test subst-5.10 {command substitutions} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     list [catch {exec [info nameofexecutable] << $script} msg] $msg
 } {1 {missing close-bracket}}
 test subst-5.9 {command substitutions} {
@@ -147,6 +156,9 @@ test subst-5.10 {command substitutions} {
     set script {[subst {0[set a 1; set a 2}]}
     list [catch {exec [info nameofexecutable] << $script} msg] $msg
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -204,7 +216,11 @@ test subst-8.6 {return in a subst} -returnCodes error -body {
 test subst-8.7 {return in a subst, parse error} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     subst {foo [return {x} ; set a {}"" ; stuff] bar} 
+=======
+    subst {foo [return {x} ; set a {}"" ; stuff] bar}
+>>>>>>> upstream/master
 =======
     subst {foo [return {x} ; set a {}"" ; stuff] bar}
 >>>>>>> upstream/master

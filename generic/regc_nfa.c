@@ -277,6 +277,7 @@ newarc(
 {
     struct arc *a;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     assert(from != NULL && to != NULL);
 
@@ -306,6 +307,26 @@ newarc(
 
 >>>>>>> upstream/master
 =======
+
+>>>>>>> upstream/master
+=======
+
+    assert(from != NULL && to != NULL);
+
+    /* check for duplicate arc, using whichever chain is shorter */
+    if (from->nouts <= to->nins) {
+	for (a = from->outs; a != NULL; a = a->outchain) {
+	    if (a->to == to && a->co == co && a->type == t) {
+		return;
+	    }
+	}
+    } else {
+	for (a = to->ins; a != NULL; a = a->inchain) {
+	    if (a->from == from && a->co == co && a->type == t) {
+		return;
+	    }
+	}
+    }
 
 >>>>>>> upstream/master
     /* no dup, so create the arc */
@@ -376,6 +397,7 @@ allocarc(
     struct state *s)
 {
     struct arc *a;
+<<<<<<< HEAD
 
     /*
      * Shortcut
@@ -419,6 +441,40 @@ allocarc(
 	s->oas.next = newAb;
 
 =======
+
+    if (s->free == NULL) {
+	struct arcbatch *newAb;
+	int i;
+
+	if (nfa->v->spaceused >= REG_MAX_COMPILE_SPACE) {
+	    NERR(REG_ETOOBIG);
+	    return NULL;
+	}
+	newAb = (struct arcbatch *) MALLOC(sizeof(struct arcbatch));
+	if (newAb == NULL) {
+	    NERR(REG_ESPACE);
+	    return NULL;
+	}
+	nfa->v->spaceused += sizeof(struct arcbatch);
+	newAb->next = s->oas.next;
+	s->oas.next = newAb;
+
+>>>>>>> upstream/master
+=======
+
+    /*
+     * Shortcut
+     */
+
+    if (s->free == NULL && s->noas < ABSIZE) {
+	a = &s->oas.a[s->noas];
+	s->noas++;
+	return a;
+    }
+
+    /*
+     * if none at hand, get more
+     */
 
     if (s->free == NULL) {
 	struct arcbatch *newAb;
@@ -624,6 +680,86 @@ cparc(
     struct state *to)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+{
+    newarc(nfa, oa->type, oa->co, from, to);
+}
+
+/*
+ * sortins - sort the in arcs of a state by from/color/type
+ */
+static void
+sortins(
+    struct nfa * nfa,
+    struct state * s)
+{
+    struct arc **sortarray;
+    struct arc *a;
+    int n = s->nins;
+    int i;
+
+    if (n <= 1) {
+	return;		/* nothing to do */
+    }
+    /* make an array of arc pointers ... */
+    sortarray = (struct arc **) MALLOC(n * sizeof(struct arc *));
+    if (sortarray == NULL) {
+	NERR(REG_ESPACE);
+	return;
+    }
+    i = 0;
+    for (a = s->ins; a != NULL; a = a->inchain) {
+	sortarray[i++] = a;
+    }
+    assert(i == n);
+    /* ... sort the array */
+    qsort(sortarray, n, sizeof(struct arc *), sortins_cmp);
+    /* ... and rebuild arc list in order */
+    /* it seems worth special-casing first and last items to simplify loop */
+    a = sortarray[0];
+    s->ins = a;
+    a->inchain = sortarray[1];
+    a->inchainRev = NULL;
+    for (i = 1; i < n - 1; i++) {
+	a = sortarray[i];
+	a->inchain = sortarray[i + 1];
+	a->inchainRev = sortarray[i - 1];
+    }
+    a = sortarray[i];
+    a->inchain = NULL;
+    a->inchainRev = sortarray[i - 1];
+    FREE(sortarray);
+}
+
+static int
+sortins_cmp(
+    const void *a,
+    const void *b)
+{
+    const struct arc *aa = *((const struct arc * const *) a);
+    const struct arc *bb = *((const struct arc * const *) b);
+
+    /* we check the fields in the order they are most likely to be different */
+    if (aa->from->no < bb->from->no) {
+	return -1;
+    }
+    if (aa->from->no > bb->from->no) {
+ 	return 1;
+    }
+    if (aa->co < bb->co) {
+ 	return -1;
+    }
+    if (aa->co > bb->co) {
+ 	return 1;
+    }
+    if (aa->type < bb->type) {
+ 	return -1;
+    }
+    if (aa->type > bb->type) {
+ 	return 1;
+    }
+    return 0;
+=======
 {
     newarc(nfa, oa->type, oa->co, from, to);
 }
@@ -703,7 +839,7 @@ sortins_cmp(
     }
     return 0;
 }
- 
+
 /*
  * sortouts - sort the out arcs of a state by to/color/type
  */
@@ -781,14 +917,534 @@ sortouts_cmp(
 }
 
 /*
+ * Common decision logic about whether to use arc-by-arc operations or
+ * sort/merge.  If there's just a few source arcs we cannot recoup the
+ * cost of sorting the destination arc list, no matter how large it is.
+ * Otherwise, limit the number of arc-by-arc comparisons to about 1000
+ * (a somewhat arbitrary choice, but the breakeven point would probably
+ * be machine dependent anyway).
+ */
+#define BULK_ARC_OP_USE_SORT(nsrcarcs, ndestarcs) \
+	((nsrcarcs) < 4 ? 0 : ((nsrcarcs) > 32 || (ndestarcs) > 32))
+
+/*
+ - moveins - move all in arcs of a state to another state
+ * You might think this could be done better by just updating the
+ * existing arcs, and you would be right if it weren't for the need
+ * for duplicate suppression, which makes it easier to just make new
+ * ones to exploit the suppression built into newarc.
+ *
+ * However, if we have a whole lot of arcs to deal with, retail duplicate
+ * checks become too slow.  In that case we proceed by sorting and merging
+ * the arc lists, and then we can indeed just update the arcs in-place.
+ *
+ ^ static void moveins(struct nfa *, struct state *, struct state *);
+ */
+static void
+moveins(
+    struct nfa *nfa,
+    struct state *oldState,
+    struct state *newState)
+{
+    assert(oldState != newState);
+
+    if (!BULK_ARC_OP_USE_SORT(oldState->nins, newState->nins)) {
+	/* With not too many arcs, just do them one at a time */
+	struct arc *a;
+
+	while ((a = oldState->ins) != NULL) {
+	    cparc(nfa, a, a->from, newState);
+	    freearc(nfa, a);
+	}
+    } else {
+	/*
+	 * With many arcs, use a sort-merge approach.  Note changearctarget()
+	 * will put the arc onto the front of newState's chain, so it does not
+	 * break our walk through the sorted part of the chain.
+	 */
+	struct arc *oa;
+	struct arc *na;
+
+	/*
+	 * Because we bypass newarc() in this code path, we'd better include a
+	 * cancel check.
+	 */
+	if (CANCEL_REQUESTED(nfa->v->re)) {
+	    NERR(REG_CANCEL);
+	    return;
+	}
+
+	sortins(nfa, oldState);
+	sortins(nfa, newState);
+	if (NISERR()) {
+	    return;		/* might have failed to sort */
+	}
+	oa = oldState->ins;
+	na = newState->ins;
+	while (oa != NULL && na != NULL) {
+	    struct arc *a = oa;
+
+	    switch (sortins_cmp(&oa, &na)) {
+		case -1:
+		    /* newState does not have anything matching oa */
+		    oa = oa->inchain;
+
+		    /*
+		     * Rather than doing createarc+freearc, we can just unlink
+		     * and relink the existing arc struct.
+		     */
+		    changearctarget(a, newState);
+		    break;
+		case 0:
+		    /* match, advance in both lists */
+		    oa = oa->inchain;
+		    na = na->inchain;
+		    /* ... and drop duplicate arc from oldState */
+		    freearc(nfa, a);
+		    break;
+		case +1:
+		    /* advance only na; oa might have a match later */
+		    na = na->inchain;
+		    break;
+		default:
+		    assert(NOTREACHED);
+	    }
+	}
+	while (oa != NULL) {
+	    /* newState does not have anything matching oa */
+	    struct arc *a = oa;
+
+	    oa = oa->inchain;
+	    changearctarget(a, newState);
+	}
+    }
+
+    assert(oldState->nins == 0);
+    assert(oldState->ins == NULL);
+}
+
+/*
+ - copyins - copy in arcs of a state to another state
+ ^ static void copyins(struct nfa *, struct state *, struct state *, int);
+ */
+static void
+copyins(
+    struct nfa *nfa,
+    struct state *oldState,
+    struct state *newState)
+{
+    assert(oldState != newState);
+
+    if (!BULK_ARC_OP_USE_SORT(oldState->nins, newState->nins)) {
+	/* With not too many arcs, just do them one at a time */
+	struct arc *a;
+
+	for (a = oldState->ins; a != NULL; a = a->inchain) {
+	    cparc(nfa, a, a->from, newState);
+	}
+    } else {
+	/*
+	 * With many arcs, use a sort-merge approach.  Note that createarc()
+	 * will put new arcs onto the front of newState's chain, so it does
+	 * not break our walk through the sorted part of the chain.
+	 */
+	struct arc *oa;
+	struct arc *na;
+
+	/*
+	 * Because we bypass newarc() in this code path, we'd better include a
+	 * cancel check.
+	 */
+	if (CANCEL_REQUESTED(nfa->v->re)) {
+	    NERR(REG_CANCEL);
+	    return;
+	}
+
+	sortins(nfa, oldState);
+	sortins(nfa, newState);
+	if (NISERR()) {
+	    return;		/* might have failed to sort */
+	}
+	oa = oldState->ins;
+	na = newState->ins;
+	while (oa != NULL && na != NULL) {
+	    struct arc *a = oa;
+
+	    switch (sortins_cmp(&oa, &na)) {
+		case -1:
+		    /* newState does not have anything matching oa */
+		    oa = oa->inchain;
+		    createarc(nfa, a->type, a->co, a->from, newState);
+		    break;
+		case 0:
+		    /* match, advance in both lists */
+		    oa = oa->inchain;
+		    na = na->inchain;
+		    break;
+		case +1:
+		    /* advance only na; oa might have a match later */
+		    na = na->inchain;
+		    break;
+		default:
+		    assert(NOTREACHED);
+	    }
+	}
+	while (oa != NULL) {
+	    /* newState does not have anything matching oa */
+	    struct arc *a = oa;
+
+	    oa = oa->inchain;
+	    createarc(nfa, a->type, a->co, a->from, newState);
+	}
+    }
+>>>>>>> upstream/master
+}
+ 
+/*
+<<<<<<< HEAD
+ * sortouts - sort the out arcs of a state by to/color/type
+ */
+static void
+sortouts(
+    struct nfa * nfa,
+    struct state * s)
+{
+    struct arc **sortarray;
+    struct arc *a;
+    int	n = s->nouts;
+    int	i;
+
+    if (n <= 1) {
+	return;					/* nothing to do */
+    }
+    /* make an array of arc pointers ... */
+    sortarray = (struct arc **) MALLOC(n * sizeof(struct arc *));
+    if (sortarray == NULL) {
+	NERR(REG_ESPACE);
+	return;
+    }
+    i = 0;
+    for (a = s->outs; a != NULL; a = a->outchain) {
+	sortarray[i++] = a;
+    }
+    assert(i == n);
+    /* ... sort the array */
+    qsort(sortarray, n, sizeof(struct arc *), sortouts_cmp);
+    /* ... and rebuild arc list in order */
+    /* it seems worth special-casing first and last items to simplify loop */
+    a = sortarray[0];
+    s->outs = a;
+    a->outchain = sortarray[1];
+    a->outchainRev = NULL;
+    for (i = 1; i < n - 1; i++) {
+	a = sortarray[i];
+	a->outchain = sortarray[i + 1];
+	a->outchainRev = sortarray[i - 1];
+    }
+    a = sortarray[i];
+    a->outchain = NULL;
+    a->outchainRev = sortarray[i - 1];
+    FREE(sortarray);
+}
+
+static int
+sortouts_cmp(
+    const void *a,
+    const void *b)
+{
+    const struct arc *aa = *((const struct arc * const *) a);
+    const struct arc *bb = *((const struct arc * const *) b);
+
+    /* we check the fields in the order they are most likely to be different */
+    if (aa->to->no < bb->to->no) {
+	return -1;
+    }
+    if (aa->to->no > bb->to->no) {
+	return 1;
+    }
+    if (aa->co < bb->co) {
+	return -1;
+    }
+    if (aa->co > bb->co) {
+	return 1;
+    }
+    if (aa->type < bb->type) {
+	return -1;
+    }
+    if (aa->type > bb->type) {
+	return 1;
+    }
+    return 0;
+}
+=======
+ * mergeins - merge a list of inarcs into a state
+ *
+ * This is much like copyins, but the source arcs are listed in an array,
+ * and are not guaranteed unique.  It's okay to clobber the array contents.
+ */
+static void
+mergeins(
+    struct nfa * nfa,
+    struct state * s,
+    struct arc ** arcarray,
+    int arccount)
+{
+    struct arc *na;
+    int	i;
+    int	j;
+
+    if (arccount <= 0) {
+	return;
+    }
+
+    /*
+     * Because we bypass newarc() in this code path, we'd better include a
+     * cancel check.
+     */
+    if (CANCEL_REQUESTED(nfa->v->re)) {
+	NERR(REG_CANCEL);
+	return;
+    }
+
+    /* Sort existing inarcs as well as proposed new ones */
+    sortins(nfa, s);
+    if (NISERR()) {
+	return;			/* might have failed to sort */
+    }
+
+    qsort(arcarray, arccount, sizeof(struct arc *), sortins_cmp);
+
+    /*
+     * arcarray very likely includes dups, so we must eliminate them.  (This
+     * could be folded into the next loop, but it's not worth the trouble.)
+     */
+    j = 0;
+    for (i = 1; i < arccount; i++) {
+	switch (sortins_cmp(&arcarray[j], &arcarray[i])) {
+	    case -1:
+		/* non-dup */
+		arcarray[++j] = arcarray[i];
+		break;
+	    case 0:
+		/* dup */
+		break;
+	    default:
+		/* trouble */
+		assert(NOTREACHED);
+	}
+    }
+    arccount = j + 1;
+
+    /*
+     * Now merge into s' inchain.  Note that createarc() will put new arcs
+     * onto the front of s's chain, so it does not break our walk through the
+     * sorted part of the chain.
+     */
+    i = 0;
+    na = s->ins;
+    while (i < arccount && na != NULL) {
+	struct arc *a = arcarray[i];
+
+	switch (sortins_cmp(&a, &na)) {
+	    case -1:
+		/* s does not have anything matching a */
+		createarc(nfa, a->type, a->co, a->from, s);
+		i++;
+		break;
+	    case 0:
+		/* match, advance in both lists */
+		i++;
+		na = na->inchain;
+		break;
+	    case +1:
+		/* advance only na; array might have a match later */
+		na = na->inchain;
+		break;
+	    default:
+		assert(NOTREACHED);
+	}
+    }
+    while (i < arccount) {
+	/* s does not have anything matching a */
+	struct arc *a = arcarray[i];
+
+	createarc(nfa, a->type, a->co, a->from, s);
+	i++;
+    }
+}
+
+/*
+ - moveouts - move all out arcs of a state to another state
+ ^ static void moveouts(struct nfa *, struct state *, struct state *);
+ */
+static void
+moveouts(
+    struct nfa *nfa,
+    struct state *oldState,
+    struct state *newState)
+{
+    assert(oldState != newState);
+
+    if (!BULK_ARC_OP_USE_SORT(oldState->nouts, newState->nouts)) {
+	/* With not too many arcs, just do them one at a time */
+	struct arc *a;
+
+	while ((a = oldState->outs) != NULL) {
+	    cparc(nfa, a, newState, a->to);
+	    freearc(nfa, a);
+	}
+    } else {
+	/*
+	 * With many arcs, use a sort-merge approach.  Note that createarc()
+	 * will put new arcs onto the front of newState's chain, so it does
+	 * not break our walk through the sorted part of the chain.
+	 */
+	struct arc *oa;
+	struct arc *na;
+
+	/*
+	 * Because we bypass newarc() in this code path, we'd better include a
+	 * cancel check.
+	 */
+	if (CANCEL_REQUESTED(nfa->v->re)) {
+	    NERR(REG_CANCEL);
+	    return;
+	}
+>>>>>>> upstream/master
+
+	sortouts(nfa, oldState);
+	sortouts(nfa, newState);
+	if (NISERR()) {
+	    return;	/* might have failed to sort */
+	}
+	oa = oldState->outs;
+	na = newState->outs;
+	while (oa != NULL && na != NULL) {
+	    struct arc *a = oa;
+
+	    switch (sortouts_cmp(&oa, &na)) {
+		case -1:
+		    /* newState does not have anything matching oa */
+		    oa = oa->outchain;
+		    createarc(nfa, a->type, a->co, newState, a->to);
+		    freearc(nfa, a);
+		    break;
+		case 0:
+		    /* match, advance in both lists */
+		    oa = oa->outchain;
+		    na = na->outchain;
+		    /* ... and drop duplicate arc from oldState */
+		    freearc(nfa, a);
+		    break;
+		case +1:
+		    /* advance only na; oa might have a match later */
+		    na = na->outchain;
+		    break;
+		default:
+		    assert(NOTREACHED);
+	    }
+	}
+	while (oa != NULL) {
+	    /* newState does not have anything matching oa */
+	    struct arc *a = oa;
+
+	    oa = oa->outchain;
+	    createarc(nfa, a->type, a->co, newState, a->to);
+	    freearc(nfa, a);
+	}
+    }
+
+    assert(oldState->nouts == 0);
+    assert(oldState->outs == NULL);
+}
+
+/*
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
 {
     newarc(nfa, oa->type, oa->co, from, to);
 }
+=======
+ - copyouts - copy out arcs of a state to another state
+ ^ static void copyouts(struct nfa *, struct state *, struct state *, int);
+ */
+static void
+copyouts(
+    struct nfa *nfa,
+    struct state *oldState,
+    struct state *newState)
+{
+    assert(oldState != newState);
 
+    if (!BULK_ARC_OP_USE_SORT(oldState->nouts, newState->nouts)) {
+	/* With not too many arcs, just do them one at a time */
+	struct arc *a;
+
+	for (a = oldState->outs; a != NULL; a = a->outchain) {
+	    cparc(nfa, a, newState, a->to);
+	}
+    } else {
+ 	/*
+	 * With many arcs, use a sort-merge approach.  Note that createarc()
+	 * will put new arcs onto the front of newState's chain, so it does
+	 * not break our walk through the sorted part of the chain.
+	 */
+	struct arc *oa;
+	struct arc *na;
+
+	/*
+	 * Because we bypass newarc() in this code path, we'd better include a
+	 * cancel check.
+	 */
+	if (CANCEL_REQUESTED(nfa->v->re)) {
+	    NERR(REG_CANCEL);
+	    return;
+	}
+>>>>>>> upstream/master
+
+	sortouts(nfa, oldState);
+	sortouts(nfa, newState);
+	if (NISERR()) {
+	    return;		/* might have failed to sort */
+	}
+	oa = oldState->outs;
+	na = newState->outs;
+	while (oa != NULL && na != NULL) {
+	    struct arc *a = oa;
+
+	    switch (sortouts_cmp(&oa, &na)) {
+		case -1:
+		    /* newState does not have anything matching oa */
+		    oa = oa->outchain;
+		    createarc(nfa, a->type, a->co, newState, a->to);
+		    break;
+		case 0:
+		    /* match, advance in both lists */
+		    oa = oa->outchain;
+		    na = na->outchain;
+		    break;
+		case +1:
+		    /* advance only na; oa might have a match later */
+		    na = na->outchain;
+		    break;
+		default:
+		    assert(NOTREACHED);
+	    }
+	}
+	while (oa != NULL) {
+	    /* newState does not have anything matching oa */
+	    struct arc *a = oa;
+
+	    oa = oa->outchain;
+	    createarc(nfa, a->type, a->co, newState, a->to);
+	}
+    }
+}
+
 /*
+<<<<<<< HEAD
  * sortins - sort the in arcs of a state by from/color/type
  */
 static void
@@ -862,9 +1518,31 @@ sortins_cmp(
  	return 1;
     }
     return 0;
-}
+=======
+ - cloneouts - copy out arcs of a state to another state pair, modifying type
+ ^ static void cloneouts(struct nfa *, struct state *, struct state *,
+ ^ 	struct state *, int);
+ */
+static void
+cloneouts(
+    struct nfa *nfa,
+    struct state *old,
+    struct state *from,
+    struct state *to,
+    int type)
+{
+    struct arc *a;
 
+    assert(old != from);
+
+    for (a=old->outs ; a!=NULL ; a=a->outchain) {
+	newarc(nfa, type, a->co, from, to);
+    }
+>>>>>>> upstream/master
+}
+
 /*
+<<<<<<< HEAD
  * sortouts - sort the out arcs of a state by to/color/type
  */
 static void
@@ -985,9 +1663,33 @@ sortouts_cmp(
 	return 1;
     }
     return 0;
-}
+=======
+ - delsub - delete a sub-NFA, updating subre pointers if necessary
+ * This uses a recursive traversal of the sub-NFA, marking already-seen
+ * states using their tmp pointer.
+ ^ static void delsub(struct nfa *, struct state *, struct state *);
+ */
+static void
+delsub(
+    struct nfa *nfa,
+    struct state *lp,		/* the sub-NFA goes from here... */
+    struct state *rp)		/* ...to here, *not* inclusive */
+{
+    assert(lp != rp);
 
+    rp->tmp = rp;		/* mark end */
+
+    deltraverse(nfa, lp, lp);
+    assert(lp->nouts == 0 && rp->nins == 0);	/* did the job */
+    assert(lp->no != FREESTATE && rp->no != FREESTATE);	/* no more */
+
+    rp->tmp = NULL;		/* unmark end */
+    lp->tmp = NULL;		/* and begin, marked by deltraverse */
+>>>>>>> upstream/master
+}
+
 /*
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -1187,9 +1889,79 @@ copyins(
 	    createarc(nfa, a->type, a->co, a->from, newState);
 	}
     }
-}
+=======
+ - deltraverse - the recursive heart of delsub
+ * This routine's basic job is to destroy all out-arcs of the state.
+ ^ static void deltraverse(struct nfa *, struct state *, struct state *);
+ */
+static void
+deltraverse(
+    struct nfa *nfa,
+    struct state *leftend,
+    struct state *s)
+{
+    struct arc *a;
+    struct state *to;
 
+    if (s->nouts == 0) {
+	return;			/* nothing to do */
+    }
+    if (s->tmp != NULL) {
+	return;			/* already in progress */
+    }
+
+    s->tmp = s;			/* mark as in progress */
+
+    while ((a = s->outs) != NULL) {
+	to = a->to;
+	deltraverse(nfa, leftend, to);
+	assert(to->nouts == 0 || to->tmp != NULL);
+	freearc(nfa, a);
+	if (to->nins == 0 && to->tmp == NULL) {
+	    assert(to->nouts == 0);
+	    freestate(nfa, to);
+	}
+    }
+
+    assert(s->no != FREESTATE);	/* we're still here */
+    assert(s == leftend || s->nins != 0);	/* and still reachable */
+    assert(s->nouts == 0);	/* but have no outarcs */
+
+    s->tmp = NULL;		/* we're done here */
+}
+
 /*
+ - dupnfa - duplicate sub-NFA
+ * Another recursive traversal, this time using tmp to point to duplicates as
+ * well as mark already-seen states. (You knew there was a reason why it's a
+ * state pointer, didn't you? :-))
+ ^ static void dupnfa(struct nfa *, struct state *, struct state *,
+ ^ 	struct state *, struct state *);
+ */
+static void
+dupnfa(
+    struct nfa *nfa,
+    struct state *start,	/* duplicate of subNFA starting here */
+    struct state *stop,		/* and stopping here */
+    struct state *from,		/* stringing duplicate from here */
+    struct state *to)		/* to here */
+{
+    if (start == stop) {
+	newarc(nfa, EMPTY, 0, from, to);
+	return;
+    }
+
+    stop->tmp = to;
+    duptraverse(nfa, start, from, 0);
+    /* done, except for clearing out the tmp pointers */
+
+    stop->tmp = NULL;
+    cleartraverse(nfa, start);
+>>>>>>> upstream/master
+}
+
+/*
+<<<<<<< HEAD
  * mergeins - merge a list of inarcs into a state
  *
  * This is much like copyins, but the source arcs are listed in an array,
@@ -1207,10 +1979,32 @@ mergeins(
     int	j;
 
     if (arccount <= 0) {
+=======
+ - duptraverse - recursive heart of dupnfa
+ ^ static void duptraverse(struct nfa *, struct state *, struct state *);
+ */
+static void
+duptraverse(
+    struct nfa *nfa,
+    struct state *s,
+    struct state *stmp,		/* s's duplicate, or NULL */
+    int depth)
+{
+    struct arc *a;
+
+    if (s->tmp != NULL) {
+	return;			/* already done */
+    }
+
+    s->tmp = (stmp == NULL) ? newstate(nfa) : stmp;
+    if (s->tmp == NULL) {
+	assert(NISERR());
+>>>>>>> upstream/master
 	return;
     }
 
     /*
+<<<<<<< HEAD
      * Because we bypass newarc() in this code path, we'd better include a
      * cancel check.
      */
@@ -1283,10 +2077,31 @@ mergeins(
 
 	createarc(nfa, a->type, a->co, a->from, s);
 	i++;
+=======
+     * Arbitrary depth limit. Needs tuning, but this value is sufficient to
+     * make all normal tests (not reg-33.14) pass.
+     */
+#ifndef DUPTRAVERSE_MAX_DEPTH
+#define DUPTRAVERSE_MAX_DEPTH 15000
+#endif
+
+    if (depth++ > DUPTRAVERSE_MAX_DEPTH) {
+	NERR(REG_ESPACE);
+    }
+
+    for (a=s->outs ; a!=NULL && !NISERR() ; a=a->outchain) {
+	duptraverse(nfa, a->to, NULL, depth);
+	if (NISERR()) {
+	    break;
+	}
+	assert(a->to->tmp != NULL);
+	cparc(nfa, a, s->tmp, a->to->tmp);
+>>>>>>> upstream/master
     }
 }
 
 /*
+<<<<<<< HEAD
  - moveouts - move all out arcs of a state to another state
  ^ static void moveouts(struct nfa *, struct state *, struct state *);
  */
@@ -2144,6 +2959,300 @@ pushfwd(
     struct nfa *nfa,
     FILE *f)			/* for debug output; NULL none */
 {
+=======
+ - cleartraverse - recursive cleanup for algorithms that leave tmp ptrs set
+ ^ static void cleartraverse(struct nfa *, struct state *);
+ */
+static void
+cleartraverse(
+    struct nfa *nfa,
+    struct state *s)
+{
+    struct arc *a;
+
+    if (s->tmp == NULL) {
+	return;
+    }
+    s->tmp = NULL;
+
+    for (a=s->outs ; a!=NULL ; a=a->outchain) {
+	cleartraverse(nfa, a->to);
+    }
+}
+
+/*
+ - specialcolors - fill in special colors for an NFA
+ ^ static void specialcolors(struct nfa *);
+ */
+static void
+specialcolors(
+    struct nfa *nfa)
+{
+    /*
+     * False colors for BOS, BOL, EOS, EOL
+     */
+
+    if (nfa->parent == NULL) {
+	nfa->bos[0] = pseudocolor(nfa->cm);
+	nfa->bos[1] = pseudocolor(nfa->cm);
+	nfa->eos[0] = pseudocolor(nfa->cm);
+	nfa->eos[1] = pseudocolor(nfa->cm);
+    } else {
+	assert(nfa->parent->bos[0] != COLORLESS);
+	nfa->bos[0] = nfa->parent->bos[0];
+	assert(nfa->parent->bos[1] != COLORLESS);
+	nfa->bos[1] = nfa->parent->bos[1];
+	assert(nfa->parent->eos[0] != COLORLESS);
+	nfa->eos[0] = nfa->parent->eos[0];
+	assert(nfa->parent->eos[1] != COLORLESS);
+	nfa->eos[1] = nfa->parent->eos[1];
+    }
+}
+
+/*
+ - optimize - optimize an NFA
+ ^ static long optimize(struct nfa *, FILE *);
+ */
+
+ /*
+  * The main goal of this function is not so much "optimization" (though it
+  * does try to get rid of useless NFA states) as reducing the NFA to a form
+  * the regex executor can handle.  The executor, and indeed the cNFA format
+  * that is its input, can only handle PLAIN and LACON arcs.  The output of
+  * the regex parser also includes EMPTY (do-nothing) arcs, as well as
+  * ^, $, AHEAD, and BEHIND constraint arcs, which we must get rid of here.
+  * We first get rid of EMPTY arcs and then deal with the constraint arcs.
+  * The hardest part of either job is to get rid of circular loops of the
+  * target arc type.  We would have to do that in any case, though, as such a
+  * loop would otherwise allow the executor to cycle through the loop endlessly
+  * without making any progress in the input string.
+  */
+static long			/* re_info bits */
+optimize(
+    struct nfa *nfa,
+    FILE *f)			/* for debug output; NULL none */
+{
+    int verbose = (f != NULL) ? 1 : 0;
+
+    if (verbose) {
+	fprintf(f, "\ninitial cleanup:\n");
+    }
+    cleanup(nfa);		/* may simplify situation */
+    if (verbose) {
+	dumpnfa(nfa, f);
+    }
+    if (verbose) {
+	fprintf(f, "\nempties:\n");
+    }
+    fixempties(nfa, f);		/* get rid of EMPTY arcs */
+    if (verbose) {
+	fprintf(f, "\nconstraints:\n");
+    }
+    fixconstraintloops(nfa, f);	/* get rid of constraint loops */
+    pullback(nfa, f);		/* pull back constraints backward */
+    pushfwd(nfa, f);		/* push fwd constraints forward */
+    if (verbose) {
+	fprintf(f, "\nfinal cleanup:\n");
+    }
+    cleanup(nfa);		/* final tidying */
+#ifdef REG_DEBUG
+    if (verbose) {
+	dumpnfa(nfa, f);
+    }
+#endif
+    return analyze(nfa);	/* and analysis */
+}
+
+/*
+ - pullback - pull back constraints backward to eliminate them
+ ^ static void pullback(struct nfa *, FILE *);
+ */
+static void
+pullback(
+    struct nfa *nfa,
+    FILE *f)			/* for debug output; NULL none */
+{
+    struct state *s;
+    struct state *nexts;
+    struct arc *a;
+    struct arc *nexta;
+    struct state *intermediates;
+    int progress;
+
+    /*
+     * Find and pull until there are no more.
+     */
+
+    do {
+	progress = 0;
+	for (s=nfa->states ; s!=NULL && !NISERR() ; s=nexts) {
+	    nexts = s->next;
+	    intermediates = NULL;
+	    for (a=s->outs ; a!=NULL && !NISERR() ; a=nexta) {
+		nexta = a->outchain;
+		if (a->type == '^' || a->type == BEHIND) {
+		    if (pull(nfa, a, &intermediates)) {
+			progress = 1;
+		    }
+		}
+		assert(nexta == NULL || s->no != FREESTATE);
+	    }
+	    /* clear tmp fields of intermediate states created here */
+	    while (intermediates != NULL) {
+		struct state *ns = intermediates->tmp;
+
+		intermediates->tmp = NULL;
+		intermediates = ns;
+	    }
+	    /* if s is now useless, get rid of it */
+	    if ((s->nins == 0 || s->nouts == 0) && !s->flag) {
+		dropstate(nfa, s);
+	    }
+	}
+	if (progress && f != NULL) {
+	    dumpnfa(nfa, f);
+	}
+    } while (progress && !NISERR());
+    if (NISERR()) {
+	return;
+    }
+
+    /*
+     * Any ^ constraints we were able to pull to the start state can now be
+     * replaced by PLAIN arcs referencing the BOS or BOL colors.  There should
+     * be no other ^ or BEHIND arcs left in the NFA, though we do not check
+     * that here (compact() will fail if so).
+     */
+    for (a=nfa->pre->outs ; a!=NULL ; a=nexta) {
+	nexta = a->outchain;
+	if (a->type == '^') {
+	    assert(a->co == 0 || a->co == 1);
+	    newarc(nfa, PLAIN, nfa->bos[a->co], a->from, a->to);
+	    freearc(nfa, a);
+	}
+    }
+}
+
+/*
+ - pull - pull a back constraint backward past its source state
+ *
+ * Returns 1 if successful (which it always is unless the source is the
+ * start state or we have an internal error), 0 if nothing happened.
+ *
+ * A significant property of this function is that it deletes no pre-existing
+ * states, and no outarcs of the constraint's from state other than the given
+ * constraint arc.  This makes the loops in pullback() safe, at the cost that
+ * we may leave useless states behind.  Therefore, we leave it to pullback()
+ * to delete such states.
+ *
+ * If the from state has multiple back-constraint outarcs, and/or multiple
+ * compatible constraint inarcs, we only need to create one new intermediate
+ * state per combination of predecessor and successor states.  *intermediates
+ * points to a list of such intermediate states for this from state (chained
+ * through their tmp fields).
+ ^ static int pull(struct nfa *, struct arc *);
+ */
+static int
+pull(
+    struct nfa *nfa,
+    struct arc *con,
+    struct state **intermediates)
+{
+    struct state *from = con->from;
+    struct state *to = con->to;
+    struct arc *a;
+    struct arc *nexta;
+    struct state *s;
+
+    assert(from != to);		/* should have gotten rid of this earlier */
+    if (from->flag) {		/* can't pull back beyond start */
+	return 0;
+    }
+    if (from->nins == 0) {	/* unreachable */
+	freearc(nfa, con);
+	return 1;
+    }
+
+    /*
+     * First, clone from state if necessary to avoid other outarcs.  This may
+     * seem wasteful, but it simplifies the logic, and we'll get rid of the
+     * clone state again at the bottom.
+     */
+
+    if (from->nouts > 1) {
+	s = newstate(nfa);
+	if (NISERR()) {
+	    return 0;
+	}
+	copyins(nfa, from, s);	/* duplicate inarcs */
+	cparc(nfa, con, s, to);		/* move constraint arc */
+	freearc(nfa, con);
+	if (NISERR()) {
+	    return 0;
+	}
+	from = s;
+	con = from->outs;
+    }
+    assert(from->nouts == 1);
+
+    /*
+     * Propagate the constraint into the from state's inarcs.
+     */
+
+    for (a=from->ins ; a!=NULL && !NISERR(); a=nexta) {
+	nexta = a->inchain;
+	switch (combine(con, a)) {
+	case INCOMPATIBLE:	/* destroy the arc */
+	    freearc(nfa, a);
+	    break;
+	case SATISFIED:		/* no action needed */
+	    break;
+	case COMPATIBLE:	/* swap the two arcs, more or less */
+	    /* need an intermediate state, but might have one already */
+	    for (s = *intermediates; s != NULL; s = s->tmp) {
+		assert(s->nins > 0 && s->nouts > 0);
+		if (s->ins->from == a->from && s->outs->to == to) {
+		    break;
+		}
+	    }
+	    if (s == NULL) {
+		s = newstate(nfa);
+		if (NISERR()) {
+		    return 0;
+		}
+		s->tmp = *intermediates;
+		*intermediates = s;
+	    }
+  	    cparc(nfa, con, a->from, s);
+	    cparc(nfa, a, s, to);
+ 	    freearc(nfa, a);
+  	    break;
+	default:
+	    assert(NOTREACHED);
+	    break;
+	}
+    }
+
+    /*
+     * Remaining inarcs, if any, incorporate the constraint.
+     */
+
+    moveins(nfa, from, to);
+    freearc(nfa, con);
+    /* from state is now useless, but we leave it to pullback() to clean up */
+    return 1;
+}
+
+/*
+ - pushfwd - push forward constraints forward to eliminate them
+ ^ static void pushfwd(struct nfa *, FILE *);
+ */
+static void
+pushfwd(
+    struct nfa *nfa,
+    FILE *f)			/* for debug output; NULL none */
+{
+>>>>>>> upstream/master
     struct state *s;
     struct state *nexts;
     struct arc *a;
@@ -2184,6 +3293,7 @@ pushfwd(
 	    dumpnfa(nfa, f);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}
     } while (progress && !NISERR());
     if (NISERR()) {
@@ -2208,6 +3318,9 @@ pushfwd(
 =======
 	}
 >>>>>>> upstream/master
+=======
+	}
+>>>>>>> upstream/master
     } while (progress && !NISERR());
     if (NISERR()) {
 	return;
@@ -2227,6 +3340,9 @@ pushfwd(
 	    freearc(nfa, a);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2567,7 +3683,11 @@ fixempties(
 	    }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2597,7 +3717,11 @@ fixempties(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2752,6 +3876,7 @@ fixconstraintloops(
  	/* If we removed all the outarcs, the state is useless. */
  	if (s->nouts == 0 && !s->flag) {
  	    dropstate(nfa, s);
+<<<<<<< HEAD
 	}
     }
 <<<<<<< HEAD
@@ -2781,6 +3906,29 @@ fixconstraintloops(
 	    goto restart;
 	}
     }
+=======
+	}
+    }
+
+    /* Nothing to do if no remaining constraint arcs */
+    if (NISERR() || !hasconstraints) {
+	return;
+    }
+
+    /*
+     * Starting from each remaining NFA state, search outwards for a
+     * constraint loop.  If we find a loop, break the loop, then start the
+     * search over.  (We could possibly retain some state from the first scan,
+     * but it would complicate things greatly, and multi-state constraint
+     * loops are rare enough that it's not worth optimizing the case.)
+     */
+  restart:
+    for (s = nfa->states; s != NULL && !NISERR(); s = s->next) {
+	if (findconstraintloop(nfa, s)) {
+	    goto restart;
+	}
+    }
+>>>>>>> upstream/master
 
     if (NISERR()) {
 	return;
@@ -2807,6 +3955,9 @@ fixconstraintloops(
  	dumpnfa(nfa, f);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 }
 
 /*
@@ -2918,6 +4069,7 @@ findconstraintloop(struct nfa * nfa, struct state * s)
 static void
 breakconstraintloop(struct nfa * nfa, struct state * sinitial)
 {
+<<<<<<< HEAD
 =======
 }
 
@@ -3030,6 +4182,8 @@ findconstraintloop(struct nfa * nfa, struct state * s)
 static void
 breakconstraintloop(struct nfa * nfa, struct state * sinitial)
 {
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     struct state *s;
     struct state *shead;
@@ -3481,7 +4635,11 @@ analyze(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  - compact - compact an NFA
+=======
+ - compact - construct the compact representation of an NFA
+>>>>>>> upstream/master
 =======
  - compact - construct the compact representation of an NFA
 >>>>>>> upstream/master
@@ -3525,6 +4683,9 @@ compact(
 	    FREE(cnfa->states);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	}
@@ -3532,11 +4693,14 @@ compact(
 	    FREE(cnfa->arcs);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	}
 	if (cnfa->arcs != NULL) {
 	    FREE(cnfa->arcs);
 	}
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -3601,8 +4765,11 @@ compact(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Really dumb algorithm, but if the list is long enough for that to matter,
  * you're in real trouble anyway.
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -3630,7 +4797,11 @@ carc_cmp(
     const struct carc *bb = (const struct carc *) b;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3826,6 +4997,7 @@ dumparc(
 	if (aa < &ab->a[ABSIZE]) {	/* propagate break */
 	    break;		/* NOTE BREAK OUT */
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}
     }
     if (ab == NULL) {
@@ -3842,6 +5014,24 @@ dumparc(
 	    break;		/* NOTE BREAK OUT */
 	}
     }
+=======
+	}
+    }
+    if (ab == NULL) {
+	fprintf(f, "?!?");	/* not in allocated space */
+    }
+    fprintf(f, "->");
+    if (a->to == NULL) {
+	fprintf(f, "NULL");
+	return;
+    }
+    fprintf(f, "%d", a->to->no);
+    for (aa = a->to->ins; aa != NULL; aa = aa->inchain) {
+	if (aa == a) {
+	    break;		/* NOTE BREAK OUT */
+	}
+    }
+>>>>>>> upstream/master
 =======
 	}
     }

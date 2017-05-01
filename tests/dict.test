@@ -2049,7 +2049,10 @@ test dict-24.25 {dict map with huge dict (compiled)} {
 } 166666666600000
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test dict-25.1 {compiled dict update with low-refcount values [Bug d553228d9f]} {
     # Test crashes on failure
     apply {{} {
@@ -2057,6 +2060,9 @@ test dict-25.1 {compiled dict update with low-refcount values [Bug d553228d9f]} 
 	dict update item item item two two {}
     }}
 } {}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup

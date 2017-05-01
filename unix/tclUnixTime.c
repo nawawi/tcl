@@ -22,10 +22,16 @@
  * variable is the key to this buffer.
  */
 
+<<<<<<< HEAD
 static Tcl_ThreadDataKey tmKey;
 <<<<<<< HEAD
 typedef struct ThreadSpecificData {
 =======
+typedef struct {
+>>>>>>> upstream/master
+=======
+#ifndef TCL_NO_DEPRECATED
+static Tcl_ThreadDataKey tmKey;
 typedef struct {
 >>>>>>> upstream/master
     struct tm gmtime_buf;
@@ -49,6 +55,11 @@ static char *lastTZ = NULL;	/* Holds the last setting of the TZ
 
 static void		SetTZIfNecessary(void);
 static void		CleanupMemory(ClientData clientData);
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+
+>>>>>>> upstream/master
 static void		NativeScaleTime(Tcl_Time *timebuf,
 			    ClientData clientData);
 static void		NativeGetTime(Tcl_Time *timebuf,
@@ -162,7 +173,11 @@ TclpGetWideClicks(void)
 	Tcl_Time time;
 
 	tclGetTimeProcPtr(&time, tclTimeClientData);
+<<<<<<< HEAD
 	now = (Tcl_WideInt) (time.sec*1000000 + time.usec);
+=======
+	now = ((Tcl_WideInt)time.sec)*1000000 + time.usec;
+>>>>>>> upstream/master
     } else {
 #ifdef MAC_OSX_TCL
 	now = (Tcl_WideInt) (mach_absolute_time() & INT64_MAX);
@@ -267,6 +282,10 @@ Tcl_GetTime(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 struct tm *
 TclpGetDate(
     const time_t *time,
@@ -356,6 +375,10 @@ TclpLocaltime(
 
     return &tsdPtr->localtime_buf;
 }
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -490,6 +513,10 @@ NativeGetTime(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 static void
 SetTZIfNecessary(void)
 {
@@ -535,6 +562,10 @@ CleanupMemory(
 {
     ckfree(lastTZ);
 }
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 
 /*
  * Local Variables:

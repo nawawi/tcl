@@ -4,18 +4,32 @@ namespace eval ::tcl::clock {
         "dom"\
         "lun"\
         "mar"\
+<<<<<<< HEAD
         "mi\u00e9"\
         "jue"\
         "vie"\
         "s\u00e1b"]
+=======
+        "mié"\
+        "jue"\
+        "vie"\
+        "sáb"]
+>>>>>>> upstream/master
     ::msgcat::mcset es DAYS_OF_WEEK_FULL [list \
         "domingo"\
         "lunes"\
         "martes"\
+<<<<<<< HEAD
         "mi\u00e9rcoles"\
         "jueves"\
         "viernes"\
         "s\u00e1bado"]
+=======
+        "miércoles"\
+        "jueves"\
+        "viernes"\
+        "sábado"]
+>>>>>>> upstream/master
     ::msgcat::mcset es MONTHS_ABBREV [list \
         "ene"\
         "feb"\

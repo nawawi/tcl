@@ -7,7 +7,11 @@
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # 
+=======
+#
+>>>>>>> upstream/master
 =======
 #
 >>>>>>> upstream/master
@@ -26,6 +30,7 @@ if {[catch {package require tcltest 2.1}]} {
 ::tcltest::loadTestedCommands
 catch [list package require -exact Tcltest [info patchlevel]]
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 namespace eval ::tcl::test::iogt {
     namespace import ::tcltest::*
@@ -33,12 +38,17 @@ namespace eval ::tcl::test::iogt {
 testConstraint testchannel [llength [info commands testchannel]]
 
 =======
+=======
+>>>>>>> upstream/master
 
 namespace eval ::tcl::test::iogt {
     namespace import ::tcltest::*
 
 testConstraint testchannel [llength [info commands testchannel]]
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 set path(dummy) [makeFile {abcdefghijklmnopqrstuvwxyz0123456789,./?><;'\|":[]\}\{`~!@#$%^&*()_+-=
 } dummy]
@@ -691,9 +701,15 @@ test iogt-4.0 {fileevent readable, after transform} -setup {
 	audit_flow trail -attach $sock
 	rblocks_t rbuf trail 23 -attach $sock
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	fileevent $sock readable [namespace code [list Get $sock]]
 
+=======
+
+	fileevent $sock readable [namespace code [list Get $sock]]
+
+>>>>>>> upstream/master
 =======
 
 	fileevent $sock readable [namespace code [list Get $sock]]

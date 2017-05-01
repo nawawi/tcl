@@ -91,10 +91,16 @@ have 59 or 61 seconds.
 One of the words, \fBseconds\fR, \fBminutes\fR, \fBhours\fR,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBdays\fR, \fBweeks\fR, \fBmonths\fR, or \fByears\fR, or
 any unique prefix of such a word. Used in conjunction with \fIcount\fR
 to identify an interval of time, for example, \fI3 seconds\fR or
 \fI1 year\fR.
+=======
+\fBdays\fR, \fBweekdays\fR, \fBweeks\fR, \fBmonths\fR, or \fByears\fR.
+Used in conjunction with \fIcount\fR to identify an interval of time,
+for example, \fI3 seconds\fR or \fI1 year\fR.
+>>>>>>> upstream/master
 =======
 \fBdays\fR, \fBweekdays\fR, \fBweeks\fR, \fBmonths\fR, or \fByears\fR.
 Used in conjunction with \fIcount\fR to identify an interval of time,
@@ -189,8 +195,12 @@ are integers and keywords in alternation, where the keywords are chosen
 from \fBseconds\fR, \fBminutes\fR, \fBhours\fR,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBdays\fR, \fBweeks\fR, \fBmonths\fR, or \fByears\fR, or
 any unique prefix of such a word.
+=======
+\fBdays\fR, \fBweekdays\fR, \fBweeks\fR, \fBmonths\fR, or \fByears\fR.
+>>>>>>> upstream/master
 =======
 \fBdays\fR, \fBweekdays\fR, \fBweeks\fR, \fBmonths\fR, or \fByears\fR.
 >>>>>>> upstream/master
@@ -235,7 +245,12 @@ to days by multiplying by seven) is added to the calendar day, and
 the date and time are then converted back to a count of seconds from
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the epoch time.
+=======
+the epoch time.  The \fBweekdays\fR keyword is similar to \fBdays\fR,
+with the only difference that weekends - Saturdays and Sundays - are skipped.
+>>>>>>> upstream/master
 =======
 the epoch time.  The \fBweekdays\fR keyword is similar to \fBdays\fR,
 with the only difference that weekends - Saturdays and Sundays - are skipped.

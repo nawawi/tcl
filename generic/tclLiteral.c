@@ -688,7 +688,11 @@ AddLocalLiteralEntry(
 
 	if (!found) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    bytes = Tcl_GetStringFromObj(objPtr, &length);
+=======
+	    bytes = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 =======
 	    bytes = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
@@ -914,10 +918,17 @@ HashString(
      * Bob Jenkins's lookup3(), but be aware that it's significantly slower.
      * Tcl scripts tend to not have a big issue in this area, and literals
      * mostly aren't looked up by name anyway.
+<<<<<<< HEAD
      *
      * See also HashStringKey in tclHash.c.
      * See also TclObjHashKey in tclObj.c.
      *
+=======
+     *
+     * See also HashStringKey in tclHash.c.
+     * See also TclObjHashKey in tclObj.c.
+     *
+>>>>>>> upstream/master
      * See [tcl-Feature Request #2958832]
      */
 
@@ -1168,6 +1179,7 @@ TclVerifyLocalLiteralTable(
 	    count++;
 	    if (localPtr->refCount != -1) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		bytes = Tcl_GetStringFromObj(localPtr->objPtr, &length);
 =======
 		bytes = TclGetStringFromObj(localPtr->objPtr, &length);
@@ -1187,6 +1199,12 @@ TclVerifyLocalLiteralTable(
 		Tcl_Panic("%s: local literal \"%.*s\" is not global",
 			"TclVerifyLocalLiteralTable",
 			(length>60? 60 : length), bytes);
+=======
+		bytes = TclGetStringFromObj(localPtr->objPtr, &length);
+		Tcl_Panic("%s: local literal \"%.*s\" had bad refCount %d",
+			"TclVerifyLocalLiteralTable",
+			(length>60? 60 : length), bytes, localPtr->refCount);
+>>>>>>> upstream/master
 	    }
 =======
 >>>>>>> upstream/master
@@ -1237,7 +1255,11 @@ TclVerifyGlobalLiteralTable(
 	    count++;
 	    if (globalPtr->refCount < 1) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		bytes = Tcl_GetStringFromObj(globalPtr->objPtr, &length);
+=======
+		bytes = TclGetStringFromObj(globalPtr->objPtr, &length);
+>>>>>>> upstream/master
 =======
 		bytes = TclGetStringFromObj(globalPtr->objPtr, &length);
 >>>>>>> upstream/master

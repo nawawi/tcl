@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -152,7 +156,11 @@ than \fI0\fR, this is equivalent to
 Accepts any numeric value, or any string acceptable to
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBstring is boolean\fR, and returns the corresponding 
+=======
+\fBstring is boolean\fR, and returns the corresponding
+>>>>>>> upstream/master
 =======
 \fBstring is boolean\fR, and returns the corresponding
 >>>>>>> upstream/master
@@ -261,7 +269,11 @@ is negative, \fIy\fR must be an integer value.
 .
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Returns a pseudo-random floating-point value in the range (\fI0\fR,\fI1\fR).  
+=======
+Returns a pseudo-random floating-point value in the range (\fI0\fR,\fI1\fR).
+>>>>>>> upstream/master
 =======
 Returns a pseudo-random floating-point value in the range (\fI0\fR,\fI1\fR).
 >>>>>>> upstream/master
@@ -316,7 +328,11 @@ The argument may be any numeric value.  The integer part of \fIarg\fR
 is determined, and then the low order 64 bits of that integer value
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 are returned as an integer value.  
+=======
+are returned as an integer value.
+>>>>>>> upstream/master
 =======
 are returned as an integer value.
 >>>>>>> upstream/master

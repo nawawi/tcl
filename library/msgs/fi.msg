@@ -22,8 +22,13 @@ namespace eval ::tcl::clock {
         "maalis"\
         "huhti"\
         "touko"\
+<<<<<<< HEAD
         "kes\u00e4"\
         "hein\u00e4"\
+=======
+        "kesä"\
+        "heinä"\
+>>>>>>> upstream/master
         "elo"\
         "syys"\
         "loka"\
@@ -36,8 +41,13 @@ namespace eval ::tcl::clock {
         "maaliskuu"\
         "huhtikuu"\
         "toukokuu"\
+<<<<<<< HEAD
         "kes\u00e4kuu"\
         "hein\u00e4kuu"\
+=======
+        "kesäkuu"\
+        "heinäkuu"\
+>>>>>>> upstream/master
         "elokuu"\
         "syyskuu"\
         "lokakuu"\

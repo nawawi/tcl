@@ -456,6 +456,7 @@ test basic-26.2 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
     # As the error code in Tcl_EvalObjv accesses the list elements, this will
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # cause a segfault if [Bug 1119369] has not been fixed. 
     # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
     #
@@ -464,12 +465,17 @@ test basic-26.2 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     # cause a segfault if [Bug 1119369] has not been fixed.
     # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
     #
 
     set SRC [list foo 1] ;# pure-list command
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -492,6 +498,7 @@ test basic-26.3 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
     #   b - the command accesses its command line
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # This will cause a segfault if [Bug 1119369] has not been fixed. 
     # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
     #
@@ -500,12 +507,17 @@ test basic-26.3 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     # This will cause a segfault if [Bug 1119369] has not been fixed.
     # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
     #
 
     set SRC [list foo 1] ;# pure-list command
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -622,7 +634,11 @@ invoked "break" outside of a loop
 "break"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     (file "*BREAKtest" line 3)}    
+=======
+    (file "*BREAKtest" line 3)}
+>>>>>>> upstream/master
 =======
     (file "*BREAKtest" line 3)}
 >>>>>>> upstream/master
@@ -647,7 +663,11 @@ test basic-46.3 {Tcl_AllowExceptions: exception return not allowed} -setup {
 "break"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     (file "*BREAKtest" line 4)}    
+=======
+    (file "*BREAKtest" line 4)}
+>>>>>>> upstream/master
 =======
     (file "*BREAKtest" line 4)}
 >>>>>>> upstream/master
@@ -697,6 +717,7 @@ set l2 [list e f {g g} h]
 proc l3 {} {
     list i j k {l l}
 }
+<<<<<<< HEAD
 
 # Do all tests once byte compiled and once with direct string evaluation
 for {set noComp 0} {$noComp <= 1} {incr noComp} {
@@ -1492,6 +1513,290 @@ test basic-48.23.$noComp {expansion: handle return codes} -constraints $constrai
         }
         lappend res $t
 
+=======
+
+# Do all tests once byte compiled and once with direct string evaluation
+for {set noComp 0} {$noComp <= 1} {incr noComp} {
+
+if $noComp {
+    interp alias {} run {} testevalex
+    set constraints testevalex
+} else {
+    interp alias {} run {} if 1
+    set constraints {}
+}
+
+test basic-47.2.$noComp {Tcl_EvalEx: error during word expansion} -body {
+    run {{*}\{}
+} -constraints $constraints -returnCodes error -result {unmatched open brace in list}
+
+test basic-47.3.$noComp {Tcl_EvalEx, error during substitution} -body {
+    run {{*}[error foo]}
+} -constraints $constraints -returnCodes error -result foo
+
+test basic-47.4.$noComp {Tcl_EvalEx: no expansion} $constraints {
+    run {list {*} {*}	{*}}
+} {* * *}
+
+test basic-47.5.$noComp {Tcl_EvalEx: expansion} $constraints {
+    run {list {*}{} {*}	{*}x {*}"y z"}
+} {* x y z}
+
+test basic-47.6.$noComp {Tcl_EvalEx: expansion to zero args} $constraints {
+    run {list {*}{}}
+} {}
+
+test basic-47.7.$noComp {Tcl_EvalEx: expansion to one arg} $constraints {
+    run {list {*}x}
+} x
+
+test basic-47.8.$noComp {Tcl_EvalEx: expansion to many args} $constraints {
+    run {list {*}"y z"}
+} {y z}
+
+test basic-47.9.$noComp {Tcl_EvalEx: expansion and subst order} $constraints {
+    set x 0
+    run {list [incr x] {*}[incr x] [incr x] \
+		{*}[list [incr x] [incr x]] [incr x]}
+} {1 2 3 4 5 6}
+
+test basic-47.10.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}{} a b c d e f g h i j k l m n o p q r}
+} {a b c d e f g h i j k l m n o p q r}
+
+test basic-47.11.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}1 a b c d e f g h i j k l m n o p q r}
+} {1 a b c d e f g h i j k l m n o p q r}
+
+test basic-47.12.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}{1 2} a b c d e f g h i j k l m n o p q r}
+} {1 2 a b c d e f g h i j k l m n o p q r}
+
+test basic-47.13.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}{} {*}{1 2} a b c d e f g h i j k l m n o p q}
+} {1 2 a b c d e f g h i j k l m n o p q}
+
+test basic-47.14.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}{} a b c d e f g h i j k l m n o p q r s}
+} {a b c d e f g h i j k l m n o p q r s}
+
+test basic-47.15.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}1 a b c d e f g h i j k l m n o p q r s}
+} {1 a b c d e f g h i j k l m n o p q r s}
+
+test basic-47.16.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}{1 2} a b c d e f g h i j k l m n o p q r s}
+} {1 2 a b c d e f g h i j k l m n o p q r s}
+
+test basic-47.17.$noComp {Tcl_EvalEx: expand and memory management} $constraints {
+    run {concat {*}{} {*}{1 2} a b c d e f g h i j k l m n o p q r}
+} {1 2 a b c d e f g h i j k l m n o p q r}
+
+test basic-48.1.$noComp {expansion: parsing} $constraints {
+	run { # A comment
+
+		# Another comment
+		list 1  2\
+			3   {*}$::l1
+
+		# Comment again
+	}
+} {1 2 3 a {b b} c d}
+
+test basic-48.2.$noComp {no expansion} $constraints {
+        run {list $::l1 $::l2 [l3]}
+} {{a {b b} c d} {e f {g g} h} {i j k {l l}}}
+
+test basic-48.3.$noComp {expansion} $constraints {
+        run {list {*}$::l1 $::l2 {*}[l3]}
+} {a {b b} c d {e f {g g} h} i j k {l l}}
+
+test basic-48.4.$noComp {expansion: really long cmd} $constraints {
+        set cmd [list list]
+        for {set t 0} {$t < 500} {incr t} {
+            lappend cmd {{*}$::l1}
+        }
+        llength [run [join $cmd]]
+} 2000
+
+test basic-48.5.$noComp {expansion: error detection} -setup {
+	set l "a {a b}x y"
+} -constraints $constraints -body {
+	run {list $::l1 {*}$l}
+} -cleanup {
+	unset l
+} -returnCodes 1 -result {list element in braces followed by "x" instead of space}
+
+test basic-48.6.$noComp {expansion: odd usage} $constraints {
+        run {list {*}$::l1$::l2}
+} {a {b b} c de f {g g} h}
+
+test basic-48.7.$noComp {expansion: odd usage} -constraints $constraints -body {
+        run {list {*}[l3]$::l1}
+} -returnCodes 1 -result {list element in braces followed by "a" instead of space}
+
+test basic-48.8.$noComp {expansion: odd usage} $constraints {
+        run {list {*}hej$::l1}
+} {heja {b b} c d}
+
+test basic-48.9.$noComp {expansion: Not all {*} should trigger} $constraints {
+	run {list {*}$::l1 \{*\}$::l2 "{*}$::l1" {{*} i j k}}
+} {a {b b} c d {{*}e f {g g} h} {{*}a {b b} c d} {{*} i j k}}
+
+test basic-48.10.$noComp {expansion: expansion of command word} -setup {
+	set cmd [list string range jultomte]
+} -constraints $constraints -body {
+	run {{*}$cmd 2 6}
+} -cleanup {
+	unset cmd
+} -result ltomt
+
+test basic-48.11.$noComp {expansion: expansion into nothing} -setup {
+        set cmd {}
+        set bar {}
+} -constraints $constraints -body {
+        run {{*}$cmd {*}$bar}
+} -cleanup {
+	unset cmd bar
+} -result {}
+
+test basic-48.12.$noComp {expansion: odd usage} $constraints {
+	run {list {*}$::l1 {*}"hej hopp" {*}$::l2}
+} {a {b b} c d hej hopp e f {g g} h}
+
+test basic-48.13.$noComp {expansion: odd usage} $constraints {
+	run {list {*}$::l1 {*}{hej hopp} {*}$::l2}
+} {a {b b} c d hej hopp e f {g g} h}
+
+test basic-48.14.$noComp {expansion: hash command} -setup {
+        catch {rename \# ""}
+        set cmd "#"
+    } -constraints $constraints -body {
+           run { {*}$cmd apa bepa }
+    } -cleanup {
+	unset cmd
+} -returnCodes 1 -result {invalid command name "#"}
+
+test basic-48.15.$noComp {expansion: complex words} -setup {
+            set a(x) [list a {b c} d e]
+            set b x
+            set c [list {f\ g h\ i j k} x y]
+            set d {0\ 1 2 3}
+    } -constraints $constraints -body {
+            run { lappend d {*}$a($b) {*}[lindex $c 0] }
+    } -cleanup {
+	unset a b c d
+} -result {{0 1} 2 3 a {b c} d e {f g} {h i} j k}
+
+testConstraint memory [llength [info commands memory]]
+test basic-48.16.$noComp {expansion: testing for leaks} -setup {
+        proc getbytes {} {
+            set lines [split [memory info] "\n"]
+            lindex [lindex $lines 3] 3
+        }
+        # This test is made to stress the allocation, reallocation and
+        # object reference management in Tcl_EvalEx.
+        proc stress {} {
+            set a x
+            # Create free objects that should disappear
+            set l [list 1$a 2$a 3$a 4$a 5$a 6$a 7$a]
+            # A short number of words and a short result (8)
+            set l [run {list {*}$l $a$a}]
+            # A short number of words and a longer result (27)
+            set l [run {list {*}$l $a$a {*}$l $a$a {*}$l $a$a}]
+            # A short number of words and a longer result, with an error
+            # This is to stress the cleanup in the error case
+            if {![catch {run {_moo_ {*}$l $a$a {*}$l $a$a {*}$l}}]} {
+                error "An error was expected in the previous statement"
+            }
+            # Many words
+            set l [run {list {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a {*}$l $a$a \
+                                 {*}$l $a$a}]
+
+            if {[llength $l] != 19*28} {
+                error "Bad Length: [llength $l] should be [expr {19*28}]"
+            }
+        }
+    } -constraints [linsert $constraints 0 memory] -body {
+        set end [getbytes]
+        for {set i 0} {$i < 5} {incr i} {
+            stress
+            set tmp $end
+            set end [getbytes]
+        }
+        set leak [expr {$end - $tmp}]
+    } -cleanup {
+	unset end i tmp
+	rename getbytes {}
+	rename stress {}
+} -result 0
+
+test basic-48.17.$noComp {expansion: object safety} -setup {
+        set old_precision $::tcl_precision
+        set ::tcl_precision 4
+    } -constraints $constraints -body {
+            set third [expr {1.0/3.0}]
+            set l [list $third $third]
+            set x [run {list $third {*}$l $third}]
+	    set res [list]
+            foreach t $x {
+                lappend res [expr {$t * 3.0}]
+            }
+            set res
+    } -cleanup {
+        set ::tcl_precision $old_precision
+        unset old_precision res t l x third
+} -result {1.0 1.0 1.0 1.0}
+
+test basic-48.18.$noComp {expansion: list semantics} -constraints $constraints -body {
+        set badcmd {
+            list a b
+            set apa 10
+        }
+        set apa 0
+        list [llength [run { {*}$badcmd }]] $apa
+    } -cleanup {
+	unset apa badcmd
+} -result {5 0}
+
+test basic-48.19.$noComp {expansion: error checking order} -body {
+        set badlist "a {}x y"
+        set a 0
+        set b 0
+        catch {run {list [incr a] {*}$badlist [incr b]}}
+        list $a $b
+    } -constraints $constraints -cleanup {
+	unset badlist a b
+} -result {1 0}
+
+test basic-48.20.$noComp {expansion: odd case with word boundaries} $constraints {
+    run {list {*}$::l1 {*}"hej hopp" {*}$::l2}
+} {a {b b} c d hej hopp e f {g g} h}
+
+test basic-48.21.$noComp {expansion: odd case with word boundaries} $constraints {
+    run {list {*}$::l1 {*}{hej hopp} {*}$::l2}
+} {a {b b} c d hej hopp e f {g g} h}
+
+test basic-48.22.$noComp {expansion: odd case with word boundaries} -body {
+    run {list {*}$::l1 {*}"hej hopp {*}$::l2}
+} -constraints $constraints -returnCodes error -result {missing "}
+
+test basic-48.23.$noComp {expansion: handle return codes} -constraints $constraints -body {
+        set res {}
+        for {set t 0} {$t < 10} {incr t} {
+            run { {*}break }
+        }
+        lappend res $t
+
+>>>>>>> upstream/master
         for {set t 0} {$t < 10} {incr t} {
             run { {*}continue }
             set t 20
@@ -1531,6 +1836,9 @@ unset noComp l1 l2 constraints
 rename l3 {}
 rename run {}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  #cleanup
 catch {namespace delete {*}[namespace children :: test_ns_*]}

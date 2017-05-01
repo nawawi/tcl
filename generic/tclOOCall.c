@@ -71,6 +71,7 @@ static void		AddSimpleClassChainToCallContext(Class *classPtr,
 static int		CmpStr(const void *ptr1, const void *ptr2);
 static void		DupMethodNameRep(Tcl_Obj *srcPtr, Tcl_Obj *dstPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeMethodRefs(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static void		FreeMethodNameRep(Tcl_Obj *objPtr);
@@ -81,12 +82,17 @@ static int		ResetFilterFlags(ClientData data[],
 static int		SetFilterFlags(ClientData data[],
 			    Tcl_Interp *interp, int result);
 =======
+=======
+>>>>>>> upstream/master
 static Tcl_NRPostProc	FinalizeMethodRefs;
 static void		FreeMethodNameRep(Tcl_Obj *objPtr);
 static inline int	IsStillValid(CallChain *callPtr, Object *oPtr,
 			    int flags, int reuseMask);
 static Tcl_NRPostProc	ResetFilterFlags;
 static Tcl_NRPostProc	SetFilterFlags;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 static inline void	StashCallChain(Tcl_Obj *objPtr, CallChain *callPtr);
 
@@ -631,6 +637,10 @@ AddClassMethodNames(
 		int isWanted = (!(flags & PUBLIC_METHOD)
 			|| (mPtr->flags & PUBLIC_METHOD)) ? IN_LIST : 0;
 
+<<<<<<< HEAD
+=======
+		isWanted |= (mPtr->typePtr == NULL ? NO_IMPLEMENTATION : 0);
+>>>>>>> upstream/master
 		Tcl_SetHashValue(hPtr, INT2PTR(isWanted));
 	    } else if ((PTR2INT(Tcl_GetHashValue(hPtr)) & NO_IMPLEMENTATION)
 		    && mPtr->typePtr != NULL) {

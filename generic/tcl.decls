@@ -4,8 +4,13 @@
 #	functions that are exported by the Tcl library via the stubs table.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	This file is used to generate the tclDecls.h, tclPlatDecls.h,
 #	tclStub.c, and tclPlatStub.c files.
+=======
+#	This file is used to generate the tclDecls.h, tclPlatDecls.h
+#	and tclStubInit.c files.
+>>>>>>> upstream/master
 =======
 #	This file is used to generate the tclDecls.h, tclPlatDecls.h
 #	and tclStubInit.c files.
@@ -1069,7 +1074,11 @@ declare 293 {
     int Tcl_EvalObjEx(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
 }
 declare 294 {
+<<<<<<< HEAD
     void Tcl_ExitThread(int status)
+=======
+    TCL_NORETURN void Tcl_ExitThread(int status)
+>>>>>>> upstream/master
 }
 declare 295 {
     int Tcl_ExternalToUtf(Tcl_Interp *interp, Tcl_Encoding encoding,
@@ -1774,6 +1783,7 @@ declare 492 {
 declare 493 {
     Tcl_DriverWideSeekProc *Tcl_ChannelWideSeekProc(
 	    const Tcl_ChannelType *chanTypePtr)
+<<<<<<< HEAD
 }
 
 # ----- BASELINE -- FOR -- 8.4.0 ----- #
@@ -2186,6 +2196,420 @@ declare 593 {
 declare 594 {
     int Tcl_GetGroupIdFromStat(const Tcl_StatBuf *statPtr)
 }
+=======
+}
+
+# ----- BASELINE -- FOR -- 8.4.0 ----- #
+
+# TIP#111 (dictionaries) dkf
+declare 494 {
+    int Tcl_DictObjPut(Tcl_Interp *interp, Tcl_Obj *dictPtr,
+	    Tcl_Obj *keyPtr, Tcl_Obj *valuePtr)
+}
+declare 495 {
+    int Tcl_DictObjGet(Tcl_Interp *interp, Tcl_Obj *dictPtr, Tcl_Obj *keyPtr,
+	    Tcl_Obj **valuePtrPtr)
+}
+declare 496 {
+    int Tcl_DictObjRemove(Tcl_Interp *interp, Tcl_Obj *dictPtr,
+	    Tcl_Obj *keyPtr)
+}
+declare 497 {
+    int Tcl_DictObjSize(Tcl_Interp *interp, Tcl_Obj *dictPtr, int *sizePtr)
+}
+declare 498 {
+    int Tcl_DictObjFirst(Tcl_Interp *interp, Tcl_Obj *dictPtr,
+	    Tcl_DictSearch *searchPtr,
+	    Tcl_Obj **keyPtrPtr, Tcl_Obj **valuePtrPtr, int *donePtr)
+}
+declare 499 {
+    void Tcl_DictObjNext(Tcl_DictSearch *searchPtr,
+	    Tcl_Obj **keyPtrPtr, Tcl_Obj **valuePtrPtr, int *donePtr)
+}
+declare 500 {
+    void Tcl_DictObjDone(Tcl_DictSearch *searchPtr)
+}
+declare 501 {
+    int Tcl_DictObjPutKeyList(Tcl_Interp *interp, Tcl_Obj *dictPtr,
+	    int keyc, Tcl_Obj *const *keyv, Tcl_Obj *valuePtr)
+}
+declare 502 {
+    int Tcl_DictObjRemoveKeyList(Tcl_Interp *interp, Tcl_Obj *dictPtr,
+	    int keyc, Tcl_Obj *const *keyv)
+}
+declare 503 {
+    Tcl_Obj *Tcl_NewDictObj(void)
+}
+declare 504 {
+    Tcl_Obj *Tcl_DbNewDictObj(const char *file, int line)
+}
+
+# TIP#59 (configuration reporting) akupries
+declare 505 {
+    void Tcl_RegisterConfig(Tcl_Interp *interp, const char *pkgName,
+	    const Tcl_Config *configuration, const char *valEncoding)
+}
+
+# TIP #139 (partial exposure of namespace API - transferred from tclInt.decls)
+# dkf, API by Brent Welch?
+declare 506 {
+    Tcl_Namespace *Tcl_CreateNamespace(Tcl_Interp *interp, const char *name,
+	    ClientData clientData, Tcl_NamespaceDeleteProc *deleteProc)
+}
+declare 507 {
+    void Tcl_DeleteNamespace(Tcl_Namespace *nsPtr)
+}
+declare 508 {
+    int Tcl_AppendExportList(Tcl_Interp *interp, Tcl_Namespace *nsPtr,
+	    Tcl_Obj *objPtr)
+}
+declare 509 {
+    int Tcl_Export(Tcl_Interp *interp, Tcl_Namespace *nsPtr,
+	    const char *pattern, int resetListFirst)
+}
+declare 510 {
+    int Tcl_Import(Tcl_Interp *interp, Tcl_Namespace *nsPtr,
+	    const char *pattern, int allowOverwrite)
+}
+declare 511 {
+    int Tcl_ForgetImport(Tcl_Interp *interp, Tcl_Namespace *nsPtr,
+	    const char *pattern)
+}
+declare 512 {
+    Tcl_Namespace *Tcl_GetCurrentNamespace(Tcl_Interp *interp)
+}
+declare 513 {
+    Tcl_Namespace *Tcl_GetGlobalNamespace(Tcl_Interp *interp)
+}
+declare 514 {
+    Tcl_Namespace *Tcl_FindNamespace(Tcl_Interp *interp, const char *name,
+	    Tcl_Namespace *contextNsPtr, int flags)
+}
+declare 515 {
+    Tcl_Command Tcl_FindCommand(Tcl_Interp *interp, const char *name,
+	    Tcl_Namespace *contextNsPtr, int flags)
+}
+declare 516 {
+    Tcl_Command Tcl_GetCommandFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr)
+}
+declare 517 {
+    void Tcl_GetCommandFullName(Tcl_Interp *interp, Tcl_Command command,
+	    Tcl_Obj *objPtr)
+}
+
+# TIP#137 (encoding-aware source command) dgp for Anton Kovalenko
+declare 518 {
+    int Tcl_FSEvalFileEx(Tcl_Interp *interp, Tcl_Obj *fileName,
+	    const char *encodingName)
+}
+
+# TIP#121 (exit handler) dkf for Joe Mistachkin
+declare 519 {
+    Tcl_ExitProc *Tcl_SetExitProc(TCL_NORETURN1 Tcl_ExitProc *proc)
+}
+
+# TIP#143 (resource limits) dkf
+declare 520 {
+    void Tcl_LimitAddHandler(Tcl_Interp *interp, int type,
+	    Tcl_LimitHandlerProc *handlerProc, ClientData clientData,
+	    Tcl_LimitHandlerDeleteProc *deleteProc)
+}
+declare 521 {
+    void Tcl_LimitRemoveHandler(Tcl_Interp *interp, int type,
+	    Tcl_LimitHandlerProc *handlerProc, ClientData clientData)
+}
+declare 522 {
+    int Tcl_LimitReady(Tcl_Interp *interp)
+}
+declare 523 {
+    int Tcl_LimitCheck(Tcl_Interp *interp)
+}
+declare 524 {
+    int Tcl_LimitExceeded(Tcl_Interp *interp)
+}
+declare 525 {
+    void Tcl_LimitSetCommands(Tcl_Interp *interp, int commandLimit)
+}
+declare 526 {
+    void Tcl_LimitSetTime(Tcl_Interp *interp, Tcl_Time *timeLimitPtr)
+}
+declare 527 {
+    void Tcl_LimitSetGranularity(Tcl_Interp *interp, int type, int granularity)
+}
+declare 528 {
+    int Tcl_LimitTypeEnabled(Tcl_Interp *interp, int type)
+}
+declare 529 {
+    int Tcl_LimitTypeExceeded(Tcl_Interp *interp, int type)
+}
+declare 530 {
+    void Tcl_LimitTypeSet(Tcl_Interp *interp, int type)
+}
+declare 531 {
+    void Tcl_LimitTypeReset(Tcl_Interp *interp, int type)
+}
+declare 532 {
+    int Tcl_LimitGetCommands(Tcl_Interp *interp)
+}
+declare 533 {
+    void Tcl_LimitGetTime(Tcl_Interp *interp, Tcl_Time *timeLimitPtr)
+}
+declare 534 {
+    int Tcl_LimitGetGranularity(Tcl_Interp *interp, int type)
+}
+
+# TIP#226 (interpreter result state management) dgp
+declare 535 {
+    Tcl_InterpState Tcl_SaveInterpState(Tcl_Interp *interp, int status)
+}
+declare 536 {
+    int Tcl_RestoreInterpState(Tcl_Interp *interp, Tcl_InterpState state)
+}
+declare 537 {
+    void Tcl_DiscardInterpState(Tcl_InterpState state)
+}
+
+# TIP#227 (return options interface) dgp
+declare 538 {
+    int Tcl_SetReturnOptions(Tcl_Interp *interp, Tcl_Obj *options)
+}
+declare 539 {
+    Tcl_Obj *Tcl_GetReturnOptions(Tcl_Interp *interp, int result)
+}
+
+# TIP#235 (ensembles) dkf
+declare 540 {
+    int Tcl_IsEnsemble(Tcl_Command token)
+}
+declare 541 {
+    Tcl_Command Tcl_CreateEnsemble(Tcl_Interp *interp, const char *name,
+	    Tcl_Namespace *namespacePtr, int flags)
+}
+declare 542 {
+    Tcl_Command Tcl_FindEnsemble(Tcl_Interp *interp, Tcl_Obj *cmdNameObj,
+	    int flags)
+}
+declare 543 {
+    int Tcl_SetEnsembleSubcommandList(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Obj *subcmdList)
+}
+declare 544 {
+    int Tcl_SetEnsembleMappingDict(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Obj *mapDict)
+}
+declare 545 {
+    int Tcl_SetEnsembleUnknownHandler(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Obj *unknownList)
+}
+declare 546 {
+    int Tcl_SetEnsembleFlags(Tcl_Interp *interp, Tcl_Command token, int flags)
+}
+declare 547 {
+    int Tcl_GetEnsembleSubcommandList(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Obj **subcmdListPtr)
+}
+declare 548 {
+    int Tcl_GetEnsembleMappingDict(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Obj **mapDictPtr)
+}
+declare 549 {
+    int Tcl_GetEnsembleUnknownHandler(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Obj **unknownListPtr)
+}
+declare 550 {
+    int Tcl_GetEnsembleFlags(Tcl_Interp *interp, Tcl_Command token,
+	    int *flagsPtr)
+}
+declare 551 {
+    int Tcl_GetEnsembleNamespace(Tcl_Interp *interp, Tcl_Command token,
+	    Tcl_Namespace **namespacePtrPtr)
+}
+
+# TIP#233 (virtualized time) akupries
+declare 552 {
+    void Tcl_SetTimeProc(Tcl_GetTimeProc *getProc,
+	    Tcl_ScaleTimeProc *scaleProc,
+	    ClientData clientData)
+}
+declare 553 {
+    void Tcl_QueryTimeProc(Tcl_GetTimeProc **getProc,
+	    Tcl_ScaleTimeProc **scaleProc,
+	    ClientData *clientData)
+}
+
+# TIP#218 (driver thread actions) davygrvy/akupries ChannelType ver 4
+declare 554 {
+    Tcl_DriverThreadActionProc *Tcl_ChannelThreadActionProc(
+	    const Tcl_ChannelType *chanTypePtr)
+}
+
+# TIP#237 (arbitrary-precision integers) kbk
+declare 555 {
+    Tcl_Obj *Tcl_NewBignumObj(mp_int *value)
+}
+declare 556 {
+    Tcl_Obj *Tcl_DbNewBignumObj(mp_int *value, const char *file, int line)
+}
+declare 557 {
+    void Tcl_SetBignumObj(Tcl_Obj *obj, mp_int *value)
+}
+declare 558 {
+    int Tcl_GetBignumFromObj(Tcl_Interp *interp, Tcl_Obj *obj, mp_int *value)
+}
+declare 559 {
+    int Tcl_TakeBignumFromObj(Tcl_Interp *interp, Tcl_Obj *obj, mp_int *value)
+}
+
+# TIP #208 ('chan' command) jeffh
+declare 560 {
+    int Tcl_TruncateChannel(Tcl_Channel chan, Tcl_WideInt length)
+}
+declare 561 {
+    Tcl_DriverTruncateProc *Tcl_ChannelTruncateProc(
+	    const Tcl_ChannelType *chanTypePtr)
+}
+
+# TIP#219 (channel reflection api) akupries
+declare 562 {
+    void Tcl_SetChannelErrorInterp(Tcl_Interp *interp, Tcl_Obj *msg)
+}
+declare 563 {
+    void Tcl_GetChannelErrorInterp(Tcl_Interp *interp, Tcl_Obj **msg)
+}
+declare 564 {
+    void Tcl_SetChannelError(Tcl_Channel chan, Tcl_Obj *msg)
+}
+declare 565 {
+    void Tcl_GetChannelError(Tcl_Channel chan, Tcl_Obj **msg)
+}
+
+# TIP #237 (additional conversion functions for bignum support) kbk/dgp
+declare 566 {
+    int Tcl_InitBignumFromDouble(Tcl_Interp *interp, double initval,
+	    mp_int *toInit)
+}
+
+# TIP#181 (namespace unknown command) dgp for Neil Madden
+declare 567 {
+    Tcl_Obj *Tcl_GetNamespaceUnknownHandler(Tcl_Interp *interp,
+	    Tcl_Namespace *nsPtr)
+}
+declare 568 {
+    int Tcl_SetNamespaceUnknownHandler(Tcl_Interp *interp,
+	    Tcl_Namespace *nsPtr, Tcl_Obj *handlerPtr)
+}
+
+# TIP#258 (enhanced interface for encodings) dgp
+declare 569 {
+    int Tcl_GetEncodingFromObj(Tcl_Interp *interp, Tcl_Obj *objPtr,
+	    Tcl_Encoding *encodingPtr)
+}
+declare 570 {
+    Tcl_Obj *Tcl_GetEncodingSearchPath(void)
+}
+declare 571 {
+    int Tcl_SetEncodingSearchPath(Tcl_Obj *searchPath)
+}
+declare 572 {
+    const char *Tcl_GetEncodingNameFromEnvironment(Tcl_DString *bufPtr)
+}
+
+# TIP#268 (extended version numbers and requirements) akupries
+declare 573 {
+    int Tcl_PkgRequireProc(Tcl_Interp *interp, const char *name,
+	    int objc, Tcl_Obj *const objv[], void *clientDataPtr)
+}
+
+# TIP#270 (utility C routines for string formatting) dgp
+declare 574 {
+    void Tcl_AppendObjToErrorInfo(Tcl_Interp *interp, Tcl_Obj *objPtr)
+}
+declare 575 {
+    void Tcl_AppendLimitedToObj(Tcl_Obj *objPtr, const char *bytes, int length,
+	    int limit, const char *ellipsis)
+}
+declare 576 {
+    Tcl_Obj *Tcl_Format(Tcl_Interp *interp, const char *format, int objc,
+	    Tcl_Obj *const objv[])
+}
+declare 577 {
+    int Tcl_AppendFormatToObj(Tcl_Interp *interp, Tcl_Obj *objPtr,
+	    const char *format, int objc, Tcl_Obj *const objv[])
+}
+declare 578 {
+    Tcl_Obj *Tcl_ObjPrintf(const char *format, ...)
+}
+declare 579 {
+    void Tcl_AppendPrintfToObj(Tcl_Obj *objPtr, const char *format, ...)
+}
+
+# ----- BASELINE -- FOR -- 8.5.0 ----- #
+
+# TIP #285 (script cancellation support) jmistachkin
+declare 580 {
+    int Tcl_CancelEval(Tcl_Interp *interp, Tcl_Obj *resultObjPtr,
+	    ClientData clientData, int flags)
+}
+declare 581 {
+    int Tcl_Canceled(Tcl_Interp *interp, int flags)
+}
+
+# TIP#304 (chan pipe) aferrieux
+declare 582 {
+    int Tcl_CreatePipe(Tcl_Interp  *interp, Tcl_Channel *rchan,
+	    Tcl_Channel *wchan, int flags)
+}
+
+# TIP #322 (NRE public interface) msofer
+declare 583 {
+    Tcl_Command Tcl_NRCreateCommand(Tcl_Interp *interp,
+	    const char *cmdName, Tcl_ObjCmdProc *proc,
+	    Tcl_ObjCmdProc *nreProc, ClientData clientData,
+	    Tcl_CmdDeleteProc *deleteProc)
+}
+declare 584 {
+    int Tcl_NREvalObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
+}
+declare 585 {
+    int Tcl_NREvalObjv(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[],
+	    int flags)
+}
+declare 586 {
+    int Tcl_NRCmdSwap(Tcl_Interp *interp, Tcl_Command cmd, int objc,
+	    Tcl_Obj *const objv[], int flags)
+}
+declare 587 {
+    void Tcl_NRAddCallback(Tcl_Interp *interp, Tcl_NRPostProc *postProcPtr,
+	    ClientData data0, ClientData data1, ClientData data2,
+	    ClientData data3)
+}
+# For use by NR extenders, to have a simple way to also provide a (required!)
+# classic objProc
+declare 588 {
+    int Tcl_NRCallObjProc(Tcl_Interp *interp, Tcl_ObjCmdProc *objProc,
+	    ClientData clientData, int objc, Tcl_Obj *const objv[])
+}
+
+# TIP#316 (Tcl_StatBuf reader functions) dkf
+declare 589 {
+    unsigned Tcl_GetFSDeviceFromStat(const Tcl_StatBuf *statPtr)
+}
+declare 590 {
+    unsigned Tcl_GetFSInodeFromStat(const Tcl_StatBuf *statPtr)
+}
+declare 591 {
+    unsigned Tcl_GetModeFromStat(const Tcl_StatBuf *statPtr)
+}
+declare 592 {
+    int Tcl_GetLinkCountFromStat(const Tcl_StatBuf *statPtr)
+}
+declare 593 {
+    int Tcl_GetUserIdFromStat(const Tcl_StatBuf *statPtr)
+}
+declare 594 {
+    int Tcl_GetGroupIdFromStat(const Tcl_StatBuf *statPtr)
+}
+>>>>>>> upstream/master
 declare 595 {
     int Tcl_GetDeviceTypeFromStat(const Tcl_StatBuf *statPtr)
 }
@@ -2336,6 +2760,20 @@ declare 630 {
 
 # ----- BASELINE -- FOR -- 8.6.0 ----- #
 
+<<<<<<< HEAD
+=======
+# TIP #456
+declare 631 {
+    Tcl_Channel Tcl_OpenTcpServerEx(Tcl_Interp *interp, const char *service,
+	    const char *host, unsigned int flags, Tcl_TcpAcceptProc *acceptProc,
+	    ClientData callbackData)
+}
+
+# ----- BASELINE -- FOR -- 8.7.0 ----- #
+
+
+
+>>>>>>> upstream/master
 ##############################################################################
 
 # Define the platform specific public Tcl interface. These functions are only

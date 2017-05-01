@@ -10,11 +10,19 @@ namespace eval ::tcl::clock {
         "sab"]
     ::msgcat::mcset it DAYS_OF_WEEK_FULL [list \
         "domenica"\
+<<<<<<< HEAD
         "luned\u00ec"\
         "marted\u00ec"\
         "mercoled\u00ec"\
         "gioved\u00ec"\
         "venerd\u00ec"\
+=======
+        "lunedì"\
+        "martedì"\
+        "mercoledì"\
+        "giovedì"\
+        "venerdì"\
+>>>>>>> upstream/master
         "sabato"]
     ::msgcat::mcset it MONTHS_ABBREV [list \
         "gen"\

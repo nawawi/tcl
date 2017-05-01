@@ -329,7 +329,11 @@ struct ForwardingResult {
 				 * results. */
 };
 
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     /*
      * Table of all reflected transformations owned by this thread.
      */
@@ -946,7 +950,11 @@ ReflectClose(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -972,7 +980,11 @@ ReflectClose(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -1204,7 +1216,11 @@ ReflectInput(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2080,7 +2096,11 @@ InvokeTclMethod(
 		Tcl_Obj *cmd = Tcl_NewListObj(cmdc, rtPtr->argv);
 		int cmdLen;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *cmdString = Tcl_GetStringFromObj(cmd, &cmdLen);
+=======
+		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
+>>>>>>> upstream/master
 =======
 		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
 >>>>>>> upstream/master
@@ -2848,7 +2868,11 @@ ForwardSetObjError(
 {
     int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *msgStr = Tcl_GetStringFromObj(obj, &len);
+=======
+    const char *msgStr = TclGetStringFromObj(obj, &len);
+>>>>>>> upstream/master
 =======
     const char *msgStr = TclGetStringFromObj(obj, &len);
 >>>>>>> upstream/master

@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -49,8 +53,14 @@ error.
 the first is the argument name and the second is its default value.
 Arguments with default values that are followed by non-defaulted
 <<<<<<< HEAD
+<<<<<<< HEAD
 arguments become required arguments.  In 8.6 this will be considered an
 error.
+>>>>>>> upstream/master
+=======
+arguments become required arguments; enough actual arguments must be
+supplied to allow all arguments up to and including the last required
+formal argument.
 >>>>>>> upstream/master
 =======
 arguments become required arguments; enough actual arguments must be
@@ -67,6 +77,7 @@ Arguments with default values need not be
 specified in a procedure invocation.  However, there must be enough
 actual arguments for all the
 formal arguments that do not have defaults, and there must not be any extra
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 actual arguments.  
@@ -93,6 +104,18 @@ variable numbers of arguments.  If the last formal argument has the name
 .QW \fBargs\fR ,
 then a call to the procedure may contain more actual arguments
 >>>>>>> upstream/master
+=======
+actual arguments.
+Arguments with default values that are followed by non-defaulted
+arguments become de-facto required arguments, though this may change
+in a future version of Tcl; portable code should ensure that all
+optional arguments come after all required arguments.
+.PP
+There is one special case to permit procedures with
+variable numbers of arguments.  If the last formal argument has the name
+.QW \fBargs\fR ,
+then a call to the procedure may contain more actual arguments
+>>>>>>> upstream/master
 than the procedure has formal arguments.  In this case, all of the actual arguments
 starting at the one that would be assigned to \fBargs\fR are combined into
 a list (as if the \fBlist\fR command had been used); this combined value
@@ -104,7 +127,11 @@ deleted when the procedure returns.  One local variable is automatically
 created for each of the procedure's arguments.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Other variables can only be accessed by invoking one of the \fBglobal\fR, 
+=======
+Other variables can only be accessed by invoking one of the \fBglobal\fR,
+>>>>>>> upstream/master
 =======
 Other variables can only be accessed by invoking one of the \fBglobal\fR,
 >>>>>>> upstream/master
@@ -129,7 +156,10 @@ body, then the procedure-as-a-whole will return that same error.
 .SH EXAMPLES
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 This is a procedure that takes two arguments and prints both their sum
 and their product. It also returns the string
 .QW OK
@@ -144,6 +174,9 @@ to the caller as an explicit result.
 }
 .CE
 .PP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 This is a procedure that accepts arbitrarily many arguments and prints
 them out, one by one.

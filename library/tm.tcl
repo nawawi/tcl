@@ -356,7 +356,11 @@ proc ::tcl::tm::Defaults {} {
 proc ::tcl::tm::roots {paths} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lassign [split [package present Tcl] .] major minor
+=======
+    regexp {^(\d+)\.(\d+)} [package present Tcl] - major minor
+>>>>>>> upstream/master
 =======
     regexp {^(\d+)\.(\d+)} [package present Tcl] - major minor
 >>>>>>> upstream/master

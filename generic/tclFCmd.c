@@ -123,7 +123,11 @@ FileCopyRename(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_WrongNumArgs(interp, 1, objv, 
+=======
+	Tcl_WrongNumArgs(interp, 1, objv,
+>>>>>>> upstream/master
 =======
 	Tcl_WrongNumArgs(interp, 1, objv,
 >>>>>>> upstream/master
@@ -1051,6 +1055,7 @@ TclFileAttrsCmd(
 		 */
 
 		Tcl_ResetResult(interp);
+<<<<<<< HEAD
 	    }
 
 	    res = Tcl_FSFileAttrsGet(interp, index, filePtr, &objPtrAttr);
@@ -1062,6 +1067,19 @@ TclFileAttrsCmd(
 		Tcl_ListObjAppendElement(interp, listPtr, objPtrAttr);
 		nbAtts++;
 	    }
+=======
+	    }
+
+	    res = Tcl_FSFileAttrsGet(interp, index, filePtr, &objPtrAttr);
+	    if (res == TCL_OK) {
+		Tcl_Obj *objPtr =
+			Tcl_NewStringObj(attributeStrings[index], -1);
+
+		Tcl_ListObjAppendElement(interp, listPtr, objPtr);
+		Tcl_ListObjAppendElement(interp, listPtr, objPtrAttr);
+		nbAtts++;
+	    }
+>>>>>>> upstream/master
 	}
 
 	if (index > 0 && nbAtts == 0) {
@@ -1088,6 +1106,7 @@ TclFileAttrsCmd(
 		    " filesystem", TclGetString(objv[0])));
 	    Tcl_SetErrorCode(interp, "TCL","OPERATION","FATTR","NONE", NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    goto end;
 	}
 
@@ -1100,10 +1119,17 @@ TclFileAttrsCmd(
 =======
 	    goto end;
 	}
+=======
+	    goto end;
+	}
+>>>>>>> upstream/master
 
 	if (Tcl_GetIndexFromObj(interp, objv[0], attributeStrings,
 		"option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
 	    goto end;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	}
 	if (Tcl_FSFileAttrsGet(interp, index, filePtr,
@@ -1129,12 +1155,18 @@ TclFileAttrsCmd(
 	for (i = 0; i < objc ; i += 2) {
 	    if (Tcl_GetIndexFromObj(interp, objv[i], attributeStrings,
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    "option", 0, &index) != TCL_OK) {
 		goto end;
 	    }
 	    if (attributeStringsAllocated != NULL) {
 		TclFreeIntRep(objv[i]);
 	    }
+=======
+		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
+		goto end;
+	    }
+>>>>>>> upstream/master
 =======
 		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
 		goto end;

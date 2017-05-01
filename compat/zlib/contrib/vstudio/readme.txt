@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Building instructions for the DLL versions of Zlib 1.2.8
+=======
+Building instructions for the DLL versions of Zlib 1.2.11
+>>>>>>> upstream/master
 ========================================================
 
 This directory contains projects that build zlib and minizip using
@@ -16,7 +20,11 @@ More information can be found at this site.
 
 Build instructions for Visual Studio 2008 (32 bits or 64 bits)
 --------------------------------------------------------------
+<<<<<<< HEAD
 - Uncompress current zlib, including all contrib/* files
+=======
+- Decompress current zlib, including all contrib/* files
+>>>>>>> upstream/master
 - Compile assembly code (with Visual Studio Command Prompt) by running:
    bld_ml64.bat (in contrib\masmx64)
    bld_ml32.bat (in contrib\masmx86)
@@ -25,14 +33,34 @@ Build instructions for Visual Studio 2008 (32 bits or 64 bits)
 
 Build instructions for Visual Studio 2010 (32 bits or 64 bits)
 --------------------------------------------------------------
+<<<<<<< HEAD
 - Uncompress current zlib, including all contrib/* files
+=======
+- Decompress current zlib, including all contrib/* files
+>>>>>>> upstream/master
 - Open contrib\vstudio\vc10\zlibvc.sln with Microsoft Visual C++ 2010
 
 Build instructions for Visual Studio 2012 (32 bits or 64 bits)
 --------------------------------------------------------------
+<<<<<<< HEAD
 - Uncompress current zlib, including all contrib/* files
 - Open contrib\vstudio\vc11\zlibvc.sln with Microsoft Visual C++ 2012
 
+=======
+- Decompress current zlib, including all contrib/* files
+- Open contrib\vstudio\vc11\zlibvc.sln with Microsoft Visual C++ 2012
+
+Build instructions for Visual Studio 2013 (32 bits or 64 bits)
+--------------------------------------------------------------
+- Decompress current zlib, including all contrib/* files
+- Open contrib\vstudio\vc12\zlibvc.sln with Microsoft Visual C++ 2013
+
+Build instructions for Visual Studio 2015 (32 bits or 64 bits)
+--------------------------------------------------------------
+- Decompress current zlib, including all contrib/* files
+- Open contrib\vstudio\vc14\zlibvc.sln with Microsoft Visual C++ 2015
+
+>>>>>>> upstream/master
 
 Important
 ---------
@@ -63,3 +91,9 @@ Additional notes
 
 Gilles Vollant
 info@winimage.com
+<<<<<<< HEAD
+=======
+
+Visual Studio 2013 and 2015 Projects from Sean Hunt
+seandhunt_7@yahoo.com
+>>>>>>> upstream/master

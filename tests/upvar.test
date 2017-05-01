@@ -354,6 +354,7 @@ test upvar-8.11 {upvar will not create a variable that looks like an array} -set
 } -returnCodes 1 -match glob -result *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 test upvar-9.1 {Tcl_UpVar2 procedure} testupvar {
     list [catch {testupvar xyz a {} x global} msg] $msg
@@ -422,6 +423,8 @@ test upvar-10.1 {CompileWord OBOE} -setup {
     apply {n {
         upvar 1 {*}{
 =======
+=======
+>>>>>>> upstream/master
 
 test upvar-9.1 {Tcl_UpVar2 procedure} testupvar {
     list [catch {testupvar xyz a {} x global} msg] $msg
@@ -541,6 +544,7 @@ test upvar-NS-1.4 {nsupvar links to correct variable} -body {
 	proc a {} {
 	    namespace upvar test_ns_0 x w
 	    set w
+<<<<<<< HEAD
 	}
 	return [a]
     }
@@ -581,6 +585,54 @@ test upvar-NS-1.7 {nsupvar links to correct variable} -body {
     namespace delete test_ns_1
 } -result {test_ns_1::test_ns_0}
 test upvar-NS-1.8 {nsupvar links to correct variable} -body {
+=======
+	}
+	return [a]
+    }
+} -returnCodes error -cleanup {
+    namespace delete test_ns_1
+} -result {namespace "test_ns_0" not found in "::test_ns_1"}
+
+test upvar-NS-1.5 {nsupvar links to correct variable} -body {
+    namespace eval test_ns_1 {
+	namespace eval test_ns_0 {}
+	namespace upvar test_ns_0 x w
+	set w
+    }
+} -cleanup {
+    namespace delete test_ns_1
+} -result {can't read "w": no such variable} -returnCodes error
+test upvar-NS-1.6 {nsupvar links to correct variable} -body {
+    namespace eval test_ns_1 {
+	namespace eval test_ns_0 {}
+	proc a {} {
+	    namespace upvar test_ns_0 x w
+	    set w
+	}
+	return [a]
+    }
+} -cleanup {
+    namespace delete test_ns_1
+} -result {can't read "w": no such variable} -returnCodes error
+test upvar-NS-1.7 {nsupvar links to correct variable} -body {
+>>>>>>> upstream/master
+    namespace eval test_ns_1 {
+	namespace eval test_ns_0 {
+	    variable x test_ns_1::test_ns_0
+	}
+<<<<<<< HEAD
+	proc a {} {
+	    namespace upvar test_ns_0 x w
+	    set w
+	}
+=======
+	namespace upvar test_ns_0 x w
+	set w
+    }
+} -cleanup {
+    namespace delete test_ns_1
+} -result {test_ns_1::test_ns_0}
+test upvar-NS-1.8 {nsupvar links to correct variable} -body {
     namespace eval test_ns_1 {
 	namespace eval test_ns_0 {
 	    variable x test_ns_1::test_ns_0
@@ -589,6 +641,7 @@ test upvar-NS-1.8 {nsupvar links to correct variable} -body {
 	    namespace upvar test_ns_0 x w
 	    set w
 	}
+>>>>>>> upstream/master
 	return [a]
     }
 } -cleanup {
@@ -617,6 +670,7 @@ test upvar-NS-2.2 {TIP 323} -setup {
 } -cleanup {
     namespace delete test_ns_1
 } -result {}
+<<<<<<< HEAD
 
 test upvar-NS-3.1 {CompileWord OBOE} -setup {
     proc linenumber {} {dict get [info frame -1] line}
@@ -955,6 +1009,44 @@ test upvar-NS-3.3 {CompileWord OBOE} -setup {
 return
 
 =======
+test upvar-NS-3.3 {CompileWord OBOE} -setup {
+    proc linenumber {} {dict get [info frame -1] line}
+} -body {
+    apply {n {
+        variable x {*}{
+        } [return [incr n -[linenumber]]]
+    }} [linenumber]
+} -cleanup {
+    rename linenumber {}
+} -result 1
+
+# cleanup
+::tcltest::cleanupTests
+return
+
+>>>>>>> upstream/master
+=======
+
+test upvar-NS-3.1 {CompileWord OBOE} -setup {
+    proc linenumber {} {dict get [info frame -1] line}
+} -body {
+    apply {n {
+        namespace upvar {*}{
+        } [return [incr n -[linenumber]]] x y
+    }} [linenumber]
+} -cleanup {
+    rename linenumber {}
+} -result 1
+test upvar-NS-3.2 {CompileWord OBOE} -setup {
+    proc linenumber {} {dict get [info frame -1] line}
+} -body {
+    apply {n {
+        namespace upvar :: {*}{
+        } [return [incr n -[linenumber]]] x
+    }} [linenumber]
+} -cleanup {
+    rename linenumber {}
+} -result 1
 test upvar-NS-3.3 {CompileWord OBOE} -setup {
     proc linenumber {} {dict get [info frame -1] line}
 } -body {

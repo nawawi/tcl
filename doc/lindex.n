@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -58,7 +62,11 @@ of elements in \fIvalue\fR, then an empty
 string is returned.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The interpretation of each simple \fIindex\fR value is the same as 
+=======
+The interpretation of each simple \fIindex\fR value is the same as
+>>>>>>> upstream/master
 =======
 The interpretation of each simple \fIindex\fR value is the same as
 >>>>>>> upstream/master
@@ -133,7 +141,11 @@ set idx 3
 .SH "SEE ALSO"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

@@ -1,6 +1,7 @@
 # created by tools/loadICU.tcl -- do not edit
 namespace eval ::tcl::clock {
     ::msgcat::mcset bg DAYS_OF_WEEK_ABBREV [list \
+<<<<<<< HEAD
         "\u041d\u0434"\
         "\u041f\u043d"\
         "\u0412\u0442"\
@@ -16,6 +17,23 @@ namespace eval ::tcl::clock {
         "\u0427\u0435\u0442\u0432\u044a\u0440\u0442\u044a\u043a"\
         "\u041f\u0435\u0442\u044a\u043a"\
         "\u0421\u044a\u0431\u043e\u0442\u0430"]
+=======
+        "Нд"\
+        "Пн"\
+        "Вт"\
+        "Ср"\
+        "Чт"\
+        "Пт"\
+        "Сб"]
+    ::msgcat::mcset bg DAYS_OF_WEEK_FULL [list \
+        "Неделя"\
+        "Понеделник"\
+        "Вторник"\
+        "Сряда"\
+        "Четвъртък"\
+        "Петък"\
+        "Събота"]
+>>>>>>> upstream/master
     ::msgcat::mcset bg MONTHS_ABBREV [list \
         "I"\
         "II"\
@@ -31,6 +49,7 @@ namespace eval ::tcl::clock {
         "XII"\
         ""]
     ::msgcat::mcset bg MONTHS_FULL [list \
+<<<<<<< HEAD
         "\u042f\u043d\u0443\u0430\u0440\u0438"\
         "\u0424\u0435\u0432\u0440\u0443\u0430\u0440\u0438"\
         "\u041c\u0430\u0440\u0442"\
@@ -46,6 +65,23 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset bg BCE "\u043f\u0440.\u043d.\u0435."
     ::msgcat::mcset bg CE "\u043d.\u0435."
+=======
+        "Януари"\
+        "Февруари"\
+        "Март"\
+        "Април"\
+        "Май"\
+        "Юни"\
+        "Юли"\
+        "Август"\
+        "Септември"\
+        "Октомври"\
+        "Ноември"\
+        "Декември"\
+        ""]
+    ::msgcat::mcset bg BCE "пр.н.е."
+    ::msgcat::mcset bg CE "н.е."
+>>>>>>> upstream/master
     ::msgcat::mcset bg DATE_FORMAT "%Y-%m-%e"
     ::msgcat::mcset bg TIME_FORMAT "%k:%M:%S"
     ::msgcat::mcset bg DATE_TIME_FORMAT "%Y-%m-%e %k:%M:%S %z"

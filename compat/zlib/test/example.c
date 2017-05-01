@@ -1,5 +1,9 @@
 /* example.c -- usage example of the zlib compression library
+<<<<<<< HEAD
  * Copyright (C) 1995-2006, 2011 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2006, 2011, 2016 Jean-loup Gailly
+>>>>>>> upstream/master
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -26,13 +30,22 @@
     } \
 }
 
+<<<<<<< HEAD
 z_const char hello[] = "hello, hello!";
+=======
+static z_const char hello[] = "hello, hello!";
+>>>>>>> upstream/master
 /* "hello world" would be more standard, but the repeated "hello"
  * stresses the compression code better, sorry...
  */
 
+<<<<<<< HEAD
 const char dictionary[] = "hello";
 uLong dictId; /* Adler32 value of the dictionary */
+=======
+static const char dictionary[] = "hello";
+static uLong dictId;    /* Adler32 value of the dictionary */
+>>>>>>> upstream/master
 
 void test_deflate       OF((Byte *compr, uLong comprLen));
 void test_inflate       OF((Byte *compr, uLong comprLen,
@@ -59,13 +72,21 @@ void *myalloc(q, n, m)
     void *q;
     unsigned n, m;
 {
+<<<<<<< HEAD
     q = Z_NULL;
+=======
+    (void)q;
+>>>>>>> upstream/master
     return calloc(n, m);
 }
 
 void myfree(void *q, void *p)
 {
+<<<<<<< HEAD
     q = Z_NULL;
+=======
+    (void)q;
+>>>>>>> upstream/master
     free(p);
 }
 
@@ -432,7 +453,11 @@ void test_sync(compr, comprLen, uncompr, uncomprLen)
     d_stream.next_out = uncompr;
     d_stream.avail_out = (uInt)uncomprLen;
 
+<<<<<<< HEAD
     inflate(&d_stream, Z_NO_FLUSH);
+=======
+    err = inflate(&d_stream, Z_NO_FLUSH);
+>>>>>>> upstream/master
     CHECK_ERR(err, "inflate");
 
     d_stream.avail_in = (uInt)comprLen-2;   /* read all compressed data */
@@ -573,7 +598,12 @@ int main(argc, argv)
     }
 
 #ifdef Z_SOLO
+<<<<<<< HEAD
     argc = strlen(argv[0]);
+=======
+    (void)argc;
+    (void)argv;
+>>>>>>> upstream/master
 #else
     test_compress(compr, comprLen, uncompr, uncomprLen);
 

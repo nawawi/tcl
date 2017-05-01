@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -31,6 +35,7 @@ interpreter.  You can override the default \fBunknown\fR to change its
 functionality, or you can register a new handler for individual namespaces
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 using the \fBnamespace unknown\fR command.  Note that there is no default 
 implementation of \fBunknown\fR in a safe interpreter.
 .PP
@@ -50,11 +55,20 @@ implementation of \fBunknown\fR in a safe interpreter.
 .PP
 If the Tcl interpreter encounters a command name for which there
 >>>>>>> upstream/master
+=======
+using the \fBnamespace unknown\fR command.  Note that there is no default
+implementation of \fBunknown\fR in a safe interpreter.
+.PP
+If the Tcl interpreter encounters a command name for which there
+>>>>>>> upstream/master
 is not a defined command (in either the current namespace, or the
 global namespace), then Tcl checks for the existence of
 an unknown handler for the current namespace. By default, this
 handler is a command named \fB::unknown\fR.  If there is no such
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

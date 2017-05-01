@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -133,7 +137,11 @@ by \fIsubSpec\fR use the original unconverted form of \fIstring\fR.
 Specifies a character index offset into the string to start
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 matching the regular expression at.  
+=======
+matching the regular expression at.
+>>>>>>> upstream/master
 =======
 matching the regular expression at.
 >>>>>>> upstream/master

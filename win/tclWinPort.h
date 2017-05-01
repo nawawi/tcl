@@ -17,6 +17,7 @@
 #if !defined(_WIN64) && defined(BUILD_tcl)
 /* See [Bug 3354324]: file mtime sets wrong time */
 #   define _USE_32BIT_TIME_T
+<<<<<<< HEAD
 #endif
 
 /*
@@ -82,6 +83,33 @@ typedef DWORD DWORD_PTR;
 typedef DWORD_PTR * PDWORD_PTR;
 #endif
 
+=======
+#endif
+
+/*
+ * We must specify the lower version we intend to support.
+ *
+ * WINVER = 0x0500 means Windows 2000 and above
+ */
+
+#ifndef WINVER
+#   define WINVER 0x0501
+#endif
+#ifndef _WIN32_WINNT
+#   define _WIN32_WINNT 0x0501
+#endif
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+
+/* Compatibility to older visual studio / windows platform SDK */
+#if !defined(MAXULONG_PTR)
+typedef DWORD DWORD_PTR;
+typedef DWORD_PTR * PDWORD_PTR;
+#endif
+
+>>>>>>> upstream/master
 /*
  * Ask for the winsock function typedefs, also.
  */
@@ -102,6 +130,9 @@ typedef DWORD_PTR * PDWORD_PTR;
 #endif /* CHECK_UNICODE_CALLS */
 
 /*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *  Pull in the typedef of TCHAR for windows.
  */
@@ -403,8 +434,12 @@ typedef DWORD_PTR * PDWORD_PTR;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* 
+=======
+/*
+>>>>>>> upstream/master
 =======
 /*
 >>>>>>> upstream/master
@@ -421,6 +456,9 @@ typedef DWORD_PTR * PDWORD_PTR;
 #   define S_IFBLK (S_IFDIR | S_IFCHR)
 #endif
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #ifndef S_ISREG
 #   ifdef S_IFREG

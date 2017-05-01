@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -80,6 +84,7 @@ proc accept {args} {
 # Clean up events that could have happened
 close $server
 after cancel set state timeout
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 # Do something based on how the vwait finished...
@@ -225,6 +230,8 @@ proc waittime ms {
 }
 
 =======
+=======
+>>>>>>> upstream/master
 
 # Do something based on how the vwait finished...
 switch $state {
@@ -368,6 +375,9 @@ proc waittime ms {
     yield
 }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 coroutine task-1 eval {
     puts "waiting for a"

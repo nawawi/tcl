@@ -4,7 +4,11 @@
 #	that are contained within the Tcl library.  This file is used to
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	generate the 'tclTomMathDecls.h' and 'tclTomMathStub.c' files.
+=======
+#	generate the 'tclTomMathDecls.h' and 'tclStubInit.c' files.
+>>>>>>> upstream/master
 =======
 #	generate the 'tclTomMathDecls.h' and 'tclStubInit.c' files.
 >>>>>>> upstream/master

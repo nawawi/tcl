@@ -176,7 +176,11 @@ test safe-6.3 {test safe interpreters knowledge of the world} {
     lsort $r
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {byteOrder pathSeparator platform pointerSize wordSize}
+=======
+} {byteOrder engine pathSeparator platform pointerSize wordSize}
+>>>>>>> upstream/master
 =======
 } {byteOrder engine pathSeparator platform pointerSize wordSize}
 >>>>>>> upstream/master
@@ -220,8 +224,13 @@ test safe-7.3 {check that safe subinterpreters work} {
 
 # test source control on file name
 <<<<<<< HEAD
+<<<<<<< HEAD
 test safe-8.1 {safe source control on file} -setup {
     set i "a"
+=======
+set i "a"
+test safe-8.1 {safe source control on file} -setup {
+>>>>>>> upstream/master
 =======
 set i "a"
 test safe-8.1 {safe source control on file} -setup {
@@ -235,7 +244,10 @@ test safe-8.1 {safe source control on file} -setup {
 } -result {wrong # args: should be "source ?-encoding E? fileName"}
 test safe-8.2 {safe source control on file} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -247,7 +259,10 @@ test safe-8.2 {safe source control on file} -setup {
 } -result {wrong # args: should be "source ?-encoding E? fileName"}
 test safe-8.3 {safe source control on file} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -265,7 +280,10 @@ test safe-8.3 {safe source control on file} -setup {
 } -result {1 {permission denied} {{ERROR for slave a : ".": is a directory}}}
 test safe-8.4 {safe source control on file} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -283,7 +301,10 @@ test safe-8.4 {safe source control on file} -setup {
 } -result {1 {permission denied} {{ERROR for slave a : "/abc/def": not in access_path}}}
 test safe-8.5 {safe source control on file} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -305,7 +326,10 @@ test safe-8.5 {safe source control on file} -setup {
 } -result [list 1 {no such file or directory} [list "ERROR for slave a : [file join [info library] blah]:no such file or directory"]]
 test safe-8.6 {safe source control on file} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -325,7 +349,10 @@ test safe-8.6 {safe source control on file} -setup {
 } -result [list 1 {no such file or directory} [list "ERROR for slave a : [file join [info library] blah.tcl]:no such file or directory"]]
 test safe-8.7 {safe source control on file} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -347,7 +374,10 @@ test safe-8.7 {safe source control on file} -setup {
 } -result [list 1 {no such file or directory} [list "ERROR for slave a : [file join [info library] xxxxxxxxxxx.tcl]:no such file or directory"]]
 test safe-8.8 {safe source forbids -rsrc} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -384,8 +414,13 @@ test safe-8.10 {safe source and return} -setup {
 } -result ok
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 test safe-9.1 {safe interps' deleteHook} -setup {
     set i "a"
+=======
+set i "a"
+test safe-9.1 {safe interps' deleteHook} -setup {
+>>>>>>> upstream/master
 =======
 set i "a"
 test safe-9.1 {safe interps' deleteHook} -setup {
@@ -405,7 +440,10 @@ test safe-9.1 {safe interps' deleteHook} -setup {
 } -result {{} {arg1 arg2 a}}
 test safe-9.2 {safe interps' error in deleteHook} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     catch {safe::interpDelete $i}
@@ -494,6 +532,7 @@ test safe-10.3 {testing nested statics loading / no nested by default} -setup {
     safe::interpDelete $i
 } -result {permission denied (nested load)}
 test safe-10.4 {testing nested statics loading / -nestedloadok} -constraints TcltestPackage -body {
+<<<<<<< HEAD
     set i [safe::interpCreate -nestedloadok]
     interp eval $i {interp create x; load {} Safepkg1 x}
 } -returnCodes error -cleanup {
@@ -501,6 +540,15 @@ test safe-10.4 {testing nested statics loading / -nestedloadok} -constraints Tcl
 } -result {can't use package in a safe interpreter: no Safepkg1_SafeInit procedure}
 test safe-10.4.1 {testing nested statics loading / -nestedloadok} -constraints TcltestPackage -body {
     set i [safe::interpCreate -nestedloadok]
+=======
+    set i [safe::interpCreate -nestedloadok]
+    interp eval $i {interp create x; load {} Safepkg1 x}
+} -returnCodes error -cleanup {
+    safe::interpDelete $i
+} -result {can't use package in a safe interpreter: no Safepkg1_SafeInit procedure}
+test safe-10.4.1 {testing nested statics loading / -nestedloadok} -constraints TcltestPackage -body {
+    set i [safe::interpCreate -nestedloadok]
+>>>>>>> upstream/master
     catch {interp eval $i {interp create x; load {} Safepkg1 x}} m o
     dict get $o -errorinfo
 } -returnCodes ok -cleanup {
@@ -574,7 +622,11 @@ test safe-11.7.1 {testing safe encoding} -setup {
     catch {interp eval $i encoding convertfrom} m o
     dict get $o -errorinfo
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes ok -cleanup {
+=======
+} -returnCodes ok -match glob -cleanup {
+>>>>>>> upstream/master
 =======
 } -returnCodes ok -match glob -cleanup {
 >>>>>>> upstream/master
@@ -585,7 +637,11 @@ test safe-11.7.1 {testing safe encoding} -setup {
 "encoding convertfrom"
     invoked from within
 <<<<<<< HEAD
+<<<<<<< HEAD
 "::interp invokehidden interp1 encoding convertfrom"
+=======
+"::interp invokehidden interp* encoding convertfrom"
+>>>>>>> upstream/master
 =======
 "::interp invokehidden interp* encoding convertfrom"
 >>>>>>> upstream/master
@@ -606,7 +662,11 @@ test safe-11.8.1 {testing safe encoding} -setup {
     catch {interp eval $i encoding convertto} m o
     dict get $o -errorinfo
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes ok -cleanup {
+=======
+} -returnCodes ok -match glob -cleanup {
+>>>>>>> upstream/master
 =======
 } -returnCodes ok -match glob -cleanup {
 >>>>>>> upstream/master
@@ -617,7 +677,11 @@ test safe-11.8.1 {testing safe encoding} -setup {
 "encoding convertto"
     invoked from within
 <<<<<<< HEAD
+<<<<<<< HEAD
 "::interp invokehidden interp1 encoding convertto"
+=======
+"::interp invokehidden interp* encoding convertto"
+>>>>>>> upstream/master
 =======
 "::interp invokehidden interp* encoding convertto"
 >>>>>>> upstream/master

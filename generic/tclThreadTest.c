@@ -341,7 +341,11 @@ ThreadObjCmd(
 	    } else if (objc == 3
 		    && strcmp("-main", Tcl_GetString(objv[2])) == 0) {
 		Tcl_MutexLock(&threadMutex);
+<<<<<<< HEAD
 		idObj = Tcl_NewLongObj((long)(size_t)mainThreadId);
+=======
+		idObj = Tcl_NewWideIntObj((Tcl_WideInt)(size_t)mainThreadId);
+>>>>>>> upstream/master
 		Tcl_MutexUnlock(&threadMutex);
 	    } else {
 		Tcl_WrongNumArgs(interp, 2, objv, NULL);
@@ -615,7 +619,11 @@ NewTestThread(
     Tcl_Preserve(tsdPtr->interp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     result = Tcl_Eval(tsdPtr->interp, threadEvalScript);
+=======
+    result = Tcl_EvalEx(tsdPtr->interp, threadEvalScript, -1, 0);
+>>>>>>> upstream/master
 =======
     result = Tcl_EvalEx(tsdPtr->interp, threadEvalScript, -1, 0);
 >>>>>>> upstream/master
@@ -663,6 +671,7 @@ ThreadErrorProc(
     char *script;
     char buf[TCL_DOUBLE_SPACE+1];
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     sprintf(buf, "%" TCL_LL_MODIFIER "d", (Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
 =======
@@ -670,6 +679,11 @@ ThreadErrorProc(
 
     sprintf(buf, "%" TCL_LL_MODIFIER "d", (Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
 
+=======
+
+    sprintf(buf, "%p", Tcl_GetCurrentThread());
+
+>>>>>>> upstream/master
     errorInfo = Tcl_GetVar2(interp, "errorInfo", NULL, TCL_GLOBAL_ONLY);
     if (errorProcString == NULL) {
 	errChannel = Tcl_GetStdChannel(TCL_STDERR);
@@ -849,7 +863,11 @@ ThreadSend(
 	Tcl_MutexUnlock(&threadMutex);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return Tcl_GlobalEval(interp, script);
+=======
+	return Tcl_EvalEx(interp, script,-1,TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 =======
 	return Tcl_EvalEx(interp, script,-1,TCL_EVAL_GLOBAL);
 >>>>>>> upstream/master
@@ -972,6 +990,7 @@ ThreadSend(
  *
  *------------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 static int
 ThreadCancel(
@@ -1007,6 +1026,43 @@ ThreadCancel(
      * we do it now.
      */
 
+=======
+
+static int
+ThreadCancel(
+    Tcl_Interp *interp,		/* The current interpreter. */
+    Tcl_ThreadId id,		/* Thread Id of other interpreter. */
+    const char *result,		/* The result or NULL for default. */
+    int flags)			/* Flags for Tcl_CancelEval. */
+{
+    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    int found;
+    Tcl_ThreadId threadId = (Tcl_ThreadId) id;
+
+    /*
+     * Verify the thread exists.
+     */
+
+    Tcl_MutexLock(&threadMutex);
+    found = 0;
+    for (tsdPtr = threadList ; tsdPtr ; tsdPtr = tsdPtr->nextPtr) {
+	if (tsdPtr->threadId == threadId) {
+	    found = 1;
+	    break;
+	}
+    }
+    if (!found) {
+	Tcl_MutexUnlock(&threadMutex);
+	Tcl_AppendResult(interp, "invalid thread id", NULL);
+	return TCL_ERROR;
+    }
+
+    /*
+     * Since Tcl_CancelEval can be safely called from any thread,
+     * we do it now.
+     */
+
+>>>>>>> upstream/master
     Tcl_MutexUnlock(&threadMutex);
     Tcl_ResetResult(interp);
     return Tcl_CancelEval(tsdPtr->interp,
@@ -1052,7 +1108,11 @@ ThreadEventProc(
 	Tcl_CreateThreadExitHandler(ThreadFreeProc, threadEventPtr->script);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	code = Tcl_GlobalEval(interp, threadEventPtr->script);
+=======
+	code = Tcl_EvalEx(interp, threadEventPtr->script,-1,TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 =======
 	code = Tcl_EvalEx(interp, threadEventPtr->script,-1,TCL_EVAL_GLOBAL);
 >>>>>>> upstream/master

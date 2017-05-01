@@ -31,7 +31,11 @@
  * limited to a single interpreter.
  */
 
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     size_t numNsCreated;	/* Count of the number of namespaces created
 				 * within the thread. This value is used as a
 				 * unique id for each namespace. Cannot be
@@ -2886,9 +2890,15 @@ GetNamespaceFromObj(
 	nsPtr = resNamePtr->nsPtr;
 	refNsPtr = resNamePtr->refNsPtr;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp) &&
 		(!refNsPtr || ((interp == refNsPtr->interp) &&
 		(refNsPtr== (Namespace *) Tcl_GetCurrentNamespace(interp))))){
+=======
+	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp)
+		&& (!refNsPtr || (refNsPtr ==
+		(Namespace *) TclGetCurrentNamespace(interp)))) {
+>>>>>>> upstream/master
 =======
 	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp)
 		&& (!refNsPtr || (refNsPtr ==
@@ -3361,6 +3371,7 @@ NRNamespaceEvalCmd(
     framePtrPtr = &framePtr;
     (void) TclPushStackFrame(interp, (Tcl_CallFrame **) framePtrPtr,
 	    namespacePtr, /*isProcCallFrame*/ 0);
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     if (iPtr->ensembleRewrite.sourceObjs == NULL) {
@@ -3380,6 +3391,16 @@ NRNamespaceEvalCmd(
 	 * TIP #280: Make actual argument location available to eval'd script.
 	 */
 
+=======
+
+    framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
+
+    if (objc == 3) {
+	/*
+	 * TIP #280: Make actual argument location available to eval'd script.
+	 */
+
+>>>>>>> upstream/master
 	objPtr = objv[2];
 	invoker = iPtr->cmdFramePtr;
 	word = 3;
@@ -3781,7 +3802,10 @@ NRNamespaceInscopeCmd(
     Tcl_Namespace *namespacePtr;
     CallFrame *framePtr, **framePtrPtr;
 <<<<<<< HEAD
+<<<<<<< HEAD
     register Interp *iPtr = (Interp *) interp;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     int i;
@@ -3810,6 +3834,7 @@ NRNamespaceInscopeCmd(
 	    namespacePtr, /*isProcCallFrame*/ 0);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	framePtr->objc = objc;
 	framePtr->objv = objv;
@@ -3818,6 +3843,9 @@ NRNamespaceInscopeCmd(
 		- iPtr->ensembleRewrite.numInsertedObjs;
 	framePtr->objv = iPtr->ensembleRewrite.sourceObjs;
     }
+=======
+    framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
+>>>>>>> upstream/master
 =======
     framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
 >>>>>>> upstream/master
@@ -4573,8 +4601,13 @@ NamespaceUpvarCmd(
 	iPtr->varFramePtr->nsPtr = (Namespace *) nsPtr;
 	otherPtr = TclObjLookupVarEx(interp, objv[0], NULL,
 <<<<<<< HEAD
+<<<<<<< HEAD
 		(TCL_NAMESPACE_ONLY | TCL_LEAVE_ERR_MSG), "access",
 		/*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
+=======
+		(TCL_NAMESPACE_ONLY|TCL_LEAVE_ERR_MSG|TCL_AVOID_RESOLVERS),
+		"access", /*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
+>>>>>>> upstream/master
 =======
 		(TCL_NAMESPACE_ONLY|TCL_LEAVE_ERR_MSG|TCL_AVOID_RESOLVERS),
 		"access", /*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
@@ -4661,6 +4694,7 @@ NamespaceWhichCmd(
 	    Tcl_GetCommandFullName(interp, cmd, resultPtr);
 	}
 	break;
+<<<<<<< HEAD
     }
     case 1: {				/* -variable */
 	Tcl_Var var = Tcl_FindNamespaceVar(interp,
@@ -4671,6 +4705,18 @@ NamespaceWhichCmd(
 	}
 	break;
     }
+=======
+    }
+    case 1: {				/* -variable */
+	Tcl_Var var = Tcl_FindNamespaceVar(interp,
+		TclGetString(objv[objc-1]), NULL, /*flags*/ 0);
+
+	if (var != NULL) {
+	    Tcl_GetVariableFullName(interp, var, resultPtr);
+	}
+	break;
+    }
+>>>>>>> upstream/master
     }
     Tcl_SetObjResult(interp, resultPtr);
     return TCL_OK;
@@ -4818,7 +4864,11 @@ SetNsNameFromAny(
 	resNamePtr->refNsPtr = NULL;
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	resNamePtr->refNsPtr = (Namespace *) Tcl_GetCurrentNamespace(interp);
+=======
+	resNamePtr->refNsPtr = (Namespace *) TclGetCurrentNamespace(interp);
+>>>>>>> upstream/master
 =======
 	resNamePtr->refNsPtr = (Namespace *) TclGetCurrentNamespace(interp);
 >>>>>>> upstream/master

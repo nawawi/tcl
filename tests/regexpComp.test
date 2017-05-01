@@ -24,7 +24,11 @@ proc evalInProc { script } {
     set status [catch {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	testProc 
+=======
+	testProc
+>>>>>>> upstream/master
 =======
 	testProc
 >>>>>>> upstream/master
@@ -617,7 +621,11 @@ test regexpComp-11.8 {regsub errors, -start bad int check} {
 # This test crashes on the Mac unless you increase the Stack Space to about 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Meg.  This is probably bigger than most users want... 
+=======
+# Meg.  This is probably bigger than most users want...
+>>>>>>> upstream/master
 =======
 # Meg.  This is probably bigger than most users want...
 >>>>>>> upstream/master
@@ -812,6 +820,7 @@ test regexpComp-20.1 {regsub shared object shimmering} {
 	# Bug #461322
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set a abcdefghijklmnopqurstuvwxyz 
 	set b $a 
 	set c abcdefghijklmnopqurstuvwxyz0123456789 
@@ -819,11 +828,16 @@ test regexpComp-20.1 {regsub shared object shimmering} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	set a abcdefghijklmnopqurstuvwxyz
 	set b $a
 	set c abcdefghijklmnopqurstuvwxyz0123456789
 	regsub $a $c $b d
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

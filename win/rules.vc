@@ -188,9 +188,20 @@ COMPILERFLAGS   = $(COMPILERFLAGS) -QIA64_Bx
 !endif
 !endif
 
+<<<<<<< HEAD
 !if "$(MACHINE)" == "IX86"
 ### test for -align:4096, when align:512 will do.
 !if [nmakehlp -l -opt:nowin98]
+=======
+# Prevents "LNK1561: entry point must be defined" error compiling from VS-IDE:
+!ifndef LINKER_TESTFLAGS
+LINKER_TESTFLAGS = /DLL /NOENTRY /OUT:nmhlp-out.txt
+!endif
+
+!if "$(MACHINE)" == "IX86"
+### test for -align:4096, when align:512 will do.
+!if [nmakehlp -l -opt:nowin98 $(LINKER_TESTFLAGS)]
+>>>>>>> upstream/master
 !message *** Linker has 'Win98 alignment problem'
 ALIGN98_HACK	= 1
 !else
@@ -203,7 +214,11 @@ ALIGN98_HACK	= 0
 
 LINKERFLAGS     =
 
+<<<<<<< HEAD
 !if [nmakehlp -l -ltcg]
+=======
+!if [nmakehlp -l -ltcg $(LINKER_TESTFLAGS)]
+>>>>>>> upstream/master
 LINKERFLAGS     =-ltcg
 !endif
 
@@ -417,7 +432,11 @@ TCL_NO_DEPRECATED	    = 0
 !if [nmakehlp -f $(CHECKS) "fullwarn"]
 !message *** Doing full warnings check
 WARNINGS		    = -W4
+<<<<<<< HEAD
 !if [nmakehlp -l -warn:3]
+=======
+!if [nmakehlp -l -warn:3 $(LINKER_TESTFLAGS)]
+>>>>>>> upstream/master
 LINKERFLAGS		    = $(LINKERFLAGS) -warn:3
 !endif
 !else
@@ -430,7 +449,11 @@ WARNINGS		    = $(WARNINGS) -Wp64
 !endif
 
 !if $(PGO) > 1
+<<<<<<< HEAD
 !if [nmakehlp -l -ltcg:pgoptimize]
+=======
+!if [nmakehlp -l -ltcg:pgoptimize $(LINKER_TESTFLAGS)]
+>>>>>>> upstream/master
 LINKERFLAGS	= $(LINKERFLAGS:-ltcg=) -ltcg:pgoptimize
 !else
 MSG=^
@@ -438,7 +461,11 @@ This compiler does not support profile guided optimization.
 !error $(MSG)
 !endif
 !elseif $(PGO) > 0
+<<<<<<< HEAD
 !if [nmakehlp -l -ltcg:pginstrument]
+=======
+!if [nmakehlp -l -ltcg:pginstrument $(LINKER_TESTFLAGS)]
+>>>>>>> upstream/master
 LINKERFLAGS	= $(LINKERFLAGS:-ltcg=) -ltcg:pginstrument
 !else
 MSG=^

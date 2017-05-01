@@ -107,7 +107,11 @@ typedef	struct finderinfo {
 } __attribute__ ((__packed__)) finderinfo;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct fileinfobuf {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -646,11 +650,16 @@ SetOSTypeFromAny(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     string = Tcl_GetStringFromObj(objPtr, &length);
 =======
     string = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
     Tcl_UtfToExternalDString(encoding, string, length, &ds);
+=======
+    string = TclGetString(objPtr);
+    Tcl_UtfToExternalDString(encoding, string, objPtr->length, &ds);
+>>>>>>> upstream/master
 =======
     string = TclGetString(objPtr);
     Tcl_UtfToExternalDString(encoding, string, objPtr->length, &ds);

@@ -730,7 +730,10 @@ test stringComp-14.3 {Bug 0dca3bfa8f} {
 } 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test stringComp-14.4 {Bug 1af8de570511} {
@@ -745,8 +748,14 @@ test stringComp-14.4 {Bug 1af8de570511} {
 } 0x00
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+test stringComp-14.5 {} {
+    string length [string replace [string repeat a\u00fe 2] 3 end {}]
+} 3
 >>>>>>> upstream/master
 =======
 test stringComp-14.5 {} {

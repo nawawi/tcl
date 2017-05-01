@@ -125,7 +125,11 @@ Pkga_QuoteObjCmd(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master

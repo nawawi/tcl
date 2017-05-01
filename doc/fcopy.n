@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -31,6 +35,7 @@ avoid extra copies and to avoid buffering too much data in
 main memory when copying large files to slow destinations like
 network sockets.
 .PP
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 The \fBfcopy\fR 
@@ -59,6 +64,19 @@ Without the \fB\-command\fR option, \fBfcopy\fR blocks until the copy is complet
 and returns the number of bytes or characters (using the same rules as
 for the \fB\-size\fR option) written to \fIoutchan\fR.
 >>>>>>> upstream/master
+=======
+The \fBfcopy\fR
+command transfers data from \fIinchan\fR until end of file
+or \fIsize\fR bytes or characters have been
+transferred; \fIsize\fR is in bytes if the two channels are using the
+same encoding, and is in characters otherwise.
+If no \fB\-size\fR argument is given,
+then the copy goes until end of file.
+All the data read from \fIinchan\fR is copied to \fIoutchan\fR.
+Without the \fB\-command\fR option, \fBfcopy\fR blocks until the copy is complete
+and returns the number of bytes or characters (using the same rules as
+for the \fB\-size\fR option) written to \fIoutchan\fR.
+>>>>>>> upstream/master
 .PP
 The \fB\-command\fR argument makes \fBfcopy\fR work in the background.
 In this case it returns immediately and the \fIcallback\fR is invoked
@@ -66,7 +84,11 @@ later when the copy completes.
 The \fIcallback\fR is called with
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 one or two additional 
+=======
+one or two additional
+>>>>>>> upstream/master
 =======
 one or two additional
 >>>>>>> upstream/master
@@ -111,6 +133,7 @@ Only the number of bytes written to \fIoutchan\fR is reported,
 either as the return value of a synchronous \fBfcopy\fR or
 as the argument to the callback for an asynchronous \fBfcopy\fR.
 <<<<<<< HEAD
+<<<<<<< HEAD
 .PP
 \fBFcopy\fR obeys the encodings and character translations configured
 for the channels. This
@@ -145,6 +168,9 @@ fconfigure $out -translation binary
 .PP
 =======
 .PP
+=======
+.PP
+>>>>>>> upstream/master
 \fBFcopy\fR obeys the encodings and character translations configured
 for the channels. This
 means that the incoming characters are converted internally first
@@ -176,6 +202,9 @@ fconfigure $out -translation binary
 \fBfcopy\fR $in $out
 .CE
 .PP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 This second example shows how the callback gets
 passed the number of bytes transferred.

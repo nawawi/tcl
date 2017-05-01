@@ -208,11 +208,15 @@ struct ClockCommand {
 };
 
 static const struct ClockCommand clockCommands[] = {
+<<<<<<< HEAD
     { "clicks",			ClockClicksObjCmd },
     { "getenv",			ClockGetenvObjCmd },
     { "microseconds",		ClockMicrosecondsObjCmd },
     { "milliseconds",		ClockMillisecondsObjCmd },
     { "seconds",		ClockSecondsObjCmd },
+=======
+    { "getenv",			ClockGetenvObjCmd },
+>>>>>>> upstream/master
     { "Oldscan",		TclClockOldscanObjCmd },
     { "ConvertLocalToUTC",	ClockConvertlocaltoutcObjCmd },
     { "GetDateFields",		ClockGetdatefieldsObjCmd },
@@ -223,6 +227,7 @@ static const struct ClockCommand clockCommands[] = {
     { "ParseFormatArgs",	ClockParseformatargsObjCmd },
     { NULL, NULL }
 };
+<<<<<<< HEAD
 
 /*
  *----------------------------------------------------------------------
@@ -287,10 +292,13 @@ TclClockInit(
 		ClockDeleteCmdProc);
     }
 }
+=======
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * ClockConvertlocaltoutcObjCmd --
  *
  *	Tcl command that converts a UTC time to a local time by whatever means
@@ -498,11 +506,180 @@ ClockGetdatefieldsObjCmd(
     Tcl_SetObjResult(interp, dict);
 
     return TCL_OK;
+=======
+ * TclClockInit --
+ *
+ *	Registers the 'clock' subcommands with the Tcl interpreter and
+ *	initializes its client data (which consists mostly of constant
+ *	Tcl_Obj's that it is too much trouble to keep recreating).
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Installs the commands and creates the client data
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+TclClockInit(
+    Tcl_Interp *interp)		/* Tcl interpreter */
+{
+    const struct ClockCommand *clockCmdPtr;
+    char cmdName[50];		/* Buffer large enough to hold the string
+				 *::tcl::clock::GetJulianDayFromEraYearMonthDay
+				 * plus a terminating NUL. */
+    ClockClientData *data;
+    int i;
+
+    /* Structure of the 'clock' ensemble */
+
+    static const EnsembleImplMap clockImplMap[] = {
+	{"add",          NULL,                    TclCompileBasicMin1ArgCmd, NULL, NULL,       0},
+	{"clicks",       ClockClicksObjCmd,       TclCompileClockClicksCmd,  NULL, NULL,       0},
+	{"format",       NULL,                    TclCompileBasicMin1ArgCmd, NULL, NULL,       0},
+	{"microseconds", ClockMicrosecondsObjCmd, TclCompileClockReadingCmd, NULL, INT2PTR(1), 0},
+	{"milliseconds", ClockMillisecondsObjCmd, TclCompileClockReadingCmd, NULL, INT2PTR(2), 0},
+	{"scan",         NULL,                    TclCompileBasicMin1ArgCmd, NULL, NULL      , 0},
+	{"seconds",      ClockSecondsObjCmd,      TclCompileClockReadingCmd, NULL, INT2PTR(3), 0},
+	{NULL,           NULL,                    NULL,                      NULL, NULL,       0}
+    };
+
+    /*
+     * Safe interps get [::clock] as alias to a master, so do not need their
+     * own copies of the support routines.
+     */
+
+    if (Tcl_IsSafe(interp)) {
+	return;
+    }
+
+    /*
+     * Create the client data, which is a refcounted literal pool.
+     */
+
+    data = ckalloc(sizeof(ClockClientData));
+    data->refCount = 0;
+    data->literals = ckalloc(LIT__END * sizeof(Tcl_Obj*));
+    for (i = 0; i < LIT__END; ++i) {
+	data->literals[i] = Tcl_NewStringObj(literals[i], -1);
+	Tcl_IncrRefCount(data->literals[i]);
+    }
+
+    /*
+     * Install the commands.
+     * TODO - Let Tcl_MakeEnsemble do this?
+     */
+
+#define TCL_CLOCK_PREFIX_LEN 14 /* == strlen("::tcl::clock::") */
+    memcpy(cmdName, "::tcl::clock::", TCL_CLOCK_PREFIX_LEN);
+    for (clockCmdPtr=clockCommands ; clockCmdPtr->name!=NULL ; clockCmdPtr++) {
+	strcpy(cmdName + TCL_CLOCK_PREFIX_LEN, clockCmdPtr->name);
+	data->refCount++;
+	Tcl_CreateObjCommand(interp, cmdName, clockCmdPtr->objCmdProc, data,
+		ClockDeleteCmdProc);
+    }
+
+    /* Make the clock ensemble */
+
+    TclMakeEnsemble(interp, "clock", clockImplMap);
 }
 
 /*
  *----------------------------------------------------------------------
  *
+ * ClockConvertlocaltoutcObjCmd --
+ *
+ *	Tcl command that converts a UTC time to a local time by whatever means
+ *	is available.
+ *
+ * Usage:
+ *	::tcl::clock::ConvertUTCToLocal dictionary tzdata changeover
+ *
+ * Parameters:
+ *	dict - Dictionary containing a 'localSeconds' entry.
+ *	tzdata - Time zone data
+ *	changeover - Julian Day of the adoption of the Gregorian calendar.
+ *
+ * Results:
+ *	Returns a standard Tcl result.
+ *
+ * Side effects:
+ *	On success, sets the interpreter result to the given dictionary
+ *	augmented with a 'seconds' field giving the UTC time. On failure,
+ *	leaves an error message in the interpreter result.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+ClockConvertlocaltoutcObjCmd(
+    ClientData clientData,	/* Client data */
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    int objc,			/* Parameter count */
+    Tcl_Obj *const *objv)	/* Parameter vector */
+{
+    ClockClientData *data = clientData;
+    Tcl_Obj *const *literals = data->literals;
+    Tcl_Obj *secondsObj;
+    Tcl_Obj *dict;
+    int changeover;
+    TclDateFields fields;
+    int created = 0;
+    int status;
+
+    /*
+     * Check params and convert time.
+     */
+
+    if (objc != 4) {
+	Tcl_WrongNumArgs(interp, 1, objv, "dict tzdata changeover");
+	return TCL_ERROR;
+    }
+    dict = objv[1];
+    if (Tcl_DictObjGet(interp, dict, literals[LIT_LOCALSECONDS],
+	    &secondsObj)!= TCL_OK) {
+	return TCL_ERROR;
+    }
+    if (secondsObj == NULL) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj("key \"localseconds\" not "
+		"found in dictionary", -1));
+	return TCL_ERROR;
+    }
+    if ((Tcl_GetWideIntFromObj(interp, secondsObj,
+	    &fields.localSeconds) != TCL_OK)
+	|| (TclGetIntFromObj(interp, objv[3], &changeover) != TCL_OK)
+	|| ConvertLocalToUTC(interp, &fields, objv[2], changeover)) {
+	return TCL_ERROR;
+    }
+
+    /*
+     * Copy-on-write; set the 'seconds' field in the dictionary and place the
+     * modified dictionary in the interpreter result.
+     */
+
+    if (Tcl_IsShared(dict)) {
+	dict = Tcl_DuplicateObj(dict);
+	created = 1;
+	Tcl_IncrRefCount(dict);
+    }
+    status = Tcl_DictObjPut(interp, dict, literals[LIT_SECONDS],
+	    Tcl_NewWideIntObj(fields.seconds));
+    if (status == TCL_OK) {
+	Tcl_SetObjResult(interp, dict);
+    }
+    if (created) {
+	Tcl_DecrRefCount(dict);
+    }
+    return status;
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
  * ClockGetjuliandayfromerayearmonthdayObjCmd --
  *
  *	Tcl command that converts a time from era-year-month-day to a Julian
@@ -594,11 +771,74 @@ ClockGetjuliandayfromerayearmonthdayObjCmd(
 	    || FetchIntField(interp, dict, literals[LIT_DAYOFMONTH],
 		&fields.dayOfMonth) != TCL_OK
 	    || TclGetIntFromObj(interp, objv[2], &changeover) != TCL_OK) {
+=======
+ * ClockGetdatefieldsObjCmd --
+ *
+ *	Tcl command that determines the values that [clock format] will use in
+ *	formatting a date, and populates a dictionary with them.
+ *
+ * Usage:
+ *	::tcl::clock::GetDateFields seconds tzdata changeover
+ *
+ * Parameters:
+ *	seconds - Time expressed in seconds from the Posix epoch.
+ *	tzdata - Time zone data of the time zone in which time is to be
+ *		 expressed.
+ *	changeover - Julian Day Number at which the current locale adopted
+ *		     the Gregorian calendar
+ *
+ * Results:
+ *	Returns a dictonary populated with the fields:
+ *		seconds - Seconds from the Posix epoch
+ *		localSeconds - Nominal seconds from the Posix epoch in the
+ *			       local time zone.
+ *		tzOffset - Time zone offset in seconds east of Greenwich
+ *		tzName - Time zone name
+ *		julianDay - Julian Day Number in the local time zone
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+ClockGetdatefieldsObjCmd(
+    ClientData clientData,	/* Opaque pointer to literal pool, etc. */
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    int objc,			/* Parameter count */
+    Tcl_Obj *const *objv)	/* Parameter vector */
+{
+    TclDateFields fields;
+    Tcl_Obj *dict;
+    ClockClientData *data = clientData;
+    Tcl_Obj *const *literals = data->literals;
+    int changeover;
+
+    /*
+     * Check params.
+     */
+
+    if (objc != 4) {
+	Tcl_WrongNumArgs(interp, 1, objv, "seconds tzdata changeover");
+	return TCL_ERROR;
+    }
+    if (Tcl_GetWideIntFromObj(interp, objv[1], &fields.seconds) != TCL_OK
+	    || TclGetIntFromObj(interp, objv[3], &changeover) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    /*
+     * fields.seconds could be an unsigned number that overflowed. Make sure
+     * that it isn't.
+     */
+
+    if (objv[1]->typePtr == &tclBignumType) {
+	Tcl_SetObjResult(interp, literals[LIT_INTEGER_VALUE_TOO_LARGE]);
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     fields.era = era;
 
     /*
+<<<<<<< HEAD
      * Get Julian day.
      */
 
@@ -647,6 +887,260 @@ ClockGetjuliandayfromerayearmonthdayObjCmd(
 
 static int
 ClockGetjuliandayfromerayearweekdayObjCmd(
+=======
+     * Convert UTC time to local.
+     */
+
+    if (ConvertUTCToLocal(interp, &fields, objv[2], changeover) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    /*
+     * Extract Julian day.
+     */
+
+    fields.julianDay = (int) ((fields.localSeconds + JULIAN_SEC_POSIX_EPOCH)
+	    / SECONDS_PER_DAY);
+
+    /*
+     * Convert to Julian or Gregorian calendar.
+     */
+
+    GetGregorianEraYearDay(&fields, changeover);
+    GetMonthDay(&fields);
+    GetYearWeekDay(&fields, changeover);
+
+    dict = Tcl_NewDictObj();
+    Tcl_DictObjPut(NULL, dict, literals[LIT_LOCALSECONDS],
+	    Tcl_NewWideIntObj(fields.localSeconds));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_SECONDS],
+	    Tcl_NewWideIntObj(fields.seconds));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_TZNAME], fields.tzName);
+    Tcl_DecrRefCount(fields.tzName);
+    Tcl_DictObjPut(NULL, dict, literals[LIT_TZOFFSET],
+	    Tcl_NewIntObj(fields.tzOffset));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_JULIANDAY],
+	    Tcl_NewIntObj(fields.julianDay));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_GREGORIAN],
+	    Tcl_NewIntObj(fields.gregorian));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_ERA],
+	    literals[fields.era ? LIT_BCE : LIT_CE]);
+    Tcl_DictObjPut(NULL, dict, literals[LIT_YEAR],
+	    Tcl_NewIntObj(fields.year));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_DAYOFYEAR],
+	    Tcl_NewIntObj(fields.dayOfYear));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_MONTH],
+	    Tcl_NewIntObj(fields.month));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_DAYOFMONTH],
+	    Tcl_NewIntObj(fields.dayOfMonth));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_ISO8601YEAR],
+	    Tcl_NewIntObj(fields.iso8601Year));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_ISO8601WEEK],
+	    Tcl_NewIntObj(fields.iso8601Week));
+    Tcl_DictObjPut(NULL, dict, literals[LIT_DAYOFWEEK],
+	    Tcl_NewIntObj(fields.dayOfWeek));
+    Tcl_SetObjResult(interp, dict);
+
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * ClockGetjuliandayfromerayearmonthdayObjCmd --
+ *
+ *	Tcl command that converts a time from era-year-month-day to a Julian
+ *	Day Number.
+ *
+ * Parameters:
+ *	dict - Dictionary that contains 'era', 'year', 'month' and
+ *	       'dayOfMonth' keys.
+ *	changeover - Julian Day of changeover to the Gregorian calendar
+ *
+ * Results:
+ *	Result is either TCL_OK, with the interpreter result being the
+ *	dictionary augmented with a 'julianDay' key, or TCL_ERROR,
+ *	with the result being an error message.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FetchEraField(
+    Tcl_Interp *interp,
+    Tcl_Obj *dict,
+    Tcl_Obj *key,
+    int *storePtr)
+{
+    Tcl_Obj *value = NULL;
+
+    if (Tcl_DictObjGet(interp, dict, key, &value) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    if (value == NULL) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		"expected key(s) not found in dictionary", -1));
+	return TCL_ERROR;
+    }
+    return Tcl_GetIndexFromObj(interp, value, eras, "era", TCL_EXACT, storePtr);
+}
+
+static int
+FetchIntField(
+    Tcl_Interp *interp,
+    Tcl_Obj *dict,
+    Tcl_Obj *key,
+    int *storePtr)
+{
+    Tcl_Obj *value = NULL;
+
+    if (Tcl_DictObjGet(interp, dict, key, &value) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    if (value == NULL) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		"expected key(s) not found in dictionary", -1));
+	return TCL_ERROR;
+    }
+    return TclGetIntFromObj(interp, value, storePtr);
+}
+
+static int
+ClockGetjuliandayfromerayearmonthdayObjCmd(
+>>>>>>> upstream/master
+    ClientData clientData,	/* Opaque pointer to literal pool, etc. */
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    int objc,			/* Parameter count */
+    Tcl_Obj *const *objv)	/* Parameter vector */
+{
+    TclDateFields fields;
+    Tcl_Obj *dict;
+    ClockClientData *data = clientData;
+    Tcl_Obj *const *literals = data->literals;
+    int changeover;
+    int copied = 0;
+    int status;
+    int era = 0;
+
+    /*
+     * Check params.
+     */
+
+    if (objc != 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "dict changeover");
+	return TCL_ERROR;
+<<<<<<< HEAD
+    }
+    dict = objv[1];
+    if (FetchEraField(interp, dict, literals[LIT_ERA], &era) != TCL_OK
+	    || FetchIntField(interp, dict, literals[LIT_ISO8601YEAR],
+		&fields.iso8601Year) != TCL_OK
+	    || FetchIntField(interp, dict, literals[LIT_ISO8601WEEK],
+		&fields.iso8601Week) != TCL_OK
+	    || FetchIntField(interp, dict, literals[LIT_DAYOFWEEK],
+		&fields.dayOfWeek) != TCL_OK
+	    || TclGetIntFromObj(interp, objv[2], &changeover) != TCL_OK) {
+	return TCL_ERROR;
+    }
+=======
+    }
+    dict = objv[1];
+    if (FetchEraField(interp, dict, literals[LIT_ERA], &era) != TCL_OK
+	    || FetchIntField(interp, dict, literals[LIT_YEAR], &fields.year)
+		!= TCL_OK
+	    || FetchIntField(interp, dict, literals[LIT_MONTH], &fields.month)
+		!= TCL_OK
+	    || FetchIntField(interp, dict, literals[LIT_DAYOFMONTH],
+		&fields.dayOfMonth) != TCL_OK
+	    || TclGetIntFromObj(interp, objv[2], &changeover) != TCL_OK) {
+	return TCL_ERROR;
+    }
+>>>>>>> upstream/master
+    fields.era = era;
+
+    /*
+     * Get Julian day.
+     */
+
+<<<<<<< HEAD
+    GetJulianDayFromEraYearWeekDay(&fields, changeover);
+=======
+    GetJulianDayFromEraYearMonthDay(&fields, changeover);
+>>>>>>> upstream/master
+
+    /*
+     * Store Julian day in the dictionary - copy on write.
+     */
+
+    if (Tcl_IsShared(dict)) {
+	dict = Tcl_DuplicateObj(dict);
+	Tcl_IncrRefCount(dict);
+	copied = 1;
+    }
+    status = Tcl_DictObjPut(interp, dict, literals[LIT_JULIANDAY],
+	    Tcl_NewIntObj(fields.julianDay));
+    if (status == TCL_OK) {
+	Tcl_SetObjResult(interp, dict);
+    }
+    if (copied) {
+	Tcl_DecrRefCount(dict);
+    }
+    return status;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * ConvertLocalToUTC --
+ *
+ *	Converts a time (in a TclDateFields structure) from the local wall
+ *	clock to UTC.
+ *
+ * Results:
+ *	Returns a standard Tcl result.
+ *
+ * Side effects:
+ *	Populates the 'seconds' field if successful; stores an error message
+ *	in the interpreter result on failure.
+=======
+ * ClockGetjuliandayfromerayearweekdayObjCmd --
+ *
+ *	Tcl command that converts a time from the ISO calendar to a Julian Day
+ *	Number.
+ *
+ * Parameters:
+ *	dict - Dictionary that contains 'era', 'iso8601Year', 'iso8601Week'
+ *	       and 'dayOfWeek' keys.
+ *	changeover - Julian Day of changeover to the Gregorian calendar
+ *
+ * Results:
+ *	Result is either TCL_OK, with the interpreter result being the
+ *	dictionary augmented with a 'julianDay' key, or TCL_ERROR, with the
+ *	result being an error message.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+<<<<<<< HEAD
+ConvertLocalToUTC(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    TclDateFields *fields,	/* Fields of the time */
+    Tcl_Obj *tzdata,		/* Time zone data */
+    int changeover)		/* Julian Day of the Gregorian transition */
+{
+    int rowc;			/* Number of rows in tzdata */
+    Tcl_Obj **rowv;		/* Pointers to the rows */
+
+    /*
+     * Unpack the tz data.
+     */
+
+    if (TclListObjGetElements(interp, tzdata, &rowc, &rowv) != TCL_OK) {
+=======
+ClockGetjuliandayfromerayearweekdayObjCmd(
     ClientData clientData,	/* Opaque pointer to literal pool, etc. */
     Tcl_Interp *interp,		/* Tcl interpreter */
     int objc,			/* Parameter count */
@@ -678,73 +1172,13 @@ ClockGetjuliandayfromerayearweekdayObjCmd(
 	    || FetchIntField(interp, dict, literals[LIT_DAYOFWEEK],
 		&fields.dayOfWeek) != TCL_OK
 	    || TclGetIntFromObj(interp, objv[2], &changeover) != TCL_OK) {
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     fields.era = era;
 
     /*
-     * Get Julian day.
-     */
-
-    GetJulianDayFromEraYearWeekDay(&fields, changeover);
-
-    /*
-     * Store Julian day in the dictionary - copy on write.
-     */
-
-    if (Tcl_IsShared(dict)) {
-	dict = Tcl_DuplicateObj(dict);
-	Tcl_IncrRefCount(dict);
-	copied = 1;
-    }
-    status = Tcl_DictObjPut(interp, dict, literals[LIT_JULIANDAY],
-	    Tcl_NewIntObj(fields.julianDay));
-    if (status == TCL_OK) {
-	Tcl_SetObjResult(interp, dict);
-    }
-    if (copied) {
-	Tcl_DecrRefCount(dict);
-    }
-    return status;
-}
-
-/*
- *----------------------------------------------------------------------
- *
- * ConvertLocalToUTC --
- *
- *	Converts a time (in a TclDateFields structure) from the local wall
- *	clock to UTC.
- *
- * Results:
- *	Returns a standard Tcl result.
- *
- * Side effects:
- *	Populates the 'seconds' field if successful; stores an error message
- *	in the interpreter result on failure.
- *
- *----------------------------------------------------------------------
- */
-
-static int
-ConvertLocalToUTC(
-    Tcl_Interp *interp,		/* Tcl interpreter */
-    TclDateFields *fields,	/* Fields of the time */
-    Tcl_Obj *tzdata,		/* Time zone data */
-    int changeover)		/* Julian Day of the Gregorian transition */
-{
-    int rowc;			/* Number of rows in tzdata */
-    Tcl_Obj **rowv;		/* Pointers to the rows */
-
-    /*
-     * Unpack the tz data.
-     */
-
-    if (TclListObjGetElements(interp, tzdata, &rowc, &rowv) != TCL_OK) {
-	return TCL_ERROR;
-    }
-
-    /*
+<<<<<<< HEAD
      * Special case: If the time zone is :localtime, the tzdata will be empty.
      * Use 'mktime' to convert the time to local
      */
@@ -829,11 +1263,162 @@ ConvertLocalToUTCUsingTable(
     fields->tzOffset = have[i];
     fields->seconds = fields->localSeconds - fields->tzOffset;
     return TCL_OK;
+=======
+     * Get Julian day.
+     */
+
+    GetJulianDayFromEraYearWeekDay(&fields, changeover);
+
+    /*
+     * Store Julian day in the dictionary - copy on write.
+     */
+
+    if (Tcl_IsShared(dict)) {
+	dict = Tcl_DuplicateObj(dict);
+	Tcl_IncrRefCount(dict);
+	copied = 1;
+    }
+    status = Tcl_DictObjPut(interp, dict, literals[LIT_JULIANDAY],
+	    Tcl_NewIntObj(fields.julianDay));
+    if (status == TCL_OK) {
+	Tcl_SetObjResult(interp, dict);
+    }
+    if (copied) {
+	Tcl_DecrRefCount(dict);
+    }
+    return status;
 }
 
 /*
  *----------------------------------------------------------------------
  *
+ * ConvertLocalToUTC --
+ *
+ *	Converts a time (in a TclDateFields structure) from the local wall
+ *	clock to UTC.
+ *
+ * Results:
+ *	Returns a standard Tcl result.
+ *
+ * Side effects:
+ *	Populates the 'seconds' field if successful; stores an error message
+ *	in the interpreter result on failure.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+ConvertLocalToUTC(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    TclDateFields *fields,	/* Fields of the time */
+    Tcl_Obj *tzdata,		/* Time zone data */
+    int changeover)		/* Julian Day of the Gregorian transition */
+{
+    int rowc;			/* Number of rows in tzdata */
+    Tcl_Obj **rowv;		/* Pointers to the rows */
+
+    /*
+     * Unpack the tz data.
+     */
+
+    if (TclListObjGetElements(interp, tzdata, &rowc, &rowv) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    /*
+     * Special case: If the time zone is :localtime, the tzdata will be empty.
+     * Use 'mktime' to convert the time to local
+     */
+
+    if (rowc == 0) {
+	return ConvertLocalToUTCUsingC(interp, fields, changeover);
+    } else {
+	return ConvertLocalToUTCUsingTable(interp, fields, rowc, rowv);
+    }
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+=======
+ * ConvertLocalToUTCUsingTable --
+ *
+ *	Converts a time (in a TclDateFields structure) from local time in a
+ *	given time zone to UTC.
+ *
+ * Results:
+ *	Returns a standard Tcl result.
+ *
+ * Side effects:
+ *	Stores an error message in the interpreter if an error occurs; if
+ *	successful, stores the 'seconds' field in 'fields.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+ConvertLocalToUTCUsingTable(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    TclDateFields *fields,	/* Time to convert, with 'seconds' filled in */
+    int rowc,			/* Number of points at which time changes */
+    Tcl_Obj *const rowv[])	/* Points at which time changes */
+{
+    Tcl_Obj *row;
+    int cellc;
+    Tcl_Obj **cellv;
+    int have[8];
+    int nHave = 0;
+    int i;
+    int found;
+
+    /*
+     * Perform an initial lookup assuming that local == UTC, and locate the
+     * last time conversion prior to that time. Get the offset from that row,
+     * and look up again. Continue until we find an offset that we found
+     * before. This definition, rather than "the same offset" ensures that we
+     * don't enter an endless loop, as would otherwise happen when trying to
+     * convert a non-existent time such as 02:30 during the US Spring Daylight
+     * Saving Time transition.
+     */
+
+    found = 0;
+    fields->tzOffset = 0;
+    fields->seconds = fields->localSeconds;
+    while (!found) {
+	row = LookupLastTransition(interp, fields->seconds, rowc, rowv);
+	if ((row == NULL)
+		|| TclListObjGetElements(interp, row, &cellc,
+		    &cellv) != TCL_OK
+		|| TclGetIntFromObj(interp, cellv[1],
+		    &fields->tzOffset) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	found = 0;
+	for (i = 0; !found && i < nHave; ++i) {
+	    if (have[i] == fields->tzOffset) {
+		found = 1;
+		break;
+	    }
+	}
+	if (!found) {
+	    if (nHave == 8) {
+		Tcl_Panic("loop in ConvertLocalToUTCUsingTable");
+	    }
+	    have[nHave++] = fields->tzOffset;
+	}
+	fields->seconds = fields->localSeconds - fields->tzOffset;
+    }
+    fields->tzOffset = have[i];
+    fields->seconds = fields->localSeconds - fields->tzOffset;
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+>>>>>>> upstream/master
  * ConvertLocalToUTCUsingC --
  *
  *	Converts a time from local wall clock to UTC when the local time zone
@@ -1500,8 +2085,11 @@ GetJulianDayFromEraYearMonthDay(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     ym1o4 = ym1 / 4;
 =======
+=======
+>>>>>>> upstream/master
 #if 0 /* BUG http://core.tcl.tk/tcl/tktview?name=da340d4f32 */
     ym1o4 = ym1 / 4;
 #else
@@ -1515,6 +2103,9 @@ GetJulianDayFromEraYearMonthDay(
         ym1o4 = - (int) (((unsigned int) -ym1) / 4);
     }
 #endif
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if (ym1 % 4 < 0) {
 	ym1o4--;
@@ -1684,7 +2275,11 @@ ThreadSafeLocalTime(
      * Get a thread-local buffer to hold the returned time.
      */
 
+<<<<<<< HEAD
     struct tm *tmPtr = Tcl_GetThreadData(&tmKey, (int) sizeof(struct tm));
+=======
+    struct tm *tmPtr = Tcl_GetThreadData(&tmKey, sizeof(struct tm));
+>>>>>>> upstream/master
 #ifdef HAVE_LOCALTIME_R
     localtime_r(timePtr, tmPtr);
 #else
@@ -2023,7 +2618,11 @@ TzsetIfNecessary(void)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static char *tzWas = NULL;	/* Previous value of TZ, protected by
+=======
+    static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
+>>>>>>> upstream/master
 =======
     static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
 >>>>>>> upstream/master
@@ -2037,10 +2636,13 @@ TzsetIfNecessary(void)
     tzIsNow = getenv("TZ");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (tzIsNow != NULL && (tzWas == NULL || strcmp(tzIsNow, tzWas) != 0)) {
 	tzset();
 	if (tzWas != NULL) {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     if (tzIsNow != NULL && (tzWas == NULL || tzWas == INT2PTR(-1)
@@ -2048,6 +2650,9 @@ TzsetIfNecessary(void)
 	tzset();
 	if (tzWas != NULL && tzWas != INT2PTR(-1)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2059,7 +2664,11 @@ TzsetIfNecessary(void)
 	tzset();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ckfree(tzWas);
+=======
+	if (tzWas != INT2PTR(-1)) ckfree(tzWas);
+>>>>>>> upstream/master
 =======
 	if (tzWas != INT2PTR(-1)) ckfree(tzWas);
 >>>>>>> upstream/master

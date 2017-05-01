@@ -155,8 +155,20 @@ proc process-text {text} {
 	    {\fP}	{\fR} \
 	    {\.}	. \
 	    {\(bu}	"&#8226;" \
+<<<<<<< HEAD
 	    {\*(qo}	"&ocirc;" \
 	    ]
+=======
+	    ]
+    # This might make a few invalid mappings, but we don't use them
+    foreach c {a e i o u y A E I O U Y} {
+	foreach {prefix suffix} {
+	    o ring / slash : uml ' acute ^ circ ` grave
+	} {
+	    lappend charmap "\\\[${prefix}${c}\]" "&${c}${suffix};"
+	}
+    }
+>>>>>>> upstream/master
     lappend charmap {\-\|\-} --        ; # two hyphens
     lappend charmap {\-} -             ; # a hyphen
 

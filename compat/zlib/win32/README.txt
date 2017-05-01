@@ -6,7 +6,11 @@ What's here
 
 Source
 ======
+<<<<<<< HEAD
   zlib version 1.2.8
+=======
+  zlib version 1.2.11
+>>>>>>> upstream/master
   available at http://www.gzip.org/zlib/
 
 
@@ -25,9 +29,15 @@ Build info
   Contributed by Jan Nijtmans.
 
   Compiler:
+<<<<<<< HEAD
     i686-w64-mingw32-gcc (GCC) 4.5.3
   Library:
     mingw64-i686-runtime/headers: 3.0b_svn5747-1
+=======
+    i686-w64-mingw32-gcc (GCC) 5.4.0
+  Library:
+    mingw64-i686-runtime/headers: 5.0.0
+>>>>>>> upstream/master
   Build commands:
     i686-w64-mingw32-gcc -c -DASMV contrib/asm686/match.S
     i686-w64-mingw32-gcc -c -DASMINF -I. -O3 contrib/inflate86/inffas86.c
@@ -37,7 +47,11 @@ Build info
 
 Copyright notice
 ================
+<<<<<<< HEAD
   Copyright (C) 1995-2010 Jean-loup Gailly and Mark Adler
+=======
+  Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
+>>>>>>> upstream/master
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages

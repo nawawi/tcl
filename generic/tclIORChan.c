@@ -234,7 +234,11 @@ typedef enum {
  * sharing problems.
  */
 
+<<<<<<< HEAD
 typedef struct ForwardParamBase {
+=======
+typedef struct {
+>>>>>>> upstream/master
     int code;			/* O: Ok/Fail of the cmd handler */
     char *msgStr;		/* O: Error message for handler failure */
     int mustFree;		/* O: True if msgStr is allocated, false if
@@ -309,7 +313,11 @@ typedef struct ForwardingResult ForwardingResult;
  * General event structure, with reference to operation specific data.
  */
 
+<<<<<<< HEAD
 typedef struct ForwardingEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Event event;		/* Basic event data, has to be first item */
     ForwardingResult *resultPtr;
     ForwardedOperation op;	/* Forwarded driver operation */
@@ -346,7 +354,11 @@ struct ForwardingResult {
 				 * results. */
 };
 
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     /*
      * Table of all reflected channels owned by this thread. This is the
      * per-thread version of the per-interpreter map.
@@ -723,7 +735,11 @@ TclChanCreateObjCmd(
     Tcl_DecrRefCount(rcPtr->name);
     Tcl_DecrRefCount(rcPtr->methods);
     Tcl_DecrRefCount(rcPtr->cmd);
+<<<<<<< HEAD
     ckfree((char*) rcPtr);
+=======
+    ckfree(rcPtr);
+>>>>>>> upstream/master
     return TCL_ERROR;
 
 #undef MODE
@@ -748,7 +764,11 @@ TclChanCreateObjCmd(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 typedef struct ReflectEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Event header;
     ReflectedChannel *rcPtr;
     int events;
@@ -851,11 +871,20 @@ TclChanPostEventObjCmd(
     }
 
     /*
+<<<<<<< HEAD
      * Note that the search above subsumes several of the older checks, namely:
      *
      * (1) Does the channel handle refer to a reflected channel ?
      * (2) Is the post event issued from the interpreter holding the handler
      *     of the reflected channel ?
+=======
+     * Note that the search above subsumes several of the older checks,
+     * namely:
+     *
+     * (1) Does the channel handle refer to a reflected channel?
+     * (2) Is the post event issued from the interpreter holding the handler
+     *     of the reflected channel?
+>>>>>>> upstream/master
      *
      * A successful search answers yes to both. Because the map holds only
      * handles of reflected channels, and only of such whose handler is
@@ -939,7 +968,12 @@ TclChanPostEventObjCmd(
 
         (void) GetThreadReflectedChannelMap();
 
+<<<<<<< HEAD
         /* XXX Race condition !!
+=======
+        /*
+         * XXX Race condition !!
+>>>>>>> upstream/master
          * XXX The destination thread may not exist anymore already.
          * XXX (Delayed postevent executed after channel got removed).
          * XXX Can we detect this ? (check the validity of the owner threadid ?)
@@ -1221,8 +1255,13 @@ ReflectClose(
 #endif
     tctPtr = ((Channel *)rcPtr->chan)->typePtr;
     if (tctPtr && tctPtr != &tclRChannelType) {
+<<<<<<< HEAD
 	    ckfree(tctPtr);
 	    ((Channel *)rcPtr->chan)->typePtr = NULL;
+=======
+	ckfree(tctPtr);
+	((Channel *)rcPtr->chan)->typePtr = NULL;
+>>>>>>> upstream/master
     }
     Tcl_EventuallyFree(rcPtr, (Tcl_FreeProc *) FreeReflectedChannel);
     return (result == TCL_OK) ? EOK : EINVAL;
@@ -1272,7 +1311,14 @@ ReflectInput(
 
 	if (p.base.code != TCL_OK) {
 	    if (p.base.code < 0) {
+<<<<<<< HEAD
 		/* No error message, this is an errno signal. */
+=======
+		/*
+                 * No error message, this is an errno signal.
+                 */
+
+>>>>>>> upstream/master
 		*errorCodePtr = -p.base.code;
 	    } else {
 		PassReceivedError(rcPtr->chan, &p);
@@ -1375,7 +1421,14 @@ ReflectOutput(
 
 	if (p.base.code != TCL_OK) {
 	    if (p.base.code < 0) {
+<<<<<<< HEAD
 		/* No error message, this is an errno signal. */
+=======
+		/*
+                 * No error message, this is an errno signal.
+                 */
+
+>>>>>>> upstream/master
 		*errorCodePtr = -p.base.code;
 	    } else {
                 PassReceivedError(rcPtr->chan, &p);
@@ -1426,8 +1479,13 @@ ReflectOutput(
 
     if ((written == 0) && (toWrite > 0)) {
 	/*
+<<<<<<< HEAD
 	 * The handler claims to have written nothing of what it was
 	 * given. That is bad.
+=======
+	 * The handler claims to have written nothing of what it was given.
+	 * That is bad.
+>>>>>>> upstream/master
 	 */
 
 	SetChannelErrorStr(rcPtr->chan, msg_write_nothing);
@@ -1611,8 +1669,11 @@ ReflectWatch(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     rcPtr->interest = mask;
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1641,6 +1702,10 @@ ReflectWatch(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    rcPtr->interest = mask;
+>>>>>>> upstream/master
 =======
     rcPtr->interest = mask;
 >>>>>>> upstream/master
@@ -1962,7 +2027,11 @@ ReflectGetOption(
     } else {
 	int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *str = Tcl_GetStringFromObj(resObj, &len);
+=======
+	const char *str = TclGetStringFromObj(resObj, &len);
+>>>>>>> upstream/master
 =======
 	const char *str = TclGetStringFromObj(resObj, &len);
 >>>>>>> upstream/master
@@ -2339,7 +2408,11 @@ InvokeTclMethod(
 	    if (result != TCL_ERROR) {
 		int cmdLen;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *cmdString = Tcl_GetStringFromObj(cmd, &cmdLen);
+=======
+		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
+>>>>>>> upstream/master
 =======
 		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
 >>>>>>> upstream/master
@@ -2396,8 +2469,13 @@ InvokeTclMethod(
  *	None.
  *
  * Users:
+<<<<<<< HEAD
  *	ReflectInput/Output(), to enable the signaling of EAGAIN
  *	on 0-sized short reads/writes.
+=======
+ *	ReflectInput/Output(), to enable the signaling of EAGAIN on 0-sized
+ *	short reads/writes.
+>>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
@@ -2583,7 +2661,14 @@ DeleteReflectedChannelMap(
 
 	evPtr = resultPtr->evPtr;
 
+<<<<<<< HEAD
 	/* Basic crash safety until this routine can get revised [3411310] */
+=======
+	/*
+         * Basic crash safety until this routine can get revised [3411310]
+         */
+
+>>>>>>> upstream/master
 	if (evPtr == NULL) {
 	    continue;
 	}
@@ -2698,8 +2783,13 @@ DeleteThreadReflectedChannelMap(
 
     /*
      * Go through the list of pending results and cancel all whose events were
+<<<<<<< HEAD
      * destined for this thread. While this is in progress we block any
      * other access to the list of pending results.
+=======
+     * destined for this thread. While this is in progress we block any other
+     * access to the list of pending results.
+>>>>>>> upstream/master
      */
 
     Tcl_MutexLock(&rcForwardMutex);
@@ -2730,7 +2820,14 @@ DeleteThreadReflectedChannelMap(
 
 	evPtr = resultPtr->evPtr;
 
+<<<<<<< HEAD
 	/* Basic crash safety until this routine can get revised [3411310] */
+=======
+	/*
+         * Basic crash safety until this routine can get revised [3411310]
+         */
+
+>>>>>>> upstream/master
 	if (evPtr == NULL ) {
 	    continue;
 	}
@@ -2784,8 +2881,13 @@ ForwardOpToHandlerThread(
     const void *param)		/* Arguments */
 {
     /*
+<<<<<<< HEAD
      * Core of the communication from OWNER to HANDLER thread.
      * The receiver is ForwardProc() below.
+=======
+     * Core of the communication from OWNER to HANDLER thread. The receiver is
+     * ForwardProc() below.
+>>>>>>> upstream/master
      */
 
     Tcl_ThreadId dst = rcPtr->thread;
@@ -2835,7 +2937,14 @@ ForwardOpToHandlerThread(
      */
 
     TclSpliceIn(resultPtr, forwardList);
+<<<<<<< HEAD
     /* Do not unlock here. That is done by the ConditionWait */
+=======
+
+    /*
+     * Do not unlock here. That is done by the ConditionWait.
+     */
+>>>>>>> upstream/master
 
     /*
      * Ensure cleanup of the event if the origin thread exits while this event
@@ -2911,7 +3020,11 @@ ForwardProc(
      * Notes regarding access to the referenced data.
      *
      * In principle the data belongs to the originating thread (see
+<<<<<<< HEAD
      * evPtr->src), however this thread is currently blocked at (*), i.e.
+=======
+     * evPtr->src), however this thread is currently blocked at (*), i.e.,
+>>>>>>> upstream/master
      * quiescent. Because of this we can treat the data as belonging to us,
      * without fear of race conditions. I.e. we can read and write as we like.
      *
@@ -3107,6 +3220,10 @@ ForwardProc(
         Tcl_Preserve(rcPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	rcPtr->interest = paramPtr->watch.mask;
+>>>>>>> upstream/master
 =======
 	rcPtr->interest = paramPtr->watch.mask;
 >>>>>>> upstream/master
@@ -3205,7 +3322,11 @@ ForwardProc(
 	    } else {
 		int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *str = Tcl_GetStringFromObj(resObj, &len);
+=======
+		const char *str = TclGetStringFromObj(resObj, &len);
+>>>>>>> upstream/master
 =======
 		const char *str = TclGetStringFromObj(resObj, &len);
 >>>>>>> upstream/master
@@ -3308,7 +3429,11 @@ ForwardSetObjError(
 {
     int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *msgStr = Tcl_GetStringFromObj(obj, &len);
+=======
+    const char *msgStr = TclGetStringFromObj(obj, &len);
+>>>>>>> upstream/master
 =======
     const char *msgStr = TclGetStringFromObj(obj, &len);
 >>>>>>> upstream/master

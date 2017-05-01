@@ -434,7 +434,11 @@ test lindex-17.0 {Bug 1718580} {*}{
         lindex {} end foo
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -451,7 +455,11 @@ test lindex-17.1 {Bug 1718580} {*}{
         lindex a end foo
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master

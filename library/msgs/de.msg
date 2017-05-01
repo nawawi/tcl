@@ -33,7 +33,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset de MONTHS_FULL [list \
         "Januar"\
         "Februar"\
+<<<<<<< HEAD
         "M\u00e4rz"\
+=======
+        "März"\
+>>>>>>> upstream/master
         "April"\
         "Mai"\
         "Juni"\

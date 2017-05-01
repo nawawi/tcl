@@ -942,7 +942,11 @@ catch {rename foo {}}
 ::tcltest::cleanupTests
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 return 
+=======
+return
+>>>>>>> upstream/master
 =======
 return
 >>>>>>> upstream/master

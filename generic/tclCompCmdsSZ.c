@@ -295,7 +295,11 @@ TclCompileStringCatCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -325,6 +329,7 @@ TclCompileStringCatCmd(
 	    if (folded) {
 		int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *bytes = Tcl_GetStringFromObj(folded, &len);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -333,6 +338,10 @@ TclCompileStringCatCmd(
 
 >>>>>>> upstream/master
 =======
+
+>>>>>>> upstream/master
+=======
+		const char *bytes = TclGetStringFromObj(folded, &len);
 
 >>>>>>> upstream/master
 =======
@@ -356,6 +365,7 @@ TclCompileStringCatCmd(
     if (folded) {
 	int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *bytes = Tcl_GetStringFromObj(folded, &len);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -364,6 +374,10 @@ TclCompileStringCatCmd(
 
 >>>>>>> upstream/master
 =======
+
+>>>>>>> upstream/master
+=======
+	const char *bytes = TclGetStringFromObj(folded, &len);
 
 >>>>>>> upstream/master
 =======
@@ -987,7 +1001,11 @@ TclCompileStringMapCmd(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(objv[0], &len);
+=======
+    bytes = TclGetStringFromObj(objv[0], &len);
+>>>>>>> upstream/master
 =======
     bytes = TclGetStringFromObj(objv[0], &len);
 >>>>>>> upstream/master
@@ -996,7 +1014,11 @@ TclCompileStringMapCmd(
     } else {
 	PushLiteral(envPtr, bytes, len);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	bytes = Tcl_GetStringFromObj(objv[1], &len);
+=======
+	bytes = TclGetStringFromObj(objv[1], &len);
+>>>>>>> upstream/master
 =======
 	bytes = TclGetStringFromObj(objv[1], &len);
 >>>>>>> upstream/master
@@ -1052,7 +1074,11 @@ TclCompileStringRangeCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      */    
+=======
+     */
+>>>>>>> upstream/master
 =======
      */
 >>>>>>> upstream/master
@@ -2088,7 +2114,11 @@ IssueSwitchChainedTests(
     JumpFixup *fixupArray;	/* Array of forward-jump fixup records. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *fixupTargetArray;	/* Array of places for fixups to point at. */
+=======
+    unsigned int *fixupTargetArray; /* Array of places for fixups to point at. */
+>>>>>>> upstream/master
 =======
     unsigned int *fixupTargetArray; /* Array of places for fixups to point at. */
 >>>>>>> upstream/master
@@ -2251,7 +2281,11 @@ IssueSwitchChainedTests(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Now do the actual compilation. Note that we do not use BODY() 
+=======
+	 * Now do the actual compilation. Note that we do not use BODY()
+>>>>>>> upstream/master
 =======
 	 * Now do the actual compilation. Note that we do not use BODY()
 >>>>>>> upstream/master
@@ -2721,7 +2755,11 @@ TclCompileThrowCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     codeIsList = codeKnown && (TCL_OK == 
+=======
+    codeIsList = codeKnown && (TCL_OK ==
+>>>>>>> upstream/master
 =======
     codeIsList = codeKnown && (TCL_OK ==
 >>>>>>> upstream/master
@@ -2916,7 +2954,11 @@ TclCompileTryCmd(
 	    if (objc > 0) {
 		int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *varname = Tcl_GetStringFromObj(objv[0], &len);
+=======
+		const char *varname = TclGetStringFromObj(objv[0], &len);
+>>>>>>> upstream/master
 =======
 		const char *varname = TclGetStringFromObj(objv[0], &len);
 >>>>>>> upstream/master
@@ -2932,7 +2974,11 @@ TclCompileTryCmd(
 	    if (objc == 2) {
 		int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *varname = Tcl_GetStringFromObj(objv[1], &len);
+=======
+		const char *varname = TclGetStringFromObj(objv[1], &len);
+>>>>>>> upstream/master
 =======
 		const char *varname = TclGetStringFromObj(objv[1], &len);
 >>>>>>> upstream/master
@@ -3139,7 +3185,11 @@ IssueTryClausesInstructions(
 	    TclAdjustStackDepth(-1, envPtr);
 	    OP44(			LIST_RANGE_IMM, 0, len-1);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    p = Tcl_GetStringFromObj(matchClauses[i], &len);
+=======
+	    p = TclGetStringFromObj(matchClauses[i], &len);
+>>>>>>> upstream/master
 =======
 	    p = TclGetStringFromObj(matchClauses[i], &len);
 >>>>>>> upstream/master
@@ -3354,7 +3404,11 @@ IssueTryClausesFinallyInstructions(
 	    TclAdjustStackDepth(-1, envPtr);
 	    OP44(			LIST_RANGE_IMM, 0, len-1);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    p = Tcl_GetStringFromObj(matchClauses[i], &len);
+=======
+	    p = TclGetStringFromObj(matchClauses[i], &len);
+>>>>>>> upstream/master
 =======
 	    p = TclGetStringFromObj(matchClauses[i], &len);
 >>>>>>> upstream/master
@@ -3686,7 +3740,11 @@ TclCompileUnsetCmd(
 	    int len;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    bytes = Tcl_GetStringFromObj(leadingWord, &len);
+=======
+	    bytes = TclGetStringFromObj(leadingWord, &len);
+>>>>>>> upstream/master
 =======
 	    bytes = TclGetStringFromObj(leadingWord, &len);
 >>>>>>> upstream/master

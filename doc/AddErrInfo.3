@@ -19,7 +19,11 @@ Tcl_Obj *
 .sp
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int 
+=======
+int
+>>>>>>> upstream/master
 =======
 int
 >>>>>>> upstream/master
@@ -55,7 +59,11 @@ void
 Interpreter in which to record information.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .AP int code 
+=======
+.AP int code
+>>>>>>> upstream/master
 =======
 .AP int code
 >>>>>>> upstream/master
@@ -136,11 +144,17 @@ retrieve the stack trace when script evaluation returns
 .PP
 .CS
 <<<<<<< HEAD
+<<<<<<< HEAD
 int code = Tcl_Eval(interp, script);
 if (code == TCL_ERROR) {
 <<<<<<< HEAD
     Tcl_Obj *options = \fBTcl_GetReturnOptions\fR(interp, code);  
 =======
+    Tcl_Obj *options = \fBTcl_GetReturnOptions\fR(interp, code);
+>>>>>>> upstream/master
+=======
+int code = Tcl_EvalEx(interp, script, -1, 0);
+if (code == TCL_ERROR) {
     Tcl_Obj *options = \fBTcl_GetReturnOptions\fR(interp, code);
 >>>>>>> upstream/master
 =======
@@ -191,7 +205,11 @@ While \fBTcl_SetReturnOptions\fR provides a general interface
 to set any collection of return options, there are a handful
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 of return options that are very frequently used.  Most 
+=======
+of return options that are very frequently used.  Most
+>>>>>>> upstream/master
 =======
 of return options that are very frequently used.  Most
 >>>>>>> upstream/master
@@ -204,7 +222,11 @@ of a command returns \fBTCL_ERROR\fR.  The \fB\-errorline\fR
 return option is also read by commands that evaluate scripts
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 and wish to supply detailed error location information in 
+=======
+and wish to supply detailed error location information in
+>>>>>>> upstream/master
 =======
 and wish to supply detailed error location information in
 >>>>>>> upstream/master
@@ -268,7 +290,11 @@ is available as a \fBTcl_Obj\fR instead of as a \fBchar\fR array.
 to \fBTcl_AddErrorInfo\fR, except that it has an additional \fIlength\fR
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 argument.  This allows the \fImessage\fR string to contain 
+=======
+argument.  This allows the \fImessage\fR string to contain
+>>>>>>> upstream/master
 =======
 argument.  This allows the \fImessage\fR string to contain
 >>>>>>> upstream/master
@@ -284,9 +310,15 @@ interface is used at all, it should be with a negative \fIlength\fR value.
 The procedure \fBTcl_SetObjErrorCode\fR is used to set the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB\-errorcode\fR return option to the list value \fIerrorObjPtr\fR 
 built up by the caller. 
 \fBTcl_SetObjErrorCode\fR is typically invoked just 
+=======
+\fB\-errorcode\fR return option to the list value \fIerrorObjPtr\fR
+built up by the caller.
+\fBTcl_SetObjErrorCode\fR is typically invoked just
+>>>>>>> upstream/master
 =======
 \fB\-errorcode\fR return option to the list value \fIerrorObjPtr\fR
 built up by the caller.
@@ -339,7 +371,11 @@ interpreter.  It adds information about the command that was being
 executed when the error occurred to the \fB\-errorinfo\fR value, and
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the line number stored internally in the interpreter is set.  
+=======
+the line number stored internally in the interpreter is set.
+>>>>>>> upstream/master
 =======
 the line number stored internally in the interpreter is set.
 >>>>>>> upstream/master
@@ -360,7 +396,11 @@ writing to those global variables will properly set the
 corresponding return options.  It has long been emphasized
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 in this manual page that it is important to 
+=======
+in this manual page that it is important to
+>>>>>>> upstream/master
 =======
 in this manual page that it is important to
 >>>>>>> upstream/master
@@ -377,7 +417,11 @@ script evaluation, including the entire return options dictionary.
 In particular, the \fB\-errorinfo\fR and \fB\-errorcode\fR options
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 are reset.  
+=======
+are reset.
+>>>>>>> upstream/master
 =======
 are reset.
 >>>>>>> upstream/master

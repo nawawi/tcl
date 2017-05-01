@@ -566,7 +566,11 @@ ParseExpr(
 				 * we build the parse tree. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesAvailable = 64;	/* Initial size of the storage array. This
+=======
+    unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
+>>>>>>> upstream/master
 =======
     unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
 >>>>>>> upstream/master
@@ -580,7 +584,11 @@ ParseExpr(
 				 * reallocation. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesUsed = 0;		/* Number of OpNodes filled. */
+=======
+    unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
+>>>>>>> upstream/master
 =======
     unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
 >>>>>>> upstream/master
@@ -680,7 +688,11 @@ ParseExpr(
 	if (nodesUsed >= nodesAvailable) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    int size = nodesUsed * 2;
+=======
+	    unsigned int size = nodesUsed * 2;
+>>>>>>> upstream/master
 =======
 	    unsigned int size = nodesUsed * 2;
 >>>>>>> upstream/master
@@ -2207,7 +2219,10 @@ ExecConstantExprTree(
     int code;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Obj *byteCodeObj = Tcl_NewObj();
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -2227,6 +2242,7 @@ ExecConstantExprTree(
     TclEmitOpcode(INST_DONE, envPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_IncrRefCount(byteCodeObj);
     TclInitByteCodeObj(byteCodeObj, envPtr);
     TclFreeCompileEnv(envPtr);
@@ -2238,6 +2254,8 @@ ExecConstantExprTree(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     byteCodePtr = TclInitByteCode(envPtr);
     TclFreeCompileEnv(envPtr);
     TclStackFree(interp, envPtr);
@@ -2245,6 +2263,9 @@ ExecConstantExprTree(
     code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
     TclReleaseByteCode(byteCodePtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

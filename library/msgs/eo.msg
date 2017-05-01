@@ -5,6 +5,7 @@ namespace eval ::tcl::clock {
         "lu"\
         "ma"\
         "me"\
+<<<<<<< HEAD
         "\u0135a"\
         "ve"\
         "sa"]
@@ -14,6 +15,17 @@ namespace eval ::tcl::clock {
         "mardo"\
         "merkredo"\
         "\u0135a\u016ddo"\
+=======
+        "ĵa"\
+        "ve"\
+        "sa"]
+    ::msgcat::mcset eo DAYS_OF_WEEK_FULL [list \
+        "dimanĉo"\
+        "lundo"\
+        "mardo"\
+        "merkredo"\
+        "ĵaŭdo"\
+>>>>>>> upstream/master
         "vendredo"\
         "sabato"]
     ::msgcat::mcset eo MONTHS_ABBREV [list \
@@ -24,7 +36,11 @@ namespace eval ::tcl::clock {
         "maj"\
         "jun"\
         "jul"\
+<<<<<<< HEAD
         "a\u016dg"\
+=======
+        "aŭg"\
+>>>>>>> upstream/master
         "sep"\
         "okt"\
         "nov"\
@@ -38,7 +54,11 @@ namespace eval ::tcl::clock {
         "majo"\
         "junio"\
         "julio"\
+<<<<<<< HEAD
         "a\u016dgusto"\
+=======
+        "aŭgusto"\
+>>>>>>> upstream/master
         "septembro"\
         "oktobro"\
         "novembro"\

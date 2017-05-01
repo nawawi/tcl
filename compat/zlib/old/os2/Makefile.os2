@@ -14,7 +14,11 @@ CC=gcc -Zomf -s
 
 CFLAGS=-O6 -Wall
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
+<<<<<<< HEAD
 #CFLAGS=-g -DDEBUG
+=======
+#CFLAGS=-g -DZLIB_DEBUG
+>>>>>>> upstream/master
 #CFLAGS=-O3 -Wall -Wwrite-strings -Wpointer-arith -Wconversion \
 #           -Wstrict-prototypes -Wmissing-prototypes
 

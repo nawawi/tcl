@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -57,7 +61,11 @@ The command will be executed at global level (outside the context
 of any Tcl procedure).
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If an error occurs while executing the delayed command then 
+=======
+If an error occurs while executing the delayed command then
+>>>>>>> upstream/master
 =======
 If an error occurs while executing the delayed command then
 >>>>>>> upstream/master

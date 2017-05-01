@@ -9,21 +9,38 @@ namespace eval ::tcl::clock {
         "P"\
         "Szo"]
     ::msgcat::mcset hu DAYS_OF_WEEK_FULL [list \
+<<<<<<< HEAD
         "vas\u00e1rnap"\
         "h\u00e9tf\u0151"\
         "kedd"\
         "szerda"\
         "cs\u00fct\u00f6rt\u00f6k"\
         "p\u00e9ntek"\
+=======
+        "vasárnap"\
+        "hétfő"\
+        "kedd"\
+        "szerda"\
+        "csütörtök"\
+        "péntek"\
+>>>>>>> upstream/master
         "szombat"]
     ::msgcat::mcset hu MONTHS_ABBREV [list \
         "jan."\
         "febr."\
+<<<<<<< HEAD
         "m\u00e1rc."\
         "\u00e1pr."\
         "m\u00e1j."\
         "j\u00fan."\
         "j\u00fal."\
+=======
+        "márc."\
+        "ápr."\
+        "máj."\
+        "jún."\
+        "júl."\
+>>>>>>> upstream/master
         "aug."\
         "szept."\
         "okt."\
@@ -31,6 +48,7 @@ namespace eval ::tcl::clock {
         "dec."\
         ""]
     ::msgcat::mcset hu MONTHS_FULL [list \
+<<<<<<< HEAD
         "janu\u00e1r"\
         "febru\u00e1r"\
         "m\u00e1rcius"\
@@ -41,6 +59,18 @@ namespace eval ::tcl::clock {
         "augusztus"\
         "szeptember"\
         "okt\u00f3ber"\
+=======
+        "január"\
+        "február"\
+        "március"\
+        "április"\
+        "május"\
+        "június"\
+        "július"\
+        "augusztus"\
+        "szeptember"\
+        "október"\
+>>>>>>> upstream/master
         "november"\
         "december"\
         ""]

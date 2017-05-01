@@ -89,6 +89,7 @@ static struct mem_header *allocHead = NULL;  /* List of allocated structures */
 #define BODY_OFFSET \
 	((size_t) (&((struct mem_header *) 0)->body))
 
+<<<<<<< HEAD
 static int total_mallocs = 0;
 static int total_frees = 0;
 static size_t current_bytes_malloced = 0;
@@ -97,6 +98,16 @@ static int current_malloc_packets = 0;
 static int maximum_malloc_packets = 0;
 static int break_on_malloc = 0;
 static int trace_on_at_malloc = 0;
+=======
+static unsigned int total_mallocs = 0;
+static unsigned int total_frees = 0;
+static size_t current_bytes_malloced = 0;
+static size_t maximum_bytes_malloced = 0;
+static unsigned int current_malloc_packets = 0;
+static unsigned int  maximum_malloc_packets = 0;
+static unsigned int break_on_malloc = 0;
+static unsigned int trace_on_at_malloc = 0;
+>>>>>>> upstream/master
 static int alloc_tracing = FALSE;
 static int init_malloced_bodies = TRUE;
 #ifdef MEM_VALIDATE
@@ -184,6 +195,7 @@ TclDumpMemoryInfo(
         return 0;
     }
     sprintf(buf,
+<<<<<<< HEAD
 	    "total mallocs             %10d\n"
 	    "total frees               %10d\n"
 	    "current packets allocated %10d\n"
@@ -196,6 +208,20 @@ TclDumpMemoryInfo(
 	    (unsigned long)current_bytes_malloced,
 	    maximum_malloc_packets,
 	    (unsigned long)maximum_bytes_malloced);
+=======
+	    "total mallocs             %10u\n"
+	    "total frees               %10u\n"
+	    "current packets allocated %10u\n"
+	    "current bytes allocated   %10" TCL_LL_MODIFIER "u\n"
+	    "maximum packets allocated %10u\n"
+	    "maximum bytes allocated   %10" TCL_LL_MODIFIER "u\n",
+	    total_mallocs,
+	    total_frees,
+	    current_malloc_packets,
+	    (Tcl_WideInt)current_bytes_malloced,
+	    maximum_malloc_packets,
+	    (Tcl_WideInt)maximum_bytes_malloced);
+>>>>>>> upstream/master
     if (flags == 0) {
 	fprintf((FILE *)clientData, "%s", buf);
     } else {
@@ -359,9 +385,14 @@ Tcl_DumpActiveMemory(
     Tcl_MutexLock(ckallocMutexPtr);
     for (memScanP = allocHead; memScanP != NULL; memScanP = memScanP->flink) {
 	address = &memScanP->body[0];
+<<<<<<< HEAD
 	fprintf(fileP, "%8" TCL_LL_MODIFIER "x - %8" TCL_LL_MODIFIER "x  %7" TCL_LL_MODIFIER "d @ %s %d %s",
 		(Tcl_WideInt)(size_t)address,
 		(Tcl_WideInt)((size_t)address + memScanP->length - 1),
+=======
+	fprintf(fileP, "%p - %p  %" TCL_LL_MODIFIER "d @ %s %d %s",
+		address, address + memScanP->length - 1,
+>>>>>>> upstream/master
 		(Tcl_WideInt)memScanP->length, memScanP->file, memScanP->line,
 		(memScanP->tagPtr == NULL) ? "" : memScanP->tagPtr->string);
 	(void) fputc('\n', fileP);
@@ -450,7 +481,11 @@ Tcl_DbCkalloc(
     total_mallocs++;
     if (trace_on_at_malloc && (total_mallocs >= trace_on_at_malloc)) {
 	(void) fflush(stdout);
+<<<<<<< HEAD
 	fprintf(stderr, "reached malloc trace enable point (%d)\n",
+=======
+	fprintf(stderr, "reached malloc trace enable point (%u)\n",
+>>>>>>> upstream/master
 		total_mallocs);
 	fflush(stderr);
 	alloc_tracing = TRUE;
@@ -465,7 +500,11 @@ Tcl_DbCkalloc(
     if (break_on_malloc && (total_mallocs >= break_on_malloc)) {
 	break_on_malloc = 0;
 	(void) fflush(stdout);
+<<<<<<< HEAD
 	Tcl_Panic("reached malloc break limit (%d)", total_mallocs);
+=======
+	Tcl_Panic("reached malloc break limit (%u)", total_mallocs);
+>>>>>>> upstream/master
     }
 
     current_malloc_packets++;
@@ -848,22 +887,42 @@ MemoryCmd(
 	return TCL_OK;
     }
     if (strcmp(argv[1],"break_on_malloc") == 0) {
+<<<<<<< HEAD
 	if (argc != 3) {
 	    goto argError;
 	}
 	if (Tcl_GetInt(interp, argv[2], &break_on_malloc) != TCL_OK) {
 	    return TCL_ERROR;
 	}
+=======
+	int value;
+	if (argc != 3) {
+	    goto argError;
+	}
+	if (Tcl_GetInt(interp, argv[2], &value) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	break_on_malloc = (unsigned int) value;
+>>>>>>> upstream/master
 	return TCL_OK;
     }
     if (strcmp(argv[1],"info") == 0) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+<<<<<<< HEAD
 		"%-25s %10d\n%-25s %10d\n%-25s %10d\n%-25s %10lu\n%-25s %10d\n%-25s %10lu\n",
 		"total mallocs", total_mallocs, "total frees", total_frees,
 		"current packets allocated", current_malloc_packets,
 		"current bytes allocated", (unsigned long)current_bytes_malloced,
 		"maximum packets allocated", maximum_malloc_packets,
 		"maximum bytes allocated", (unsigned long)maximum_bytes_malloced));
+=======
+		"%-25s %10u\n%-25s %10u\n%-25s %10u\n%-25s %10" TCL_LL_MODIFIER"d\n%-25s %10u\n%-25s %10" TCL_LL_MODIFIER "d\n",
+		"total mallocs", total_mallocs, "total frees", total_frees,
+		"current packets allocated", current_malloc_packets,
+		"current bytes allocated", (Tcl_WideInt)current_bytes_malloced,
+		"maximum packets allocated", maximum_malloc_packets,
+		"maximum bytes allocated", (Tcl_WideInt)maximum_bytes_malloced));
+>>>>>>> upstream/master
 	return TCL_OK;
     }
     if (strcmp(argv[1], "init") == 0) {
@@ -934,12 +993,21 @@ MemoryCmd(
     }
 
     if (strcmp(argv[1],"trace_on_at_malloc") == 0) {
+<<<<<<< HEAD
 	if (argc != 3) {
 	    goto argError;
 	}
 	if (Tcl_GetInt(interp, argv[2], &trace_on_at_malloc) != TCL_OK) {
+=======
+	int value;
+	if (argc != 3) {
+	    goto argError;
+	}
+	if (Tcl_GetInt(interp, argv[2], &value) != TCL_OK) {
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
+	trace_on_at_malloc = value;
 	return TCL_OK;
     }
     if (strcmp(argv[1],"validate") == 0) {

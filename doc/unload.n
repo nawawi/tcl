@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -55,7 +59,11 @@ never report an error.
 This switch will prevent \fBunload\fR from issuing the operating system call
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 that will unload the library from the process. 
+=======
+that will unload the library from the process.
+>>>>>>> upstream/master
 =======
 that will unload the library from the process.
 >>>>>>> upstream/master
@@ -127,7 +135,11 @@ library is used only by the target interpreter and the library will be
 detached from the application as soon as the unload procedure returns,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the \fIflags\fR argument will be set to \fBTCL_UNLOAD_DETACH_FROM_PROCESS\fR. 
+=======
+the \fIflags\fR argument will be set to \fBTCL_UNLOAD_DETACH_FROM_PROCESS\fR.
+>>>>>>> upstream/master
 =======
 the \fIflags\fR argument will be set to \fBTCL_UNLOAD_DETACH_FROM_PROCESS\fR.
 >>>>>>> upstream/master

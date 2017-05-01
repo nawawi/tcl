@@ -46,7 +46,11 @@
    end-of-file, they cannot be concantenated.  If a Unix compress stream is
    encountered in an input file, it is the last stream in that file.
 
+<<<<<<< HEAD
    Like gunzip and uncompress, the file attributes of the orignal compressed
+=======
+   Like gunzip and uncompress, the file attributes of the original compressed
+>>>>>>> upstream/master
    file are maintained in the final uncompressed file, to the extent that the
    user permissions allow it.
 

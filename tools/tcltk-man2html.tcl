@@ -4,7 +4,11 @@ if {[catch {package require Tcl 8.6-} msg]} {
     puts stderr "ERROR: $msg"
     puts stderr "If running this script from 'make html', set the\
 	NATIVE_TCLSH environment\nvariable to point to an installed\
+<<<<<<< HEAD
 	tclsh8.6 (or the equivalent tclsh86.exe\non Windows)."
+=======
+	tclsh8.7 (or the equivalent tclsh87.exe\non Windows)."
+>>>>>>> upstream/master
     exit 1
 }
 
@@ -22,7 +26,11 @@ if {[catch {package require Tcl 8.6-} msg]} {
 # Copyright (c) 1995-1997 Roger E. Critchlow Jr
 # Copyright (c) 2004-2010 Donal K. Fellows
 
+<<<<<<< HEAD
 set ::Version "50/8.6"
+=======
+set ::Version "50/8.7"
+>>>>>>> upstream/master
 set ::CSSFILE "docs.css"
 
 ##
@@ -586,6 +594,10 @@ array set exclude_refs_map {
     scrollbar.n		{set}
     selection.n		{string}
     tcltest.n		{error}
+<<<<<<< HEAD
+=======
+    text.n		{bind image lower raise}
+>>>>>>> upstream/master
     tkvars.n		{tk}
     tkwait.n		{variable}
     tm.n		{exec}
@@ -669,11 +681,15 @@ try {
 	    try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		try {
 		    set f [open [file join $pkgsDir $dir configure.in]]
 		} trap {POSIX ENOENT} {} {
 		    set f [open [file join $pkgsDir $dir configure.ac]]
 		}
+=======
+		set f [open [file join $pkgsDir $dir configure.ac]]
+>>>>>>> upstream/master
 =======
 		set f [open [file join $pkgsDir $dir configure.ac]]
 >>>>>>> upstream/master

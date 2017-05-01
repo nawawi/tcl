@@ -326,6 +326,8 @@ ExtractWinRoot(
  *	The objectified Tcl_FSGetPathType should be used in preference to this
  *	function (as you can see below, this is just a wrapper around that
  *	other function).
+<<<<<<< HEAD
+=======
  *
  * Results:
  *	Returns one of TCL_PATH_ABSOLUTE, TCL_PATH_RELATIVE, or
@@ -338,6 +340,49 @@ ExtractWinRoot(
  */
 
 Tcl_PathType
+Tcl_GetPathType(
+    const char *path)
+{
+    Tcl_PathType type;
+    Tcl_Obj *tempObj = Tcl_NewStringObj(path,-1);
+
+    Tcl_IncrRefCount(tempObj);
+    type = Tcl_FSGetPathType(tempObj);
+    Tcl_DecrRefCount(tempObj);
+    return type;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclpGetNativePathType --
+ *
+ *	Determines whether a given path is relative to the current directory,
+ *	relative to the current volume, or absolute, but ONLY FOR THE NATIVE
+ *	FILESYSTEM. This function is called from tclIOUtil.c (but needs to be
+ *	here due to its dependence on static variables/functions in this
+ *	file). The exported function Tcl_FSGetPathType should be used by
+ *	extensions.
+ *
+ *	Note that '~' paths are always considered TCL_PATH_ABSOLUTE, even
+ *	though expanding the '~' could lead to any possible path type. This
+ *	function should therefore be considered a low-level, string
+ *	manipulation function only -- it doesn't actually do any expansion in
+ *	making its determination.
+>>>>>>> upstream/master
+ *
+ * Results:
+ *	Returns one of TCL_PATH_ABSOLUTE, TCL_PATH_RELATIVE, or
+ *	TCL_PATH_VOLUME_RELATIVE.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+Tcl_PathType
+<<<<<<< HEAD
 Tcl_GetPathType(
     const char *path)
 {
@@ -399,6 +444,24 @@ TclpGetNativePathType(
 	 * absolute.
 	 */
 
+=======
+TclpGetNativePathType(
+    Tcl_Obj *pathPtr,		/* Native path of interest */
+    int *driveNameLengthPtr,	/* Returns length of drive, if non-NULL and
+				 * path was absolute */
+    Tcl_Obj **driveNameRef)
+{
+    Tcl_PathType type = TCL_PATH_ABSOLUTE;
+    int pathLen;
+    const char *path = TclGetStringFromObj(pathPtr, &pathLen);
+
+    if (path[0] == '~') {
+	/*
+	 * This case is common to all platforms. Paths that begin with ~ are
+	 * absolute.
+	 */
+
+>>>>>>> upstream/master
 	if (driveNameLengthPtr != NULL) {
 	    const char *end = path + 1;
 	    while ((*end != '\0') && (*end != '/')) {
@@ -425,6 +488,7 @@ TclpGetNativePathType(
 		    path += 2;
 		    while (*path && *path != '/') {
 			++path;
+<<<<<<< HEAD
 		    }
 #if defined(__CYGWIN__)
 		    /* UNC paths need to be followed by a share name */
@@ -436,6 +500,19 @@ TclpGetNativePathType(
 		    } else {
 			path = origPath + 1;
 		    }
+=======
+		    }
+#if defined(__CYGWIN__)
+		    /* UNC paths need to be followed by a share name */
+		    if (*path++ && (*path && *path != '/')) {
+			++path;
+			while (*path && *path != '/') {
+			    ++path;
+			}
+		    } else {
+			path = origPath + 1;
+		    }
+>>>>>>> upstream/master
 #endif
 		}
 #endif
@@ -583,7 +660,11 @@ Tcl_SplitPath(
     for (i = 0; i < *argcPtr; i++) {
 	Tcl_ListObjIndex(NULL, resultPtr, i, &eltPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(eltPtr, &len);
+=======
+	TclGetStringFromObj(eltPtr, &len);
+>>>>>>> upstream/master
 =======
 	TclGetStringFromObj(eltPtr, &len);
 >>>>>>> upstream/master
@@ -606,7 +687,11 @@ Tcl_SplitPath(
     for (i = 0; i < *argcPtr; i++) {
 	Tcl_ListObjIndex(NULL, resultPtr, i, &eltPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	str = Tcl_GetStringFromObj(eltPtr, &len);
+=======
+	str = TclGetStringFromObj(eltPtr, &len);
+>>>>>>> upstream/master
 =======
 	str = TclGetStringFromObj(eltPtr, &len);
 >>>>>>> upstream/master
@@ -792,12 +877,21 @@ SplitWinPath(
 
 /*
  *---------------------------------------------------------------------------
+<<<<<<< HEAD
  *
  * Tcl_FSJoinToPath --
  *
  *	This function takes the given object, which should usually be a valid
  *	path or NULL, and joins onto it the array of paths segments given.
  *
+=======
+ *
+ * Tcl_FSJoinToPath --
+ *
+ *	This function takes the given object, which should usually be a valid
+ *	path or NULL, and joins onto it the array of paths segments given.
+ *
+>>>>>>> upstream/master
  *	The objects in the array given will temporarily have their refCount
  *	increased by one, and then decreased by one when this function exits
  *	(which means if they had zero refCount when we were called, they will
@@ -870,7 +964,11 @@ TclpNativeJoinPath(
     const char *start;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     start = Tcl_GetStringFromObj(prefix, &length);
+=======
+    start = TclGetStringFromObj(prefix, &length);
+>>>>>>> upstream/master
 =======
     start = TclGetStringFromObj(prefix, &length);
 >>>>>>> upstream/master
@@ -902,7 +1000,11 @@ TclpNativeJoinPath(
 	if (length > 0 && (start[length-1] != '/')) {
 	    Tcl_AppendToObj(prefix, "/", 1);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(prefix, &length);
+=======
+	    TclGetStringFromObj(prefix, &length);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(prefix, &length);
 >>>>>>> upstream/master
@@ -920,10 +1022,17 @@ TclpNativeJoinPath(
 	    if (*p == '/') {
 		while (p[1] == '/') {
 		    p++;
+<<<<<<< HEAD
 		}
 		if (p[1] != '\0' && needsSep) {
 		    *dest++ = '/';
 		}
+=======
+		}
+		if (p[1] != '\0' && needsSep) {
+		    *dest++ = '/';
+		}
+>>>>>>> upstream/master
 	    } else {
 		*dest++ = *p;
 		needsSep = 1;
@@ -942,7 +1051,11 @@ TclpNativeJoinPath(
 		(start[length-1] != '/') && (start[length-1] != ':')) {
 	    Tcl_AppendToObj(prefix, "/", 1);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(prefix, &length);
+=======
+	    TclGetStringFromObj(prefix, &length);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(prefix, &length);
 >>>>>>> upstream/master
@@ -1028,7 +1141,11 @@ Tcl_JoinPath(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     resultStr = Tcl_GetStringFromObj(resultObj, &len);
+=======
+    resultStr = TclGetStringFromObj(resultObj, &len);
+>>>>>>> upstream/master
 =======
     resultStr = TclGetStringFromObj(resultObj, &len);
 >>>>>>> upstream/master
@@ -1278,7 +1395,11 @@ Tcl_GlobObjCmd(
 	if (Tcl_GetIndexFromObj(interp, objv[i], options, "option", 0,
 		&index) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    string = Tcl_GetStringFromObj(objv[i], &length);
+=======
+	    string = TclGetStringFromObj(objv[i], &length);
+>>>>>>> upstream/master
 =======
 	    string = TclGetStringFromObj(objv[i], &length);
 >>>>>>> upstream/master
@@ -1390,7 +1511,11 @@ Tcl_GlobObjCmd(
 	int pathlength;
 	const char *last;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *first = Tcl_GetStringFromObj(pathOrDir,&pathlength);
+=======
+	const char *first = TclGetStringFromObj(pathOrDir,&pathlength);
+>>>>>>> upstream/master
 =======
 	const char *first = TclGetStringFromObj(pathOrDir,&pathlength);
 >>>>>>> upstream/master
@@ -1632,8 +1757,14 @@ Tcl_GlobObjCmd(
 	Tcl_DString str;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	for (i = 0; i < objc; i++) {
 	    Tcl_DStringInit(&str);
+=======
+	Tcl_DStringInit(&str);
+	for (i = 0; i < objc; i++) {
+	    Tcl_DStringSetLength(&str, 0);
+>>>>>>> upstream/master
 =======
 	Tcl_DStringInit(&str);
 	for (i = 0; i < objc; i++) {
@@ -1896,6 +2027,7 @@ TclGlob(
 		    tail += 2;
 		}
 		Tcl_IncrRefCount(pathPrefix);
+<<<<<<< HEAD
 		break;
 	    }
 	    case TCL_PATH_ABSOLUTE:
@@ -1911,6 +2043,23 @@ TclGlob(
 		/* Do nothing */
 		break;
 	    }
+=======
+		break;
+	    }
+	    case TCL_PATH_ABSOLUTE:
+		/*
+		 * Absolute, possibly network path //Machine/Share. Use that
+		 * as the path prefix (it already has a refCount).
+		 */
+
+		pathPrefix = driveName;
+		tail += driveNameLen;
+		break;
+	    case TCL_PATH_RELATIVE:
+		/* Do nothing */
+		break;
+	    }
+>>>>>>> upstream/master
 	    Tcl_DecrRefCount(temp);
 	}
 
@@ -2034,7 +2183,11 @@ TclGlob(
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	pre = Tcl_GetStringFromObj(pathPrefix, &prefixLen);
+=======
+	pre = TclGetStringFromObj(pathPrefix, &prefixLen);
+>>>>>>> upstream/master
 =======
 	pre = TclGetStringFromObj(pathPrefix, &prefixLen);
 >>>>>>> upstream/master
@@ -2056,7 +2209,11 @@ TclGlob(
 	for (i = 0; i< objc; i++) {
 	    int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    const char *oldStr = Tcl_GetStringFromObj(objv[i], &len);
+=======
+	    const char *oldStr = TclGetStringFromObj(objv[i], &len);
+>>>>>>> upstream/master
 =======
 	    const char *oldStr = TclGetStringFromObj(objv[i], &len);
 >>>>>>> upstream/master
@@ -2412,7 +2569,11 @@ DoGlob(
 
 			Tcl_ListObjIndex(NULL, matchesObj, repair, &fixme);
 <<<<<<< HEAD
+<<<<<<< HEAD
 			bytes = Tcl_GetStringFromObj(fixme, &numBytes);
+=======
+			bytes = TclGetStringFromObj(fixme, &numBytes);
+>>>>>>> upstream/master
 =======
 			bytes = TclGetStringFromObj(fixme, &numBytes);
 >>>>>>> upstream/master
@@ -2454,7 +2615,11 @@ DoGlob(
 
 	if (pathPtr != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    (void) Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	    (void) TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 =======
 	    (void) TclGetStringFromObj(pathPtr, &length);
 >>>>>>> upstream/master
@@ -2504,7 +2669,11 @@ DoGlob(
 
 		int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *joined = Tcl_GetStringFromObj(joinedPtr,&len);
+=======
+		const char *joined = TclGetStringFromObj(joinedPtr,&len);
+>>>>>>> upstream/master
 =======
 		const char *joined = TclGetStringFromObj(joinedPtr,&len);
 >>>>>>> upstream/master
@@ -2545,7 +2714,11 @@ DoGlob(
 
 	    int len;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    const char *joined = Tcl_GetStringFromObj(joinedPtr,&len);
+=======
+	    const char *joined = TclGetStringFromObj(joinedPtr,&len);
+>>>>>>> upstream/master
 =======
 	    const char *joined = TclGetStringFromObj(joinedPtr,&len);
 >>>>>>> upstream/master
@@ -2564,6 +2737,7 @@ DoGlob(
     Tcl_DecrRefCount(joinedPtr);
 
     return result;
+<<<<<<< HEAD
 }
 
 /*
@@ -2716,6 +2890,66 @@ Tcl_GetBlockSizeFromStat(
 }
 =======
 }
+=======
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_AllocStatBuf --
+ *
+ *	This procedure allocates a Tcl_StatBuf on the heap. It exists so that
+ *	extensions may be used unchanged on systems where largefile support is
+ *	optional.
+ *
+ * Results:
+ *	A pointer to a Tcl_StatBuf which may be deallocated by being passed to
+ *	ckfree().
+ *
+ * Side effects:
+ *	None.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+Tcl_StatBuf *
+Tcl_AllocStatBuf(void)
+{
+    return ckalloc(sizeof(Tcl_StatBuf));
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Access functions for Tcl_StatBuf --
+ *
+ *	These functions provide portable read-only access to the portable
+ *	fields of the Tcl_StatBuf structure (really a 'struct stat', 'struct
+ *	stat64' or something else related). [TIP #316]
+ *
+ * Results:
+ *	The value from the field being retrieved.
+ *
+ * Side effects:
+ *	None.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+unsigned
+Tcl_GetFSDeviceFromStat(
+    const Tcl_StatBuf *statPtr)
+{
+    return (unsigned) statPtr->st_dev;
+}
+
+unsigned
+Tcl_GetFSInodeFromStat(
+    const Tcl_StatBuf *statPtr)
+{
+    return (unsigned) statPtr->st_ino;
+}
+>>>>>>> upstream/master
 
 unsigned
 Tcl_GetModeFromStat(
@@ -2807,6 +3041,9 @@ Tcl_GetBlockSizeFromStat(
     return GUESSED_BLOCK_SIZE;
 #endif
 }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*

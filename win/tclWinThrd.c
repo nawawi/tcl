@@ -31,10 +31,14 @@ _CRTIMP unsigned int __cdecl _controlfp (unsigned int unNew, unsigned int unMask
 static CRITICAL_SECTION masterLock;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int init = 0;
 #define MASTER_LOCK TclpMasterLock()
 #define MASTER_UNLOCK TclpMasterUnlock()
 
+=======
+static int initialized = 0;
+>>>>>>> upstream/master
 =======
 static int initialized = 0;
 >>>>>>> upstream/master
@@ -119,7 +123,11 @@ static Tcl_ThreadDataKey dataKey;
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct WinCondition {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -136,12 +144,18 @@ typedef struct {
 #ifdef USE_THREAD_ALLOC
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int once;
 =======
 >>>>>>> upstream/master
 static DWORD tlsKey;
 
 typedef struct allocMutex {
+=======
+static DWORD tlsKey;
+
+typedef struct {
+>>>>>>> upstream/master
 =======
 static DWORD tlsKey;
 
@@ -158,7 +172,11 @@ typedef struct {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct WinThread {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -168,7 +186,10 @@ typedef struct {
 				 * main thread */
 } WinThread;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 
 /*
@@ -207,6 +228,7 @@ TclWinThreadStart(
 	    | _MCW_PC
 #endif
     );
+<<<<<<< HEAD
 >>>>>>> upstream/master
 
     lpOrigStartAddress = winThreadPtr->lpStartAddress;
@@ -256,17 +278,26 @@ TclWinThreadStart(
 #endif
 
     _controlfp(winThreadPtr->fpControl, fpmask);
+=======
+>>>>>>> upstream/master
 
     lpOrigStartAddress = winThreadPtr->lpStartAddress;
     lpOrigParameter = winThreadPtr->lpParameter;
 
+<<<<<<< HEAD
     ckfree((char *)winThreadPtr);
+=======
+    ckfree(winThreadPtr);
+>>>>>>> upstream/master
     return lpOrigStartAddress(lpOrigParameter);
 }
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  * TclpThreadCreate --
@@ -307,6 +338,7 @@ TclpThreadCreate(
 		 */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
     tHandle = (HANDLE) _beginthreadex(NULL, (unsigned) stackSize,
@@ -330,6 +362,8 @@ TclpThreadCreate(
 
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 
 #if defined(_MSC_VER) || defined(__MSVCRT__) || defined(__BORLANDC__)
     tHandle = (HANDLE) _beginthreadex(NULL, (unsigned) stackSize,
@@ -340,6 +374,9 @@ TclpThreadCreate(
 	    TclWinThreadStart, winThreadPtr, 0, (LPDWORD)idPtr);
 #endif
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if (tHandle == NULL) {
 	LeaveCriticalSection(&joinLock);
@@ -471,7 +508,11 @@ TclpInitLock(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 =======
 	initialized = 1;
 >>>>>>> upstream/master
@@ -541,7 +582,11 @@ TclpMasterLock(void)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 =======
 	initialized = 1;
 >>>>>>> upstream/master
@@ -616,7 +661,11 @@ Tcl_GetAllocMutex(void)
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
 =======
  * TclFinalizeLock
 >>>>>>> upstream/master
@@ -642,7 +691,11 @@ TclFinalizeLock(void)
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     MASTER_LOCK;
+=======
+    TclpMasterLock();
+>>>>>>> upstream/master
 =======
     TclpMasterLock();
 >>>>>>> upstream/master
@@ -658,7 +711,11 @@ TclFinalizeLock(void)
     DeleteCriticalSection(&masterLock);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     init = 0;
+=======
+    initialized = 0;
+>>>>>>> upstream/master
 =======
     initialized = 0;
 >>>>>>> upstream/master
@@ -1089,9 +1146,15 @@ Tcl_Mutex *
 TclpNewAllocMutex(void)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct allocMutex *lockPtr;
 
     lockPtr = malloc(sizeof(struct allocMutex));
+=======
+    allocMutex *lockPtr;
+
+    lockPtr = malloc(sizeof(allocMutex));
+>>>>>>> upstream/master
 =======
     allocMutex *lockPtr;
 
@@ -1120,7 +1183,10 @@ TclpFreeAllocMutex(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 void
@@ -1138,6 +1204,9 @@ TclpInitAllocCache(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1145,6 +1214,7 @@ void *
 TclpGetAllocCache(void)
 {
     void *result;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -1161,6 +1231,8 @@ TclpGetAllocCache(void)
 	}
     }
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1204,7 +1276,11 @@ TclpFreeAllocCache(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else if (once) {
+=======
+    } else {
+>>>>>>> upstream/master
 =======
     } else {
 >>>>>>> upstream/master
@@ -1222,9 +1298,13 @@ TclpFreeAllocCache(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	once = 0; /* reset for next time. */
     }
 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master

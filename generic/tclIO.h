@@ -215,8 +215,13 @@ typedef struct ChannelState {
 				 * value is the chanMg, if any. #219's
 				 * companion to 'unreportedError'. */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     int epoch;			/* Used to test validity of stored channelname
+				 * lookup results. */
+>>>>>>> upstream/master
+=======
+    size_t epoch;		/* Used to test validity of stored channelname
 				 * lookup results. */
 >>>>>>> upstream/master
 } ChannelState;
@@ -281,10 +286,13 @@ typedef struct ChannelState {
 					 * again from within the close
 					 * handler. */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define CHANNEL_TAINTED		(1<<20)	/* Channel stack structure has changed.
 					 * Used by Channel Tcl_Obj type to
 					 * determine if we have to revalidate
 					 * the channel. */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #define CHANNEL_CLOSEDWRITE	(1<<21)	/* Channel write side has been closed.

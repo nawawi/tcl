@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -78,7 +82,11 @@ All of the legal \fIaccess\fR values above may have the character
 indicate that the opened channel should be configured as if with the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for 
+=======
+\fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for
+>>>>>>> upstream/master
 =======
 \fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for
 >>>>>>> upstream/master
@@ -251,6 +259,7 @@ The \fB\-ttycontrol\fR option cannot be queried.
 .TP
 \fB\-ttystatus\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 .
 (Windows and Unix). The \fB\-ttystatus\fR option can only be
 queried.  It returns the current modem status and handshake input signals
@@ -270,6 +279,9 @@ XON and XOFF characters.
 .
 =======
 .
+=======
+.
+>>>>>>> upstream/master
 (Windows and Unix). The \fB\-ttystatus\fR option can only be
 queried.  It returns the current modem status and handshake input signals
 (see below).
@@ -286,6 +298,9 @@ XON and XOFF characters.
 .TP
 \fB\-pollinterval\fR \fImsec\fR
 .
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 (Windows only). This option is used to set the maximum time between
 polling for fileevents.
@@ -420,7 +435,11 @@ pipeline is started from a script, so that Tcl is not accessing the console,
 or if the command pipeline does not use standard input or output, but is
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 redirected from or to a file, then the above problems do not occur.  
+=======
+redirected from or to a file, then the above problems do not occur.
+>>>>>>> upstream/master
 =======
 redirected from or to a file, then the above problems do not occur.
 >>>>>>> upstream/master
@@ -448,7 +467,11 @@ same time.  If the command pipeline is started from a script, so that Tcl is
 not accessing the console, or if the command pipeline does not use standard
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 input, but is redirected from a file, then the above problem does not occur.  
+=======
+input, but is redirected from a file, then the above problem does not occur.
+>>>>>>> upstream/master
 =======
 input, but is redirected from a file, then the above problem does not occur.
 >>>>>>> upstream/master

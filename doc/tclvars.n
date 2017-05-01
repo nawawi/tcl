@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -104,7 +108,11 @@ Note that this environment variable should \fInot\fR normally be set.
 If set, then it must contain a valid Tcl list giving directories to
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 search during auto-load operations.  Directories must be specified in 
+=======
+search during auto-load operations.  Directories must be specified in
+>>>>>>> upstream/master
 =======
 search during auto-load operations.  Directories must be specified in
 >>>>>>> upstream/master
@@ -307,7 +315,11 @@ predefined elements are:
 The native byte order of this machine: either \fBlittleEndian\fR or
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBbigEndian\fR. 
+=======
+\fBbigEndian\fR.
+>>>>>>> upstream/master
 =======
 \fBbigEndian\fR.
 >>>>>>> upstream/master
@@ -324,7 +336,10 @@ C run-time library that is in use.  This is not an indication that this core
 contains symbols.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 .TP
@@ -333,6 +348,9 @@ contains symbols.
 The name of the Tcl language implementation.  When the interpreter is first
 created, this is always set to the string \fBTcl\fR.
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -411,7 +429,11 @@ binary number.
 If \fBtcl_precision\fR is not zero, then when Tcl converts a floating
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 point number, it creates a decimal representation of at most 
+=======
+point number, it creates a decimal representation of at most
+>>>>>>> upstream/master
 =======
 point number, it creates a decimal representation of at most
 >>>>>>> upstream/master

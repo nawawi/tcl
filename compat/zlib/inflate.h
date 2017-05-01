@@ -1,5 +1,9 @@
 /* inflate.h -- internal inflate state definition
+<<<<<<< HEAD
  * Copyright (C) 1995-2009 Mark Adler
+=======
+ * Copyright (C) 1995-2016 Mark Adler
+>>>>>>> upstream/master
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -18,7 +22,11 @@
 
 /* Possible inflate modes between inflate() calls */
 typedef enum {
+<<<<<<< HEAD
     HEAD,       /* i: waiting for magic header */
+=======
+    HEAD = 16180,   /* i: waiting for magic header */
+>>>>>>> upstream/master
     FLAGS,      /* i: waiting for method and flags (gzip) */
     TIME,       /* i: waiting for modification time (gzip) */
     OS,         /* i: waiting for extra flags and operating system (gzip) */
@@ -77,11 +85,22 @@ typedef enum {
         CHECK -> LENGTH -> DONE
  */
 
+<<<<<<< HEAD
 /* state maintained between inflate() calls.  Approximately 10K bytes. */
 struct inflate_state {
     inflate_mode mode;          /* current inflate mode */
     int last;                   /* true if processing last block */
     int wrap;                   /* bit 0 true for zlib, bit 1 true for gzip */
+=======
+/* State maintained between inflate() calls -- approximately 7K bytes, not
+   including the allocated sliding window, which is up to 32K bytes. */
+struct inflate_state {
+    z_streamp strm;             /* pointer back to this zlib stream */
+    inflate_mode mode;          /* current inflate mode */
+    int last;                   /* true if processing last block */
+    int wrap;                   /* bit 0 true for zlib, bit 1 true for gzip,
+                                   bit 2 true to validate check value */
+>>>>>>> upstream/master
     int havedict;               /* true if dictionary provided */
     int flags;                  /* gzip header method and flags (0 if zlib) */
     unsigned dmax;              /* zlib header max distance (INFLATE_STRICT) */

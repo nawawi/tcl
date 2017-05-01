@@ -12,6 +12,7 @@
 # this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   
 =======
 
@@ -23,6 +24,11 @@
 if {[lsearch [namespace children] ::tcltest] == -1} {
     package require tcltest
 =======
+if {"::tcltest" ni [namespace children]} {
+    package require tcltest 2
+>>>>>>> upstream/master
+=======
+
 if {"::tcltest" ni [namespace children]} {
     package require tcltest 2
 >>>>>>> upstream/master
@@ -247,6 +253,10 @@ test history-8.1 {clear option} history {catch {history clear junk}} 1
 test history-8.2 {clear option} history {history clear} {}
 if {[testConstraint history]} {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    history clear
+>>>>>>> upstream/master
 =======
     history clear
 >>>>>>> upstream/master
@@ -325,4 +335,7 @@ return
 # Local Variables:
 # mode: tcl
 # End:
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master

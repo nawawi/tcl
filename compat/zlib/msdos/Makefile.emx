@@ -11,7 +11,11 @@ CC=gcc
 
 #CFLAGS=-MMD -O
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
+<<<<<<< HEAD
 #CFLAGS=-MMD -g -DDEBUG
+=======
+#CFLAGS=-MMD -g -DZLIB_DEBUG
+>>>>>>> upstream/master
 CFLAGS=-MMD -O3 $(BUTT) -Wall -Wwrite-strings -Wpointer-arith -Wconversion \
              -Wstrict-prototypes -Wmissing-prototypes
 

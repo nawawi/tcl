@@ -10,7 +10,11 @@ m4_include(../unix/aclocal.m4)
 m4_define(SC_USE_CONFIG_HEADERS)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 m4_include(../unix/configure.in)
+=======
+m4_include(../unix/configure.ac)
+>>>>>>> upstream/master
 =======
 m4_include(../unix/configure.ac)
 >>>>>>> upstream/master

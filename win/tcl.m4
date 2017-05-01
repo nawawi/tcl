@@ -151,6 +151,7 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 	    with_tkconfig="${withval}")
 	AC_MSG_CHECKING([for Tk configuration])
 	AC_CACHE_VAL(ac_cv_c_tkconfig,[
+<<<<<<< HEAD
 
 	    # First check to see if --with-tkconfig was specified.
 	    if test x"${with_tkconfig}" != x ; then
@@ -234,6 +235,47 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		done
 	    fi
 
+=======
+
+	    # First check to see if --with-tkconfig was specified.
+	    if test x"${with_tkconfig}" != x ; then
+		case "${with_tkconfig}" in
+		    */tkConfig.sh )
+			if test -f "${with_tkconfig}"; then
+			    AC_MSG_WARN([--with-tk argument should refer to directory containing tkConfig.sh, not to tkConfig.sh itself])
+			    with_tkconfig="`echo "${with_tkconfig}" | sed 's!/tkConfig\.sh$!!'`"
+			fi ;;
+		esac
+		if test -f "${with_tkconfig}/tkConfig.sh" ; then
+		    ac_cv_c_tkconfig="`(cd "${with_tkconfig}"; pwd)`"
+		else
+		    AC_MSG_ERROR([${with_tkconfig} directory doesn't contain tkConfig.sh])
+		fi
+	    fi
+
+	    # then check for a private Tk library
+	    if test x"${ac_cv_c_tkconfig}" = x ; then
+		for i in \
+			../tk \
+			`ls -dr ../tk[[8-9]].[[0-9]].[[0-9]]* 2>/dev/null` \
+			`ls -dr ../tk[[8-9]].[[0-9]] 2>/dev/null` \
+			`ls -dr ../tk[[8-9]].[[0-9]]* 2>/dev/null` \
+			../../tk \
+			`ls -dr ../../tk[[8-9]].[[0-9]].[[0-9]]* 2>/dev/null` \
+			`ls -dr ../../tk[[8-9]].[[0-9]] 2>/dev/null` \
+			`ls -dr ../../tk[[8-9]].[[0-9]]* 2>/dev/null` \
+			../../../tk \
+			`ls -dr ../../../tk[[8-9]].[[0-9]].[[0-9]]* 2>/dev/null` \
+			`ls -dr ../../../tk[[8-9]].[[0-9]] 2>/dev/null` \
+			`ls -dr ../../../tk[[8-9]].[[0-9]]* 2>/dev/null` ; do
+		    if test -f "$i/win/tkConfig.sh" ; then
+			ac_cv_c_tkconfig="`(cd $i/win; pwd)`"
+			break
+		    fi
+		done
+	    fi
+
+>>>>>>> upstream/master
 	    # check in a few common install locations
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
 		for i in `ls -d ${libdir} 2>/dev/null` \
@@ -253,6 +295,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		done
 	    fi
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    # check in a few other private locations
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
@@ -308,6 +353,9 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
     else
         AC_MSG_RESULT([could not find ${TCL_BIN_DIR}/tclConfig.sh])
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
     fi
 
     #
@@ -337,6 +385,7 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
     eval "TCL_STUB_LIB_FLAG=\"${TCL_STUB_LIB_FLAG}\""
     eval "TCL_STUB_LIB_SPEC=\"${TCL_STUB_LIB_SPEC}\""
 
+<<<<<<< HEAD
 =======
     fi
 
@@ -367,6 +416,8 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
     eval "TCL_STUB_LIB_FLAG=\"${TCL_STUB_LIB_FLAG}\""
     eval "TCL_STUB_LIB_SPEC=\"${TCL_STUB_LIB_SPEC}\""
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     AC_SUBST(TCL_VERSION)
     AC_SUBST(TCL_BIN_DIR)
@@ -543,6 +594,7 @@ AC_DEFUN([SC_ENABLE_SYMBOLS], [
 	    AC_MSG_RESULT([yes (standard debugging)])
 	fi
 <<<<<<< HEAD
+<<<<<<< HEAD
     fi
     AC_SUBST(CFLAGS_DEFAULT)
     AC_SUBST(LDFLAGS_DEFAULT)
@@ -556,6 +608,21 @@ AC_DEFUN([SC_ENABLE_SYMBOLS], [
 	AC_DEFINE(TCL_COMPILE_STATS, 1, [Are bytecode statistics enabled?])
     fi
 
+=======
+    fi
+    AC_SUBST(CFLAGS_DEFAULT)
+    AC_SUBST(LDFLAGS_DEFAULT)
+
+    if test "$tcl_ok" = "mem" -o "$tcl_ok" = "all"; then
+	AC_DEFINE(TCL_MEM_DEBUG, 1, [Is memory debugging enabled?])
+    fi
+
+    if test "$tcl_ok" = "compile" -o "$tcl_ok" = "all"; then
+	AC_DEFINE(TCL_COMPILE_DEBUG, 1, [Is bytecode debugging enabled?])
+	AC_DEFINE(TCL_COMPILE_STATS, 1, [Are bytecode statistics enabled?])
+    fi
+
+>>>>>>> upstream/master
 =======
     fi
     AC_SUBST(CFLAGS_DEFAULT)
@@ -742,6 +809,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	if test "$ac_cv_win32" != "yes"; then
 	    AC_MSG_ERROR([${CC} cannot produce win32 executables.])
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	fi
 
 	hold_cflags=$CFLAGS; CFLAGS="$CFLAGS -mwindows -municode -Dmain=xxmain"
@@ -761,6 +831,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	else
 	    extra_cflags="$extra_cflags -DTCL_BROKEN_MAINARGS"
 	fi
+<<<<<<< HEAD
 =======
 	fi
 
@@ -781,6 +852,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	else
 	    extra_cflags="$extra_cflags -DTCL_BROKEN_MAINARGS"
 	fi
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     fi
 
@@ -844,12 +917,16 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	CFLAGS_OPTIMIZE="-O2 -fomit-frame-pointer"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall -Wdeclaration-after-statement"
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
+=======
+	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement"
 >>>>>>> upstream/master
 	LDFLAGS_DEBUG=
 	LDFLAGS_OPTIMIZE=
@@ -921,6 +998,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		*)
 		    ;;
 	    esac
+<<<<<<< HEAD
 	fi
 	MAKE_DLL="\${SHLIB_LD} \$(LDFLAGS) -out:\[$]@"
 	# DLLSUFFIX is separate because it is the building block for
@@ -1057,9 +1135,40 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		fi
 		CELIBPATH="${SDKROOT}/${OSVERSION}/${PLATFORM}/Lib/${TARGETCPU}"
 	    fi
-	fi
-
 =======
+>>>>>>> upstream/master
+	fi
+	MAKE_DLL="\${SHLIB_LD} \$(LDFLAGS) -out:\[$]@"
+	# DLLSUFFIX is separate because it is the building block for
+	# users of tclConfig.sh that may build shared or static.
+	DLLSUFFIX="\${DBGX}.dll"
+	LIBSUFFIX="\${DBGX}.lib"
+	LIBFLAGSUFFIX="\${DBGX}"
+
+<<<<<<< HEAD
+=======
+=======
+	# This is a 2-stage check to make sure we have the 64-bit SDK
+	# We have to know where the SDK is installed.
+	# This magic is based on MS Platform SDK for Win2003 SP1 - hobbs
+	if test "$do64bit" != "no" ; then
+	    if test "x${MSSDK}x" = "xx" ; then
+		MSSDK="C:/Progra~1/Microsoft Platform SDK"
+	    fi
+	    MSSDK=`echo "$MSSDK" | sed -e 's!\\\!/!g'`
+	    PATH64=""
+	    case "$do64bit" in
+		amd64|x64|yes)
+		    MACHINE="AMD64" ; # assume AMD64 as default 64-bit build
+		    PATH64="${MSSDK}/Bin/Win64/x86/AMD64"
+		    ;;
+		ia64)
+		    MACHINE="IA64"
+		    PATH64="${MSSDK}/Bin/Win64"
+		    ;;
+	    esac
+	    if test ! -d "${PATH64}" ; then
+>>>>>>> upstream/master
 		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
 	    fi
 	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
@@ -1160,6 +1269,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    fi
 	fi
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if test "$doWince" != "no" ; then
 	    CEBINROOT="${WCEROOT}/EVC/${OSVERSION}/bin"
@@ -1239,6 +1351,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 
     if test "$do64bit" != "no" ; then
 	AC_DEFINE(TCL_CFG_DO64BIT)
+<<<<<<< HEAD
     fi
 
     if test "${GCC}" = "yes" ; then
@@ -1336,6 +1449,105 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	fi
     fi
 
+=======
+    fi
+
+    if test "${GCC}" = "yes" ; then
+	AC_CACHE_CHECK(for SEH support in compiler,
+	    tcl_cv_seh,
+	AC_TRY_RUN([
+	    #define WIN32_LEAN_AND_MEAN
+	    #include <windows.h>
+	    #undef WIN32_LEAN_AND_MEAN
+
+	    int main(int argc, char** argv) {
+		int a, b = 0;
+		__try {
+		    a = 666 / b;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER) {
+		    return 0;
+		}
+		return 1;
+	    }
+	],
+	    tcl_cv_seh=yes,
+	    tcl_cv_seh=no,
+	    tcl_cv_seh=no)
+	)
+	if test "$tcl_cv_seh" = "no" ; then
+	    AC_DEFINE(HAVE_NO_SEH, 1,
+		    [Defined when mingw does not support SEH])
+	fi
+
+	#
+	# Check to see if the excpt.h include file provided contains the
+	# definition for EXCEPTION_DISPOSITION; if not, which is the case
+	# with Cygwin's version as of 2002-04-10, define it to be int,
+	# sufficient for getting the current code to work.
+	#
+	AC_CACHE_CHECK(for EXCEPTION_DISPOSITION support in include files,
+	    tcl_cv_eh_disposition,
+	    AC_TRY_COMPILE([
+#	    define WIN32_LEAN_AND_MEAN
+#	    include <windows.h>
+#	    undef WIN32_LEAN_AND_MEAN
+	    ],[
+		EXCEPTION_DISPOSITION x;
+	    ],
+		tcl_cv_eh_disposition=yes,
+		tcl_cv_eh_disposition=no)
+	)
+	if test "$tcl_cv_eh_disposition" = "no" ; then
+	AC_DEFINE(EXCEPTION_DISPOSITION, int,
+		[Defined when cygwin/mingw does not support EXCEPTION DISPOSITION])
+	fi
+
+	# Check to see if winnt.h defines CHAR, SHORT, and LONG
+	# even if VOID has already been #defined. The win32api
+	# used by mingw and cygwin is known to do this.
+
+	AC_CACHE_CHECK(for winnt.h that ignores VOID define,
+	    tcl_cv_winnt_ignore_void,
+	    AC_TRY_COMPILE([
+		#define VOID void
+		#define WIN32_LEAN_AND_MEAN
+		#include <windows.h>
+		#undef WIN32_LEAN_AND_MEAN
+	    ], [
+		CHAR c;
+		SHORT s;
+		LONG l;
+	    ],
+        tcl_cv_winnt_ignore_void=yes,
+        tcl_cv_winnt_ignore_void=no)
+	)
+	if test "$tcl_cv_winnt_ignore_void" = "yes" ; then
+	    AC_DEFINE(HAVE_WINNT_IGNORE_VOID, 1,
+		    [Defined when cygwin/mingw ignores VOID define in winnt.h])
+	fi
+
+	# See if the compiler supports casting to a union type.
+	# This is used to stop gcc from printing a compiler
+	# warning when initializing a union member.
+
+	AC_CACHE_CHECK(for cast to union support,
+	    tcl_cv_cast_to_union,
+	    AC_TRY_COMPILE([],
+	    [
+		  union foo { int i; double d; };
+		  union foo f = (union foo) (int) 0;
+	    ],
+	    tcl_cv_cast_to_union=yes,
+	    tcl_cv_cast_to_union=no)
+	)
+	if test "$tcl_cv_cast_to_union" = "yes"; then
+	    AC_DEFINE(HAVE_CAST_TO_UNION, 1,
+		    [Defined when compiler supports casting to union type.])
+	fi
+    fi
+
+>>>>>>> upstream/master
     # DL_LIBS is empty, but then we match the Unix version
     AC_SUBST(DL_LIBS)
     AC_SUBST(CFLAGS_DEBUG)
@@ -1363,6 +1575,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 AC_DEFUN([SC_WITH_TCL], [
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if test -d ../../tcl8.6$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.6$1/win
     else
@@ -1373,6 +1586,8 @@ AC_DEFUN([SC_WITH_TCL], [
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     if test -d ../../tcl8.7$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.7$1/win
     else
@@ -1381,6 +1596,9 @@ AC_DEFUN([SC_WITH_TCL], [
 
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

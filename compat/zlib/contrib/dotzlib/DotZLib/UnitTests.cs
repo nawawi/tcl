@@ -156,7 +156,11 @@ namespace DotZLibTests
         public void Info_Version()
         {
             Info info = new Info();
+<<<<<<< HEAD
             Assert.AreEqual("1.2.8", Info.Version);
+=======
+            Assert.AreEqual("1.2.11", Info.Version);
+>>>>>>> upstream/master
             Assert.AreEqual(32, info.SizeOfUInt);
             Assert.AreEqual(32, info.SizeOfULong);
             Assert.AreEqual(32, info.SizeOfPointer);

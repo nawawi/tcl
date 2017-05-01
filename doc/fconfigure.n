@@ -257,6 +257,9 @@ if {[gets $f] ne "P6"} {
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -274,6 +277,7 @@ while {[llength $words] < 3} {
 lassign $words xSize ySize depth
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 # Read lines until we have got non-comment lines
@@ -289,6 +293,8 @@ while {[llength $words] < 3} {
 # overall depth per channel. Assign to variables.
 lassign $words xSize ySize depth
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

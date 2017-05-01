@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -231,6 +235,7 @@ of \fB::msgcat::mcunknown\fR is used as the return value for the call
 to \fB::msgcat::mc\fR.
 .VS "TIP 412"
 .RS
+<<<<<<< HEAD
 .PP
 Note that this routine is only called if the concerned package did not set a package locale unknown command name.
 .RE
@@ -244,6 +249,19 @@ The calling package clears all its state within the \fBmsgcat\fR package includi
 .SH "LOCALE SPECIFICATION"
 .PP
 =======
+.PP
+.SH "LOCALE SPECIFICATION"
+.PP
+>>>>>>> upstream/master
+=======
+.PP
+Note that this routine is only called if the concerned package did not set a package locale unknown command name.
+.RE
+.TP
+\fB::msgcat::mcforgetpackage\fR
+.
+The calling package clears all its state within the \fBmsgcat\fR package including all settings and translations.
+.VE "TIP 412"
 .PP
 .SH "LOCALE SPECIFICATION"
 .PP
@@ -275,7 +293,11 @@ language[_country][.codeset][@modifier]
 to extract its parts.  The initial locale is then set by calling
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB::msgcat::mclocale\fR with the argument 
+=======
+\fB::msgcat::mclocale\fR with the argument
+>>>>>>> upstream/master
 =======
 \fB::msgcat::mclocale\fR with the argument
 >>>>>>> upstream/master
@@ -408,7 +430,11 @@ the package. For example, a short \fBes.msg\fR might contain:
 namespace eval ::mypackage {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     \fB::msgcat::mcflset\fR "Free Beer!" "Cerveza Gracias!"
+=======
+    \fB::msgcat::mcflset\fR "Free Beer" "Cerveza Gratis"
+>>>>>>> upstream/master
 =======
     \fB::msgcat::mcflset\fR "Free Beer" "Cerveza Gratis"
 >>>>>>> upstream/master
@@ -613,6 +639,7 @@ To register to a callback, use:
 .CS
 namespace eval gui {
     msgcat::mcpackageconfig changecmd updateGUI
+<<<<<<< HEAD
 
     proc updateGui args {
         puts "New locale is '[lindex $args 0]'."
@@ -628,6 +655,23 @@ If locales (or additional locales) are contained in another source like a data b
 namespace eval db {
     msgcat::mcpackageconfig loadcmd loadMessages
 
+=======
+
+    proc updateGui args {
+        puts "New locale is '[lindex $args 0]'."
+    }
+}
+% msgcat::mclocale fr
+fr
+% New locale is 'fr'.
+.CE
+.PP
+If locales (or additional locales) are contained in another source like a data base, a package may use the load callback and not mcload:
+.CS
+namespace eval db {
+    msgcat::mcpackageconfig loadcmd loadMessages
+
+>>>>>>> upstream/master
     proc loadMessages args {
         foreach locale $args {
             if {[LocaleInDB $locale]} {

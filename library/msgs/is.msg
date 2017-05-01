@@ -2,6 +2,7 @@
 namespace eval ::tcl::clock {
     ::msgcat::mcset is DAYS_OF_WEEK_ABBREV [list \
         "sun."\
+<<<<<<< HEAD
         "m\u00e1n."\
         "\u00feri."\
         "mi\u00f0."\
@@ -15,12 +16,28 @@ namespace eval ::tcl::clock {
         "mi\u00f0vikudagur"\
         "fimmtudagur"\
         "f\u00f6studagur"\
+=======
+        "mán."\
+        "þri."\
+        "mið."\
+        "fim."\
+        "fös."\
+        "lau."]
+    ::msgcat::mcset is DAYS_OF_WEEK_FULL [list \
+        "sunnudagur"\
+        "mánudagur"\
+        "þriðjudagur"\
+        "miðvikudagur"\
+        "fimmtudagur"\
+        "föstudagur"\
+>>>>>>> upstream/master
         "laugardagur"]
     ::msgcat::mcset is MONTHS_ABBREV [list \
         "jan."\
         "feb."\
         "mar."\
         "apr."\
+<<<<<<< HEAD
         "ma\u00ed"\
         "j\u00fan."\
         "j\u00fal."\
@@ -42,6 +59,29 @@ namespace eval ::tcl::clock {
         "september"\
         "okt\u00f3ber"\
         "n\u00f3vember"\
+=======
+        "maí"\
+        "jún."\
+        "júl."\
+        "ágú."\
+        "sep."\
+        "okt."\
+        "nóv."\
+        "des."\
+        ""]
+    ::msgcat::mcset is MONTHS_FULL [list \
+        "janúar"\
+        "febrúar"\
+        "mars"\
+        "apríl"\
+        "maí"\
+        "júní"\
+        "júlí"\
+        "ágúst"\
+        "september"\
+        "október"\
+        "nóvember"\
+>>>>>>> upstream/master
         "desember"\
         ""]
     ::msgcat::mcset is DATE_FORMAT "%e.%m.%Y"

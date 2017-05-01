@@ -14,6 +14,7 @@
 #undef STATIC_BUILD
 #include "tcl.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 /*
  * TCL_STORAGE_CLASS is set unconditionally to DLLEXPORT because the
@@ -23,6 +24,8 @@
 #undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLEXPORT
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -44,7 +47,11 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master

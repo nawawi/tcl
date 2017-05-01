@@ -144,7 +144,11 @@ static int		TraceVarEx(Tcl_Interp *interp, const char *part1,
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct StringTraceData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -283,7 +287,11 @@ Tcl_TraceObjCmd(
 	opsList = Tcl_NewObj();
 	Tcl_IncrRefCount(opsList);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	flagOps = Tcl_GetStringFromObj(objv[3], &numFlags);
+=======
+	flagOps = TclGetStringFromObj(objv[3], &numFlags);
+>>>>>>> upstream/master
 =======
 	flagOps = TclGetStringFromObj(objv[3], &numFlags);
 >>>>>>> upstream/master
@@ -471,7 +479,11 @@ TraceExecutionObjCmd(
 	    }
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(objv[5], &commandLength);
+=======
+	command = TclGetStringFromObj(objv[5], &commandLength);
+>>>>>>> upstream/master
 =======
 	command = TclGetStringFromObj(objv[5], &commandLength);
 >>>>>>> upstream/master
@@ -714,7 +726,11 @@ TraceCommandObjCmd(
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(objv[5], &commandLength);
+=======
+	command = TclGetStringFromObj(objv[5], &commandLength);
+>>>>>>> upstream/master
 =======
 	command = TclGetStringFromObj(objv[5], &commandLength);
 >>>>>>> upstream/master
@@ -921,7 +937,11 @@ TraceVariableObjCmd(
 	    }
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(objv[5], &commandLength);
+=======
+	command = TclGetStringFromObj(objv[5], &commandLength);
+>>>>>>> upstream/master
 =======
 	command = TclGetStringFromObj(objv[5], &commandLength);
 >>>>>>> upstream/master
@@ -1911,7 +1931,12 @@ TraceExecutionProc(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    traceCode = Tcl_Eval(interp, Tcl_DStringValue(&cmd));
+=======
+	    traceCode = Tcl_EvalEx(interp, Tcl_DStringValue(&cmd),
+		    Tcl_DStringLength(&cmd), 0);
+>>>>>>> upstream/master
 =======
 	    traceCode = Tcl_EvalEx(interp, Tcl_DStringValue(&cmd),
 		    Tcl_DStringLength(&cmd), 0);
@@ -2848,6 +2873,10 @@ DisposeTraceResult(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 #undef Tcl_UntraceVar
 void
 Tcl_UntraceVar(
@@ -2863,6 +2892,10 @@ Tcl_UntraceVar(
 {
     Tcl_UntraceVar2(interp, varName, NULL, flags, proc, clientData);
 }
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -3017,6 +3050,10 @@ Tcl_UntraceVar2(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 #undef Tcl_VarTraceInfo
 ClientData
 Tcl_VarTraceInfo(
@@ -3034,6 +3071,10 @@ Tcl_VarTraceInfo(
     return Tcl_VarTraceInfo2(interp, varName, NULL, flags, proc,
 	    prevClientData);
 }
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -3126,6 +3167,10 @@ Tcl_VarTraceInfo2(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 #undef Tcl_TraceVar
 int
 Tcl_TraceVar(
@@ -3143,6 +3188,10 @@ Tcl_TraceVar(
 {
     return Tcl_TraceVar2(interp, varName, NULL, flags, proc, clientData);
 }
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------

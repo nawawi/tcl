@@ -1,5 +1,9 @@
 /* compress.c -- compress a memory buffer
+<<<<<<< HEAD
  * Copyright (C) 1995-2005 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2005, 2014, 2016 Jean-loup Gailly, Mark Adler
+>>>>>>> upstream/master
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -28,6 +32,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
 {
     z_stream stream;
     int err;
+<<<<<<< HEAD
 
     stream.next_in = (z_const Bytef *)source;
     stream.avail_in = (uInt)sourceLen;
@@ -38,6 +43,13 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     stream.next_out = dest;
     stream.avail_out = (uInt)*destLen;
     if ((uLong)stream.avail_out != *destLen) return Z_BUF_ERROR;
+=======
+    const uInt max = (uInt)-1;
+    uLong left;
+
+    left = *destLen;
+    *destLen = 0;
+>>>>>>> upstream/master
 
     stream.zalloc = (alloc_func)0;
     stream.zfree = (free_func)0;
@@ -46,6 +58,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     err = deflateInit(&stream, level);
     if (err != Z_OK) return err;
 
+<<<<<<< HEAD
     err = deflate(&stream, Z_FINISH);
     if (err != Z_STREAM_END) {
         deflateEnd(&stream);
@@ -55,6 +68,28 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
 
     err = deflateEnd(&stream);
     return err;
+=======
+    stream.next_out = dest;
+    stream.avail_out = 0;
+    stream.next_in = (z_const Bytef *)source;
+    stream.avail_in = 0;
+
+    do {
+        if (stream.avail_out == 0) {
+            stream.avail_out = left > (uLong)max ? max : (uInt)left;
+            left -= stream.avail_out;
+        }
+        if (stream.avail_in == 0) {
+            stream.avail_in = sourceLen > (uLong)max ? max : (uInt)sourceLen;
+            sourceLen -= stream.avail_in;
+        }
+        err = deflate(&stream, sourceLen ? Z_NO_FLUSH : Z_FINISH);
+    } while (err == Z_OK);
+
+    *destLen = stream.total_out;
+    deflateEnd(&stream);
+    return err == Z_STREAM_END ? Z_OK : err;
+>>>>>>> upstream/master
 }
 
 /* ===========================================================================

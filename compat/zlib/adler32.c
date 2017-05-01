@@ -1,5 +1,9 @@
 /* adler32.c -- compute the Adler-32 checksum of a data stream
+<<<<<<< HEAD
  * Copyright (C) 1995-2011 Mark Adler
+=======
+ * Copyright (C) 1995-2011, 2016 Mark Adler
+>>>>>>> upstream/master
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -7,11 +11,17 @@
 
 #include "zutil.h"
 
+<<<<<<< HEAD
 #define local static
 
 local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 
 #define BASE 65521      /* largest prime smaller than 65536 */
+=======
+local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
+
+#define BASE 65521U     /* largest prime smaller than 65536 */
+>>>>>>> upstream/master
 #define NMAX 5552
 /* NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1 */
 
@@ -62,10 +72,17 @@ local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 #endif
 
 /* ========================================================================= */
+<<<<<<< HEAD
 uLong ZEXPORT adler32(adler, buf, len)
     uLong adler;
     const Bytef *buf;
     uInt len;
+=======
+uLong ZEXPORT adler32_z(adler, buf, len)
+    uLong adler;
+    const Bytef *buf;
+    z_size_t len;
+>>>>>>> upstream/master
 {
     unsigned long sum2;
     unsigned n;
@@ -133,6 +150,18 @@ uLong ZEXPORT adler32(adler, buf, len)
 }
 
 /* ========================================================================= */
+<<<<<<< HEAD
+=======
+uLong ZEXPORT adler32(adler, buf, len)
+    uLong adler;
+    const Bytef *buf;
+    uInt len;
+{
+    return adler32_z(adler, buf, len);
+}
+
+/* ========================================================================= */
+>>>>>>> upstream/master
 local uLong adler32_combine_(adler1, adler2, len2)
     uLong adler1;
     uLong adler2;
@@ -156,7 +185,11 @@ local uLong adler32_combine_(adler1, adler2, len2)
     sum2 += ((adler1 >> 16) & 0xffff) + ((adler2 >> 16) & 0xffff) + BASE - rem;
     if (sum1 >= BASE) sum1 -= BASE;
     if (sum1 >= BASE) sum1 -= BASE;
+<<<<<<< HEAD
     if (sum2 >= (BASE << 1)) sum2 -= (BASE << 1);
+=======
+    if (sum2 >= ((unsigned long)BASE << 1)) sum2 -= ((unsigned long)BASE << 1);
+>>>>>>> upstream/master
     if (sum2 >= BASE) sum2 -= BASE;
     return sum1 | (sum2 << 16);
 }

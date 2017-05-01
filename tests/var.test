@@ -27,7 +27,10 @@ testConstraint testgetvarfullname [llength [info commands testgetvarfullname]]
 testConstraint testsetnoerr [llength [info commands testsetnoerr]]
 testConstraint memory [llength [info commands memory]]
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 if {[testConstraint memory]} {
     proc getbytes {} {
         return [lindex [split [memory info] \n] 3 3]
@@ -43,6 +46,9 @@ if {[testConstraint memory]} {
     }
 }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 catch {rename p ""}
@@ -59,7 +65,11 @@ test var-1.1 {TclLookupVar, Array handling} -setup {
 } -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x "incr"  ;# force no compilation and runtime call to Tcl_IncrCmd 
+=======
+    set x "incr"  ;# force no compilation and runtime call to Tcl_IncrCmd
+>>>>>>> upstream/master
 =======
     set x "incr"  ;# force no compilation and runtime call to Tcl_IncrCmd
 >>>>>>> upstream/master
@@ -71,11 +81,17 @@ test var-1.1 {TclLookupVar, Array handling} -setup {
     list [$x i] $i [$x arr(foo)] $arr(foo)
 } -result {11 11 38 38}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 set ::x "global value"
 namespace eval test_ns_var {
     variable x "namespace value"
 }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test var-1.2 {TclLookupVar, TCL_GLOBAL_ONLY implies global namespace var} {
     namespace eval test_ns_var {
@@ -213,7 +229,11 @@ test var-1.18 {TclLookupVar, resurrect array element via upvar to deleted array:
 	set result
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {0 2 1 {can't set "foo": upvar refers to element in deleted array}}
+=======
+} -result {0 2 1 {can't set "foo": upvar refers to element in deleted array}}
+>>>>>>> upstream/master
 =======
 } -result {0 2 1 {can't set "foo": upvar refers to element in deleted array}}
 >>>>>>> upstream/master
@@ -255,7 +275,11 @@ test var-3.3 {MakeUpvar, my var has TCL_GLOBAL_ONLY specified} -setup {
 	# create global xx linked to global a
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	testupvar 1 a {} xx global 
+=======
+	testupvar 1 a {} xx global
+>>>>>>> upstream/master
 =======
 	testupvar 1 a {} xx global
 >>>>>>> upstream/master
@@ -275,7 +299,11 @@ test var-3.4 {MakeUpvar, my var has TCL_NAMESPACE_ONLY specified} -setup {
 	    # create namespace var vv linked to global a
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    testupvar 1 a {} vv namespace 
+=======
+	    testupvar 1 a {} vv namespace
+>>>>>>> upstream/master
 =======
 	    testupvar 1 a {} vv namespace
 >>>>>>> upstream/master
@@ -315,6 +343,10 @@ test var-3.7 {MakeUpvar, my var has ::s} -setup {
 } -result {789789}
 test var-3.8 {MakeUpvar, my var already exists in global ns} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    upvar #0 aaaaa xxxxx
+>>>>>>> upstream/master
 =======
     upvar #0 aaaaa xxxxx
 >>>>>>> upstream/master
@@ -328,10 +360,14 @@ test var-3.8 {MakeUpvar, my var already exists in global ns} -setup {
 } -result {hello}
 test var-3.9 {MakeUpvar, my var has invalid ns name} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
     catch {unset aaaaa}
 } -returnCodes error -body {
     set aaaaa 789789
     upvar #0 aaaaa test_ns_fred::lnk
+<<<<<<< HEAD
 } -result {can't create "test_ns_fred::lnk": parent namespace doesn't exist}
 test var-3.10 {MakeUpvar, between namespaces} -body {
     namespace eval {} {
@@ -352,6 +388,8 @@ test var-3.11 {MakeUpvar, my var looks like array elem} -setup {
 } -returnCodes error -body {
     set aaaaa 789789
     upvar #0 aaaaa test_ns_fred::lnk
+=======
+>>>>>>> upstream/master
 } -cleanup {
     unset ::aaaaa
 } -result {can't create "test_ns_fred::lnk": parent namespace doesn't exist}
@@ -367,6 +405,7 @@ test var-3.11 {MakeUpvar, my var looks like array elem} -setup {
     catch {unset aaaaa}
 } -returnCodes error -body {
     set aaaaa 789789
+<<<<<<< HEAD
 >>>>>>> upstream/master
     upvar #0 aaaaa foo(bar)
 } -result {bad variable name "foo(bar)": can't create a scalar variable that looks like an array element}
@@ -391,6 +430,31 @@ test var-4.3 {Tcl_GetVariableName, variable can't be array element} -setup {
 
 test var-5.1 {Tcl_GetVariableFullName, global variable} -setup {
     catch {unset a}
+=======
+    upvar #0 aaaaa foo(bar)
+} -result {bad variable name "foo(bar)": can't create a scalar variable that looks like an array element}
+
+test var-4.1 {Tcl_GetVariableName, global variable} testgetvarfullname {
+    catch {unset a}
+    set a 123
+    testgetvarfullname a global
+} ::a
+test var-4.2 {Tcl_GetVariableName, namespace variable} testgetvarfullname {
+    namespace eval test_ns_var {
+	variable george
+	testgetvarfullname george namespace
+    }
+} ::test_ns_var::george
+test var-4.3 {Tcl_GetVariableName, variable can't be array element} -setup {
+    catch {unset a}
+} -constraints testgetvarfullname -body {
+    set a(1) foo
+    testgetvarfullname a(1) global
+} -returnCodes error -result {unknown variable "a(1)"}
+
+test var-5.1 {Tcl_GetVariableFullName, global variable} -setup {
+    catch {unset a}
+>>>>>>> upstream/master
 } -body {
     set a bar
     namespace which -variable a
@@ -491,7 +555,11 @@ test var-7.4 {Tcl_VariableObjCmd, list of vars} -setup {
     list [lsort [info vars test_ns_var::*]] \
          [namespace eval test_ns_var {expr $three+$four}]
 <<<<<<< HEAD
+<<<<<<< HEAD
 } [list [lsort {::test_ns_var::four ::test_ns_var::three ::test_ns_var::two ::test_ns_var::one}] 7]
+=======
+} -result [list [lsort {::test_ns_var::four ::test_ns_var::three ::test_ns_var::two ::test_ns_var::one}] 7]
+>>>>>>> upstream/master
 =======
 } -result [list [lsort {::test_ns_var::four ::test_ns_var::three ::test_ns_var::two ::test_ns_var::one}] 7]
 >>>>>>> upstream/master
@@ -614,6 +682,7 @@ test var-7.14 {Tcl_VariableObjCmd, array element parameter} -body {
 test var-7.15 {Tcl_VariableObjCmd, array element parameter} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     namespace eval test_ns_var { 
 	variable arrayvar
 	set arrayvar(1) x
@@ -622,12 +691,17 @@ test var-7.15 {Tcl_VariableObjCmd, array element parameter} -body {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     namespace eval test_ns_var {
 	variable arrayvar
 	set arrayvar(1) x
 	variable arrayvar(1) y
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -796,6 +870,7 @@ test var-9.12 {behaviour of TclSetVar write trace error} testsetnoerr {
 test var-10.1 {can't nest arrays with array set} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
    catch {unset arr}
@@ -807,6 +882,8 @@ test var-10.2 {can't nest arrays with array set} -setup {
 } -returnCodes error -body {
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
    catch {unset arr}
 } -returnCodes error -body {
    array set arr(x) {a 1 b 2}
@@ -814,6 +891,9 @@ test var-10.2 {can't nest arrays with array set} -setup {
 test var-10.2 {can't nest arrays with array set} -setup {
    catch {unset arr}
 } -returnCodes error -body {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -872,6 +952,9 @@ test var-13.1 {Tcl_UnsetVar2, unset array with trace set on element} -setup {
 } -result "If you see this, it worked"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -882,6 +965,7 @@ test var-14.2 {array names -glob} -body {
     array names tcl_platform -glob os
 } -result os
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -960,6 +1044,8 @@ test var-19.1 {crash when freeing locals hashtable: Bug 3037525} {
 } {}
 
 =======
+=======
+>>>>>>> upstream/master
 test var-15.1 {segfault in [unset], [Bug 735335]} {
     proc A { name } {
 	upvar $name var
@@ -1021,6 +1107,7 @@ test var-19.1 {crash when freeing locals hashtable: Bug 3037525} {
     foo ; # This crashes without the fix for the bug
     rename foo {}
 } {}
+<<<<<<< HEAD
 
 >>>>>>> upstream/master
 test var-20.1 {array set compilation correctness: Bug 3603163} -setup {
@@ -1108,6 +1195,94 @@ test var-20.10 {[bc1a96407a] array set don't compile bad varname} -body {
     apply {{} {set name foo(bar); array set $name {a 1}}}
 } -returnCodes error -match glob -result *
 
+=======
+
+test var-20.1 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	global x
+	array set x {a 1}
+    }}
+    array size x
+} -result 1
+test var-20.2 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	global x
+	array set x {}
+    }}
+    array size x
+} -result 0
+test var-20.3 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	array set ::x {a 1}
+    }}
+    array size x
+} -result 1
+test var-20.4 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	array set ::x {}
+    }}
+    array size x
+} -result 0
+test var-20.5 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	global x
+	eval {array set x {a 1}}
+    }}
+    array size x
+} -result 1
+test var-20.6 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	global x
+	eval {array set x {}}
+    }}
+    array size x
+} -result 0
+test var-20.7 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	eval {array set ::x {a 1}}
+    }}
+    array size x
+} -result 1
+test var-20.8 {array set compilation correctness: Bug 3603163} -setup {
+    unset -nocomplain x
+} -body {
+    apply {{} {
+	eval {array set ::x {}}
+    }}
+    array size x
+} -result 0
+test var-20.9 {[bc1a96407a] array set compiled w/ trace} -setup {
+    variable foo
+    variable lambda
+    unset -nocomplain lambda foo
+    array set foo {}
+    lappend lambda {}
+    lappend lambda [list array set [namespace which -variable foo] {a 1}]
+} -body {
+    after 0 [list apply $lambda]
+    vwait [namespace which -variable foo]
+} -cleanup {
+    unset -nocomplain lambda foo
+} -result {}
+test var-20.10 {[bc1a96407a] array set don't compile bad varname} -body {
+    apply {{} {set name foo(bar); array set $name {a 1}}}
+} -returnCodes error -match glob -result *
+
+>>>>>>> upstream/master
 test var-21.0 {PushVarNameWord OBOE in compiled unset} -setup {
     proc linenumber {} {dict get [info frame -1] line}
 } -body {
@@ -1122,9 +1297,12 @@ test var-21.0 {PushVarNameWord OBOE in compiled unset} -setup {
 
 test var-22.0 {leak in array element unset: Bug a3309d01db} -setup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc getbytes {} {
 	lindex [split [memory info] \n] 3 3
     }
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     proc doit k {
@@ -1147,6 +1325,7 @@ test var-22.0 {leak in array element unset: Bug a3309d01db} -setup {
 } -cleanup {
     array unset A
 <<<<<<< HEAD
+<<<<<<< HEAD
     rename getbytes {}
     rename doit {}
 } -result 0
@@ -1156,6 +1335,11 @@ test var-22.1 {leak in localVarName intrep: Bug 80304238ac} -setup {
     proc getbytes {} {
 	lindex [split [memory info] \n] 3 3
     }
+=======
+    rename doit {}
+} -result 0
+test var-22.1 {leak in localVarName intrep: Bug 80304238ac} -setup {
+>>>>>>> upstream/master
 =======
     rename doit {}
 } -result 0
@@ -1183,11 +1367,14 @@ test var-22.1 {leak in localVarName intrep: Bug 80304238ac} -setup {
 } -cleanup {
     array unset A
 <<<<<<< HEAD
+<<<<<<< HEAD
     rename getbytes {}
     rename doit {}
 } -result 0
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     rename doit {}
 } -result 0
 test var-22.2 {leak in parsedVarName} -constraints memory -body {
@@ -1196,6 +1383,9 @@ test var-22.2 {leak in parsedVarName} -constraints memory -body {
 } -cleanup {
     unset -nocomplain i x
 } -result 0
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 

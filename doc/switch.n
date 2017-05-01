@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -134,6 +138,9 @@ patterns, and not intermingled with the patterns.
 The \fBswitch\fR command can match against variables and not just
 literals, as shown here (the result is \fI2\fR):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 .PP
 .CS
 set foo "abc"
@@ -172,6 +179,7 @@ last) is taken.  This example has a result of \fI3\fR:
 }
 .CE
 .PP
+<<<<<<< HEAD
 =======
 .PP
 .CS
@@ -211,6 +219,8 @@ last) is taken.  This example has a result of \fI3\fR:
 }
 .CE
 .PP
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 When matching against regular expressions, information about what
 exactly matched is easily obtained using the \fB\-matchvar\fR option:

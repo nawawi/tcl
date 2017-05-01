@@ -31,7 +31,11 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct PipeState {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master

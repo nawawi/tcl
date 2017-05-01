@@ -1122,7 +1122,11 @@ test expr-old-37.25 {Tcl_ExprDouble and NaN} \
     } {1 {domain error: argument not in valid range}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

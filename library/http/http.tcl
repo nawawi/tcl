@@ -28,10 +28,26 @@ namespace eval http {
 	# We need a useragent string of this style or various servers will refuse to
 	# send us compressed content even when we ask for it. This follows the
 	# de-facto layout of user-agent strings in current browsers.
+<<<<<<< HEAD
 	set http(-useragent) "Mozilla/5.0\
             ([string totitle $::tcl_platform(platform)]; U;\
             $::tcl_platform(os) $::tcl_platform(osVersion))\
             http/[package provide http] Tcl/[package provide Tcl]"
+=======
+	# Safe interpreters do not have ::tcl_platform(os) or
+	# ::tcl_platform(osVersion).
+	if {[interp issafe]} {
+	    set http(-useragent) "Mozilla/5.0\
+                (Windows; U;\
+                Windows NT 10.0)\
+                http/[package provide http] Tcl/[package provide Tcl]"
+	} else {
+	    set http(-useragent) "Mozilla/5.0\
+                ([string totitle $::tcl_platform(platform)]; U;\
+                $::tcl_platform(os) $::tcl_platform(osVersion))\
+                http/[package provide http] Tcl/[package provide Tcl]"
+	}
+>>>>>>> upstream/master
     }
 
     proc init {} {
@@ -213,6 +229,7 @@ proc http::Finish {token {errormsg ""} {skipCB 0}} {
 	    set state(error) [list $err $errorInfo $errorCode]
 	    set state(status) error
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}
     }
 }
@@ -249,6 +266,9 @@ proc ::http::CloseSocket {s {token {}}} {
 	}
 =======
 	}
+=======
+	}
+>>>>>>> upstream/master
     }
 }
 
@@ -282,6 +302,9 @@ proc ::http::CloseSocket {s {token {}}} {
         if {[catch {close $s} err]} {
 	    Log "Error: $err"
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     } else {
 	if {[info exists socketmap($conn_id)]} {
@@ -584,6 +607,7 @@ proc http::geturl {url args} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
@@ -591,10 +615,13 @@ proc http::geturl {url args} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -604,6 +631,8 @@ proc http::geturl {url args} {
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set sockopts [list -async]
     if {$state(-timeout) > 0} {
@@ -619,6 +648,7 @@ proc http::geturl {url args} {
 	set targetAddr [list $phost $pport]
     } else {
 	set targetAddr [list $host $port]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -649,6 +679,9 @@ proc http::geturl {url args} {
 =======
 >>>>>>> upstream/master
     }
+=======
+    }
+>>>>>>> upstream/master
     # Proxy connections aren't shared among different hosts.
     set state(socketinfo) $host:$port
 
@@ -675,6 +708,9 @@ proc http::geturl {url args} {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -738,6 +774,7 @@ proc http::geturl {url args} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 proc http::Connected { token proto phost srvurl} {
 =======
@@ -761,6 +798,8 @@ proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 # http::Connected --
 #
 #	Callback used when the connection to the HTTP server is actually
@@ -777,6 +816,9 @@ proc http::Connected {token proto phost srvurl} {
 proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -838,6 +880,10 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    set accept_types_seen 0
+>>>>>>> upstream/master
 =======
     set accept_types_seen 0
 >>>>>>> upstream/master
@@ -845,6 +891,7 @@ proc http::Connected {token proto phost srvurl} {
 	puts $sock "$how $srvurl HTTP/$state(-protocol)"
 	if {[dict exists $state(-headers) Host]} {
 	    # Allow Host spoofing. [Bug 928154]
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    puts $sock "Host: $hdrs(Host)"
 =======
@@ -868,6 +915,9 @@ proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+	    puts $sock "Host: [dict get $state(-headers) Host]"
+>>>>>>> upstream/master
 	} elseif {$port == $defport} {
 	    # Don't add port in this case, to handle broken servers. [Bug
 	    # #504508]
@@ -879,7 +929,10 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unset hdrs
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -904,7 +957,13 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	foreach {key value} $state(-headers) {
+=======
+	dict for {key value} $state(-headers) {
+	    set value [string map [list \n "" \r ""] $value]
+	    set key [string map {" " -} [string trim $key]]
+>>>>>>> upstream/master
 =======
 	dict for {key value} $state(-headers) {
 	    set value [string map [list \n "" \r ""] $value]
@@ -935,6 +994,7 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if {[string equal -nocase $key "content-type"]} {
 		set content_type_seen 1
 	    }
@@ -953,6 +1013,8 @@ proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	    if {[string equal -nocase $key "accept"]} {
 		set accept_types_seen 1
 	    }
@@ -961,6 +1023,9 @@ proc http::Connected {token proto phost srvurl} {
 	    }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -978,7 +1043,10 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -993,6 +1061,9 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1061,7 +1132,10 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1759,6 +1833,7 @@ proc http::CharsetToEncoding {charset} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else {
 	# other charset, like euc-xx, utf-8,...  may directly map to encoding
 	set encoding $charset
@@ -1846,6 +1921,73 @@ proc http::make-transformation-chunked {chan command} {
     return
 }
 
+=======
+    } else {
+	# other charset, like euc-xx, utf-8,...  may directly map to encoding
+	set encoding $charset
+    }
+    set idx [lsearch -exact $encodings $encoding]
+    if {$idx >= 0} {
+	return $encoding
+    } else {
+	return "binary"
+    }
+}
+
+# Return the list of content-encoding transformations we need to do in order.
+proc http::ContentEncoding {token} {
+    upvar 0 $token state
+    set r {}
+    if {[info exists state(coding)]} {
+	foreach coding [split $state(coding) ,] {
+	    switch -exact -- $coding {
+		deflate { lappend r inflate }
+		gzip - x-gzip { lappend r gunzip }
+		compress - x-compress { lappend r decompress }
+		identity {}
+		default {
+		    return -code error "unsupported content-encoding \"$coding\""
+		}
+	    }
+	}
+    }
+    return $r
+}
+
+proc http::make-transformation-chunked {chan command} {
+    set lambda {{chan command} {
+        set data ""
+        set size -1
+        yield
+        while {1} {
+            chan configure $chan -translation {crlf binary}
+            while {[gets $chan line] < 1} { yield }
+            chan configure $chan -translation {binary binary}
+            if {[scan $line %x size] != 1} { return -code error "invalid size: \"$line\"" }
+            set chunk ""
+            while {$size && ![chan eof $chan]} {
+                set part [chan read $chan $size]
+                incr size -[string length $part]
+                append chunk $part
+            }
+            if {[catch {
+		uplevel #0 [linsert $command end $chunk]
+	    }]} {
+		http::Log "Error in callback: $::errorInfo"
+	    }
+            if {[string length $chunk] == 0} {
+		# channel might have been closed in the callback
+                catch {chan event $chan readable {}}
+                return
+            }
+        }
+    }}
+    coroutine dechunk$chan ::apply $lambda $chan $command
+    chan event $chan readable [namespace origin dechunk$chan]
+    return
+}
+
+>>>>>>> upstream/master
 # Local variables:
 # indent-tabs-mode: t
 # End:

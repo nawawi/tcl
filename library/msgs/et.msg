@@ -9,6 +9,7 @@ namespace eval ::tcl::clock {
         "R"\
         "L"]
     ::msgcat::mcset et DAYS_OF_WEEK_FULL [list \
+<<<<<<< HEAD
         "p\u00fchap\u00e4ev"\
         "esmasp\u00e4ev"\
         "teisip\u00e4ev"\
@@ -20,6 +21,19 @@ namespace eval ::tcl::clock {
         "Jaan"\
         "Veebr"\
         "M\u00e4rts"\
+=======
+        "pühapäev"\
+        "esmaspäev"\
+        "teisipäev"\
+        "kolmapäev"\
+        "neljapäev"\
+        "reede"\
+        "laupäev"]
+    ::msgcat::mcset et MONTHS_ABBREV [list \
+        "Jaan"\
+        "Veebr"\
+        "Märts"\
+>>>>>>> upstream/master
         "Apr"\
         "Mai"\
         "Juuni"\
@@ -33,7 +47,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset et MONTHS_FULL [list \
         "Jaanuar"\
         "Veebruar"\
+<<<<<<< HEAD
         "M\u00e4rts"\
+=======
+        "Märts"\
+>>>>>>> upstream/master
         "Aprill"\
         "Mai"\
         "Juuni"\

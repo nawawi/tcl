@@ -547,6 +547,7 @@ DoCopyFile(
     TCLEXCEPTION_REGISTRATION registration;
 #endif
     int retval = -1;
+<<<<<<< HEAD
 
     /*
      * The CopyFile API acts differently under Win95/98 and NT WRT NULL and
@@ -563,6 +564,32 @@ DoCopyFile(
      * The CopyFile API would throw an exception under NT if one of the
      * arguments is a char block device.
      */
+=======
+
+    /*
+     * The CopyFile API acts differently under Win95/98 and NT WRT NULL and
+     * "". Avoid passing these values.
+     */
+
+    if (nativeSrc == NULL || nativeSrc[0] == '\0' ||
+	    nativeDst == NULL || nativeDst[0] == '\0') {
+	Tcl_SetErrno(ENOENT);
+	return TCL_ERROR;
+    }
+>>>>>>> upstream/master
+
+#if defined(HAVE_NO_SEH) && !defined(_WIN64)
+    /*
+<<<<<<< HEAD
+     * Don't have SEH available, do things the hard way. Note that this needs
+     * to be one block of asm, to avoid stack imbalance; also, it is illegal
+     * for one asm block to contain a jump to another.
+     */
+
+=======
+     * The CopyFile API would throw an exception under NT if one of the
+     * arguments is a char block device.
+     */
 
 #if defined(HAVE_NO_SEH) && !defined(_WIN64)
     /*
@@ -571,6 +598,7 @@ DoCopyFile(
      * for one asm block to contain a jump to another.
      */
 
+>>>>>>> upstream/master
     __asm__ __volatile__ (
 
 	/*
@@ -1526,11 +1554,16 @@ GetWinFileAttributes(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int len;
 <<<<<<< HEAD
 	const char *str = Tcl_GetStringFromObj(fileName,&len);
 =======
 	const char *str = TclGetStringFromObj(fileName,&len);
+>>>>>>> upstream/master
+=======
+	const char *str = TclGetString(fileName);
+	size_t len = fileName->length;
 >>>>>>> upstream/master
 =======
 	const char *str = TclGetString(fileName);
@@ -1626,9 +1659,14 @@ ConvertFileNameFormat(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	pathv = Tcl_GetStringFromObj(elt, &pathLen);
 =======
 	pathv = TclGetStringFromObj(elt, &pathLen);
+>>>>>>> upstream/master
+=======
+	pathv = TclGetString(elt);
+	pathLen = elt->length;
 >>>>>>> upstream/master
 =======
 	pathv = TclGetString(elt);
@@ -1672,11 +1710,16 @@ ConvertFileNameFormat(
 	    Tcl_DStringInit(&ds);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    tempString = Tcl_GetStringFromObj(tempPath,&tempLen);
 =======
 	    tempString = TclGetStringFromObj(tempPath,&tempLen);
 >>>>>>> upstream/master
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempLen, &ds);
+=======
+	    tempString = TclGetString(tempPath);
+	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);
+>>>>>>> upstream/master
 =======
 	    tempString = TclGetString(tempPath);
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);

@@ -39,7 +39,11 @@ test unixforkevent-1.1 {fork and test writeable event} \
     -result {writable} \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -cleanup { 
+=======
+    -cleanup {
+>>>>>>> upstream/master
 =======
     -cleanup {
 >>>>>>> upstream/master

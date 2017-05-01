@@ -61,11 +61,29 @@ proc traceCheck {cmd args} {
 }
 proc traceCrtElement {value name1 name2 op} {
     uplevel 1 set ${name1}($name2) $value
+<<<<<<< HEAD
+}
+proc traceCommand {oldName newName op} {
+    global info
+    set info [list $oldName $newName $op]
+=======
+>>>>>>> upstream/master
 }
 proc traceCommand {oldName newName op} {
     global info
     set info [list $oldName $newName $op]
 }
+
+test trace-0.0 {memory corruption in trace (Tcl Bug 484339)} {
+    # You may need Purify or Electric Fence to reliably
+    # see this one fail.
+    unset -nocomplain z
+    trace add variable z array {set z(foo) 1 ;#}
+    set res "names: [array names z]"
+    unset -nocomplain ::z
+    trace variable ::z w {unset ::z; error "memory corruption";#}
+    list [catch {set ::z 1} msg] $msg
+} {1 {can't set "::z": memory corruption}}
 
 test trace-0.0 {memory corruption in trace (Tcl Bug 484339)} {
     # You may need Purify or Electric Fence to reliably
@@ -166,9 +184,15 @@ test trace-1.11 {read traces that modify the array structure} {
     unset -nocomplain x
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {set x(foo) 1 ;#} 
     trace variable x r {unset -nocomplain x(bar) ;#} 
+=======
+    set x(bar) 0
+    trace variable x r {set x(foo) 1 ;#}
+    trace variable x r {unset -nocomplain x(bar) ;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {set x(foo) 1 ;#}
@@ -185,9 +209,15 @@ test trace-1.12 {read traces that modify the array structure} {
     unset -nocomplain x
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {unset -nocomplain x(bar) ;#} 
     trace variable x r {set x(foo) 1 ;#} 
+=======
+    set x(bar) 0
+    trace variable x r {unset -nocomplain x(bar) ;#}
+    trace variable x r {set x(foo) 1 ;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {unset -nocomplain x(bar) ;#}
@@ -204,9 +234,15 @@ test trace-1.13 {read traces that modify the array structure} {
     unset -nocomplain x
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {set x(foo) 1 ;#} 
     trace variable x r {unset -nocomplain x;#} 
+=======
+    set x(bar) 0
+    trace variable x r {set x(foo) 1 ;#}
+    trace variable x r {unset -nocomplain x;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {set x(foo) 1 ;#}
@@ -223,9 +259,15 @@ test trace-1.14 {read traces that modify the array structure} {
     unset -nocomplain x
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {unset -nocomplain x;#} 
     trace variable x r {set x(foo) 1 ;#} 
+=======
+    set x(bar) 0
+    trace variable x r {unset -nocomplain x;#}
+    trace variable x r {set x(foo) 1 ;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {unset -nocomplain x;#}
@@ -1645,6 +1687,7 @@ test trace-21.1 {trace execution: enter} {
 } {{foo {foo 1} enter}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
@@ -1881,6 +1924,240 @@ test trace-24.1 {delete trace during enter trace} {
     foo 1
     list $info [catch {trace info execution foo} res] $res
 } {{{foo 1} enter} 0 {}}
+=======
+
+test trace-21.2 {trace exeuction: leave} {
+    set info {}
+    trace add execution foo leave [list traceExecute foo]
+    foo 2
+    trace remove execution foo leave [list traceExecute foo]
+    set info
+} {{foo {foo 2} 0 2 leave}}
+
+test trace-21.3 {trace exeuction: enter, leave} {
+    set info {}
+    trace add execution foo {enter leave} [list traceExecute foo]
+    foo 3
+    trace remove execution foo {enter leave} [list traceExecute foo]
+    set info
+} {{foo {foo 3} enter} {foo {foo 3} 0 3 leave}}
+
+test trace-21.4 {trace execution: enter, leave, enterstep} {
+    set info {}
+    trace add execution foo {enter leave enterstep} [list traceExecute foo]
+    foo 3
+    trace remove execution foo {enter leave enterstep} [list traceExecute foo]
+    set info
+} {{foo {foo 3} enter} {foo {set b 3} enterstep} {foo {foo 3} 0 3 leave}}
+
+test trace-21.5 {trace execution: enter, leave, enterstep, leavestep} {
+    set info {}
+    trace add execution foo {enter leave enterstep leavestep} [list traceExecute foo]
+    foo 3
+    trace remove execution foo {enter leave enterstep leavestep} [list traceExecute foo]
+    set info
+} {{foo {foo 3} enter} {foo {set b 3} enterstep} {foo {set b 3} 0 3 leavestep} {foo {foo 3} 0 3 leave}}
+
+test trace-21.6 {trace execution: enterstep, leavestep} {
+    set info {}
+    trace add execution foo {enterstep leavestep} [list traceExecute foo]
+    foo 3
+    trace remove execution foo {enterstep leavestep} [list traceExecute foo]
+    set info
+} {{foo {set b 3} enterstep} {foo {set b 3} 0 3 leavestep}}
+
+test trace-21.7 {trace execution: enterstep} {
+    set info {}
+    trace add execution foo {enterstep} [list traceExecute foo]
+    foo 3
+    trace remove execution foo {enterstep} [list traceExecute foo]
+    set info
+} {{foo {set b 3} enterstep}}
+
+test trace-21.8 {trace execution: leavestep} {
+    set info {}
+    trace add execution foo {leavestep} [list traceExecute foo]
+    foo 3
+    trace remove execution foo {leavestep} [list traceExecute foo]
+    set info
+} {{foo {set b 3} 0 3 leavestep}}
+
+test trace-21.9 {trace execution: TCL_EVAL_GLOBAL} testevalobjv {
+    trace add execution foo enter soom
+    proc ::soom args {lappend ::info SUCCESS [info level]}
+    set ::info {}
+    namespace eval test_ns_1 {
+        proc soom args {lappend ::info FAIL [info level]}
+        # [testevalobjv 1 ...] ought to produce the same
+       # results as [uplevel #0 ...].
+        testevalobjv 1 foo x
+       uplevel #0 foo x
+    }
+    namespace delete test_ns_1
+    trace remove execution foo enter soom
+    set ::info
+} {SUCCESS 1 SUCCESS 1}
+
+test trace-21.10 {trace execution: TCL_EVAL_GLOBAL} testevalobjv {
+    trace add execution foo leave soom
+    proc ::soom args {lappend ::info SUCCESS [info level]}
+    set ::info {}
+    namespace eval test_ns_1 {
+        proc soom args {lappend ::info FAIL [info level]}
+        # [testevalobjv 1 ...] ought to produce the same
+       # results as [uplevel #0 ...].
+        testevalobjv 1 foo x
+       uplevel #0 foo x
+    }
+    namespace delete test_ns_1
+    trace remove execution foo leave soom
+    set ::info
+} {SUCCESS 1 SUCCESS 1}
+
+test trace-21.11 {trace execution and alias} -setup {
+    set res {}
+    proc ::x {} {return ::}
+    namespace eval a {}
+    proc ::a::x {} {return ::a}
+    interp alias {} y {} x
+} -body {
+    lappend res [namespace eval ::a y]
+    trace add execution ::x enter {
+      rename ::x {}
+	proc ::x {} {return ::}
+    #}
+    lappend res [namespace eval ::a y]
+} -cleanup {
+    namespace delete a
+    rename ::x {}
+} -result {:: ::}
+
+proc set2 args {
+    set {*}$args
+}
+
+test trace-21.12 {bug 2438181} -setup {
+    trace add execution set2 leave {puts one two three #;}
+} -body {
+    set2 a hello
+} -returnCodes 1 -result {wrong # args: should be "puts ?-nonewline? ?channelId? string"}
+
+proc factorial {n} {
+    if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }
+    return 1
+}
+
+test trace-22.1 {recursive(1) trace execution: enter} {
+    set info {}
+    trace add execution factorial {enter} [list traceExecute factorial]
+    factorial 1
+    trace remove execution factorial {enter} [list traceExecute factorial]
+    set info
+} {{factorial {factorial 1} enter}}
+
+test trace-22.2 {recursive(2) trace execution: enter} {
+    set info {}
+    trace add execution factorial {enter} [list traceExecute factorial]
+    factorial 2
+    trace remove execution factorial {enter} [list traceExecute factorial]
+    set info
+} {{factorial {factorial 2} enter} {factorial {factorial 1} enter}}
+
+test trace-22.3 {recursive(3) trace execution: enter} {
+    set info {}
+    trace add execution factorial {enter} [list traceExecute factorial]
+    factorial 3
+    trace remove execution factorial {enter} [list traceExecute factorial]
+    set info
+} {{factorial {factorial 3} enter} {factorial {factorial 2} enter} {factorial {factorial 1} enter}}
+
+test trace-23.1 {recursive(1) trace execution: enter, leave, enterstep, leavestep} {
+    set info {}
+    trace add execution factorial {enter leave enterstep leavestep} [list traceExecute]
+    factorial 1
+    trace remove execution factorial {enter leave enterstep leavestep} [list traceExecute]
+    join $info "\n"
+} {{factorial 1} enter
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} enterstep
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} 0 {} leavestep
+{return 1} enterstep
+{return 1} 2 1 leavestep
+{factorial 1} 0 1 leave}
+
+test trace-23.2 {recursive(2) trace execution: enter, leave, enterstep, leavestep} {
+    set info {}
+    trace add execution factorial {enter leave enterstep leavestep} [list traceExecute]
+    factorial 2
+    trace remove execution factorial {enter leave enterstep leavestep} [list traceExecute]
+    join $info "\n"
+} {{factorial 2} enter
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} enterstep
+{expr {$n * [factorial [expr {$n -1 }]]}} enterstep
+{expr {$n -1 }} enterstep
+{expr {$n -1 }} 0 1 leavestep
+{factorial 1} enterstep
+{factorial 1} enter
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} enterstep
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} 0 {} leavestep
+{return 1} enterstep
+{return 1} 2 1 leavestep
+{factorial 1} 0 1 leave
+{factorial 1} 0 1 leavestep
+{expr {$n * [factorial [expr {$n -1 }]]}} 0 2 leavestep
+{return 2} enterstep
+{return 2} 2 2 leavestep
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} 2 2 leavestep
+{factorial 2} 0 2 leave}
+
+test trace-23.3 {recursive(3) trace execution: enter, leave, enterstep, leavestep} {
+    set info {}
+    trace add execution factorial {enter leave enterstep leavestep} [list traceExecute]
+    factorial 3
+    trace remove execution factorial {enter leave enterstep leavestep} [list traceExecute]
+    join $info "\n"
+} {{factorial 3} enter
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} enterstep
+{expr {$n * [factorial [expr {$n -1 }]]}} enterstep
+{expr {$n -1 }} enterstep
+{expr {$n -1 }} 0 2 leavestep
+{factorial 2} enterstep
+{factorial 2} enter
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} enterstep
+{expr {$n * [factorial [expr {$n -1 }]]}} enterstep
+{expr {$n -1 }} enterstep
+{expr {$n -1 }} 0 1 leavestep
+{factorial 1} enterstep
+{factorial 1} enter
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} enterstep
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} 0 {} leavestep
+{return 1} enterstep
+{return 1} 2 1 leavestep
+{factorial 1} 0 1 leave
+{factorial 1} 0 1 leavestep
+{expr {$n * [factorial [expr {$n -1 }]]}} 0 2 leavestep
+{return 2} enterstep
+{return 2} 2 2 leavestep
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} 2 2 leavestep
+{factorial 2} 0 2 leave
+{factorial 2} 0 2 leavestep
+{expr {$n * [factorial [expr {$n -1 }]]}} 0 6 leavestep
+{return 6} enterstep
+{return 6} 2 6 leavestep
+{if {$n != 1} { return [expr {$n * [factorial [expr {$n -1 }]]}] }} 2 6 leavestep
+{factorial 3} 0 6 leave}
+
+proc traceDelete {cmd args} {
+    trace remove execution $cmd {*}[lindex [trace info execution $cmd] 0]
+    global info
+    set info $args
+}
+
+test trace-24.1 {delete trace during enter trace} {
+    set info {}
+    trace add execution foo enter [list traceDelete foo]
+    foo 1
+    list $info [catch {trace info execution foo} res] $res
+} {{{foo 1} enter} 0 {}}
 
 test trace-24.2 {delete trace during leave trace} {
     set info {}
@@ -1889,6 +2166,714 @@ test trace-24.2 {delete trace during leave trace} {
     list $info [catch {trace info execution foo} res] $res
 } {{{foo 1} 0 1 leave} 0 {}}
 
+test trace-24.3 {delete trace during enter-leave trace} {
+    set info {}
+    trace add execution foo {enter leave} [list traceDelete foo]
+    foo 1
+    list $info [catch {trace info execution foo} res] $res
+} {{{foo 1} enter} 0 {}}
+
+test trace-24.4 {delete trace during all exec traces} {
+    set info {}
+    trace add execution foo {enter leave enterstep leavestep} [list traceDelete foo]
+    foo 1
+    list $info [catch {trace info execution foo} res] $res
+} {{{foo 1} enter} 0 {}}
+
+test trace-24.5 {delete trace during all exec traces except enter} {
+    set info {}
+    trace add execution foo {leave enterstep leavestep} [list traceDelete foo]
+    foo 1
+    list $info [catch {trace info execution foo} res] $res
+} {{{set b 1} enterstep} 0 {}}
+
+proc traceDelete {cmd args} {
+    rename $cmd {}
+    global info
+    set info $args
+}
+
+proc foo {a} {
+    set b $a
+}
+
+test trace-25.1 {delete command during enter trace} {
+    set info {}
+    trace add execution foo enter [list traceDelete foo]
+    catch {foo 1} err
+    list $err $info [catch {trace info execution foo} res] $res
+} {{invalid command name "foo"} {{foo 1} enter} 1 {unknown command "foo"}}
+
+proc foo {a} {
+    set b $a
+}
+
+test trace-25.2 {delete command during leave trace} {
+    set info {}
+    trace add execution foo leave [list traceDelete foo]
+    foo 1
+    list $info [catch {trace info execution foo} res] $res
+} {{{foo 1} 0 1 leave} 1 {unknown command "foo"}}
+
+proc foo {a} {
+    set b $a
+}
+
+test trace-25.3 {delete command during enter then leave trace} {
+    set info {}
+    trace add execution foo enter [list traceDelete foo]
+    trace add execution foo leave [list traceDelete foo]
+    catch {foo 1} err
+    list $err $info [catch {trace info execution foo} res] $res
+} {{invalid command name "foo"} {{foo 1} enter} 1 {unknown command "foo"}}
+
+proc foo {a} {
+    set b $a
+}
+proc traceExecute2 {args} {
+    global info
+    lappend info $args
+}
+
+# This shows the peculiar consequences of having two traces
+# at the same time: as well as tracing the procedure you want
+test trace-25.4 {order dependencies of two enter traces} {
+    set info {}
+    trace add execution foo enter [list traceExecute traceExecute]
+    trace add execution foo enter [list traceExecute2 traceExecute2]
+    catch {foo 1} err
+    trace remove execution foo enter [list traceExecute traceExecute]
+    trace remove execution foo enter [list traceExecute2 traceExecute2]
+    join [list $err [join $info \n] [trace info execution foo]] "\n"
+} {1
+traceExecute2 {foo 1} enter
+traceExecute {foo 1} enter
+}
+
+test trace-25.5 {order dependencies of two step traces} {
+    set info {}
+    trace add execution foo enterstep [list traceExecute traceExecute]
+    trace add execution foo enterstep [list traceExecute2 traceExecute2]
+    catch {foo 1} err
+    trace remove execution foo enterstep [list traceExecute traceExecute]
+    trace remove execution foo enterstep [list traceExecute2 traceExecute2]
+    join [list $err [join $info \n] [trace info execution foo]] "\n"
+} {1
+traceExecute2 {set b 1} enterstep
+traceExecute {set b 1} enterstep
+}
+
+# We don't want the result string (5th argument), or the results
+# will get unmanageable.
+proc tracePostExecute {args} {
+    global info
+    lappend info [concat [lrange $args 0 2] [lindex $args 4]]
+}
+proc tracePostExecute2 {args} {
+    global info
+    lappend info [concat [lrange $args 0 2] [lindex $args 4]]
+}
+
+test trace-25.6 {order dependencies of two leave traces} {
+    set info {}
+    trace add execution foo leave [list tracePostExecute tracePostExecute]
+    trace add execution foo leave [list tracePostExecute2 tracePostExecute2]
+    catch {foo 1} err
+    trace remove execution foo leave [list tracePostExecute tracePostExecute]
+    trace remove execution foo leave [list tracePostExecute2 tracePostExecute2]
+    join [list $err [join $info \n] [trace info execution foo]] "\n"
+} {1
+tracePostExecute {foo 1} 0 leave
+tracePostExecute2 {foo 1} 0 leave
+}
+
+test trace-25.7 {order dependencies of two leavestep traces} {
+    set info {}
+    trace add execution foo leavestep [list tracePostExecute tracePostExecute]
+    trace add execution foo leavestep [list tracePostExecute2 tracePostExecute2]
+    catch {foo 1} err
+    trace remove execution foo leavestep [list tracePostExecute tracePostExecute]
+    trace remove execution foo leavestep [list tracePostExecute2 tracePostExecute2]
+    join [list $err [join $info \n] [trace info execution foo]] "\n"
+} {1
+tracePostExecute {set b 1} 0 leavestep
+tracePostExecute2 {set b 1} 0 leavestep
+}
+
+proc foo {a} {
+    set b $a
+}
+
+proc traceDelete {cmd args} {
+    rename $cmd {}
+    global info
+    set info $args
+}
+
+test trace-25.8 {delete command during enter leave and enter/leave-step traces} {
+    set info {}
+    trace add execution foo enter [list traceDelete foo]
+    trace add execution foo leave [list traceDelete foo]
+    trace add execution foo enterstep [list traceDelete foo]
+    trace add execution foo leavestep [list traceDelete foo]
+    catch {foo 1} err
+    list $err $info [catch {trace info execution foo} res] $res
+} {{invalid command name "foo"} {{foo 1} enter} 1 {unknown command "foo"}}
+
+proc foo {a} {
+    set b $a
+}
+
+test trace-25.9 {delete command during enter leave and leavestep traces} {
+    set info {}
+    trace add execution foo enter [list traceDelete foo]
+    trace add execution foo leave [list traceDelete foo]
+    trace add execution foo leavestep [list traceDelete foo]
+    catch {foo 1} err
+    list $err $info [catch {trace info execution foo} res] $res
+} {{invalid command name "foo"} {{foo 1} enter} 1 {unknown command "foo"}}
+
+proc foo {a} {
+    set b $a
+}
+
+test trace-25.10 {delete command during leave and leavestep traces} {
+    set info {}
+    trace add execution foo leave [list traceDelete foo]
+    trace add execution foo leavestep [list traceDelete foo]
+    catch {foo 1} err
+    list $err $info [catch {trace info execution foo} res] $res
+} {1 {{set b 1} 0 1 leavestep} 1 {unknown command "foo"}}
+
+proc foo {a} {
+    set b $a
+}
+
+test trace-25.11 {delete command during enter and enterstep traces} {
+    set info {}
+    trace add execution foo enter [list traceDelete foo]
+    trace add execution foo enterstep [list traceDelete foo]
+    catch {foo 1} err
+    list $err $info [catch {trace info execution foo} res] $res
+} {{invalid command name "foo"} {{foo 1} enter} 1 {unknown command "foo"}}
+
+test trace-26.1 {trace targetCmd when invoked through an alias} {
+    proc foo {args} {
+	set b $args
+    }
+    set info {}
+    trace add execution foo enter [list traceExecute foo]
+    interp alias {} bar {} foo 1
+    bar 2
+    trace remove execution foo enter [list traceExecute foo]
+    set info
+} {{foo {foo 1 2} enter}}
+test trace-26.2 {trace targetCmd when invoked through an alias} {
+    proc foo {args} {
+	set b $args
+    }
+    set info {}
+    trace add execution foo enter [list traceExecute foo]
+    interp create child
+    interp alias child bar {} foo 1
+    child eval bar 2
+    interp delete child
+    trace remove execution foo enter [list traceExecute foo]
+    set info
+} {{foo {foo 1 2} enter}}
+
+test trace-27.1 {memory leak in rename trace (604609)} {
+    catch {rename bar {}}
+    proc foo {} {error foo}
+    trace add command foo rename {rename foo "" ;#}
+    rename foo bar
+    info commands foo
+} {}
+
+test trace-27.2 {command trace remove nonsense} {
+    list [catch {trace remove command thisdoesntexist \
+      {delete rename} bar} res] $res
+} {1 {unknown command "thisdoesntexist"}}
+
+test trace-27.3 {command trace info nonsense} {
+    list [catch {trace info command thisdoesntexist} res] $res
+} {1 {unknown command "thisdoesntexist"}}
+
+
+test trace-28.1 {enterstep and leavestep traces with update idletasks (615043)} {
+    catch {rename foo {}}
+    proc foo {} {
+        set a 1
+        update idletasks
+        set b 1
+    }
+
+    set info {}
+    trace add execution foo {enter enterstep leavestep leave} \
+        [list traceExecute foo]
+    update
+    after idle {set a "idle"}
+    foo
+
+    trace remove execution foo {enter enterstep leavestep leave} \
+        [list traceExecute foo]
+    rename foo {}
+    unset -nocomplain a
+    join $info "\n"
+} {foo foo enter
+foo {set a 1} enterstep
+foo {set a 1} 0 1 leavestep
+foo {update idletasks} enterstep
+foo {set a idle} enterstep
+foo {set a idle} 0 idle leavestep
+foo {update idletasks} 0 {} leavestep
+foo {set b 1} enterstep
+foo {set b 1} 0 1 leavestep
+foo foo 0 1 leave}
+
+test trace-28.2 {exec traces with 'error'} {
+    set info {}
+    set res {}
+
+    proc foo {} {
+	if {[catch {bar}]} {
+	    return "error"
+	} else {
+	    return "ok"
+	}
+    }
+
+    proc bar {} { error "msg" }
+
+    lappend res [foo]
+
+    trace add execution foo {enter enterstep leave leavestep} \
+      [list traceExecute foo]
+
+    # With the trace active
+
+    lappend res [foo]
+
+    trace remove execution foo {enter enterstep leave leavestep} \
+      [list traceExecute foo]
+
+    list $res [join $info \n]
+} {{error error} {foo foo enter
+foo {if {[catch {bar}]} {
+	    return "error"
+	} else {
+	    return "ok"
+	}} enterstep
+foo {catch bar} enterstep
+foo bar enterstep
+foo {error msg} enterstep
+foo {error msg} 1 msg leavestep
+foo bar 1 msg leavestep
+foo {catch bar} 0 1 leavestep
+foo {return error} enterstep
+foo {return error} 2 error leavestep
+foo {if {[catch {bar}]} {
+	    return "error"
+	} else {
+	    return "ok"
+	}} 2 error leavestep
+foo foo 0 error leave}}
+
+test trace-28.3 {exec traces with 'return -code error'} {
+    set info {}
+    set res {}
+
+    proc foo {} {
+	if {[catch {bar}]} {
+	    return "error"
+	} else {
+	    return "ok"
+	}
+    }
+
+    proc bar {} { return -code error "msg" }
+
+    lappend res [foo]
+
+    trace add execution foo {enter enterstep leave leavestep} \
+      [list traceExecute foo]
+
+    # With the trace active
+
+    lappend res [foo]
+
+    trace remove execution foo {enter enterstep leave leavestep} \
+      [list traceExecute foo]
+
+    list $res [join $info \n]
+} {{error error} {foo foo enter
+foo {if {[catch {bar}]} {
+	    return "error"
+	} else {
+	    return "ok"
+	}} enterstep
+foo {catch bar} enterstep
+foo bar enterstep
+foo {return -code error msg} enterstep
+foo {return -code error msg} 2 msg leavestep
+foo bar 1 msg leavestep
+foo {catch bar} 0 1 leavestep
+foo {return error} enterstep
+foo {return error} 2 error leavestep
+foo {if {[catch {bar}]} {
+	    return "error"
+	} else {
+	    return "ok"
+	}} 2 error leavestep
+foo foo 0 error leave}}
+
+test trace-28.4 {exec traces in slave with 'return -code error'} {
+    interp create slave
+    interp alias slave traceExecute {} traceExecute
+    set info {}
+    set res [interp eval slave {
+	set info {}
+	set res {}
+
+	proc foo {} {
+	    if {[catch {bar}]} {
+		return "error"
+	    } else {
+		return "ok"
+	    }
+	}
+
+	proc bar {} { return -code error "msg" }
+
+	lappend res [foo]
+
+	trace add execution foo {enter enterstep leave leavestep} \
+	  [list traceExecute foo]
+
+	# With the trace active
+
+	lappend res [foo]
+
+	trace remove execution foo {enter enterstep leave leavestep} \
+	  [list traceExecute foo]
+
+	list $res
+    }]
+    interp delete slave
+    lappend res [join $info \n]
+} {{error error} {foo foo enter
+foo {if {[catch {bar}]} {
+		return "error"
+	    } else {
+		return "ok"
+	    }} enterstep
+foo {catch bar} enterstep
+foo bar enterstep
+foo {return -code error msg} enterstep
+foo {return -code error msg} 2 msg leavestep
+foo bar 1 msg leavestep
+foo {catch bar} 0 1 leavestep
+foo {return error} enterstep
+foo {return error} 2 error leavestep
+foo {if {[catch {bar}]} {
+		return "error"
+	    } else {
+		return "ok"
+	    }} 2 error leavestep
+foo foo 0 error leave}}
+
+test trace-28.5 {exec traces} {
+    set info {}
+    proc foo {args} { set a 1 }
+    trace add execution foo {enter enterstep leave leavestep} \
+      [list traceExecute foo]
+    after idle [list foo test-28.4]
+    update
+    # Complicated way of removing traces
+    set ti [lindex [eval [list trace info execution ::foo]] 0]
+    if {[llength $ti]} {
+	eval [concat [list trace remove execution foo] $ti]
+    }
+    join $info \n
+} {foo {foo test-28.4} enter
+foo {set a 1} enterstep
+foo {set a 1} 0 1 leavestep
+foo {foo test-28.4} 0 1 leave}
+
+test trace-28.6 {exec traces firing order} {
+    set info {}
+    proc enterStep {cmd op} {lappend ::info "enter $cmd/$op"}
+    proc leaveStep {cmd code result op} {lappend ::info "leave $cmd/$code/$result/$op"}
+
+    proc foo x {
+	set b x=$x
+	incr x
+    }
+    trace add execution foo enterstep enterStep
+    trace add execution foo leavestep leaveStep
+    foo 42
+    rename foo {}
+    join $info \n
+} {enter set b x=42/enterstep
+leave set b x=42/0/x=42/leavestep
+enter incr x/enterstep
+leave incr x/0/43/leavestep}
+
+test trace-28.7 {exec trace information} {
+    set info {}
+    proc foo x { incr x }
+    proc bar {args} {}
+    trace add execution foo {enter leave enterstep leavestep} bar
+    set info [trace info execution foo]
+    trace remove execution foo {enter leave enterstep leavestep} bar
+} {}
+
+test trace-28.8 {exec trace remove nonsense} {
+    list [catch {trace remove execution thisdoesntexist \
+      {enter leave enterstep leavestep} bar} res] $res
+} {1 {unknown command "thisdoesntexist"}}
+
+test trace-28.9 {exec trace info nonsense} {
+    list [catch {trace info execution thisdoesntexist} res] $res
+} {1 {unknown command "thisdoesntexist"}}
+
+test trace-28.10 {exec trace info nonsense} {
+    list [catch {trace remove execution} res] $res
+} {1 {wrong # args: should be "trace remove execution name opList command"}}
+
+test trace-29.1 {Tcl_CreateTrace, correct command and argc/argv arguments of trace proc} {testcmdtrace} {
+    testcmdtrace tracetest {set stuff [expr 14 + 16]}
+} {{expr 14 + 16} {expr 14 + 16} {set stuff [expr 14 + 16]} {set stuff 30}}
+test trace-29.2 {Tcl_CreateTrace, correct command and argc/argv arguments of trace proc} {testcmdtrace} {
+    testcmdtrace tracetest {set stuff [info tclversion]}
+} [concat {{info tclversion} {info tclversion} ::tcl::info::tclversion {::tcl::info::tclversion} {set stuff [info tclversion]}} [list "set stuff [info tclversion]"]]
+test trace-29.3 {Tcl_CreateTrace, correct command and argc/argv arguments of trace proc} {testcmdtrace} {
+    testcmdtrace deletetest {set stuff [info tclversion]}
+} [info tclversion]
+test trace-29.4 {Tcl_CreateTrace, check that tracing doesn't cause memory faults} {testcmdtrace} {
+    # Note that the proc call is the same as the variable name, and that
+    # the call can be direct or indirect by way of another procedure
+    proc tracer {args} {}
+    proc tracedLoop {level} {
+	incr level
+	tracer
+	foreach tracer [expr {$level==1 ? {1 2} : {}}] {tracedLoop $level}
+    }
+    testcmdtrace tracetest {tracedLoop 0}
+} {{tracedLoop 0} {tracedLoop 0} {incr level} {incr level} tracer {tracer} {expr {$level==1 ? {1 2} : {}}} {expr {$level==1 ? {1 2} : {}}} {foreach tracer [expr {$level==1 ? {1 2} : {}}] {tracedLoop $level}} {foreach tracer {1 2} {tracedLoop $level}} {tracedLoop $level} {tracedLoop 1} {incr level} {incr level} tracer {tracer} {expr {$level==1 ? {1 2} : {}}} {expr {$level==1 ? {1 2} : {}}} {foreach tracer [expr {$level==1 ? {1 2} : {}}] {tracedLoop $level}} {foreach tracer {} {tracedLoop $level}} {tracedLoop $level} {tracedLoop 1} {incr level} {incr level} tracer {tracer} {expr {$level==1 ? {1 2} : {}}} {expr {$level==1 ? {1 2} : {}}} {foreach tracer [expr {$level==1 ? {1 2} : {}}] {tracedLoop $level}} {foreach tracer {} {tracedLoop $level}}}
+catch {rename tracer {}}
+catch {rename tracedLoop {}}
+
+test trace-29.5 {Tcl_CreateObjTrace, status return TCL_ERROR} {testcmdtrace} {
+    proc Error { args } { error "Shouldn't get here" }
+    set x 1;
+    list [catch {testcmdtrace resulttest {Error $x}} result] [set result]
+} {1 {Error $x}}
+
+test trace-29.6 {Tcl_CreateObjTrace, status return TCL_RETURN} {testcmdtrace} {
+    proc Return { args } { error "Shouldn't get here" }
+    set x 1;
+    list [catch {testcmdtrace resulttest {Return $x}} result] [set result]
+} {2 {}}
+
+test trace-29.7 {Tcl_CreateObjTrace, status return TCL_BREAK} {testcmdtrace} {
+    proc Break { args } { error "Shouldn't get here" }
+    set x 1;
+    list [catch {testcmdtrace resulttest {Break $x}} result] [set result]
+} {3 {}}
+
+test trace-29.8 {Tcl_CreateObjTrace, status return TCL_CONTINUE} {testcmdtrace} {
+    proc Continue { args } { error "Shouldn't get here" }
+    set x 1;
+    list [catch {testcmdtrace resulttest {Continue $x}} result] [set result]
+} {4 {}}
+
+test trace-29.9 {Tcl_CreateObjTrace, status return unknown} {testcmdtrace} {
+    proc OtherStatus { args } { error "Shouldn't get here" }
+    set x 1;
+    list [catch {testcmdtrace resulttest {OtherStatus $x}} result] [set result]
+} {6 {}}
+
+test trace-29.10 {Tcl_CreateTrace, correct level interpretation} {testcmdtrace} {
+    proc foo {} {uplevel 1 bar}
+    proc bar {} {uplevel 1 grok}
+    proc grok {} {uplevel 1 spock}
+    proc spock {} {uplevel 1 fascinating}
+    proc fascinating {} {}
+    testcmdtrace leveltest {foo}
+} {foo {foo} {uplevel 1 bar} {uplevel 1 bar} bar {bar} {uplevel 1 grok} {uplevel 1 grok}}
+
+test trace-29.11 {Tcl_CreateTrace, multiple traces} {testcmdtrace} {
+    testcmdtrace doubletest {format xx}
+} {{format xx} {format xx}}
+
+test trace-30.1 {Tcl_DeleteTrace} {emptyTest} {
+    # the above tests have tested Tcl_DeleteTrace
+} {}
+
+test trace-31.1 {command and execution traces shared struct} {
+    # Tcl Bug 807243
+    proc foo {} {}
+    trace add command foo delete foo
+    trace add execution foo enter foo
+    set result [trace info command foo]
+    trace remove command foo delete foo
+    trace remove execution foo enter foo
+    rename foo {}
+    set result
+} [list [list delete foo]]
+test trace-31.2 {command and execution traces shared struct} {
+    # Tcl Bug 807243
+    proc foo {} {}
+    trace add command foo delete foo
+    trace add execution foo enter foo
+    set result [trace info execution foo]
+    trace remove command foo delete foo
+    trace remove execution foo enter foo
+    rename foo {}
+    set result
+} [list [list enter foo]]
+
+test trace-32.1 {
+    TraceCommandInfo refcount decr in TraceCommandProc w/o loss of reference
+} {
+    # Tcl Bug 811483
+    proc foo {} {}
+    trace add command foo delete foo
+    trace add execution foo enter foo
+    set result [trace info command foo]
+    rename foo {}
+    set result
+} [list [list delete foo]]
+
+test trace-33.1 {variable match with remove variable} {
+    unset -nocomplain x
+    trace variable x w foo
+    trace remove variable x write foo
+    llength [trace info variable x]
+} 0
+
+test trace-34.1 {Bug 1201035} {
+    set ::x [list]
+    proc foo {} {lappend ::x foo}
+    proc bar args {
+        lappend ::x $args
+        trace remove execution foo leavestep bar
+        trace remove execution foo enterstep bar
+        trace add execution foo leavestep bar
+        trace add execution foo enterstep bar
+        lappend ::x done
+    }
+    trace add execution foo leavestep bar
+    trace add execution foo enterstep bar
+    foo
+    set ::x
+} {{{lappend ::x foo} enterstep} done foo}
+
+test trace-34.2 {Bug 1224585} {
+    proc foo {} {}
+    proc bar args {trace remove execution foo leave soom}
+    trace add execution foo leave bar
+    trace add execution foo leave soom
+    foo
+} {}
+
+test trace-34.3 {Bug 1224585} {
+    proc foo {} {set x {}}
+    proc bar args {trace remove execution foo enterstep soom}
+    trace add execution foo enterstep soom
+    trace add execution foo enterstep bar
+    foo
+} {}
+
+# We test here for the half-documented and currently valid interplay between
+# delete traces and namespace deletion.
+test trace-34.4 {Bug 1047286} {
+    variable x notrace
+    proc callback {old - -} {
+        variable x "$old exists: [namespace which -command $old]"
+    }
+    namespace eval ::foo {proc bar {} {}}
+    trace add command ::foo::bar delete [namespace code callback]
+    namespace delete ::foo
+    set x
+} {::foo::bar exists: ::foo::bar}
+
+test trace-34.5 {Bug 1047286} {
+    variable x notrace
+    proc callback {old - -} {
+        variable x "$old exists: [namespace which -command $old]"
+    }
+    namespace eval ::foo {proc bar {} {}}
+    trace add command ::foo::bar delete [namespace code callback]
+    namespace eval ::foo namespace delete ::foo
+    set x
+} {::foo::bar exists: }
+
+test trace-34.6 {Bug 1458266} -setup {
+    proc dummy {} {}
+    proc stepTraceHandler {cmdString args} {
+        variable log
+        append log "[expr {[info level] - 1}]: [lindex [split $cmdString] 0]\n"
+        dummy
+        isTracedInside_2
+    }
+    proc cmdTraceHandler {cmdString args} {
+        # silent
+    }
+    proc isTracedInside_1 {} {
+        isTracedInside_2
+    }
+    proc isTracedInside_2 {} {
+        set x 2
+    }
+} -body {
+    variable log {}
+    trace add execution isTracedInside_1 enterstep stepTraceHandler
+    trace add execution isTracedInside_2 enterstep stepTraceHandler
+    isTracedInside_1
+    variable first $log
+    set log {}
+    trace add execution dummy enter cmdTraceHandler
+    isTracedInside_1
+    variable second $log
+    expr {($first eq $second) ? "ok" : "\n$first\nand\n\n$second\ndiffer"}
+} -cleanup {
+    unset -nocomplain log first second
+    rename dummy {}
+    rename stepTraceHandler {}
+    rename cmdTraceHandler {}
+    rename isTracedInside_1 {}
+    rename isTracedInside_2 {}
+} -result ok
+
+test trace-35.1 {527164: Keep -errorinfo of traces} -setup {
+    unset -nocomplain x y
+} -body {
+    trace add variable x write {error foo;#}
+    trace add variable y write {set x 2;#}
+    list [catch {set y 1} msg opts] $msg [dict get $opts -errorinfo]
+} -cleanup {
+    unset -nocomplain x y
+} -result {1 {can't set "y": can't set "x": foo} {foo
+    while executing
+"error foo"
+    (write trace on "x")
+    invoked from within
+"set x 2"
+    (write trace on "y")
+    invoked from within
+"set y 1"}}
+>>>>>>> upstream/master
+
+test trace-24.2 {delete trace during leave trace} {
+    set info {}
+    trace add execution foo leave [list traceDelete foo]
+    foo 1
+    list $info [catch {trace info execution foo} res] $res
+} {{{foo 1} 0 1 leave} 0 {}}
+
+<<<<<<< HEAD
 test trace-24.3 {delete trace during enter-leave trace} {
     set info {}
     trace add execution foo {enter leave} [list traceDelete foo]
@@ -3356,6 +4341,104 @@ test trace-39 {bug #3484621: tracing Bc'ed commands} -setup {
 =======
 
 >>>>>>> upstream/master
+=======
+#
+# Test for the correct(?) dynamics of execution traces. This test insures that
+# the dynamics of the original implementation remain valid; note that
+# these aspects are neither documented nor do they appear in TIP 62
+
+proc traceproc {tracevar args} {
+    append ::$tracevar *
+}
+proc untraced {type} {
+    trace add execution untraced $type {traceproc tracevar}
+    append ::tracevar -
+}
+proc runbase {results base} {
+    set tt {enter leave enterstep leavestep}
+    foreach n {1 2 3 4} t $tt r $results {
+	eval [subst $base]
+    }
+}
+set base {
+    test trace-36.$n {dynamic trace creation: $t} -setup {
+	set ::tracevar {}
+    } -cleanup {
+	unset ::tracevar
+	trace remove execution untraced $t {traceproc tracevar}
+    } -body {
+	untraced $t
+	set ::tracevar
+    } -result {$r}
+}
+runbase {- - - -} $base
+
+set base {
+    test trace-37.$n {dynamic trace addition: $t} -setup {
+	set ::tracevar {}
+	set ::tracevar2 {}
+	trace add execution untraced enter {traceproc tracevar2}
+    } -cleanup {
+	trace remove execution untraced $t {traceproc tracevar}
+	trace remove execution untraced enter {traceproc tracevar2}
+	unset ::tracevar ::tracevar2
+    } -body {
+	untraced $t
+	list \$::tracevar \$::tracevar2
+    } -result {$r}
+}
+runbase {{- *} {-* *} {- *} {- *}} $base
+
+set base {
+    test trace-38.$n {dynamic trace addition: $t} -setup {
+	set ::tracevar {}
+	set ::tracevar2 {}
+	trace add execution untraced leave {traceproc tracevar2}
+    } -cleanup {
+	trace remove execution untraced $t {traceproc tracevar}
+	trace remove execution untraced leave {traceproc tracevar2}
+	unset ::tracevar ::tracevar2
+    } -body {
+	untraced $t
+	list \$::tracevar \$::tracevar2
+    } -result {$r}
+}
+runbase {{- *} {-* *} {- *} {- *}} $base
+
+test trace-39 {bug #3484621: tracing Bc'ed commands} -setup {
+    set ::traceLog 0
+    set ::traceCalls 0
+    set ::bar [list 0 1 2 3]
+    set res {}
+    proc dotrace args {
+	incr ::traceLog
+    }
+    proc foo {} {
+	incr ::traceCalls
+	# choose a BC'ed command that is 'unlikely' to interfere with tcltest's
+	# internals
+	lset ::bar 1 2
+    }
+} -body {
+    foo
+    lappend res $::traceLog
+
+    trace add execution lset enter dotrace
+    foo
+    lappend res $::traceLog
+
+    trace remove execution lset enter dotrace
+    foo
+    lappend res $::traceLog
+
+    list $::traceCalls | {*}$res
+} -cleanup {
+    unset ::traceLog ::traceCalls ::bar res
+    rename dotrace {}
+    rename foo {}
+} -result {3 | 0 1 1}
+
+>>>>>>> upstream/master
 test trace-39.1 {bug #3485022: tracing Bc'ed commands} -setup {
     set ::traceLog 0
     set ::traceCalls 0
@@ -3394,7 +4477,11 @@ test trace-40.1 {execution trace errors become command errors} {
 } bar
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

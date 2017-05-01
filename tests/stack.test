@@ -10,6 +10,7 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
@@ -53,6 +54,23 @@ test stack-1.1 {maxNestingDepth reached on infinite recursion} -body {
     }
 } -result {too many nested evaluations (infinite loop?)}
 
+=======
+
+package require tcltest 2
+namespace import ::tcltest::*
+
+# Note that a failure in this test may result in a crash of the executable.
+
+test stack-1.1 {maxNestingDepth reached on infinite recursion} -body {
+    # do this in a sub process in case it segfaults
+    exec [interpreter] << {
+	proc recurse {} { recurse }
+	catch { recurse } rv
+	puts $rv
+    }
+} -result {too many nested evaluations (infinite loop?)}
+
+>>>>>>> upstream/master
 test stack-2.1 {maxNestingDepth reached on infinite recursion} -body {
     # do this in a sub process in case it segfaults
     exec [interpreter] << {
@@ -62,11 +80,14 @@ test stack-2.1 {maxNestingDepth reached on infinite recursion} -body {
     }
 } -result {too many nested evaluations (infinite loop?)}
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
     }
 } -result {too many nested evaluations (infinite loop?)}
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Make sure that there is enough stack to run regexp even if we're
 # close to the recursion limit. [Bug 947070] [Patch 746378]

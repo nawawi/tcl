@@ -19,7 +19,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ca MONTHS_ABBREV [list \
         "gen."\
         "feb."\
+<<<<<<< HEAD
         "mar\u00e7"\
+=======
+        "març"\
+>>>>>>> upstream/master
         "abr."\
         "maig"\
         "juny"\
@@ -33,7 +37,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ca MONTHS_FULL [list \
         "gener"\
         "febrer"\
+<<<<<<< HEAD
         "mar\u00e7"\
+=======
+        "març"\
+>>>>>>> upstream/master
         "abril"\
         "maig"\
         "juny"\

@@ -18,7 +18,11 @@
 typedef struct AcceptCallback {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     char *script;		/* Script to invoke. */
+=======
+    Tcl_Obj *script;		/* Script to invoke. */
+>>>>>>> upstream/master
 =======
     Tcl_Obj *script;		/* Script to invoke. */
 >>>>>>> upstream/master
@@ -33,7 +37,11 @@ typedef struct AcceptCallback {
  * It must be per-thread because of std channel limitations.
  */
 
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
     int initialized;		/* Set to 1 when the module is initialized. */
     Tcl_Obj *stdoutObjPtr;	/* Cached stdout channel Tcl_Obj */
 } ThreadSpecificData;
@@ -47,8 +55,12 @@ static Tcl_ThreadDataKey dataKey;
 static void		FinalizeIOCmdTSD(ClientData clientData);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		AcceptCallbackProc(ClientData callbackData,
 			    Tcl_Channel chan, char *address, int port);
+=======
+static Tcl_TcpAcceptProc AcceptCallbackProc;
+>>>>>>> upstream/master
 =======
 static Tcl_TcpAcceptProc AcceptCallbackProc;
 >>>>>>> upstream/master
@@ -130,7 +142,10 @@ Tcl_PutsObjCmd(
     int newline;		/* Add a newline at end? */
     int result;			/* Result of puts operation. */
     int mode;			/* Mode in which channel is opened. */
+<<<<<<< HEAD
     ThreadSpecificData *tsdPtr;
+=======
+>>>>>>> upstream/master
 
     switch (objc) {
     case 2:			/* [puts $x] */
@@ -177,7 +192,11 @@ Tcl_PutsObjCmd(
     }
 
     if (chanObjPtr == NULL) {
+<<<<<<< HEAD
 	tsdPtr = TCL_TSD_INIT(&dataKey);
+=======
+	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+>>>>>>> upstream/master
 
 	if (!tsdPtr->initialized) {
 	    tsdPtr->initialized = 1;
@@ -632,6 +651,9 @@ Tcl_TellObjCmd(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
     /*
      * Try to find a channel with the right name and permissions in the IO
      * channel table of this interpreter.
@@ -657,6 +679,7 @@ Tcl_TellObjCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
 =======
     /*
      * Try to find a channel with the right name and permissions in the IO
@@ -683,6 +706,8 @@ Tcl_TellObjCmd(
 	return TCL_ERROR;
     }
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_SetObjResult(interp, Tcl_NewWideIntObj(newLoc));
     return TCL_OK;
@@ -1419,6 +1444,7 @@ AcceptCallbackProc(
     if (acceptCallbackPtr->interp != NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	char portBuf[TCL_INTEGER_SPACE];
 	char *script = acceptCallbackPtr->script;
 	Tcl_Interp *interp = acceptCallbackPtr->interp;
@@ -1429,6 +1455,8 @@ AcceptCallbackProc(
 
 	TclFormatInt(portBuf, port);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	Tcl_Interp *interp = acceptCallbackPtr->interp;
@@ -1448,6 +1476,9 @@ AcceptCallbackProc(
 
 	Tcl_Preserve(interp);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1462,8 +1493,14 @@ AcceptCallbackProc(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	result = Tcl_VarEval(interp, script, " ", Tcl_GetChannelName(chan),
 		" ", address, " ", portBuf, NULL);
+=======
+	result = Tcl_EvalObjEx(interp, script, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
+	Tcl_DecrRefCount(script);
+
+>>>>>>> upstream/master
 =======
 	result = Tcl_EvalObjEx(interp, script, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
 	Tcl_DecrRefCount(script);
@@ -1478,6 +1515,7 @@ AcceptCallbackProc(
 	    Tcl_BackgroundException(interp, result);
 	    Tcl_UnregisterChannel(interp, chan);
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -1528,6 +1566,23 @@ AcceptCallbackProc(
 =======
 
 >>>>>>> upstream/master
+=======
+
+	/*
+	 * Decrement the artificially bumped refcount. After this it is not
+	 * safe anymore to use "chan", because it may now be deleted.
+	 */
+
+	Tcl_UnregisterChannel(NULL, chan);
+
+	Tcl_Release(interp);
+    } else {
+	/*
+	 * The interpreter has been deleted, so there is no useful way to use
+	 * the client socket - just close it.
+	 */
+
+>>>>>>> upstream/master
 	Tcl_Close(NULL, chan);
     }
 }
@@ -1567,7 +1622,11 @@ TcpServerCloseProc(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_EventuallyFree(acceptCallbackPtr->script, TCL_DYNAMIC);
+=======
+    Tcl_DecrRefCount(acceptCallbackPtr->script);
+>>>>>>> upstream/master
 =======
     Tcl_DecrRefCount(acceptCallbackPtr->script);
 >>>>>>> upstream/master
@@ -1602,6 +1661,7 @@ Tcl_SocketObjCmd(
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
     static const char *const socketOptions[] = {
+<<<<<<< HEAD
 	"-async", "-myaddr", "-myport", "-server", NULL
     };
     enum socketOptions {
@@ -1617,6 +1677,20 @@ Tcl_SocketObjCmd(
 >>>>>>> upstream/master
 =======
     const char *host, *myaddr = NULL;
+    Tcl_Obj *script = NULL;
+>>>>>>> upstream/master
+=======
+	"-async", "-myaddr", "-myport", "-reuseaddr", "-reuseport", "-server",
+	NULL
+    };
+    enum socketOptions {
+	SKT_ASYNC, SKT_MYADDR, SKT_MYPORT, SKT_REUSEADDR, SKT_REUSEPORT,
+	SKT_SERVER
+    };
+    int optionIndex, a, server = 0, myport = 0, async = 0, reusep = -1,
+	reusea = -1;
+    unsigned int flags = 0;
+    const char *host, *port, *myaddr = NULL;
     Tcl_Obj *script = NULL;
 >>>>>>> upstream/master
     Tcl_Channel chan;
@@ -1667,6 +1741,9 @@ Tcl_SocketObjCmd(
 		return TCL_ERROR;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	    }
@@ -1678,6 +1755,7 @@ Tcl_SocketObjCmd(
 			"cannot set -async option for server sockets", -1));
 		return TCL_ERROR;
 	    }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 	    }
@@ -1712,6 +1790,38 @@ Tcl_SocketObjCmd(
 	    }
 	    script = objv[a];
 >>>>>>> upstream/master
+=======
+	    server = 1;
+	    a++;
+	    if (a >= objc) {
+		Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			"no argument given for -server option", -1));
+		return TCL_ERROR;
+	    }
+	    script = objv[a];
+	    break;
+	case SKT_REUSEADDR:
+	    a++;
+	    if (a >= objc) {
+		Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			"no argument given for -reuseaddr option", -1));
+		return TCL_ERROR;
+	    }
+	    if (Tcl_GetBooleanFromObj(interp, objv[a], &reusea) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+	    break;
+	case SKT_REUSEPORT:
+	    a++;
+	    if (a >= objc) {
+		Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			"no argument given for -reuseport option", -1));
+		return TCL_ERROR;
+	    }
+	    if (Tcl_GetBooleanFromObj(interp, objv[a], &reusep) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+>>>>>>> upstream/master
 	    break;
 	default:
 	    Tcl_Panic("Tcl_SocketObjCmd: bad option index to SocketOptions");
@@ -1736,6 +1846,7 @@ Tcl_SocketObjCmd(
 		"?-myaddr addr? ?-myport myport? ?-async? host port");
 	iPtr->flags |= INTERP_ALTERNATE_WRONG_ARGS;
 	Tcl_WrongNumArgs(interp, 1, objv,
+<<<<<<< HEAD
 		"-server command ?-myaddr addr? port");
 	return TCL_ERROR;
     }
@@ -1746,10 +1857,56 @@ Tcl_SocketObjCmd(
 	    return TCL_ERROR;
 	}
     } else {
+=======
+		"-server command ?-reuseaddr boolean? ?-reuseport boolean? "
+		"?-myaddr addr? port");
+	return TCL_ERROR;
+    }
+
+    if (!server && (reusea != -1 || reusep != -1)) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		"options -reuseaddr and -reuseport are only valid for servers",
+		-1));
+	return TCL_ERROR;
+    }
+
+    /*
+     * Set the options to their default value if the user didn't override
+     * their value.
+     */
+
+    if (reusep == -1) {
+	reusep = 0;
+    }
+    if (reusea == -1) {
+	reusea = 1;
+    }
+
+    /*
+     * Build the bitset with the flags values.
+     */
+
+    if (reusea) {
+	flags |= TCL_TCPSERVER_REUSEADDR;
+    }
+    if (reusep) {
+	flags |= TCL_TCPSERVER_REUSEPORT;
+    }
+
+    /*
+     * All the arguments should have been parsed by now, 'a' points to the
+     * last one, the port number.
+     */
+
+    if (a != objc-1) {
+>>>>>>> upstream/master
 	goto wrongNumArgs;
     }
 
+    port = TclGetString(objv[a]);
+
     if (server) {
+<<<<<<< HEAD
 	AcceptCallback *acceptCallbackPtr =
 		ckalloc(sizeof(AcceptCallback));
 <<<<<<< HEAD
@@ -1782,6 +1939,18 @@ Tcl_SocketObjCmd(
 =======
 	    Tcl_DecrRefCount(script);
 >>>>>>> upstream/master
+=======
+	AcceptCallback *acceptCallbackPtr = ckalloc(sizeof(AcceptCallback));
+
+	Tcl_IncrRefCount(script);
+	acceptCallbackPtr->script = script;
+	acceptCallbackPtr->interp = interp;
+
+	chan = Tcl_OpenTcpServerEx(interp, port, host, flags,
+		AcceptCallbackProc, acceptCallbackPtr);
+	if (chan == NULL) {
+	    Tcl_DecrRefCount(script);
+>>>>>>> upstream/master
 	    ckfree(acceptCallbackPtr);
 	    return TCL_ERROR;
 	}
@@ -1803,7 +1972,17 @@ Tcl_SocketObjCmd(
 
 	Tcl_CreateCloseHandler(chan, TcpServerCloseProc, acceptCallbackPtr);
     } else {
+<<<<<<< HEAD
 	chan = Tcl_OpenTcpClient(interp, port, host, myaddr, myport, async);
+=======
+	int portNum;
+
+	if (TclSockGetPort(interp, port, "tcp", &portNum) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+
+	chan = Tcl_OpenTcpClient(interp, portNum, host, myaddr, myport, async);
+>>>>>>> upstream/master
 	if (chan == NULL) {
 	    return TCL_ERROR;
 	}

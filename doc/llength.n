@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -59,7 +63,11 @@ An empty list is not necessarily an empty string:
 .SH "SEE ALSO"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), lsearch(n), 
+=======
+list(n), lappend(n), lindex(n), linsert(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), lindex(n), linsert(n), lsearch(n),
 >>>>>>> upstream/master

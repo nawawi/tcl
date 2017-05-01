@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -62,7 +66,11 @@ of Tcl and evaluation of a script contained in a file given as
 a command line argument.  \fBTcl_Main\fR is offered as a convenience
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 to developers of shell applications, so they do not have to 
+=======
+to developers of shell applications, so they do not have to
+>>>>>>> upstream/master
 =======
 to developers of shell applications, so they do not have to
 >>>>>>> upstream/master
@@ -124,7 +132,11 @@ call in the same thread.  The stored file name is returned,
 and the stored encoding name is written to space pointed to
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 by \fIencodingPtr\fR, when that is not NULL.  
+=======
+by \fIencodingPtr\fR, when that is not NULL.
+>>>>>>> upstream/master
 =======
 by \fIencodingPtr\fR, when that is not NULL.
 >>>>>>> upstream/master
@@ -162,7 +174,11 @@ for the application to perform its own initialization of the interpreter
 created by \fBTcl_Main\fR, such as defining application-specific
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 commands.  The application initialization routine might also 
+=======
+commands.  The application initialization routine might also
+>>>>>>> upstream/master
 =======
 commands.  The application initialization routine might also
 >>>>>>> upstream/master
@@ -173,6 +189,7 @@ call \fBTcl_SetStartupScript\fR to (re-)set the file and encoding
 to be used as a startup script.  The procedure must have an interface
 that matches the type \fBTcl_AppInitProc\fR:
 .PP
+<<<<<<< HEAD
 .CS
 typedef int \fBTcl_AppInitProc\fR(
         Tcl_Interp *\fIinterp\fR);
@@ -212,6 +229,47 @@ The main loop procedure must have an interface that matches the type
 typedef void \fBTcl_MainLoopProc\fR(void);
 .CE
 .PP
+=======
+.CS
+typedef int \fBTcl_AppInitProc\fR(
+        Tcl_Interp *\fIinterp\fR);
+.CE
+.PP
+\fIAppInitProc\fR is almost always a pointer to \fBTcl_AppInit\fR; for more
+details on this procedure, see the documentation for \fBTcl_AppInit\fR.
+.PP
+When the \fIappInitProc\fR is finished, \fBTcl_Main\fR calls
+\fBTcl_GetStartupScript\fR to determine what startup script has
+been requested, if any.  If a startup script has been provided,
+\fBTcl_Main\fR attempts to evaluate it.  Otherwise, interactive
+mode begins with examination of the variable \fItcl_rcFileName\fR
+in the master interpreter.  If that variable exists and holds the
+name of a readable file, the contents of that file are evaluated
+in the master interpreter.  Then interactive operations begin,
+with prompts and command evaluation results written to the standard
+output channel, and commands read from the standard input channel
+and then evaluated.  The prompts written to the standard output
+channel may be customized by defining the Tcl variables \fItcl_prompt1\fR
+and \fItcl_prompt2\fR as described in the documentation for \fBtclsh\fR.
+The prompts and command evaluation results are written to the standard
+output channel only if the Tcl variable \fItcl_interactive\fR in the
+master interpreter holds a non-zero integer value.
+.PP
+\fBTcl_SetMainLoop\fR allows setting an event loop procedure to be run.
+This allows, for example, Tk to be dynamically loaded and set its event
+loop.  The event loop will run following the startup script.  If you
+are in interactive mode, setting the main loop procedure will cause the
+prompt to become fileevent based and then the loop procedure is called.
+When the loop procedure returns in interactive mode, interactive operation
+will continue.
+The main loop procedure must have an interface that matches the type
+\fBTcl_MainLoopProc\fR:
+.PP
+.CS
+typedef void \fBTcl_MainLoopProc\fR(void);
+.CE
+.PP
+>>>>>>> upstream/master
 \fBTcl_Main\fR does not return.  Normally a program based on
 \fBTcl_Main\fR will terminate when the \fBexit\fR command is
 evaluated.  In interactive mode, if an EOF or channel error

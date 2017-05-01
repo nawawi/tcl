@@ -76,6 +76,15 @@ typedef struct {
 #define PROCESSOR_ARCHITECTURE_UNKNOWN		0xFFFF
 #endif
 
+
+/*
+ * Windows version dependend functions
+ */
+static TclWinProcs _tclWinProcs = {
+    NULL
+};
+TclWinProcs *tclWinProcs = &_tclWinProcs;
+
 /*
  * The following arrays contain the human readable strings for the Windows
  * platform and processor values.
@@ -132,6 +141,10 @@ TclpInitPlatform(void)
 {
     WSADATA wsaData;
     WORD wVersionRequested = MAKEWORD(2, 2);
+<<<<<<< HEAD
+=======
+    HINSTANCE hInstance;
+>>>>>>> upstream/master
 
     tclPlatform = TCL_PLATFORM_WINDOWS;
 
@@ -150,6 +163,16 @@ TclpInitPlatform(void)
 
     TclWinInit(GetModuleHandle(NULL));
 #endif
+
+    /*
+     * Fill available functions depending on windows version
+     */
+    hInstance = LoadLibraryW(L"kernel32");
+    if (hInstance != NULL) {
+	_tclWinProcs.cancelSynchronousIo =
+	    (BOOL (WINAPI *)(HANDLE)) GetProcAddress(hInstance,
+	    "CancelSynchronousIo");
+    }
 }
 
 /*
@@ -216,6 +239,7 @@ TclpInitLibraryPath(
     *encodingPtr = NULL;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     bytes = TclGetStringFromObj(pathPtr, lengthPtr);
@@ -223,10 +247,15 @@ TclpInitLibraryPath(
     *valuePtr = ckalloc((*lengthPtr) + 1);
     memcpy(*valuePtr, bytes, (size_t)(*lengthPtr)+1);
 =======
+=======
+>>>>>>> upstream/master
     bytes = TclGetString(pathPtr);
     *lengthPtr = pathPtr->length;
     *valuePtr = ckalloc(*lengthPtr + 1);
     memcpy(*valuePtr, bytes, *lengthPtr + 1);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_DecrRefCount(pathPtr);
 }

@@ -22,7 +22,11 @@ proc ulam2 {n} {
 	jump start;     # max n
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -40,7 +44,11 @@ proc ulam2 {n} {
 	dup;            # n n
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -54,6 +62,7 @@ proc ulam2 {n} {
 	jumpTrue odd;   # max n
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	push 2;         # max n 2
 	div;            # max n/2 -> max n
@@ -62,12 +71,17 @@ proc ulam2 {n} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 	push 2;         # max n 2
 	div;            # max n/2 -> max n
 	jump start;     # max n
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -78,7 +92,11 @@ proc ulam2 {n} {
 	add;            # max 3*n+1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -92,7 +110,11 @@ proc ulam2 {n} {
 	jumpTrue loop;	# max n
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -108,7 +130,11 @@ proc test1 {n} {
     for {set i 1} {$i <= $n} {incr i} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ulam1 $i  
+=======
+	ulam1 $i
+>>>>>>> upstream/master
 =======
 	ulam1 $i
 >>>>>>> upstream/master
@@ -121,7 +147,11 @@ proc test2 {n} {
     for {set i 1} {$i <= $n} {incr i} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ulam2 $i  
+=======
+	ulam2 $i
+>>>>>>> upstream/master
 =======
 	ulam2 $i
 >>>>>>> upstream/master
@@ -139,7 +169,11 @@ for {set j 0} {$j < 10} {incr j} {
     puts "compiled: [expr {1e-6 * ($after - $before)}]"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -154,7 +188,10 @@ for {set j 0} {$j < 10} {incr j} {
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

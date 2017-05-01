@@ -566,7 +566,11 @@ TclUnixCopyFile(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define DEFAULT_COPY_BLOCK_SIZE 4069
+=======
+#define DEFAULT_COPY_BLOCK_SIZE 4096
+>>>>>>> upstream/master
 =======
 #define DEFAULT_COPY_BLOCK_SIZE 4096
 >>>>>>> upstream/master
@@ -606,6 +610,7 @@ TclUnixCopyFile(
 #else
     blockSize = DEFAULT_COPY_BLOCK_SIZE;
 #endif /* HAVE_STRUCT_STAT_ST_BLKSIZE */
+<<<<<<< HEAD
 
     /*
      * [SF Tcl Bug 1586470] Even if we HAVE_STRUCT_STAT_ST_BLKSIZE, there are
@@ -615,6 +620,17 @@ TclUnixCopyFile(
      * default size.
      */
 
+=======
+
+    /*
+     * [SF Tcl Bug 1586470] Even if we HAVE_STRUCT_STAT_ST_BLKSIZE, there are
+     * filesystems which report a bogus value for the blocksize. An example
+     * is the Andrew Filesystem (afs), reporting a blocksize of 0. When
+     * detecting such a situation we now simply fall back to a hardwired
+     * default size.
+     */
+
+>>>>>>> upstream/master
     if (blockSize <= 0) {
 	blockSize = DEFAULT_COPY_BLOCK_SIZE;
     }
@@ -1780,6 +1796,7 @@ GetModeFromPermString(
 	switch (*(modeStringPtr+i)) {
 	case 'r':
 	    if ((i%3) != 0) {
+<<<<<<< HEAD
 		goto chmodStyleCheck;
 	    }
 	    newMode |= (1<<(8-i));
@@ -1801,6 +1818,29 @@ GetModeFromPermString(
 		goto chmodStyleCheck;
 	    }
 	    newMode |= (1<<(8-i));
+=======
+		goto chmodStyleCheck;
+	    }
+	    newMode |= (1<<(8-i));
+	    break;
+	case 'w':
+	    if ((i%3) != 1) {
+		goto chmodStyleCheck;
+	    }
+	    newMode |= (1<<(8-i));
+	    break;
+	case 'x':
+	    if ((i%3) != 2) {
+		goto chmodStyleCheck;
+	    }
+	    newMode |= (1<<(8-i));
+	    break;
+	case 's':
+	    if (((i%3) != 2) || (i > 5)) {
+		goto chmodStyleCheck;
+	    }
+	    newMode |= (1<<(8-i));
+>>>>>>> upstream/master
 	    newMode |= (1<<(11-(i/3)));
 	    break;
 	case 'S':
@@ -1870,6 +1910,7 @@ GetModeFromPermString(
 		case '+':
 		    op = 1;
 		    op_found = 1;
+<<<<<<< HEAD
 		    continue;
 		case '-':
 		    op = 2;
@@ -1879,6 +1920,17 @@ GetModeFromPermString(
 		    op = 3;
 		    op_found = 1;
 		    continue;
+=======
+		    continue;
+		case '-':
+		    op = 2;
+		    op_found = 1;
+		    continue;
+		case '=':
+		    op = 3;
+		    op_found = 1;
+		    continue;
+>>>>>>> upstream/master
 		default:
 		    return TCL_ERROR;
 		}
@@ -1955,9 +2007,14 @@ TclpObjNormalizePath(
     char cur;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *path = Tcl_GetStringFromObj(pathPtr, &pathLen);
 =======
     const char *path = TclGetStringFromObj(pathPtr, &pathLen);
+>>>>>>> upstream/master
+=======
+    const char *path = TclGetString(pathPtr);
+    size_t pathLen = pathPtr->length;
 >>>>>>> upstream/master
 =======
     const char *path = TclGetString(pathPtr);
@@ -2200,11 +2257,16 @@ TclUnixOpenTemporaryFile(
     if (dirObj) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(dirObj, &len);
 =======
 	string = TclGetStringFromObj(dirObj, &len);
 >>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &template);
+=======
+	string = TclGetString(dirObj);
+	Tcl_UtfToExternalDString(NULL, string, dirObj->length, &template);
+>>>>>>> upstream/master
 =======
 	string = TclGetString(dirObj);
 	Tcl_UtfToExternalDString(NULL, string, dirObj->length, &template);
@@ -2219,11 +2281,16 @@ TclUnixOpenTemporaryFile(
     if (basenameObj) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(basenameObj, &len);
 =======
 	string = TclGetStringFromObj(basenameObj, &len);
 >>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &tmp);
+=======
+	string = TclGetString(basenameObj);
+	Tcl_UtfToExternalDString(NULL, string, basenameObj->length, &tmp);
+>>>>>>> upstream/master
 =======
 	string = TclGetString(basenameObj);
 	Tcl_UtfToExternalDString(NULL, string, basenameObj->length, &tmp);
@@ -2240,11 +2307,16 @@ TclUnixOpenTemporaryFile(
     if (extensionObj) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(extensionObj, &len);
 =======
 	string = TclGetStringFromObj(extensionObj, &len);
 >>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &tmp);
+=======
+	string = TclGetString(extensionObj);
+	Tcl_UtfToExternalDString(NULL, string, extensionObj->length, &tmp);
+>>>>>>> upstream/master
 =======
 	string = TclGetString(extensionObj);
 	Tcl_UtfToExternalDString(NULL, string, extensionObj->length, &tmp);

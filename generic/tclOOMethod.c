@@ -71,10 +71,15 @@ static int		InvokeProcedureMethod(ClientData clientData,
 			    Tcl_Interp *interp, Tcl_ObjectContext context,
 			    int objc, Tcl_Obj *const *objv);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeForwardCall(ClientData data[], Tcl_Interp *interp,
 			    int result);
 static int		FinalizePMCall(ClientData data[], Tcl_Interp *interp,
 			    int result);
+=======
+static Tcl_NRPostProc	FinalizeForwardCall;
+static Tcl_NRPostProc	FinalizePMCall;
+>>>>>>> upstream/master
 =======
 static Tcl_NRPostProc	FinalizeForwardCall;
 static Tcl_NRPostProc	FinalizePMCall;
@@ -1174,7 +1179,11 @@ MethodErrorHandler(
     Method *mPtr = contextPtr->callPtr->chain[contextPtr->index].mPtr;
     const char *objectName, *kindName, *methodName =
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(mPtr->namePtr, &nameLen);
+=======
+	    TclGetStringFromObj(mPtr->namePtr, &nameLen);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(mPtr->namePtr, &nameLen);
 >>>>>>> upstream/master
@@ -1468,12 +1477,18 @@ InvokeForwardMethod(
 	    numPrefixes, prefixObjs, &len);
     Tcl_NRAddCallback(interp, FinalizeForwardCall, argObjs, NULL, NULL, NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     /*
      * NOTE: The combination of direct set of iPtr->lookupNsPtr and the use
      * of the TCL_EVAL_NOERR flag results in an evaluation configuration
      * very much like TCL_EVAL_INVOKE.
      */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ((Interp *)interp)->lookupNsPtr
 	    = (Namespace *) contextPtr->oPtr->namespacePtr;
@@ -1612,12 +1627,18 @@ InitEnsembleRewrite(
 				 * array of rewritten arguments. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
     int isRootEnsemble = (iPtr->ensembleRewrite.sourceObjs == NULL);
     Tcl_Obj **argObjs;
     unsigned len = rewriteLength + objc - toRewrite;
 
     argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
+=======
+    unsigned len = rewriteLength + objc - toRewrite;
+    Tcl_Obj **argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
+
+>>>>>>> upstream/master
 =======
     unsigned len = rewriteLength + objc - toRewrite;
     Tcl_Obj **argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
@@ -1637,6 +1658,7 @@ InitEnsembleRewrite(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (isRootEnsemble) {
 	iPtr->ensembleRewrite.sourceObjs = objv;
 	iPtr->ensembleRewrite.numRemovedObjs = toRewrite;
@@ -1653,6 +1675,11 @@ InitEnsembleRewrite(
 	}
     }
 
+=======
+    if (TclInitRewriteEnsemble(interp, toRewrite, rewriteLength, objv)) {
+	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
+    }
+>>>>>>> upstream/master
 =======
     if (TclInitRewriteEnsemble(interp, toRewrite, rewriteLength, objv)) {
 	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);

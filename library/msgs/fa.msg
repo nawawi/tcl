@@ -1,6 +1,7 @@
 # created by tools/loadICU.tcl -- do not edit
 namespace eval ::tcl::clock {
     ::msgcat::mcset fa DAYS_OF_WEEK_ABBREV [list \
+<<<<<<< HEAD
         "\u06cc\u2214"\
         "\u062f\u2214"\
         "\u0633\u2214"\
@@ -43,5 +44,49 @@ namespace eval ::tcl::clock {
         "\u0627\u0643\u062a\u0628\u0631"\
         "\u0646\u0648\u0627\u0645\u0628\u0631"\
         "\u062f\u0633\u0627\u0645\u0628\u0631"\
+=======
+        "ی∔"\
+        "د∔"\
+        "س∔"\
+        "چ∔"\
+        "پ∔"\
+        "ج∔"\
+        "ش∔"]
+    ::msgcat::mcset fa DAYS_OF_WEEK_FULL [list \
+        "یی‌شنبه"\
+        "دوشنبه"\
+        "سه‌شنبه"\
+        "چهارشنبه"\
+        "پنج‌شنبه"\
+        "جمعه"\
+        "شنبه"]
+    ::msgcat::mcset fa MONTHS_ABBREV [list \
+        "ژان"\
+        "فور"\
+        "مار"\
+        "آور"\
+        "مـه"\
+        "ژون"\
+        "ژوی"\
+        "اوت"\
+        "سپت"\
+        "اكت"\
+        "نوا"\
+        "دسا"\
+        ""]
+    ::msgcat::mcset fa MONTHS_FULL [list \
+        "ژانویه"\
+        "فورویه"\
+        "مارس"\
+        "آوریل"\
+        "مه"\
+        "ژوئن"\
+        "ژوئیه"\
+        "اوت"\
+        "سپتامبر"\
+        "اكتبر"\
+        "نوامبر"\
+        "دسامبر"\
+>>>>>>> upstream/master
         ""]
 }

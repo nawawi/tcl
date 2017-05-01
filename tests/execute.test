@@ -700,7 +700,11 @@ test execute-6.12 {Tcl_ExprObj: exprcode interp validation} -setup {
     interp create slave
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     interp alias {} e slave expr 
+=======
+    interp alias {} e slave expr
+>>>>>>> upstream/master
 =======
     interp alias {} e slave expr
 >>>>>>> upstream/master
@@ -787,6 +791,9 @@ test execute-6.18 {Tcl_ExprObj: exprcode context validation} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -960,6 +967,9 @@ test execute-8.3 {Stack restoration} -setup {
 } -result {too many nested evaluations (infinite loop?)}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test execute-8.4 {Compile epoch bump effect on stack trace} -setup {
@@ -1013,6 +1023,7 @@ test execute-9.1 {Interp result resetting [Bug 1522803]} {
 } SUCCESS
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 test execute-7.0 {Wide int handling in INST_JUMP_FALSE/LAND} {
@@ -1440,6 +1451,8 @@ test execute-9.1 {Interp result resetting [Bug 1522803]} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1470,8 +1483,13 @@ test execute-10.3 {Bug 3072640} -setup {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc t {args} { 
 	incr ::foo 
+=======
+    proc t {args} {
+	incr ::foo
+>>>>>>> upstream/master
 =======
     proc t {args} {
 	incr ::foo
@@ -1495,6 +1513,7 @@ test execute-10.3 {Bug 3072640} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
     interp create slave
@@ -1519,6 +1538,8 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
     interp create slave
@@ -1538,6 +1559,9 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1560,8 +1584,11 @@ test execute-11.2 {Bug 268b23df11} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1580,6 +1607,9 @@ test execute-11.3 {Bug a0ece9d6d4} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -901,15 +901,21 @@ Tcl_AfterObjCmd(
 	    commandPtr = Tcl_ConcatObj(objc-2, objv+2);;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(commandPtr, &length);
 	for (afterPtr = assocPtr->firstAfterPtr;  afterPtr != NULL;
 		afterPtr = afterPtr->nextPtr) {
 	    tempCommand = Tcl_GetStringFromObj(afterPtr->commandPtr,
 =======
+=======
+>>>>>>> upstream/master
 	command = TclGetStringFromObj(commandPtr, &length);
 	for (afterPtr = assocPtr->firstAfterPtr;  afterPtr != NULL;
 		afterPtr = afterPtr->nextPtr) {
 	    tempCommand = TclGetStringFromObj(afterPtr->commandPtr,
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 		    &tempLength);
 	    if ((length == tempLength)
@@ -1055,11 +1061,36 @@ AfterDelay(
 #ifndef TCL_WIDE_INT_IS_LONG
 	    if (diff > LONG_MAX) {
 		diff = LONG_MAX;
+<<<<<<< HEAD
+=======
 	    }
 #endif
 	    if (diff > TCL_TIME_MAXIMUM_SLICE) {
 		diff = TCL_TIME_MAXIMUM_SLICE;
 	    }
+            if (diff == 0 && TCL_TIME_BEFORE(now, endTime)) {
+                diff = 1;
+            }
+	    if (diff > 0) {
+		Tcl_Sleep((long) diff);
+                if (diff < SLEEP_OFFLOAD_GETTIMEOFDAY) {
+                    break;
+                }
+	    } else {
+                break;
+            }
+	} else {
+	    diff = TCL_TIME_DIFF_MS(iPtr->limit.time, now);
+#ifndef TCL_WIDE_INT_IS_LONG
+	    if (diff > LONG_MAX) {
+		diff = LONG_MAX;
+>>>>>>> upstream/master
+	    }
+#endif
+	    if (diff > TCL_TIME_MAXIMUM_SLICE) {
+		diff = TCL_TIME_MAXIMUM_SLICE;
+	    }
+<<<<<<< HEAD
             if (diff == 0 && TCL_TIME_BEFORE(now, endTime)) diff = 1;
 	    if (diff > 0) {
 		Tcl_Sleep((long) diff);
@@ -1075,6 +1106,8 @@ AfterDelay(
 	    if (diff > TCL_TIME_MAXIMUM_SLICE) {
 		diff = TCL_TIME_MAXIMUM_SLICE;
 	    }
+=======
+>>>>>>> upstream/master
 	    if (diff > 0) {
 		Tcl_Sleep((long) diff);
 	    }

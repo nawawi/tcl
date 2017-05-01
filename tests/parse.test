@@ -371,7 +371,11 @@ test parse-8.8 {Tcl_EvalObjv procedure, async handlers} -constraints {
     proc async1 {result code} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	variable ::aresult 
+=======
+	variable ::aresult
+>>>>>>> upstream/master
 =======
 	variable ::aresult
 >>>>>>> upstream/master

@@ -2,7 +2,11 @@
 
 set TZData(:Antarctica/Macquarie) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-9223372036854775808 0 0 zzz}
+=======
+    {-9223372036854775808 0 0 -00}
+>>>>>>> upstream/master
 =======
     {-9223372036854775808 0 0 -00}
 >>>>>>> upstream/master
@@ -11,7 +15,11 @@ set TZData(:Antarctica/Macquarie) {
     {-1669892400 39600 0 AEDT}
     {-1665392400 36000 0 AEST}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1601719200 0 0 zzz}
+=======
+    {-1601719200 0 0 -00}
+>>>>>>> upstream/master
 =======
     {-1601719200 0 0 -00}
 >>>>>>> upstream/master
@@ -101,5 +109,9 @@ set TZData(:Antarctica/Macquarie) {
     {1223136000 39600 1 AEDT}
     {1238860800 36000 0 AEST}
     {1254585600 39600 1 AEDT}
+<<<<<<< HEAD
     {1270310400 39600 0 MIST}
+=======
+    {1270310400 39600 0 +11}
+>>>>>>> upstream/master
 }

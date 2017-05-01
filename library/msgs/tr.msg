@@ -4,27 +4,45 @@ namespace eval ::tcl::clock {
         "Paz"\
         "Pzt"\
         "Sal"\
+<<<<<<< HEAD
         "\u00c7ar"\
+=======
+        "Çar"\
+>>>>>>> upstream/master
         "Per"\
         "Cum"\
         "Cmt"]
     ::msgcat::mcset tr DAYS_OF_WEEK_FULL [list \
         "Pazar"\
         "Pazartesi"\
+<<<<<<< HEAD
         "Sal\u0131"\
         "\u00c7ar\u015famba"\
         "Per\u015fembe"\
+=======
+        "Salı"\
+        "Çarşamba"\
+        "Perşembe"\
+>>>>>>> upstream/master
         "Cuma"\
         "Cumartesi"]
     ::msgcat::mcset tr MONTHS_ABBREV [list \
         "Oca"\
+<<<<<<< HEAD
         "\u015eub"\
+=======
+        "Şub"\
+>>>>>>> upstream/master
         "Mar"\
         "Nis"\
         "May"\
         "Haz"\
         "Tem"\
+<<<<<<< HEAD
         "A\u011fu"\
+=======
+        "Ağu"\
+>>>>>>> upstream/master
         "Eyl"\
         "Eki"\
         "Kas"\
@@ -32,6 +50,7 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset tr MONTHS_FULL [list \
         "Ocak"\
+<<<<<<< HEAD
         "\u015eubat"\
         "Mart"\
         "Nisan"\
@@ -43,6 +62,19 @@ namespace eval ::tcl::clock {
         "Ekim"\
         "Kas\u0131m"\
         "Aral\u0131k"\
+=======
+        "Şubat"\
+        "Mart"\
+        "Nisan"\
+        "Mayıs"\
+        "Haziran"\
+        "Temmuz"\
+        "Ağustos"\
+        "Eylül"\
+        "Ekim"\
+        "Kasım"\
+        "Aralık"\
+>>>>>>> upstream/master
         ""]
     ::msgcat::mcset tr DATE_FORMAT "%d.%m.%Y"
     ::msgcat::mcset tr TIME_FORMAT "%H:%M:%S"

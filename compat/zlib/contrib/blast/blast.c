@@ -1,7 +1,13 @@
 /* blast.c
+<<<<<<< HEAD
  * Copyright (C) 2003, 2012 Mark Adler
  * For conditions of distribution and use, see copyright notice in blast.h
  * version 1.2, 24 Oct 2012
+=======
+ * Copyright (C) 2003, 2012, 2013 Mark Adler
+ * For conditions of distribution and use, see copyright notice in blast.h
+ * version 1.3, 24 Aug 2013
+>>>>>>> upstream/master
  *
  * blast.c decompresses data compressed by the PKWare Compression Library.
  * This function provides functionality similar to the explode() function of
@@ -24,8 +30,17 @@
  * 1.1  16 Feb 2003     - Fixed distance check for > 4 GB uncompressed data
  * 1.2  24 Oct 2012     - Add note about using binary mode in stdio
  *                      - Fix comparisons of differently signed integers
+<<<<<<< HEAD
  */
 
+=======
+ * 1.3  24 Aug 2013     - Return unused input from blast()
+ *                      - Fix test code to correctly report unused input
+ *                      - Enable the provision of initial input to blast()
+ */
+
+#include <stddef.h>             /* for NULL */
+>>>>>>> upstream/master
 #include <setjmp.h>             /* for setjmp(), longjmp(), and jmp_buf */
 #include "blast.h"              /* prototype for blast() */
 
@@ -256,7 +271,11 @@ local int construct(struct huffman *h, const unsigned char *rep, int n)
  *   next, 0 for literals, 1 for length/distance.
  *
  * - If literals are uncoded, then the next eight bits are the literal, in the
+<<<<<<< HEAD
  *   normal bit order in th stream, i.e. no bit-reversal is needed. Similarly,
+=======
+ *   normal bit order in the stream, i.e. no bit-reversal is needed. Similarly,
+>>>>>>> upstream/master
  *   no bit reversal is needed for either the length extra bits or the distance
  *   extra bits.
  *
@@ -376,7 +395,12 @@ local int decomp(struct state *s)
 }
 
 /* See comments in blast.h */
+<<<<<<< HEAD
 int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow)
+=======
+int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
+          unsigned *left, unsigned char **in)
+>>>>>>> upstream/master
 {
     struct state s;             /* input/output state */
     int err;                    /* return value */
@@ -384,7 +408,16 @@ int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow)
     /* initialize input state */
     s.infun = infun;
     s.inhow = inhow;
+<<<<<<< HEAD
     s.left = 0;
+=======
+    if (left != NULL && *left) {
+        s.left = *left;
+        s.in = *in;
+    }
+    else
+        s.left = 0;
+>>>>>>> upstream/master
     s.bitbuf = 0;
     s.bitcnt = 0;
 
@@ -400,6 +433,15 @@ int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow)
     else
         err = decomp(&s);               /* decompress */
 
+<<<<<<< HEAD
+=======
+    /* return unused input */
+    if (left != NULL)
+        *left = s.left;
+    if (in != NULL)
+        *in = s.left ? s.in : NULL;
+
+>>>>>>> upstream/master
     /* write any leftover output and update the error code if needed */
     if (err != 1 && s.next && s.outfun(s.outhow, s.out, s.next) && err == 0)
         err = 1;
@@ -429,6 +471,7 @@ local int outf(void *how, unsigned char *buf, unsigned len)
 /* Decompress a PKWare Compression Library stream from stdin to stdout */
 int main(void)
 {
+<<<<<<< HEAD
     int ret, n;
 
     /* decompress to stdout */
@@ -439,6 +482,22 @@ int main(void)
     n = 0;
     while (getchar() != EOF) n++;
     if (n) fprintf(stderr, "blast warning: %d unused bytes of input\n", n);
+=======
+    int ret;
+    unsigned left;
+
+    /* decompress to stdout */
+    left = 0;
+    ret = blast(inf, stdin, outf, stdout, &left, NULL);
+    if (ret != 0)
+        fprintf(stderr, "blast error: %d\n", ret);
+
+    /* count any leftover bytes */
+    while (getchar() != EOF)
+        left++;
+    if (left)
+        fprintf(stderr, "blast warning: %u unused bytes of input\n", left);
+>>>>>>> upstream/master
 
     /* return blast() error code */
     return ret;

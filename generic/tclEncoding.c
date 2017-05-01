@@ -3632,9 +3632,13 @@ InitializeEncodingSearchPath(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(searchPathObj, &numBytes);
 =======
     bytes = TclGetStringFromObj(searchPathObj, &numBytes);
+>>>>>>> upstream/master
+=======
+    bytes = TclGetString(searchPathObj);
 >>>>>>> upstream/master
 =======
     bytes = TclGetString(searchPathObj);

@@ -20,6 +20,7 @@
 #include "tclRegexp.h"
 #include "tclStringTrim.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 static inline Tcl_Obj *	During(Tcl_Interp *interp, int resultCode,
 			    Tcl_Obj *oldOptions, Tcl_Obj *errorInfo);
@@ -35,6 +36,8 @@ static int		UniCharIsAscii(int character);
 static int		UniCharIsHexDigit(int character);
 
 =======
+=======
+>>>>>>> upstream/master
 
 static inline Tcl_Obj *	During(Tcl_Interp *interp, int resultCode,
 			    Tcl_Obj *oldOptions, Tcl_Obj *errorInfo);
@@ -45,6 +48,9 @@ static Tcl_NRPostProc	TryPostHandler;
 static int		UniCharIsAscii(int character);
 static int		UniCharIsHexDigit(int character);
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 /*
  * Default set of characters to trim in [string trim] and friends. This is a
@@ -321,6 +327,7 @@ Tcl_RegexpObjCmd(
 	 * passed and -start is positive, then the pattern will not match the
 	 * start of the string unless the previous character is a newline.
 	 */
+<<<<<<< HEAD
 
 	if (offset == 0) {
 	    eflags = 0;
@@ -332,6 +339,19 @@ Tcl_RegexpObjCmd(
 	    eflags = TCL_REG_NOTBOL;
 	}
 
+=======
+
+	if (offset == 0) {
+	    eflags = 0;
+	} else if (offset > stringLength) {
+	    eflags = TCL_REG_NOTBOL;
+	} else if (Tcl_GetUniChar(objPtr, offset-1) == (Tcl_UniChar)'\n') {
+	    eflags = 0;
+	} else {
+	    eflags = TCL_REG_NOTBOL;
+	}
+
+>>>>>>> upstream/master
 	match = Tcl_RegExpExecObj(interp, regExpr, objPtr, offset,
 		numMatchesSaved, eflags);
 	if (match < 0) {
@@ -437,6 +457,7 @@ Tcl_RegexpObjCmd(
 	    break;
 	}
 
+<<<<<<< HEAD
 	/*
 	 * Adjust the offset to the character just after the last one in the
 	 * matchVar and increment all to count how many times we are making a
@@ -456,6 +477,27 @@ Tcl_RegexpObjCmd(
 	 * these cases we always want to bump the index up one.
 	 */
 
+=======
+	/*
+	 * Adjust the offset to the character just after the last one in the
+	 * matchVar and increment all to count how many times we are making a
+	 * match. We always increment the offset by at least one to prevent
+	 * endless looping (as in the case: regexp -all {a*} a). Otherwise,
+	 * when we match the NULL string at the end of the input string, we
+	 * will loop indefinately (because the length of the match is 0, so
+	 * offset never changes).
+	 */
+
+	matchLength = (info.matches[0].end - info.matches[0].start);
+
+	offset += info.matches[0].end;
+
+	/*
+	 * A match of length zero could happen for {^} {$} or {.*} and in
+	 * these cases we always want to bump the index up one.
+	 */
+
+>>>>>>> upstream/master
 	if (matchLength == 0) {
 	    offset++;
 	}
@@ -993,6 +1035,7 @@ Tcl_SourceObjCmd(
     Tcl_Interp *interp,		/* Current interpreter. */
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
+<<<<<<< HEAD
 {
     return Tcl_NRCallObjProc(interp, TclNRSourceObjCmd, dummy, objc, objv);
 }
@@ -1008,6 +1051,26 @@ TclNRSourceObjCmd(
     Tcl_Obj *fileName;
 
     if (objc != 2 && objc !=4) {
+=======
+{
+    return Tcl_NRCallObjProc(interp, TclNRSourceObjCmd, dummy, objc, objv);
+}
+
+int
+TclNRSourceObjCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    const char *encodingName = NULL;
+    Tcl_Obj *fileName;
+    int result;
+    void **pkgFiles = NULL;
+    void *names = NULL;
+
+    if (objc < 2 || objc > 4) {
+>>>>>>> upstream/master
 	Tcl_WrongNumArgs(interp, 1, objv, "?-encoding name? fileName");
 	return TCL_ERROR;
     }
@@ -1025,9 +1088,36 @@ TclNRSourceObjCmd(
 	    return TCL_ERROR;
 	}
 	encodingName = TclGetString(objv[2]);
+<<<<<<< HEAD
     }
 
     return TclNREvalFile(interp, fileName, encodingName);
+=======
+    } else if (objc == 3) {
+	/* Handle undocumented -nopkg option. This should only be
+	 * used by the internal ::tcl::Pkg::source utility function. */
+	static const char *const nopkgoptions[] = {
+	    "-nopkg", NULL
+	};
+	int index;
+
+	if (TCL_ERROR == Tcl_GetIndexFromObj(interp, objv[1], nopkgoptions,
+		"option", TCL_EXACT, &index)) {
+	    return TCL_ERROR;
+	}
+	pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+	/* Make sure that during the following TclNREvalFile no filenames
+	 * are recorded for inclusion in the "package files" command */
+	names = *pkgFiles;
+	*pkgFiles = NULL;
+    }
+    result = TclNREvalFile(interp, fileName, encodingName);
+    if (pkgFiles) {
+	/* restore "tclPkgFiles" assocdata to how it was. */
+	*pkgFiles = names;
+    }
+    return result;
+>>>>>>> upstream/master
 }
 
 /*
@@ -1036,10 +1126,13 @@ TclNRSourceObjCmd(
  *
  * Tcl_SplitObjCmd --
  *
+<<<<<<< HEAD
 =======
  *
  * Tcl_SplitObjCmd --
  *
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *	This procedure is invoked to process the "split" Tcl command. See the
  *	user documentation for details on what it does.
@@ -1098,6 +1191,7 @@ Tcl_SplitObjCmd(
 	 * one Tcl_Obj instance (multiply-referenced) in the final list. This
 	 * is a *major* win when splitting on a long string (especially in the
 	 * megabyte range!) - DKF
+<<<<<<< HEAD
 	 */
 
 	Tcl_InitHashTable(&charReuseTable, TCL_ONE_WORD_KEYS);
@@ -1135,6 +1229,45 @@ Tcl_SplitObjCmd(
 	 * byte in length.
 	 */
 
+=======
+	 */
+
+	Tcl_InitHashTable(&charReuseTable, TCL_ONE_WORD_KEYS);
+
+	for ( ; stringPtr < end; stringPtr += len) {
+	    len = TclUtfToUniChar(stringPtr, &ch);
+
+	    /*
+	     * Assume Tcl_UniChar is an integral type...
+	     */
+
+	    hPtr = Tcl_CreateHashEntry(&charReuseTable, INT2PTR((int) ch),
+		    &isNew);
+	    if (isNew) {
+		TclNewStringObj(objPtr, stringPtr, len);
+
+		/*
+		 * Don't need to fiddle with refcount...
+		 */
+
+		Tcl_SetHashValue(hPtr, objPtr);
+	    } else {
+		objPtr = Tcl_GetHashValue(hPtr);
+	    }
+	    Tcl_ListObjAppendElement(NULL, listPtr, objPtr);
+	}
+	Tcl_DeleteHashTable(&charReuseTable);
+
+    } else if (splitCharLen == 1) {
+	char *p;
+
+	/*
+	 * Handle the special case of splitting on a single character. This is
+	 * only true for the one-char ASCII case, as one unicode char is > 1
+	 * byte in length.
+	 */
+
+>>>>>>> upstream/master
 	while (*stringPtr && (p=strchr(stringPtr,(int)*splitChars)) != NULL) {
 	    objPtr = Tcl_NewStringObj(stringPtr, p - stringPtr);
 	    Tcl_ListObjAppendElement(NULL, listPtr, objPtr);
@@ -1200,6 +1333,7 @@ StringFirstCmd(
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
     int start = 0;
+<<<<<<< HEAD
 
     if (objc < 3 || objc > 4) {
 	Tcl_WrongNumArgs(interp, 1, objv,
@@ -1653,10 +1787,505 @@ StringIsCmd(
 	}
 
     failedIntParse:
+=======
+
+    if (objc < 3 || objc > 4) {
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"needleString haystackString ?startIndex?");
+	return TCL_ERROR;
+    }
+
+    if (objc == 4) {
+	int size = Tcl_GetCharLength(objv[2]);
+
+	if (TCL_OK != TclGetIntForIndexM(interp, objv[3], size - 1, &start)) {
+	    return TCL_ERROR;
+	}
+
+	if (start < 0) {
+	    start = 0;
+	}
+	if (start >= size) {
+	    Tcl_SetObjResult(interp, Tcl_NewIntObj(-1));
+	    return TCL_OK;
+	}
+    }
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(TclStringFind(objv[1],
+	    objv[2], start)));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringLastCmd --
+ *
+ *	This procedure is invoked to process the "string last" Tcl command.
+ *	See the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringLastCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    int last = INT_MAX - 1;
+
+    if (objc < 3 || objc > 4) {
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"needleString haystackString ?lastIndex?");
+	return TCL_ERROR;
+    }
+
+    if (objc == 4) {
+	int size = Tcl_GetCharLength(objv[2]);
+
+	if (TCL_OK != TclGetIntForIndexM(interp, objv[3], size - 1, &last)) {
+	    return TCL_ERROR;
+	}
+
+	if (last < 0) {
+	    Tcl_SetObjResult(interp, Tcl_NewIntObj(-1));
+	    return TCL_OK;
+	}
+	if (last >= size) {
+	    last = size - 1;
+	}
+    }
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(TclStringLast(objv[1],
+	    objv[2], last)));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringIndexCmd --
+ *
+ *	This procedure is invoked to process the "string index" Tcl command.
+ *	See the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringIndexCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    int length, index;
+
+    if (objc != 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "string charIndex");
+	return TCL_ERROR;
+    }
+
+    /*
+     * Get the char length to calulate what 'end' means.
+     */
+
+    length = Tcl_GetCharLength(objv[1]);
+    if (TclGetIntForIndexM(interp, objv[2], length-1, &index) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    if ((index >= 0) && (index < length)) {
+	Tcl_UniChar ch = Tcl_GetUniChar(objv[1], index);
+
+	/*
+	 * If we have a ByteArray object, we're careful to generate a new
+	 * bytearray for a result.
+	 */
+
+	if (TclIsPureByteArray(objv[1])) {
+	    unsigned char uch = (unsigned char) ch;
+
+	    Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(&uch, 1));
+	} else {
+	    char buf[TCL_UTF_MAX];
+
+	    length = Tcl_UniCharToUtf(ch, buf);
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(buf, length));
+	}
+    }
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringIsCmd --
+ *
+ *	This procedure is invoked to process the "string is" Tcl command. See
+ *	the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringIsCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    const char *string1, *end, *stop;
+    Tcl_UniChar ch;
+    int (*chcomp)(int) = NULL;	/* The UniChar comparison function. */
+    int i, failat = 0, result = 1, strict = 0, index, length1, length2;
+    Tcl_Obj *objPtr, *failVarObj = NULL;
+    Tcl_WideInt w;
+
+    static const char *const isClasses[] = {
+	"alnum",	"alpha",	"ascii",	"control",
+	"boolean",	"digit",	"double",	"entier",
+	"false",	"graph",	"integer",	"list",
+	"lower",	"print",	"punct",	"space",
+	"true",		"upper",	"wideinteger",	"wordchar",
+	"xdigit",	NULL
+    };
+    enum isClasses {
+	STR_IS_ALNUM,	STR_IS_ALPHA,	STR_IS_ASCII,	STR_IS_CONTROL,
+	STR_IS_BOOL,	STR_IS_DIGIT,	STR_IS_DOUBLE,	STR_IS_ENTIER,
+	STR_IS_FALSE,	STR_IS_GRAPH,	STR_IS_INT,	STR_IS_LIST,
+	STR_IS_LOWER,	STR_IS_PRINT,	STR_IS_PUNCT,	STR_IS_SPACE,
+	STR_IS_TRUE,	STR_IS_UPPER,	STR_IS_WIDE,	STR_IS_WORD,
+	STR_IS_XDIGIT
+    };
+    static const char *const isOptions[] = {
+	"-strict", "-failindex", NULL
+    };
+    enum isOptions {
+	OPT_STRICT, OPT_FAILIDX
+    };
+
+    if (objc < 3 || objc > 6) {
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"class ?-strict? ?-failindex var? str");
+	return TCL_ERROR;
+    }
+    if (Tcl_GetIndexFromObj(interp, objv[1], isClasses, "class", 0,
+	    &index) != TCL_OK) {
+	return TCL_ERROR;
+    }
+
+    if (objc != 3) {
+	for (i = 2; i < objc-1; i++) {
+	    int idx2;
+
+	    if (Tcl_GetIndexFromObj(interp, objv[i], isOptions, "option", 0,
+		    &idx2) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+	    switch ((enum isOptions) idx2) {
+	    case OPT_STRICT:
+		strict = 1;
+		break;
+	    case OPT_FAILIDX:
+		if (i+1 >= objc-1) {
+		    Tcl_WrongNumArgs(interp, 2, objv,
+			    "?-strict? ?-failindex var? str");
+		    return TCL_ERROR;
+		}
+		failVarObj = objv[++i];
+		break;
+	    }
+	}
+    }
+
+    /*
+     * We get the objPtr so that we can short-cut for some classes by checking
+     * the object type (int and double), but we need the string otherwise,
+     * because we don't want any conversion of type occuring (as, for example,
+     * Tcl_Get*FromObj would do).
+     */
+
+    objPtr = objv[objc-1];
+
+    /*
+     * When entering here, result == 1 and failat == 0.
+     */
+
+    switch ((enum isClasses) index) {
+    case STR_IS_ALNUM:
+	chcomp = Tcl_UniCharIsAlnum;
+	break;
+    case STR_IS_ALPHA:
+	chcomp = Tcl_UniCharIsAlpha;
+	break;
+    case STR_IS_ASCII:
+	chcomp = UniCharIsAscii;
+	break;
+    case STR_IS_BOOL:
+    case STR_IS_TRUE:
+    case STR_IS_FALSE:
+	if ((objPtr->typePtr != &tclBooleanType)
+		&& (TCL_OK != TclSetBooleanFromAny(NULL, objPtr))) {
+	    if (strict) {
+		result = 0;
+	    } else {
+		string1 = TclGetStringFromObj(objPtr, &length1);
+		result = length1 == 0;
+	    }
+	} else if (((index == STR_IS_TRUE) &&
+		objPtr->internalRep.longValue == 0)
+	    || ((index == STR_IS_FALSE) &&
+		objPtr->internalRep.longValue != 0)) {
+	    result = 0;
+	}
+	break;
+    case STR_IS_CONTROL:
+	chcomp = Tcl_UniCharIsControl;
+	break;
+    case STR_IS_DIGIT:
+	chcomp = Tcl_UniCharIsDigit;
+	break;
+    case STR_IS_DOUBLE: {
+	/* TODO */
+	if ((objPtr->typePtr == &tclDoubleType) ||
+		(objPtr->typePtr == &tclIntType) ||
+#ifndef TCL_WIDE_INT_IS_LONG
+		(objPtr->typePtr == &tclWideIntType) ||
+#endif
+		(objPtr->typePtr == &tclBignumType)) {
+	    break;
+	}
 	string1 = TclGetStringFromObj(objPtr, &length1);
 	if (length1 == 0) {
 	    if (strict) {
 		result = 0;
+	    }
+	    goto str_is_done;
+	}
+	end = string1 + length1;
+	if (TclParseNumber(NULL, objPtr, NULL, NULL, -1,
+		(const char **) &stop, 0) != TCL_OK) {
+	    result = 0;
+	    failat = 0;
+	} else {
+	    failat = stop - string1;
+	    if (stop < end) {
+		result = 0;
+		TclFreeIntRep(objPtr);
+	    }
+	}
+	break;
+    }
+    case STR_IS_GRAPH:
+	chcomp = Tcl_UniCharIsGraph;
+	break;
+    case STR_IS_INT:
+	if (TCL_OK == TclGetIntFromObj(NULL, objPtr, &i)) {
+	    break;
+	}
+	goto failedIntParse;
+    case STR_IS_ENTIER:
+	if ((objPtr->typePtr == &tclIntType) ||
+#ifndef TCL_WIDE_INT_IS_LONG
+		(objPtr->typePtr == &tclWideIntType) ||
+#endif
+		(objPtr->typePtr == &tclBignumType)) {
+	    break;
+	}
+	string1 = TclGetStringFromObj(objPtr, &length1);
+	if (length1 == 0) {
+	    if (strict) {
+		result = 0;
+	    }
+	    goto str_is_done;
+	}
+	end = string1 + length1;
+	if (TclParseNumber(NULL, objPtr, NULL, NULL, -1,
+		(const char **) &stop, TCL_PARSE_INTEGER_ONLY) == TCL_OK) {
+	    if (stop == end) {
+		/*
+		 * Entire string parses as an integer.
+		 */
+
+		break;
+	    } else {
+		/*
+		 * Some prefix parsed as an integer, but not the whole string,
+		 * so return failure index as the point where parsing stopped.
+		 * Clear out the internal rep, since keeping it would leave
+		 * *objPtr in an inconsistent state.
+		 */
+
+		result = 0;
+		failat = stop - string1;
+		TclFreeIntRep(objPtr);
+	    }
+	} else {
+	    /*
+	     * No prefix is a valid integer. Fail at beginning.
+	     */
+
+	    result = 0;
+	    failat = 0;
+	}
+	break;
+    case STR_IS_WIDE:
+	if (TCL_OK == Tcl_GetWideIntFromObj(NULL, objPtr, &w)) {
+	    break;
+	}
+
+    failedIntParse:
+	string1 = TclGetStringFromObj(objPtr, &length1);
+	if (length1 == 0) {
+	    if (strict) {
+		result = 0;
+	    }
+	    goto str_is_done;
+	}
+	result = 0;
+	if (failVarObj == NULL) {
+	    /*
+	     * Don't bother computing the failure point if we're not going to
+	     * return it.
+	     */
+
+	    break;
+	}
+	end = string1 + length1;
+	if (TclParseNumber(NULL, objPtr, NULL, NULL, -1,
+		(const char **) &stop, TCL_PARSE_INTEGER_ONLY) == TCL_OK) {
+	    if (stop == end) {
+		/*
+		 * Entire string parses as an integer, but rejected by
+		 * Tcl_Get(Wide)IntFromObj() so we must have overflowed the
+		 * target type, and our convention is to return failure at
+		 * index -1 in that situation.
+		 */
+
+		failat = -1;
+	    } else {
+		/*
+		 * Some prefix parsed as an integer, but not the whole string,
+		 * so return failure index as the point where parsing stopped.
+		 * Clear out the internal rep, since keeping it would leave
+		 * *objPtr in an inconsistent state.
+		 */
+
+		failat = stop - string1;
+		TclFreeIntRep(objPtr);
+	    }
+	} else {
+	    /*
+	     * No prefix is a valid integer. Fail at beginning.
+	     */
+
+	    failat = 0;
+	}
+	break;
+    case STR_IS_LIST:
+	/*
+	 * We ignore the strictness here, since empty strings are always
+	 * well-formed lists.
+	 */
+
+	if (TCL_OK == TclListObjLength(NULL, objPtr, &length2)) {
+	    break;
+	}
+
+	if (failVarObj != NULL) {
+	    /*
+	     * Need to figure out where the list parsing failed, which is
+	     * fairly expensive. This is adapted from the core of
+	     * SetListFromAny().
+	     */
+
+	    const char *elemStart, *nextElem;
+	    int lenRemain, elemSize;
+	    register const char *p;
+
+	    string1 = TclGetStringFromObj(objPtr, &length1);
+	    end = string1 + length1;
+	    failat = -1;
+	    for (p=string1, lenRemain=length1; lenRemain > 0;
+		    p=nextElem, lenRemain=end-nextElem) {
+		if (TCL_ERROR == TclFindElement(NULL, p, lenRemain,
+			&elemStart, &nextElem, &elemSize, NULL)) {
+		    Tcl_Obj *tmpStr;
+
+		    /*
+		     * This is the simplest way of getting the number of
+		     * characters parsed. Note that this is not the same as
+		     * the number of bytes when parsing strings with non-ASCII
+		     * characters in them.
+		     *
+		     * Skip leading spaces first. This is only really an issue
+		     * if it is the first "element" that has the failure.
+		     */
+
+		    while (TclIsSpaceProc(*p)) {
+			p++;
+		    }
+		    TclNewStringObj(tmpStr, string1, p-string1);
+		    failat = Tcl_GetCharLength(tmpStr);
+		    TclDecrRefCount(tmpStr);
+		    break;
+		}
+	    }
+	}
+	result = 0;
+	break;
+    case STR_IS_LOWER:
+	chcomp = Tcl_UniCharIsLower;
+	break;
+    case STR_IS_PRINT:
+	chcomp = Tcl_UniCharIsPrint;
+	break;
+    case STR_IS_PUNCT:
+	chcomp = Tcl_UniCharIsPunct;
+	break;
+    case STR_IS_SPACE:
+	chcomp = Tcl_UniCharIsSpace;
+	break;
+    case STR_IS_UPPER:
+	chcomp = Tcl_UniCharIsUpper;
+	break;
+    case STR_IS_WORD:
+	chcomp = Tcl_UniCharIsWordChar;
+	break;
+    case STR_IS_XDIGIT:
+	chcomp = UniCharIsHexDigit;
+	break;
+    }
+
+    if (chcomp != NULL) {
+>>>>>>> upstream/master
+	string1 = TclGetStringFromObj(objPtr, &length1);
+	if (length1 == 0) {
+	    if (strict) {
+		result = 0;
+<<<<<<< HEAD
 	    }
 	    goto str_is_done;
 	}
@@ -2141,10 +2770,297 @@ StringIsCmd(
 		    TclNewStringObj(tmpStr, string1, p-string1);
 		    failat = Tcl_GetCharLength(tmpStr);
 		    TclDecrRefCount(tmpStr);
+=======
+	    }
+	    goto str_is_done;
+	}
+	end = string1 + length1;
+	for (; string1 < end; string1 += length2, failat++) {
+	    length2 = TclUtfToUniChar(string1, &ch);
+	    if (!chcomp(ch)) {
+		result = 0;
+		break;
+	    }
+	}
+    }
+
+    /*
+     * Only set the failVarObj when we will return 0 and we have indicated a
+     * valid fail index (>= 0).
+     */
+
+ str_is_done:
+    if ((result == 0) && (failVarObj != NULL) &&
+	Tcl_ObjSetVar2(interp, failVarObj, NULL, Tcl_NewIntObj(failat),
+		TCL_LEAVE_ERR_MSG) == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, Tcl_NewBooleanObj(result));
+    return TCL_OK;
+}
+
+static int
+UniCharIsAscii(
+    int character)
+{
+    return (character >= 0) && (character < 0x80);
+}
+
+static int
+UniCharIsHexDigit(
+    int character)
+{
+    return (character >= 0) && (character < 0x80) && isxdigit(character);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * StringMapCmd --
+ *
+ *	This procedure is invoked to process the "string map" Tcl command. See
+ *	the user documentation for details on what it does. Note that this
+ *	command only functions correctly on properly formed Tcl UTF strings.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+StringMapCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    int length1, length2, mapElemc, index;
+    int nocase = 0, mapWithDict = 0, copySource = 0;
+    Tcl_Obj **mapElemv, *sourceObj, *resultPtr;
+    Tcl_UniChar *ustring1, *ustring2, *p, *end;
+    int (*strCmpFn)(const Tcl_UniChar*, const Tcl_UniChar*, unsigned long);
+
+    if (objc < 3 || objc > 4) {
+	Tcl_WrongNumArgs(interp, 1, objv, "?-nocase? charMap string");
+	return TCL_ERROR;
+    }
+
+    if (objc == 4) {
+	const char *string = TclGetStringFromObj(objv[1], &length2);
+
+	if ((length2 > 1) &&
+		strncmp(string, "-nocase", (size_t) length2) == 0) {
+	    nocase = 1;
+	} else {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "bad option \"%s\": must be -nocase", string));
+	    Tcl_SetErrorCode(interp, "TCL", "LOOKUP", "INDEX", "option",
+		    string, NULL);
+	    return TCL_ERROR;
+	}
+    }
+
+    /*
+     * This test is tricky, but has to be that way or you get other strange
+     * inconsistencies (see test string-10.20.1 for illustration why!)
+     */
+
+    if (objv[objc-2]->typePtr == &tclDictType && objv[objc-2]->bytes == NULL){
+	int i, done;
+	Tcl_DictSearch search;
+
+	/*
+	 * We know the type exactly, so all dict operations will succeed for
+	 * sure. This shortens this code quite a bit.
+	 */
+
+	Tcl_DictObjSize(interp, objv[objc-2], &mapElemc);
+	if (mapElemc == 0) {
+	    /*
+	     * Empty charMap, just return whatever string was given.
+	     */
+
+	    Tcl_SetObjResult(interp, objv[objc-1]);
+	    return TCL_OK;
+	}
+
+	mapElemc *= 2;
+	mapWithDict = 1;
+
+	/*
+	 * Copy the dictionary out into an array; that's the easiest way to
+	 * adapt this code...
+	 */
+
+	mapElemv = TclStackAlloc(interp, sizeof(Tcl_Obj *) * mapElemc);
+	Tcl_DictObjFirst(interp, objv[objc-2], &search, mapElemv+0,
+		mapElemv+1, &done);
+	for (i=2 ; i<mapElemc ; i+=2) {
+	    Tcl_DictObjNext(&search, mapElemv+i, mapElemv+i+1, &done);
+	}
+	Tcl_DictObjDone(&search);
+    } else {
+	if (TclListObjGetElements(interp, objv[objc-2], &mapElemc,
+		&mapElemv) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	if (mapElemc == 0) {
+	    /*
+	     * empty charMap, just return whatever string was given.
+	     */
+
+	    Tcl_SetObjResult(interp, objv[objc-1]);
+	    return TCL_OK;
+	} else if (mapElemc & 1) {
+	    /*
+	     * The charMap must be an even number of key/value items.
+	     */
+
+	    Tcl_SetObjResult(interp,
+		    Tcl_NewStringObj("char map list unbalanced", -1));
+	    Tcl_SetErrorCode(interp, "TCL", "OPERATION", "MAP",
+		    "UNBALANCED", NULL);
+	    return TCL_ERROR;
+	}
+    }
+
+    /*
+     * Take a copy of the source string object if it is the same as the map
+     * string to cut out nasty sharing crashes. [Bug 1018562]
+     */
+
+    if (objv[objc-2] == objv[objc-1]) {
+	sourceObj = Tcl_DuplicateObj(objv[objc-1]);
+	copySource = 1;
+    } else {
+	sourceObj = objv[objc-1];
+    }
+    ustring1 = Tcl_GetUnicodeFromObj(sourceObj, &length1);
+    if (length1 == 0) {
+	/*
+	 * Empty input string, just stop now.
+	 */
+
+	goto done;
+    }
+    end = ustring1 + length1;
+
+    strCmpFn = (nocase ? Tcl_UniCharNcasecmp : Tcl_UniCharNcmp);
+
+    /*
+     * Force result to be Unicode
+     */
+
+    resultPtr = Tcl_NewUnicodeObj(ustring1, 0);
+
+    if (mapElemc == 2) {
+	/*
+	 * Special case for one map pair which avoids the extra for loop and
+	 * extra calls to get Unicode data. The algorithm is otherwise
+	 * identical to the multi-pair case. This will be >30% faster on
+	 * larger strings.
+	 */
+
+	int mapLen;
+	Tcl_UniChar *mapString, u2lc;
+
+	ustring2 = Tcl_GetUnicodeFromObj(mapElemv[0], &length2);
+	p = ustring1;
+	if ((length2 > length1) || (length2 == 0)) {
+	    /*
+	     * Match string is either longer than input or empty.
+	     */
+
+	    ustring1 = end;
+	} else {
+	    mapString = Tcl_GetUnicodeFromObj(mapElemv[1], &mapLen);
+	    u2lc = (nocase ? Tcl_UniCharToLower(*ustring2) : 0);
+	    for (; ustring1 < end; ustring1++) {
+		if (((*ustring1 == *ustring2) ||
+			(nocase&&Tcl_UniCharToLower(*ustring1)==u2lc)) &&
+			(length2==1 || strCmpFn(ustring1, ustring2,
+				(unsigned long) length2) == 0)) {
+		    if (p != ustring1) {
+			Tcl_AppendUnicodeToObj(resultPtr, p, ustring1-p);
+			p = ustring1 + length2;
+		    } else {
+			p += length2;
+		    }
+		    ustring1 = p - 1;
+
+		    Tcl_AppendUnicodeToObj(resultPtr, mapString, mapLen);
+		}
+	    }
+	}
+    } else {
+	Tcl_UniChar **mapStrings, *u2lc = NULL;
+	int *mapLens;
+
+	/*
+	 * Precompute pointers to the unicode string and length. This saves us
+	 * repeated function calls later, significantly speeding up the
+	 * algorithm. We only need the lowercase first char in the nocase
+	 * case.
+	 */
+
+	mapStrings = TclStackAlloc(interp, mapElemc*2*sizeof(Tcl_UniChar *));
+	mapLens = TclStackAlloc(interp, mapElemc * 2 * sizeof(int));
+	if (nocase) {
+	    u2lc = TclStackAlloc(interp, mapElemc * sizeof(Tcl_UniChar));
+	}
+	for (index = 0; index < mapElemc; index++) {
+	    mapStrings[index] = Tcl_GetUnicodeFromObj(mapElemv[index],
+		    mapLens+index);
+	    if (nocase && ((index % 2) == 0)) {
+		u2lc[index/2] = Tcl_UniCharToLower(*mapStrings[index]);
+	    }
+	}
+	for (p = ustring1; ustring1 < end; ustring1++) {
+	    for (index = 0; index < mapElemc; index += 2) {
+		/*
+		 * Get the key string to match on.
+		 */
+
+		ustring2 = mapStrings[index];
+		length2 = mapLens[index];
+		if ((length2 > 0) && ((*ustring1 == *ustring2) || (nocase &&
+			(Tcl_UniCharToLower(*ustring1) == u2lc[index/2]))) &&
+			/* Restrict max compare length. */
+			(end-ustring1 >= length2) && ((length2 == 1) ||
+			!strCmpFn(ustring2, ustring1, (unsigned) length2))) {
+		    if (p != ustring1) {
+			/*
+			 * Put the skipped chars onto the result first.
+			 */
+
+			Tcl_AppendUnicodeToObj(resultPtr, p, ustring1-p);
+			p = ustring1 + length2;
+		    } else {
+			p += length2;
+		    }
+
+		    /*
+		     * Adjust len to be full length of matched string.
+		     */
+
+		    ustring1 = p - 1;
+
+		    /*
+		     * Append the map value to the unicode string.
+		     */
+
+		    Tcl_AppendUnicodeToObj(resultPtr,
+			    mapStrings[index+1], mapLens[index+1]);
+>>>>>>> upstream/master
 		    break;
 		}
 	    }
 	}
+<<<<<<< HEAD
 	result = 0;
 	break;
     case STR_IS_LOWER:
@@ -2475,6 +3391,8 @@ StringMapCmd(
 		}
 	    }
 	}
+=======
+>>>>>>> upstream/master
 	if (nocase) {
 	    TclStackFree(interp, u2lc);
 	}

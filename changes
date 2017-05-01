@@ -8459,6 +8459,10 @@ include ::oo::class (fellows)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        *** POTENTIAL INCOMPATIBILITY ***
+>>>>>>> upstream/master
 =======
         *** POTENTIAL INCOMPATIBILITY ***
 >>>>>>> upstream/master
@@ -8526,6 +8530,7 @@ include ::oo::class (fellows)
 2014-12-17 (TIP 427) [fconfigure $h -connecting, -peername, -sockname] (oehlmann,rmax)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 2014-12-18 (bug)[af08c8] Crash in full finalize encoding teardown (porter)
 
@@ -8550,6 +8555,8 @@ include ::oo::class (fellows)
 => msgcat 1.6.0
 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -8668,6 +8675,9 @@ improvements to regexp engine from Postgres (lane,porter,fellows,seltenreich)
 
 --- Released 8.6.5, February 29, 2016 --- http://core.tcl.tk/tcl/ for details
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

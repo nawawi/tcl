@@ -82,8 +82,12 @@ CFLAGS_OPTIMIZE	= @CFLAGS_OPTIMIZE@
 #CFLAGS = 		$(CFLAGS_OPTIMIZE)
 #CFLAGS = 		$(CFLAGS_DEBUG) $(CFLAGS_OPTIMIZE)
 <<<<<<< HEAD
+<<<<<<< HEAD
 CFLAGS = 		@CFLAGS@ @CFLAGS_DEFAULT@ -DUNICODE -D_UNICODE
 <<<<<<< HEAD
+=======
+CFLAGS = 		@CFLAGS@ @CFLAGS_DEFAULT@ -DUNICODE -D_UNICODE -D_ATL_XP_TARGETING
+>>>>>>> upstream/master
 =======
 CFLAGS = 		@CFLAGS@ @CFLAGS_DEFAULT@ -DUNICODE -D_UNICODE -D_ATL_XP_TARGETING
 >>>>>>> upstream/master
@@ -93,6 +97,7 @@ CFLAGS = 		@CFLAGS@ @CFLAGS_DEFAULT@ -DUNICODE -D_UNICODE -D_ATL_XP_TARGETING
 NO_DEPRECATED_FLAGS	=
 #NO_DEPRECATED_FLAGS	= -DTCL_NO_DEPRECATED
 
+<<<<<<< HEAD
 =======
 
 # To compile without backward compatibility and deprecated code uncomment the
@@ -100,6 +105,8 @@ NO_DEPRECATED_FLAGS	=
 NO_DEPRECATED_FLAGS	=
 #NO_DEPRECATED_FLAGS	= -DTCL_NO_DEPRECATED
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # To enable compilation debugging reverse the comment characters on one of the
 # following lines.
@@ -431,6 +438,7 @@ TCL_DOCS = "$(ROOT_DIR_NATIVE)"/doc/*.[13n]
 
 all: binaries libraries doc packages
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 tcltest: $(TCLSH) $(TEST_DLL_FILE)
 
@@ -438,6 +446,14 @@ tcltest: $(TCLSH) $(TEST_DLL_FILE)
 binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ $(DDE_DLL_FILE) $(REG_DLL_FILE) $(TCLSH)
 =======
 binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions $(TCLSH)
+=======
+
+tcltest: $(TCLSH) $(TEST_DLL_FILE)
+
+binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions $(TCLSH)
+
+winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
+>>>>>>> upstream/master
 
 winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
 >>>>>>> upstream/master
@@ -445,6 +461,7 @@ winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
 
 tcltest: $(TCLSH) $(TEST_DLL_FILE)
 
+<<<<<<< HEAD
 binaries: $(TCL_STUB_LIB_FILE) @LIBRARIES@ winextensions $(TCLSH)
 
 winextensions: ${DDE_DLL_FILE} ${REG_DLL_FILE}
@@ -454,6 +471,8 @@ libraries:
 
 doc:
 
+=======
+>>>>>>> upstream/master
 $(TCLSH): $(TCLSH_OBJS) @LIBRARIES@ $(TCL_STUB_LIB_FILE) tclsh.$(RES)
 	$(CC) $(CFLAGS) $(TCLSH_OBJS) $(TCL_LIB_FILE) $(TCL_STUB_LIB_FILE) $(LIBS) \
         tclsh.$(RES) $(CC_EXENAME) $(LDFLAGS_CONSOLE)
@@ -494,6 +513,7 @@ ${TEST_DLL_FILE}: ${TCL_STUB_LIB_FILE} ${TCLTEST_OBJS}
 	@MAKE_DLL@ ${TCLTEST_OBJS} $(TCL_STUB_LIB_FILE) $(SHLIB_LD_LIBS)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # use pre-built zlib1.dll
 ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
@@ -506,6 +526,8 @@ ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 # use pre-built zlib1.dll
 ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
@@ -516,6 +538,9 @@ ${ZLIB_DLL_FILE}: ${TCL_STUB_LIB_FILE}
 	fi;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -720,6 +745,7 @@ install-tzdata:
 	@echo "Installing time zone data"
 	@$(TCL_EXE) "$(ROOT_DIR)/tools/installData.tcl" \
 	    "$(ROOT_DIR)/library/tzdata" "$(SCRIPT_INSTALL_DIR)/tzdata"
+<<<<<<< HEAD
 
 install-msgs:
 	@echo "Installing message catalogs"
@@ -750,6 +776,16 @@ install-private-headers: libraries
 
 =======
 
+=======
+
+install-msgs:
+	@echo "Installing message catalogs"
+	@$(TCL_EXE) "$(ROOT_DIR)/tools/installData.tcl" \
+	    "$(ROOT_DIR)/library/msgs" "$(SCRIPT_INSTALL_DIR)/msgs"
+
+install-doc: doc
+
+>>>>>>> upstream/master
 # Optional target to install private headers
 install-private-headers: libraries
 	@for i in $(PRIVATE_INCLUDE_INSTALL_DIR); \
@@ -769,6 +805,9 @@ install-private-headers: libraries
 	    $(COPY) "$$i" "$(PRIVATE_INCLUDE_INSTALL_DIR)"; \
 	    done;
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Specifying TESTFLAGS on the command line is the standard way to pass args to
 # tcltest, i.e.:
@@ -910,12 +949,16 @@ $(GENERIC_DIR)/tclStubInit.c: $(GENERIC_DIR)/tcl.decls \
 genstubs:
 	$(TCL_EXE) "$(ROOT_DIR_NATIVE)/tools/genStubs.tcl" \
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    "$(GENERIC_DIR_NATIVE)" \
 	    "$(GENERIC_DIR_NATIVE)/tcl.decls" \
 	    "$(GENERIC_DIR_NATIVE)/tclInt.decls" \
 	    "$(GENERIC_DIR_NATIVE)/tclTomMath.decls"
 	$(TCL_EXE) "$(ROOT_DIR_NATIVE)/tools/genStubs.tcl" \
 	    "$(GENERIC_DIR_NATIVE)" \
+<<<<<<< HEAD
 =======
 	    "$(GENERIC_DIR_NATIVE)" \
 	    "$(GENERIC_DIR_NATIVE)/tcl.decls" \
@@ -923,6 +966,8 @@ genstubs:
 	    "$(GENERIC_DIR_NATIVE)/tclTomMath.decls"
 	$(TCL_EXE) "$(ROOT_DIR_NATIVE)/tools/genStubs.tcl" \
 	    "$(GENERIC_DIR_NATIVE)" \
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    "$(GENERIC_DIR_NATIVE)/tclOO.decls"
 

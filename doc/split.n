@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -39,6 +43,7 @@ If \fIsplitChars\fR is an empty string then each character of
 .PP
 Divide up a USENET group name into its hierarchical components:
 .PP
+<<<<<<< HEAD
 <<<<<<< HEAD
 .CS
 \fBsplit\fR "comp.lang.tcl" .
@@ -89,12 +94,38 @@ Extract the list words from a string that is not a well-formed list:
       \fI\(-> Example with \e{unbalanced brace character\fR
 .CE
 .PP
+=======
+.CS
+\fBsplit\fR "comp.lang.tcl" .
+      \fI\(-> comp lang tcl\fR
+.CE
+.PP
+See how the \fBsplit\fR command splits on \fIevery\fR character in
+\fIsplitChars\fR, which can result in information loss if you are not
+careful:
+.PP
+.CS
+\fBsplit\fR "alpha beta gamma" "temp"
+      \fI\(-> al {ha b} {} {a ga} {} a\fR
+.CE
+.PP
+Extract the list words from a string that is not a well-formed list:
+.PP
+.CS
+\fBsplit\fR "Example with {unbalanced brace character"
+      \fI\(-> Example with \e{unbalanced brace character\fR
+.CE
+.PP
+>>>>>>> upstream/master
 Split a string into its constituent characters
 .PP
 .CS
 \fBsplit\fR "Hello world" {}
       \fI\(-> H e l l o { } w o r l d\fR
 .CE
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .SS "PARSING RECORD-ORIENTED FILES"
 .PP
@@ -106,6 +137,7 @@ with each line consisting of a colon-separated list of fields:
 set fid [open /etc/passwd]
 set content [read $fid]
 close $fid
+<<<<<<< HEAD
 
 ## Split into records on newlines
 set records [\fBsplit\fR $content "\en"]
@@ -113,6 +145,15 @@ set records [\fBsplit\fR $content "\en"]
 ## Iterate over the records
 foreach rec $records {
 
+=======
+
+## Split into records on newlines
+set records [\fBsplit\fR $content "\en"]
+
+## Iterate over the records
+foreach rec $records {
+
+>>>>>>> upstream/master
     ## Split into fields on colons
     set fields [\fBsplit\fR $rec ":"]
 

@@ -60,6 +60,11 @@ static Object *		AllocObject(Tcl_Interp *interp, const char *nameStr,
 			    const char *nsNameStr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+static void		ClearMixins(Class *clsPtr);
+static void		ClearSuperclasses(Class *clsPtr);
+>>>>>>> upstream/master
 =======
 static void		ClearMixins(Class *clsPtr);
 static void		ClearSuperclasses(Class *clsPtr);
@@ -77,12 +82,18 @@ static void		DeletedDefineNamespace(ClientData clientData);
 static void		DeletedObjdefNamespace(ClientData clientData);
 static void		DeletedHelpersNamespace(ClientData clientData);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeAlloc(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeNext(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeObjectCall(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	FinalizeAlloc;
+static Tcl_NRPostProc	FinalizeNext;
+static Tcl_NRPostProc	FinalizeObjectCall;
+>>>>>>> upstream/master
 =======
 static Tcl_NRPostProc	FinalizeAlloc;
 static Tcl_NRPostProc	FinalizeNext;
@@ -284,7 +295,11 @@ TclOOInit(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Tcl_Eval(interp, initScript) != TCL_OK) {
+=======
+    if (Tcl_EvalEx(interp, initScript, -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 =======
     if (Tcl_EvalEx(interp, initScript, -1, 0) != TCL_OK) {
 >>>>>>> upstream/master
@@ -482,7 +497,11 @@ InitFoundation(
 	return TCL_ERROR;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     return Tcl_Eval(interp, slotScript);
+=======
+    return Tcl_EvalEx(interp, slotScript, -1, 0);
+>>>>>>> upstream/master
 =======
     return Tcl_EvalEx(interp, slotScript, -1, 0);
 >>>>>>> upstream/master
@@ -922,7 +941,10 @@ ObjectRenamedTrace(
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  * ClearMixins, ClearSuperclasses --
@@ -975,6 +997,9 @@ ClearSuperclasses(
  * ----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1035,7 +1060,10 @@ ReleaseClassContents(
 	FOREACH(instancePtr, clsPtr->instances) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	    int j;
@@ -1049,6 +1077,9 @@ ReleaseClassContents(
 		}
 	    }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1065,9 +1096,12 @@ ReleaseClassContents(
     FOREACH(mixinSubclassPtr, clsPtr->mixinSubs) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinSubclassPtr == NULL) {
 	    continue;
 	}
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1078,6 +1112,10 @@ ReleaseClassContents(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	ClearMixins(mixinSubclassPtr);
+>>>>>>> upstream/master
 =======
 	ClearMixins(mixinSubclassPtr);
 >>>>>>> upstream/master
@@ -1100,7 +1138,11 @@ ReleaseClassContents(
     FOREACH(subclassPtr, clsPtr->subclasses) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (subclassPtr == NULL || IsRoot(subclassPtr)) {
+=======
+	if (IsRoot(subclassPtr)) {
+>>>>>>> upstream/master
 =======
 	if (IsRoot(subclassPtr)) {
 >>>>>>> upstream/master
@@ -1114,6 +1156,10 @@ ReleaseClassContents(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	ClearSuperclasses(subclassPtr);
+>>>>>>> upstream/master
 =======
 	ClearSuperclasses(subclassPtr);
 >>>>>>> upstream/master
@@ -1264,7 +1310,11 @@ ObjectNamespaceDeleted(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!IsRootObject(oPtr)) {
+=======
+    if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
+>>>>>>> upstream/master
 =======
     if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
 >>>>>>> upstream/master
@@ -1277,7 +1327,13 @@ ObjectNamespaceDeleted(
     FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+	if (mixinPtr) {
+	    TclOORemoveFromInstances(oPtr, mixinPtr);
+	}
+>>>>>>> upstream/master
 =======
 	if (mixinPtr) {
 	    TclOORemoveFromInstances(oPtr, mixinPtr);
@@ -1335,9 +1391,12 @@ ObjectNamespaceDeleted(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (clsPtr != NULL) {
 	Class *superPtr;
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     /*
@@ -1346,6 +1405,9 @@ ObjectNamespaceDeleted(
 
     if (clsPtr != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1370,6 +1432,7 @@ ObjectNamespaceDeleted(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	FOREACH(mixinPtr, clsPtr->mixins) {
 	    if (!Deleted(mixinPtr->thisPtr)) {
 		TclOORemoveFromMixinSubs(clsPtr, mixinPtr);
@@ -1391,12 +1454,17 @@ ObjectNamespaceDeleted(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 	ClearMixins(clsPtr);
 
 	ClearSuperclasses(clsPtr);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1543,9 +1611,13 @@ TclOORemoveFromSubclasses(
   removeSubclass:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->subclasses.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 =======
     if (!Deleted(superPtr->thisPtr)) {
 >>>>>>> upstream/master
@@ -1624,9 +1696,13 @@ TclOORemoveFromMixinSubs(
   removeSubclass:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->mixinSubs.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 =======
     if (!Deleted(superPtr->thisPtr)) {
 >>>>>>> upstream/master
@@ -1835,7 +1911,11 @@ Tcl_NewObjectInstance(
 
 	if (contextPtr != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    int result;
+=======
+	    int isRoot, result;
+>>>>>>> upstream/master
 =======
 	    int isRoot, result;
 >>>>>>> upstream/master
@@ -1850,6 +1930,7 @@ Tcl_NewObjectInstance(
 	     */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if (((Interp*) interp)->ensembleRewrite.sourceObjs) {
 		((Interp*) interp)->ensembleRewrite.numInsertedObjs += skip-1;
 		((Interp*) interp)->ensembleRewrite.numRemovedObjs += skip-1;
@@ -1858,6 +1939,8 @@ Tcl_NewObjectInstance(
 		    objc, objv);
 
 =======
+=======
+>>>>>>> upstream/master
 	    isRoot = TclInitRewriteEnsemble(interp, skip, skip, objv);
 	    result = Tcl_NRCallObjProc(interp, TclOOInvokeContext, contextPtr,
 		    objc, objv);
@@ -1866,6 +1949,9 @@ Tcl_NewObjectInstance(
 		TclResetRewriteEnsemble(interp, 1);
 	    }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    /*
 	     * It's an error if the object was whacked in the constructor.
@@ -1990,9 +2076,14 @@ TclNRNewObjectInstance(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (((Interp *) interp)->ensembleRewrite.sourceObjs) {
 	((Interp *) interp)->ensembleRewrite.numInsertedObjs += skip - 1;
 	((Interp *) interp)->ensembleRewrite.numRemovedObjs += skip - 1;
+=======
+    if (TclInitRewriteEnsemble(interp, skip, skip, objv)) {
+	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
+>>>>>>> upstream/master
 =======
     if (TclInitRewriteEnsemble(interp, skip, skip, objv)) {
 	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
@@ -2125,7 +2216,11 @@ Tcl_CopyObjectInstance(
     FOREACH(mixinPtr, o2Ptr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 =======
 	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
 >>>>>>> upstream/master
@@ -2139,7 +2234,11 @@ Tcl_CopyObjectInstance(
     FOREACH(mixinPtr, o2Ptr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 =======
 	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
 >>>>>>> upstream/master

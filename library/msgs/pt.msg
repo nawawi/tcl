@@ -7,6 +7,7 @@ namespace eval ::tcl::clock {
         "Qua"\
         "Qui"\
         "Sex"\
+<<<<<<< HEAD
         "S\u00e1b"]
     ::msgcat::mcset pt DAYS_OF_WEEK_FULL [list \
         "Domingo"\
@@ -16,6 +17,17 @@ namespace eval ::tcl::clock {
         "Quinta-feira"\
         "Sexta-feira"\
         "S\u00e1bado"]
+=======
+        "Sáb"]
+    ::msgcat::mcset pt DAYS_OF_WEEK_FULL [list \
+        "Domingo"\
+        "Segunda-feira"\
+        "Terça-feira"\
+        "Quarta-feira"\
+        "Quinta-feira"\
+        "Sexta-feira"\
+        "Sábado"]
+>>>>>>> upstream/master
     ::msgcat::mcset pt MONTHS_ABBREV [list \
         "Jan"\
         "Fev"\
@@ -33,7 +45,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset pt MONTHS_FULL [list \
         "Janeiro"\
         "Fevereiro"\
+<<<<<<< HEAD
         "Mar\u00e7o"\
+=======
+        "Março"\
+>>>>>>> upstream/master
         "Abril"\
         "Maio"\
         "Junho"\

@@ -44,7 +44,11 @@
 static Tcl_HashEntry *	AllocArrayEntry(Tcl_HashTable *tablePtr, void *keyPtr);
 static int		CompareArrayKeys(void *keyPtr, Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+static TCL_HASH_TYPE	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -70,7 +74,11 @@ static Tcl_HashEntry *	AllocStringEntry(Tcl_HashTable *tablePtr,
 			    void *keyPtr);
 static int		CompareStringKeys(void *keyPtr, Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+static TCL_HASH_TYPE	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -279,6 +287,7 @@ Tcl_CreateHashEntry(
     const void *key,		/* Key to use to find or create matching
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				 * entry. */
     int *newPtr)		/* Store info here telling whether a new entry
 				 * was created. */
@@ -313,6 +322,22 @@ CreateHashEntry(
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+				 * entry. */
+    int *newPtr)		/* Store info here telling whether a new entry
+				 * was created. */
+{
+    return (*((tablePtr)->createProc))(tablePtr, key, newPtr);
+}
+
+static Tcl_HashEntry *
+CreateHashEntry(
+    Tcl_HashTable *tablePtr,	/* Table in which to lookup entry. */
+    const char *key,		/* Key to use to find or create matching
+				 * entry. */
+    int *newPtr)		/* Store info here telling whether a new entry
+				 * was created. */
 >>>>>>> upstream/master
 {
     register Tcl_HashEntry *hPtr;
@@ -354,11 +379,17 @@ CreateHashEntry(
 		hPtr = hPtr->nextPtr) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
 	    }
 #endif
+=======
+	    if (hash != PTR2UINT(hPtr->hash)) {
+		continue;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
@@ -381,7 +412,10 @@ CreateHashEntry(
 		hPtr = hPtr->nextPtr) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -418,6 +452,7 @@ CreateHashEntry(
     hPtr->tablePtr = tablePtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
     hPtr->hash = UINT2PTR(hash);
     hPtr->nextPtr = tablePtr->buckets[index];
@@ -427,6 +462,11 @@ CreateHashEntry(
     hPtr->nextPtr = *hPtr->bucketPtr;
     *hPtr->bucketPtr = hPtr;
 #endif
+=======
+    hPtr->hash = UINT2PTR(hash);
+    hPtr->nextPtr = tablePtr->buckets[index];
+    tablePtr->buckets[index] = hPtr;
+>>>>>>> upstream/master
 =======
     hPtr->hash = UINT2PTR(hash);
     hPtr->nextPtr = tablePtr->buckets[index];
@@ -493,7 +533,10 @@ Tcl_DeleteHashEntry(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -508,9 +551,12 @@ Tcl_DeleteHashEntry(
     bucketPtr = &tablePtr->buckets[index];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else
     bucketPtr = entryPtr->bucketPtr;
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -861,7 +907,11 @@ CompareArrayKeys(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int
+=======
+static TCL_HASH_TYPE
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE
 >>>>>>> upstream/master
@@ -961,7 +1011,11 @@ CompareStringKeys(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned
+=======
+static TCL_HASH_TYPE
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE
 >>>>>>> upstream/master
@@ -981,6 +1035,9 @@ HashStringKey(
      * following reasons:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
      *
@@ -1002,6 +1059,7 @@ HashStringKey(
      * Since Tcl command and namespace names are usually reasonably-named (the
      * main use for string hashes in modern Tcl) speed is far more important
      * than strength.
+<<<<<<< HEAD
      *
 <<<<<<< HEAD
 =======
@@ -1030,6 +1088,12 @@ HashStringKey(
      * See also TclObjHashKey in tclObj.c.
      *
 =======
+     * See also HashString in tclLiteral.c.
+     * See also TclObjHashKey in tclObj.c.
+     *
+>>>>>>> upstream/master
+=======
+     *
      * See also HashString in tclLiteral.c.
      * See also TclObjHashKey in tclObj.c.
      *
@@ -1174,7 +1238,10 @@ RebuildTable(
 	    *oldChainPtr = hPtr->nextPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1187,6 +1254,7 @@ RebuildTable(
 	    }
 	    hPtr->nextPtr = tablePtr->buckets[index];
 	    tablePtr->buckets[index] = hPtr;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 #else
@@ -1209,6 +1277,8 @@ RebuildTable(
 	    hPtr->nextPtr = *hPtr->bucketPtr;
 	    *hPtr->bucketPtr = hPtr;
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

@@ -239,16 +239,22 @@ test set-1.26 {TclCompileSetCmd: various array constructs} {
 {b c} foo 51}]; # " just a matching end quote
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 test set-2.1 {set command: runtime error, bad variable name} {
     unset -nocomplain {"foo}
     list [catch {set {"foo}} msg] $msg $::errorInfo
 } {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
 =======
+=======
+>>>>>>> upstream/master
 test set-2.1 {set command: runtime error, bad variable name} -setup {
     unset -nocomplain {"foo}
 } -body {
     list [catch {set {"foo}} msg] $msg $::errorInfo
 } -result {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     while executing
 "set {"foo}"}}
@@ -265,13 +271,19 @@ test set-2.3 {set command: runtime error, errors in reading variables} -setup {
     set a(6) 44
     list [catch {set a(18)} msg] $msg
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {can't read "a(18)": no such element in array}}
 test set-2.4 {set command: runtime error, readonly variable} -body {
 =======
+=======
+>>>>>>> upstream/master
 } -result {1 {can't read "a(18)": no such element in array}}
 test set-2.4 {set command: runtime error, readonly variable} -setup {
     unset -nocomplain x
 } -body {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     proc readonly args {error "variable is read-only"}
     set x 123
@@ -507,11 +519,20 @@ test set-3.24 {uncompiled set command: too many arguments} {
 } {wrong # args: should be "set varName ?newValue?"}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 test set-4.1 {uncompiled set command: runtime error, bad variable name} {
     unset -nocomplain {"foo}
     set z set
     list [catch {$z {"foo}} msg] $msg $::errorInfo
 } {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
+=======
+test set-4.1 {uncompiled set command: runtime error, bad variable name} -setup {
+    unset -nocomplain {"foo}
+} -body {
+    set z set
+    list [catch {$z {"foo}} msg] $msg $::errorInfo
+} -result {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
+>>>>>>> upstream/master
 =======
 test set-4.1 {uncompiled set command: runtime error, bad variable name} -setup {
     unset -nocomplain {"foo}
@@ -537,7 +558,11 @@ test set-4.3 {uncompiled set command: runtime error, errors in reading variables
     $z a(6) 44
     list [catch {$z a(18)} msg] $msg
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {can't read "a(18)": no such element in array}}
+=======
+} -result {1 {can't read "a(18)": no such element in array}}
+>>>>>>> upstream/master
 =======
 } -result {1 {can't read "a(18)": no such element in array}}
 >>>>>>> upstream/master
@@ -565,6 +590,7 @@ test set-4.6 {set command: runtime error, basic array operations} -setup {
     set z set
     list [catch {$z a} msg] $msg
 } -result {1 {can't read "a": variable is array}}
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 test set-5.1 {error on malformed array name} testset2 {
@@ -575,6 +601,9 @@ test set-5.1 {error on malformed array name} testset2 {
 } {{can't read "z(a)(b)": variable isn't array} {can't read "z(b)(a)": variable isn't array}}
 
 =======
+=======
+
+>>>>>>> upstream/master
 test set-5.1 {error on malformed array name} -constraints testset2 -setup {
     unset -nocomplain z
 } -body {
@@ -582,13 +611,20 @@ test set-5.1 {error on malformed array name} -constraints testset2 -setup {
     catch {testset2 z(b) a} msg1
     list $msg $msg1
 } -result {{can't read "z(a)(b)": variable isn't array} {can't read "z(b)(a)": variable isn't array}}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # In a mem-debug build, this test will crash unless Bug 3602706 is fixed.
 test set-5.2 {Bug 3602706} -body {
     testset2 ::tcl_platform not-in-there
 } -returnCodes error -result * -match glob
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -601,9 +637,15 @@ catch {unset z}
 ::tcltest::cleanupTests
 return
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 # Local Variables:
 # mode: tcl
 # End:
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master

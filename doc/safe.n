@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -185,8 +189,13 @@ ERROR for slave interp10 : /foo/bar/init.tcl: no such file or directory
 .SS OPTIONS
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The following options are common to 
 \fB::safe::interpCreate\fR, \fB::safe::interpInit\fR, 
+=======
+The following options are common to
+\fB::safe::interpCreate\fR, \fB::safe::interpInit\fR,
+>>>>>>> upstream/master
 =======
 The following options are common to
 \fB::safe::interpCreate\fR, \fB::safe::interpInit\fR,
@@ -312,6 +321,7 @@ The only valid file names arguments
 for the \fBsource\fR and \fBload\fR aliases provided to the slave
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 are path in the form of 
 \fB[file join \fItoken filename\fB]\fR (i.e. when using the
 native file path formats: \fItoken\fB/\fIfilename\fR
@@ -320,12 +330,17 @@ where \fItoken\fR is representing one of the directories
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 are path in the form of
 \fB[file join \fItoken filename\fB]\fR (i.e. when using the
 native file path formats: \fItoken\fB/\fIfilename\fR
 on Unix and \fItoken\fB\e\fIfilename\fR on Windows),
 where \fItoken\fR is representing one of the directories
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -359,11 +374,19 @@ If the access path argument is not given or is the empty list,
 the default behavior is to let the slave access the same packages
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 as the master has access to (Or to be more precise: 
 only packages written in Tcl (which by definition cannot be dangerous
 as they run in the slave interpreter) and C extensions that
 provides a _SafeInit entry point). For that purpose, the master's 
 \fBauto_path\fR will be used to construct the slave access path. 
+=======
+as the master has access to (Or to be more precise:
+only packages written in Tcl (which by definition cannot be dangerous
+as they run in the slave interpreter) and C extensions that
+provides a _SafeInit entry point). For that purpose, the master's
+\fBauto_path\fR will be used to construct the slave access path.
+>>>>>>> upstream/master
 =======
 as the master has access to (Or to be more precise:
 only packages written in Tcl (which by definition cannot be dangerous

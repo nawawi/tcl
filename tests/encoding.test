@@ -75,7 +75,11 @@ test encoding-2.2 {Tcl_FreeEncoding: refcount != 0} -setup {
     encoding dirs [list [pwd]]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x [encoding convertto shiftjis \u4e4e]	;# old one found   
+=======
+    set x [encoding convertto shiftjis \u4e4e]	;# old one found
+>>>>>>> upstream/master
 =======
     set x [encoding convertto shiftjis \u4e4e]	;# old one found
 >>>>>>> upstream/master
@@ -192,7 +196,11 @@ test encoding-8.1 {Tcl_ExternalToUtf} {
     set f [open [file join [temporaryDirectory] dummy] r]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation binary -encoding shiftjis    
+=======
+    fconfigure $f -translation binary -encoding shiftjis
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation binary -encoding shiftjis
 >>>>>>> upstream/master
@@ -283,7 +291,11 @@ test encoding-11.6 {LoadEncodingFile: invalid file} -constraints {testencoding} 
     set f [open [file join tmp encoding splat.enc] w]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation binary 
+=======
+    fconfigure $f -translation binary
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation binary
 >>>>>>> upstream/master

@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -38,7 +42,11 @@ used to initialize the \fB\-errorinfo\fR return options and
 the first increment of unwind information
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will not be added by the Tcl interpreter.  
+=======
+will not be added by the Tcl interpreter.
+>>>>>>> upstream/master
 =======
 will not be added by the Tcl interpreter.
 >>>>>>> upstream/master
@@ -55,6 +63,7 @@ to return a stack trace reflecting the original point of occurrence
 of the error:
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CS
 catch {...} errMsg
 set savedInfo $::errorInfo
@@ -68,6 +77,21 @@ should be used instead:
 .CS
 catch {...} errMsg options
 \&...
+=======
+.CS
+catch {...} errMsg
+set savedInfo $::errorInfo
+\&...
+\fBerror\fR $errMsg $savedInfo
+.CE
+.PP
+When working with Tcl 8.5 or later, the following code
+should be used instead:
+.PP
+.CS
+catch {...} errMsg options
+\&...
+>>>>>>> upstream/master
 =======
 .CS
 catch {...} errMsg

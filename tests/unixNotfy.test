@@ -36,7 +36,11 @@ test unixNotfy-1.1 {Tcl_DeleteFileHandler} -constraints {noTk unix unthreaded} -
     list [catch {vwait x} msg] $msg
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {1 {can't wait for variable "x": would wait forever}} -cleanup { 
+=======
+} -result {1 {can't wait for variable "x": would wait forever}} -cleanup {
+>>>>>>> upstream/master
 =======
 } -result {1 {can't wait for variable "x": would wait forever}} -cleanup {
 >>>>>>> upstream/master
@@ -100,7 +104,11 @@ test unixNotfy-2.2 {Tcl_DeleteFileHandler} \
     -result {ok} \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -cleanup { 
+=======
+    -cleanup {
+>>>>>>> upstream/master
 =======
     -cleanup {
 >>>>>>> upstream/master

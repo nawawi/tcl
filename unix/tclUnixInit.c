@@ -116,7 +116,11 @@ static char pkgPath[sizeof(TCL_PACKAGE_PATH)+200] = TCL_PACKAGE_PATH;
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct LocaleTable {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -366,6 +370,7 @@ TclpInitPlatform(void)
 #else
     tclPlatform = TCL_PLATFORM_UNIX;
 #endif
+<<<<<<< HEAD
 
     /*
      * Make sure, that the standard FDs exist. [Bug 772288]
@@ -382,6 +387,24 @@ TclpInitPlatform(void)
     }
 
     /*
+=======
+
+    /*
+     * Make sure, that the standard FDs exist. [Bug 772288]
+     */
+
+    if (TclOSseek(0, (Tcl_SeekOffset) 0, SEEK_CUR) == -1 && errno == EBADF) {
+	open("/dev/null", O_RDONLY);
+    }
+    if (TclOSseek(1, (Tcl_SeekOffset) 0, SEEK_CUR) == -1 && errno == EBADF) {
+	open("/dev/null", O_WRONLY);
+    }
+    if (TclOSseek(2, (Tcl_SeekOffset) 0, SEEK_CUR) == -1 && errno == EBADF) {
+	open("/dev/null", O_WRONLY);
+    }
+
+    /*
+>>>>>>> upstream/master
      * The code below causes SIGPIPE (broken pipe) errors to be ignored. This
      * is needed so that Tcl processes don't die if they create child
      * processes (e.g. using "exec" or "open") that terminate prematurely.
@@ -548,6 +571,7 @@ TclpInitLibraryPath(
     *encodingPtr = Tcl_GetEncoding(NULL, NULL);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     str = TclGetStringFromObj(pathPtr, lengthPtr);
@@ -555,10 +579,15 @@ TclpInitLibraryPath(
     *valuePtr = ckalloc((*lengthPtr) + 1);
     memcpy(*valuePtr, str, (size_t)(*lengthPtr)+1);
 =======
+=======
+>>>>>>> upstream/master
     str = TclGetString(pathPtr);
     *lengthPtr = pathPtr->length;
     *valuePtr = ckalloc(*lengthPtr + 1);
     memcpy(*valuePtr, str, *lengthPtr + 1);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_DecrRefCount(pathPtr);
 }
@@ -589,6 +618,7 @@ TclpInitLibraryPath(
 
 void
 TclpSetInitialEncodings(void)
+<<<<<<< HEAD
 {
     Tcl_DString encodingName;
     Tcl_SetSystemEncoding(NULL,
@@ -629,6 +659,48 @@ const char *
 Tcl_GetEncodingNameFromEnvironment(
     Tcl_DString *bufPtr)
 {
+=======
+{
+    Tcl_DString encodingName;
+    Tcl_SetSystemEncoding(NULL,
+	    Tcl_GetEncodingNameFromEnvironment(&encodingName));
+    Tcl_DStringFree(&encodingName);
+}
+
+void
+TclpSetInterfaces(void)
+{
+    /* do nothing */
+}
+
+static const char *
+SearchKnownEncodings(
+    const char *encoding)
+{
+    int left = 0;
+    int right = sizeof(localeTable)/sizeof(LocaleTable);
+
+    while (left < right) {
+	int test = (left + right)/2;
+	int code = strcmp(localeTable[test].lang, encoding);
+
+	if (code == 0) {
+	    return localeTable[test].encoding;
+	}
+	if (code < 0) {
+	    left = test+1;
+	} else {
+	    right = test-1;
+	}
+    }
+    return NULL;
+}
+
+const char *
+Tcl_GetEncodingNameFromEnvironment(
+    Tcl_DString *bufPtr)
+{
+>>>>>>> upstream/master
     const char *encoding;
     const char *knownEncoding;
 
@@ -751,6 +823,43 @@ Tcl_GetEncodingNameFromEnvironment(
  *----------------------------------------------------------------------
  */
 
+#if defined(HAVE_COREFOUNDATION) && MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+/*
+ * Helper because whether CFLocaleCopyCurrent and CFLocaleGetIdentifier are
+ * strongly or weakly bound varies by version of OSX, triggering warnings.
+ */
+
+static inline void
+InitMacLocaleInfoVar(
+    CFLocaleRef (*localeCopyCurrent)(void),
+    CFStringRef (*localeGetIdentifier)(CFLocaleRef),
+    Tcl_Interp *interp)
+{
+    CFLocaleRef localeRef;
+    CFStringRef locale;
+    char loc[256];
+
+    if (localeCopyCurrent == NULL || localeGetIdentifier == NULL) {
+	return;
+    }
+
+    localeRef = localeCopyCurrent();
+    if (!localeRef) {
+	return;
+    }
+
+    locale = localeGetIdentifier(localeRef);
+    if (locale && CFStringGetCString(locale, loc, 256,
+	    kCFStringEncodingUTF8)) {
+	if (!Tcl_CreateNamespace(interp, "::tcl::mac", NULL, NULL)) {
+	    Tcl_ResetResult(interp);
+	}
+	Tcl_SetVar2(interp, "::tcl::mac::locale", NULL, loc, TCL_GLOBAL_ONLY);
+    }
+    CFRelease(localeRef);
+}
+#endif /*defined(HAVE_COREFOUNDATION) && MAC_OS_X_VERSION_MAX_ALLOWED > 1020*/
+
 void
 TclpSetVariables(
     Tcl_Interp *interp)
@@ -769,11 +878,15 @@ TclpSetVariables(
 #ifdef HAVE_COREFOUNDATION
     char tclLibPath[MAXPATHLEN + 1];
 
+<<<<<<< HEAD
 #if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+=======
+>>>>>>> upstream/master
     /*
      * Set msgcat fallback locale to current CFLocale identifier.
      */
 
+<<<<<<< HEAD
     CFLocaleRef localeRef;
 
     if (&CFLocaleCopyCurrent != NULL && &CFLocaleGetIdentifier != NULL &&
@@ -796,6 +909,10 @@ TclpSetVariables(
 	}
 	CFRelease(localeRef);
     }
+=======
+#if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+    InitMacLocaleInfoVar(CFLocaleCopyCurrent, CFLocaleGetIdentifier, interp);
+>>>>>>> upstream/master
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED > 1020 */
 
     if (MacOSXGetLibraryPath(interp, MAXPATHLEN, tclLibPath) == TCL_OK) {
@@ -803,9 +920,15 @@ TclpSetVariables(
 	CFBundleRef bundleRef;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tclDefaultLibrary", tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+	Tcl_SetVar2(interp, "tclDefaultLibrary", NULL, tclLibPath, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tclDefaultLibrary", NULL, tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath, TCL_GLOBAL_ONLY);
@@ -827,9 +950,15 @@ TclpSetVariables(
 		}
 	    } while (*p++);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_SetVar(interp, "tcl_pkgPath", Tcl_DStringValue(&ds),
 		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 	    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, Tcl_DStringValue(&ds),
+		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, Tcl_DStringValue(&ds),
 		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -850,9 +979,15 @@ TclpSetVariables(
 			! TclOSstat(tclLibPath, &statBuf) &&
 			S_ISDIR(statBuf.st_mode)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 		    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
+			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -869,9 +1004,15 @@ TclpSetVariables(
 			! TclOSstat(tclLibPath, &statBuf) &&
 			S_ISDIR(statBuf.st_mode)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 		    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
+			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -883,7 +1024,11 @@ TclpSetVariables(
 	    }
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tcl_pkgPath", pkgPath,
+=======
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath,
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath,
 >>>>>>> upstream/master
@@ -892,7 +1037,11 @@ TclpSetVariables(
 #endif /* HAVE_COREFOUNDATION */
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tcl_pkgPath", pkgPath, TCL_GLOBAL_ONLY);
+=======
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath, TCL_GLOBAL_ONLY);
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath, TCL_GLOBAL_ONLY);
 >>>>>>> upstream/master

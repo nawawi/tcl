@@ -234,7 +234,11 @@ ConvertZeroEffectToNOP(
 		int numBytes;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		(void) Tcl_GetStringFromObj(litPtr, &numBytes);
+=======
+		(void) TclGetStringFromObj(litPtr, &numBytes);
+>>>>>>> upstream/master
 =======
 		(void) TclGetStringFromObj(litPtr, &numBytes);
 >>>>>>> upstream/master
@@ -253,7 +257,11 @@ ConvertZeroEffectToNOP(
 		int numBytes;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		(void) Tcl_GetStringFromObj(litPtr, &numBytes);
+=======
+		(void) TclGetStringFromObj(litPtr, &numBytes);
+>>>>>>> upstream/master
 =======
 		(void) TclGetStringFromObj(litPtr, &numBytes);
 >>>>>>> upstream/master

@@ -13,6 +13,7 @@
 # The following variables are used to determine which characters are
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # interpreted as white space.
 
 if {$::tcl_platform(platform) eq "windows"} {
@@ -25,6 +26,8 @@ if {$::tcl_platform(platform) eq "windows"} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 # interpreted as word characters. See bug [f1253530cdd8]. Will
 # probably be removed in Tcl 9.
 
@@ -33,6 +36,9 @@ if {![info exists ::tcl_wordchars]} {
 }
 if {![info exists ::tcl_nonwordchars]} {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

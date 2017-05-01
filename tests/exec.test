@@ -683,7 +683,10 @@ test exec-19.1 {exec >> uses O_APPEND} -constraints {exec unix} -setup {
     removeFile $tmpfile
 } -result 14
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 # Tests to ensure batch files and .CMD (Bug 9ece99d58b)
 # can be executed on Windows
@@ -698,9 +701,12 @@ test exec-20.1 {exec .CMD file} -constraints {win} -body {
     viewFile $log
 } -result "\"Testing exec-20.1\""
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

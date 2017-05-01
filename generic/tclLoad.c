@@ -757,6 +757,7 @@ Tcl_UnloadObjCmd(
 	    goto done;
 	}
 	unloadProc = pkgPtr->unloadProc;
+<<<<<<< HEAD
     }
 
     /*
@@ -797,6 +798,48 @@ Tcl_UnloadObjCmd(
      * if we unload the DLL.
      */
 
+=======
+    }
+
+    /*
+     * We are ready to unload the package. First, evaluate the unload
+     * function. If this fails, we cannot proceed with unload. Also, we must
+     * specify the proper flag to pass to the unload callback.
+     * TCL_UNLOAD_DETACH_FROM_INTERPRETER is defined when the callback should
+     * only remove itself from the interpreter; the library will be unloaded
+     * in a future call of unload. In case the library will be unloaded just
+     * after the callback returns, TCL_UNLOAD_DETACH_FROM_PROCESS is passed.
+     */
+
+    code = TCL_UNLOAD_DETACH_FROM_INTERPRETER;
+    if (!keepLibrary) {
+	Tcl_MutexLock(&packageMutex);
+	trustedRefCount = pkgPtr->interpRefCount;
+	safeRefCount = pkgPtr->safeInterpRefCount;
+	Tcl_MutexUnlock(&packageMutex);
+
+	if (Tcl_IsSafe(target)) {
+	    safeRefCount--;
+	} else {
+	    trustedRefCount--;
+	}
+
+	if (safeRefCount <= 0 && trustedRefCount <= 0) {
+	    code = TCL_UNLOAD_DETACH_FROM_PROCESS;
+	}
+    }
+    code = unloadProc(target, code);
+    if (code != TCL_OK) {
+	Tcl_TransferResult(target, code, interp);
+	goto done;
+    }
+
+    /*
+     * The unload function executed fine. Examine the reference count to see
+     * if we unload the DLL.
+     */
+
+>>>>>>> upstream/master
     Tcl_MutexLock(&packageMutex);
     if (Tcl_IsSafe(target)) {
 	pkgPtr->safeInterpRefCount--;
@@ -818,6 +861,7 @@ Tcl_UnloadObjCmd(
 	if (pkgPtr->interpRefCount < 0) {
 	    pkgPtr->interpRefCount = 0;
 	}
+<<<<<<< HEAD
     }
     trustedRefCount = pkgPtr->interpRefCount;
     safeRefCount = pkgPtr->safeInterpRefCount;
@@ -896,8 +940,91 @@ Tcl_UnloadObjCmd(
 		NULL);
 	code = TCL_ERROR;
 #endif
+=======
+>>>>>>> upstream/master
+    }
+    trustedRefCount = pkgPtr->interpRefCount;
+    safeRefCount = pkgPtr->safeInterpRefCount;
+    Tcl_MutexUnlock(&packageMutex);
+
+    code = TCL_OK;
+    if (pkgPtr->safeInterpRefCount <= 0 && pkgPtr->interpRefCount <= 0
+	    && !keepLibrary) {
+	/*
+	 * Unload the shared library from the application memory...
+	 */
+
+#if defined(TCL_UNLOAD_DLLS) || defined(_WIN32)
+	/*
+	 * Some Unix dlls are poorly behaved - registering things like atexit
+	 * calls that can't be unregistered. If you unload such dlls, you get
+	 * a core on exit because it wants to call a function in the dll after
+	 * it's been unloaded.
+	 */
+
+<<<<<<< HEAD
+=======
+	if (pkgPtr->fileName[0] != '\0') {
+	    Tcl_MutexLock(&packageMutex);
+	    if (Tcl_FSUnloadFile(interp, pkgPtr->loadHandle) == TCL_OK) {
+		/*
+		 * Remove this library from the loaded library cache.
+		 */
+
+		defaultPtr = pkgPtr;
+		if (defaultPtr == firstPackagePtr) {
+		    firstPackagePtr = pkgPtr->nextPtr;
+		} else {
+		    for (pkgPtr = firstPackagePtr; pkgPtr != NULL;
+			    pkgPtr = pkgPtr->nextPtr) {
+			if (pkgPtr->nextPtr == defaultPtr) {
+			    pkgPtr->nextPtr = defaultPtr->nextPtr;
+			    break;
+			}
+		    }
+		}
+
+		/*
+		 * Remove this library from the interpreter's library cache.
+		 */
+
+		ipFirstPtr = Tcl_GetAssocData(target, "tclLoad", NULL);
+		ipPtr = ipFirstPtr;
+		if (ipPtr->pkgPtr == defaultPtr) {
+		    ipFirstPtr = ipFirstPtr->nextPtr;
+		} else {
+		    InterpPackage *ipPrevPtr;
+
+		    for (ipPrevPtr = ipPtr; ipPtr != NULL;
+			    ipPrevPtr = ipPtr, ipPtr = ipPtr->nextPtr) {
+			if (ipPtr->pkgPtr == pkgPtr) {
+			    ipPrevPtr->nextPtr = ipPtr->nextPtr;
+			    break;
+			}
+		    }
+		}
+		Tcl_SetAssocData(target, "tclLoad", LoadCleanupProc,
+			ipFirstPtr);
+		ckfree(defaultPtr->fileName);
+		ckfree(defaultPtr->packageName);
+		ckfree(defaultPtr);
+		ckfree(ipPtr);
+		Tcl_MutexUnlock(&packageMutex);
+	    } else {
+		code = TCL_ERROR;
+	    }
+	}
+#else
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"file \"%s\" cannot be unloaded: unloading disabled",
+		fullFileName));
+	Tcl_SetErrorCode(interp, "TCL", "OPERATION", "UNLOAD", "DISABLED",
+		NULL);
+	code = TCL_ERROR;
+#endif
     }
 
+>>>>>>> upstream/master
   done:
     Tcl_DStringFree(&pkgName);
     Tcl_DStringFree(&tmp);
@@ -998,7 +1125,11 @@ Tcl_StaticPackage(
 	}
 
 	/*
+<<<<<<< HEAD
 	 * Package isn't loade in the current interp yet. Mark it as now being
+=======
+	 * Package isn't loaded in the current interp yet. Mark it as now being
+>>>>>>> upstream/master
 	 * loaded.
 	 */
 
@@ -1012,7 +1143,7 @@ Tcl_StaticPackage(
 /*
  *----------------------------------------------------------------------
  *
- * TclGetLoadedPackages --
+ * TclGetLoadedPackages, TclGetLoadedPackagesEx --
  *
  *	This function returns information about all of the files that are
  *	loaded (either in a particular interpreter, or for all interpreters).
@@ -1036,8 +1167,26 @@ TclGetLoadedPackages(
 				 * or error message. */
     const char *targetName)	/* Name of target interpreter or NULL. If
 				 * NULL, return info about all interps;
+<<<<<<< HEAD
+=======
 				 * otherwise, just return info about this
 				 * interpreter. */
+{
+    return TclGetLoadedPackagesEx(interp, targetName, NULL);
+}
+
+int
+TclGetLoadedPackagesEx(
+    Tcl_Interp *interp,		/* Interpreter in which to return information
+				 * or error message. */
+    const char *targetName,	/* Name of target interpreter or NULL. If
+				 * NULL, return info about all interps;
+>>>>>>> upstream/master
+				 * otherwise, just return info about this
+				 * interpreter. */
+    const char *packageName)	/* Package name or NULL. If NULL, return info
+				 * for all packages.
+				 */
 {
     Tcl_Interp *target;
     LoadedPackage *pkgPtr;
@@ -1045,10 +1194,13 @@ TclGetLoadedPackages(
     Tcl_Obj *resultObj, *pkgDesc[2];
 
     if (targetName == NULL) {
+<<<<<<< HEAD
 	/*
 	 * Return information about all of the available packages.
 	 */
 
+=======
+>>>>>>> upstream/master
 	resultObj = Tcl_NewObj();
 	Tcl_MutexLock(&packageMutex);
 	for (pkgPtr = firstPackagePtr; pkgPtr != NULL;
@@ -1063,16 +1215,49 @@ TclGetLoadedPackages(
 	return TCL_OK;
     }
 
+<<<<<<< HEAD
     /*
      * Return information about only the packages that are loaded in a given
      * interpreter.
      */
 
+=======
+>>>>>>> upstream/master
     target = Tcl_GetSlave(interp, targetName);
     if (target == NULL) {
 	return TCL_ERROR;
     }
     ipPtr = Tcl_GetAssocData(target, "tclLoad", NULL);
+<<<<<<< HEAD
+=======
+
+    /*
+     * Return information about all of the available packages.
+     */
+    if (packageName) {
+	resultObj = NULL;
+
+	for (; ipPtr != NULL; ipPtr = ipPtr->nextPtr) {
+	    pkgPtr = ipPtr->pkgPtr;
+
+	    if (!strcmp(packageName, pkgPtr->packageName)) {
+		resultObj = Tcl_NewStringObj(pkgPtr->fileName, -1);
+		break;
+	    }
+	}
+
+	if (resultObj) {
+	    Tcl_SetObjResult(interp, resultObj);
+	}
+	return TCL_OK;
+    }
+
+    /*
+     * Return information about only the packages that are loaded in a given
+     * interpreter.
+     */
+
+>>>>>>> upstream/master
     resultObj = Tcl_NewObj();
     for (; ipPtr != NULL; ipPtr = ipPtr->nextPtr) {
 	pkgPtr = ipPtr->pkgPtr;

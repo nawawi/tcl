@@ -1,6 +1,7 @@
 # created by tools/loadICU.tcl -- do not edit
 namespace eval ::tcl::clock {
     ::msgcat::mcset ta DAYS_OF_WEEK_FULL [list \
+<<<<<<< HEAD
         "\u0b9e\u0bbe\u0baf\u0bbf\u0bb1\u0bc1"\
         "\u0ba4\u0bbf\u0b99\u0bcd\u0b95\u0bb3\u0bcd"\
         "\u0b9a\u0bc6\u0bb5\u0bcd\u0bb5\u0bbe\u0baf\u0bcd"\
@@ -36,4 +37,41 @@ namespace eval ::tcl::clock {
         "\u0b9f\u0bbf\u0b9a\u0bae\u0bcd\u0baa\u0bb0\u0bcdr"]
     ::msgcat::mcset ta AM "\u0b95\u0bbf\u0bae\u0bc1"
     ::msgcat::mcset ta PM "\u0b95\u0bbf\u0baa\u0bbf"
+=======
+        "ஞாயிறு"\
+        "திங்கள்"\
+        "செவ்வாய்"\
+        "புதன்"\
+        "வியாழன்"\
+        "வெள்ளி"\
+        "சனி"]
+    ::msgcat::mcset ta MONTHS_ABBREV [list \
+        "ஜனவரி"\
+        "பெப்ரவரி"\
+        "மார்ச்"\
+        "ஏப்ரல்"\
+        "மே"\
+        "ஜூன்"\
+        "ஜூலை"\
+        "ஆகஸ்ட்"\
+        "செப்டம்பர்"\
+        "அக்டோபர்"\
+        "நவம்பர்"\
+        "டிசம்பர்r"]
+    ::msgcat::mcset ta MONTHS_FULL [list \
+        "ஜனவரி"\
+        "பெப்ரவரி"\
+        "மார்ச்"\
+        "ஏப்ரல்"\
+        "மே"\
+        "ஜூன்"\
+        "ஜூலை"\
+        "ஆகஸ்ட்"\
+        "செப்டம்பர்"\
+        "அக்டோபர்"\
+        "நவம்பர்"\
+        "டிசம்பர்r"]
+    ::msgcat::mcset ta AM "கிமு"
+    ::msgcat::mcset ta PM "கிபி"
+>>>>>>> upstream/master
 }

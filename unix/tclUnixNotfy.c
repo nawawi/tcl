@@ -42,7 +42,11 @@ typedef struct FileHandler {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct FileHandlerEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -61,7 +65,11 @@ typedef struct {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct SelectMasks {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -158,6 +166,7 @@ static int triggerPipe = -1;
 
 /*
  * The notifierMutex locks access to all of the global notifier state.
+<<<<<<< HEAD
  */
 
 static pthread_mutex_t notifierInitMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -168,6 +177,18 @@ static pthread_mutex_t notifierMutex     = PTHREAD_MUTEX_INITIALIZER;
  * You must hold the notifierInitMutex before accessing this variable.
  */
 
+=======
+ */
+
+static pthread_mutex_t notifierInitMutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t notifierMutex     = PTHREAD_MUTEX_INITIALIZER;
+/*
+ * The following static indicates if the notifier thread is running.
+ *
+ * You must hold the notifierInitMutex before accessing this variable.
+ */
+
+>>>>>>> upstream/master
 static int notifierThreadRunning = 0;
 
 /*
@@ -203,6 +224,7 @@ static Tcl_ThreadId notifierThread;
  */
 
 #ifdef TCL_THREADS
+<<<<<<< HEAD
 static void	NotifierThreadProc(ClientData clientData);
 #if defined(HAVE_PTHREAD_ATFORK)
 <<<<<<< HEAD
@@ -214,6 +236,11 @@ static void	AtForkParent(void);
 static int	atForkInit = 0;
 >>>>>>> upstream/master
 =======
+static int	atForkInit = 0;
+>>>>>>> upstream/master
+=======
+static TCL_NORETURN void NotifierThreadProc(ClientData clientData);
+#if defined(HAVE_PTHREAD_ATFORK)
 static int	atForkInit = 0;
 >>>>>>> upstream/master
 static void	AtForkChild(void);
@@ -274,7 +301,11 @@ extern unsigned char __stdcall	TranslateMessage(const MSG *);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const WCHAR NotfyClassName[] = L"TclNotifier";
+=======
+static const WCHAR className[] = L"TclNotifier";
+>>>>>>> upstream/master
 =======
 static const WCHAR className[] = L"TclNotifier";
 >>>>>>> upstream/master
@@ -371,7 +402,11 @@ Tcl_InitNotifier(void)
 	    class.lpszMenuName = NULL;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    class.lpszClassName = NotfyClassName;
+=======
+	    class.lpszClassName = className;
+>>>>>>> upstream/master
 =======
 	    class.lpszClassName = className;
 >>>>>>> upstream/master
@@ -395,6 +430,7 @@ Tcl_InitNotifier(void)
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	pthread_mutex_lock(&notifierInitMutex);
 #if defined(HAVE_PTHREAD_ATFORK)
@@ -406,6 +442,19 @@ Tcl_InitNotifier(void)
 	if (!atForkInit) {
 	    int result = pthread_atfork(AtForkPrepare, AtForkParent, AtForkChild);
 
+=======
+
+	pthread_mutex_lock(&notifierInitMutex);
+#if defined(HAVE_PTHREAD_ATFORK)
+	/*
+	 * Install pthread_atfork handlers to clean up the notifier in the
+	 * child of a fork.
+	 */
+
+	if (!atForkInit) {
+	    int result = pthread_atfork(NULL, NULL, AtForkChild);
+
+>>>>>>> upstream/master
 =======
 
 	pthread_mutex_lock(&notifierInitMutex);
@@ -485,6 +534,7 @@ Tcl_FinalizeNotifier(
 	 * pipe and wait for the background thread to terminate.
 	 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	if (notifierCount == 0) {
 
@@ -529,6 +579,46 @@ Tcl_FinalizeNotifier(
 #endif /* __CYGWIN__ */
 	tsdPtr->waitCVinitialized = 0;
 
+=======
+
+	if (notifierCount == 0) {
+
+	    if (triggerPipe != -1) {
+		if (write(triggerPipe, "q", 1) != 1) {
+		    Tcl_Panic("Tcl_FinalizeNotifier: %s",
+			    "unable to write q to triggerPipe");
+		}
+		close(triggerPipe);
+		pthread_mutex_lock(&notifierMutex);
+		while(triggerPipe != -1) {
+		    pthread_cond_wait(&notifierCV, &notifierMutex);
+		}
+		pthread_mutex_unlock(&notifierMutex);
+		if (notifierThreadRunning) {
+		    int result = pthread_join((pthread_t) notifierThread, NULL);
+
+		    if (result) {
+			Tcl_Panic("Tcl_FinalizeNotifier: unable to join notifier "
+				"thread");
+		    }
+		    notifierThreadRunning = 0;
+		}
+	    }
+	}
+
+	/*
+	 * Clean up any synchronization objects in the thread local storage.
+	 */
+
+#ifdef __CYGWIN__
+	DestroyWindow(tsdPtr->hwnd);
+	CloseHandle(tsdPtr->event);
+#else /* __CYGWIN__ */
+	pthread_cond_destroy(&tsdPtr->waitCV);
+#endif /* __CYGWIN__ */
+	tsdPtr->waitCVinitialized = 0;
+
+>>>>>>> upstream/master
 =======
 
 	if (notifierCount == 0) {
@@ -985,12 +1075,21 @@ Tcl_WaitForEvent(
 	 * used when the core is not thread-enabled.
 	 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	struct timeval timeout, *timeoutPtr;
 	int numFound;
 #endif /* TCL_THREADS */
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
+=======
+
+	struct timeval timeout, *timeoutPtr;
+	int numFound;
+#endif /* TCL_THREADS */
+	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+
+>>>>>>> upstream/master
 =======
 
 	struct timeval timeout, *timeoutPtr;
@@ -1045,6 +1144,7 @@ Tcl_WaitForEvent(
 	StartNotifierThread("Tcl_WaitForEvent");
 
 	pthread_mutex_lock(&notifierMutex);
+<<<<<<< HEAD
 
 	if (timePtr != NULL && timePtr->sec == 0 && (timePtr->usec == 0
 #if defined(__APPLE__) && defined(__LP64__)
@@ -1115,11 +1215,70 @@ Tcl_WaitForEvent(
 	FD_ZERO(&tsdPtr->readyMasks.writable);
 	FD_ZERO(&tsdPtr->readyMasks.exception);
 
+=======
+
+	if (timePtr != NULL && timePtr->sec == 0 && (timePtr->usec == 0
+#if defined(__APPLE__) && defined(__LP64__)
+		/*
+		 * On 64-bit Darwin, pthread_cond_timedwait() appears to have
+		 * a bug that causes it to wait forever when passed an
+		 * absolute time which has already been exceeded by the system
+		 * time; as a workaround, when given a very brief timeout,
+		 * just do a poll. [Bug 1457797]
+		 */
+		|| timePtr->usec < 10
+#endif /* __APPLE__ && __LP64__ */
+		)) {
+	    /*
+	     * Cannot emulate a polling select with a polling condition
+	     * variable. Instead, pretend to wait for files and tell the
+	     * notifier thread what we are doing. The notifier thread makes
+	     * sure it goes through select with its select mask in the same
+	     * state as ours currently is. We block until that happens.
+	     */
+
+	    waitForFiles = 1;
+	    tsdPtr->pollState = POLL_WANT;
+	    timePtr = NULL;
+	} else {
+	    waitForFiles = (tsdPtr->numFdBits > 0);
+	    tsdPtr->pollState = 0;
+	}
+
+	if (waitForFiles) {
+	    /*
+	     * Add the ThreadSpecificData structure of this thread to the list
+	     * of ThreadSpecificData structures of all threads that are
+	     * waiting on file events.
+	     */
+
+	    tsdPtr->nextPtr = waitingListPtr;
+	    if (waitingListPtr) {
+		waitingListPtr->prevPtr = tsdPtr;
+	    }
+	    tsdPtr->prevPtr = 0;
+	    waitingListPtr = tsdPtr;
+	    tsdPtr->onList = 1;
+
+	    if ((write(triggerPipe, "", 1) == -1) && (errno != EAGAIN)) {
+		Tcl_Panic("Tcl_WaitForEvent: %s",
+			"unable to write to triggerPipe");
+	    }
+	}
+
+	FD_ZERO(&tsdPtr->readyMasks.readable);
+	FD_ZERO(&tsdPtr->readyMasks.writable);
+	FD_ZERO(&tsdPtr->readyMasks.exception);
+
+>>>>>>> upstream/master
 	if (!tsdPtr->eventReady) {
 #ifdef __CYGWIN__
 	    if (!PeekMessageW(&msg, NULL, 0, 0, 0)) {
 		DWORD timeout;
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 		if (timePtr) {
 		    timeout = timePtr->sec * 1000 + timePtr->usec / 1000;
@@ -1155,6 +1314,7 @@ Tcl_WaitForEvent(
 
 	    DWORD result = GetMessageW(&msg, NULL, 0, 0);
 
+<<<<<<< HEAD
 =======
 
 	if (!tsdPtr->eventReady) {
@@ -1196,6 +1356,8 @@ Tcl_WaitForEvent(
 
 	    DWORD result = GetMessageW(&msg, NULL, 0, 0);
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    if (result == 0) {
 		PostQuitMessage(msg.wParam);
@@ -1318,7 +1480,11 @@ Tcl_WaitForEvent(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 static void
+=======
+static TCL_NORETURN void
+>>>>>>> upstream/master
 NotifierThreadProc(
     ClientData clientData)	/* Not used. */
 {
@@ -1412,16 +1578,23 @@ NotifierThreadProc(
 	}
 	pthread_mutex_unlock(&notifierMutex);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 	/*
 	 * Set up the select mask to include the receive pipe.
 	 */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 	if (receivePipe >= numFdBits) {
 	    numFdBits = receivePipe + 1;
 	}
 	FD_SET(receivePipe, &readableMask);
+<<<<<<< HEAD
 
 =======
 
@@ -1440,6 +1613,9 @@ NotifierThreadProc(
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+
 >>>>>>> upstream/master
 	if (select(numFdBits, &readableMask, &writableMask, &exceptionMask,
 		timePtr) == -1) {
@@ -1542,6 +1718,9 @@ NotifierThreadProc(
     TclpThreadExit(0);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 }
@@ -1551,9 +1730,15 @@ NotifierThreadProc(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * AtForkPrepare --
  *
  *	Lock the notifier in preparation for a fork.
+=======
+ * AtForkChild --
+ *
+ *	Unlock and reinstall the notifier in the child after a fork.
+>>>>>>> upstream/master
  *
  * Results:
  *	None.
@@ -1565,6 +1750,7 @@ NotifierThreadProc(
  */
 
 static void
+<<<<<<< HEAD
 AtForkPrepare(void)
 {
 #if RESET_ATFORK_MUTEX == 0
@@ -1681,6 +1867,54 @@ AtForkChild(void)
 	    pthread_cond_destroy(&tsdPtr->waitCV);
 	    pthread_cond_init(&tsdPtr->waitCV, NULL);
 #endif
+=======
+AtForkChild(void)
+{
+    if (notifierThreadRunning == 1) {
+	pthread_cond_destroy(&notifierCV);
+    }
+    pthread_mutex_init(&notifierInitMutex, NULL);
+    pthread_mutex_init(&notifierMutex, NULL);
+    pthread_cond_init(&notifierCV, NULL);
+
+    /*
+     * notifierThreadRunning == 1: thread is running, (there might be data in notifier lists)
+     * atForkInit == 0: InitNotifier was never called
+     * notifierCount != 0: unbalanced  InitNotifier() / FinalizeNotifier calls
+     * waitingListPtr != 0: there are threads currently waiting for events.
+     */
+
+    if (atForkInit == 1) {
+
+	notifierCount = 0;
+	if (notifierThreadRunning == 1) {
+	    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+	    notifierThreadRunning = 0;
+
+	    close(triggerPipe);
+	    triggerPipe = -1;
+	    /*
+	     * The waitingListPtr might contain event info from multiple
+	     * threads, which are invalid here, so setting it to NULL is not
+	     * unreasonable.
+	     */
+	    waitingListPtr = NULL;
+
+	    /*
+	     * The tsdPtr from before the fork is copied as well.  But since
+	     * we are paranoic, we don't trust its condvar and reset it.
+	     */
+#ifdef __CYGWIN__
+	    DestroyWindow(tsdPtr->hwnd);
+	    tsdPtr->hwnd = CreateWindowExW(NULL, className,
+		    className, 0, 0, 0, 0, 0, NULL, NULL,
+		    TclWinGetTclInstance(), NULL);
+	    ResetEvent(tsdPtr->event);
+#else
+	    pthread_cond_destroy(&tsdPtr->waitCV);
+	    pthread_cond_init(&tsdPtr->waitCV, NULL);
+#endif
+>>>>>>> upstream/master
 =======
 AtForkChild(void)
 {

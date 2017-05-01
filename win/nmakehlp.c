@@ -43,7 +43,11 @@
 /* protos */
 
 static int CheckForCompilerFeature(const char *option);
+<<<<<<< HEAD
 static int CheckForLinkerFeature(const char *option);
+=======
+static int CheckForLinkerFeature(const char **options, int count);
+>>>>>>> upstream/master
 static int IsIn(const char *string, const char *substring);
 static int SubstituteFile(const char *substs, const char *filename);
 static int QualifyPath(const char *path);
@@ -102,16 +106,26 @@ main(
 	    }
 	    return CheckForCompilerFeature(argv[2]);
 	case 'l':
+<<<<<<< HEAD
 	    if (argc != 3) {
 		chars = snprintf(msg, sizeof(msg) - 1,
 	       		"usage: %s -l <linker option>\n"
+=======
+	    if (argc < 3) {
+		chars = snprintf(msg, sizeof(msg) - 1,
+	       		"usage: %s -l <linker option> ?<mandatory option> ...?\n"
+>>>>>>> upstream/master
 			"Tests for whether link.exe supports an option\n"
 			"exitcodes: 0 == no, 1 == yes, 2 == error\n", argv[0]);
 		WriteFile(GetStdHandle(STD_ERROR_HANDLE), msg, chars,
 			&dwWritten, NULL);
 		return 2;
 	    }
+<<<<<<< HEAD
 	    return CheckForLinkerFeature(argv[2]);
+=======
+	    return CheckForLinkerFeature(&argv[2], argc-2);
+>>>>>>> upstream/master
 	case 'f':
 	    if (argc == 2) {
 		chars = snprintf(msg, sizeof(msg) - 1,
@@ -313,7 +327,12 @@ CheckForCompilerFeature(
 
 static int
 CheckForLinkerFeature(
+<<<<<<< HEAD
     const char *option)
+=======
+    const char **options,
+    int count)
+>>>>>>> upstream/master
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -322,7 +341,12 @@ CheckForLinkerFeature(
     char msg[300];
     BOOL ok;
     HANDLE hProcess, h, pipeThreads[2];
+<<<<<<< HEAD
     char cmdline[100];
+=======
+    int i;
+    char cmdline[255];
+>>>>>>> upstream/master
 
     hProcess = GetCurrentProcess();
 
@@ -368,7 +392,15 @@ CheckForLinkerFeature(
      * Append our option for testing.
      */
 
+<<<<<<< HEAD
     lstrcat(cmdline, option);
+=======
+    for (i = 0; i < count; i++) {
+	lstrcat(cmdline, " \"");
+	lstrcat(cmdline, options[i]);
+	lstrcat(cmdline, "\"");
+    }
+>>>>>>> upstream/master
 
     ok = CreateProcess(
 	    NULL,	    /* Module name. */
@@ -433,7 +465,13 @@ CheckForLinkerFeature(
     return !(strstr(Out.buffer, "LNK1117") != NULL ||
 	    strstr(Err.buffer, "LNK1117") != NULL ||
 	    strstr(Out.buffer, "LNK4044") != NULL ||
+<<<<<<< HEAD
 	    strstr(Err.buffer, "LNK4044") != NULL);
+=======
+	    strstr(Err.buffer, "LNK4044") != NULL ||
+	    strstr(Out.buffer, "LNK4224") != NULL ||
+	    strstr(Err.buffer, "LNK4224") != NULL);
+>>>>>>> upstream/master
 }
 
 static DWORD WINAPI
@@ -608,8 +646,13 @@ SubstituteFile(
 	    while (fgets(szBuffer, cbBuffer, sp) != NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		char *ks, *ke, *vs, *ve;
 		ks = szBuffer;
+=======
+		unsigned char *ks, *ke, *vs, *ve;
+		ks = (unsigned char*)szBuffer;
+>>>>>>> upstream/master
 =======
 		unsigned char *ks, *ke, *vs, *ve;
 		ks = (unsigned char*)szBuffer;
@@ -628,7 +671,11 @@ SubstituteFile(
 		*ke = 0, *ve = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		list_insert(&substPtr, ks, vs);
+=======
+		list_insert(&substPtr, (char*)ks, (char*)vs);
+>>>>>>> upstream/master
 =======
 		list_insert(&substPtr, (char*)ks, (char*)vs);
 >>>>>>> upstream/master

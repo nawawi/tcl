@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -23,7 +27,11 @@ Tcl_CancelEval, Tcl_Canceled \- cancel Tcl scripts
 int
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBTcl_CancelEval\fR(\fIinterp, clientData, flags\fR)
+=======
+\fBTcl_CancelEval\fR(\fIinterp, resultObjPtr, clientData, flags\fR)
+>>>>>>> upstream/master
 =======
 \fBTcl_CancelEval\fR(\fIinterp, resultObjPtr, clientData, flags\fR)
 >>>>>>> upstream/master
@@ -36,9 +44,12 @@ int
 .SH ARGUMENTS
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .AP Tcl_Interp *interp in
 Interpreter in which to cancel the script.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 .AS Tcl_Interp *interp
@@ -49,6 +60,9 @@ Error message to use in the cancellation, or NULL to use a default message. If
 not NULL, this object will have its reference count decremented before
 \fBTcl_CancelEval\fR returns.
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -60,7 +74,11 @@ supported.  For \fBTcl_Canceled\fR, only \fBTCL_LEAVE_ERR_MSG\fR and
 .AP ClientData clientData in
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Currently, reserved for future use.
+=======
+Currently reserved for future use.
+>>>>>>> upstream/master
 =======
 Currently reserved for future use.
 >>>>>>> upstream/master
@@ -83,6 +101,7 @@ running command.  This function is thread sensitive and may only be called
 from the thread the interpreter was created in.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .SH "FLAG BITS"
 Any ORed combination of the following values may be used for the
 \fIflags\fR argument to procedures such as \fBTcl_CancelEval\fR:
@@ -97,6 +116,8 @@ interpreter is being unwound.
 .TP 23
 \fBTCL_LEAVE_ERR_MSG\fR
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 .SS "FLAG BITS"
@@ -115,6 +136,9 @@ interpreter is being unwound.
 \fBTCL_LEAVE_ERR_MSG\fR
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -127,6 +151,10 @@ message is left and the interpreter's result will not be modified.
 .SH "SEE ALSO"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+interp(n), Tcl_Eval(3),
+>>>>>>> upstream/master
 =======
 interp(n), Tcl_Eval(3),
 >>>>>>> upstream/master

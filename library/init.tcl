@@ -18,7 +18,11 @@ if {[info commands package] == ""} {
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require -exact Tcl 8.6.4
+=======
+package require -exact Tcl 8.7a0
+>>>>>>> upstream/master
 =======
 package require -exact Tcl 8.7a0
 >>>>>>> upstream/master
@@ -53,6 +57,10 @@ if {![info exists auto_path]} {
 	set auto_path ""
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 namespace eval tcl {
     variable Dir
     foreach Dir [list $::tcl_library [file dirname $::tcl_library]] {
@@ -120,6 +128,11 @@ namespace eval tcl {
     }
 }
 
+<<<<<<< HEAD
+=======
+namespace eval tcl::Pkg {}
+
+>>>>>>> upstream/master
 # Windows specific end of initialization
 
 if {(![interp issafe]) && ($tcl_platform(platform) eq "windows")} {
@@ -177,6 +190,7 @@ if {[interp issafe]} {
 
     namespace eval ::tcl::clock [list variable TclLibDir $::tcl_library]
 
+<<<<<<< HEAD
     proc clock args {
 	namespace eval ::tcl::clock [list namespace ensemble create -command \
 		[uplevel 1 [list namespace origin [lindex [info level 0] 0]]] \
@@ -184,6 +198,9 @@ if {[interp issafe]} {
 		    add clicks format microseconds milliseconds scan seconds
 		}]
 
+=======
+    proc ::tcl::initClock {} {
+>>>>>>> upstream/master
 	# Auto-loading stubs for 'clock.tcl'
 
 	foreach cmd {add format scan} {
@@ -194,8 +211,14 @@ if {[interp issafe]} {
 	    }
 	}
 
+<<<<<<< HEAD
 	return [uplevel 1 [info level 0]]
     }
+=======
+	rename ::tcl::initClock {}
+    }
+    ::tcl::initClock
+>>>>>>> upstream/master
 }
 
 # Conditionalize for presence of exec.
@@ -465,6 +488,22 @@ proc auto_load {cmd {namespace {}}} {
     return 0
 }
 
+# ::tcl::Pkg::source --
+# This procedure provides an alternative "source" command, which doesn't
+# register the file for the "package files" command. Safe interpreters
+# don't have to do anything special.
+#
+# Arguments:
+# filename
+
+proc ::tcl::Pkg::source {filename} {
+    if {[interp issafe]} {
+	uplevel 1 [list ::source $filename]
+    } else {
+	uplevel 1 [list ::source -nopkg $filename]
+    }
+}
+
 # auto_load_index --
 # Loads the contents of tclIndex files on the auto_path directory
 # list.  This is usually invoked within auto_load to load the index
@@ -507,7 +546,7 @@ proc auto_load_index {} {
 			}
 			set name [lindex $line 0]
 			set auto_index($name) \
-				"source [file join $dir [lindex $line 1]]"
+				"::tcl::Pkg::source [file join $dir [lindex $line 1]]"
 		    }
 		} else {
 		    error "[file join $dir tclIndex] isn't a proper Tcl index file"
@@ -644,8 +683,14 @@ proc auto_execok name {
     }
     set auto_execs($name) ""
 
+<<<<<<< HEAD
     set shellBuiltins [list cls copy date del dir echo erase md mkdir \
 	    mklink rd ren rename rmdir start time type ver vol]
+=======
+    set shellBuiltins [list assoc cls copy date del dir echo erase ftype \
+                           md mkdir mklink move rd ren rename rmdir start \
+                           time type ver vol]
+>>>>>>> upstream/master
     if {[info exists env(PATHEXT)]} {
 	# Add an initial ; to have the {} extension check first.
 	set execExtensions [split ";$env(PATHEXT)" ";"]

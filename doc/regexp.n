@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -61,7 +65,11 @@ the \fB(?x)\fR embedded option (see the \fBre_syntax\fR manual page).
 .
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Changes what is stored in the \fImatchVar\fR and \fIsubMatchVar\fRs. 
+=======
+Changes what is stored in the \fImatchVar\fR and \fIsubMatchVar\fRs.
+>>>>>>> upstream/master
 =======
 Changes what is stored in the \fImatchVar\fR and \fIsubMatchVar\fRs.
 >>>>>>> upstream/master
@@ -151,7 +159,11 @@ regular expression.  Examples are:
 Specifies a character index offset into the string to start
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 matching the regular expression at.  
+=======
+matching the regular expression at.
+>>>>>>> upstream/master
 =======
 matching the regular expression at.
 >>>>>>> upstream/master

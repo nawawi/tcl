@@ -37,6 +37,7 @@ set TZData(:Europe/Kaliningrad) {
     {591145200 10800 0 MSK}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {606870000 14400 1 MSD}
     {622594800 10800 0 MSK}
     {638319600 14400 1 MSD}
@@ -49,6 +50,8 @@ set TZData(:Europe/Kaliningrad) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {606870000 7200 0 EEMMTT}
     {606873600 10800 1 EEST}
     {622598400 7200 0 EET}
@@ -59,6 +62,9 @@ set TZData(:Europe/Kaliningrad) {
     {701827200 10800 1 EEST}
     {717552000 7200 0 EET}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -31,7 +31,11 @@ package ZLib.Streams is
       Mode   : in     Flush_Mode := Sync_Flush);
    --  Flush the written data to the back stream,
    --  all data placed to the compressor is flushing to the Back stream.
+<<<<<<< HEAD
    --  Should not be used untill necessary, becouse it is decreasing
+=======
+   --  Should not be used until necessary, because it is decreasing
+>>>>>>> upstream/master
    --  compression.
 
    function Read_Total_In (Stream : in Stream_Type) return Count;
@@ -97,13 +101,21 @@ private
       Rest_Last  : Stream_Element_Offset;
       --  Buffer for Read operation.
       --  We need to have this buffer in the record
+<<<<<<< HEAD
       --  becouse not all read data from back stream
+=======
+      --  because not all read data from back stream
+>>>>>>> upstream/master
       --  could be processed during the read operation.
 
       Buffer_Size : Stream_Element_Offset;
       --  Buffer size for write operation.
       --  We do not need to have this buffer
+<<<<<<< HEAD
       --  in the record becouse all data could be
+=======
+      --  in the record because all data could be
+>>>>>>> upstream/master
       --  processed in the write operation.
 
       Back       : Stream_Access;

@@ -1123,6 +1123,9 @@ parseqatom(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1134,12 +1137,15 @@ parseqatom(
      *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
      *
      * [lp] ---> [s] ---prefix---> [begin] ---atom---> [end] ---rest---> [rp]
      *
      * where prefix is some repetitions of atom.  In the general case we need
      *
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

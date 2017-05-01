@@ -199,6 +199,32 @@ proc genStubs::declare {args} {
 		set stubs($curName,$platform,lastNum) $index
 	    }
 	}
+	if {$platformList eq "deprecated"} {
+	    set stubs($curName,generic,$index) $decl
+	    if {![info exists stubs($curName,generic,lastNum)] \
+		    || ($index > $stubs($curName,generic,lastNum))} {
+		set stubs($curName,$platform,lastNum) $index
+	    }
+	}
+    }
+    return
+}
+
+# genStubs::export --
+#
+#	This function is used in the declarations file to declare a symbol
+#	that is exported from the library but is not in the stubs table.
+#
+# Arguments:
+#	decl		The C function declaration, or {} for an undefined
+#			entry.
+#
+# Results:
+#	None.
+
+proc genStubs::export {args} {
+    if {[llength $args] != 1} {
+	puts stderr "wrong # args: export $args"
     }
     return
 }
@@ -455,10 +481,23 @@ proc genStubs::parseArg {arg} {
 
 proc genStubs::makeDecl {name decl index} {
     variable scspec
+<<<<<<< HEAD
     lassign $decl rtype fname args
 
     append text "/* $index */\n"
     set line "$scspec $rtype"
+=======
+    variable stubs
+    variable libraryName
+    lassign $decl rtype fname args
+
+    append text "/* $index */\n"
+    if {[info exists stubs($name,deprecated,$index)]} {
+    set line "[string toupper $libraryName]_DEPRECATED $rtype"
+    } else {
+    set line "$scspec $rtype"
+    }
+>>>>>>> upstream/master
     set count [expr {2 - ([string length $line] / 8)}]
     append line [string range "\t\t\t" 0 $count]
     set pad [expr {24 - [string length $line]}]
@@ -682,7 +721,10 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 	for {set i 0} {$i <= $lastNum} {incr i} {
 	    set slots [array names stubs $name,*,$i]
 	    set emit 0
-	    if {[info exists stubs($name,generic,$i)]} {
+	    if {[info exists stubs($name,deprecated,$i)]} {
+		append text [$slotProc $name $stubs($name,generic,$i) $i]
+		set emit 1
+	    } elseif {[info exists stubs($name,generic,$i)]} {
 		if {[llength $slots] > 1} {
 		    puts stderr "conflicting generic and platform entries:\
 			    $name $i"
@@ -711,6 +753,8 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 			append temp [$slotProc $name $stubs($name,$plat,$i) $i]
 		    } elseif {$onAll} {
 			eval {append temp} $skipString
+<<<<<<< HEAD
+=======
 		    }
 		}
 		if {$temp ne ""} {
@@ -725,12 +769,30 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 			append temp [$slotProc $name $stubs($name,$plat,$i) $i]
 		    } elseif {$onAll} {
 			eval {append temp} $skipString
+>>>>>>> upstream/master
 		    }
 		}
 		if {$temp ne ""} {
 		    append text [addPlatformGuard $plat $temp]
 		    set emit 1
 		}
+<<<<<<< HEAD
+		## x11 ##
+		set temp {}
+		set plat x11
+		if {!$slot(unix) && !$slot(macosx)} {
+		    if {$slot($plat)} {
+			append temp [$slotProc $name $stubs($name,$plat,$i) $i]
+		    } elseif {$onAll} {
+			eval {append temp} $skipString
+		    }
+		}
+		if {$temp ne ""} {
+		    append text [addPlatformGuard $plat $temp]
+		    set emit 1
+		}
+=======
+>>>>>>> upstream/master
 		## win ##
 		set temp {}
 		set plat win
@@ -841,6 +903,8 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 		set emit 0
 		foreach plat {unix macosx} {
 		    if {[info exists stubs($name,$plat,$i)]} {
+<<<<<<< HEAD
+=======
 			append temp [$slotProc $name $stubs($name,$plat,$i) $i]
 			set emit 1
 			break
@@ -849,6 +913,33 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 		if {!$emit} {
 		    eval {append temp} $skipString
 		}
+	    }
+	    append text [addPlatformGuard macosx $temp]
+	}
+	## aqua ##
+	if {$block(aqua)} {
+	    set temp {}
+	    set lastNum -1
+	    foreach plat {unix macosx aqua} {
+		if {$block($plat)} {
+		    set lastNum [expr {$lastNum > $stubs($name,$plat,lastNum)
+			    ? $lastNum : $stubs($name,$plat,lastNum)}]
+		}
+	    }
+	    for {set i 0} {$i <= $lastNum} {incr i} {
+		set emit 0
+		foreach plat {unix macosx aqua} {
+		    if {[info exists stubs($name,$plat,$i)]} {
+>>>>>>> upstream/master
+			append temp [$slotProc $name $stubs($name,$plat,$i) $i]
+			set emit 1
+			break
+		    }
+		}
+		if {!$emit} {
+		    eval {append temp} $skipString
+		}
+<<<<<<< HEAD
 	    }
 	    append text [addPlatformGuard macosx $temp]
 	}
@@ -907,6 +998,41 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 		    eval {append temp} $skipString
 		}
 	    }
+=======
+	    }
+	    append text [addPlatformGuard aqua $temp]
+	}
+	## x11 ##
+	if {$block(x11)} {
+	    set temp {}
+	    set lastNum -1
+	    foreach plat {unix macosx x11} {
+		if {$block($plat)} {
+		    set lastNum [expr {$lastNum > $stubs($name,$plat,lastNum)
+			    ? $lastNum : $stubs($name,$plat,lastNum)}]
+		}
+	    }
+	    for {set i 0} {$i <= $lastNum} {incr i} {
+		set emit 0
+		foreach plat {unix macosx x11} {
+		    if {[info exists stubs($name,$plat,$i)]} {
+			if {$plat ne "macosx"} {
+			    append temp [$slotProc $name \
+				    $stubs($name,$plat,$i) $i]
+			} else {
+			    eval {set etxt} $skipString
+			    append temp [addPlatformGuard $plat [$slotProc \
+				    $name $stubs($name,$plat,$i) $i] $etxt true]
+			}
+			set emit 1
+			break
+		    }
+		}
+		if {!$emit} {
+		    eval {append temp} $skipString
+		}
+	    }
+>>>>>>> upstream/master
 	    append text [addPlatformGuard x11 $temp {} true]
 	}
     }

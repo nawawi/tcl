@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -82,6 +86,9 @@ command will not cause further trace evaluations to occur.
 Both \fIoldName\fR and \fInewName\fR are fully qualified with any namespace(s)
 in which they appear.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 .RE
 .TP
 \fBtrace add execution\fR \fIname ops commandPrefix\fR
@@ -194,6 +201,7 @@ The behavior of execution traces is currently undefined for a command
 \fIname\fR imported into another namespace.
 .RE
 .TP
+<<<<<<< HEAD
 =======
 .RE
 .TP
@@ -308,6 +316,8 @@ The behavior of execution traces is currently undefined for a command
 .RE
 .TP
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 \fBtrace add variable\fI name ops commandPrefix\fR
 Arrange for \fIcommandPrefix\fR to be executed whenever variable \fIname\fR
 is accessed in one of the ways given by the list \fIops\fR.  \fIName\fR may
@@ -322,6 +332,7 @@ queries, but not to \fBinfo exists\fR queries.
 .PP
 \fIOps\fR indicates which operations are of interest, and is a list of
 one or more of the following items:
+<<<<<<< HEAD
 .TP
 \fBarray\fR
 Invoke \fIcommandPrefix\fR whenever the variable is accessed or modified via
@@ -336,6 +347,22 @@ Invoke \fIcommandPrefix\fR whenever the variable is read.
 \fBwrite\fR
 Invoke \fIcommandPrefix\fR whenever the variable is written.
 .TP
+=======
+.TP
+\fBarray\fR
+Invoke \fIcommandPrefix\fR whenever the variable is accessed or modified via
+the \fBarray\fR command, provided that \fIname\fR is not a scalar
+variable at the time that the \fBarray\fR command is invoked.  If
+\fIname\fR is a scalar variable, the access via the \fBarray\fR
+command will not trigger the trace.
+.TP
+\fBread\fR
+Invoke \fIcommandPrefix\fR whenever the variable is read.
+.TP
+\fBwrite\fR
+Invoke \fIcommandPrefix\fR whenever the variable is written.
+.TP
+>>>>>>> upstream/master
 \fBunset\fR
 Invoke \fIcommandPrefix\fR whenever the variable is unset.  Variables
 can be unset explicitly with the \fBunset\fR command, or

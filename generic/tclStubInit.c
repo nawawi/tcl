@@ -41,15 +41,25 @@
 #undef Tcl_FindExecutable
 #undef TclpGetPid
 #undef TclSockMinimumBuffers
+<<<<<<< HEAD
 #define TclBackgroundException Tcl_BackgroundException
+=======
+>>>>>>> upstream/master
 #undef Tcl_SetIntObj
 #undef TclpInetNtoa
 #undef TclWinGetServByName
 #undef TclWinGetSockOpt
 #undef TclWinSetSockOpt
+<<<<<<< HEAD
 
 /* See bug 510001: TclSockMinimumBuffers needs plat imp */
 #ifdef _WIN64
+=======
+#undef TclWinNToHS
+
+/* See bug 510001: TclSockMinimumBuffers needs plat imp */
+#if defined(_WIN64) || defined(TCL_NO_DEPRECATED)
+>>>>>>> upstream/master
 #   define TclSockMinimumBuffersOld 0
 #else
 #define TclSockMinimumBuffersOld sockMinimumBuffersOld
@@ -57,6 +67,7 @@ static int TclSockMinimumBuffersOld(int sock, int size)
 {
     return TclSockMinimumBuffers(INT2PTR(sock), size);
 }
+<<<<<<< HEAD
 #endif
 
 #define TclSetStartupScriptPath setStartupScriptPath
@@ -292,7 +303,348 @@ static int formatInt(char *buffer, int n){
 #else /* UNIX and MAC */
 #   define TclpLocaltime_unix TclpLocaltime
 #   define TclpGmtime_unix TclpGmtime
+=======
+>>>>>>> upstream/master
 #endif
+
+#if defined(TCL_NO_DEPRECATED)
+#   define TclSetStartupScriptPath 0
+#   define TclGetStartupScriptPath 0
+#   define TclSetStartupScriptFileName 0
+#   define TclGetStartupScriptFileName 0
+#   define TclpInetNtoa 0
+#   define TclWinGetServByName 0
+#   define TclWinGetSockOpt 0
+#   define TclWinSetSockOpt 0
+#   define TclWinNToHS 0
+#else
+#define TclSetStartupScriptPath setStartupScriptPath
+static void TclSetStartupScriptPath(Tcl_Obj *path)
+{
+    Tcl_SetStartupScript(path, NULL);
+}
+#define TclGetStartupScriptPath getStartupScriptPath
+static Tcl_Obj *TclGetStartupScriptPath(void)
+{
+    return Tcl_GetStartupScript(NULL);
+}
+#define TclSetStartupScriptFileName setStartupScriptFileName
+static void TclSetStartupScriptFileName(
+    const char *fileName)
+{
+    Tcl_SetStartupScript(Tcl_NewStringObj(fileName,-1), NULL);
+}
+#define TclGetStartupScriptFileName getStartupScriptFileName
+static const char *TclGetStartupScriptFileName(void)
+{
+    Tcl_Obj *path = Tcl_GetStartupScript(NULL);
+    if (path == NULL) {
+	return NULL;
+    }
+    return Tcl_GetString(path);
+}
+
+#if defined(_WIN32) || defined(__CYGWIN__)
+#undef TclWinNToHS
+#define TclWinNToHS winNToHS
+static unsigned short TclWinNToHS(unsigned short ns) {
+	return ntohs(ns);
+}
+#endif
+#endif /* TCL_NO_DEPRECATED */
+
+#ifdef _WIN32
+#   define TclUnixWaitForFile 0
+#   define TclUnixCopyFile 0
+#   define TclUnixOpenTemporaryFile 0
+#   define TclpReaddir 0
+#   define TclpIsAtty 0
+#elif defined(__CYGWIN__)
+#   define TclpIsAtty TclPlatIsAtty
+#   define TclWinSetInterfaces (void (*) (int)) doNothing
+#   define TclWinAddProcess (void (*) (void *, unsigned int)) doNothing
+#   define TclWinFlushDirtyChannels doNothing
+#   define TclWinResetInterfaces doNothing
+
+static Tcl_Encoding winTCharEncoding;
+
+static int
+TclpIsAtty(int fd)
+{
+    return isatty(fd);
+}
+
+#define TclWinGetPlatformId winGetPlatformId
+static int
+TclWinGetPlatformId()
+{
+    /* Don't bother to determine the real platform on cygwin,
+     * because VER_PLATFORM_WIN32_NT is the only supported platform */
+    return 2; /* VER_PLATFORM_WIN32_NT */;
+}
+
+void *TclWinGetTclInstance()
+{
+    void *hInstance = NULL;
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+	    (const char *)&winTCharEncoding, &hInstance);
+    return hInstance;
+}
+
+#ifndef TCL_NO_DEPRECATED
+#define TclWinSetSockOpt winSetSockOpt
+static int
+TclWinSetSockOpt(SOCKET s, int level, int optname,
+	    const char *optval, int optlen)
+{
+    return setsockopt((int) s, level, optname, optval, optlen);
+}
+
+#define TclWinGetSockOpt winGetSockOpt
+static int
+TclWinGetSockOpt(SOCKET s, int level, int optname,
+	    char *optval, int *optlen)
+{
+    return getsockopt((int) s, level, optname, optval, optlen);
+}
+
+#define TclWinGetServByName winGetServByName
+static struct servent *
+TclWinGetServByName(const char *name, const char *proto)
+{
+    return getservbyname(name, proto);
+}
+#endif /* TCL_NO_DEPRECATED */
+
+#define TclWinNoBackslash winNoBackslash
+static char *
+TclWinNoBackslash(char *path)
+{
+    char *p;
+
+    for (p = path; *p != '\0'; p++) {
+	if (*p == '\\') {
+	    *p = '/';
+	}
+    }
+    return path;
+}
+
+int
+TclpGetPid(Tcl_Pid pid)
+{
+    return (int) (size_t) pid;
+}
+
+static void
+doNothing(void)
+{
+    /* dummy implementation, no need to do anything */
+}
+
+char *
+Tcl_WinUtfToTChar(
+    const char *string,
+    int len,
+    Tcl_DString *dsPtr)
+{
+    if (!winTCharEncoding) {
+	winTCharEncoding = Tcl_GetEncoding(0, "unicode");
+    }
+    return Tcl_UtfToExternalDString(winTCharEncoding,
+	    string, len, dsPtr);
+}
+
+char *
+Tcl_WinTCharToUtf(
+    const char *string,
+    int len,
+    Tcl_DString *dsPtr)
+{
+    if (!winTCharEncoding) {
+	winTCharEncoding = Tcl_GetEncoding(0, "unicode");
+    }
+    return Tcl_ExternalToUtfDString(winTCharEncoding,
+	    string, len, dsPtr);
+}
+
+#if defined(TCL_WIDE_INT_IS_LONG)
+/* On Cygwin64, long is 64-bit while on Win64 long is 32-bit. Therefore
+ * we have to make sure that all stub entries on Cygwin64 follow the Win64
+ * signature. Tcl 9 must find a better solution, but that cannot be done
+ * without introducing a binary incompatibility.
+ */
+#define Tcl_DbNewLongObj ((Tcl_Obj*(*)(long,const char*,int))dbNewLongObj)
+static Tcl_Obj *dbNewLongObj(
+    int intValue,
+    const char *file,
+    int line
+) {
+#ifdef TCL_MEM_DEBUG
+    register Tcl_Obj *objPtr;
+
+    TclDbNewObj(objPtr, file, line);
+    objPtr->bytes = NULL;
+
+    objPtr->internalRep.longValue = (long) intValue;
+    objPtr->typePtr = &tclIntType;
+    return objPtr;
+#else
+    return Tcl_NewIntObj(intValue);
+#endif
+}
+#define Tcl_GetLongFromObj (int(*)(Tcl_Interp*,Tcl_Obj*,long*))Tcl_GetIntFromObj
+#define Tcl_NewLongObj (Tcl_Obj*(*)(long))Tcl_NewIntObj
+#define Tcl_SetLongObj (void(*)(Tcl_Obj*,long))Tcl_SetIntObj
+static int exprInt(Tcl_Interp *interp, const char *expr, int *ptr){
+    long longValue;
+    int result = Tcl_ExprLong(interp, expr, &longValue);
+    if (result == TCL_OK) {
+	    if ((longValue >= -(long)(UINT_MAX))
+		    && (longValue <= (long)(UINT_MAX))) {
+	    *ptr = (int)longValue;
+	} else {
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		    "integer value too large to represent as non-long integer", -1));
+	    result = TCL_ERROR;
+	}
+    }
+    return result;
+}
+#define Tcl_ExprLong (int(*)(Tcl_Interp*,const char*,long*))exprInt
+static int exprIntObj(Tcl_Interp *interp, Tcl_Obj*expr, int *ptr){
+    long longValue;
+    int result = Tcl_ExprLongObj(interp, expr, &longValue);
+    if (result == TCL_OK) {
+	    if ((longValue >= -(long)(UINT_MAX))
+		    && (longValue <= (long)(UINT_MAX))) {
+	    *ptr = (int)longValue;
+	} else {
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		    "integer value too large to represent as non-long integer", -1));
+	    result = TCL_ERROR;
+	}
+    }
+    return result;
+}
+#define Tcl_ExprLongObj (int(*)(Tcl_Interp*,Tcl_Obj*,long*))exprIntObj
+static int uniCharNcmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsigned int n){
+   return Tcl_UniCharNcmp(ucs, uct, (unsigned long)n);
+}
+#define Tcl_UniCharNcmp (int(*)(const Tcl_UniChar*,const Tcl_UniChar*,unsigned long))uniCharNcmp
+static int utfNcmp(const char *s1, const char *s2, unsigned int n){
+   return Tcl_UtfNcmp(s1, s2, (unsigned long)n);
+}
+#define Tcl_UtfNcmp (int(*)(const char*,const char*,unsigned long))utfNcmp
+static int utfNcasecmp(const char *s1, const char *s2, unsigned int n){
+   return Tcl_UtfNcasecmp(s1, s2, (unsigned long)n);
+}
+#define Tcl_UtfNcasecmp (int(*)(const char*,const char*,unsigned long))utfNcasecmp
+static int uniCharNcasecmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsigned int n){
+   return Tcl_UniCharNcasecmp(ucs, uct, (unsigned long)n);
+}
+#define Tcl_UniCharNcasecmp (int(*)(const Tcl_UniChar*,const Tcl_UniChar*,unsigned long))uniCharNcasecmp
+static int formatInt(char *buffer, int n){
+   return TclFormatInt(buffer, (long)n);
+}
+#define TclFormatInt (int(*)(char *, long))formatInt
+
+#endif /* TCL_WIDE_INT_IS_LONG */
+
+#endif /* __CYGWIN__ */
+
+#ifdef TCL_NO_DEPRECATED
+#   define Tcl_SeekOld 0
+#   define Tcl_TellOld 0
+#   undef Tcl_SetBooleanObj
+#   define Tcl_SetBooleanObj 0
+#   undef Tcl_PkgPresent
+#   define Tcl_PkgPresent 0
+#   undef Tcl_PkgProvide
+#   define Tcl_PkgProvide 0
+#   undef Tcl_PkgRequire
+#   define Tcl_PkgRequire 0
+#   undef Tcl_GetIndexFromObj
+#   define Tcl_GetIndexFromObj 0
+#   define Tcl_NewBooleanObj 0
+#   undef Tcl_DbNewBooleanObj
+#   define Tcl_DbNewBooleanObj 0
+#   undef Tcl_SetBooleanObj
+#   define Tcl_SetBooleanObj 0
+#   undef Tcl_SetVar
+#   define Tcl_SetVar 0
+#   undef Tcl_UnsetVar
+#   define Tcl_UnsetVar 0
+#   undef Tcl_GetVar
+#   define Tcl_GetVar 0
+#   undef Tcl_TraceVar
+#   define Tcl_TraceVar 0
+#   undef Tcl_UntraceVar
+#   define Tcl_UntraceVar 0
+#   undef Tcl_VarTraceInfo
+#   define Tcl_VarTraceInfo 0
+#   undef Tcl_UpVar
+#   define Tcl_UpVar 0
+#   undef Tcl_AddErrorInfo
+#   define Tcl_AddErrorInfo 0
+#   undef Tcl_AddObjErrorInfo
+#   define Tcl_AddObjErrorInfo 0
+#   undef Tcl_Eval
+#   define Tcl_Eval 0
+#   undef Tcl_GlobalEval
+#   define Tcl_GlobalEval 0
+#   undef Tcl_SaveResult
+#   define Tcl_SaveResult 0
+#   undef Tcl_RestoreResult
+#   define Tcl_RestoreResult 0
+#   undef Tcl_DiscardResult
+#   define Tcl_DiscardResult 0
+#   undef Tcl_SetResult
+#   define Tcl_SetResult 0
+#   undef Tcl_EvalObj
+#   define Tcl_EvalObj 0
+#   undef Tcl_GlobalEvalObj
+#   define Tcl_GlobalEvalObj 0
+#   define TclBackgroundException 0
+#   undef TclpReaddir
+#   define TclpReaddir 0
+#   undef TclpGetDate
+#   define TclpGetDate 0
+#   undef TclpLocaltime
+#   define TclpLocaltime 0
+#   undef TclpGmtime
+#   define TclpGmtime 0
+#   define TclpLocaltime_unix 0
+#   define TclpGmtime_unix 0
+#else /* TCL_NO_DEPRECATED */
+#   define Tcl_SeekOld seekOld
+#   define Tcl_TellOld tellOld
+#   define TclBackgroundException Tcl_BackgroundException
+#   define TclpLocaltime_unix TclpLocaltime
+#   define TclpGmtime_unix TclpGmtime
+
+static int
+seekOld(
+    Tcl_Channel chan,		/* The channel on which to seek. */
+    int offset,			/* Offset to seek to. */
+    int mode)			/* Relative to which location to seek? */
+{
+    Tcl_WideInt wOffset, wResult;
+
+    wOffset = Tcl_LongAsWide((long) offset);
+    wResult = Tcl_Seek(chan, wOffset, mode);
+    return (int) Tcl_WideAsLong(wResult);
+}
+
+static int
+tellOld(
+    Tcl_Channel chan)		/* The channel to return pos for. */
+{
+    Tcl_WideInt wResult = Tcl_Tell(chan);
+
+    return (int) Tcl_WideAsLong(wResult);
+}
+#endif /* !TCL_NO_DEPRECATED */
 
 /*
  * WARNING: The contents of this file is automatically generated by the
@@ -1416,6 +1768,10 @@ const TclStubs tclStubs = {
     Tcl_FindSymbol, /* 628 */
     Tcl_FSUnloadFile, /* 629 */
     Tcl_ZlibStreamSetCompressionDictionary, /* 630 */
+<<<<<<< HEAD
+=======
+    Tcl_OpenTcpServerEx, /* 631 */
+>>>>>>> upstream/master
 };
 
 /* !END!: Do not edit above this line. */

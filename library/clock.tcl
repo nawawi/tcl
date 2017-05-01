@@ -114,6 +114,10 @@ proc ::tcl::clock::Initialize {} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
+>>>>>>> upstream/master
 =======
     ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
 >>>>>>> upstream/master
@@ -1329,6 +1333,7 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
@@ -1352,6 +1357,8 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     # Parse the date.  The parser will return a list comprising date, time,
     # time zone, relative month/day/seconds, relative weekday, ordinal month.
@@ -1370,6 +1377,9 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4293,7 +4303,11 @@ proc ::tcl::clock::add { clockval args } {
     if { [catch { expr {wide($clockval)} } result] } {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return -code error $result
+=======
+	return -code error "expected integer but got \"$clockval\""
+>>>>>>> upstream/master
 =======
 	return -code error "expected integer but got \"$clockval\""
 >>>>>>> upstream/master
@@ -4340,9 +4354,12 @@ proc ::tcl::clock::add { clockval args } {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if { [catch { expr { wide($clockval) } } result] } {
 	return -code error "expected integer but got \"$clockval\""
     }
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4385,7 +4402,10 @@ proc ::tcl::clock::add { clockval args } {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 		weekdays - weekday {
@@ -4394,6 +4414,9 @@ proc ::tcl::clock::add { clockval args } {
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4498,7 +4521,10 @@ proc ::tcl::clock::AddMonths { months clockval timezone changeover } {
 #
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 # AddWeekDays --
@@ -4552,6 +4578,9 @@ proc ::tcl::clock::AddWeekDays { days clockval timezone changeover } {
 #----------------------------------------------------------------------
 #
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4609,7 +4638,10 @@ proc ::tcl::clock::AddDays { days clockval timezone changeover } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4651,6 +4683,9 @@ proc ::tcl::clock::ChangeCurrentLocale {args} {
 #
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

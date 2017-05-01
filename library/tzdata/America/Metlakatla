@@ -42,7 +42,10 @@ set TZData(:America/Metlakatla) {
     {436356000 -28800 0 PST}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     {1446372000 -32400 0 AKST}
@@ -215,6 +218,9 @@ set TZData(:America/Metlakatla) {
     {4076650800 -28800 1 AKDT}
     {4097210400 -32400 0 AKST}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

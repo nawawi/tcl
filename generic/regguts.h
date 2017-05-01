@@ -231,10 +231,13 @@ struct arc {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define	freechain	outchain
     struct arc *inchain;	/* link in *to's ins chain */
     struct arc *colorchain;	/* link in color's arc chain */
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -246,6 +249,9 @@ struct arc {
     struct arc *colorchain;	/* color's arc chain */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

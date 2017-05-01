@@ -71,6 +71,7 @@ static inline Tcl_HashEntry *CreateChainEntry(struct Dict *dict,
 			    Tcl_Obj *keyPtr, int *newPtr);
 static inline int	DeleteChainEntry(struct Dict *dict, Tcl_Obj *keyPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeDictUpdate(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeDictWith(ClientData data[],
@@ -84,12 +85,17 @@ static int		DictForLoopCallback(ClientData data[],
 static int		DictMapLoopCallback(ClientData data[],
 			    Tcl_Interp *interp, int result);
 =======
+=======
+>>>>>>> upstream/master
 static Tcl_NRPostProc	FinalizeDictUpdate;
 static Tcl_NRPostProc	FinalizeDictWith;
 static Tcl_ObjCmdProc	DictForNRCmd;
 static Tcl_ObjCmdProc	DictMapNRCmd;
 static Tcl_NRPostProc	DictForLoopCallback;
 static Tcl_NRPostProc	DictMapLoopCallback;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*
@@ -521,7 +527,11 @@ UpdateStringOfDict(
 
     /* Handle empty list case first, simplifies what follows */
     if (numElems == 0) {
+<<<<<<< HEAD
 	dictPtr->bytes = tclEmptyStringRep;
+=======
+	dictPtr->bytes = &tclEmptyString;
+>>>>>>> upstream/master
 	dictPtr->length = 0;
 	return;
     }
@@ -3088,7 +3098,11 @@ DictFilterCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master
@@ -3107,7 +3121,11 @@ DictFilterCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master

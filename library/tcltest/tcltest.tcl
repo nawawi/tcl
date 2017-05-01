@@ -2710,7 +2710,11 @@ proc tcltest::GetMatchingDirectories {rootdir} {
 		and skip patterns!"
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     return $matchDirs
+=======
+    return [lsort $matchDirs]
+>>>>>>> upstream/master
 =======
     return [lsort $matchDirs]
 >>>>>>> upstream/master

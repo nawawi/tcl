@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -198,6 +202,7 @@ will return a string equivalent to \fBalpha\e000\e000bravoc\fR,
 \fBbinary format\fR a* [encoding convertto utf-8 \eu20ac]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CE
 will return a string equivalent to \fB\e342\e202\e254\fR (which is the
 UTF-8 byte sequence for a Euro-currency character) and
@@ -225,6 +230,14 @@ UTF-8 byte sequence for a Euro-currency character) and
 \fBbinary format\fR a* [encoding convertto iso8859-15 \eu20ac]
 .CE
 >>>>>>> upstream/master
+=======
+.CE
+will return a string equivalent to \fB\e342\e202\e254\fR (which is the
+UTF-8 byte sequence for a Euro-currency character) and
+.CS
+\fBbinary format\fR a* [encoding convertto iso8859-15 \eu20ac]
+.CE
+>>>>>>> upstream/master
 will return a string equivalent to \fB\e244\fR (which is the ISO
 8859\-15 byte sequence for a Euro-currency character). Contrast these
 last two with:
@@ -232,6 +245,9 @@ last two with:
 \fBbinary format\fR a* \eu20ac
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -337,7 +353,11 @@ example,
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -356,7 +376,11 @@ example,
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -383,7 +407,11 @@ example,
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -402,7 +430,11 @@ For example,
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -426,6 +458,7 @@ example,
 \fBbinary format\fR w 7810179016327718216
 .CE
 will return the string \fBHelloTcl\fR
+<<<<<<< HEAD
 .RE
 .IP \fBW\fR 5
 This form is the same as \fBw\fR except that it stores one or more one
@@ -459,6 +492,19 @@ example,
 \fBbinary format\fR w 7810179016327718216
 .CE
 will return the string \fBHelloTcl\fR
+.RE
+.IP \fBW\fR 5
+This form is the same as \fBw\fR except that it stores one or more one
+or more 64-bit integers in big-endian byte order in the output string.
+For example,
+.RS
+.CS
+\fBbinary format\fR Wc 4785469626960341345 110
+.CE
+will return the string \fBBigEndian\fR
+.RE
+>>>>>>> upstream/master
+=======
 .RE
 .IP \fBW\fR 5
 This form is the same as \fBw\fR except that it stores one or more one
@@ -497,7 +543,11 @@ on a Windows system running on an Intel Pentium processor,
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -526,7 +576,11 @@ Windows system running on an Intel Pentium processor,
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -623,6 +677,7 @@ scan subcommand:
 .CE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .PP
 This command (provided the binary string in the variable \fIbytes\fR
 is long enough) assigns a list of three integers to the variable
@@ -648,6 +703,9 @@ can't read "second": no such variable
 =======
 .PP
 >>>>>>> upstream/master
+=======
+.PP
+>>>>>>> upstream/master
 This command (provided the binary string in the variable \fIbytes\fR
 is long enough) assigns a list of three integers to the variable
 \fIfirst\fR and assigns a single value to the variable \fIsecond\fR.
@@ -668,6 +726,9 @@ can't read "second": no such variable
 .CE
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -708,6 +769,7 @@ For example,
 \fBbinary scan\fR abcde\e000fghi a6a10 var1 var2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CE
 will return \fB1\fR with the string equivalent to \fBabcde\e000\fR
 stored in \fIvar1\fR and \fIvar2\fR left unmodified, and
@@ -720,6 +782,9 @@ set var2 [encoding convertfrom utf-8 $var1]
 =======
 .CE
 >>>>>>> upstream/master
+=======
+.CE
+>>>>>>> upstream/master
 will return \fB1\fR with the string equivalent to \fBabcde\e000\fR
 stored in \fIvar1\fR and \fIvar2\fR left unmodified, and
 .CS
@@ -727,6 +792,9 @@ stored in \fIvar1\fR and \fIvar2\fR left unmodified, and
 set var2 [encoding convertfrom utf-8 $var1]
 .CE
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -847,7 +915,11 @@ order.  For example,
 will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 stored in \fIvar2\fR. 
+=======
+stored in \fIvar2\fR.
+>>>>>>> upstream/master
 =======
 stored in \fIvar2\fR.
 >>>>>>> upstream/master
@@ -891,6 +963,9 @@ set str \ex00\ex00\ex00\ex05\ex00\ex00\ex00\ex07\exff\exff\exff\exf0
 \fBbinary scan\fR $str I2I* var1 var2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 .CE
 will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
 stored in \fIvar2\fR.
@@ -929,6 +1004,7 @@ set str \ex00\ex00\ex00\ex05\ex00\ex00\ex00\ex07\exff\exff\exff\exf0
 will return \fB2\fR with \fB21474836487\fR stored in \fIvar1\fR and \fB\-16\fR
 stored in \fIvar2\fR.
 .RE
+<<<<<<< HEAD
 =======
 .CE
 will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
@@ -975,6 +1051,8 @@ will return \fB2\fR with \fB21474836487\fR stored in \fIvar1\fR and \fB\-16\fR
 stored in \fIvar2\fR.
 .RE
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

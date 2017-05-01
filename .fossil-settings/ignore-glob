@@ -6,6 +6,10 @@
 *.lib
 *.o
 *.obj
+<<<<<<< HEAD
+=======
+*.pdb
+>>>>>>> upstream/master
 *.res
 *.sl
 *.so
@@ -19,10 +23,14 @@
 */versions.vc
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unix/dltest.marker
 unix/tcl.pc
 =======
 =======
+=======
+html
+>>>>>>> upstream/master
 libtommath/bn.ilg
 libtommath/bn.ind
 libtommath/pretty.build
@@ -39,12 +47,23 @@ libtommath/etc/*
 libtommath/demo/*
 libtommath/*.out
 libtommath/*.tex
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 unix/autoMkindex.tcl
 unix/dltest.marker
 unix/tcl.pc
 unix/tclIndex
+<<<<<<< HEAD
 >>>>>>> upstream/master
 unix/pkgs/*
 win/pkgs/*
 win/tcl.hpj
+=======
+unix/pkgs/*
+win/Debug_VC*
+win/Release_VC*
+win/pkgs/*
+win/tcl.hpj
+>>>>>>> upstream/master

@@ -441,6 +441,12 @@ test filename-7.18 {Tcl_JoinPath: unix} {testsetplatform} {
     testsetplatform unix
     file join /// a b
 } "/a/b"
+<<<<<<< HEAD
+=======
+test filename-7.19 {[Bug f34cf83dd0]} {
+    file join foo //bar
+} /bar
+>>>>>>> upstream/master
 
 test filename-9.1 {Tcl_JoinPath: win} {testsetplatform} {
     testsetplatform win
@@ -1469,6 +1475,7 @@ if {[testConstraint testsetplatform]} {
 test filename-17.2 {windows specific glob with executable} -body {
     makeDirectory execglob
 <<<<<<< HEAD
+<<<<<<< HEAD
     makeFile contents execglob/abc.exe
     makeFile contents execglob/abc.notexecutable
     glob -nocomplain -dir [temporaryDirectory]/execglob -tails -types x *
@@ -1478,6 +1485,8 @@ test filename-17.2 {windows specific glob with executable} -body {
     removeDirectory execglob
 } -result {abc.exe}
 =======
+=======
+>>>>>>> upstream/master
     foreach ext {exe com cmd bat notexecutable} {
         makeFile contents execglob/abc.$ext
     }
@@ -1488,6 +1497,9 @@ test filename-17.2 {windows specific glob with executable} -body {
     }
     removeDirectory execglob
 } -result {abc.bat abc.cmd abc.com abc.exe}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test filename-17.3 {Bug 2571597} win {
     set p /a

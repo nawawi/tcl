@@ -1,5 +1,9 @@
 /* infback.c -- inflate using a call-back interface
+<<<<<<< HEAD
  * Copyright (C) 1995-2011 Mark Adler
+=======
+ * Copyright (C) 1995-2016 Mark Adler
+>>>>>>> upstream/master
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -61,7 +65,11 @@ int stream_size;
     Tracev((stderr, "inflate: allocated\n"));
     strm->state = (struct internal_state FAR *)state;
     state->dmax = 32768U;
+<<<<<<< HEAD
     state->wbits = windowBits;
+=======
+    state->wbits = (uInt)windowBits;
+>>>>>>> upstream/master
     state->wsize = 1U << windowBits;
     state->window = window;
     state->wnext = 0;

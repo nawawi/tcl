@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -43,7 +47,11 @@ with no special interpretation.
 .PP
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that the substitution of one kind can include substitution of 
+=======
+Note that the substitution of one kind can include substitution of
+>>>>>>> upstream/master
 =======
 Note that the substitution of one kind can include substitution of
 >>>>>>> upstream/master
@@ -116,6 +124,7 @@ Similarly, when
 variable substitution is performed, it includes any command
 substitution necessary to retrieve the value of the variable.
 .PP
+<<<<<<< HEAD
 .CS
 proc b {} {return c}
 array set a {c c [b] tricky}
@@ -147,6 +156,39 @@ and the script
 .CE
 .PP
 returns
+=======
+.CS
+proc b {} {return c}
+array set a {c c [b] tricky}
+\fBsubst\fR -nocommands {[b] $a([b])}
+.CE
+.PP
+returns
+.QW "\fB[b] c\fR" ,
+not
+.QW "\fB[b] tricky\fR" .
+.PP
+The continue and break exceptions allow command substitutions to
+prevent substitution of the rest of the command substitution and the
+rest of \fIstring\fR respectively, giving script authors more options
+when processing text using \fIsubst\fR.  For example, the script
+.PP
+.CS
+\fBsubst\fR {abc,[break],def}
+.CE
+.PP
+returns
+.QW \fBabc,\fR ,
+not
+.QW \fBabc,,def\fR
+and the script
+.PP
+.CS
+\fBsubst\fR {abc,[continue;expr {1+2}],def}
+.CE
+.PP
+returns
+>>>>>>> upstream/master
 .QW \fBabc,,def\fR ,
 not
 .QW \fBabc,3,def\fR .

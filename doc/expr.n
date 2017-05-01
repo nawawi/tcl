@@ -7,7 +7,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -111,6 +115,7 @@ produces the value on the right side.
 \fBexpr\fR {{word one} < "word $a"}	\fI0\fR
 .CE
 .SS OPERATORS
+<<<<<<< HEAD
 .PP
 For operators having both a numeric mode and a string mode, the numeric mode is
 chosen when all operands have a numeric interpretation.  The integer
@@ -119,6 +124,16 @@ interpretation.  To ensure string operations on arbitrary values it is generally
 good idea to use \fBeq\fR, \fBne\fR, or the \fBstring\fR command instead of
 more versatile operators such as \fB==\fR.
 .PP
+=======
+.PP
+For operators having both a numeric mode and a string mode, the numeric mode is
+chosen when all operands have a numeric interpretation.  The integer
+interpretation of an operand is preferred over the floating-point
+interpretation.  To ensure string operations on arbitrary values it is generally a
+good idea to use \fBeq\fR, \fBne\fR, or the \fBstring\fR command instead of
+more versatile operators such as \fB==\fR.
+.PP
+>>>>>>> upstream/master
 Unless otherwise specified, operators accept non-numeric operands.  The value
 of a boolean operation is 1 if true, 0 otherwise.  See also \fBstring is\fR
 \fBboolean\fR.  The valid operators, most of which are also available as
@@ -214,6 +229,7 @@ Exponentiation groups right-to-left within a precedence level. Other binary
 operators group left-to-right.  For example, the value of
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 .CS
 \fBexpr\fR {4*2 < 7}
 .CE
@@ -225,6 +241,8 @@ returns 0, while
 .CE
 .PP
 =======
+=======
+>>>>>>> upstream/master
 .CS
 \fBexpr\fR {4*2 < 7}
 .CE
@@ -236,8 +254,12 @@ is 0, while the value of
 .CE
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 returns 512.
+=======
+is 512.
+>>>>>>> upstream/master
 =======
 is 512.
 >>>>>>> upstream/master
@@ -247,6 +269,7 @@ As in C, \fB&&\fR, \fB||\fR, and \fB?:\fR feature
 which means that operands are not evaluated if they are
 not needed to determine the outcome.  For example, in
 .PP
+<<<<<<< HEAD
 .CS
 \fBexpr\fR {$v ? [a] : [b]}
 .CE
@@ -294,6 +317,55 @@ As in C, a mathematical function may accept multiple arguments separated by comm
 \fBexpr\fR {hypot($x,$y)}
 .CE
 .PP
+=======
+.CS
+\fBexpr\fR {$v ? [a] : [b]}
+.CE
+.PP
+only one of \fB[a]\fR or \fB[b]\fR is evaluated,
+depending on the value of \fB$v\fR.  This is not true of the normal Tcl parser,
+so it is normally recommended to enclose the arguments to \fBexpr\fR in braces.
+Without braces, as in
+\fBexpr\fR $v ? [a] : [b]
+both \fB[a]\fR and \fB[b]\fR are evaluated before \fBexpr\fR is even called.
+.PP
+For more details on the results
+produced by each operator, see the documentation for C.
+.SS "MATH FUNCTIONS"
+.PP
+A mathematical function such as \fBsin($x)\fR is replaced with a call to an ordinary
+Tcl command in the \fBtcl::mathfunc\fR namespace.  The evaluation
+of an expression such as
+.PP
+.CS
+\fBexpr\fR {sin($x+$y)}
+.CE
+.PP
+is the same in every way as the evaluation of
+.PP
+.CS
+\fBexpr\fR {[tcl::mathfunc::sin [\fBexpr\fR {$x+$y}]]}
+.CE
+.PP
+which in turn is the same as the evaluation of
+.PP
+.CS
+tcl::mathfunc::sin [\fBexpr\fR {$x+$y}]
+.CE
+.PP
+\fBtcl::mathfunc::sin\fR is resolved as described in
+\fBNAMESPACE RESOLUTION\fR in the \fBnamespace\fR(n) documentation.   Given the
+default value of \fBnamespace path\fR, \fB[namespace
+current]::tcl::mathfunc::sin\fR or \fB::tcl::mathfunc::sin\fR are the typical
+resolutions.
+.PP
+As in C, a mathematical function may accept multiple arguments separated by commas. Thus,
+.PP
+.CS
+\fBexpr\fR {hypot($x,$y)}
+.CE
+.PP
+>>>>>>> upstream/master
 becomes
 .PP
 .CS
@@ -351,6 +423,7 @@ or
 .PP
 returns \fB4.0\fR, not \fB4\fR.
 .SH "PERFORMANCE CONSIDERATIONS"
+<<<<<<< HEAD
 .PP
 Where an expression contains syntax that Tcl would otherwise perform
 substitutions on, enclosing an expression in braces or otherwise quoting it
@@ -424,6 +497,50 @@ A string comparison whose result is 1:
 \fBexpr\fR {"0y" > "0x12"}
 .CE
 .PP
+=======
+.PP
+Where an expression contains syntax that Tcl would otherwise perform
+substitutions on, enclosing an expression in braces or otherwise quoting it
+so that it's a static value allows the Tcl compiler to generate bytecode for
+the expression, resulting in better speed and smaller storage requirements.
+This also avoids issues that can arise if Tcl is allowed to perform
+substitution on the value before \fBexpr\fR is called.
+.PP
+In the following example, the value of the expression is 11 because the Tcl parser first
+substitutes \fB$b\fR and \fBexpr\fR then substitutes \fB$a\fR.  Enclosing the
+expression in braces would result in a syntax error.
+.CS
+set a 3
+set b {$a + 2}
+\fBexpr\fR $b*4
+.CE
+.PP
+
+When an expression is generated at runtime, like the one above is, the bytcode
+compiler must ensure that new code is generated each time the expression
+is evaluated.  This is the most costly kind of expression from a performance
+perspective.  In such cases, consider directly using the commands described in
+the \fBmathfunc\fR(n) or \fBmathop\fR(n) documentation instead of \fBexpr\fR.
+
+Most expressions are not formed at runtime, but are literal strings or contain
+substitutions that don't introduce other substitutions.  To allow the bytecode
+compiler to work with an expression as a string literal at compilation time,
+ensure that it contains no substitutions or that it is enclosed in braces or
+otherwise quoted to prevent Tcl from performing substitutions, allowing
+\fBexpr\fR to perform them instead.
+.SH EXAMPLES
+.PP
+A numeric comparison whose result is 1:
+.CS
+\fBexpr\fR {"0x03" > "2"}
+.CE
+.PP
+A string comparison whose result is 1:
+.CS
+\fBexpr\fR {"0y" > "0x12"}
+.CE
+.PP
+>>>>>>> upstream/master
 Define a procedure that computes an
 .QW interesting
 mathematical function:

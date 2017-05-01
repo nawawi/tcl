@@ -7,15 +7,26 @@ namespace eval ::tcl::clock {
         "Tr"\
         "Kt"\
         "Pn"\
+<<<<<<< HEAD
         "\u0160t"]
+=======
+        "Št"]
+>>>>>>> upstream/master
     ::msgcat::mcset lt DAYS_OF_WEEK_FULL [list \
         "Sekmadienis"\
         "Pirmadienis"\
         "Antradienis"\
+<<<<<<< HEAD
         "Tre\u010diadienis"\
         "Ketvirtadienis"\
         "Penktadienis"\
         "\u0160e\u0161tadienis"]
+=======
+        "Trečiadienis"\
+        "Ketvirtadienis"\
+        "Penktadienis"\
+        "Šeštadienis"]
+>>>>>>> upstream/master
     ::msgcat::mcset lt MONTHS_ABBREV [list \
         "Sau"\
         "Vas"\
@@ -34,6 +45,7 @@ namespace eval ::tcl::clock {
         "Sausio"\
         "Vasario"\
         "Kovo"\
+<<<<<<< HEAD
         "Baland\u017eio"\
         "Gegu\u017e\u0117s"\
         "Bir\u017eelio"\
@@ -43,6 +55,17 @@ namespace eval ::tcl::clock {
         "Spalio"\
         "Lapkri\u010dio"\
         "Gruod\u017eio"\
+=======
+        "Balandžio"\
+        "Gegužės"\
+        "Birželio"\
+        "Liepos"\
+        "Rugpjūčio"\
+        "Rugsėjo"\
+        "Spalio"\
+        "Lapkričio"\
+        "Gruodžio"\
+>>>>>>> upstream/master
         ""]
     ::msgcat::mcset lt BCE "pr.Kr."
     ::msgcat::mcset lt CE "po.Kr."

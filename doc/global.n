@@ -6,7 +6,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -34,7 +38,11 @@ If \fIvarname\fR contains namespace qualifiers, the local variable's name is
 the unqualified name of the global variable, as determined by the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBnamespace tail\fR command. 
+=======
+\fBnamespace tail\fR command.
+>>>>>>> upstream/master
 =======
 \fBnamespace tail\fR command.
 >>>>>>> upstream/master
