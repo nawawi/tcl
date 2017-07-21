@@ -191,12 +191,30 @@ proc genStubs::declare {args} {
     regsub -all "\[ \t\n\]+" [string trim $decl] " " decl
     set decl [parseDecl $decl]
 
+<<<<<<< HEAD
     foreach platform $platformList {
 	if {$decl ne ""} {
 	    set stubs($curName,$platform,$index) $decl
 	    if {![info exists stubs($curName,$platform,lastNum)] \
 		    || ($index > $stubs($curName,$platform,lastNum))} {
 		set stubs($curName,$platform,lastNum) $index
+=======
+    if {([lindex $platformList 0] eq "deprecated")} {
+	set stubs($curName,deprecated,$index) [lindex $platformList 1]
+	set stubs($curName,generic,$index) $decl
+	if {![info exists stubs($curName,generic,lastNum)] \
+		|| ($index > $stubs($curName,generic,lastNum))} {
+	    set stubs($curName,generic,lastNum) $index
+	}
+    } else {
+	foreach platform $platformList {
+	    if {$decl ne ""} {
+		set stubs($curName,$platform,$index) $decl
+		    if {![info exists stubs($curName,$platform,lastNum)] \
+			    || ($index > $stubs($curName,$platform,lastNum))} {
+			set stubs($curName,$platform,lastNum) $index
+		}
+>>>>>>> upstream/master
 	    }
 	}
 	if {$platformList eq "deprecated"} {
@@ -226,6 +244,7 @@ proc genStubs::export {args} {
     if {[llength $args] != 1} {
 	puts stderr "wrong # args: export $args"
     }
+<<<<<<< HEAD
     return
 }
 
@@ -245,6 +264,8 @@ proc genStubs::export {args} {
     if {[llength $args] != 1} {
 	puts stderr "wrong # args: export $args"
     }
+=======
+>>>>>>> upstream/master
     return
 }
 
@@ -482,6 +503,7 @@ proc genStubs::parseArg {arg} {
 proc genStubs::makeDecl {name decl index} {
     variable scspec
 <<<<<<< HEAD
+<<<<<<< HEAD
     lassign $decl rtype fname args
 
     append text "/* $index */\n"
@@ -496,6 +518,19 @@ proc genStubs::makeDecl {name decl index} {
     set line "[string toupper $libraryName]_DEPRECATED $rtype"
     } else {
     set line "$scspec $rtype"
+    }
+>>>>>>> upstream/master
+=======
+    variable stubs
+    variable libraryName
+    lassign $decl rtype fname args
+
+    append text "/* $index */\n"
+    if {[info exists stubs($name,deprecated,$index)]} {
+	append text "[string toupper $libraryName]_DEPRECATED(\"$stubs($name,deprecated,$index)\")\n"
+	set line "$rtype"
+    } else {
+	set line "$scspec $rtype"
     }
 >>>>>>> upstream/master
     set count [expr {2 - ([string length $line] / 8)}]
@@ -608,11 +643,18 @@ proc genStubs::makeMacro {name decl index} {
 
 proc genStubs::makeSlot {name decl index} {
     lassign $decl rtype fname args
+    variable stubs
 
     set lfname [string tolower [string index $fname 0]]
     append lfname [string range $fname 1 end]
 
     set text "    "
+<<<<<<< HEAD
+=======
+    if {[info exists stubs($name,deprecated,$index)]} {
+	append text "TCL_DEPRECATED_API(\"$stubs($name,deprecated,$index)\") "
+    }
+>>>>>>> upstream/master
     if {$args eq ""} {
 	append text $rtype " *" $lfname "; /* $index */\n"
 	return $text
@@ -989,6 +1031,7 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 			    eval {set etxt} $skipString
 			    append temp [addPlatformGuard $plat [$slotProc \
 				    $name $stubs($name,$plat,$i) $i] $etxt true]
+<<<<<<< HEAD
 			}
 			set emit 1
 			break
@@ -1023,6 +1066,8 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 			    eval {set etxt} $skipString
 			    append temp [addPlatformGuard $plat [$slotProc \
 				    $name $stubs($name,$plat,$i) $i] $etxt true]
+=======
+>>>>>>> upstream/master
 			}
 			set emit 1
 			break
@@ -1032,6 +1077,9 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 		    eval {append temp} $skipString
 		}
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    append text [addPlatformGuard x11 $temp {} true]
 	}

@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -36,13 +40,18 @@ functionality, or you can register a new handler for individual namespaces
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 using the \fBnamespace unknown\fR command.  Note that there is no default 
+=======
+using the \fBnamespace unknown\fR command.  Note that there is no default
+>>>>>>> upstream/master
 implementation of \fBunknown\fR in a safe interpreter.
 .PP
 If the Tcl interpreter encounters a command name for which there
-is not a defined command (in either the current namespace, or the 
+is not a defined command (in either the current namespace, or the
 global namespace), then Tcl checks for the existence of
 an unknown handler for the current namespace. By default, this
+<<<<<<< HEAD
 handler is a command named \fB::unknown\fR.  If there is no such 
 =======
 using the \fBnamespace unknown\fR command.  Note that there is no default
@@ -71,6 +80,9 @@ handler is a command named \fB::unknown\fR.  If there is no such
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+handler is a command named \fB::unknown\fR.  If there is no such
 >>>>>>> upstream/master
 command, then the interpreter returns an error.
 If the \fBunknown\fR command exists (or a new handler has been

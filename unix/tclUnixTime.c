@@ -23,10 +23,16 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static Tcl_ThreadDataKey tmKey;
 <<<<<<< HEAD
 typedef struct ThreadSpecificData {
 =======
+typedef struct {
+>>>>>>> upstream/master
+=======
+#ifndef TCL_NO_DEPRECATED
+static Tcl_ThreadDataKey tmKey;
 typedef struct {
 >>>>>>> upstream/master
 =======
@@ -56,6 +62,11 @@ static char *lastTZ = NULL;	/* Holds the last setting of the TZ
 static void		SetTZIfNecessary(void);
 static void		CleanupMemory(ClientData clientData);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+
+>>>>>>> upstream/master
 =======
 #endif /* TCL_NO_DEPRECATED */
 
@@ -174,7 +185,11 @@ TclpGetWideClicks(void)
 
 	tclGetTimeProcPtr(&time, tclTimeClientData);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	now = (Tcl_WideInt) (time.sec*1000000 + time.usec);
+=======
+	now = ((Tcl_WideInt)time.sec)*1000000 + time.usec;
+>>>>>>> upstream/master
 =======
 	now = ((Tcl_WideInt)time.sec)*1000000 + time.usec;
 >>>>>>> upstream/master
@@ -283,6 +298,10 @@ Tcl_GetTime(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 =======
 #ifndef TCL_NO_DEPRECATED
 >>>>>>> upstream/master
@@ -376,6 +395,10 @@ TclpLocaltime(
     return &tsdPtr->localtime_buf;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 =======
 #endif /* TCL_NO_DEPRECATED */
 >>>>>>> upstream/master
@@ -514,6 +537,10 @@ NativeGetTime(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 =======
 #ifndef TCL_NO_DEPRECATED
 >>>>>>> upstream/master
@@ -563,6 +590,10 @@ CleanupMemory(
     ckfree(lastTZ);
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 =======
 #endif /* TCL_NO_DEPRECATED */
 >>>>>>> upstream/master

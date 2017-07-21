@@ -13,6 +13,7 @@
 
 #include "tclInt.h"
 #include "tclFileSystem.h"
+#include <assert.h>
 
 /*
  * Prototypes for functions defined later in this file.
@@ -233,7 +234,11 @@ TclFSNormalizeAbsolutePath(
 		}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(retVal, &curLen);
+=======
+		TclGetStringFromObj(retVal, &curLen);
+>>>>>>> upstream/master
 =======
 		TclGetStringFromObj(retVal, &curLen);
 >>>>>>> upstream/master
@@ -267,7 +272,11 @@ TclFSNormalizeAbsolutePath(
 		}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(retVal, &curLen);
+=======
+		TclGetStringFromObj(retVal, &curLen);
+>>>>>>> upstream/master
 =======
 		TclGetStringFromObj(retVal, &curLen);
 >>>>>>> upstream/master
@@ -306,7 +315,11 @@ TclFSNormalizeAbsolutePath(
 			    const char *path =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				    Tcl_GetStringFromObj(retVal, &curLen);
+=======
+				    TclGetStringFromObj(retVal, &curLen);
+>>>>>>> upstream/master
 =======
 				    TclGetStringFromObj(retVal, &curLen);
 >>>>>>> upstream/master
@@ -329,7 +342,11 @@ TclFSNormalizeAbsolutePath(
 			    TclDecrRefCount(linkObj);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			    linkStr = Tcl_GetStringFromObj(retVal, &curLen);
+=======
+			    linkStr = TclGetStringFromObj(retVal, &curLen);
+>>>>>>> upstream/master
 =======
 			    linkStr = TclGetStringFromObj(retVal, &curLen);
 >>>>>>> upstream/master
@@ -350,7 +367,11 @@ TclFSNormalizeAbsolutePath(
 			    }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			    linkStr = Tcl_GetStringFromObj(retVal, &curLen);
+=======
+			    linkStr = TclGetStringFromObj(retVal, &curLen);
+>>>>>>> upstream/master
 =======
 			    linkStr = TclGetStringFromObj(retVal, &curLen);
 >>>>>>> upstream/master
@@ -375,7 +396,11 @@ TclFSNormalizeAbsolutePath(
 		    } else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			linkStr = Tcl_GetStringFromObj(retVal, &curLen);
+=======
+			linkStr = TclGetStringFromObj(retVal, &curLen);
+>>>>>>> upstream/master
 =======
 			linkStr = TclGetStringFromObj(retVal, &curLen);
 >>>>>>> upstream/master
@@ -454,7 +479,11 @@ TclFSNormalizeAbsolutePath(
 	int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *path = Tcl_GetStringFromObj(retVal, &len);
+=======
+	const char *path = TclGetStringFromObj(retVal, &len);
+>>>>>>> upstream/master
 =======
 	const char *path = TclGetStringFromObj(retVal, &len);
 >>>>>>> upstream/master
@@ -637,7 +666,11 @@ TclPathPart(
 		const char *rest =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			Tcl_GetStringFromObj(fsPathPtr->normPathPtr, &numBytes);
+=======
+			TclGetStringFromObj(fsPathPtr->normPathPtr, &numBytes);
+>>>>>>> upstream/master
 =======
 			TclGetStringFromObj(fsPathPtr->normPathPtr, &numBytes);
 >>>>>>> upstream/master
@@ -683,7 +716,11 @@ TclPathPart(
 		const char *rest =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			Tcl_GetStringFromObj(fsPathPtr->normPathPtr, &numBytes);
+=======
+			TclGetStringFromObj(fsPathPtr->normPathPtr, &numBytes);
+>>>>>>> upstream/master
 =======
 			TclGetStringFromObj(fsPathPtr->normPathPtr, &numBytes);
 >>>>>>> upstream/master
@@ -720,7 +757,11 @@ TclPathPart(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		fileName = Tcl_GetStringFromObj(fsPathPtr->normPathPtr,
+=======
+		fileName = TclGetStringFromObj(fsPathPtr->normPathPtr,
+>>>>>>> upstream/master
 =======
 		fileName = TclGetStringFromObj(fsPathPtr->normPathPtr,
 >>>>>>> upstream/master
@@ -780,7 +821,11 @@ TclPathPart(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    fileName = Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	    fileName = TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 =======
 	    fileName = TclGetStringFromObj(pathPtr, &length);
 >>>>>>> upstream/master
@@ -923,6 +968,7 @@ Tcl_FSJoinPath(
     if (Tcl_ListObjLength(NULL, listObj, &objc) != TCL_OK) {
 	return NULL;
     }
+<<<<<<< HEAD
 
     elements = ((elements >= 0) && (elements <= objc)) ? elements : objc;
     copy = TclListObjCopy(NULL, listObj);
@@ -940,15 +986,45 @@ TclJoinPath(
     Tcl_Obj *res;
     int i;
     const Tcl_Filesystem *fsPtr = NULL;
+=======
 
-    res = NULL;
+    elements = ((elements >= 0) && (elements <= objc)) ? elements : objc;
+    copy = TclListObjCopy(NULL, listObj);
+    Tcl_ListObjGetElements(NULL, listObj, &objc, &objv);
+    res = TclJoinPath(elements, objv);
+    Tcl_DecrRefCount(copy);
+    return res;
+}
 
+Tcl_Obj *
+TclJoinPath(
+    int elements,
+    Tcl_Obj * const objv[])
+{
+    Tcl_Obj *res = NULL;
+    int i;
+    const Tcl_Filesystem *fsPtr = NULL;
+
+    assert ( elements >= 0 );
+
+    if (elements == 0) {
+	return Tcl_NewObj();
+    }
+>>>>>>> upstream/master
+
+    assert ( elements > 0 );
+
+<<<<<<< HEAD
     for (i = 0; i < elements; i++) {
 	int driveNameLength, strEltLen, length;
 	Tcl_PathType type;
 	char *strElt, *ptr;
 	Tcl_Obj *driveName = NULL;
 	Tcl_Obj *elt = objv[i];
+=======
+    if (elements == 2) {
+	Tcl_Obj *elt = objv[0];
+>>>>>>> upstream/master
 
 	/*
 	 * This is a special case where we can be much more efficient, where
@@ -957,6 +1033,7 @@ TclJoinPath(
 	 * object which can be normalized more efficiently. Currently we only
 	 * use the special case when we have exactly two elements, but we
 	 * could expand that in the future.
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	 */
@@ -984,13 +1061,30 @@ TclJoinPath(
 >>>>>>> upstream/master
 
 	    type = TclGetPathType(tailObj, NULL, NULL, NULL);
+=======
+	 *
+	 * Bugfix [a47641a0]. TclNewFSPathObj requires first argument
+	 * to be an absolute path. Added a check for that elt is absolute.
+	 */
+
+	if ((elt->typePtr == &tclFsPathType)
+		&& !((elt->bytes != NULL) && (elt->bytes[0] == '\0'))
+                && TclGetPathType(elt, NULL, NULL, NULL) == TCL_PATH_ABSOLUTE) {
+            Tcl_Obj *tailObj = objv[1];
+	    Tcl_PathType type = TclGetPathType(tailObj, NULL, NULL, NULL);
+
+>>>>>>> upstream/master
 	    if (type == TCL_PATH_RELATIVE) {
 		const char *str;
 		int len;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		str = Tcl_GetStringFromObj(tailObj, &len);
+=======
+		str = TclGetStringFromObj(tailObj, &len);
+>>>>>>> upstream/master
 =======
 		str = TclGetStringFromObj(tailObj, &len);
 >>>>>>> upstream/master
@@ -1004,9 +1098,6 @@ TclJoinPath(
 		     * the base itself is just fine!
 		     */
 
-		    if (res != NULL) {
-			TclDecrRefCount(res);
-		    }
 		    return elt;
 		}
 
@@ -1029,10 +1120,17 @@ TclJoinPath(
 
 		    if ((tclPlatform != TCL_PLATFORM_WINDOWS)
 			    || (strchr(Tcl_GetString(elt), '\\') == NULL)) {
-			if (res != NULL) {
-			    TclDecrRefCount(res);
+
+			if (PATHFLAGS(elt)) {
+			    return TclNewFSPathObj(elt, str, len);
 			}
-			return TclNewFSPathObj(elt, str, len);
+			if (TCL_PATH_ABSOLUTE != Tcl_FSGetPathType(elt)) {
+			    return TclNewFSPathObj(elt, str, len);
+			}
+			(void) Tcl_FSGetNormalizedPath(NULL, elt);
+			if (elt == PATHOBJ(elt)->normPathPtr) {
+			    return TclNewFSPathObj(elt, str, len);
+			}
 		    }
 		}
 
@@ -1041,18 +1139,24 @@ TclJoinPath(
 		 * more general code below handle things.
 		 */
 	    } else if (tclPlatform == TCL_PLATFORM_UNIX) {
+<<<<<<< HEAD
 		if (res != NULL) {
 		    TclDecrRefCount(res);
 		}
+=======
+>>>>>>> upstream/master
 		return tailObj;
 	    } else {
 		const char *str = TclGetString(tailObj);
 
 		if (tclPlatform == TCL_PLATFORM_WINDOWS) {
 		    if (strchr(str, '\\') == NULL) {
+<<<<<<< HEAD
 			if (res != NULL) {
 			    TclDecrRefCount(res);
 			}
+=======
+>>>>>>> upstream/master
 			return tailObj;
 		    }
 		}
@@ -1060,11 +1164,27 @@ TclJoinPath(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	strElt = Tcl_GetStringFromObj(elt, &strEltLen);
 =======
 	strElt = TclGetStringFromObj(elt, &strEltLen);
 >>>>>>> upstream/master
 =======
+	strElt = TclGetStringFromObj(elt, &strEltLen);
+	driveNameLength = 0;
+>>>>>>> upstream/master
+=======
+    }
+
+    assert ( res == NULL );
+
+    for (i = 0; i < elements; i++) {
+	int driveNameLength, strEltLen, length;
+	Tcl_PathType type;
+	char *strElt, *ptr;
+	Tcl_Obj *driveName = NULL;
+	Tcl_Obj *elt = objv[i];
+
 	strElt = TclGetStringFromObj(elt, &strEltLen);
 	driveNameLength = 0;
 >>>>>>> upstream/master
@@ -1124,13 +1244,19 @@ TclJoinPath(
 	    }
 	    ptr = strElt;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 	    /* [Bug f34cf83dd0] */
 	    if (driveNameLength > 0) {
 		if (ptr[0] == '/' && ptr[-1] == '/') {
 		    goto noQuickReturn;
 		}
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    while (*ptr != '\0') {
 		if (*ptr == '/' && (ptr[1] == '/' || ptr[1] == '\0')) {
@@ -1165,6 +1291,7 @@ TclJoinPath(
 	    res = Tcl_NewObj();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    ptr = Tcl_GetStringFromObj(res, &length);
 	} else {
 	    ptr = Tcl_GetStringFromObj(res, &length);
@@ -1177,8 +1304,11 @@ TclJoinPath(
 	    ptr = TclGetStringFromObj(res, &length);
 	} else {
 	    ptr = TclGetStringFromObj(res, &length);
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	}
+	ptr = TclGetStringFromObj(res, &length);
 
 	/*
 	 * Strip off any './' before a tilde, unless this is the beginning of
@@ -1211,6 +1341,13 @@ TclJoinPath(
 
 		if (sep != NULL) {
 		    separator = TclGetString(sep)[0];
+		    TclDecrRefCount(sep);
+		}
+		/* Safety check in case the VFS driver caused sharing */
+		if (Tcl_IsShared(res)) {
+		    TclDecrRefCount(res);
+		    res = Tcl_DuplicateObj(res);
+		    Tcl_IncrRefCount(res);
 		}
 		/* Safety check in case the VFS driver caused sharing */
 		if (Tcl_IsShared(res)) {
@@ -1224,7 +1361,11 @@ TclJoinPath(
 		Tcl_AppendToObj(res, &separator, 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(res, &length);
+=======
+		TclGetStringFromObj(res, &length);
+>>>>>>> upstream/master
 =======
 		TclGetStringFromObj(res, &length);
 >>>>>>> upstream/master
@@ -1254,9 +1395,7 @@ TclJoinPath(
 	    Tcl_SetObjLength(res, length);
 	}
     }
-    if (res == NULL) {
-	res = Tcl_NewObj();
-    }
+    assert ( res != NULL );
     return res;
 }
 
@@ -1527,7 +1666,11 @@ AppendPath(
      */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(tail, &numBytes);
+=======
+    bytes = TclGetStringFromObj(tail, &numBytes);
+>>>>>>> upstream/master
 =======
     bytes = TclGetStringFromObj(tail, &numBytes);
 >>>>>>> upstream/master
@@ -1594,7 +1737,11 @@ TclFSMakePathRelative(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tempStr = Tcl_GetStringFromObj(cwdPtr, &cwdLen);
+=======
+    tempStr = TclGetStringFromObj(cwdPtr, &cwdLen);
+>>>>>>> upstream/master
 =======
     tempStr = TclGetStringFromObj(cwdPtr, &cwdLen);
 >>>>>>> upstream/master
@@ -1622,7 +1769,11 @@ TclFSMakePathRelative(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tempStr = Tcl_GetStringFromObj(pathPtr, &len);
+=======
+    tempStr = TclGetStringFromObj(pathPtr, &len);
+>>>>>>> upstream/master
 =======
     tempStr = TclGetStringFromObj(pathPtr, &len);
 >>>>>>> upstream/master
@@ -1894,7 +2045,11 @@ Tcl_FSGetTranslatedStringPath(
 	int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *orig = Tcl_GetStringFromObj(transPtr, &len);
+=======
+	const char *orig = TclGetStringFromObj(transPtr, &len);
+>>>>>>> upstream/master
 =======
 	const char *orig = TclGetStringFromObj(transPtr, &len);
 >>>>>>> upstream/master
@@ -1963,7 +2118,11 @@ Tcl_FSGetNormalizedPath(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(fsPathPtr->normPathPtr, &tailLen);
+=======
+	TclGetStringFromObj(fsPathPtr->normPathPtr, &tailLen);
+>>>>>>> upstream/master
 =======
 	TclGetStringFromObj(fsPathPtr->normPathPtr, &tailLen);
 >>>>>>> upstream/master
@@ -1984,7 +2143,11 @@ Tcl_FSGetNormalizedPath(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	(void) Tcl_GetStringFromObj(dir, &cwdLen);
+=======
+	(void) TclGetStringFromObj(dir, &cwdLen);
+>>>>>>> upstream/master
 =======
 	(void) TclGetStringFromObj(dir, &cwdLen);
 >>>>>>> upstream/master
@@ -2081,6 +2244,7 @@ Tcl_FSGetNormalizedPath(
 	} else if (fsPathPtr->normPathPtr == NULL) {
 	    int cwdLen;
 	    Tcl_Obj *copy;
+<<<<<<< HEAD
 
 	    copy = AppendPath(fsPathPtr->cwdPtr, pathPtr);
 
@@ -2091,6 +2255,12 @@ Tcl_FSGetNormalizedPath(
 	    (void) TclGetStringFromObj(fsPathPtr->cwdPtr, &cwdLen);
 >>>>>>> upstream/master
 =======
+	    (void) TclGetStringFromObj(fsPathPtr->cwdPtr, &cwdLen);
+>>>>>>> upstream/master
+=======
+
+	    copy = AppendPath(fsPathPtr->cwdPtr, pathPtr);
+
 	    (void) TclGetStringFromObj(fsPathPtr->cwdPtr, &cwdLen);
 >>>>>>> upstream/master
 	    cwdLen += (Tcl_GetString(copy)[cwdLen] == '/');
@@ -2544,7 +2714,11 @@ SetFsPathFromAny(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     name = Tcl_GetStringFromObj(pathPtr, &len);
+=======
+    name = TclGetStringFromObj(pathPtr, &len);
+>>>>>>> upstream/master
 =======
     name = TclGetStringFromObj(pathPtr, &len);
 >>>>>>> upstream/master
@@ -2821,12 +2995,18 @@ UpdateStringOfFsPath(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     pathPtr->bytes = Tcl_GetStringFromObj(copy, &cwdLen);
 =======
     pathPtr->bytes = TclGetStringFromObj(copy, &cwdLen);
 >>>>>>> upstream/master
     pathPtr->length = cwdLen;
     copy->bytes = tclEmptyStringRep;
+=======
+    pathPtr->bytes = TclGetStringFromObj(copy, &cwdLen);
+    pathPtr->length = cwdLen;
+    copy->bytes = &tclEmptyString;
+>>>>>>> upstream/master
 =======
     pathPtr->bytes = TclGetStringFromObj(copy, &cwdLen);
     pathPtr->length = cwdLen;
@@ -2892,7 +3072,11 @@ TclNativePathInFilesystem(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	(void) Tcl_GetStringFromObj(pathPtr, &len);
+=======
+	(void) TclGetStringFromObj(pathPtr, &len);
+>>>>>>> upstream/master
 =======
 	(void) TclGetStringFromObj(pathPtr, &len);
 >>>>>>> upstream/master

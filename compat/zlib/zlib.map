@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ZLIB_1.2.0 {
   global:
     compressBound;
@@ -83,6 +84,8 @@ ZLIB_1.2.7.1 {
     gzvprintf;
 } ZLIB_1.2.5.2;
 =======
+=======
+>>>>>>> upstream/master
 ZLIB_1.2.0 {
   global:
     compressBound;
@@ -177,4 +180,7 @@ ZLIB_1.2.9 {
     adler32_z;
     crc32_z;
 } ZLIB_1.2.7.1;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master

@@ -121,6 +121,7 @@ typedef struct PipeInfo {
 				 * reader thread has finished waiting for
 				 * input. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     HANDLE startWriter;		/* Auto-reset event used by the main thread to
 				 * signal when the writer thread should
 				 * attempt to write to the pipe. */
@@ -131,6 +132,8 @@ typedef struct PipeInfo {
 				 * attempt to read from the pipe. */
     HANDLE stopReader;		/* Manual-reset event used to alert the reader
 				 * thread to fall-out and exit */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     DWORD writeError;		/* An error caused by the last background
@@ -905,7 +908,11 @@ TclpGetPid(
  *	executable. If an executable by the given name is not found,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  *	automatically tries appending ".com", ".exe", and ".bat" to the
+=======
+ *	automatically tries appending standard extensions to the
+>>>>>>> upstream/master
 =======
  *	automatically tries appending standard extensions to the
 >>>>>>> upstream/master
@@ -1308,7 +1315,11 @@ ApplicationType(
     TCHAR nativeFullPath[MAX_PATH];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static const char extensions[][5] = {"", ".com", ".exe", ".bat"};
+=======
+    static const char extensions[][5] = {"", ".com", ".exe", ".bat", ".cmd"};
+>>>>>>> upstream/master
 =======
     static const char extensions[][5] = {"", ".com", ".exe", ".bat", ".cmd"};
 >>>>>>> upstream/master
@@ -1362,12 +1373,17 @@ ApplicationType(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if ((ext != NULL) && (strcasecmp(ext, ".bat") == 0)) {
 =======
 	if ((ext != NULL) && 
 =======
 	if ((ext != NULL) &&
 >>>>>>> upstream/master
+            (strcasecmp(ext, ".cmd") == 0 || strcasecmp(ext, ".bat") == 0)) {
+>>>>>>> upstream/master
+=======
+	if ((ext != NULL) &&
             (strcasecmp(ext, ".cmd") == 0 || strcasecmp(ext, ".bat") == 0)) {
 >>>>>>> upstream/master
 =======
@@ -1524,7 +1540,11 @@ BuildCommandLine(
 	    Tcl_UniChar ch;
 
 	    for (start = arg; *start != '\0'; start += count) {
+<<<<<<< HEAD
 		count = Tcl_UtfToUniChar(start, &ch);
+=======
+		count = TclUtfToUniChar(start, &ch);
+>>>>>>> upstream/master
 		if (Tcl_UniCharIsSpace(ch)) {	/* INTL: ISO space. */
 		    quote = 1;
 		    break;
@@ -1607,7 +1627,10 @@ TclpCreateCommandChannel(
 {
     char channelName[16 + TCL_INTEGER_SPACE];
 <<<<<<< HEAD
+<<<<<<< HEAD
     DWORD id;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     PipeInfo *infoPtr = ckalloc(sizeof(PipeInfo));
@@ -1638,10 +1661,16 @@ TclpCreateCommandChannel(
 
 	infoPtr->readable = CreateEvent(NULL, TRUE, TRUE, NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	infoPtr->startReader = CreateEvent(NULL, FALSE, FALSE, NULL);
 	infoPtr->stopReader = CreateEvent(NULL, TRUE, FALSE, NULL);
 	infoPtr->readThread = CreateThread(NULL, 256, PipeReaderThread,
 		infoPtr, 0, &id);
+=======
+	infoPtr->readThread = CreateThread(NULL, 256, PipeReaderThread,
+	    TclPipeThreadCreateTI(&infoPtr->readTI, infoPtr, infoPtr->readable),
+	    0, NULL);
+>>>>>>> upstream/master
 =======
 	infoPtr->readThread = CreateThread(NULL, 256, PipeReaderThread,
 	    TclPipeThreadCreateTI(&infoPtr->readTI, infoPtr, infoPtr->readable),
@@ -1660,18 +1689,28 @@ TclpCreateCommandChannel(
 
 	infoPtr->writable = CreateEvent(NULL, TRUE, TRUE, NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	infoPtr->startWriter = CreateEvent(NULL, FALSE, FALSE, NULL);
 	infoPtr->stopWriter = CreateEvent(NULL, TRUE, FALSE, NULL);
+=======
+>>>>>>> upstream/master
 	infoPtr->writeThread = CreateThread(NULL, 256, PipeWriterThread,
-		infoPtr, 0, &id);
-	SetThreadPriority(infoPtr->readThread, THREAD_PRIORITY_HIGHEST);
+	    TclPipeThreadCreateTI(&infoPtr->writeTI, infoPtr, infoPtr->writable),
+	    0, NULL);
+	SetThreadPriority(infoPtr->writeThread, THREAD_PRIORITY_HIGHEST);
 	infoPtr->validMask |= TCL_WRITABLE;
+<<<<<<< HEAD
 =======
 	infoPtr->writeThread = CreateThread(NULL, 256, PipeWriterThread,
 	    TclPipeThreadCreateTI(&infoPtr->writeTI, infoPtr, infoPtr->writable),
 	    0, NULL);
 	SetThreadPriority(infoPtr->writeThread, THREAD_PRIORITY_HIGHEST);
 	infoPtr->validMask |= TCL_WRITABLE;
+    } else {
+    	infoPtr->writeTI = NULL;
+    	infoPtr->writeThread = 0;
+>>>>>>> upstream/master
+=======
     } else {
     	infoPtr->writeTI = NULL;
     	infoPtr->writeThread = 0;
@@ -1862,7 +1901,11 @@ PipeClose2Proc(
     PipeInfo *infoPtr, **nextPtrPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 <<<<<<< HEAD
+<<<<<<< HEAD
     DWORD exitCode;
+=======
+    int inExit = (TclInExit() || TclInThreadExit());
+>>>>>>> upstream/master
 =======
     int inExit = (TclInExit() || TclInThreadExit());
 >>>>>>> upstream/master
@@ -1871,7 +1914,11 @@ PipeClose2Proc(
     result = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if ((!flags || flags == TCL_CLOSE_READ) && (pipePtr->readFile != NULL)) {
+=======
+    if ((!flags || flags & TCL_CLOSE_READ) && (pipePtr->readFile != NULL)) {
+>>>>>>> upstream/master
 =======
     if ((!flags || flags & TCL_CLOSE_READ) && (pipePtr->readFile != NULL)) {
 >>>>>>> upstream/master
@@ -1882,6 +1929,7 @@ PipeClose2Proc(
 	 */
 
 	if (pipePtr->readThread) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    /*
 	     * The thread may already have closed on its own. Check its exit
@@ -1929,13 +1977,18 @@ PipeClose2Proc(
 	    }
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 	    TclPipeThreadStop(&pipePtr->readTI, pipePtr->readThread);
 	    CloseHandle(pipePtr->readThread);
 	    CloseHandle(pipePtr->readable);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    CloseHandle(pipePtr->startReader);
 	    CloseHandle(pipePtr->stopReader);
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	    pipePtr->readThread = NULL;
@@ -1946,6 +1999,7 @@ PipeClose2Proc(
 	pipePtr->validMask &= ~TCL_READABLE;
 	pipePtr->readFile = NULL;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
     if ((!flags || flags & TCL_CLOSE_WRITE)
 	    && (pipePtr->writeFile != NULL)) {
@@ -1971,28 +2025,27 @@ PipeClose2Proc(
 		WaitForSingleObject(pipePtr->writable, INFINITE);
 
 	    }
+=======
+    if ((!flags || flags & TCL_CLOSE_WRITE) && (pipePtr->writeFile != NULL)) {
+	if (pipePtr->writeThread) {
+>>>>>>> upstream/master
 
 	    /*
-	     * The thread may already have closed on it's own. Check its exit
-	     * code.
+	     * Wait for the  writer thread to finish the  current buffer, then
+	     * terminate the thread  and close the handles. If  the channel is
+	     * nonblocking or may block during exit, bail out since the worker
+	     * thread is not interruptible and we want TIP#398-fast-exit.
 	     */
+	    if ((pipePtr->flags & PIPE_ASYNC) && inExit) {
 
-	    GetExitCodeThread(pipePtr->writeThread, &exitCode);
+		/* give it a chance to leave honorably */
+		TclPipeThreadStopSignal(&pipePtr->writeTI, pipePtr->writable);
 
-	    if (exitCode == STILL_ACTIVE) {
-		/*
-		 * Set the stop event so that if the reader thread is blocked
-		 * in PipeReaderThread on WaitForMultipleEvents, it will exit
-		 * cleanly.
-		 */
+		if (WaitForSingleObject(pipePtr->writable, 20) == WAIT_TIMEOUT) {
+		    return EWOULDBLOCK;
+		}
 
-		SetEvent(pipePtr->stopWriter);
-
-		/*
-		 * Wait at most 20 milliseconds for the reader thread to
-		 * close.
-		 */
-
+<<<<<<< HEAD
 		if (WaitForSingleObject(pipePtr->writeThread,
 			20) == WAIT_TIMEOUT) {
 		    /*
@@ -2008,13 +2061,12 @@ PipeClose2Proc(
 		     * thread while it is in the middle of Tcl_ThreadAlert
 		     * because it won't be able to release the notifier lock.
 		     */
+=======
+	    } else {
+>>>>>>> upstream/master
 
-		    Tcl_MutexLock(&pipeMutex);
+		WaitForSingleObject(pipePtr->writable, inExit ? 5000 : INFINITE);
 
-		    /* BUG: this leaks memory */
-		    TerminateThread(pipePtr->writeThread, 0);
-		    Tcl_MutexUnlock(&pipeMutex);
-		}
 	    }
 =======
     if ((!flags || flags & TCL_CLOSE_WRITE) && (pipePtr->writeFile != NULL)) {
@@ -2044,11 +2096,18 @@ PipeClose2Proc(
 	    TclPipeThreadStop(&pipePtr->writeTI, pipePtr->writeThread);
 >>>>>>> upstream/master
 
+<<<<<<< HEAD
 	    CloseHandle(pipePtr->writable);
 <<<<<<< HEAD
 	    CloseHandle(pipePtr->startWriter);
 	    CloseHandle(pipePtr->stopWriter);
 =======
+	    CloseHandle(pipePtr->writeThread);
+>>>>>>> upstream/master
+=======
+	    TclPipeThreadStop(&pipePtr->writeTI, pipePtr->writeThread);
+
+	    CloseHandle(pipePtr->writable);
 	    CloseHandle(pipePtr->writeThread);
 >>>>>>> upstream/master
 	    pipePtr->writeThread = NULL;
@@ -2086,7 +2145,11 @@ PipeClose2Proc(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if ((pipePtr->flags & PIPE_ASYNC) || TclInExit()) {
+=======
+    if ((pipePtr->flags & PIPE_ASYNC) || inExit) {
+>>>>>>> upstream/master
 =======
     if ((pipePtr->flags & PIPE_ASYNC) || inExit) {
 >>>>>>> upstream/master
@@ -2613,6 +2676,7 @@ Tcl_WaitPid(
     } else if (ret == WAIT_OBJECT_0) {
 	GetExitCodeProcess(infoPtr->hProcess, &exitCode);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	/*
 	 * Does the exit code look like one of the exception codes?
@@ -2689,6 +2753,8 @@ Tcl_WaitPid(
     ckfree(infoPtr);
 
 =======
+=======
+>>>>>>> upstream/master
 
 	/*
 	 * Does the exit code look like one of the exception codes?
@@ -2900,7 +2966,13 @@ WaitForRead(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	timeout = blocking ? INFINITE : 0;
+=======
+	/* avoid blocking if pipe-thread exited */
+	timeout = (!blocking || !TclPipeThreadIsAlive(&infoPtr->readTI)
+		|| TclInExit() || TclInThreadExit()) ? 0 : INFINITE;
+>>>>>>> upstream/master
 =======
 	/* avoid blocking if pipe-thread exited */
 	timeout = (!blocking || !TclPipeThreadIsAlive(&infoPtr->readTI)
@@ -3012,11 +3084,6 @@ PipeReaderThread(
     HANDLE handle = NULL;
     DWORD count, err;
     int done = 0;
-    HANDLE wEvents[2];
-    DWORD waitResult;
-
-    wEvents[0] = infoPtr->stopReader;
-    wEvents[1] = infoPtr->startReader;
 
     while (!done) {
 	/*
@@ -3025,6 +3092,7 @@ PipeReaderThread(
 	 */
 	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
 	    /* exit */
+<<<<<<< HEAD
 	    break;
 	}
 
@@ -3037,12 +3105,19 @@ PipeReaderThread(
 	     * an error, so exit.
 	     */
 
+=======
+>>>>>>> upstream/master
 	    break;
 =======
 	if (!infoPtr) {
 	    infoPtr = (PipeInfo *)pipeTI->clientData;
 	    handle = ((WinFile *) infoPtr->readFile)->handle;
 >>>>>>> upstream/master
+	}
+
+	if (!infoPtr) {
+	    infoPtr = (PipeInfo *)pipeTI->clientData;
+	    handle = ((WinFile *) infoPtr->readFile)->handle;
 	}
 
 	/*
@@ -3092,7 +3167,10 @@ PipeReaderThread(
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	/*
@@ -3121,13 +3199,19 @@ PipeReaderThread(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     /*
      * If state of thread was set to stop, we can sane free info structure,
      * otherwise it is shared with main thread, so main thread will own it
      */
     TclPipeThreadExit(&pipeTI);
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return 0;
 }
@@ -3154,8 +3238,14 @@ PipeWriterThread(
     LPVOID arg)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     PipeInfo *infoPtr = (PipeInfo *)arg;
     HANDLE *handle = ((WinFile *) infoPtr->writeFile)->handle;
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    PipeInfo *infoPtr = NULL; /* access info only after success init/wait */
+    HANDLE handle = NULL;
+>>>>>>> upstream/master
 =======
     TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
     PipeInfo *infoPtr = NULL; /* access info only after success init/wait */
@@ -3164,11 +3254,6 @@ PipeWriterThread(
     DWORD count, toWrite;
     char *buf;
     int done = 0;
-    HANDLE wEvents[2];
-    DWORD waitResult;
-
-    wEvents[0] = infoPtr->stopWriter;
-    wEvents[1] = infoPtr->startWriter;
 
     while (!done) {
 	/*
@@ -3176,6 +3261,7 @@ PipeWriterThread(
 	 */
 	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
 	    /* exit */
+<<<<<<< HEAD
 	    break;
 	}
 
@@ -3192,12 +3278,19 @@ PipeWriterThread(
 		SetEvent(infoPtr->writable);
 	    }
 
+=======
+>>>>>>> upstream/master
 	    break;
 =======
 	if (!infoPtr) {
 	    infoPtr = (PipeInfo *)pipeTI->clientData;
 	    handle = ((WinFile *) infoPtr->writeFile)->handle;
 >>>>>>> upstream/master
+	}
+
+	if (!infoPtr) {
+	    infoPtr = (PipeInfo *)pipeTI->clientData;
+	    handle = ((WinFile *) infoPtr->writeFile)->handle;
 	}
 
 	buf = infoPtr->writeBuf;
@@ -3244,7 +3337,10 @@ PipeWriterThread(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     /*
      * If state of thread was set to stop, we can sane free info structure,
      * otherwise it is shared with main thread, so main thread will own it.
@@ -3503,6 +3599,9 @@ end:
     if (wakeEvent) {
     	SetEvent(wakeEvent);
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return 0;
 }
@@ -3511,10 +3610,13 @@ end:
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * PipeThreadActionProc --
  *
  *	Insert or remove any thread local refs to this channel.
 =======
+=======
+>>>>>>> upstream/master
  * TclPipeThreadStopSignal --
  *
  *	Send stop signal to the pipe worker (without waiting).
@@ -3580,6 +3682,9 @@ TclPipeThreadStopSignal(
  *
  *	After calling of this function, TI-structure pointer given via pipeTIPtr
  *	is not accessible (owned by pipe worker or released here).
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  * Results:
@@ -3587,8 +3692,11 @@ TclPipeThreadStopSignal(
  *
  * Side effects:
 <<<<<<< HEAD
+<<<<<<< HEAD
  *	Changes thread local list of valid channels.
 =======
+=======
+>>>>>>> upstream/master
  *	Can terminate pipe worker (and / or stop its synchronous operations).
  *
  *----------------------------------------------------------------------
@@ -3600,7 +3708,11 @@ TclPipeThreadStop(
     HANDLE hThread)
 {
     TclPipeThreadInfo *pipeTI = *pipeTIPtr;
+<<<<<<< HEAD
     HANDLE evControl, wakeEvent;
+=======
+    HANDLE evControl;
+>>>>>>> upstream/master
     int state;
 
     if (!pipeTI) {
@@ -3608,7 +3720,10 @@ TclPipeThreadStop(
     }
     pipeTI = *pipeTIPtr;
     evControl = pipeTI->evControl;
+<<<<<<< HEAD
     wakeEvent = pipeTI->evWakeUp;
+=======
+>>>>>>> upstream/master
     pipeTI->evWakeUp = NULL;
     /*
      * Try to sane stop the pipe worker, corresponding its current state
@@ -3676,8 +3791,13 @@ TclPipeThreadStop(
 	    /*
 	     * Cancel all sync-IO of this thread (may be blocked there).
 	     */
+<<<<<<< HEAD
 	    if (tclWinProcs->cancelSynchronousIo) {
 		tclWinProcs->cancelSynchronousIo(hThread);
+=======
+	    if (tclWinProcs.cancelSynchronousIo) {
+		tclWinProcs.cancelSynchronousIo(hThread);
+>>>>>>> upstream/master
 	    }
 
 	    /*
@@ -3763,11 +3883,15 @@ TclPipeThreadStop(
  *
  * Results:
  *	None.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 static void
 PipeThreadActionProc(
@@ -3896,6 +4020,8 @@ TclpOpenTemporaryFile(
     TclWinConvertError(GetLastError());
     return NULL;
 =======
+=======
+>>>>>>> upstream/master
 void
 TclPipeThreadExit(
     TclPipeThreadInfo **pipeTIPtr)
@@ -3925,6 +4051,9 @@ TclPipeThreadExit(
 	Tcl_FinalizeThread();
     #endif
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }
 

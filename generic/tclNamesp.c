@@ -32,7 +32,11 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -728,6 +732,7 @@ Tcl_CreateNamespace(
 	Tcl_DStringFree(&tmpBuffer);
 	return NULL;
     }
+<<<<<<< HEAD
 
     /*
      * Find the parent for the new namespace.
@@ -752,6 +757,32 @@ Tcl_CreateNamespace(
      * already exist in the parent namespace.
      */
 
+=======
+
+    /*
+     * Find the parent for the new namespace.
+     */
+
+    TclGetNamespaceForQualName(interp, name, NULL, TCL_CREATE_NS_IF_UNKNOWN,
+	    &parentPtr, &dummy1Ptr, &dummy2Ptr, &simpleName);
+
+    /*
+     * If the unqualified name at the end is empty, there were trailing "::"s
+     * after the namespace's name which we ignore. The new namespace was
+     * already (recursively) created and is pointed to by parentPtr.
+     */
+
+    if (*simpleName == '\0') {
+	Tcl_DStringFree(&tmpBuffer);
+	return (Tcl_Namespace *) parentPtr;
+    }
+
+    /*
+     * Check for a bad namespace name and make sure that the name does not
+     * already exist in the parent namespace.
+     */
+
+>>>>>>> upstream/master
     if (
 #ifndef BREAK_NAMESPACE_COMPAT
 	Tcl_FindHashEntry(&parentPtr->childTable, simpleName) != NULL
@@ -2891,9 +2922,15 @@ GetNamespaceFromObj(
 	refNsPtr = resNamePtr->refNsPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp) &&
 		(!refNsPtr || ((interp == refNsPtr->interp) &&
 		(refNsPtr== (Namespace *) Tcl_GetCurrentNamespace(interp))))){
+=======
+	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp)
+		&& (!refNsPtr || (refNsPtr ==
+		(Namespace *) TclGetCurrentNamespace(interp)))) {
+>>>>>>> upstream/master
 =======
 	if (!(nsPtr->flags & NS_DYING) && (interp == nsPtr->interp)
 		&& (!refNsPtr || (refNsPtr ==
@@ -3372,6 +3409,7 @@ NRNamespaceEvalCmd(
     (void) TclPushStackFrame(interp, (Tcl_CallFrame **) framePtrPtr,
 	    namespacePtr, /*isProcCallFrame*/ 0);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     if (iPtr->ensembleRewrite.sourceObjs == NULL) {
@@ -3395,11 +3433,19 @@ NRNamespaceEvalCmd(
 
     framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
 
+=======
+
+    framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
+
+>>>>>>> upstream/master
     if (objc == 3) {
 	/*
 	 * TIP #280: Make actual argument location available to eval'd script.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	objPtr = objv[2];
 	invoker = iPtr->cmdFramePtr;
@@ -3803,7 +3849,10 @@ NRNamespaceInscopeCmd(
     CallFrame *framePtr, **framePtrPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     register Interp *iPtr = (Interp *) interp;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -3835,6 +3884,7 @@ NRNamespaceInscopeCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (iPtr->ensembleRewrite.sourceObjs == NULL) {
 	framePtr->objc = objc;
 	framePtr->objv = objv;
@@ -3843,6 +3893,9 @@ NRNamespaceInscopeCmd(
 		- iPtr->ensembleRewrite.numInsertedObjs;
 	framePtr->objv = iPtr->ensembleRewrite.sourceObjs;
     }
+=======
+    framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
+>>>>>>> upstream/master
 =======
     framePtr->objv = TclFetchEnsembleRoot(interp, objv, objc, &framePtr->objc);
 >>>>>>> upstream/master
@@ -4602,8 +4655,13 @@ NamespaceUpvarCmd(
 	otherPtr = TclObjLookupVarEx(interp, objv[0], NULL,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		(TCL_NAMESPACE_ONLY | TCL_LEAVE_ERR_MSG), "access",
 		/*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
+=======
+		(TCL_NAMESPACE_ONLY|TCL_LEAVE_ERR_MSG|TCL_AVOID_RESOLVERS),
+		"access", /*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
+>>>>>>> upstream/master
 =======
 		(TCL_NAMESPACE_ONLY|TCL_LEAVE_ERR_MSG|TCL_AVOID_RESOLVERS),
 		"access", /*createPart1*/ 1, /*createPart2*/ 1, &arrayPtr);
@@ -4865,7 +4923,11 @@ SetNsNameFromAny(
     } else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	resNamePtr->refNsPtr = (Namespace *) Tcl_GetCurrentNamespace(interp);
+=======
+	resNamePtr->refNsPtr = (Namespace *) TclGetCurrentNamespace(interp);
+>>>>>>> upstream/master
 =======
 	resNamePtr->refNsPtr = (Namespace *) TclGetCurrentNamespace(interp);
 >>>>>>> upstream/master
@@ -4918,6 +4980,7 @@ TclGetNamespaceCommandTable(
  *
  *----------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 Tcl_HashTable *
 TclGetNamespaceChildTable(
@@ -4989,6 +5052,79 @@ TclLogCommandInfo(
 	 * Compute the line number where the error occurred.
 	 */
 
+=======
+
+Tcl_HashTable *
+TclGetNamespaceChildTable(
+    Tcl_Namespace *nsPtr)
+{
+    Namespace *nPtr = (Namespace *) nsPtr;
+#ifndef BREAK_NAMESPACE_COMPAT
+    return &nPtr->childTable;
+#else
+    if (nPtr->childTablePtr == NULL) {
+	nPtr->childTablePtr = ckalloc(sizeof(Tcl_HashTable));
+	Tcl_InitHashTable(nPtr->childTablePtr, TCL_STRING_KEYS);
+    }
+    return nPtr->childTablePtr;
+#endif
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclLogCommandInfo --
+ *
+ *	This function is invoked after an error occurs in an interpreter. It
+ *	adds information to iPtr->errorInfo/errorStack fields to describe the
+ *	command that was being executed when the error occurred. When pc and
+ *	tosPtr are non-NULL, conveying a bytecode execution "inner context",
+ *	and the offending instruction is suitable, that inner context is
+ *	recorded in errorStack.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Information about the command is added to errorInfo/errorStack and the
+ *	line number stored internally in the interpreter is set.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+TclLogCommandInfo(
+    Tcl_Interp *interp,		/* Interpreter in which to log information. */
+    const char *script,		/* First character in script containing
+				 * command (must be <= command). */
+    const char *command,	/* First character in command that generated
+				 * the error. */
+    int length,			/* Number of bytes in command (-1 means use
+				 * all bytes up to first null byte). */
+    const unsigned char *pc,    /* Current pc of bytecode execution context */
+    Tcl_Obj **tosPtr)		/* Current stack of bytecode execution
+				 * context */
+{
+    register const char *p;
+    Interp *iPtr = (Interp *) interp;
+    int overflow, limit = 150;
+    Var *varPtr, *arrayPtr;
+
+    if (iPtr->flags & ERR_ALREADY_LOGGED) {
+	/*
+	 * Someone else has already logged error information for this command;
+	 * we shouldn't add anything more.
+	 */
+
+	return;
+    }
+
+    if (command != NULL) {
+	/*
+	 * Compute the line number where the error occurred.
+	 */
+
+>>>>>>> upstream/master
 	iPtr->errorLine = 1;
 	for (p = script; p != command; p++) {
 	    if (*p == '\n') {
@@ -5050,6 +5186,32 @@ TclLogCommandInfo(
     }
     if (iPtr->resetErrorStack) {
 	int len;
+<<<<<<< HEAD
+
+	iPtr->resetErrorStack = 0;
+	Tcl_ListObjLength(interp, iPtr->errorStack, &len);
+
+	/*
+	 * Reset while keeping the list intrep as much as possible.
+	 */
+
+	Tcl_ListObjReplace(interp, iPtr->errorStack, 0, len, 0, NULL);
+	if (pc != NULL) {
+	    Tcl_Obj *innerContext;
+
+	    innerContext = TclGetInnerContext(interp, pc, tosPtr);
+	    if (innerContext != NULL) {
+		Tcl_ListObjAppendElement(NULL, iPtr->errorStack,
+			iPtr->innerLiteral);
+		Tcl_ListObjAppendElement(NULL, iPtr->errorStack, innerContext);
+	    }
+	} else if (command != NULL) {
+	    Tcl_ListObjAppendElement(NULL, iPtr->errorStack,
+		    iPtr->innerLiteral);
+	    Tcl_ListObjAppendElement(NULL, iPtr->errorStack,
+		    Tcl_NewStringObj(command, length));
+	}
+=======
 
 	iPtr->resetErrorStack = 0;
 	Tcl_ListObjLength(interp, iPtr->errorStack, &len);
@@ -5132,6 +5294,68 @@ TclErrorStackResetIf(
 	Tcl_DecrRefCount(iPtr->errorStack);
 	Tcl_IncrRefCount(newObj);
 	iPtr->errorStack = newObj;
+>>>>>>> upstream/master
+    }
+    if (iPtr->resetErrorStack) {
+	int len;
+
+<<<<<<< HEAD
+    if (!iPtr->framePtr->objc) {
+	/*
+	 * Special frame, nothing to report.
+	 */
+    } else if (iPtr->varFramePtr != iPtr->framePtr) {
+	/*
+	 * uplevel case, [lappend errorstack UP $relativelevel]
+	 */
+
+	Tcl_ListObjAppendElement(NULL, iPtr->errorStack, iPtr->upLiteral);
+	Tcl_ListObjAppendElement(NULL, iPtr->errorStack, Tcl_NewIntObj(
+		iPtr->framePtr->level - iPtr->varFramePtr->level));
+    } else if (iPtr->framePtr != iPtr->rootFramePtr) {
+	/*
+	 * normal case, [lappend errorstack CALL [info level 0]]
+	 */
+
+	Tcl_ListObjAppendElement(NULL, iPtr->errorStack, iPtr->callLiteral);
+	Tcl_ListObjAppendElement(NULL, iPtr->errorStack, Tcl_NewListObj(
+		iPtr->framePtr->objc, iPtr->framePtr->objv));
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclErrorStackResetIf --
+ *
+ *	The TIP 348 reset/no-bc part of TLCI, for specific use by
+ *	TclCompileSyntaxError.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Reset errorstack if it needs be, and in that case remember the
+ *	passed-in error message as inner context.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+TclErrorStackResetIf(
+    Tcl_Interp *interp,
+    const char *msg,
+    int length)
+{
+    Interp *iPtr = (Interp *) interp;
+
+    if (Tcl_IsShared(iPtr->errorStack)) {
+	Tcl_Obj *newObj;
+
+	newObj = Tcl_DuplicateObj(iPtr->errorStack);
+	Tcl_DecrRefCount(iPtr->errorStack);
+	Tcl_IncrRefCount(newObj);
+	iPtr->errorStack = newObj;
     }
     if (iPtr->resetErrorStack) {
 	int len;
@@ -5148,6 +5372,20 @@ TclErrorStackResetIf(
 	Tcl_ListObjAppendElement(NULL, iPtr->errorStack,
 		Tcl_NewStringObj(msg, length));
     }
+=======
+	iPtr->resetErrorStack = 0;
+	Tcl_ListObjLength(interp, iPtr->errorStack, &len);
+
+	/*
+	 * Reset while keeping the list intrep as much as possible.
+	 */
+
+	Tcl_ListObjReplace(interp, iPtr->errorStack, 0, len, 0, NULL);
+	Tcl_ListObjAppendElement(NULL, iPtr->errorStack, iPtr->innerLiteral);
+	Tcl_ListObjAppendElement(NULL, iPtr->errorStack,
+		Tcl_NewStringObj(msg, length));
+    }
+>>>>>>> upstream/master
 }
 
 /*

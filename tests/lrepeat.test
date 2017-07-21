@@ -43,7 +43,11 @@ test lrepeat-1.4 {error cases} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -result {bad count "-3": must be integer >= 0} 
+=======
+    -result {bad count "-3": must be integer >= 0}
+>>>>>>> upstream/master
 =======
     -result {bad count "-3": must be integer >= 0}
 >>>>>>> upstream/master
@@ -68,7 +72,11 @@ test lrepeat-1.6 {error cases} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -result {expected integer but got "3.5"} 
+=======
+    -result {expected integer but got "3.5"}
+>>>>>>> upstream/master
 =======
     -result {expected integer but got "3.5"}
 >>>>>>> upstream/master

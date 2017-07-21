@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -109,7 +113,11 @@ If set, then it must contain a valid Tcl list giving directories to
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 search during auto-load operations.  Directories must be specified in 
+=======
+search during auto-load operations.  Directories must be specified in
+>>>>>>> upstream/master
 =======
 search during auto-load operations.  Directories must be specified in
 >>>>>>> upstream/master
@@ -316,7 +324,11 @@ The native byte order of this machine: either \fBlittleEndian\fR or
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBbigEndian\fR. 
+=======
+\fBbigEndian\fR.
+>>>>>>> upstream/master
 =======
 \fBbigEndian\fR.
 >>>>>>> upstream/master
@@ -354,6 +366,11 @@ created, this is always set to the string \fBTcl\fR.
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+.TP
+\fBengine\fR
+.
+The name of the Tcl language implementation.  When the interpreter is first
+created, this is always set to the string \fBTcl\fR.
 .TP
 \fBmachine\fR
 .
@@ -430,7 +447,11 @@ If \fBtcl_precision\fR is not zero, then when Tcl converts a floating
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 point number, it creates a decimal representation of at most 
+=======
+point number, it creates a decimal representation of at most
+>>>>>>> upstream/master
 =======
 point number, it creates a decimal representation of at most
 >>>>>>> upstream/master

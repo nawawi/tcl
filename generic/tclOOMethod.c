@@ -72,10 +72,15 @@ static int		InvokeProcedureMethod(ClientData clientData,
 			    int objc, Tcl_Obj *const *objv);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeForwardCall(ClientData data[], Tcl_Interp *interp,
 			    int result);
 static int		FinalizePMCall(ClientData data[], Tcl_Interp *interp,
 			    int result);
+=======
+static Tcl_NRPostProc	FinalizeForwardCall;
+static Tcl_NRPostProc	FinalizePMCall;
+>>>>>>> upstream/master
 =======
 static Tcl_NRPostProc	FinalizeForwardCall;
 static Tcl_NRPostProc	FinalizePMCall;
@@ -1180,7 +1185,11 @@ MethodErrorHandler(
     const char *objectName, *kindName, *methodName =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(mPtr->namePtr, &nameLen);
+=======
+	    TclGetStringFromObj(mPtr->namePtr, &nameLen);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(mPtr->namePtr, &nameLen);
 >>>>>>> upstream/master
@@ -1478,7 +1487,10 @@ InvokeForwardMethod(
     Tcl_NRAddCallback(interp, FinalizeForwardCall, argObjs, NULL, NULL, NULL);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     /*
@@ -1487,6 +1499,9 @@ InvokeForwardMethod(
      * very much like TCL_EVAL_INVOKE.
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1628,11 +1643,16 @@ InitEnsembleRewrite(
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
     int isRootEnsemble = (iPtr->ensembleRewrite.sourceObjs == NULL);
     Tcl_Obj **argObjs;
+=======
+>>>>>>> upstream/master
     unsigned len = rewriteLength + objc - toRewrite;
+    Tcl_Obj **argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
 
+<<<<<<< HEAD
     argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
 =======
     unsigned len = rewriteLength + objc - toRewrite;
@@ -1643,6 +1663,8 @@ InitEnsembleRewrite(
     unsigned len = rewriteLength + objc - toRewrite;
     Tcl_Obj **argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     memcpy(argObjs, rewriteObjs, rewriteLength * sizeof(Tcl_Obj *));
     memcpy(argObjs + rewriteLength, objv + toRewrite,
@@ -1657,6 +1679,7 @@ InitEnsembleRewrite(
      * (and unavoidably).
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (isRootEnsemble) {
@@ -1675,6 +1698,11 @@ InitEnsembleRewrite(
 	}
     }
 
+=======
+    if (TclInitRewriteEnsemble(interp, toRewrite, rewriteLength, objv)) {
+	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
+    }
+>>>>>>> upstream/master
 =======
     if (TclInitRewriteEnsemble(interp, toRewrite, rewriteLength, objv)) {
 	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);

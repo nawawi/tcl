@@ -1,4 +1,4 @@
-'\" 
+'\"
 '\" Copyright (c) 1993 The Regents of the University of California.
 '\" Copyright (c) 1994-1996 Sun Microsystems, Inc.
 '\" Copyright (c) 2001 Kevin B. Kenny <kennykb@acm.org>.  All rights reserved.
@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -126,7 +130,11 @@ Causes comparisons to be handled in a case-insensitive manner.  Has no
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or 
+=======
+effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
+>>>>>>> upstream/master
 =======
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
 >>>>>>> upstream/master
@@ -236,7 +244,11 @@ It is also possible to search inside elements:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n), 
+=======
+foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
+>>>>>>> upstream/master
 =======
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
 >>>>>>> upstream/master

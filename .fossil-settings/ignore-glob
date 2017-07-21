@@ -7,6 +7,10 @@
 *.o
 *.obj
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+*.pdb
+>>>>>>> upstream/master
 =======
 *.pdb
 >>>>>>> upstream/master
@@ -24,10 +28,14 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unix/dltest.marker
 unix/tcl.pc
 =======
 =======
+=======
+html
+>>>>>>> upstream/master
 =======
 html
 >>>>>>> upstream/master
@@ -48,6 +56,9 @@ libtommath/demo/*
 libtommath/*.out
 libtommath/*.tex
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -56,14 +67,21 @@ unix/dltest.marker
 unix/tcl.pc
 unix/tclIndex
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 unix/pkgs/*
 win/pkgs/*
 win/tcl.hpj
 =======
+=======
+>>>>>>> upstream/master
 unix/pkgs/*
 win/Debug_VC*
 win/Release_VC*
 win/pkgs/*
+<<<<<<< HEAD
+win/tcl.hpj
+>>>>>>> upstream/master
+=======
 win/tcl.hpj
 >>>>>>> upstream/master

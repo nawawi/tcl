@@ -4,26 +4,33 @@ namespace eval ::tcl::clock {
         "Domh"\
         "Luan"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "M\u00e1irt"\
         "C\u00e9ad"\
         "D\u00e9ar"\
+=======
+        "Máirt"\
+        "Céad"\
+        "Déar"\
+>>>>>>> upstream/master
         "Aoine"\
         "Sath"]
     ::msgcat::mcset ga DAYS_OF_WEEK_FULL [list \
-        "D\u00e9 Domhnaigh"\
-        "D\u00e9 Luain"\
-        "D\u00e9 M\u00e1irt"\
-        "D\u00e9 C\u00e9adaoin"\
-        "D\u00e9ardaoin"\
-        "D\u00e9 hAoine"\
-        "D\u00e9 Sathairn"]
+        "Dé Domhnaigh"\
+        "Dé Luain"\
+        "Dé Máirt"\
+        "Dé Céadaoin"\
+        "Déardaoin"\
+        "Dé hAoine"\
+        "Dé Sathairn"]
     ::msgcat::mcset ga MONTHS_ABBREV [list \
         "Ean"\
         "Feabh"\
-        "M\u00e1rta"\
+        "Márta"\
         "Aib"\
         "Beal"\
         "Meith"\
+<<<<<<< HEAD
         "I\u00fail"\
         "L\u00fan"\
         "MF\u00f3mh"\
@@ -49,22 +56,32 @@ namespace eval ::tcl::clock {
         "Aib"\
         "Beal"\
         "Meith"\
+=======
+>>>>>>> upstream/master
         "Iúil"\
         "Lún"\
         "MFómh"\
         "DFómh"\
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         "Samh"\
         "Noll"\
         ""]
     ::msgcat::mcset ga MONTHS_FULL [list \
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Ean\u00e1ir"\
+=======
+        "Eanáir"\
+>>>>>>> upstream/master
         "Feabhra"\
-        "M\u00e1rta"\
-        "Aibre\u00e1n"\
-        "M\u00ed na Bealtaine"\
+        "Márta"\
+        "Aibreán"\
+        "Mí na Bealtaine"\
         "Meith"\
+<<<<<<< HEAD
         "I\u00fail"\
         "L\u00fanasa"\
         "Me\u00e1n F\u00f3mhair"\
@@ -78,12 +95,17 @@ namespace eval ::tcl::clock {
         "Aibreán"\
         "Mí na Bealtaine"\
         "Meith"\
+=======
+>>>>>>> upstream/master
         "Iúil"\
         "Lúnasa"\
         "Meán Fómhair"\
         "Deireadh Fómhair"\
         "Mí na Samhna"\
         "Mí na Nollag"\
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         ""]
 }

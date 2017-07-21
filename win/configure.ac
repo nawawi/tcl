@@ -13,8 +13,13 @@ SHELL=/bin/sh
 
 TCL_VERSION=8.7
 TCL_MAJOR_VERSION=8
+<<<<<<< HEAD:win/configure.in
+TCL_MINOR_VERSION=6
+TCL_PATCH_LEVEL=".4"
+=======
 TCL_MINOR_VERSION=7
 TCL_PATCH_LEVEL="a0"
+>>>>>>> upstream/master:win/configure.ac
 VER=$TCL_MAJOR_VERSION$TCL_MINOR_VERSION
 
 TCL_DDE_VERSION=1.4
@@ -433,10 +438,7 @@ AC_SUBST(MAKE_EXE)
 
 # empty on win, but needs sub'ing
 AC_SUBST(TCL_BUILD_LIB_SPEC)
-<<<<<<< HEAD
-=======
 AC_SUBST(TCL_CC_SEARCH_FLAGS)
->>>>>>> upstream/master
 AC_SUBST(TCL_LD_SEARCH_FLAGS)
 AC_SUBST(TCL_NEEDS_EXP_FILE)
 AC_SUBST(TCL_BUILD_EXP_FILE)

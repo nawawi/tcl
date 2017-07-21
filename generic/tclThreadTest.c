@@ -342,7 +342,11 @@ ThreadObjCmd(
 		    && strcmp("-main", Tcl_GetString(objv[2])) == 0) {
 		Tcl_MutexLock(&threadMutex);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		idObj = Tcl_NewLongObj((long)(size_t)mainThreadId);
+=======
+		idObj = Tcl_NewWideIntObj((Tcl_WideInt)(size_t)mainThreadId);
+>>>>>>> upstream/master
 =======
 		idObj = Tcl_NewWideIntObj((Tcl_WideInt)(size_t)mainThreadId);
 >>>>>>> upstream/master
@@ -620,7 +624,11 @@ NewTestThread(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     result = Tcl_Eval(tsdPtr->interp, threadEvalScript);
+=======
+    result = Tcl_EvalEx(tsdPtr->interp, threadEvalScript, -1, 0);
+>>>>>>> upstream/master
 =======
     result = Tcl_EvalEx(tsdPtr->interp, threadEvalScript, -1, 0);
 >>>>>>> upstream/master
@@ -672,6 +680,7 @@ ThreadErrorProc(
     char buf[TCL_DOUBLE_SPACE+1];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     sprintf(buf, "%" TCL_LL_MODIFIER "d", (Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
 =======
@@ -679,6 +688,11 @@ ThreadErrorProc(
 
     sprintf(buf, "%" TCL_LL_MODIFIER "d", (Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
 
+=======
+
+    sprintf(buf, "%p", Tcl_GetCurrentThread());
+
+>>>>>>> upstream/master
 =======
 
     sprintf(buf, "%p", Tcl_GetCurrentThread());
@@ -864,7 +878,11 @@ ThreadSend(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return Tcl_GlobalEval(interp, script);
+=======
+	return Tcl_EvalEx(interp, script,-1,TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 =======
 	return Tcl_EvalEx(interp, script,-1,TCL_EVAL_GLOBAL);
 >>>>>>> upstream/master
@@ -1109,7 +1127,11 @@ ThreadEventProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	code = Tcl_GlobalEval(interp, threadEventPtr->script);
+=======
+	code = Tcl_EvalEx(interp, threadEventPtr->script,-1,TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
 =======
 	code = Tcl_EvalEx(interp, threadEventPtr->script,-1,TCL_EVAL_GLOBAL);
 >>>>>>> upstream/master

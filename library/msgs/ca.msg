@@ -20,7 +20,11 @@ namespace eval ::tcl::clock {
         "gen."\
         "feb."\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "mar\u00e7"\
+=======
+        "març"\
+>>>>>>> upstream/master
 =======
         "març"\
 >>>>>>> upstream/master
@@ -38,7 +42,11 @@ namespace eval ::tcl::clock {
         "gener"\
         "febrer"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "mar\u00e7"\
+=======
+        "març"\
+>>>>>>> upstream/master
 =======
         "març"\
 >>>>>>> upstream/master

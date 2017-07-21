@@ -1,6 +1,10 @@
 /* infback.c -- inflate using a call-back interface
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2011 Mark Adler
+=======
+ * Copyright (C) 1995-2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2016 Mark Adler
 >>>>>>> upstream/master
@@ -66,7 +70,11 @@ int stream_size;
     strm->state = (struct internal_state FAR *)state;
     state->dmax = 32768U;
 <<<<<<< HEAD
+<<<<<<< HEAD
     state->wbits = windowBits;
+=======
+    state->wbits = (uInt)windowBits;
+>>>>>>> upstream/master
 =======
     state->wbits = (uInt)windowBits;
 >>>>>>> upstream/master

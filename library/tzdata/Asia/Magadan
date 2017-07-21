@@ -4,6 +4,7 @@ set TZData(:Asia/Magadan) {
     {-9223372036854775808 36192 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441188192 36000 0 MAGT}
     {-1247565600 39600 0 MAGMMTT}
     {354891600 43200 1 MAGST}
@@ -91,6 +92,8 @@ set TZData(:Asia/Magadan) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1441188192 36000 0 +10}
     {-1247565600 39600 0 +12}
     {354891600 43200 1 +12}
@@ -159,6 +162,9 @@ set TZData(:Asia/Magadan) {
     {1414245600 36000 0 +10}
     {1461427200 39600 0 +11}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

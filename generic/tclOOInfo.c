@@ -199,6 +199,12 @@ InfoObjectClassCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    if (!mixinPtr) {
+		continue;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (!mixinPtr) {
 		continue;
@@ -488,6 +494,12 @@ InfoObjectIsACmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		if (!mixinPtr) {
+		    continue;
+		}
+>>>>>>> upstream/master
 =======
 		if (!mixinPtr) {
 		    continue;
@@ -704,6 +716,12 @@ InfoObjectMixinsCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 =======
 	if (!mixinPtr) {
 	    continue;
@@ -1338,6 +1356,12 @@ InfoClassMixinsCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 =======
 	if (!mixinPtr) {
 	    continue;

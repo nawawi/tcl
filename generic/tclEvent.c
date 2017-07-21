@@ -38,7 +38,11 @@ typedef struct BgError {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ErrAssocData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -489,6 +493,9 @@ TclDefaultBgErrorHandlerObjCmd(
 
     saved = Tcl_SaveInterpState(interp, code);
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     /*
      * Invoke the bgerror command.
@@ -1000,6 +1007,7 @@ Tcl_Exit(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
@@ -1016,6 +1024,8 @@ Tcl_Exit(
 
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 
     Tcl_MutexLock(&exitMutex);
     currentAppExitPtr = appExitPtr;
@@ -1141,6 +1151,9 @@ TclInitSubsystems(void)
 	    TclInitThreadAlloc();	/* Setup thread allocator caches */
 >>>>>>> upstream/master
 #endif
+#if defined(TCL_THREADS) && defined(USE_THREAD_ALLOC)
+	    TclInitThreadAlloc();	/* Setup thread allocator caches */
+#endif
 #ifdef TCL_MEM_DEBUG
 	    TclInitDbCkalloc();		/* Process wide mutex init */
 #endif
@@ -1212,6 +1225,7 @@ Tcl_Finalize(void)
      * thread-local storage or IO subsystem after this call.
      */
 
+<<<<<<< HEAD
     Tcl_FinalizeThread();
 
     /*
@@ -1229,6 +1243,8 @@ Tcl_Finalize(void)
      * thread-local storage or IO subsystem after this call.
      */
 
+=======
+>>>>>>> upstream/master
     Tcl_FinalizeThread();
 
     /*
@@ -1585,6 +1601,11 @@ VwaitVarProc(
     *donePtr = 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
+	    VwaitVarProc, clientData);
+>>>>>>> upstream/master
 =======
     Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 	    VwaitVarProc, clientData);

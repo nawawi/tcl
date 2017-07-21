@@ -4,6 +4,7 @@ set TZData(:Asia/Novosibirsk) {
     {-9223372036854775808 19900 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1579476700 21600 0 NOVT}
     {-1247551200 25200 0 NOVMMTT}
     {354906000 28800 1 NOVST}
@@ -79,6 +80,8 @@ set TZData(:Asia/Novosibirsk) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1579476700 21600 0 +06}
     {-1247551200 25200 0 +08}
     {354906000 28800 1 +08}
@@ -148,6 +151,9 @@ set TZData(:Asia/Novosibirsk) {
     {1414263600 21600 0 +06}
     {1469304000 25200 0 +07}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

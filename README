@@ -2,7 +2,11 @@ README:  Tcl
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     This is the Tcl 8.6.4 source distribution.
+=======
+    This is the Tcl 8.7a0 source distribution.
+>>>>>>> upstream/master
 =======
     This is the Tcl 8.7a0 source distribution.
 >>>>>>> upstream/master
@@ -40,9 +44,15 @@ powerful command languages for applications.
 Tcl is maintained, enhanced, and distributed freely by the Tcl community.
 Source code development and tracking of bug reports and feature requests
 takes place at:
+<<<<<<< HEAD
 
 	http://core.tcl.tk/
 
+=======
+
+	http://core.tcl.tk/
+
+>>>>>>> upstream/master
 Tcl/Tk release and mailing list services are hosted by SourceForge:
 
 	http://sourceforge.net/projects/tcl/
@@ -64,7 +74,11 @@ The home page for this release, including new features, is
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	http://www.tcl.tk/software/tcltk/8.6.html
+=======
+	http://www.tcl.tk/software/tcltk/8.7.html
+>>>>>>> upstream/master
 =======
 	http://www.tcl.tk/software/tcltk/8.7.html
 >>>>>>> upstream/master
@@ -88,9 +102,15 @@ There have been many Tcl books on the market.  Many are mentioned in the Wiki:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 To view the complete set of reference manual entries for Tcl 8.6 online,
 visit the URL:
 	http://www.tcl.tk/man/tcl8.6/
+=======
+To view the complete set of reference manual entries for Tcl 8.7 online,
+visit the URL:
+	http://www.tcl.tk/man/tcl8.7/
+>>>>>>> upstream/master
 =======
 To view the complete set of reference manual entries for Tcl 8.7 online,
 visit the URL:

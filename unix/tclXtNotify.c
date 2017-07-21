@@ -44,7 +44,11 @@ typedef struct FileHandler {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct FileHandlerEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master

@@ -41,6 +41,7 @@ static const struct {
     {"forward", TclOODefineForwardObjCmd, 1},
     {"method", TclOODefineMethodObjCmd, 1},
     {"renamemethod", TclOODefineRenameMethodObjCmd, 1},
+    {"self", TclOODefineObjSelfObjCmd, 0},
     {"unexport", TclOODefineUnexportObjCmd, 1},
     {NULL, NULL, 0}
 };
@@ -61,6 +62,11 @@ static Object *		AllocObject(Tcl_Interp *interp, const char *nameStr,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+static void		ClearMixins(Class *clsPtr);
+static void		ClearSuperclasses(Class *clsPtr);
+>>>>>>> upstream/master
 =======
 static void		ClearMixins(Class *clsPtr);
 static void		ClearSuperclasses(Class *clsPtr);
@@ -83,12 +89,18 @@ static void		DeletedObjdefNamespace(ClientData clientData);
 static void		DeletedHelpersNamespace(ClientData clientData);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeAlloc(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeNext(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeObjectCall(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	FinalizeAlloc;
+static Tcl_NRPostProc	FinalizeNext;
+static Tcl_NRPostProc	FinalizeObjectCall;
+>>>>>>> upstream/master
 =======
 static Tcl_NRPostProc	FinalizeAlloc;
 static Tcl_NRPostProc	FinalizeNext;
@@ -175,6 +187,7 @@ static const char *initScript =
 /*
  * The scripted part of the definitions of slots.
  */
+<<<<<<< HEAD
 
 static const char *slotScript =
 "::oo::define ::oo::Slot {\n"
@@ -209,6 +222,42 @@ static const char *slotScript =
  * The body of the <cloned> method of oo::object.
  */
 
+=======
+
+static const char *slotScript =
+"::oo::define ::oo::Slot {\n"
+"    method Get {} {error unimplemented}\n"
+"    method Set list {error unimplemented}\n"
+"    method -set args {\n"
+"        uplevel 1 [list [namespace which my] Set $args]\n"
+"    }\n"
+"    method -append args {\n"
+"        uplevel 1 [list [namespace which my] Set [list"
+"                {*}[uplevel 1 [list [namespace which my] Get]] {*}$args]]\n"
+"    }\n"
+"    method -clear {} {uplevel 1 [list [namespace which my] Set {}]}\n"
+"    forward --default-operation my -append\n"
+"    method unknown {args} {\n"
+"        set def --default-operation\n"
+"        if {[llength $args] == 0} {\n"
+"            return [uplevel 1 [list [namespace which my] $def]]\n"
+"        } elseif {![string match -* [lindex $args 0]]} {\n"
+"            return [uplevel 1 [list [namespace which my] $def {*}$args]]\n"
+"        }\n"
+"        next {*}$args\n"
+"    }\n"
+"    export -set -append -clear\n"
+"    unexport unknown destroy\n"
+"}\n"
+"::oo::objdefine ::oo::define::superclass forward --default-operation my -set\n"
+"::oo::objdefine ::oo::define::mixin forward --default-operation my -set\n"
+"::oo::objdefine ::oo::objdefine::mixin forward --default-operation my -set\n";
+
+/*
+ * The body of the <cloned> method of oo::object.
+ */
+
+>>>>>>> upstream/master
 static const char *clonedBody =
 "foreach p [info procs [info object namespace $originObject]::*] {"
 "    set args [info args $p];"
@@ -296,7 +345,11 @@ TclOOInit(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Tcl_Eval(interp, initScript) != TCL_OK) {
+=======
+    if (Tcl_EvalEx(interp, initScript, -1, 0) != TCL_OK) {
+>>>>>>> upstream/master
 =======
     if (Tcl_EvalEx(interp, initScript, -1, 0) != TCL_OK) {
 >>>>>>> upstream/master
@@ -498,7 +551,11 @@ InitFoundation(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return Tcl_Eval(interp, slotScript);
+=======
+    return Tcl_EvalEx(interp, slotScript, -1, 0);
+>>>>>>> upstream/master
 =======
     return Tcl_EvalEx(interp, slotScript, -1, 0);
 >>>>>>> upstream/master
@@ -942,7 +999,10 @@ ObjectRenamedTrace(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -998,6 +1058,9 @@ ClearSuperclasses(
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1036,6 +1099,7 @@ ReleaseClassContents(
 	} else {
 	    Tcl_Panic("deleting class structure for non-deleted %s",
 		    "general object");
+<<<<<<< HEAD
 	}
     }
 
@@ -1132,6 +1196,66 @@ ReleaseClassContents(
     }
 
     /*
+=======
+	}
+    }
+
+    /*
+     * Lock a number of dependent objects until we've stopped putting our
+     * fingers in them.
+     */
+
+    FOREACH(mixinSubclassPtr, clsPtr->mixinSubs) {
+	if (mixinSubclassPtr != NULL) {
+	    AddRef(mixinSubclassPtr);
+	    AddRef(mixinSubclassPtr->thisPtr);
+	}
+    }
+    FOREACH(subclassPtr, clsPtr->subclasses) {
+	if (subclassPtr != NULL && !IsRoot(subclassPtr)) {
+	    AddRef(subclassPtr);
+	    AddRef(subclassPtr->thisPtr);
+	}
+    }
+    if (!IsRootClass(oPtr)) {
+	FOREACH(instancePtr, clsPtr->instances) {
+	    int j;
+	    if (instancePtr->selfCls == clsPtr) {
+		instancePtr->flags |= CLASS_GONE;
+	    }
+	    for(j=0 ; j<instancePtr->mixins.num ; j++) {
+		Class *mixin = instancePtr->mixins.list[j];
+		if (mixin == clsPtr) {
+		    instancePtr->mixins.list[j] = NULL;
+		}
+	    }
+	    if (instancePtr != NULL && !IsRoot(instancePtr)) {
+		AddRef(instancePtr);
+	    }
+	}
+    }
+
+    /*
+     * Squelch classes that this class has been mixed into.
+     */
+
+    FOREACH(mixinSubclassPtr, clsPtr->mixinSubs) {
+	if (!Deleted(mixinSubclassPtr->thisPtr)) {
+	    Tcl_DeleteCommandFromToken(interp,
+		    mixinSubclassPtr->thisPtr->command);
+	}
+	ClearMixins(mixinSubclassPtr);
+	DelRef(mixinSubclassPtr->thisPtr);
+	DelRef(mixinSubclassPtr);
+    }
+    if (clsPtr->mixinSubs.list != NULL) {
+	ckfree(clsPtr->mixinSubs.list);
+	clsPtr->mixinSubs.list = NULL;
+	clsPtr->mixinSubs.num = 0;
+    }
+
+    /*
+>>>>>>> upstream/master
      * Squelch subclasses of this class.
      */
 
@@ -1139,7 +1263,11 @@ ReleaseClassContents(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (subclassPtr == NULL || IsRoot(subclassPtr)) {
+=======
+	if (IsRoot(subclassPtr)) {
+>>>>>>> upstream/master
 =======
 	if (IsRoot(subclassPtr)) {
 >>>>>>> upstream/master
@@ -1157,6 +1285,10 @@ ReleaseClassContents(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	ClearSuperclasses(subclassPtr);
+>>>>>>> upstream/master
 =======
 	ClearSuperclasses(subclassPtr);
 >>>>>>> upstream/master
@@ -1200,6 +1332,7 @@ ReleaseClassContents(
 	ckfree(clsPtr->instances.list);
 	clsPtr->instances.list = NULL;
 	clsPtr->instances.num = 0;
+<<<<<<< HEAD
     }
 
     /*
@@ -1211,6 +1344,19 @@ ReleaseClassContents(
     }
 
     /*
+=======
+    }
+
+    /*
+     * Special: We delete these after everything else.
+     */
+
+    if (IsRootClass(oPtr) && !Deleted(fPtr->objectCls->thisPtr)) {
+	Tcl_DeleteCommandFromToken(interp, fPtr->objectCls->thisPtr->command);
+    }
+
+    /*
+>>>>>>> upstream/master
      * Squelch method implementation chain caches.
      */
 
@@ -1311,7 +1457,11 @@ ObjectNamespaceDeleted(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!IsRootObject(oPtr)) {
+=======
+    if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
+>>>>>>> upstream/master
 =======
     if (!IsRootObject(oPtr) && !(oPtr->flags & CLASS_GONE)) {
 >>>>>>> upstream/master
@@ -1328,7 +1478,13 @@ ObjectNamespaceDeleted(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclOORemoveFromInstances(oPtr, mixinPtr);
+=======
+	if (mixinPtr) {
+	    TclOORemoveFromInstances(oPtr, mixinPtr);
+	}
+>>>>>>> upstream/master
 =======
 	if (mixinPtr) {
 	    TclOORemoveFromInstances(oPtr, mixinPtr);
@@ -1392,6 +1548,7 @@ ObjectNamespaceDeleted(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (clsPtr != NULL) {
 	Class *superPtr;
 =======
@@ -1414,6 +1571,16 @@ ObjectNamespaceDeleted(
 	Tcl_ObjectMetadataType *metadataTypePtr;
 	ClientData value;
 
+=======
+    /*
+     * If this was a class, there's additional deletion work to do.
+     */
+
+    if (clsPtr != NULL) {
+	Tcl_ObjectMetadataType *metadataTypePtr;
+	ClientData value;
+
+>>>>>>> upstream/master
 	if (clsPtr->metadataPtr != NULL) {
 	    FOREACH_HASH(metadataTypePtr, value, clsPtr->metadataPtr) {
 		metadataTypePtr->deleteProc(value);
@@ -1430,6 +1597,7 @@ ObjectNamespaceDeleted(
 	    ckfree(clsPtr->filters.list);
 	    clsPtr->filters.num = 0;
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1456,6 +1624,8 @@ ObjectNamespaceDeleted(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 	ClearMixins(clsPtr);
 
@@ -1463,6 +1633,9 @@ ObjectNamespaceDeleted(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1612,9 +1785,13 @@ TclOORemoveFromSubclasses(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->subclasses.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 =======
     if (!Deleted(superPtr->thisPtr)) {
 >>>>>>> upstream/master
@@ -1697,9 +1874,13 @@ TclOORemoveFromMixinSubs(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (Deleted(superPtr->thisPtr)) {
 	superPtr->mixinSubs.list[i] = NULL;
     } else {
+=======
+    if (!Deleted(superPtr->thisPtr)) {
+>>>>>>> upstream/master
 =======
     if (!Deleted(superPtr->thisPtr)) {
 >>>>>>> upstream/master
@@ -1912,7 +2093,11 @@ Tcl_NewObjectInstance(
 	if (contextPtr != NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    int result;
+=======
+	    int isRoot, result;
+>>>>>>> upstream/master
 =======
 	    int isRoot, result;
 >>>>>>> upstream/master
@@ -1931,6 +2116,7 @@ Tcl_NewObjectInstance(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if (((Interp*) interp)->ensembleRewrite.sourceObjs) {
 		((Interp*) interp)->ensembleRewrite.numInsertedObjs += skip-1;
 		((Interp*) interp)->ensembleRewrite.numRemovedObjs += skip-1;
@@ -1945,11 +2131,20 @@ Tcl_NewObjectInstance(
 	    result = Tcl_NRCallObjProc(interp, TclOOInvokeContext, contextPtr,
 		    objc, objv);
 
+=======
+	    isRoot = TclInitRewriteEnsemble(interp, skip, skip, objv);
+	    result = Tcl_NRCallObjProc(interp, TclOOInvokeContext, contextPtr,
+		    objc, objv);
+
+>>>>>>> upstream/master
 	    if (isRoot) {
 		TclResetRewriteEnsemble(interp, 1);
 	    }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2077,9 +2272,14 @@ TclNRNewObjectInstance(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (((Interp *) interp)->ensembleRewrite.sourceObjs) {
 	((Interp *) interp)->ensembleRewrite.numInsertedObjs += skip - 1;
 	((Interp *) interp)->ensembleRewrite.numRemovedObjs += skip - 1;
+=======
+    if (TclInitRewriteEnsemble(interp, skip, skip, objv)) {
+	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
+>>>>>>> upstream/master
 =======
     if (TclInitRewriteEnsemble(interp, skip, skip, objv)) {
 	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
@@ -2217,7 +2417,11 @@ Tcl_CopyObjectInstance(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 =======
 	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
 >>>>>>> upstream/master
@@ -2235,7 +2439,11 @@ Tcl_CopyObjectInstance(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mixinPtr != o2Ptr->selfCls) {
+=======
+	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
+>>>>>>> upstream/master
 =======
 	if (mixinPtr && mixinPtr != o2Ptr->selfCls) {
 >>>>>>> upstream/master

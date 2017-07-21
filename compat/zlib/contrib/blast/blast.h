@@ -1,7 +1,12 @@
 /* blast.h -- interface for blast.c
 <<<<<<< HEAD
+<<<<<<< HEAD
   Copyright (C) 2003, 2012 Mark Adler
   version 1.2, 24 Oct 2012
+=======
+  Copyright (C) 2003, 2012, 2013 Mark Adler
+  version 1.3, 24 Aug 2013
+>>>>>>> upstream/master
 =======
   Copyright (C) 2003, 2012, 2013 Mark Adler
   version 1.3, 24 Aug 2013
@@ -48,7 +53,12 @@ typedef int (*blast_out)(void *how, unsigned char *buf, unsigned len);
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow);
+=======
+int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
+          unsigned *left, unsigned char **in);
+>>>>>>> upstream/master
 =======
 int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
           unsigned *left, unsigned char **in);
@@ -66,6 +76,12 @@ int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
  * use by the application to pass an input descriptor to infun(), if desired.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+ * If left and in are not NULL and *left is not zero when blast() is called,
+ * then the *left bytes are *in are consumed for input before infun() is used.
+ *
+>>>>>>> upstream/master
 =======
  * If left and in are not NULL and *left is not zero when blast() is called,
  * then the *left bytes are *in are consumed for input before infun() is used.
@@ -78,11 +94,17 @@ int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
  * desired.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
  * If there is any unused input, *left is set to the number of bytes that were
  * read and *in points to them.  Otherwise *left is set to zero and *in is set
  * to NULL.  If left or in are NULL, then they are not set.
  *
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  * The return codes are:
  *

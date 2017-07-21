@@ -25,7 +25,11 @@ proc evalInProc { script } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	testProc 
+=======
+	testProc
+>>>>>>> upstream/master
 =======
 	testProc
 >>>>>>> upstream/master
@@ -75,6 +79,7 @@ test lsetComp-2.4 {lset, compiled, list of args, scalar, four-byte offset} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x0 0; set x1 0; set x2 0; set x3 0; 
 	set x4 0; set x5 0; set x6 0; set x7 0; 
 	set x8 0; set x9 0; set x10 0; set x11 0; 
@@ -139,6 +144,8 @@ test lsetComp-2.4 {lset, compiled, list of args, scalar, four-byte offset} {
 	set x244 0; set x245 0; set x246 0; set x247 0; 
 	set x248 0; set x249 0; set x250 0; set x251 0; 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -208,6 +215,9 @@ test lsetComp-2.4 {lset, compiled, list of args, scalar, four-byte offset} {
 	set x248 0; set x249 0; set x250 0; set x251 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -238,6 +248,7 @@ test lsetComp-2.7 {lset, compiled, list of args, array, four-byte offset} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x0 0; set x1 0; set x2 0; set x3 0; 
 	set x4 0; set x5 0; set x6 0; set x7 0; 
 	set x8 0; set x9 0; set x10 0; set x11 0; 
@@ -302,6 +313,8 @@ test lsetComp-2.7 {lset, compiled, list of args, array, four-byte offset} {
 	set x244 0; set x245 0; set x246 0; set x247 0; 
 	set x248 0; set x249 0; set x250 0; set x251 0; 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -371,6 +384,9 @@ test lsetComp-2.7 {lset, compiled, list of args, array, four-byte offset} {
 	set x248 0; set x249 0; set x250 0; set x251 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -424,6 +440,7 @@ test lsetComp-3.4 {lset, compiled, scalar, four-byte offset} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x0 0; set x1 0; set x2 0; set x3 0; 
 	set x4 0; set x5 0; set x6 0; set x7 0; 
 	set x8 0; set x9 0; set x10 0; set x11 0; 
@@ -488,6 +505,8 @@ test lsetComp-3.4 {lset, compiled, scalar, four-byte offset} {
 	set x244 0; set x245 0; set x246 0; set x247 0; 
 	set x248 0; set x249 0; set x250 0; set x251 0; 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -557,6 +576,9 @@ test lsetComp-3.4 {lset, compiled, scalar, four-byte offset} {
 	set x248 0; set x249 0; set x250 0; set x251 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -587,6 +609,7 @@ test lsetComp-3.7 {lset, compiled, flat args, array, four-byte offset} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x0 0; set x1 0; set x2 0; set x3 0; 
 	set x4 0; set x5 0; set x6 0; set x7 0; 
 	set x8 0; set x9 0; set x10 0; set x11 0; 
@@ -651,6 +674,8 @@ test lsetComp-3.7 {lset, compiled, flat args, array, four-byte offset} {
 	set x244 0; set x245 0; set x246 0; set x247 0; 
 	set x248 0; set x249 0; set x250 0; set x251 0; 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -720,6 +745,9 @@ test lsetComp-3.7 {lset, compiled, flat args, array, four-byte offset} {
 	set x248 0; set x249 0; set x250 0; set x251 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -1,9 +1,13 @@
 /* example.c -- usage example of the zlib compression library
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
  * Copyright (C) 1995-2006, 2011 Jean-loup Gailly.
 =======
  * Copyright (C) 1995-2006, 2011, 2016 Jean-loup Gailly
 >>>>>>> upstream/master
+=======
+ * Copyright (C) 1995-2006, 2011, 2016 Jean-loup Gailly
+>>>>>>> upstream/master:compat/zlib/test/example.c
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -30,15 +34,20 @@
     } \
 }
 
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
 z_const char hello[] = "hello, hello!";
 =======
 static z_const char hello[] = "hello, hello!";
 >>>>>>> upstream/master
+=======
+static z_const char hello[] = "hello, hello!";
+>>>>>>> upstream/master:compat/zlib/test/example.c
 /* "hello world" would be more standard, but the repeated "hello"
  * stresses the compression code better, sorry...
  */
 
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
 const char dictionary[] = "hello";
 uLong dictId; /* Adler32 value of the dictionary */
@@ -46,6 +55,10 @@ uLong dictId; /* Adler32 value of the dictionary */
 static const char dictionary[] = "hello";
 static uLong dictId;    /* Adler32 value of the dictionary */
 >>>>>>> upstream/master
+=======
+static const char dictionary[] = "hello";
+static uLong dictId;    /* Adler32 value of the dictionary */
+>>>>>>> upstream/master:compat/zlib/test/example.c
 
 void test_deflate       OF((Byte *compr, uLong comprLen));
 void test_inflate       OF((Byte *compr, uLong comprLen,
@@ -72,21 +85,29 @@ void *myalloc(q, n, m)
     void *q;
     unsigned n, m;
 {
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
     q = Z_NULL;
 =======
     (void)q;
 >>>>>>> upstream/master
+=======
+    (void)q;
+>>>>>>> upstream/master:compat/zlib/test/example.c
     return calloc(n, m);
 }
 
 void myfree(void *q, void *p)
 {
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
     q = Z_NULL;
 =======
     (void)q;
 >>>>>>> upstream/master
+=======
+    (void)q;
+>>>>>>> upstream/master:compat/zlib/test/example.c
     free(p);
 }
 
@@ -453,11 +474,15 @@ void test_sync(compr, comprLen, uncompr, uncomprLen)
     d_stream.next_out = uncompr;
     d_stream.avail_out = (uInt)uncomprLen;
 
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
     inflate(&d_stream, Z_NO_FLUSH);
 =======
     err = inflate(&d_stream, Z_NO_FLUSH);
 >>>>>>> upstream/master
+=======
+    err = inflate(&d_stream, Z_NO_FLUSH);
+>>>>>>> upstream/master:compat/zlib/test/example.c
     CHECK_ERR(err, "inflate");
 
     d_stream.avail_in = (uInt)comprLen-2;   /* read all compressed data */
@@ -598,12 +623,17 @@ int main(argc, argv)
     }
 
 #ifdef Z_SOLO
+<<<<<<< HEAD:compat/zlib/test/example.c
 <<<<<<< HEAD
     argc = strlen(argv[0]);
 =======
     (void)argc;
     (void)argv;
 >>>>>>> upstream/master
+=======
+    (void)argc;
+    (void)argv;
+>>>>>>> upstream/master:compat/zlib/test/example.c
 #else
     test_compress(compr, comprLen, uncompr, uncomprLen);
 

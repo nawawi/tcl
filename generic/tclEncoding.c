@@ -603,6 +603,7 @@ TclInitEncodingSubsystem(void)
     memset(dataPtr->toUnicode, 0, size);
     dataPtr->fromUnicode = ckalloc(size);
     memset(dataPtr->fromUnicode, 0, size);
+<<<<<<< HEAD
 
     dataPtr->toUnicode[0] = (unsigned short *) (dataPtr->toUnicode + 256);
     dataPtr->fromUnicode[0] = (unsigned short *) (dataPtr->fromUnicode + 256);
@@ -616,6 +617,21 @@ TclInitEncodingSubsystem(void)
 	dataPtr->fromUnicode[0][i] = i;
     }
 
+=======
+
+    dataPtr->toUnicode[0] = (unsigned short *) (dataPtr->toUnicode + 256);
+    dataPtr->fromUnicode[0] = (unsigned short *) (dataPtr->fromUnicode + 256);
+    for (i=1 ; i<256 ; i++) {
+	dataPtr->toUnicode[i] = emptyPage;
+	dataPtr->fromUnicode[i] = emptyPage;
+    }
+
+    for (i=0 ; i<256 ; i++) {
+	dataPtr->toUnicode[0][i] = i;
+	dataPtr->fromUnicode[0][i] = i;
+    }
+
+>>>>>>> upstream/master
     type.encodingName	= "iso8859-1";
     type.toUtfProc	= Iso88591ToUtfProc;
     type.fromUtfProc	= Iso88591FromUtfProc;
@@ -2341,7 +2357,7 @@ UtfToUtfProc(
 	    src += 2;
 	} else if (!Tcl_UtfCharComplete(src, srcEnd - src)) {
 	    /*
-	     * Always check before using Tcl_UtfToUniChar. Not doing can so
+	     * Always check before using TclUtfToUniChar. Not doing can so
 	     * cause it run beyond the endof the buffer! If we happen such an
 	     * incomplete char its byts are made to represent themselves.
 	     */
@@ -2350,7 +2366,7 @@ UtfToUtfProc(
 	    src += 1;
 	    dst += Tcl_UniCharToUtf(ch, dst);
 	} else {
-	    src += Tcl_UtfToUniChar(src, &ch);
+	    src += TclUtfToUniChar(src, &ch);
 	    dst += Tcl_UniCharToUtf(ch, dst);
 	}
     }
@@ -3633,9 +3649,13 @@ InitializeEncodingSearchPath(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(searchPathObj, &numBytes);
 =======
     bytes = TclGetStringFromObj(searchPathObj, &numBytes);
+>>>>>>> upstream/master
+=======
+    bytes = TclGetString(searchPathObj);
 >>>>>>> upstream/master
 =======
     bytes = TclGetString(searchPathObj);

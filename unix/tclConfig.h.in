@@ -226,6 +226,7 @@
 /* Define to 1 if `st_blksize' is a member of `struct stat'. */
 #undef HAVE_STRUCT_STAT_ST_BLKSIZE
 
+<<<<<<< HEAD
 /* Define to 1 if `st_blocks' is a member of `struct stat'. */
 =======
 =======
@@ -242,6 +243,9 @@
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+/* Define to 1 if `st_blocks' is member of `struct stat'. */
 >>>>>>> upstream/master
 #undef HAVE_STRUCT_STAT_ST_BLOCKS
 

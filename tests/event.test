@@ -271,6 +271,9 @@ test event-5.13 {Default [interp bgerror] handler} -body {
     return $::res
 } -cleanup {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
     rename bgerror {}
 } -result {invoked "break" outside of a loop}
 test event-5.14 {Default [interp bgerror] handler} -body {
@@ -280,6 +283,7 @@ test event-5.14 {Default [interp bgerror] handler} -body {
     return $::res
 } -cleanup {
     rename bgerror {}
+<<<<<<< HEAD
 =======
     rename bgerror {}
 } -result {invoked "break" outside of a loop}
@@ -290,6 +294,8 @@ test event-5.14 {Default [interp bgerror] handler} -body {
     return $::res
 } -cleanup {
     rename bgerror {}
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } -result {invoked "continue" outside of a loop}
 test event-5.15 {Default [interp bgerror] handler} -body {
@@ -607,6 +613,7 @@ test event-11.7 {Bug 16828b3744} {
 test event-11.8 {Bug 16828b3744} -setup {
     oo::class create A {
 	variable continue
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -633,6 +640,25 @@ test event-11.8 {Bug 16828b3744} -setup {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+
+	method start {} {
+           after idle [self] destroy
+
+           set continue 0
+           vwait [namespace current]::continue
+	}
+	destructor {
+           set continue 1
+	}
+    }
+} -body {
+    [A new] start
+} -cleanup {
+    A destroy
+} -result {}
+
+>>>>>>> upstream/master
 test event-12.1 {Tcl_UpdateCmd procedure} -returnCodes error -body {
     update a b
 } -result {wrong # args: should be "update ?idletasks?"}
@@ -655,6 +681,7 @@ test event-12.3 {Tcl_UpdateCmd procedure} -setup {
 } -cleanup {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
     foreach i [after info] {
@@ -670,11 +697,19 @@ test event-12.4 {Tcl_UpdateCmd procedure} -setup {
     foreach i [after info] {
 	after cancel $i
     }
+=======
+    foreach i [after info] {
+	after cancel $i
+    }
+>>>>>>> upstream/master
 } -result {before after {after, y = after}}
 test event-12.4 {Tcl_UpdateCmd procedure} -setup {
     foreach i [after info] {
 	after cancel $i
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

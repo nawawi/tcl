@@ -336,7 +336,7 @@ Tcl_LoadObjCmd(
 		}
 #endif /* __CYGWIN__ */
 		for (p = pkgGuess; *p != 0; p += offset) {
-		    offset = Tcl_UtfToUniChar(p, &ch);
+		    offset = TclUtfToUniChar(p, &ch);
 		    if ((ch > 0x100)
 			    || !(isalpha(UCHAR(ch)) /* INTL: ISO only */
 				    || (UCHAR(ch) == '_'))) {
@@ -947,6 +947,7 @@ Tcl_UnloadObjCmd(
     safeRefCount = pkgPtr->safeInterpRefCount;
     Tcl_MutexUnlock(&packageMutex);
 
+<<<<<<< HEAD
     code = TCL_OK;
     if (pkgPtr->safeInterpRefCount <= 0 && pkgPtr->interpRefCount <= 0
 	    && !keepLibrary) {
@@ -1024,6 +1025,8 @@ Tcl_UnloadObjCmd(
 #endif
     }
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
   done:
     Tcl_DStringFree(&pkgName);
@@ -1126,7 +1129,11 @@ Tcl_StaticPackage(
 
 	/*
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Package isn't loade in the current interp yet. Mark it as now being
+=======
+	 * Package isn't loaded in the current interp yet. Mark it as now being
+>>>>>>> upstream/master
 =======
 	 * Package isn't loaded in the current interp yet. Mark it as now being
 >>>>>>> upstream/master
@@ -1188,6 +1195,24 @@ TclGetLoadedPackagesEx(
 				 * for all packages.
 				 */
 {
+<<<<<<< HEAD
+=======
+    return TclGetLoadedPackagesEx(interp, targetName, NULL);
+}
+
+int
+TclGetLoadedPackagesEx(
+    Tcl_Interp *interp,		/* Interpreter in which to return information
+				 * or error message. */
+    const char *targetName,	/* Name of target interpreter or NULL. If
+				 * NULL, return info about all interps;
+				 * otherwise, just return info about this
+				 * interpreter. */
+    const char *packageName)	/* Package name or NULL. If NULL, return info
+				 * for all packages.
+				 */
+{
+>>>>>>> upstream/master
     Tcl_Interp *target;
     LoadedPackage *pkgPtr;
     InterpPackage *ipPtr;
@@ -1195,10 +1220,13 @@ TclGetLoadedPackagesEx(
 
     if (targetName == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/*
 	 * Return information about all of the available packages.
 	 */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	resultObj = Tcl_NewObj();
@@ -1216,11 +1244,14 @@ TclGetLoadedPackagesEx(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*
      * Return information about only the packages that are loaded in a given
      * interpreter.
      */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     target = Tcl_GetSlave(interp, targetName);
@@ -1229,7 +1260,10 @@ TclGetLoadedPackagesEx(
     }
     ipPtr = Tcl_GetAssocData(target, "tclLoad", NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
     /*
      * Return information about all of the available packages.
@@ -1257,6 +1291,9 @@ TclGetLoadedPackagesEx(
      * interpreter.
      */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     resultObj = Tcl_NewObj();
     for (; ipPtr != NULL; ipPtr = ipPtr->nextPtr) {

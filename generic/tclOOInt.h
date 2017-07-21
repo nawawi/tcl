@@ -196,6 +196,12 @@ typedef struct Object {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#define CLASS_GONE	4	/* Indicates that the class of this object has
+				 * been deleted, and so the object should not
+				 * attempt to remove itself from its class. */
+>>>>>>> upstream/master
 =======
 #define CLASS_GONE	4	/* Indicates that the class of this object has
 				 * been deleted, and so the object should not
@@ -444,6 +450,9 @@ MODULE_SCOPE int	TclOODefineClassObjCmd(ClientData clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const *objv);
 MODULE_SCOPE int	TclOODefineSelfObjCmd(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineObjSelfObjCmd(ClientData clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const *objv);
 MODULE_SCOPE int	TclOOUnknownDefinition(ClientData clientData,

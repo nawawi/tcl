@@ -124,7 +124,11 @@ FileCopyRename(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_WrongNumArgs(interp, 1, objv, 
+=======
+	Tcl_WrongNumArgs(interp, 1, objv,
+>>>>>>> upstream/master
 =======
 	Tcl_WrongNumArgs(interp, 1, objv,
 >>>>>>> upstream/master
@@ -1107,11 +1111,14 @@ TclFileAttrsCmd(
 	    Tcl_SetErrorCode(interp, "TCL","OPERATION","FATTR","NONE", NULL);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    goto end;
 	}
 
 	if (Tcl_GetIndexFromObj(interp, objv[0], attributeStrings,
-		"option", 0, &index) != TCL_OK) {
+		"option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
 	    goto end;
 	}
 	if (attributeStringsAllocated != NULL) {
@@ -1156,12 +1163,18 @@ TclFileAttrsCmd(
 	    if (Tcl_GetIndexFromObj(interp, objv[i], attributeStrings,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    "option", 0, &index) != TCL_OK) {
 		goto end;
 	    }
 	    if (attributeStringsAllocated != NULL) {
 		TclFreeIntRep(objv[i]);
 	    }
+=======
+		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
+		goto end;
+	    }
+>>>>>>> upstream/master
 =======
 		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
 		goto end;

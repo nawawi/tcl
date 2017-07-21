@@ -6,7 +6,11 @@ namespace eval ::tcl::clock {
         "Uto"\
         "Sre"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u010cet"\
+=======
+        "Čet"\
+>>>>>>> upstream/master
 =======
         "Čet"\
 >>>>>>> upstream/master
@@ -18,7 +22,11 @@ namespace eval ::tcl::clock {
         "Utorak"\
         "Sreda"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u010cetvrtak"\
+=======
+        "Četvrtak"\
+>>>>>>> upstream/master
 =======
         "Četvrtak"\
 >>>>>>> upstream/master

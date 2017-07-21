@@ -879,7 +879,11 @@ EXTERN int		Tcl_EvalObjEx(Tcl_Interp *interp, Tcl_Obj *objPtr,
 				int flags);
 /* 294 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN void		Tcl_ExitThread(int status);
+=======
+EXTERN TCL_NORETURN void Tcl_ExitThread(int status);
+>>>>>>> upstream/master
 =======
 EXTERN TCL_NORETURN void Tcl_ExitThread(int status);
 >>>>>>> upstream/master
@@ -1821,13 +1825,19 @@ EXTERN void		Tcl_ZlibStreamSetCompressionDictionary(
 				Tcl_ZlibStream zhandle,
 				Tcl_Obj *compressionDictionaryObj);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 /* 631 */
 EXTERN Tcl_Channel	Tcl_OpenTcpServerEx(Tcl_Interp *interp,
 				const char *service, const char *host,
 				unsigned int flags,
 				Tcl_TcpAcceptProc *acceptProc,
 				ClientData callbackData);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 typedef struct {
@@ -2159,7 +2169,11 @@ typedef struct TclStubs {
     int (*tcl_EvalObjv) (Tcl_Interp *interp, int objc, Tcl_Obj *const objv[], int flags); /* 292 */
     int (*tcl_EvalObjEx) (Tcl_Interp *interp, Tcl_Obj *objPtr, int flags); /* 293 */
 <<<<<<< HEAD
+<<<<<<< HEAD
     void (*tcl_ExitThread) (int status); /* 294 */
+=======
+    TCL_NORETURN1 void (*tcl_ExitThread) (int status); /* 294 */
+>>>>>>> upstream/master
 =======
     TCL_NORETURN1 void (*tcl_ExitThread) (int status); /* 294 */
 >>>>>>> upstream/master
@@ -2500,6 +2514,10 @@ typedef struct TclStubs {
     int (*tcl_FSUnloadFile) (Tcl_Interp *interp, Tcl_LoadHandle handlePtr); /* 629 */
     void (*tcl_ZlibStreamSetCompressionDictionary) (Tcl_ZlibStream zhandle, Tcl_Obj *compressionDictionaryObj); /* 630 */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_Channel (*tcl_OpenTcpServerEx) (Tcl_Interp *interp, const char *service, const char *host, unsigned int flags, Tcl_TcpAcceptProc *acceptProc, ClientData callbackData); /* 631 */
+>>>>>>> upstream/master
 =======
     Tcl_Channel (*tcl_OpenTcpServerEx) (Tcl_Interp *interp, const char *service, const char *host, unsigned int flags, Tcl_TcpAcceptProc *acceptProc, ClientData callbackData); /* 631 */
 >>>>>>> upstream/master
@@ -3796,6 +3814,11 @@ extern const TclStubs *tclStubsPtr;
 #define Tcl_ZlibStreamSetCompressionDictionary \
 	(tclStubsPtr->tcl_ZlibStreamSetCompressionDictionary) /* 630 */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#define Tcl_OpenTcpServerEx \
+	(tclStubsPtr->tcl_OpenTcpServerEx) /* 631 */
+>>>>>>> upstream/master
 =======
 #define Tcl_OpenTcpServerEx \
 	(tclStubsPtr->tcl_OpenTcpServerEx) /* 631 */
@@ -3815,7 +3838,10 @@ extern const TclStubs *tclStubsPtr;
 #   undef Tcl_ObjSetVar2
 #   undef Tcl_StaticPackage
 <<<<<<< HEAD
+<<<<<<< HEAD
 #   undef TclFSGetNativePath
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #   define Tcl_CreateInterp() (tclStubsPtr->tcl_CreateInterp())
@@ -3857,7 +3883,11 @@ extern const TclStubs *tclStubsPtr;
 #undef Tcl_NewBooleanObj
 #define Tcl_NewBooleanObj(boolValue) \
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_NewIntObj((boolValue)!=0)
+=======
+	Tcl_NewLongObj((boolValue)!=0)
+>>>>>>> upstream/master
 =======
 	Tcl_NewLongObj((boolValue)!=0)
 >>>>>>> upstream/master
@@ -3867,7 +3897,11 @@ extern const TclStubs *tclStubsPtr;
 #undef Tcl_SetBooleanObj
 #define Tcl_SetBooleanObj(objPtr, boolValue) \
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetIntObj((objPtr), (boolValue)!=0)
+=======
+	Tcl_SetLongObj(objPtr, (boolValue)!=0)
+>>>>>>> upstream/master
 =======
 	Tcl_SetLongObj(objPtr, (boolValue)!=0)
 >>>>>>> upstream/master
@@ -3893,7 +3927,10 @@ extern const TclStubs *tclStubsPtr;
 #define Tcl_UpVar(interp, frameName, varName, localName, flags) \
 	Tcl_UpVar2(interp, frameName, varName, NULL, localName, flags)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 #undef Tcl_AddErrorInfo
 #define Tcl_AddErrorInfo(interp, message) \
 	Tcl_AppendObjToErrorInfo(interp, Tcl_NewStringObj(message, -1))
@@ -3939,6 +3976,9 @@ extern const TclStubs *tclStubsPtr;
 	    } \
 	} while(0)
 #endif /* TCL_NO_DEPRECATED */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 #if defined(USE_TCL_STUBS) && !defined(USE_TCL_STUB_PROCS)
@@ -3992,6 +4032,7 @@ extern const TclStubs *tclStubsPtr;
 /*
  * Deprecated Tcl procedures:
  */
+<<<<<<< HEAD
 
 #undef Tcl_EvalObj
 <<<<<<< HEAD
@@ -4008,4 +4049,14 @@ extern const TclStubs *tclStubsPtr;
     Tcl_EvalObjEx(interp, objPtr, TCL_EVAL_GLOBAL)
 >>>>>>> upstream/master
 
+=======
+
+#undef Tcl_EvalObj
+#define Tcl_EvalObj(interp, objPtr) \
+    Tcl_EvalObjEx(interp, objPtr, 0)
+#undef Tcl_GlobalEvalObj
+#define Tcl_GlobalEvalObj(interp, objPtr) \
+    Tcl_EvalObjEx(interp, objPtr, TCL_EVAL_GLOBAL)
+
+>>>>>>> upstream/master
 #endif /* _TCLDECLS */

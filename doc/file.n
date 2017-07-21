@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -49,9 +53,15 @@ generated.  On Windows, FAT file systems do not support access time.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile attributes \fIname\fR ?\fBoption\fR?
 .TP
 \fBfile attributes \fIname\fR ?\fBoption value option value...\fR?
+=======
+\fBfile attributes \fIname\fR ?\fIoption\fR?
+.TP
+\fBfile attributes \fIname\fR ?\fIoption value option value...\fR?
+>>>>>>> upstream/master
 =======
 \fBfile attributes \fIname\fR ?\fIoption\fR?
 .TP
@@ -174,7 +184,11 @@ returned.  For example,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 returns \fBc:/\fR. 
+=======
+returns \fBc:/\fR.
+>>>>>>> upstream/master
 =======
 returns \fBc:/\fR.
 >>>>>>> upstream/master
@@ -206,7 +220,13 @@ returns \fB/home\fR (or something similar).
 Returns \fB1\fR if file \fIname\fR is executable by the current user,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB0\fR otherwise.
+=======
+\fB0\fR otherwise. On Windows, which does not have an executable attribute,
+the command treats all directories and any files with extensions
+\fBexe\fR, \fBcom\fR, \fBcmd\fR or \fBbat\fR as executable.
+>>>>>>> upstream/master
 =======
 \fB0\fR otherwise. On Windows, which does not have an executable attribute,
 the command treats all directories and any files with extensions
@@ -260,7 +280,11 @@ Windows.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile link ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+=======
+\fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+>>>>>>> upstream/master
 =======
 \fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
 >>>>>>> upstream/master
@@ -324,7 +348,11 @@ as the \fBstat\fR option.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile mkdir ?\fIdir\fR ...?
+=======
+\fBfile mkdir\fR ?\fIdir\fR ...?
+>>>>>>> upstream/master
 =======
 \fBfile mkdir\fR ?\fIdir\fR ...?
 >>>>>>> upstream/master
@@ -384,6 +412,7 @@ links, not on the things that they point to).
 .TP
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile owned \fIname\fR 
 =======
 \fBfile owned \fIname\fR
@@ -411,6 +440,9 @@ operate on the actual symbolic link itself (for example \fBfile delete\fR,
 \fBfile rename\fR, \fBfile copy\fR are defined to operate on symbolic
 links, not on the things that they point to).
 .TP
+\fBfile owned \fIname\fR
+>>>>>>> upstream/master
+=======
 \fBfile owned \fIname\fR
 >>>>>>> upstream/master
 =======
@@ -545,7 +577,11 @@ Returns all of the characters in the last filesystem component of
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If \fIname\fR contains no separators then returns \fIname\fR.  So, 
+=======
+If \fIname\fR contains no separators then returns \fIname\fR.  So,
+>>>>>>> upstream/master
 =======
 If \fIname\fR contains no separators then returns \fIname\fR.  So,
 >>>>>>> upstream/master
@@ -587,7 +623,11 @@ Returns a string giving the type of file \fIname\fR, which will be one of
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 . 
+=======
+.
+>>>>>>> upstream/master
 =======
 .
 >>>>>>> upstream/master
@@ -620,6 +660,7 @@ These commands always operate using the real user and group identifiers,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 not the effective ones. 
 =======
 not the effective ones.
@@ -634,6 +675,8 @@ may be fixed in a future release of Tcl.
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 not the effective ones.
 .TP
 \fBWindows\fR\0\0\0\0
@@ -642,6 +685,9 @@ The \fBfile owned\fR subcommand uses the user identifier (SID) of
 the process token, not the thread token which may be impersonating
 some other user.
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

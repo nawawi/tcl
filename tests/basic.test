@@ -457,6 +457,7 @@ test basic-26.2 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # cause a segfault if [Bug 1119369] has not been fixed. 
     # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
     #
@@ -479,6 +480,13 @@ test basic-26.2 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+    # cause a segfault if [Bug 1119369] has not been fixed.
+    # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
+    #
+
+    set SRC [list foo 1] ;# pure-list command
+>>>>>>> upstream/master
     proc foo str {
 	# Shimmer pure-list to cmdName, cleanup and error
 	proc $::SRC {} {}; $::SRC
@@ -496,6 +504,7 @@ test basic-26.3 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
     # Follow the pure-list branch in a manner that
     #   a - the pure-list internal rep is destroyed by shimmering
     #   b - the command accesses its command line
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -520,6 +529,13 @@ test basic-26.3 {Tcl_EvalObjEx, pure-list branch: preserve "objv"} -body {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    # This will cause a segfault if [Bug 1119369] has not been fixed.
+    # NOTE: a MEM_DEBUG build may be necessary to guarantee the segfault.
+    #
+
+    set SRC [list foo 1] ;# pure-list command
 >>>>>>> upstream/master
     proc foo str {
 	# Shimmer pure-list to cmdName, cleanup and error
@@ -635,7 +651,11 @@ invoked "break" outside of a loop
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     (file "*BREAKtest" line 3)}    
+=======
+    (file "*BREAKtest" line 3)}
+>>>>>>> upstream/master
 =======
     (file "*BREAKtest" line 3)}
 >>>>>>> upstream/master
@@ -664,7 +684,11 @@ test basic-46.3 {Tcl_AllowExceptions: exception return not allowed} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     (file "*BREAKtest" line 4)}    
+=======
+    (file "*BREAKtest" line 4)}
+>>>>>>> upstream/master
 =======
     (file "*BREAKtest" line 4)}
 >>>>>>> upstream/master
@@ -804,7 +828,7 @@ test basic-48.1.$noComp {expansion: parsing} $constraints {
 		# Another comment
 		list 1  2\
 			3   {*}$::l1
-            
+
 		# Comment again
 	}
 } {1 2 3 a {b b} c d}
@@ -877,7 +901,7 @@ test basic-48.13.$noComp {expansion: odd usage} $constraints {
 test basic-48.14.$noComp {expansion: hash command} -setup {
         catch {rename \# ""}
         set cmd "#"
-    } -constraints $constraints -body { 
+    } -constraints $constraints -body {
            run { {*}$cmd apa bepa }
     } -cleanup {
 	unset cmd
@@ -937,7 +961,7 @@ test basic-48.16.$noComp {expansion: testing for leaks} -setup {
             stress
             set tmp $end
             set end [getbytes]
-        }    
+        }
         set leak [expr {$end - $tmp}]
     } -cleanup {
 	unset end i tmp
@@ -948,7 +972,7 @@ test basic-48.16.$noComp {expansion: testing for leaks} -setup {
 test basic-48.17.$noComp {expansion: object safety} -setup {
         set old_precision $::tcl_precision
         set ::tcl_precision 4
-    } -constraints $constraints -body { 
+    } -constraints $constraints -body {
             set third [expr {1.0/3.0}]
             set l [list $third $third]
             set x [run {list $third {*}$l $third}]

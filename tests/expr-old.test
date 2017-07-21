@@ -1123,7 +1123,11 @@ test expr-old-37.25 {Tcl_ExprDouble and NaN} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

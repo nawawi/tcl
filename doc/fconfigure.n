@@ -274,6 +274,7 @@ while {[llength $words] < 3} {
 
 # Those words supply the size of the image and its
 # overall depth per channel. Assign to variables.
+<<<<<<< HEAD
 lassign $words xSize ySize depth
 
 <<<<<<< HEAD
@@ -291,6 +292,8 @@ while {[llength $words] < 3} {
 
 # Those words supply the size of the image and its
 # overall depth per channel. Assign to variables.
+=======
+>>>>>>> upstream/master
 lassign $words xSize ySize depth
 
 >>>>>>> upstream/master

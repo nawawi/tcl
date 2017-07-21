@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -43,7 +47,11 @@ the first increment of unwind information
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will not be added by the Tcl interpreter.  
+=======
+will not be added by the Tcl interpreter.
+>>>>>>> upstream/master
 =======
 will not be added by the Tcl interpreter.
 >>>>>>> upstream/master
@@ -76,6 +84,7 @@ should be used instead:
 .PP
 .CS
 catch {...} errMsg options
+<<<<<<< HEAD
 \&...
 =======
 .CS
@@ -110,6 +119,12 @@ catch {...} errMsg options
 return -options $options $errMsg
 .CE
 .PP
+=======
+\&...
+return -options $options $errMsg
+.CE
+.PP
+>>>>>>> upstream/master
 If the \fIcode\fR argument is present, then its value is stored
 in the \fB\-errorcode\fR return option.  The \fB\-errorcode\fR
 return option is intended to hold a machine-readable description

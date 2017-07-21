@@ -18,8 +18,14 @@
 #include <shlobj.h>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <lm.h>		/* For TclpGetUserHome(). */
 #include <userenv.h>		/* For TclpGetUserHome(). */
+=======
+#include <lm.h>		        /* For TclpGetUserHome(). */
+#include <userenv.h>		/* For TclpGetUserHome(). */
+#include <aclapi.h>             /* For GetNamedSecurityInfo */
+>>>>>>> upstream/master
 =======
 #include <lm.h>		        /* For TclpGetUserHome(). */
 #include <userenv.h>		/* For TclpGetUserHome(). */
@@ -34,6 +40,7 @@
  * on the proleptic Gregorian calendar) and the Posix epoch (1970-01-01).
  */
 
+<<<<<<< HEAD
 #define POSIX_EPOCH_AS_FILETIME	\
 	((Tcl_WideInt) 116444736 * (Tcl_WideInt) 1000000000)
 
@@ -50,6 +57,8 @@
  * on the proleptic Gregorian calendar) and the Posix epoch (1970-01-01).
  */
 
+=======
+>>>>>>> upstream/master
 #define POSIX_EPOCH_AS_FILETIME	\
 	((Tcl_WideInt) 116444736 * (Tcl_WideInt) 1000000000)
 
@@ -967,9 +976,13 @@ TclpMatchInDirectory(
 	    WIN32_FILE_ATTRIBUTE_DATA data;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    const char *str = Tcl_GetStringFromObj(norm,&len);
 =======
 	    const char *str = TclGetStringFromObj(norm,&len);
+>>>>>>> upstream/master
+=======
+	    const char *str = TclGetString(norm);
 >>>>>>> upstream/master
 =======
 	    const char *str = TclGetString(norm);
@@ -1035,9 +1048,14 @@ TclpMatchInDirectory(
 	Tcl_DStringInit(&dsOrig);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	dirName = Tcl_GetStringFromObj(fileNamePtr, &dirLength);
 =======
 	dirName = TclGetStringFromObj(fileNamePtr, &dirLength);
+>>>>>>> upstream/master
+=======
+	dirName = TclGetString(fileNamePtr);
+	dirLength = fileNamePtr->length;
 >>>>>>> upstream/master
 =======
 	dirName = TclGetString(fileNamePtr);
@@ -1719,6 +1737,7 @@ NativeAccess(
 	 * usually mapped to the Windows attributes, so if the user is the
 	 * file owner then the attrib checks above are correct (as far as they
 	 * go).
+<<<<<<< HEAD
 	 */
 
 	if(!GetSecurityDescriptorOwner(sdPtr,&pSid,&SidDefaulted) ||
@@ -1733,6 +1752,22 @@ NativeAccess(
 	 * thread token.
 	 */
 
+=======
+	 */
+
+	if(!GetSecurityDescriptorOwner(sdPtr,&pSid,&SidDefaulted) ||
+	   memcmp(GetSidIdentifierAuthority(pSid),&samba_unmapped,
+		  sizeof(SID_IDENTIFIER_AUTHORITY))==0) {
+	    HeapFree(GetProcessHeap(), 0, sdPtr);
+	    return 0; /* Attrib tests say access allowed. */
+	}
+
+	/*
+	 * Perform security impersonation of the user and open the resulting
+	 * thread token.
+	 */
+
+>>>>>>> upstream/master
 	if (!ImpersonateSelf(SecurityImpersonation)) {
 	    /*
 	     * Unable to perform security impersonation.
@@ -1817,7 +1852,11 @@ NativeAccess(
  *
  *	Determines if a path is executable. On windows this is simply defined
 <<<<<<< HEAD
+<<<<<<< HEAD
  *	by whether the path ends in any of ".exe", ".com", or ".bat"
+=======
+ *	by whether the path ends in a standard executable extension.
+>>>>>>> upstream/master
 =======
  *	by whether the path ends in a standard executable extension.
 >>>>>>> upstream/master
@@ -1833,6 +1872,7 @@ NativeIsExec(
     const TCHAR *path)
 {
     int len = _tcslen(path);
+<<<<<<< HEAD
 
     if (len < 5) {
 	return 0;
@@ -1846,6 +1886,20 @@ NativeIsExec(
 	    || (_tcsicmp(path+len-3, TEXT("com")) == 0)
 <<<<<<< HEAD
 =======
+	    || (_tcsicmp(path+len-3, TEXT("cmd")) == 0)
+>>>>>>> upstream/master
+=======
+
+    if (len < 5) {
+	return 0;
+    }
+
+    if (path[len-4] != '.') {
+	return 0;
+    }
+
+    if ((_tcsicmp(path+len-3, TEXT("exe")) == 0)
+	    || (_tcsicmp(path+len-3, TEXT("com")) == 0)
 	    || (_tcsicmp(path+len-3, TEXT("cmd")) == 0)
 >>>>>>> upstream/master
 	    || (_tcsicmp(path+len-3, TEXT("bat")) == 0)) {
@@ -2007,6 +2061,10 @@ NativeStat(
     unsigned int inode = 0;
     HANDLE fileHandle;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    DWORD fileType = FILE_TYPE_UNKNOWN;
+>>>>>>> upstream/master
 =======
     DWORD fileType = FILE_TYPE_UNKNOWN;
 >>>>>>> upstream/master
@@ -2018,7 +2076,10 @@ NativeStat(
      * 'getFileAttributesExProc', and if that isn't available, then on even
      * simpler routines.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
      *
      * Special consideration must be given to Windows hardcoded names
      * like CON, NULL, COM1, LPT1 etc. For these, we still need to
@@ -2027,6 +2088,9 @@ NativeStat(
      * will fail. We do a WinIsReserved to see if it is one of the special
      * names, and if successful, mock up a BY_HANDLE_FILE_INFORMATION
      * structure.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      */
 
@@ -2039,16 +2103,36 @@ NativeStat(
 
 	if (GetFileInformationByHandle(fileHandle,&data) != TRUE) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    CloseHandle(fileHandle);
 	    Tcl_SetErrno(ENOENT);
 	    return -1;
 	}
 	CloseHandle(fileHandle);
 
+=======
+            fileType = GetFileType(fileHandle);
+            CloseHandle(fileHandle);
+            if (fileType != FILE_TYPE_CHAR && fileType != FILE_TYPE_DISK) {
+                Tcl_SetErrno(ENOENT);
+                return -1;
+            }
+            /* Mock up the expected structure */
+            memset(&data, 0, sizeof(data));
+            statPtr->st_atime = 0;
+            statPtr->st_mtime = 0;
+            statPtr->st_ctime = 0;
+        } else {
+            CloseHandle(fileHandle);
+            statPtr->st_atime = ToCTime(data.ftLastAccessTime);
+            statPtr->st_mtime = ToCTime(data.ftLastWriteTime);
+            statPtr->st_ctime = ToCTime(data.ftCreationTime);
+        }
+>>>>>>> upstream/master
 	attr = data.dwFileAttributes;
-
 	statPtr->st_size = ((Tcl_WideInt) data.nFileSizeLow) |
 		(((Tcl_WideInt) data.nFileSizeHigh) << 32);
+<<<<<<< HEAD
 	statPtr->st_atime = ToCTime(data.ftLastAccessTime);
 	statPtr->st_mtime = ToCTime(data.ftLastWriteTime);
 	statPtr->st_ctime = ToCTime(data.ftCreationTime);
@@ -2073,6 +2157,8 @@ NativeStat(
 	attr = data.dwFileAttributes;
 	statPtr->st_size = ((Tcl_WideInt) data.nFileSizeLow) |
 		(((Tcl_WideInt) data.nFileSizeHigh) << 32);
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 	/*
@@ -2130,7 +2216,10 @@ NativeStat(
     dev = NativeDev(nativePath);
     mode = NativeStatMode(attr, checkLinks, NativeIsExec(nativePath));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     if (fileType == FILE_TYPE_CHAR) {
         mode &= ~S_IFMT;
         mode |= S_IFCHR;
@@ -2138,6 +2227,9 @@ NativeStat(
         mode &= ~S_IFMT;
         mode |= S_IFBLK;
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     statPtr->st_dev	= (dev_t) dev;
@@ -2535,6 +2627,7 @@ TclpObjNormalizePath(
     }
     while (1) {
 	char cur = *currentPathEndPosition;
+<<<<<<< HEAD
 
 	if ((cur=='/' || cur==0) && (path != currentPathEndPosition)) {
 	    /*
@@ -4870,6 +4963,37 @@ TclpObjNormalizePath(
 			for (i=0 ; i<len ; i++) {
 			    WCHAR wc = ((WCHAR *) nativePath)[i];
 
+=======
+
+	if ((cur=='/' || cur==0) && (path != currentPathEndPosition)) {
+	    /*
+	     * Reached directory separator, or end of string.
+	     */
+
+	    WIN32_FILE_ATTRIBUTE_DATA data;
+	    const TCHAR *nativePath = Tcl_WinUtfToTChar(path,
+		    currentPathEndPosition - path, &ds);
+
+	    if (GetFileAttributesEx(nativePath,
+		    GetFileExInfoStandard, &data) != TRUE) {
+		/*
+		 * File doesn't exist.
+		 */
+
+		if (isDrive) {
+		    int len = WinIsReserved(path);
+
+		    if (len > 0) {
+			/*
+			 * Actually it does exist - COM1, etc.
+			 */
+
+			int i;
+
+			for (i=0 ; i<len ; i++) {
+			    WCHAR wc = ((WCHAR *) nativePath)[i];
+
+>>>>>>> upstream/master
 			    if (wc >= L'a') {
 				wc -= (L'a' - L'A');
 				((WCHAR *) nativePath)[i] = wc;
@@ -4997,6 +5121,7 @@ TclpObjNormalizePath(
 		    /*
 		     * Normal path.
 		     */
+<<<<<<< HEAD
 
 		    WIN32_FIND_DATAW fData;
 		    HANDLE handle;
@@ -5013,6 +5138,24 @@ TclpObjNormalizePath(
 		    } else {
 			WCHAR *nativeName;
 
+=======
+
+		    WIN32_FIND_DATAW fData;
+		    HANDLE handle;
+
+		    handle = FindFirstFileW((WCHAR *) nativePath, &fData);
+		    if (handle == INVALID_HANDLE_VALUE) {
+			/*
+			 * This is usually the '/' in 'c:/' at end of
+			 * string.
+			 */
+
+			Tcl_DStringAppend(&dsNorm, (const char *) L"/",
+				sizeof(WCHAR));
+		    } else {
+			WCHAR *nativeName;
+
+>>>>>>> upstream/master
 			if (fData.cFileName[0] != '\0') {
 			    nativeName = fData.cFileName;
 			} else {
@@ -5081,6 +5224,9 @@ TclpObjNormalizePath(
 	 * native encoding, so we have to convert it to Utf.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	Tcl_WinTCharToUtf((const TCHAR *) Tcl_DStringValue(&dsNorm),
 		Tcl_DStringLength(&dsNorm), &ds);
@@ -5091,21 +5237,21 @@ TclpObjNormalizePath(
 	     */
 <<<<<<< HEAD
 
-	    int len;
 	    char *path;
 	    Tcl_Obj *tmpPathPtr;
 
 	    tmpPathPtr = Tcl_NewStringObj(Tcl_DStringValue(&ds),
 		    nextCheckpoint);
 	    Tcl_AppendToObj(tmpPathPtr, lastValidPathEnd, -1);
-	    path = Tcl_GetStringFromObj(tmpPathPtr, &len);
-	    Tcl_SetStringObj(pathPtr, path, len);
+	    path = TclGetString(tmpPathPtr);
+	    Tcl_SetStringObj(pathPtr, path, tmpPathPtr->length);
 	    Tcl_DecrRefCount(tmpPathPtr);
 	} else {
 	    /*
 	     * End of string was reached above.
 	     */
 
+<<<<<<< HEAD
 =======
 
 	    char *path;
@@ -5122,6 +5268,8 @@ TclpObjNormalizePath(
 	     * End of string was reached above.
 	     */
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    Tcl_SetStringObj(pathPtr, Tcl_DStringValue(&ds), nextCheckpoint);
 	}
@@ -5327,11 +5475,17 @@ TclpNativeToNormalized(
     copy = Tcl_DStringValue(&ds);
     len = Tcl_DStringLength(&ds);
 
+<<<<<<< HEAD
     /*
      * Certain native path representations on Windows have this special prefix
      * to indicate that they are to be treated specially. For example
      * extremely long paths, or symlinks.
      */
+=======
+	const char *drive = TclGetString(useThisCwd);
+	size_t cwdLen = useThisCwd->length;
+	char drive_cur = path[0];
+>>>>>>> upstream/master
 
     if (*copy == '\\') {
 	if (0 == strncmp(copy,"\\??\\",4)) {
@@ -5956,7 +6110,11 @@ TclWinFileOwned(
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+>>>>>>> upstream/master
+=======
+
 >>>>>>> upstream/master
 =======
 

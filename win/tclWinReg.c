@@ -29,6 +29,7 @@
 #   define Tcl_WinUtfToTChar(a,b,c)	Tcl_UtfToExternalDString(NULL,a,b,c)
 #endif /* !UNICODE */
 
+<<<<<<< HEAD
 /*
  * Ensure that we can say which registry is being accessed.
  */
@@ -44,6 +45,23 @@
  * The maximum length of a sub-key name.
  */
 
+=======
+/*
+ * Ensure that we can say which registry is being accessed.
+ */
+
+#ifndef KEY_WOW64_64KEY
+#   define KEY_WOW64_64KEY	(0x0100)
+#endif
+#ifndef KEY_WOW64_32KEY
+#   define KEY_WOW64_32KEY	(0x0200)
+#endif
+
+/*
+ * The maximum length of a sub-key name.
+ */
+
+>>>>>>> upstream/master
 #ifndef MAX_KEY_LENGTH
 #   define MAX_KEY_LENGTH	256
 #endif
@@ -1197,6 +1215,7 @@ RecursiveDeleteKey(
 	     */
 
 	    if (mode && !checkExProc) {
+<<<<<<< HEAD
 		HINSTANCE dllH;
 
 		checkExProc = 1;
@@ -1205,6 +1224,14 @@ RecursiveDeleteKey(
 		    regDeleteKeyExProc = (FARPROC)
 			    GetProcAddress(dllH, "RegDeleteKeyExW");
 		}
+=======
+		HMODULE handle;
+
+		checkExProc = 1;
+		handle = GetModuleHandle(TEXT("ADVAPI32"));
+		regDeleteKeyExProc = (FARPROC)
+			GetProcAddress(handle, "RegDeleteKeyExW");
+>>>>>>> upstream/master
 	    }
 	    if (mode && regDeleteKeyExProc) {
 		result = regDeleteKeyExProc(startKey, keyName, mode, 0);

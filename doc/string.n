@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .\" 
+=======
+.\"
+>>>>>>> upstream/master
 =======
 .\"
 >>>>>>> upstream/master
@@ -458,7 +462,11 @@ in
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The char specified at the integral index that is the sum of 
+=======
+The char specified at the integral index that is the sum of
+>>>>>>> upstream/master
 =======
 The char specified at the integral index that is the sum of
 >>>>>>> upstream/master
@@ -478,7 +486,11 @@ in
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The char specified at the integral index that is the difference of 
+=======
+The char specified at the integral index that is the difference of
+>>>>>>> upstream/master
 =======
 The char specified at the integral index that is the difference of
 >>>>>>> upstream/master

@@ -47,7 +47,11 @@
    encountered in an input file, it is the last stream in that file.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    Like gunzip and uncompress, the file attributes of the orignal compressed
+=======
+   Like gunzip and uncompress, the file attributes of the original compressed
+>>>>>>> upstream/master
 =======
    Like gunzip and uncompress, the file attributes of the original compressed
 >>>>>>> upstream/master

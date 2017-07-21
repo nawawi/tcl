@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -48,6 +52,7 @@ Expressions differ from C expressions in the way that
 operands are specified.  Expressions also support
 non-numeric operands, string comparisons, and some
 additional operators not found in C.
+<<<<<<< HEAD
 .PP
 When an expression evaluates to an integer, the value is the decimal form of
 the integer, and when an expression evaluates to a floating-point number, the
@@ -59,6 +64,20 @@ An expression consists of a combination of operands, operators, parentheses and
 commas, possibly with whitespace between any of these elements, which is
 ignored.
 An integer operand may be specified in decimal, binary
+=======
+.PP
+When an expression evaluates to an integer, the value is the decimal form of
+the integer, and when an expression evaluates to a floating-point number, the
+value is the form produced by the \fB%g\fR format specifier of Tcl's
+\fBformat\fR command.
+.SS OPERANDS
+.PP
+An expression consists of a combination of operands, operators, parentheses and
+commas, possibly with whitespace between any of these elements, which is
+ignored.
+An integer operand may be specified in decimal (the normal case, the optional
+first two characters are \fB0d\fR), binary
+>>>>>>> upstream/master
 (the first two characters are \fB0b\fR), octal
 (the first two characters are \fB0o\fR), or hexadecimal
 (the first two characters are \fB0x\fR) form.  For
@@ -133,6 +152,9 @@ interpretation.  To ensure string operations on arbitrary values it is generally
 good idea to use \fBeq\fR, \fBne\fR, or the \fBstring\fR command instead of
 more versatile operators such as \fB==\fR.
 .PP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 Unless otherwise specified, operators accept non-numeric operands.  The value
 of a boolean operation is 1 if true, 0 otherwise.  See also \fBstring is\fR
@@ -234,11 +256,16 @@ operators group left-to-right.  For example, the value of
 \fBexpr\fR {4*2 < 7}
 .CE
 .PP
+<<<<<<< HEAD
 returns 0, while
+=======
+is 0, while the value of
+>>>>>>> upstream/master
 .PP
 .CS
 \fBexpr\fR {2**3**2}
 .CE
+<<<<<<< HEAD
 .PP
 =======
 =======
@@ -264,6 +291,11 @@ is 512.
 is 512.
 >>>>>>> upstream/master
 .PP
+=======
+.PP
+is 512.
+.PP
+>>>>>>> upstream/master
 As in C, \fB&&\fR, \fB||\fR, and \fB?:\fR feature
 .QW "lazy evaluation" ,
 which means that operands are not evaluated if they are
@@ -317,6 +349,7 @@ As in C, a mathematical function may accept multiple arguments separated by comm
 \fBexpr\fR {hypot($x,$y)}
 .CE
 .PP
+<<<<<<< HEAD
 =======
 .CS
 \fBexpr\fR {$v ? [a] : [b]}
@@ -365,6 +398,8 @@ As in C, a mathematical function may accept multiple arguments separated by comm
 \fBexpr\fR {hypot($x,$y)}
 .CE
 .PP
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 becomes
 .PP
@@ -424,6 +459,9 @@ or
 returns \fB4.0\fR, not \fB4\fR.
 .SH "PERFORMANCE CONSIDERATIONS"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 .PP
 Where an expression contains syntax that Tcl would otherwise perform
 substitutions on, enclosing an expression in braces or otherwise quoting it
@@ -435,6 +473,7 @@ substitution on the value before \fBexpr\fR is called.
 In the following example, the value of the expression is 11 because the Tcl parser first
 substitutes \fB$b\fR and \fBexpr\fR then substitutes \fB$a\fR.  Enclosing the
 expression in braces would result in a syntax error.
+<<<<<<< HEAD
 .CS
 set a 3
 set b {$a + 2}
@@ -486,6 +525,38 @@ otherwise quoted to prevent Tcl from performing substitutions, allowing
 \fBexpr\fR to perform them instead.
 >>>>>>> upstream/master
 .SH EXAMPLES
+=======
+.CS
+set a 3
+set b {$a + 2}
+\fBexpr\fR $b*4
+.CE
+.PP
+
+When an expression is generated at runtime, like the one above is, the bytcode
+compiler must ensure that new code is generated each time the expression
+is evaluated.  This is the most costly kind of expression from a performance
+perspective.  In such cases, consider directly using the commands described in
+the \fBmathfunc\fR(n) or \fBmathop\fR(n) documentation instead of \fBexpr\fR.
+
+Most expressions are not formed at runtime, but are literal strings or contain
+substitutions that don't introduce other substitutions.  To allow the bytecode
+compiler to work with an expression as a string literal at compilation time,
+ensure that it contains no substitutions or that it is enclosed in braces or
+otherwise quoted to prevent Tcl from performing substitutions, allowing
+\fBexpr\fR to perform them instead.
+.SH EXAMPLES
+.PP
+A numeric comparison whose result is 1:
+.CS
+\fBexpr\fR {"0x03" > "2"}
+.CE
+.PP
+A string comparison whose result is 1:
+.CS
+\fBexpr\fR {"0y" > "0x12"}
+.CE
+>>>>>>> upstream/master
 .PP
 A numeric comparison whose result is 1:
 .CS

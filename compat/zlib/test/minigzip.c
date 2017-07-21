@@ -1,6 +1,10 @@
 /* minigzip.c -- simulate gzip using the zlib compression library
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2006, 2010, 2011 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2006, 2010, 2011, 2016 Jean-loup Gailly
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2006, 2010, 2011, 2016 Jean-loup Gailly
 >>>>>>> upstream/master
@@ -45,7 +49,11 @@
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef _MSC_VER
+=======
+#if defined(_MSC_VER) && _MSC_VER < 1900
+>>>>>>> upstream/master
 =======
 #if defined(_MSC_VER) && _MSC_VER < 1900
 >>>>>>> upstream/master
@@ -165,7 +173,11 @@ void *myalloc(q, n, m)
     unsigned n, m;
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     q = Z_NULL;
+=======
+    (void)q;
+>>>>>>> upstream/master
 =======
     (void)q;
 >>>>>>> upstream/master
@@ -176,7 +188,11 @@ void myfree(q, p)
     void *q, *p;
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     q = Z_NULL;
+=======
+    (void)q;
+>>>>>>> upstream/master
 =======
     (void)q;
 >>>>>>> upstream/master
@@ -350,7 +366,11 @@ const char *gzerror(gz, err)
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 char *prog;
+=======
+static char *prog;
+>>>>>>> upstream/master
 =======
 static char *prog;
 >>>>>>> upstream/master
@@ -521,7 +541,11 @@ void file_uncompress(file)
     FILE  *out;
     gzFile in;
 <<<<<<< HEAD
+<<<<<<< HEAD
     size_t len = strlen(file);
+=======
+    unsigned len = strlen(file);
+>>>>>>> upstream/master
 =======
     unsigned len = strlen(file);
 >>>>>>> upstream/master

@@ -1,6 +1,10 @@
 /* infcover.c -- test zlib's inflate routines with full code coverage
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 2011 Mark Adler
+=======
+ * Copyright (C) 2011, 2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 2011, 2016 Mark Adler
 >>>>>>> upstream/master
@@ -242,6 +246,7 @@ local void mem_done(z_stream *strm, char *prefix)
 /* Decode a hexadecimal string, set *len to length, in[] to the bytes.  This
    decodes liberally, in that hex digits can be adjacent, in which case two in
 <<<<<<< HEAD
+<<<<<<< HEAD
    a row writes a byte.  Or they can delimited by any non-hex character, where
    the delimiters are ignored except when a single hex digit is followed by a
    delimiter in which case that single digit writes a byte.  The returned
@@ -251,6 +256,8 @@ local unsigned char *h2b(const char *hex, unsigned *len)
 {
     unsigned char *in;
 =======
+=======
+>>>>>>> upstream/master
    a row writes a byte.  Or they can be delimited by any non-hex character,
    where the delimiters are ignored except when a single hex digit is followed
    by a delimiter, where that single digit writes a byte.  The returned data is
@@ -259,6 +266,9 @@ local unsigned char *h2b(const char *hex, unsigned *len)
 local unsigned char *h2b(const char *hex, unsigned *len)
 {
     unsigned char *in, *re;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     unsigned next, val;
 
@@ -284,8 +294,13 @@ local unsigned char *h2b(const char *hex, unsigned *len)
     if (len != NULL)
         *len = next;
 <<<<<<< HEAD
+<<<<<<< HEAD
     in = reallocf(in, next);
     return in;
+=======
+    re = realloc(in, next);
+    return re == NULL ? in : re;
+>>>>>>> upstream/master
 =======
     re = realloc(in, next);
     return re == NULL ? in : re;

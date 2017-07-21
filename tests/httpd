@@ -225,7 +225,7 @@ proc httpdRespond { sock } {
 >>>>>>> upstream/master
 
     # Catch errors from premature client closes
-    
+
     catch {
 	if {$data(proto) == "HEAD"} {
 	    puts $sock "HTTP/1.0 200 OK"

@@ -148,7 +148,11 @@ TclCompileGlobalCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
+=======
+	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
 >>>>>>> upstream/master
@@ -1231,6 +1235,7 @@ TclCompileListCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int len;
 	const char *bytes = Tcl_GetStringFromObj(listObj, &len);
 
@@ -1245,6 +1250,9 @@ TclCompileListCmd(
 	    TclEmitOpcode(	INST_LIST_LENGTH,	envPtr);
 	    TclEmitOpcode(	INST_POP,		envPtr);
 	}
+=======
+	TclEmitPush(TclAddLiteralObj(envPtr, listObj, NULL), envPtr);
+>>>>>>> upstream/master
 =======
 	TclEmitPush(TclAddLiteralObj(envPtr, listObj, NULL), envPtr);
 >>>>>>> upstream/master
@@ -1541,12 +1549,15 @@ TclCompileLreplaceCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if(idx2 != INDEX_END && idx2 < idx1) {
 =======
     if(idx2 != INDEX_END && idx2 >= 0 && idx2 < idx1) {
 >>>>>>> upstream/master
 	idx2 = idx1-1;
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1574,6 +1585,9 @@ TclCompileLreplaceCmd(
 	idx2 = idx1 - 1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1603,6 +1617,12 @@ TclCompileLreplaceCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    if (idx2 < idx1) {
+		idx2 = idx1 - 1;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (idx2 < idx1) {
 		idx2 = idx1 - 1;
@@ -1648,9 +1668,13 @@ TclCompileLreplaceCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (idx1 > 0 && idx2 > 0 && idx2 < idx1) {
 	    idx2 = idx1 - 1;
 	} else if (idx1 < 0 && idx2 < 0 && idx2 < idx1) {
+=======
+	if (idx2 < idx1) {
+>>>>>>> upstream/master
 =======
 	if (idx2 < idx1) {
 >>>>>>> upstream/master
@@ -1678,7 +1702,11 @@ TclCompileLreplaceCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   dropAll:
+=======
+  dropAll:			/* This just ensures the arg is a list. */
+>>>>>>> upstream/master
 =======
   dropAll:			/* This just ensures the arg is a list. */
 >>>>>>> upstream/master
@@ -1703,6 +1731,7 @@ TclCompileLreplaceCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
@@ -1710,6 +1739,8 @@ TclCompileLreplaceCmd(
 	offset = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1731,6 +1762,9 @@ TclCompileLreplaceCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1789,6 +1823,7 @@ TclCompileLreplaceCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
@@ -1800,6 +1835,8 @@ TclCompileLreplaceCmd(
 	offset2 = CurrentOffset(envPtr);
 	TclEmitInstInt1(	INST_JUMP_TRUE1, 0,		envPtr);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1830,6 +1867,9 @@ TclCompileLreplaceCmd(
 	TclEmitInstInt1(	INST_JUMP_FALSE1, 0,		envPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2610,7 +2650,11 @@ TclCompileRegsubCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(patternObj, &len);
+=======
+    bytes = TclGetStringFromObj(patternObj, &len);
+>>>>>>> upstream/master
 =======
     bytes = TclGetStringFromObj(patternObj, &len);
 >>>>>>> upstream/master
@@ -2666,7 +2710,11 @@ TclCompileRegsubCmd(
     PushLiteral(envPtr,	bytes, len);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(replacementObj, &len);
+=======
+    bytes = TclGetStringFromObj(replacementObj, &len);
+>>>>>>> upstream/master
 =======
     bytes = TclGetStringFromObj(replacementObj, &len);
 >>>>>>> upstream/master
@@ -3110,7 +3158,11 @@ TclCompileVariableCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
+=======
+	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
 >>>>>>> upstream/master
@@ -3201,11 +3253,14 @@ IndexTailVarIfKnown(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (!TclWordKnownAtCompileTime(lastTokenPtr, tailPtr)) {
 	    Tcl_DecrRefCount(tailPtr);
 	    return -1;
 	}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -3218,6 +3273,9 @@ IndexTailVarIfKnown(
 	Tcl_SetStringObj(tailPtr, lastTokenPtr->start, lastTokenPtr->size);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

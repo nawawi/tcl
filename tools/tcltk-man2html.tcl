@@ -5,7 +5,11 @@ if {[catch {package require Tcl 8.6-} msg]} {
     puts stderr "If running this script from 'make html', set the\
 	NATIVE_TCLSH environment\nvariable to point to an installed\
 <<<<<<< HEAD
+<<<<<<< HEAD
 	tclsh8.6 (or the equivalent tclsh86.exe\non Windows)."
+=======
+	tclsh8.7 (or the equivalent tclsh87.exe\non Windows)."
+>>>>>>> upstream/master
 =======
 	tclsh8.7 (or the equivalent tclsh87.exe\non Windows)."
 >>>>>>> upstream/master
@@ -27,7 +31,11 @@ if {[catch {package require Tcl 8.6-} msg]} {
 # Copyright (c) 2004-2010 Donal K. Fellows
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 set ::Version "50/8.6"
+=======
+set ::Version "50/8.7"
+>>>>>>> upstream/master
 =======
 set ::Version "50/8.7"
 >>>>>>> upstream/master
@@ -457,6 +465,7 @@ proc plus-base {var root glob name dir desc} {
 	return [list $tcltkdir/$glob $name $dir $desc]
     }
 }
+<<<<<<< HEAD
 
 ##
 ## Helper for assembling the descriptions of contributed packages.
@@ -746,6 +755,278 @@ try {
 	    lset packageBuildList $idx+1 [dict get $packageDirNameMap $n]
 	}
     }
+=======
+
+##
+## Helper for assembling the descriptions of contributed packages.
+##
+proc plus-pkgs {type args} {
+    global build_tcl tcltkdir tcldir
+    if {$type ni {n 3}} {
+	error "unknown type \"$type\": must be 3 or n"
+    }
+    if {!$build_tcl} return
+    set result {}
+    set pkgsdir $tcltkdir/$tcldir/pkgs
+    foreach {dir name version} $args {
+	set globpat $pkgsdir/$dir/doc/*.$type
+	if {![llength [glob -type f -nocomplain $globpat]]} {
+	    # Fallback for manpages generated using doctools
+	    set globpat $pkgsdir/$dir/doc/man/*.$type
+	    if {![llength [glob -type f -nocomplain $globpat]]} {
+		continue
+	    }
+	}
+	set dir [string trimright $dir "0123456789-."]
+	switch $type {
+	    n {
+		set title "$name Package Commands"
+		if {$version ne ""} {
+		    append title ", version $version"
+		}
+		set dir [string totitle $dir]Cmd
+		set desc \
+		    "The additional commands provided by the $name package."
+	    }
+	    3 {
+		set title "$name Package C API"
+		if {$version ne ""} {
+		    append title ", version $version"
+		}
+		set dir [string totitle $dir]Lib
+		set desc \
+		    "The additional C functions provided by the $name package."
+	    }
+	}
+	lappend result [list $globpat $title $dir $desc]
+    }
+    return $result
+}
+
+##
+## Set up some special cases. It would be nice if we didn't have them,
+## but we do...
+##
+set excluded_pages {case menubar pack-old}
+set forced_index_pages {GetDash}
+set process_first_patterns {*/ttk_widget.n */options.n}
+set ensemble_commands {
+    after array binary chan clock dde dict encoding file history info interp
+    memory namespace package registry self string trace update zlib
+    clipboard console font grab grid image option pack place selection tk
+    tkwait ttk::style winfo wm itcl::delete itcl::find itcl::is
+}
+array set remap_link_target {
+    stdin  Tcl_GetStdChannel
+    stdout Tcl_GetStdChannel
+    stderr Tcl_GetStdChannel
+    style  ttk::style
+    {style map} ttk::style
+    {tk busy}   busy
+    library     auto_execok
+    safe-tcl    safe
+    tclvars     env
+    tcl_break   catch
+    tcl_continue catch
+    tcl_error   catch
+    tcl_ok      catch
+    tcl_return  catch
+    int()       mathfunc
+    wide()      mathfunc
+    packagens   pkg::create
+    pkgMkIndex  pkg_mkIndex
+    pkg_mkIndex pkg_mkIndex
+    Tcl_Obj     Tcl_NewObj
+    Tcl_ObjType Tcl_RegisterObjType
+    Tcl_OpenFileChannelProc Tcl_FSOpenFileChannel
+    errorinfo 	env
+    errorcode 	env
+    tcl_pkgpath env
+    Tcl_Command Tcl_CreateObjCommand
+    Tcl_CmdProc Tcl_CreateObjCommand
+    Tcl_CmdDeleteProc Tcl_CreateObjCommand
+    Tcl_ObjCmdProc Tcl_CreateObjCommand
+    Tcl_Channel Tcl_OpenFileChannel
+    Tcl_WideInt Tcl_NewIntObj
+    Tcl_ChannelType Tcl_CreateChannel
+    Tcl_DString Tcl_DStringInit
+    Tcl_Namespace Tcl_AppendExportList
+    Tcl_Object  Tcl_NewObjectInstance
+    Tcl_Class   Tcl_GetObjectAsClass
+    Tcl_Event   Tcl_QueueEvent
+    Tcl_Time	Tcl_GetTime
+    Tcl_ThreadId Tcl_CreateThread
+    Tk_Window	Tk_WindowId
+    Tk_3DBorder Tk_Get3DBorder
+    Tk_Anchor	Tk_GetAnchor
+    Tk_Cursor	Tk_GetCursor
+    Tk_Dash	Tk_GetDash
+    Tk_Font	Tk_GetFont
+    Tk_Image	Tk_GetImage
+    Tk_ImageMaster Tk_GetImage
+    Tk_ItemType Tk_CreateItemType
+    Tk_Justify	Tk_GetJustify
+    Ttk_Theme	Ttk_GetTheme
+}
+array set exclude_refs_map {
+    bind.n		{button destroy option}
+    clock.n		{next}
+    history.n		{exec}
+    next.n		{unknown}
+    zlib.n		{binary close filename text}
+    canvas.n		{bitmap text}
+    console.n		{eval}
+    checkbutton.n	{image}
+    clipboard.n		{string}
+    entry.n		{string}
+    event.n		{return}
+    font.n		{menu}
+    getOpenFile.n	{file open text}
+    grab.n		{global}
+    interp.n		{time}
+    menu.n		{checkbutton radiobutton}
+    messageBox.n	{error info}
+    options.n		{bitmap image set}
+    radiobutton.n	{image}
+    safe.n		{join split}
+    scale.n		{label variable}
+    scrollbar.n		{set}
+    selection.n		{string}
+    tcltest.n		{error}
+    text.n		{bind image lower raise}
+    tkvars.n		{tk}
+    tkwait.n		{variable}
+    tm.n		{exec}
+    ttk_checkbutton.n	{variable}
+    ttk_combobox.n	{selection}
+    ttk_entry.n		{focus variable}
+    ttk_intro.n		{focus text}
+    ttk_label.n		{font text}
+    ttk_labelframe.n	{text}
+    ttk_menubutton.n	{flush}
+    ttk_notebook.n	{image text}
+    ttk_progressbar.n	{variable}
+    ttk_radiobutton.n	{variable}
+    ttk_scale.n		{variable}
+    ttk_scrollbar.n	{set}
+    ttk_spinbox.n	{format}
+    ttk_treeview.n	{text open}
+    ttk_widget.n	{image text variable}
+    TclZlib.3		{binary flush filename text}
+}
+array set exclude_when_followed_by_map {
+    canvas.n {
+	bind widget
+	focus widget
+	image are
+	lower widget
+	raise widget
+    }
+    selection.n {
+	clipboard selection
+	clipboard ;
+    }
+    ttk_image.n {
+	image imageSpec
+    }
+    fontchooser.n {
+	tk fontchooser
+    }
+}
+
+try {
+    # Parse what the user told us to do
+    parse_command_line
+
+    # Some strings depend on what options are specified
+    set tcltkdesc ""; set cmdesc ""; set appdir ""
+    if {$build_tcl} {
+	append tcltkdesc "Tcl"
+	append cmdesc "Tcl"
+	append appdir "$tcldir"
+    }
+    if {$build_tcl && $build_tk} {
+	append tcltkdesc "/"
+	append cmdesc " and "
+	append appdir ","
+    }
+    if {$build_tk} {
+	append tcltkdesc "Tk"
+	append cmdesc "Tk"
+	append appdir "$tkdir"
+    }
+
+    apply {{} {
+    global packageBuildList tcltkdir tcldir build_tcl
+
+    # When building docs for Tcl, try to build docs for bundled packages too
+    set packageBuildList {}
+    if {$build_tcl} {
+	set pkgsDir [file join $tcltkdir $tcldir pkgs]
+	set subdirs [glob -nocomplain -types d -tails -directory $pkgsDir *]
+
+	foreach dir [lsort $subdirs] {
+	    # Parse the subdir name into (name, version) as fallback...
+	    set description [split $dir -]
+	    if {2 != [llength $description]} {
+		regexp {([^0-9]*)(.*)} $dir -> n v
+		set description [list $n $v]
+	    }
+
+	    # ... but try to extract (name, version) from subdir contents
+	    try {
+		set f [open [file join $pkgsDir $dir configure.ac]]
+		foreach line [split [read $f] \n] {
+		    if {2 == [scan $line \
+			    { AC_INIT ( [%[^]]] , [%[^]]] ) } n v]} {
+			set description [list $n $v]
+			break
+		    }
+		}
+	    } finally {
+		catch {close $f; unset f}
+	    }
+
+	    if {[file exists [file join $pkgsDir $dir configure]]} {
+		# Looks like a package, record our best extraction attempt
+		lappend packageBuildList $dir {*}$description
+	    }
+	}
+    }
+
+    # Get the list of packages to try, and what their human-readable names
+    # are. Note that the package directory list should be version-less.
+    try {
+	set packageDirNameMap {}
+	if {$build_tcl} {
+	    set f [open $tcltkdir/$tcldir/pkgs/package.list.txt]
+	    try {
+		foreach line [split [read $f] \n] {
+		    if {[string trim $line] eq ""} continue
+		    if {[string match #* $line]} continue
+		    lassign $line dir name
+		    lappend packageDirNameMap $dir $name
+		}
+	    } finally {
+		close $f
+	    }
+	}
+    } trap {POSIX ENOENT} {} {
+	set packageDirNameMap {
+	    itcl {[incr Tcl]}
+	    tdbc {TDBC}
+	    thread Thread
+	}
+    }
+
+    # Convert to human readable names, if applicable
+    for {set idx 0} {$idx < [llength $packageBuildList]} {incr idx 3} {
+	lassign [lrange $packageBuildList $idx $idx+2] d n v
+	if {[dict exists $packageDirNameMap $n]} {
+	    lset packageBuildList $idx+1 [dict get $packageDirNameMap $n]
+	}
+    }
+>>>>>>> upstream/master
     }}
 
     #

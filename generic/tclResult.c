@@ -218,7 +218,9 @@ enum returnKeys {
 static Tcl_Obj **	GetKeys(void);
 static void		ReleaseKeys(ClientData clientData);
 static void		ResetObjResult(Interp *iPtr);
+#ifndef TCL_NO_DEPRECATED
 static void		SetupAppendBuffer(Interp *iPtr, int newSpace);
+#endif /* !TCL_NO_DEPRECATED */
 
 /*
  * This structure is used to take a snapshot of the interpreter state in
@@ -226,7 +228,11 @@ static void		SetupAppendBuffer(Interp *iPtr, int newSpace);
  * then back up to the result or the error that was previously in progress.
  */
 
+<<<<<<< HEAD
 typedef struct InterpState {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -429,6 +435,10 @@ Tcl_DiscardInterpState(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 =======
 #ifndef TCL_NO_DEPRECATED
 >>>>>>> upstream/master
@@ -696,8 +706,11 @@ Tcl_GetStringResult(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     if (*(iPtr->result) == 0) {
@@ -706,6 +719,10 @@ Tcl_GetStringResult(
     }
     return iPtr->result;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> upstream/master
 =======
 #endif
 >>>>>>> upstream/master
@@ -999,6 +1016,10 @@ Tcl_AppendElement(
     }
     iPtr->appendUsed += Tcl_ConvertElement(element, dst, flags);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif /* !TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 =======
 #endif /* !TCL_NO_DEPRECATED */
 >>>>>>> upstream/master
@@ -1115,6 +1136,10 @@ Tcl_FreeResult(
     register Interp *iPtr = (Interp *) interp;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#ifndef TCL_NO_DEPRECATED
+>>>>>>> upstream/master
 =======
 #ifndef TCL_NO_DEPRECATED
 >>>>>>> upstream/master
@@ -1128,6 +1153,10 @@ Tcl_FreeResult(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif /* !TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 =======
 #endif /* !TCL_NO_DEPRECATED */
 >>>>>>> upstream/master
@@ -1172,6 +1201,10 @@ Tcl_ResetResult(
     iPtr->result = iPtr->resultSpace;
     iPtr->resultSpace[0] = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#endif /* !TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 =======
 #endif /* !TCL_NO_DEPRECATED */
 >>>>>>> upstream/master
@@ -1235,17 +1268,23 @@ ResetObjResult(
 	iPtr->objResultPtr = objResultPtr;
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (objResultPtr->bytes != tclEmptyStringRep) {
 	    if (objResultPtr->bytes) {
 		ckfree(objResultPtr->bytes);
 	    }
 	    objResultPtr->bytes = tclEmptyStringRep;
 =======
+=======
+>>>>>>> upstream/master
 	if (objResultPtr->bytes != &tclEmptyString) {
 	    if (objResultPtr->bytes) {
 		ckfree(objResultPtr->bytes);
 	    }
 	    objResultPtr->bytes = &tclEmptyString;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    objResultPtr->length = 0;
 	}
@@ -3094,6 +3133,9 @@ TclNoErrorStack(
 
     Tcl_DictObjRemove(interp, options, keys[KEY_ERRORSTACK]);
     return options;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }
 
@@ -3102,6 +3144,9 @@ TclNoErrorStack(
  *
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  * Tcl_SetReturnOptions --
@@ -3215,6 +3260,7 @@ Tcl_TransferResult(
 	 * code and no explicit return options.
 	 */
 
+<<<<<<< HEAD
 	if (tiPtr->returnOpts) {
 	    Tcl_DecrRefCount(tiPtr->returnOpts);
 	    tiPtr->returnOpts = NULL;
@@ -3251,6 +3297,8 @@ Tcl_TransferResult(
 	 * code and no explicit return options.
 	 */
 
+=======
+>>>>>>> upstream/master
 	if (tiPtr->returnOpts) {
 	    Tcl_DecrRefCount(tiPtr->returnOpts);
 	    tiPtr->returnOpts = NULL;

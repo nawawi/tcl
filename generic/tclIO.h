@@ -216,8 +216,13 @@ typedef struct ChannelState {
 				 * companion to 'unreportedError'. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     int epoch;			/* Used to test validity of stored channelname
+				 * lookup results. */
+>>>>>>> upstream/master
+=======
+    size_t epoch;		/* Used to test validity of stored channelname
 				 * lookup results. */
 >>>>>>> upstream/master
 =======
@@ -287,10 +292,13 @@ typedef struct ChannelState {
 					 * handler. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define CHANNEL_TAINTED		(1<<20)	/* Channel stack structure has changed.
 					 * Used by Channel Tcl_Obj type to
 					 * determine if we have to revalidate
 					 * the channel. */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

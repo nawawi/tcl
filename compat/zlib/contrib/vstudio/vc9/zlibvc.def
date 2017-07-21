@@ -2,7 +2,11 @@ LIBRARY
 ; zlib data compression and ZIP file I/O library
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 VERSION		1.2.8
+=======
+VERSION		1.2
+>>>>>>> upstream/master
 =======
 VERSION		1.2
 >>>>>>> upstream/master
@@ -146,7 +150,10 @@ EXPORTS
         inflateGetDictionary                    @166
         gzvprintf                               @167
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 ; zlib1 v1.2.9 added:
         inflateCodesUsed                        @168
@@ -157,4 +164,7 @@ EXPORTS
         deflateGetDictionary                    @173
         adler32_z                               @174
         crc32_z                                 @175
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master

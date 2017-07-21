@@ -3,9 +3,15 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset sq DAYS_OF_WEEK_ABBREV [list \
         "Die"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "H\u00ebn"\
         "Mar"\
         "M\u00ebr"\
+=======
+        "Hën"\
+        "Mar"\
+        "Mër"\
+>>>>>>> upstream/master
 =======
         "Hën"\
         "Mar"\
@@ -17,12 +23,21 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset sq DAYS_OF_WEEK_FULL [list \
         "e diel"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "e h\u00ebn\u00eb"\
         "e mart\u00eb"\
         "e m\u00ebrkur\u00eb"\
         "e enjte"\
         "e premte"\
         "e shtun\u00eb"]
+=======
+        "e hënë"\
+        "e martë"\
+        "e mërkurë"\
+        "e enjte"\
+        "e premte"\
+        "e shtunë"]
+>>>>>>> upstream/master
 =======
         "e hënë"\
         "e martë"\
@@ -43,7 +58,11 @@ namespace eval ::tcl::clock {
         "Sht"\
         "Tet"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "N\u00ebn"\
+=======
+        "Nën"\
+>>>>>>> upstream/master
 =======
         "Nën"\
 >>>>>>> upstream/master
@@ -61,7 +80,11 @@ namespace eval ::tcl::clock {
         "shtator"\
         "tetor"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "n\u00ebntor"\
+=======
+        "nëntor"\
+>>>>>>> upstream/master
 =======
         "nëntor"\
 >>>>>>> upstream/master

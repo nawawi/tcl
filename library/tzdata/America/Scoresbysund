@@ -3,6 +3,7 @@
 set TZData(:America/Scoresbysund) {
     {-9223372036854775808 -5272 0 LMT}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1686090728 -7200 0 CGT}
     {323841600 -3600 0 CGST}
     {338961600 -7200 0 CGT}
@@ -245,6 +246,8 @@ set TZData(:America/Scoresbysund) {
     {4078429200 0 1 EGST}
     {4096573200 -3600 0 EGT}
 =======
+=======
+>>>>>>> upstream/master
     {-1686090728 -7200 0 -02}
     {323841600 -3600 0 -01}
     {338961600 -7200 0 -02}
@@ -486,5 +489,8 @@ set TZData(:America/Scoresbysund) {
     {4065123600 -3600 0 -01}
     {4078429200 0 1 +00}
     {4096573200 -3600 0 -01}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }

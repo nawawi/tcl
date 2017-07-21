@@ -51,7 +51,11 @@ TCL_DECLARE_MUTEX(consoleMutex)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ConsoleThreadInfo {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -63,11 +67,15 @@ typedef struct {
 				 * thread when the worker thread has finished
 				 * waiting for its normal work to happen. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     HANDLE startEvent;		/* Auto-reset event used by the main thread to
 				 * signal when the thread should attempt to do
 				 * its normal work. */
     HANDLE stopEvent;		/* Auto-reset event used by the main thread to
 				 * signal when the thread should exit. */
+=======
+    TclPipeThreadInfo *TI;	/* Thread info structure of writer and reader. */
+>>>>>>> upstream/master
 =======
     TclPipeThreadInfo *TI;	/* Thread info structure of writer and reader. */
 >>>>>>> upstream/master
@@ -95,6 +103,7 @@ typedef struct ConsoleInfo {
     ConsoleThreadInfo writer;	/* A specialized thread for handling
 				 * asynchronous writes to the console; the
 <<<<<<< HEAD
+<<<<<<< HEAD
 				 * waiting starts when a start event is sent,
 				 * and a reset event is sent back to the main
 				 * thread when the write is done. A stop event
@@ -106,6 +115,8 @@ typedef struct ConsoleInfo {
 				 * thread when input is available. A stop
 				 * event is used to terminate the thread. */
 =======
+=======
+>>>>>>> upstream/master
 				 * waiting starts when a control event is sent,
 				 * and a reset event is sent back to the main
 				 * thread when the write is done. */
@@ -114,6 +125,9 @@ typedef struct ConsoleInfo {
 				 * waiting starts when a control event is sent,
 				 * and a reset event is sent back to the main
 				 * thread when input is available. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     DWORD writeError;		/* An error caused by the last background
 				 * write. Set to 0 if no error has been
@@ -153,7 +167,11 @@ static Tcl_ThreadDataKey dataKey;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ConsoleEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -200,10 +218,13 @@ static BOOL		WriteConsoleBytes(HANDLE hConsole,
 			    const void *lpBuffer, DWORD nbytes,
 			    LPDWORD nbyteswritten);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		StartChannelThread(ConsoleInfo *infoPtr,
 			    ConsoleThreadInfo *threadInfoPtr,
 			    LPTHREAD_START_ROUTINE threadProc);
 static void		StopChannelThread(ConsoleThreadInfo *threadInfoPtr);
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -661,12 +682,18 @@ ConsoleCloseProc(
 
     if (consolePtr->reader.thread) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	StopChannelThread(&consolePtr->reader);
 =======
+=======
+>>>>>>> upstream/master
 	TclPipeThreadStop(&consolePtr->reader.TI, consolePtr->reader.thread);
 	CloseHandle(consolePtr->reader.thread);
 	CloseHandle(consolePtr->reader.readyEvent);
 	consolePtr->reader.thread = NULL;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
     consolePtr->validMask &= ~TCL_READABLE;
@@ -685,11 +712,14 @@ ConsoleCloseProc(
 	     */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    WaitForSingleObject(consolePtr->writer.readyEvent, INFINITE);
 	}
 
 	StopChannelThread(&consolePtr->writer);
 =======
+=======
+>>>>>>> upstream/master
 	    WaitForSingleObject(consolePtr->writer.readyEvent, 5000);
 	}
 
@@ -697,6 +727,9 @@ ConsoleCloseProc(
 	CloseHandle(consolePtr->writer.thread);
 	CloseHandle(consolePtr->writer.readyEvent);
 	consolePtr->writer.thread = NULL;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
     consolePtr->validMask &= ~TCL_WRITABLE;
@@ -860,6 +893,7 @@ ConsoleOutputProc(
 {
     ConsoleInfo *infoPtr = instanceData;
 <<<<<<< HEAD
+<<<<<<< HEAD
     ConsoleThreadInfo *threadInfo = &infoPtr->reader;
     DWORD bytesWritten, timeout;
 
@@ -871,11 +905,20 @@ ConsoleOutputProc(
     DWORD bytesWritten, timeout;
 
     *errorCode = 0;
+=======
+    ConsoleThreadInfo *threadInfo = &infoPtr->writer;
+    DWORD bytesWritten, timeout;
+
+    *errorCode = 0;
+>>>>>>> upstream/master
 
     /* avoid blocking if pipe-thread exited */
     timeout = (infoPtr->flags & CONSOLE_ASYNC) || !TclPipeThreadIsAlive(&threadInfo->TI)
 	|| TclInExit() || TclInThreadExit() ? 0 : INFINITE;
     if (WaitForSingleObject(threadInfo->readyEvent, timeout) == WAIT_TIMEOUT) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	/*
 	 * The writer thread is blocked waiting for a write to complete and
@@ -917,7 +960,11 @@ ConsoleOutputProc(
 	infoPtr->toWrite = toWrite;
 	ResetEvent(threadInfo->readyEvent);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	SetEvent(threadInfo->startEvent);
+=======
+	TclPipeThreadSignal(&threadInfo->TI);
+>>>>>>> upstream/master
 =======
 	TclPipeThreadSignal(&threadInfo->TI);
 >>>>>>> upstream/master
@@ -1158,14 +1205,20 @@ WaitForRead(
 	 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	timeout = blocking ? INFINITE : 0;
 	if (WaitForSingleObject(threadInfo->readyEvent,
 		timeout) == WAIT_TIMEOUT) {
 =======
+=======
+>>>>>>> upstream/master
 	/* avoid blocking if pipe-thread exited */
 	timeout = (!blocking || !TclPipeThreadIsAlive(&threadInfo->TI)
 		|| TclInExit() || TclInThreadExit()) ? 0 : INFINITE;
 	if (WaitForSingleObject(threadInfo->readyEvent, timeout) == WAIT_TIMEOUT) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    /*
 	     * The reader thread is blocked waiting for data and the channel
@@ -1227,7 +1280,11 @@ WaitForRead(
 
 	ResetEvent(threadInfo->readyEvent);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	SetEvent(threadInfo->startEvent);
+=======
+	TclPipeThreadSignal(&threadInfo->TI);
+>>>>>>> upstream/master
 =======
 	TclPipeThreadSignal(&threadInfo->TI);
 >>>>>>> upstream/master
@@ -1258,6 +1315,7 @@ ConsoleReaderThread(
     LPVOID arg)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     ConsoleInfo *infoPtr = arg;
     HANDLE *handle = infoPtr->handle;
     ConsoleThreadInfo *threadInfo = &infoPtr->reader;
@@ -1278,11 +1336,20 @@ ConsoleReaderThread(
     int done = 0;
 >>>>>>> upstream/master
 
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    ConsoleInfo *infoPtr = NULL; /* access info only after success init/wait */
+    HANDLE *handle = NULL;
+    ConsoleThreadInfo *threadInfo = NULL;
+    int done = 0;
+
+>>>>>>> upstream/master
     while (!done) {
 	/*
 	 * Wait for the main thread to signal before attempting to read.
 	 */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	waitResult = WaitForMultipleObjects(2, wEvents, FALSE, INFINITE);
 
@@ -1299,12 +1366,21 @@ ConsoleReaderThread(
 	    /* exit */
 	    break;
 	}
+=======
+	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
+	    /* exit */
+	    break;
+	}
+>>>>>>> upstream/master
 	if (!infoPtr) {
 	    infoPtr = (ConsoleInfo *)pipeTI->clientData;
 	    handle = infoPtr->handle;
 	    threadInfo = &infoPtr->reader;
 	}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 	/*
@@ -1354,6 +1430,12 @@ ConsoleReaderThread(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    /* Worker exit, so inform the main thread or free TI-structure (if owned) */
+    TclPipeThreadExit(&pipeTI);
+
+>>>>>>> upstream/master
 =======
     /* Worker exit, so inform the main thread or free TI-structure (if owned) */
     TclPipeThreadExit(&pipeTI);
@@ -1386,6 +1468,7 @@ ConsoleWriterThread(
     LPVOID arg)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     ConsoleInfo *infoPtr = arg;
     HANDLE *handle = infoPtr->handle;
     ConsoleThreadInfo *threadInfo = &infoPtr->writer;
@@ -1408,11 +1491,21 @@ ConsoleWriterThread(
     char *buf;
     int done = 0;
 >>>>>>> upstream/master
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    ConsoleInfo *infoPtr = NULL; /* access info only after success init/wait */
+    HANDLE *handle = NULL;
+    ConsoleThreadInfo *threadInfo = NULL;
+    DWORD count, toWrite;
+    char *buf;
+    int done = 0;
+>>>>>>> upstream/master
 
     while (!done) {
 	/*
 	 * Wait for the main thread to signal before attempting to write.
 	 */
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	waitResult = WaitForMultipleObjects(2, wEvents, FALSE, INFINITE);
@@ -1430,11 +1523,20 @@ ConsoleWriterThread(
 	    /* exit */
 	    break;
 	}
+=======
+	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
+	    /* exit */
+	    break;
+	}
+>>>>>>> upstream/master
 	if (!infoPtr) {
 	    infoPtr = (ConsoleInfo *)pipeTI->clientData;
 	    handle = infoPtr->handle;
 	    threadInfo = &infoPtr->writer;
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 	buf = infoPtr->writeBuf;
@@ -1485,6 +1587,9 @@ ConsoleWriterThread(
     /* Worker exit, so inform the main thread or free TI-structure (if owned) */
     TclPipeThreadExit(&pipeTI);
 >>>>>>> upstream/master
+
+    /* Worker exit, so inform the main thread or free TI-structure (if owned) */
+    TclPipeThreadExit(&pipeTI);
 
     return 0;
 }
@@ -1560,10 +1665,13 @@ TclWinOpenConsoleChannel(
 	StartChannelThread(infoPtr, &infoPtr->reader, ConsoleReaderThread);
     }
 
+<<<<<<< HEAD
     if (permissions & TCL_WRITABLE) {
 	StartChannelThread(infoPtr, &infoPtr->writer, ConsoleWriterThread);
 =======
 
+=======
+>>>>>>> upstream/master
 	infoPtr->reader.readyEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
 	infoPtr->reader.thread = CreateThread(NULL, 256, ConsoleReaderThread,
 		TclPipeThreadCreateTI(&infoPtr->reader.TI, infoPtr,
@@ -1578,6 +1686,9 @@ TclWinOpenConsoleChannel(
 		TclPipeThreadCreateTI(&infoPtr->writer.TI, infoPtr,
 			infoPtr->writer.readyEvent), 0, NULL);
 	SetThreadPriority(infoPtr->writer.thread, THREAD_PRIORITY_HIGHEST);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
 

@@ -567,7 +567,11 @@ ParseExpr(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesAvailable = 64;	/* Initial size of the storage array. This
+=======
+    unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
+>>>>>>> upstream/master
 =======
     unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
 >>>>>>> upstream/master
@@ -585,7 +589,11 @@ ParseExpr(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesUsed = 0;		/* Number of OpNodes filled. */
+=======
+    unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
+>>>>>>> upstream/master
 =======
     unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
 >>>>>>> upstream/master
@@ -689,7 +697,11 @@ ParseExpr(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    int size = nodesUsed * 2;
+=======
+	    unsigned int size = nodesUsed * 2;
+>>>>>>> upstream/master
 =======
 	    unsigned int size = nodesUsed * 2;
 >>>>>>> upstream/master
@@ -2055,6 +2067,7 @@ ParseLexeme(
 	    return (end-start);
 	} else {
 	    unsigned char lexeme;
+<<<<<<< HEAD
 
 	    /*
 	     * We have a number followed directly by bareword characters
@@ -2101,12 +2114,60 @@ ParseLexeme(
     if (!TclIsBareword(*start) || *start == '_') {
 	if (Tcl_UtfCharComplete(start, numBytes)) {
 	    scanned = Tcl_UtfToUniChar(start, &ch);
+=======
+
+	    /*
+	     * We have a number followed directly by bareword characters
+	     * (alpha, digit, underscore).  Is this a number followed by
+	     * bareword syntax error?  Or should we join into one bareword?
+	     * Example: Inf + luence + () becomes a valid function call.
+	     * [Bug 3401704]
+	     */
+	    if (literal->typePtr == &tclDoubleType) {
+		const char *p = start;
+
+		while (p < end) {
+		    if (!TclIsBareword(*p++)) {
+			/*
+			 * The number has non-bareword characters, so we
+			 * must treat it as a number.
+			 */
+			goto number;
+		    }
+		}
+	    }
+	    ParseLexeme(end, numBytes-(end-start), &lexeme, NULL);
+	    if ((NODE_TYPE & lexeme) == BINARY) {
+		/*
+		 * The bareword characters following the number take the
+		 * form of an operator (eq, ne, in, ni, ...) so we treat
+		 * as number + operator.
+		 */
+		goto number;
+	    }
+
+	    /*
+	     * Otherwise, fall through and parse the whole as a bareword.
+	     */
+	}
+    }
+
+    /*
+     * We reject leading underscores in bareword.  No sensible reason why.
+     * Might be inspired by reserved identifier rules in C, which of course
+     * have no direct relevance here.
+     */
+
+    if (!TclIsBareword(*start) || *start == '_') {
+	if (Tcl_UtfCharComplete(start, numBytes)) {
+	    scanned = TclUtfToUniChar(start, &ch);
+>>>>>>> upstream/master
 	} else {
 	    char utfBytes[TCL_UTF_MAX];
 
 	    memcpy(utfBytes, start, (size_t) numBytes);
 	    utfBytes[numBytes] = '\0';
-	    scanned = Tcl_UtfToUniChar(utfBytes, &ch);
+	    scanned = TclUtfToUniChar(utfBytes, &ch);
 	}
 	*lexemePtr = INVALID;
 	Tcl_DecrRefCount(literal);
@@ -2220,7 +2281,10 @@ ExecConstantExprTree(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Obj *byteCodeObj = Tcl_NewObj();
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -2240,6 +2304,7 @@ ExecConstantExprTree(
     CompileExprTree(interp, nodes, index, litObjvPtr, NULL, NULL, envPtr,
 	    0 /* optimize */);
     TclEmitOpcode(INST_DONE, envPtr);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2268,6 +2333,14 @@ ExecConstantExprTree(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    byteCodePtr = TclInitByteCode(envPtr);
+    TclFreeCompileEnv(envPtr);
+    TclStackFree(interp, envPtr);
+    TclNRExecuteByteCode(interp, byteCodePtr);
+    code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
+    TclReleaseByteCode(byteCodePtr);
 >>>>>>> upstream/master
     return code;
 }

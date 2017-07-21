@@ -1,7 +1,11 @@
 
 To build zlib using the Microsoft Visual C++ environment,
 <<<<<<< HEAD
+<<<<<<< HEAD
 use the appropriate project from the projects/ directory.
+=======
+use the appropriate project from the contrib/vstudio/ directory.
+>>>>>>> upstream/master
 =======
 use the appropriate project from the contrib/vstudio/ directory.
 >>>>>>> upstream/master

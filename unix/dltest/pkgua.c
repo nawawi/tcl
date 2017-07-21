@@ -92,7 +92,11 @@ PkguaInterpToTokens(
     Tcl_HashEntry *entryPtr =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_CreateHashEntry(&interpTokenMap, (char *) interp, &newEntry);
+=======
+	    Tcl_CreateHashEntry(&interpTokenMap, interp, &newEntry);
+>>>>>>> upstream/master
 =======
 	    Tcl_CreateHashEntry(&interpTokenMap, interp, &newEntry);
 >>>>>>> upstream/master
@@ -120,7 +124,11 @@ PkguaDeleteTokens(
     Tcl_HashEntry *entryPtr =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_FindHashEntry(&interpTokenMap, (char *) interp);
+=======
+	    Tcl_FindHashEntry(&interpTokenMap, interp);
+>>>>>>> upstream/master
 =======
 	    Tcl_FindHashEntry(&interpTokenMap, interp);
 >>>>>>> upstream/master
@@ -230,7 +238,11 @@ PkguaQuoteObjCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master
@@ -262,7 +274,11 @@ Pkgua_Init(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_SetVar(interp, "::pkgua_loaded", ".", TCL_APPEND_VALUE);
+=======
+    Tcl_SetVar2(interp, "::pkgua_loaded", NULL, ".", TCL_APPEND_VALUE);
+>>>>>>> upstream/master
 =======
     Tcl_SetVar2(interp, "::pkgua_loaded", NULL, ".", TCL_APPEND_VALUE);
 >>>>>>> upstream/master
@@ -299,7 +315,11 @@ Pkgua_Init(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master
@@ -332,7 +352,11 @@ Pkgua_SafeInit(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master
@@ -361,7 +385,11 @@ Pkgua_Unload(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_SetVar(interp, "::pkgua_detached", ".", TCL_APPEND_VALUE);
+=======
+    Tcl_SetVar2(interp, "::pkgua_detached", NULL, ".", TCL_APPEND_VALUE);
+>>>>>>> upstream/master
 =======
     Tcl_SetVar2(interp, "::pkgua_detached", NULL, ".", TCL_APPEND_VALUE);
 >>>>>>> upstream/master
@@ -379,7 +407,11 @@ Pkgua_Unload(
 	PkguaFreeTokensHashTable();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "::pkgua_unloaded", ".", TCL_APPEND_VALUE);
+=======
+	Tcl_SetVar2(interp, "::pkgua_unloaded", NULL, ".", TCL_APPEND_VALUE);
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "::pkgua_unloaded", NULL, ".", TCL_APPEND_VALUE);
 >>>>>>> upstream/master
@@ -409,7 +441,11 @@ Pkgua_Unload(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master

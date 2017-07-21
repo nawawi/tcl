@@ -4,8 +4,12 @@ dnl	Makefile in this directory.
 AC_INIT(man2tcl.c)
 <<<<<<< HEAD:tools/configure.ac
 <<<<<<< HEAD:tools/configure.ac
+<<<<<<< HEAD:tools/configure.ac
 <<<<<<< HEAD:tools/configure.in
 AC_PREREQ(2.59)
+=======
+AC_PREREQ(2.69)
+>>>>>>> upstream/master:tools/configure.ac
 =======
 AC_PREREQ(2.69)
 >>>>>>> upstream/master:tools/configure.ac
@@ -25,8 +29,12 @@ AC_PREREQ(2.69)
 
 <<<<<<< HEAD:tools/configure.ac
 <<<<<<< HEAD:tools/configure.ac
+<<<<<<< HEAD:tools/configure.ac
 <<<<<<< HEAD:tools/configure.in
 DEF_VER=8.6
+=======
+DEF_VER=8.7
+>>>>>>> upstream/master:tools/configure.ac
 =======
 DEF_VER=8.7
 >>>>>>> upstream/master:tools/configure.ac

@@ -5,8 +5,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	This file is used to generate the tclDecls.h, tclPlatDecls.h,
 #	tclStub.c, and tclPlatStub.c files.
+=======
+#	This file is used to generate the tclDecls.h, tclPlatDecls.h
+#	and tclStubInit.c files.
+>>>>>>> upstream/master
 =======
 #	This file is used to generate the tclDecls.h, tclPlatDecls.h
 #	and tclStubInit.c files.
@@ -1075,7 +1080,11 @@ declare 293 {
 }
 declare 294 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     void Tcl_ExitThread(int status)
+=======
+    TCL_NORETURN void Tcl_ExitThread(int status)
+>>>>>>> upstream/master
 =======
     TCL_NORETURN void Tcl_ExitThread(int status)
 >>>>>>> upstream/master
@@ -1786,6 +1795,7 @@ declare 493 {
 <<<<<<< HEAD
 }
 
+<<<<<<< HEAD
 # ----- BASELINE -- FOR -- 8.4.0 ----- #
 
 # TIP#111 (dictionaries) dkf
@@ -2199,6 +2209,8 @@ declare 594 {
 =======
 }
 
+=======
+>>>>>>> upstream/master
 # ----- BASELINE -- FOR -- 8.4.0 ----- #
 
 # TIP#111 (dictionaries) dkf
@@ -2609,6 +2621,9 @@ declare 593 {
 declare 594 {
     int Tcl_GetGroupIdFromStat(const Tcl_StatBuf *statPtr)
 }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 declare 595 {
     int Tcl_GetDeviceTypeFromStat(const Tcl_StatBuf *statPtr)
@@ -2761,7 +2776,10 @@ declare 630 {
 # ----- BASELINE -- FOR -- 8.6.0 ----- #
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 # TIP #456
 declare 631 {
     Tcl_Channel Tcl_OpenTcpServerEx(Tcl_Interp *interp, const char *service,
@@ -2773,6 +2791,9 @@ declare 631 {
 
 
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 ##############################################################################
 

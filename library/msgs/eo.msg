@@ -6,14 +6,19 @@ namespace eval ::tcl::clock {
         "ma"\
         "me"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0135a"\
+=======
+        "ĵa"\
+>>>>>>> upstream/master
         "ve"\
         "sa"]
     ::msgcat::mcset eo DAYS_OF_WEEK_FULL [list \
-        "diman\u0109o"\
+        "dimanĉo"\
         "lundo"\
         "mardo"\
         "merkredo"\
+<<<<<<< HEAD
         "\u0135a\u016ddo"\
 =======
         "ĵa"\
@@ -24,6 +29,9 @@ namespace eval ::tcl::clock {
         "lundo"\
         "mardo"\
         "merkredo"\
+        "ĵaŭdo"\
+>>>>>>> upstream/master
+=======
         "ĵaŭdo"\
 >>>>>>> upstream/master
         "vendredo"\
@@ -37,7 +45,11 @@ namespace eval ::tcl::clock {
         "jun"\
         "jul"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "a\u016dg"\
+=======
+        "aŭg"\
+>>>>>>> upstream/master
 =======
         "aŭg"\
 >>>>>>> upstream/master
@@ -55,7 +67,11 @@ namespace eval ::tcl::clock {
         "junio"\
         "julio"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "a\u016dgusto"\
+=======
+        "aŭgusto"\
+>>>>>>> upstream/master
 =======
         "aŭgusto"\
 >>>>>>> upstream/master

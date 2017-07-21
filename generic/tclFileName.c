@@ -433,6 +433,7 @@ TclpGetNativePathType(
     Tcl_PathType type = TCL_PATH_ABSOLUTE;
     int pathLen;
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *path = Tcl_GetStringFromObj(pathPtr, &pathLen);
 =======
     const char *path = TclGetStringFromObj(pathPtr, &pathLen);
@@ -453,6 +454,8 @@ TclpGetNativePathType(
 {
     Tcl_PathType type = TCL_PATH_ABSOLUTE;
     int pathLen;
+=======
+>>>>>>> upstream/master
     const char *path = TclGetStringFromObj(pathPtr, &pathLen);
 
     if (path[0] == '~') {
@@ -489,6 +492,9 @@ TclpGetNativePathType(
 		    while (*path && *path != '/') {
 			++path;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 		    }
 #if defined(__CYGWIN__)
 		    /* UNC paths need to be followed by a share name */
@@ -500,6 +506,7 @@ TclpGetNativePathType(
 		    } else {
 			path = origPath + 1;
 		    }
+<<<<<<< HEAD
 =======
 		    }
 #if defined(__CYGWIN__)
@@ -512,6 +519,8 @@ TclpGetNativePathType(
 		    } else {
 			path = origPath + 1;
 		    }
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #endif
 		}
@@ -661,7 +670,11 @@ Tcl_SplitPath(
 	Tcl_ListObjIndex(NULL, resultPtr, i, &eltPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(eltPtr, &len);
+=======
+	TclGetStringFromObj(eltPtr, &len);
+>>>>>>> upstream/master
 =======
 	TclGetStringFromObj(eltPtr, &len);
 >>>>>>> upstream/master
@@ -688,7 +701,11 @@ Tcl_SplitPath(
 	Tcl_ListObjIndex(NULL, resultPtr, i, &eltPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	str = Tcl_GetStringFromObj(eltPtr, &len);
+=======
+	str = TclGetStringFromObj(eltPtr, &len);
+>>>>>>> upstream/master
 =======
 	str = TclGetStringFromObj(eltPtr, &len);
 >>>>>>> upstream/master
@@ -965,7 +982,11 @@ TclpNativeJoinPath(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     start = Tcl_GetStringFromObj(prefix, &length);
+=======
+    start = TclGetStringFromObj(prefix, &length);
+>>>>>>> upstream/master
 =======
     start = TclGetStringFromObj(prefix, &length);
 >>>>>>> upstream/master
@@ -1001,7 +1022,11 @@ TclpNativeJoinPath(
 	    Tcl_AppendToObj(prefix, "/", 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(prefix, &length);
+=======
+	    TclGetStringFromObj(prefix, &length);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(prefix, &length);
 >>>>>>> upstream/master
@@ -1052,7 +1077,11 @@ TclpNativeJoinPath(
 	    Tcl_AppendToObj(prefix, "/", 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(prefix, &length);
+=======
+	    TclGetStringFromObj(prefix, &length);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(prefix, &length);
 >>>>>>> upstream/master
@@ -1142,7 +1171,11 @@ Tcl_JoinPath(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     resultStr = Tcl_GetStringFromObj(resultObj, &len);
+=======
+    resultStr = TclGetStringFromObj(resultObj, &len);
+>>>>>>> upstream/master
 =======
     resultStr = TclGetStringFromObj(resultObj, &len);
 >>>>>>> upstream/master
@@ -1396,7 +1429,11 @@ Tcl_GlobObjCmd(
 		&index) != TCL_OK) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    string = Tcl_GetStringFromObj(objv[i], &length);
+=======
+	    string = TclGetStringFromObj(objv[i], &length);
+>>>>>>> upstream/master
 =======
 	    string = TclGetStringFromObj(objv[i], &length);
 >>>>>>> upstream/master
@@ -1512,7 +1549,11 @@ Tcl_GlobObjCmd(
 	const char *last;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *first = Tcl_GetStringFromObj(pathOrDir,&pathlength);
+=======
+	const char *first = TclGetStringFromObj(pathOrDir,&pathlength);
+>>>>>>> upstream/master
 =======
 	const char *first = TclGetStringFromObj(pathOrDir,&pathlength);
 >>>>>>> upstream/master
@@ -1758,8 +1799,14 @@ Tcl_GlobObjCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	for (i = 0; i < objc; i++) {
 	    Tcl_DStringInit(&str);
+=======
+	Tcl_DStringInit(&str);
+	for (i = 0; i < objc; i++) {
+	    Tcl_DStringSetLength(&str, 0);
+>>>>>>> upstream/master
 =======
 	Tcl_DStringInit(&str);
 	for (i = 0; i < objc; i++) {
@@ -2184,7 +2231,11 @@ TclGlob(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	pre = Tcl_GetStringFromObj(pathPrefix, &prefixLen);
+=======
+	pre = TclGetStringFromObj(pathPrefix, &prefixLen);
+>>>>>>> upstream/master
 =======
 	pre = TclGetStringFromObj(pathPrefix, &prefixLen);
 >>>>>>> upstream/master
@@ -2210,7 +2261,11 @@ TclGlob(
 	    int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    const char *oldStr = Tcl_GetStringFromObj(objv[i], &len);
+=======
+	    const char *oldStr = TclGetStringFromObj(objv[i], &len);
+>>>>>>> upstream/master
 =======
 	    const char *oldStr = TclGetStringFromObj(objv[i], &len);
 >>>>>>> upstream/master
@@ -2570,7 +2625,11 @@ DoGlob(
 			Tcl_ListObjIndex(NULL, matchesObj, repair, &fixme);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			bytes = Tcl_GetStringFromObj(fixme, &numBytes);
+=======
+			bytes = TclGetStringFromObj(fixme, &numBytes);
+>>>>>>> upstream/master
 =======
 			bytes = TclGetStringFromObj(fixme, &numBytes);
 >>>>>>> upstream/master
@@ -2616,7 +2675,11 @@ DoGlob(
 	if (pathPtr != NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    (void) Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	    (void) TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 =======
 	    (void) TclGetStringFromObj(pathPtr, &length);
 >>>>>>> upstream/master
@@ -2670,7 +2733,11 @@ DoGlob(
 		int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *joined = Tcl_GetStringFromObj(joinedPtr,&len);
+=======
+		const char *joined = TclGetStringFromObj(joinedPtr,&len);
+>>>>>>> upstream/master
 =======
 		const char *joined = TclGetStringFromObj(joinedPtr,&len);
 >>>>>>> upstream/master
@@ -2715,7 +2782,11 @@ DoGlob(
 	    int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    const char *joined = Tcl_GetStringFromObj(joinedPtr,&len);
+=======
+	    const char *joined = TclGetStringFromObj(joinedPtr,&len);
+>>>>>>> upstream/master
 =======
 	    const char *joined = TclGetStringFromObj(joinedPtr,&len);
 >>>>>>> upstream/master

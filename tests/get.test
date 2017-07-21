@@ -99,6 +99,7 @@ test get-3.2 {Tcl_GetDouble(FromObj), bad numbers} {
 # Bug 7114ac6141
 test get-3.3 {tcl_GetInt with iffy numbers} testgetint {
 <<<<<<< HEAD
+<<<<<<< HEAD
     lmap x {0 " 0" "0 " " 0 " " 0xa " " 010 " " 0o10 " " 0b10 "} {
 	catch {testgetint 44 $x} x
 	set x
@@ -111,6 +112,8 @@ test get-3.4 {Tcl_GetDouble with iffy numbers} testdoubleobj {
     }
 } {0.0 0.0 0.0 0.0 0.0 {expected floating-point number but got "09" (looks like invalid octal number)} {expected floating-point number but got "- 0"} 0.0 10.0 2.0}
 =======
+=======
+>>>>>>> upstream/master
     lmap x {0 " 0" "0 " " 0 " " 0xa " " 007 " " 0o10 " " 0b10 "} {
 	catch {testgetint 44 $x} x
 	set x
@@ -122,6 +125,9 @@ test get-3.4 {Tcl_GetDouble with iffy numbers} testdoubleobj {
 	set x
     }
 } {0.0 0.0 0.0 0.0 0.0 7.0 {expected floating-point number but got "- 0"} 0.0 10.0 2.0}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup

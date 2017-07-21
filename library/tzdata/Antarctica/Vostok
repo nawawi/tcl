@@ -3,6 +3,7 @@
 set TZData(:Antarctica/Vostok) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-9223372036854775808 0 0 zzz}
 =======
     {-9223372036854775808 0 0 -00}
@@ -10,6 +11,10 @@ set TZData(:Antarctica/Vostok) {
 >>>>>>> upstream/master
     {-380073600 21600 0 VOST}
 =======
+    {-380073600 21600 0 +06}
+>>>>>>> upstream/master
+=======
+    {-9223372036854775808 0 0 -00}
     {-380073600 21600 0 +06}
 >>>>>>> upstream/master
 =======

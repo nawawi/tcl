@@ -911,7 +911,10 @@ test expr-22.9 {non-numeric floats: shared object equality and NaN} {
     expr {$x == $x}
 } 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 # Make sure [Bug d0f7ba56f0] stays fixed.
 test expr-22.10 {non-numeric arguments: equality and NaN} {
     set x NaN
@@ -921,6 +924,9 @@ test expr-22.11 {non-numeric arguments: equality and NaN} {
     set x NaN
     expr {"Gran" < $x}
 } 1
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # Tests for exponentiation handling
@@ -1444,7 +1450,11 @@ test expr-23.74.3 {INST_EXPON: Bug 2798543} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -5804,7 +5814,11 @@ test expr-32.1 {expr mod basics} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -6815,7 +6829,11 @@ test expr-39.16 {Tcl_ExprLongObj handles overflows} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

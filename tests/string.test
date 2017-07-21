@@ -222,7 +222,11 @@ test string-4.15 {string first, ability to two-byte encoded utf-8 chars} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # strings was incorrect, leading to an index returned by [string first] 
+=======
+    # strings was incorrect, leading to an index returned by [string first]
+>>>>>>> upstream/master
 =======
     # strings was incorrect, leading to an index returned by [string first]
 >>>>>>> upstream/master
@@ -434,7 +438,11 @@ test string-6.39 {string is double, false} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # This test is non-portable because IRIX thinks 
+=======
+    # This test is non-portable because IRIX thinks
+>>>>>>> upstream/master
 =======
     # This test is non-portable because IRIX thinks
 >>>>>>> upstream/master
@@ -600,12 +608,12 @@ test string-6.85 {string is control} {
 } 0
 test string-6.86 {string is graph} {
     ## graph is any print char, except space
-    list [string is gra -fail var "0123abc!@#\$\u0100 "] $var
-} {0 12}
+    list [string is gra -fail var "0123abc!@#\$\u0100\UE0100\UE01EF "] $var
+} {0 14}
 test string-6.87 {string is print} {
     ## basically any printable char
-    list [string is print -fail var "0123abc!@#\$\u0100 \u0010"] $var
-} {0 13}
+    list [string is print -fail var "0123abc!@#\$\u0100 \UE0100\UE01EF\u0010"] $var
+} {0 15}
 test string-6.88 {string is punct} {
     ## any graph char that isn't alnum
     list [string is punct -fail var "_!@#\u00beq0"] $var
@@ -1864,7 +1872,11 @@ proc MemStress {args} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         for {set i 0} {$i < 5} {incr i} { 
+=======
+        for {set i 0} {$i < 5} {incr i} {
+>>>>>>> upstream/master
 =======
         for {set i 0} {$i < 5} {incr i} {
 >>>>>>> upstream/master
@@ -2030,6 +2042,54 @@ test string-29.4 {string cat, many args} {
     set r2 [string compare $xx [eval "string cat $vvs"]]
     list $r1 $r2
 } {0 0}
+<<<<<<< HEAD
+=======
+test string-29.5 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat [list x] [list]]
+} -match glob -result {*no string representation}
+test string-29.6 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat [list] [list x]]
+} -match glob -result {*no string representation}
+test string-29.7 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat [list x] [list] [list]]
+} -match glob -result {*no string representation}
+test string-29.8 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat [list] [list x] [list]]
+} -match glob -result {*no string representation}
+test string-29.9 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat [list] [list] [list x]]
+} -match glob -result {*no string representation}
+test string-29.10 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat [list x] [list x]]
+} -match glob -result {*, string representation "xx"}
+test string-29.11 {string cat, efficiency} -body {
+    tcl::unsupported::representation \
+	[string cat [list x] [encoding convertto utf-8 {}]]
+} -match glob -result {*no string representation}
+test string-29.12 {string cat, efficiency} -body {
+    tcl::unsupported::representation \
+	[string cat [encoding convertto utf-8 {}] [list x]]
+} -match glob -result {*, string representation "x"}
+test string-29.13 {string cat, efficiency} -body {
+    tcl::unsupported::representation [string cat \
+	[encoding convertto utf-8 {}] [encoding convertto utf-8 {}] [list x]]
+} -match glob -result {*, string representation "x"}
+test string-29.14 {string cat, efficiency} -setup {
+    set e [encoding convertto utf-8 {}]
+} -cleanup {
+    unset e
+} -body {
+    tcl::unsupported::representation [string cat $e $e [list x]]
+} -match glob -result {*no string representation}
+test string-29.15 {string cat, efficiency} -setup {
+    set e [encoding convertto utf-8 {}]
+    set f [encoding convertto utf-8 {}]
+} -cleanup {
+    unset e f
+} -body {
+    tcl::unsupported::representation [string cat $e $f $e $f [list x]]
+} -match glob -result {*no string representation}
+>>>>>>> upstream/master
 
 
 

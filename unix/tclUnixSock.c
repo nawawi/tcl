@@ -7,6 +7,7 @@
  *
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
  */
 
 #include "tclInt.h"
@@ -171,6 +172,171 @@ static void		WrapNotify(ClientData clientData, int mask);
 /*
  * This structure describes the channel type structure for TCP socket
  * based IO:
+=======
+>>>>>>> upstream/master
+ */
+
+static const Tcl_ChannelType tcpChannelType = {
+    "tcp",			/* Type name. */
+    TCL_CHANNEL_VERSION_5,	/* v5 channel */
+    TcpCloseProc,		/* Close proc. */
+    TcpInputProc,		/* Input proc. */
+    TcpOutputProc,		/* Output proc. */
+    NULL,			/* Seek proc. */
+    NULL,			/* Set option proc. */
+    TcpGetOptionProc,		/* Get option proc. */
+    TcpWatchProc,		/* Initialize notifier. */
+    TcpGetHandleProc,		/* Get OS handles out of channel. */
+    TcpClose2Proc,		/* Close2 proc. */
+    TcpBlockModeProc,		/* Set blocking or non-blocking mode.*/
+    NULL,			/* flush proc. */
+    NULL,			/* handler proc. */
+    NULL,			/* wide seek proc. */
+    NULL,			/* thread action proc. */
+    NULL			/* truncate proc. */
+};
+
+/*
+ * Helper macros to make parts of this file clearer. The macros do exactly
+ * what they say on the tin. :-) They also only ever refer to their arguments
+ * once, and so can be used without regard to side effects.
+ */
+
+#define SET_BITS(var, bits)	((var) |= (bits))
+#define CLEAR_BITS(var, bits)	((var) &= ~(bits))
+#define GOT_BITS(var, bits)     (((var) & (bits)) != 0)
+
+/* "sock" + a pointer in hex + \0 */
+#define SOCK_CHAN_LENGTH        (4 + sizeof(void *) * 2 + 1)
+#define SOCK_TEMPLATE           "sock%lx"
+
+#undef SOCKET   /* Possible conflict with win32 SOCKET */
+
+/*
+ * This is needed to comply with the strict aliasing rules of GCC, but it also
+ * simplifies casting between the different sockaddr types.
+ */
+
+typedef union {
+    struct sockaddr sa;
+    struct sockaddr_in sa4;
+    struct sockaddr_in6 sa6;
+    struct sockaddr_storage sas;
+} address;
+
+/*
+ * This structure describes per-instance state of a tcp based channel.
+ */
+
+typedef struct TcpState TcpState;
+
+typedef struct TcpFdList {
+    TcpState *statePtr;
+    int fd;
+    struct TcpFdList *next;
+} TcpFdList;
+
+struct TcpState {
+    Tcl_Channel channel;	/* Channel associated with this file. */
+    int testFlags;              /* bit field for tests. Is set by testsocket
+                                 * test procedure */
+    TcpFdList fds;		/* The file descriptors of the sockets. */
+    int flags;			/* ORed combination of the bitfields defined
+				 * below. */
+    int interest;		/* Event types of interest */
+
+    /*
+     * Only needed for server sockets
+     */
+
+    Tcl_TcpAcceptProc *acceptProc;
+                                /* Proc to call on accept. */
+    ClientData acceptProcData;  /* The data for the accept proc. */
+
+    /*
+     * Only needed for client sockets
+     */
+
+    struct addrinfo *addrlist;	/* Addresses to connect to. */
+    struct addrinfo *addr;	/* Iterator over addrlist. */
+    struct addrinfo *myaddrlist;/* Local address. */
+    struct addrinfo *myaddr;	/* Iterator over myaddrlist. */
+    int filehandlers;           /* Caches FileHandlers that get set up while
+                                 * an async socket is not yet connected. */
+    int connectError;           /* Cache SO_ERROR of async socket. */
+    int cachedBlocking;         /* Cache blocking mode of async socket. */
+};
+
+/*
+ * These bits may be ORed together into the "flags" field of a TcpState
+ * structure.
+ */
+
+#define TCP_NONBLOCKING		(1<<0)	/* Socket with non-blocking I/O */
+#define TCP_ASYNC_CONNECT	(1<<1)	/* Async connect in progress. */
+#define TCP_ASYNC_PENDING	(1<<4)	/* TcpConnect was called to
+					 * process an async connect. This
+					 * flag indicates that reentry is
+					 * still pending */
+#define TCP_ASYNC_FAILED	(1<<5)	/* An async connect finally failed */
+
+/*
+ * These bits may be ORed together into the "testFlags" field of a TcpState
+ * structure.
+ */
+
+#define TCP_ASYNC_TEST_MODE	(1<<0)	/* Async testing activated.  Do not
+					 * automatically continue connection
+					 * process. */
+
+/*
+ * The following defines the maximum length of the listen queue. This is the
+ * number of outstanding yet-to-be-serviced requests for a connection on a
+ * server socket, more than this number of outstanding requests and the
+ * connection request will fail.
+ */
+
+#ifndef SOMAXCONN
+#   define SOMAXCONN	100
+#elif (SOMAXCONN < 100)
+#   undef  SOMAXCONN
+#   define SOMAXCONN	100
+#endif /* SOMAXCONN < 100 */
+
+/*
+ * The following defines how much buffer space the kernel should maintain for
+ * a socket.
+ */
+
+#define SOCKET_BUFSIZE	4096
+
+/*
+ * Static routines for this file:
+ */
+
+static int		TcpConnect(Tcl_Interp *interp, TcpState *state);
+static void		TcpAccept(ClientData data, int mask);
+static int		TcpBlockModeProc(ClientData data, int mode);
+static int		TcpCloseProc(ClientData instanceData,
+			    Tcl_Interp *interp);
+static int		TcpClose2Proc(ClientData instanceData,
+			    Tcl_Interp *interp, int flags);
+static int		TcpGetHandleProc(ClientData instanceData,
+			    int direction, ClientData *handlePtr);
+static int		TcpGetOptionProc(ClientData instanceData,
+			    Tcl_Interp *interp, const char *optionName,
+			    Tcl_DString *dsPtr);
+static int		TcpInputProc(ClientData instanceData, char *buf,
+			    int toRead, int *errorCode);
+static int		TcpOutputProc(ClientData instanceData,
+			    const char *buf, int toWrite, int *errorCode);
+static void		TcpWatchProc(ClientData instanceData, int mask);
+static int		WaitForConnect(TcpState *statePtr, int *errorCodePtr);
+static void		WrapNotify(ClientData clientData, int mask);
+
+/*
+ * This structure describes the channel type structure for TCP socket
+ * based IO:
  */
 
 static const Tcl_ChannelType tcpChannelType = {
@@ -204,6 +370,7 @@ static ProcessGlobalValue hostName =
 #if 0
 /* printf debugging */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void printaddrinfo(struct addrinfo *addrlist, char *prefix)
 {
     char host[NI_MAXHOST], port[NI_MAXSERV];
@@ -214,6 +381,8 @@ void printaddrinfo(struct addrinfo *addrlist, char *prefix)
 		    port, sizeof(port),
 		    NI_NUMERICHOST|NI_NUMERICSERV);
 =======
+=======
+>>>>>>> upstream/master
 void
 printaddrinfo(
     struct addrinfo *addrlist,
@@ -226,6 +395,9 @@ printaddrinfo(
 	getnameinfo(ai->ai_addr, ai->ai_addrlen,
 		host, sizeof(host), port, sizeof(port),
 		NI_NUMERICHOST|NI_NUMERICSERV);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	fprintf(stderr,"%s: %s:%s\n", prefix, host, port);
     }
@@ -286,7 +458,11 @@ InitializeHostName(
     }
     if (native == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	native = tclEmptyStringRep;
+=======
+	native = &tclEmptyString;
+>>>>>>> upstream/master
 =======
 	native = &tclEmptyString;
 >>>>>>> upstream/master
@@ -323,30 +499,7 @@ InitializeHostName(
     *valuePtr = ckalloc(*lengthPtr + 1);
     memcpy(*valuePtr, native, *lengthPtr + 1);
 <<<<<<< HEAD
-}
-
-/*
- *----------------------------------------------------------------------
- *
- * Tcl_GetHostName --
- *
- *	Returns the name of the local host.
- *
- * Results:
- *	A string containing the network name for this machine, or an empty
- *	string if we can't figure out the name. The caller must not modify or
- *	free this string.
- *
- * Side effects:
- *	Caches the name to return for future calls.
- *
- *----------------------------------------------------------------------
- */
-
-const char *
-Tcl_GetHostName(void)
-{
-    return Tcl_GetString(TclGetProcessGlobalValue(&hostName));
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 }
@@ -373,10 +526,39 @@ const char *
 Tcl_GetHostName(void)
 {
     return Tcl_GetString(TclGetProcessGlobalValue(&hostName));
+=======
+>>>>>>> upstream/master
 }
 
 /*
  * ----------------------------------------------------------------------
+<<<<<<< HEAD
+ *
+ * Tcl_GetHostName --
+ *
+ *	Returns the name of the local host.
+ *
+ * Results:
+ *	A string containing the network name for this machine, or an empty
+ *	string if we can't figure out the name. The caller must not modify or
+ *	free this string.
+ *
+ * Side effects:
+ *	Caches the name to return for future calls.
+ *
+ * ----------------------------------------------------------------------
+ */
+
+const char *
+Tcl_GetHostName(void)
+{
+    return Tcl_GetString(TclGetProcessGlobalValue(&hostName));
+}
+
+/*
+ * ----------------------------------------------------------------------
+=======
+>>>>>>> upstream/master
  *
  * TclpHasSockets --
  *
@@ -400,7 +582,11 @@ TclpHasSockets(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -416,7 +602,11 @@ TclpHasSockets(
  *	None.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -430,7 +620,11 @@ TclpFinalizeSockets(void)
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -447,7 +641,11 @@ TclpFinalizeSockets(void)
  *	Sets the device into blocking or nonblocking mode.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -469,7 +667,11 @@ TcpBlockModeProc(
 	SET_BITS(statePtr->flags, TCP_NONBLOCKING);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (statePtr->flags & TCP_ASYNC_CONNECT) {
+=======
+    if (GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT)) {
+>>>>>>> upstream/master
 =======
     if (GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT)) {
 >>>>>>> upstream/master
@@ -483,6 +685,7 @@ TcpBlockModeProc(
 }
 
 /*
+<<<<<<< HEAD
 <<<<<<< HEAD
  *----------------------------------------------------------------------
  *
@@ -512,6 +715,8 @@ TcpBlockModeProc(
  *	Processes socket events off the system queue.
  *	May process asynchroneous connect.
 =======
+=======
+>>>>>>> upstream/master
  * ----------------------------------------------------------------------
  *
  * WaitForConnect --
@@ -538,6 +743,9 @@ TcpBlockModeProc(
  * Side effects:
  *	Processes socket events off the system queue. May process
  *	asynchroneous connects.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
@@ -552,17 +760,23 @@ WaitForConnect(
 
     /*
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Check if an async connect failed already and error reporting is demanded,
      * return the error ENOTCONN
      */
 
     if (errorCodePtr != NULL && (statePtr->flags & TCP_ASYNC_FAILED)) {
 =======
+=======
+>>>>>>> upstream/master
      * Check if an async connect failed already and error reporting is
      * demanded, return the error ENOTCONN
      */
 
     if (errorCodePtr != NULL && GOT_BITS(statePtr->flags, TCP_ASYNC_FAILED)) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	*errorCodePtr = ENOTCONN;
 	return -1;
@@ -573,12 +787,15 @@ WaitForConnect(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!(statePtr->flags & TCP_ASYNC_PENDING)) {
 	return 0;
     }
 
     if (errorCodePtr == NULL || (statePtr->flags & TCP_NONBLOCKING)) {
 =======
+=======
+>>>>>>> upstream/master
     if (!GOT_BITS(statePtr->flags, TCP_ASYNC_PENDING)) {
 	return 0;
     }
@@ -598,6 +815,9 @@ WaitForConnect(
     }
 
     if (errorCodePtr == NULL || GOT_BITS(statePtr->flags, TCP_NONBLOCKING)) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         timeout = 0;
     } else {
@@ -605,6 +825,7 @@ WaitForConnect(
     }
     do {
         if (TclUnixWaitForFile(statePtr->fds.fd,
+<<<<<<< HEAD
 <<<<<<< HEAD
                                 TCL_WRITABLE | TCL_EXCEPTION, timeout) != 0) {
             TcpConnect(NULL, statePtr);
@@ -616,6 +837,8 @@ WaitForConnect(
     if (errorCodePtr != NULL) {
         if (statePtr->flags & TCP_ASYNC_PENDING) {
 =======
+=======
+>>>>>>> upstream/master
                 TCL_WRITABLE | TCL_EXCEPTION, timeout) != 0) {
             TcpConnect(NULL, statePtr);
         }
@@ -628,6 +851,9 @@ WaitForConnect(
 
     if (errorCodePtr != NULL) {
         if (GOT_BITS(statePtr->flags, TCP_ASYNC_PENDING)) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
             *errorCodePtr = EAGAIN;
             return -1;
@@ -786,6 +1012,10 @@ TcpCloseProc(
     while (fds != NULL) {
 	TcpFdList *next = fds->next;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -860,10 +1090,16 @@ TcpClose2Proc(
  * TcpHostPortList --
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *	This function is called by the -gethostname and -getpeername
  *	switches of TcpGetOptionProc() to add three list elements
  *	with the textual representation of the given address to the
  *	given DString.
+=======
+ *	This function is called by the -gethostname and -getpeername switches
+ *	of TcpGetOptionProc() to add three list elements with the textual
+ *	representation of the given address to the given DString.
+>>>>>>> upstream/master
 =======
  *	This function is called by the -gethostname and -getpeername switches
  *	of TcpGetOptionProc() to add three list elements with the textual
@@ -879,9 +1115,16 @@ TcpClose2Proc(
  *----------------------------------------------------------------------
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 #ifndef NEED_FAKE_RFC2553
+=======
+
+#ifndef NEED_FAKE_RFC2553
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+>>>>>>> upstream/master
 static inline int
 IPv6AddressNeedsNumericRendering(
     struct in6_addr addr)
@@ -895,16 +1138,26 @@ IPv6AddressNeedsNumericRendering(
      * at least some versions of OSX.
      */
 
+<<<<<<< HEAD
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     if (!IN6_IS_ADDR_V4MAPPED(&addr)) {
 #pragma GCC diagnostic pop
+=======
+    if (!IN6_IS_ADDR_V4MAPPED(&addr)) {
+>>>>>>> upstream/master
         return 0;
     }
 
     return (addr.s6_addr[12] == 0 && addr.s6_addr[13] == 0
             && addr.s6_addr[14] == 0 && addr.s6_addr[15] == 0);
 }
+<<<<<<< HEAD
+#endif /* NEED_FAKE_RFC2553 */
+
+>>>>>>> upstream/master
+=======
+#pragma GCC diagnostic pop
 #endif /* NEED_FAKE_RFC2553 */
 
 >>>>>>> upstream/master
@@ -920,6 +1173,7 @@ TcpHostPortList(
     int flags = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     getnameinfo(&addr.sa, salen,
                 nhost, sizeof(nhost), nport, sizeof(nport),
                 NI_NUMERICHOST | NI_NUMERICSERV);
@@ -929,6 +1183,8 @@ TcpHostPortList(
      * can sometimes cause problems (and never have a name).
      */
 =======
+=======
+>>>>>>> upstream/master
     getnameinfo(&addr.sa, salen, nhost, sizeof(nhost), nport, sizeof(nport),
             NI_NUMERICHOST | NI_NUMERICSERV);
     Tcl_DStringAppendElement(dsPtr, nhost);
@@ -938,6 +1194,9 @@ TcpHostPortList(
      * sometimes cause problems (and never have a name).
      */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if (addr.sa.sa_family == AF_INET) {
         if (addr.sa4.sin_addr.s_addr == INADDR_ANY) {
@@ -945,6 +1204,7 @@ TcpHostPortList(
         }
 #ifndef NEED_FAKE_RFC2553
     } else if (addr.sa.sa_family == AF_INET6) {
+<<<<<<< HEAD
 <<<<<<< HEAD
         if ((IN6_ARE_ADDR_EQUAL(&addr.sa6.sin6_addr,
                                 &in6addr_any))
@@ -956,10 +1216,14 @@ TcpHostPortList(
 =======
         if (IPv6AddressNeedsNumericRendering(addr.sa6.sin6_addr)) {
 >>>>>>> upstream/master
+=======
+        if (IPv6AddressNeedsNumericRendering(addr.sa6.sin6_addr)) {
+>>>>>>> upstream/master
             flags |= NI_NUMERICHOST;
         }
 #endif /* NEED_FAKE_RFC2553 */
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
     /* Check if reverse DNS has been switched off globally */
 <<<<<<< HEAD
@@ -975,6 +1239,8 @@ TcpHostPortList(
     } else {
         /* Reverse mappong failed - use the numeric rep once more */
 =======
+=======
+>>>>>>> upstream/master
 
     /*
      * Check if reverse DNS has been switched off globally.
@@ -996,6 +1262,9 @@ TcpHostPortList(
          * Reverse mapping failed - use the numeric rep once more.
          */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         Tcl_DStringAppendElement(dsPtr, nhost);
     }
@@ -1047,14 +1316,20 @@ TcpGetOptionProc(
 	socklen_t optlen = sizeof(int);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (statePtr->flags & TCP_ASYNC_CONNECT) {
             /* Suppress errors as long as we are not done */
 =======
+=======
+>>>>>>> upstream/master
         if (GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT)) {
             /*
              * Suppress errors as long as we are not done.
              */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
             errno = 0;
         } else if (statePtr->connectError != 0) {
@@ -1063,8 +1338,14 @@ TcpGetOptionProc(
         } else {
             int err;
 <<<<<<< HEAD
+<<<<<<< HEAD
             getsockopt(statePtr->fds.fd, SOL_SOCKET, SO_ERROR,
                     (char *) &err, &optlen);
+=======
+
+            getsockopt(statePtr->fds.fd, SOL_SOCKET, SO_ERROR, (char *) &err,
+                    &optlen);
+>>>>>>> upstream/master
 =======
 
             getsockopt(statePtr->fds.fd, SOL_SOCKET, SO_ERROR, (char *) &err,
@@ -1081,9 +1362,14 @@ TcpGetOptionProc(
     if ((len > 1) && (optionName[1] == 'c') &&
 	    (strncmp(optionName, "-connecting", len) == 0)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         Tcl_DStringAppend(dsPtr,
                         (statePtr->flags & TCP_ASYNC_CONNECT) ? "1" : "0", -1);
+=======
+        Tcl_DStringAppend(dsPtr,
+                GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT) ? "1" : "0", -1);
+>>>>>>> upstream/master
 =======
         Tcl_DStringAppend(dsPtr,
                 GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT) ? "1" : "0", -1);
@@ -1097,16 +1383,22 @@ TcpGetOptionProc(
         socklen_t size = sizeof(peername);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if ( (statePtr->flags & TCP_ASYNC_CONNECT) ) {
 	    /*
 	     * In async connect output an empty string
 	     */
 =======
+=======
+>>>>>>> upstream/master
 	if (GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT)) {
 	    /*
 	     * In async connect output an empty string
 	     */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    if (len == 0) {
 		Tcl_DStringAppendElement(dsPtr, "-peername");
@@ -1119,6 +1411,10 @@ TcpGetOptionProc(
 	     * Peername fetch succeeded - output list
 	     */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1162,18 +1458,24 @@ TcpGetOptionProc(
 	    Tcl_DStringStartSublist(dsPtr);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if ( (statePtr->flags & TCP_ASYNC_CONNECT) ) {
 	    /*
 	     * In async connect output an empty string
 	     */
 	     found = 1;
 =======
+=======
+>>>>>>> upstream/master
 	if (GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT)) {
 	    /*
 	     * In async connect output an empty string
 	     */
 
             found = 1;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	} else {
 	    for (fds = &statePtr->fds; fds != NULL; fds = fds->next) {
@@ -1200,7 +1502,12 @@ TcpGetOptionProc(
 
     if (len > 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return Tcl_BadChannelOption(interp, optionName, "connecting peername sockname");
+=======
+	return Tcl_BadChannelOption(interp, optionName,
+                "connecting peername sockname");
+>>>>>>> upstream/master
 =======
 	return Tcl_BadChannelOption(interp, optionName,
                 "connecting peername sockname");
@@ -1212,7 +1519,11 @@ TcpGetOptionProc(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -1229,7 +1540,11 @@ TcpGetOptionProc(
  *	seen by Tcl.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -1246,6 +1561,7 @@ WrapNotify(
     if (newmask == 0) {
 	/*
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * There was no overlap between the states the channel is
 	 * interested in notifications for, and the states that are
 	 * reported present on the file descriptor by select().  The
@@ -1258,6 +1574,8 @@ WrapNotify(
 	 * writable state.
 	 */
 =======
+=======
+>>>>>>> upstream/master
 	 * There was no overlap between the states the channel is interested
 	 * in notifications for, and the states that are reported present on
 	 * the file descriptor by select().  The only way that can happen is
@@ -1269,6 +1587,9 @@ WrapNotify(
 	 * writable state.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if (errno == 0) {
 	    return;
@@ -1294,6 +1615,7 @@ TcpWatchProc(
          * from interfering with the -accept behavior (bug #3394732).
          */
 <<<<<<< HEAD
+<<<<<<< HEAD
     	return;
     }
 
@@ -1301,6 +1623,8 @@ TcpWatchProc(
         /* Async sockets use a FileHandler internally while connecting, so we
          * need to cache this request until the connection has succeeded. */
 =======
+=======
+>>>>>>> upstream/master
 
     	return;
     }
@@ -1311,11 +1635,15 @@ TcpWatchProc(
          * need to cache this request until the connection has succeeded.
          */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         statePtr->filehandlers = mask;
     } else if (mask) {
 
 	/*
+<<<<<<< HEAD
 <<<<<<< HEAD
 	 * Whether it is a bug or feature or otherwise, it is a fact
 	 * of life that on at least some Linux kernels select() fails
@@ -1335,6 +1663,8 @@ TcpWatchProc(
 	 * channel states and report the chan events as best it can.
 	 * We save a copy of the mask passed in to assist with that.
 =======
+=======
+>>>>>>> upstream/master
 	 * Whether it is a bug or feature or otherwise, it is a fact of life
 	 * that on at least some Linux kernels select() fails to report that a
 	 * socket file descriptor is writable when the other end of the socket
@@ -1351,6 +1681,9 @@ TcpWatchProc(
 	 * the meaning of these channel states and report the chan events as
 	 * best it can.  We save a copy of the mask passed in to assist with
 	 * that.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	 */
 
@@ -1364,7 +1697,11 @@ TcpWatchProc(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -1382,7 +1719,11 @@ TcpWatchProc(
  *	None.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -1403,6 +1744,7 @@ TcpGetHandleProc(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
  *
  * TcpAsyncCallback --
@@ -1414,6 +1756,8 @@ TcpGetHandleProc(
  *----------------------------------------------------------------------
  */
 =======
+=======
+>>>>>>> upstream/master
  * ----------------------------------------------------------------------
  *
  * TcpAsyncCallback --
@@ -1425,6 +1769,9 @@ TcpGetHandleProc(
  * ----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 static void
 TcpAsyncCallback(
@@ -1438,7 +1785,11 @@ TcpAsyncCallback(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -1468,7 +1819,11 @@ TcpAsyncCallback(
  *	For syncronously connecting sockets, the loops work the usual way.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  *----------------------------------------------------------------------
+=======
+ * ----------------------------------------------------------------------
+>>>>>>> upstream/master
 =======
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
@@ -1481,9 +1836,15 @@ TcpConnect(
 {
     socklen_t optlen;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int async_callback = statePtr->flags & TCP_ASYNC_PENDING;
     int ret = -1, error = EHOSTUNREACH;
     int async = statePtr->flags & TCP_ASYNC_CONNECT;
+=======
+    int async_callback = GOT_BITS(statePtr->flags, TCP_ASYNC_PENDING);
+    int ret = -1, error = EHOSTUNREACH;
+    int async = GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT);
+>>>>>>> upstream/master
 =======
     int async_callback = GOT_BITS(statePtr->flags, TCP_ASYNC_PENDING);
     int ret = -1, error = EHOSTUNREACH;
@@ -1497,8 +1858,13 @@ TcpConnect(
     for (statePtr->addr = statePtr->addrlist; statePtr->addr != NULL;
             statePtr->addr = statePtr->addr->ai_next) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         for (statePtr->myaddr = statePtr->myaddrlist; statePtr->myaddr != NULL;
+=======
+        for (statePtr->myaddr = statePtr->myaddrlist;
+                statePtr->myaddr != NULL;
+>>>>>>> upstream/master
 =======
         for (statePtr->myaddr = statePtr->myaddrlist;
                 statePtr->myaddr != NULL;
@@ -1527,7 +1893,12 @@ TcpConnect(
 	    }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    statePtr->fds.fd = socket(statePtr->addr->ai_family, SOCK_STREAM, 0);
+=======
+	    statePtr->fds.fd = socket(statePtr->addr->ai_family, SOCK_STREAM,
+                    0);
+>>>>>>> upstream/master
 =======
 	    statePtr->fds.fd = socket(statePtr->addr->ai_family, SOCK_STREAM,
                     0);
@@ -1551,7 +1922,12 @@ TcpConnect(
 
 	    if (async) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ret = TclUnixSetBlockingMode(statePtr->fds.fd,TCL_MODE_NONBLOCKING);
+=======
+                ret = TclUnixSetBlockingMode(statePtr->fds.fd,
+                        TCL_MODE_NONBLOCKING);
+>>>>>>> upstream/master
 =======
                 ret = TclUnixSetBlockingMode(statePtr->fds.fd,
                         TCL_MODE_NONBLOCKING);
@@ -1562,14 +1938,20 @@ TcpConnect(
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* Gotta reset the error variable here, before we use it for the
              * first time in this iteration. */
 =======
+=======
+>>>>>>> upstream/master
             /*
              * Must reset the error variable here, before we use it for the
              * first time in this iteration.
              */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
             error = 0;
 
@@ -1592,11 +1974,14 @@ TcpConnect(
 	    ret = connect(statePtr->fds.fd, statePtr->addr->ai_addr,
                         statePtr->addr->ai_addrlen);
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (ret < 0) error = errno;
 	    if (ret < 0 && errno == EINPROGRESS) {
                 Tcl_CreateFileHandler(statePtr->fds.fd,
                         TCL_WRITABLE|TCL_EXCEPTION, TcpAsyncCallback, statePtr);
 =======
+=======
+>>>>>>> upstream/master
             if (ret < 0) {
                 error = errno;
             }
@@ -1604,6 +1989,9 @@ TcpConnect(
                 Tcl_CreateFileHandler(statePtr->fds.fd,
                         TCL_WRITABLE | TCL_EXCEPTION, TcpAsyncCallback,
                         statePtr);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
                 errno = EWOULDBLOCK;
                 SET_BITS(statePtr->flags, TCP_ASYNC_PENDING);
@@ -1633,7 +2021,11 @@ TcpConnect(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 out:
+=======
+  out:
+>>>>>>> upstream/master
 =======
   out:
 >>>>>>> upstream/master
@@ -1735,6 +2127,10 @@ Tcl_OpenTcpClient(
      * Allocate a new TcpState for this socket.
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1750,6 +2146,10 @@ Tcl_OpenTcpClient(
      * Create a new client socket and wrap it in a channel.
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1761,8 +2161,13 @@ Tcl_OpenTcpClient(
     sprintf(channelName, SOCK_TEMPLATE, (long) statePtr);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     statePtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName, statePtr,
             (TCL_READABLE | TCL_WRITABLE));
+=======
+    statePtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
+            statePtr, TCL_READABLE | TCL_WRITABLE);
+>>>>>>> upstream/master
 =======
     statePtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
             statePtr, TCL_READABLE | TCL_WRITABLE);
@@ -1796,7 +2201,12 @@ Tcl_MakeTcpClientChannel(
     ClientData sock)		/* The socket to wrap up into a channel. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     return (Tcl_Channel) TclpMakeTcpClientChannelMode(sock, (TCL_READABLE | TCL_WRITABLE));
+=======
+    return (Tcl_Channel) TclpMakeTcpClientChannelMode(sock,
+            TCL_READABLE | TCL_WRITABLE);
+>>>>>>> upstream/master
 =======
     return (Tcl_Channel) TclpMakeTcpClientChannelMode(sock,
             TCL_READABLE | TCL_WRITABLE);
@@ -1850,7 +2260,11 @@ TclpMakeTcpClientChannelMode(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Tcl_OpenTcpServer --
+=======
+ * Tcl_OpenTcpServerEx --
+>>>>>>> upstream/master
 =======
  * Tcl_OpenTcpServerEx --
 >>>>>>> upstream/master
@@ -1869,16 +2283,22 @@ TclpMakeTcpClientChannelMode(
 
 Tcl_Channel
 <<<<<<< HEAD
+<<<<<<< HEAD
 Tcl_OpenTcpServer(
     Tcl_Interp *interp,		/* For error reporting - may be NULL. */
     int port,			/* Port number to open. */
     const char *myHost,		/* Name of local host. */
 =======
+=======
+>>>>>>> upstream/master
 Tcl_OpenTcpServerEx(
     Tcl_Interp *interp,		/* For error reporting - may be NULL. */
     const char *service,	/* Port number to open. */
     const char *myHost,		/* Name of local host. */
     unsigned int flags,		/* Flags. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_TcpAcceptProc *acceptProc,
 				/* Callback for accepting connections from new
@@ -1886,7 +2306,11 @@ Tcl_OpenTcpServerEx(
     ClientData acceptProcData)	/* Data for the callback. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int status = 0, sock = -1, reuseaddr = 1, chosenport;
+=======
+    int status = 0, sock = -1, optvalue, port, chosenport;
+>>>>>>> upstream/master
 =======
     int status = 0, sock = -1, optvalue, port, chosenport;
 >>>>>>> upstream/master
@@ -1916,6 +2340,10 @@ Tcl_OpenTcpServerEx(
      * if all ports are taken.
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1940,8 +2368,11 @@ Tcl_OpenTcpServerEx(
     chosenport = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!TclCreateSocketAddress(interp, &addrlist, myHost, port, 1, &errorMsg)) {
 =======
+=======
+>>>>>>> upstream/master
     if (TclSockGetPort(interp, service, "tcp", &port) != TCL_OK) {
 	errorMsg = "invalid port number";
 	goto error;
@@ -1949,6 +2380,9 @@ Tcl_OpenTcpServerEx(
 
     if (!TclCreateSocketAddress(interp, &addrlist, myHost, port, 1,
             &errorMsg)) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	my_errno = errno;
 	goto error;
@@ -1980,6 +2414,7 @@ Tcl_OpenTcpServerEx(
 
 	/*
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Set up to reuse server addresses automatically and bind to the
 	 * specified port.
 	 */
@@ -1987,6 +2422,8 @@ Tcl_OpenTcpServerEx(
 	(void) setsockopt(sock, SOL_SOCKET, SO_REUSEADDR,
 		(char *) &reuseaddr, sizeof(reuseaddr));
 =======
+=======
+>>>>>>> upstream/master
 	 * Set up to reuse server addresses and/or ports if requested.
 	 */
 
@@ -2011,6 +2448,9 @@ Tcl_OpenTcpServerEx(
 		    (char *) &optvalue, sizeof(optvalue));
 #endif
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
         /*
@@ -2028,12 +2468,18 @@ Tcl_OpenTcpServerEx(
 
 #ifdef IPV6_V6ONLY
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* Missing on: Solaris 2.8 */
 =======
+=======
+>>>>>>> upstream/master
 	/*
          * Missing on: Solaris 2.8
          */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         if (addrPtr->ai_family == AF_INET6) {
             int v6only = 1;
@@ -2187,7 +2633,11 @@ TcpAccept(
     sprintf(channelName, SOCK_TEMPLATE, (long) newSockState);
     newSockState->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    newSockState, (TCL_READABLE | TCL_WRITABLE));
+=======
+	    newSockState, TCL_READABLE | TCL_WRITABLE);
+>>>>>>> upstream/master
 =======
 	    newSockState, TCL_READABLE | TCL_WRITABLE);
 >>>>>>> upstream/master

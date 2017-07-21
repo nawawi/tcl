@@ -4,6 +4,7 @@ set TZData(:America/Argentina/Buenos_Aires) {
     {-9223372036854775808 -14028 0 LMT}
     {-2372097972 -15408 0 CMT}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1567453392 -14400 0 ART}
     {-1233432000 -10800 0 ARST}
     {-1222981200 -14400 0 ART}
@@ -66,6 +67,8 @@ set TZData(:America/Argentina/Buenos_Aires) {
     {1224385200 -7200 1 ARST}
     {1237082400 -10800 0 ART}
 =======
+=======
+>>>>>>> upstream/master
     {-1567453392 -14400 0 -04}
     {-1233432000 -10800 0 -03}
     {-1222981200 -14400 0 -04}
@@ -127,5 +130,8 @@ set TZData(:America/Argentina/Buenos_Aires) {
     {1205632800 -10800 0 -03}
     {1224385200 -7200 1 -02}
     {1237082400 -10800 0 -03}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }

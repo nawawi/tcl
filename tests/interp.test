@@ -21,7 +21,11 @@ catch [list package require -exact Tcltest [info patchlevel]]
 testConstraint testinterpdelete [llength [info commands testinterpdelete]]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 set hidden_cmds {cd encoding exec exit fconfigure file glob load open pwd socket source tcl:file:atime tcl:file:attributes tcl:file:copy tcl:file:delete tcl:file:dirname tcl:file:executable tcl:file:exists tcl:file:extension tcl:file:isdirectory tcl:file:isfile tcl:file:link tcl:file:lstat tcl:file:mkdir tcl:file:mtime tcl:file:nativename tcl:file:normalize tcl:file:owned tcl:file:readable tcl:file:readlink tcl:file:rename tcl:file:rootname tcl:file:size tcl:file:stat tcl:file:tail tcl:file:tempfile tcl:file:type tcl:file:volumes tcl:file:writable unload}
+=======
+set hidden_cmds {cd encoding exec exit fconfigure file glob load open pwd socket source tcl:encoding:dirs tcl:file:atime tcl:file:attributes tcl:file:copy tcl:file:delete tcl:file:dirname tcl:file:executable tcl:file:exists tcl:file:extension tcl:file:isdirectory tcl:file:isfile tcl:file:link tcl:file:lstat tcl:file:mkdir tcl:file:mtime tcl:file:nativename tcl:file:normalize tcl:file:owned tcl:file:readable tcl:file:readlink tcl:file:rename tcl:file:rootname tcl:file:size tcl:file:stat tcl:file:tail tcl:file:tempfile tcl:file:type tcl:file:volumes tcl:file:writable unload}
+>>>>>>> upstream/master
 =======
 set hidden_cmds {cd encoding exec exit fconfigure file glob load open pwd socket source tcl:encoding:dirs tcl:file:atime tcl:file:attributes tcl:file:copy tcl:file:delete tcl:file:dirname tcl:file:executable tcl:file:exists tcl:file:extension tcl:file:isdirectory tcl:file:isfile tcl:file:link tcl:file:lstat tcl:file:mkdir tcl:file:mtime tcl:file:nativename tcl:file:normalize tcl:file:owned tcl:file:readable tcl:file:readlink tcl:file:rename tcl:file:rootname tcl:file:size tcl:file:stat tcl:file:tail tcl:file:tempfile tcl:file:type tcl:file:volumes tcl:file:writable unload}
 >>>>>>> upstream/master
@@ -63,7 +67,11 @@ test interp-1.9 {options for interp command} -returnCodes error -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {bad option "-froboz": must be alias, aliases, bgerror, cancel, create, debug, delete, eval, exists, expose, hide, hidden, issafe, invokehidden, limit, marktrusted, recursionlimit, slaves, share, target, or transfer} 
+=======
+} -result {bad option "-froboz": must be alias, aliases, bgerror, cancel, create, debug, delete, eval, exists, expose, hide, hidden, issafe, invokehidden, limit, marktrusted, recursionlimit, slaves, share, target, or transfer}
+>>>>>>> upstream/master
 =======
 } -result {bad option "-froboz": must be alias, aliases, bgerror, cancel, create, debug, delete, eval, exists, expose, hide, hidden, issafe, invokehidden, limit, marktrusted, recursionlimit, slaves, share, target, or transfer}
 >>>>>>> upstream/master
@@ -89,10 +97,13 @@ test interp-2.3 {basic interpreter creation} {
 } 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test interp-2.4 {basic interpreter creation} {
     list [catch {interp create a} msg] $msg
 } {1 {interpreter named "a" already exists, cannot create}}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test interp-2.4 {basic interpreter creation} -setup {
@@ -101,6 +112,9 @@ test interp-2.4 {basic interpreter creation} -setup {
     interp create a
 } -result {interpreter named "a" already exists, cannot create}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -178,6 +192,7 @@ test interp-3.7 {testing interp exists and interp slaves} -setup {
     interp slaves
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } a
 test interp-3.8 {testing interp exists and interp slaves} -body {
     interp slaves a b c
@@ -208,12 +223,26 @@ test interp-3.9 {testing interp exists and interp slaves} -setup {
     interp create {a a2} -safe
     expr {"a2" in [interp slaves a]}
 >>>>>>> upstream/master
+=======
+} -result a
+test interp-3.8 {testing interp exists and interp slaves} -body {
+    interp slaves a b c
+} -returnCodes error -result {wrong # args: should be "interp slaves ?path?"}
+test interp-3.9 {testing interp exists and interp slaves} -setup {
+    catch {interp create a}
+} -body {
+    interp create {a a2} -safe
+    expr {"a2" in [interp slaves a]}
+>>>>>>> upstream/master
 } -result 1
 test interp-3.10 {testing interp exists and interp slaves} -setup {
     catch {interp create a}
     catch {interp create {a a2}}
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -299,6 +328,10 @@ test interp-6.5 {testing eval} {
 } 36
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+catch {interp create {a x2}}
+>>>>>>> upstream/master
 =======
 catch {interp create {a x2}}
 >>>>>>> upstream/master
@@ -678,6 +711,11 @@ test interp-14.11 {{interp alias} {target named the empty string} {bug 2bf56185}
     interp alias {} p1 $interp {}
     p1 one two three
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+} -cleanup {
+    interp delete $interp
+>>>>>>> upstream/master
 =======
 } -cleanup {
     interp delete $interp
@@ -944,7 +982,11 @@ test interp-18.9 {eval in deleted interp, bug 495830} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {attempt to call eval in deleted interpreter}}     
+=======
+} {1 {attempt to call eval in deleted interpreter}}
+>>>>>>> upstream/master
 =======
 } {1 {attempt to call eval in deleted interpreter}}
 >>>>>>> upstream/master
@@ -961,7 +1003,11 @@ test interp-18.10 {eval in deleted interp, bug 495830} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {attempt to call eval in deleted interpreter}}     
+=======
+} {1 {attempt to call eval in deleted interpreter}}
+>>>>>>> upstream/master
 =======
 } {1 {attempt to call eval in deleted interpreter}}
 >>>>>>> upstream/master
@@ -1768,7 +1814,11 @@ test interp-21.5 {interp hidden} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result $hidden_cmds 
+=======
+} -result $hidden_cmds
+>>>>>>> upstream/master
 =======
 } -result $hidden_cmds
 >>>>>>> upstream/master
@@ -2304,7 +2354,11 @@ test interp-27.1 {interp aliases & namespaces} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc tstAlias {args} { 
+=======
+    proc tstAlias {args} {
+>>>>>>> upstream/master
 =======
     proc tstAlias {args} {
 >>>>>>> upstream/master
@@ -2330,7 +2384,11 @@ test interp-27.2 {interp aliases & namespaces} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc tstAlias {args} { 
+=======
+    proc tstAlias {args} {
+>>>>>>> upstream/master
 =======
     proc tstAlias {args} {
 >>>>>>> upstream/master
@@ -2356,7 +2414,11 @@ test interp-27.3 {interp aliases & namespaces} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc tstAlias {args} { 
+=======
+    proc tstAlias {args} {
+>>>>>>> upstream/master
 =======
     proc tstAlias {args} {
 >>>>>>> upstream/master
@@ -2384,7 +2446,11 @@ test interp-27.4 {interp aliases & namespaces} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	proc bar {args} { 
+=======
+	proc bar {args} {
+>>>>>>> upstream/master
 =======
 	proc bar {args} {
 >>>>>>> upstream/master
@@ -3473,7 +3539,11 @@ test interp-34.9 {time limits trigger in blocking after} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     list $code $msg [expr {($t1-$t0) < 3 ? "OK" : $t1-$t0}] 
+=======
+    list $code $msg [expr {($t1-$t0) < 3 ? "OK" : $t1-$t0}]
+>>>>>>> upstream/master
 =======
     list $code $msg [expr {($t1-$t0) < 3 ? "OK" : $t1-$t0}]
 >>>>>>> upstream/master
@@ -3719,7 +3789,11 @@ test interp-36.1 {interp bgerror syntax} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test interp-36.2 {interp bgerror syntax} -body { 
+=======
+test interp-36.2 {interp bgerror syntax} -body {
+>>>>>>> upstream/master
 =======
 test interp-36.2 {interp bgerror syntax} -body {
 >>>>>>> upstream/master

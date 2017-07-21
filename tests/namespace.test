@@ -198,11 +198,14 @@ test namespace-7.7 {Bug 1655305} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
+=======
+>>>>>>> upstream/master
 test namespace-8.1 {TclTeardownNamespace, delete global namespace} {
     catch {interp delete test_interp}
     interp create test_interp
@@ -275,7 +278,11 @@ test namespace-8.6 {TclTeardownNamespace: preserve errorInfo; errorCode values} 
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     interp create slave 
+=======
+    interp create slave
+>>>>>>> upstream/master
 =======
     interp create slave
 >>>>>>> upstream/master
@@ -325,6 +332,7 @@ test namespace-9.4 {Tcl_Import, simple import} {
 } {cmd1: 123}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-9.5 {Tcl_Import, RFE 1230597} {
     list [catch {namespace eval test_ns_import {namespace import ::test_ns_export::*}} msg] $msg
 } {0 {}}
@@ -342,6 +350,13 @@ test namespace-9.5 {Tcl_Import, RFE 1230597} -setup {
 } -body {
     list [catch {namespace eval test_ns_import {namespace import ::test_ns_export::*}} msg] $msg
 >>>>>>> upstream/master
+=======
+test namespace-9.5 {Tcl_Import, RFE 1230597} -setup {
+    namespace eval test_ns_import {}
+    namespace eval test_ns_export {}
+} -body {
+    list [catch {namespace eval test_ns_import {namespace import ::test_ns_export::*}} msg] $msg
+>>>>>>> upstream/master
 } -result {0 {}}
 test namespace-9.6 {Tcl_Import, cmd redefinition ok if allowOverwrite!=0} -setup {
     namespace eval test_ns_import {}
@@ -351,6 +366,9 @@ test namespace-9.6 {Tcl_Import, cmd redefinition ok if allowOverwrite!=0} -setup
     }
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -376,6 +394,7 @@ test namespace-9.7 {Tcl_Import, links are preserved if cmd is redefined} {
          [test_ns_import::cmd1 g h i] \
          [test_ns_export::cmd1 j k l]
 } {{cmd1: a b c} {cmd1: d e f} {} ::test_ns_export::cmd1 ::test_ns_export::cmd1 {new1: g h i} {new1: j k l}}
+<<<<<<< HEAD
 test namespace-9.8 {Tcl_Import: Bug 1017299} -setup {
     namespace eval one {
 	namespace export cmd
@@ -420,6 +439,8 @@ test namespace-9.9 {Tcl_Import: Bug 1017299} -setup {
 } -returnCodes error -match glob -result {import pattern * would create a loop*}
 <<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 test namespace-9.8 {Tcl_Import: Bug 1017299} -setup {
     namespace eval one {
 	namespace export cmd
@@ -444,7 +465,6 @@ test namespace-9.8 {Tcl_Import: Bug 1017299} -setup {
 } -cleanup {
     namespace delete one two three
 } -match glob -result *::one::cmd
-
 test namespace-9.9 {Tcl_Import: Bug 1017299} -setup {
     namespace eval one {
 	namespace export cmd
@@ -497,6 +517,7 @@ test namespace-10.3 {Tcl_ForgetImport, deletes matching imported cmds} -setup {
         lappend l [catch {cmd1 777} msg] $msg
     }
 } -result [list [lsort {::test_ns_import::p ::test_ns_import::cmd1}] ::test_ns_import::p 1 {invalid command name "cmd1"}]
+<<<<<<< HEAD
 test namespace-10.4 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -608,6 +629,8 @@ test namespace-10.9 {Tcl_ForgetImport: Bug 560297} -setup {
 <<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 test namespace-10.4 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -625,7 +648,6 @@ test namespace-10.4 {Tcl_ForgetImport: Bug 560297} -setup {
 } -cleanup {
     namespace delete origin unrelated my
 }
-
 test namespace-10.5 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -641,7 +663,6 @@ test namespace-10.5 {Tcl_ForgetImport: Bug 560297} -setup {
 } -cleanup {
     namespace delete origin my
 } -returnCodes error -match glob -result *
-
 test namespace-10.6 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -658,7 +679,6 @@ test namespace-10.6 {Tcl_ForgetImport: Bug 560297} -setup {
 } -cleanup {
     namespace delete origin my your
 } -returnCodes error -match glob -result *
-
 test namespace-10.7 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -679,7 +699,6 @@ test namespace-10.7 {Tcl_ForgetImport: Bug 560297} -setup {
 } -cleanup {
     namespace delete origin link link2 my
 } -returnCodes error -match glob -result *
-
 test namespace-10.8 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -700,7 +719,6 @@ test namespace-10.8 {Tcl_ForgetImport: Bug 560297} -setup {
 } -cleanup {
     namespace delete origin link link2 my
 }
-
 test namespace-10.9 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace eval origin {
 	namespace export cmd
@@ -722,8 +740,9 @@ test namespace-10.9 {Tcl_ForgetImport: Bug 560297} -setup {
     namespace delete origin link link2 my
 } -returnCodes error -match glob -result *
 
-test namespace-11.1 {TclGetOriginalCommand, check if not imported cmd} {
+test namespace-11.1 {TclGetOriginalCommand, check if not imported cmd} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+<<<<<<< HEAD
 =======
 test namespace-11.1 {TclGetOriginalCommand, check if not imported cmd} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
@@ -733,6 +752,9 @@ test namespace-11.1 {TclGetOriginalCommand, check if not imported cmd} -setup {
 
 test namespace-11.1 {TclGetOriginalCommand, check if not imported cmd} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+>>>>>>> upstream/master
+=======
 } -body {
 >>>>>>> upstream/master
     namespace eval test_ns_export {
@@ -804,7 +826,11 @@ test namespace-13.1 {DeleteImportedCmd, deletes imported cmds} -setup {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {::test_ns_import::cmd1 {}}
+=======
+} -result {::test_ns_import::cmd1 {}}
+>>>>>>> upstream/master
 =======
 } -result {::test_ns_import::cmd1 {}}
 >>>>>>> upstream/master
@@ -823,7 +849,11 @@ test namespace-13.2 {DeleteImportedCmd, Bug a4494e28ed} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-14.1 {TclGetNamespaceForQualName, absolute names} {
+=======
+test namespace-14.1 {TclGetNamespaceForQualName, absolute names} -setup {
+>>>>>>> upstream/master
 =======
 test namespace-14.1 {TclGetNamespaceForQualName, absolute names} -setup {
 >>>>>>> upstream/master
@@ -860,9 +890,12 @@ test namespace-14.2 {TclGetNamespaceForQualName, invalid absolute names} -setup 
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {can't read "::test_ns_777::v": no such variable} 1 {namespace "test_ns_777" not found in "::test_ns_1"}}
 test namespace-14.3 {TclGetNamespaceForQualName, relative names} {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {1 {can't read "::test_ns_777::v": no such variable} 1 {namespace "test_ns_777" not found in "::test_ns_1"}}
@@ -877,6 +910,9 @@ test namespace-14.3 {TclGetNamespaceForQualName, relative names} -setup {
     }
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -912,7 +948,13 @@ test namespace-14.6 {TclGetNamespaceForQualName, relative ns names looked up onl
 } {::test_ns_1::test_ns_2::foo 1 {namespace "test_ns_1" not found in "::test_ns_1"}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-14.7 {TclGetNamespaceForQualName, ignore extra :s if ns} {
+=======
+test namespace-14.7 {TclGetNamespaceForQualName, ignore extra :s if ns} -setup {
+    namespace eval test_ns_1::test_ns_2::foo {}
+} -body {
+>>>>>>> upstream/master
 =======
 test namespace-14.7 {TclGetNamespaceForQualName, ignore extra :s if ns} -setup {
     namespace eval test_ns_1::test_ns_2::foo {}
@@ -955,6 +997,7 @@ test namespace-14.11 {TclGetNamespaceForQualName, extra ::s are significant for 
     lappend l [test_ns_1::test_ns_2:: hello]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {invalid command name "test_ns_1::test_ns_2::"} {{}: hello}}
 test namespace-14.12 {TclGetNamespaceForQualName, extra ::s are significant for vars} {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
@@ -969,6 +1012,12 @@ test namespace-14.12 {TclGetNamespaceForQualName, extra ::s are significant for 
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+} -result {1 {invalid command name "test_ns_1::test_ns_2::"} {{}: hello}}
+test namespace-14.12 {TclGetNamespaceForQualName, extra ::s are significant for vars} -setup {
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+>>>>>>> upstream/master
     namespace eval test_ns_1 {
         variable {}
         set test_ns_1::(x) y
@@ -976,14 +1025,25 @@ test namespace-14.12 {TclGetNamespaceForQualName, extra ::s are significant for 
     set test_ns_1::(x)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } y
 test namespace-14.13 {TclGetNamespaceForQualName, namespace other than global ns can't have empty name} {
+=======
+} -result y
+test namespace-14.13 {TclGetNamespaceForQualName, namespace other than global ns can't have empty name} -setup {
+>>>>>>> upstream/master
     catch {namespace delete {*}[namespace children :: test_ns_*]}
-    list [catch {namespace eval test_ns_1 {proc {} {} {}; namespace eval {} {}; {}}} msg] $msg
-} {1 {can't create namespace "": only global namespace can have empty name}}
+} -returnCodes error -body {
+    namespace eval test_ns_1 {
+	proc {} {} {}
+	namespace eval {} {}
+	{}
+    }
+} -result {can't create namespace "": only global namespace can have empty name}
 
-test namespace-15.1 {Tcl_FindNamespace, absolute name found} {
+test namespace-15.1 {Tcl_FindNamespace, absolute name found} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -1004,6 +1064,9 @@ test namespace-15.1 {Tcl_FindNamespace, absolute name found} -setup {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+} -body {
 >>>>>>> upstream/master
     namespace eval test_ns_delete {
         namespace eval test_ns_delete2 {}
@@ -1032,8 +1095,14 @@ test namespace-15.4 {Tcl_FindNamespace, relative name not found} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-16.1 {Tcl_FindCommand, absolute name found} {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+=======
+test namespace-16.1 {Tcl_FindCommand, absolute name found} -setup {
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+>>>>>>> upstream/master
 =======
 test namespace-16.1 {Tcl_FindCommand, absolute name found} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
@@ -1098,7 +1167,11 @@ test namespace-16.8 {Tcl_FindCommand, relative name found} -setup {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {::test_ns_1::cmd: a b c}
+=======
+} -result {::test_ns_1::cmd: a b c}
+>>>>>>> upstream/master
 =======
 } -result {::test_ns_1::cmd: a b c}
 >>>>>>> upstream/master
@@ -1128,7 +1201,11 @@ test namespace-16.10 {Tcl_FindCommand, relative name found, only look in current
 } -result {::::cmd2: a b c}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-16.11 {Tcl_FindCommand, relative name not found} {
+=======
+test namespace-16.11 {Tcl_FindCommand, relative name not found} -body {
+>>>>>>> upstream/master
 =======
 test namespace-16.11 {Tcl_FindCommand, relative name not found} -body {
 >>>>>>> upstream/master
@@ -1140,6 +1217,7 @@ test namespace-16.11 {Tcl_FindCommand, relative name not found} -body {
     }
 } -returnCodes error -result {invalid command name "cmd3"}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 catch {unset x}
@@ -1155,6 +1233,12 @@ test namespace-17.1 {Tcl_FindNamespaceVar, absolute name found} -setup {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+unset -nocomplain x
+test namespace-17.1 {Tcl_FindNamespaceVar, absolute name found} -setup {
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
 >>>>>>> upstream/master
     set x 314159
     namespace eval test_ns_1 {
@@ -1223,8 +1307,14 @@ test namespace-17.9 {Tcl_FindNamespaceVar, relative name and TCL_GLOBAL_ONLY} {
 } {hello}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-17.10 {Tcl_FindNamespaceVar, interference with cached varNames} {
     namespace eval test_ns_1 {}
+=======
+test namespace-17.10 {Tcl_FindNamespaceVar, interference with cached varNames} -setup {
+    namespace eval test_ns_1 {}
+} -body {
+>>>>>>> upstream/master
 =======
 test namespace-17.10 {Tcl_FindNamespaceVar, interference with cached varNames} -setup {
     namespace eval test_ns_1 {}
@@ -1247,7 +1337,11 @@ test namespace-17.10 {Tcl_FindNamespaceVar, interference with cached varNames} -
     return $a
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 1
+=======
+} -result 1
+>>>>>>> upstream/master
 =======
 } -result 1
 >>>>>>> upstream/master
@@ -1261,8 +1355,14 @@ catch {unset l}
 catch {rename foo {}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-18.1 {TclResetShadowedCmdRefs, one-level check for command shadowing} {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+=======
+test namespace-18.1 {TclResetShadowedCmdRefs, one-level check for command shadowing} -setup {
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+>>>>>>> upstream/master
 =======
 test namespace-18.1 {TclResetShadowedCmdRefs, one-level check for command shadowing} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
@@ -1288,7 +1388,11 @@ test namespace-18.1 {TclResetShadowedCmdRefs, one-level check for command shadow
     lappend l [test_ns_1::trigger]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {{global foo} {foo in test_ns_1}}
+=======
+} -result {{global foo} {foo in test_ns_1}}
+>>>>>>> upstream/master
 =======
 } -result {{global foo} {foo in test_ns_1}}
 >>>>>>> upstream/master
@@ -1320,8 +1424,14 @@ catch {rename foo {}}
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-19.1 {GetNamespaceFromObj, global name found} {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+=======
+test namespace-19.1 {GetNamespaceFromObj, global name found} -setup {
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+>>>>>>> upstream/master
 =======
 test namespace-19.1 {GetNamespaceFromObj, global name found} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
@@ -1344,9 +1454,12 @@ test namespace-19.2 {GetNamespaceFromObj, relative name found} -setup {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {}
 test namespace-19.3 {GetNamespaceFromObj, name not found} -body {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {}
@@ -1354,6 +1467,9 @@ test namespace-19.3 {GetNamespaceFromObj, name not found} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1363,8 +1479,11 @@ test namespace-19.3 {GetNamespaceFromObj, name not found} -setup {
 } -returnCodes error -result {namespace "test_ns_99" not found in "::test_ns_1"}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-19.4 {GetNamespaceFromObj, invalidation of cached ns refs} {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test namespace-19.4 {GetNamespaceFromObj, invalidation of cached ns refs} -setup {
@@ -1372,6 +1491,9 @@ test namespace-19.4 {GetNamespaceFromObj, invalidation of cached ns refs} -setup
     namespace eval test_ns_1::test_ns_2 {}
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1388,7 +1510,11 @@ test namespace-19.4 {GetNamespaceFromObj, invalidation of cached ns refs} -setup
     lappend l [test_ns_1::foo]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {{} ::test_ns_1::test_ns_2::test_ns_3}
+=======
+} -result {{} ::test_ns_1::test_ns_2::test_ns_3}
+>>>>>>> upstream/master
 =======
 } -result {{} ::test_ns_1::test_ns_2::test_ns_3}
 >>>>>>> upstream/master
@@ -1409,6 +1535,7 @@ test namespace-20.3 {Tcl_NamespaceObjCmd, abbreviations are okay} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-21.1 {NamespaceChildrenCmd, no args} {
 =======
 test namespace-21.1 {NamespaceChildrenCmd, no args} -setup {
@@ -1426,6 +1553,18 @@ test namespace-21.1 {NamespaceChildrenCmd, no args} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
 } -body {
     namespace eval test_ns_1::test_ns_2 {}
+    expr {"::test_ns_1" in [namespace children]}
+} -result {1}
+test namespace-21.2 {NamespaceChildrenCmd, no args} -setup {
+=======
+test namespace-21.1 {NamespaceChildrenCmd, no args} -setup {
+>>>>>>> upstream/master
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+    namespace eval test_ns_1::test_ns_2 {}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
     expr {"::test_ns_1" in [namespace children]}
 } -result {1}
 test namespace-21.2 {NamespaceChildrenCmd, no args} -setup {
@@ -1468,7 +1607,11 @@ test namespace-21.7 {NamespaceChildrenCmd, glob-style pattern given} -setup {
     lsort [namespace children test_ns_1 test*]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } [lsort {::test_ns_1::test_ns_2 ::test_ns_1::test_ns_foo}]
+=======
+} -result {::test_ns_1::test_ns_2 ::test_ns_1::test_ns_foo}
+>>>>>>> upstream/master
 =======
 } -result {::test_ns_1::test_ns_2 ::test_ns_1::test_ns_foo}
 >>>>>>> upstream/master
@@ -1505,6 +1648,7 @@ test namespace-22.5 {NamespaceCodeCmd, in other namespace} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-22.6 {NamespaceCodeCmd, in other namespace} { 
     namespace eval test_ns_1 { 
 	variable v 42 
@@ -1517,6 +1661,8 @@ test namespace-22.6 {NamespaceCodeCmd, in other namespace} {
     }] 
 } {42} 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1534,6 +1680,9 @@ test namespace-22.6 {NamespaceCodeCmd, in other namespace} {
 } {42}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1717,7 +1866,11 @@ test namespace-26.7 {NamespaceExportCmd, -clear resets export list} -setup {
     list [lsort [info commands test_ns_2::*]] [test_ns_2::cmd4 hello]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } [list [lsort {::test_ns_2::cmd4 ::test_ns_2::cmd1 ::test_ns_2::cmd3}] {cmd4: hello}]
+=======
+} -result [list [lsort {::test_ns_2::cmd4 ::test_ns_2::cmd1 ::test_ns_2::cmd3}] {cmd4: hello}]
+>>>>>>> upstream/master
 =======
 } -result [list [lsort {::test_ns_2::cmd4 ::test_ns_2::cmd1 ::test_ns_2::cmd3}] {cmd4: hello}]
 >>>>>>> upstream/master
@@ -1819,6 +1972,7 @@ test namespace-29.5 {NamespaceInscopeCmd, has lappend semantics} -setup {
          [namespace eval test_ns_1 [concat cmd [list x y z]]]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {{::test_ns_1::cmd: v=747, args=x y z} {::test_ns_1::cmd: v=747, args=x y z}}
 test namespace-29.6 {NamespaceInscopeCmd, 1400572} {
     namespace inscope test_ns_1 {info level 0}
@@ -1836,6 +1990,14 @@ test namespace-29.6 {NamespaceInscopeCmd, 1400572} -setup {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+} -result {{::test_ns_1::cmd: v=747, args=x y z} {::test_ns_1::cmd: v=747, args=x y z}}
+test namespace-29.6 {NamespaceInscopeCmd, 1400572} -setup {
+    namespace eval test_ns_1 {}
+} -body {
+    namespace inscope test_ns_1 {info level 0}
+} -result {namespace inscope test_ns_1 {info level 0}}
 >>>>>>> upstream/master
 
 test namespace-30.1 {NamespaceOriginCmd, bad args} {
@@ -2033,8 +2195,14 @@ test namespace-34.7 {NamespaceWhichCmd, variable lookup} -setup {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-35.1 {FreeNsNameInternalRep, resulting ref count > 0} {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
+=======
+test namespace-35.1 {FreeNsNameInternalRep, resulting ref count > 0} -setup {
+    catch {namespace delete {*}[namespace children :: test_ns_*]}
+} -body {
+>>>>>>> upstream/master
 =======
 test namespace-35.1 {FreeNsNameInternalRep, resulting ref count > 0} -setup {
     catch {namespace delete {*}[namespace children :: test_ns_*]}
@@ -2125,10 +2293,14 @@ test namespace-40.1 {Ignoring namespace proc "unknown"} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     rename unknown {}   
 =======
     rename unknown {}
 >>>>>>> upstream/master
+=======
+    rename unknown {}
+>>>>>>> upstream/master
     rename _unknown unknown
     namespace delete ns
 } -result {global global}
@@ -2218,6 +2390,7 @@ test namespace-41.1 {Shadowing byte-compiled commands, Bug: 231259} {
 	lappend ::res [test]
     }
     namespace delete ns
+<<<<<<< HEAD
     set res
 } {0 1}
 test namespace-41.2 {Shadowing byte-compiled commands, Bug: 231259} {
@@ -2270,10 +2443,18 @@ test namespace-42.2 {ensembles: basic} {
 test namespace-42.3 {ensembles: basic} {
     namespace eval ns {
 	namespace export x*
+=======
+    lappend result [info command ns::x1]
+} {1 2 1 {unknown or ambiguous subcommand "x": must be x1, or x2} ::ns::x1 {}}
+test namespace-42.4 {ensembles: basic} -body {
+    namespace eval ns {
+	namespace export y*
+>>>>>>> upstream/master
 	proc x1 {} {format 1}
 	proc x2 {} {format 2}
 	namespace ensemble create
     }
+<<<<<<< HEAD
     set result [list [ns x1] [ns x2]]
     lappend result [catch {ns x} msg] $msg
     rename ns {}
@@ -2291,6 +2472,11 @@ test namespace-42.4 {ensembles: basic} -body {
     list [catch {ns x} msg] $msg
 } -cleanup {
     namespace delete ns
+=======
+    list [catch {ns x} msg] $msg
+} -cleanup {
+    namespace delete ns
+>>>>>>> upstream/master
 } -result {1 {unknown subcommand "x": namespace ::ns does not export any commands}}
 test namespace-42.5 {ensembles: basic} -body {
     namespace eval ns {
@@ -2338,6 +2524,7 @@ test namespace-42.7 {ensembles: nested} -body {
 } -cleanup {
     namespace delete ns
 } -result {{1 ::ns::x0::z} 1 2 3}
+<<<<<<< HEAD
 test namespace-42.8 {ensembles: [Bug 1670091]} -setup {
     proc demo args {}
     variable target [list [namespace which demo] x]
@@ -2426,6 +2613,8 @@ test namespace-42.7 {ensembles: nested} -body {
 } -cleanup {
     namespace delete ns
 } -result {{1 ::ns::x0::z} 1 2 3}
+=======
+>>>>>>> upstream/master
 test namespace-42.8 {ensembles: [Bug 1670091]} -setup {
     proc demo args {}
     variable target [list [namespace which demo] x]
@@ -8161,6 +8350,35 @@ test namespace-53.11 {ensembles: nested rewrite} -setup {
     namespace delete ns
     unset -nocomplain msg
 } -result {1 {wrong # args: should be "ns x 1 z2 a2"}}
+<<<<<<< HEAD
+
+test namespace-54.1 {leak on namespace deletion} -constraints {memory} \
+-setup {
+    proc getbytes {} {
+	set lines [split [memory info] "\n"]
+	lindex $lines 3 3
+    }
+} -body {
+    set end [getbytes]
+    for {set i 0} {$i < 5} {incr i} {
+	set ns ::y$i
+	namespace eval $ns {}
+	namespace delete $ns
+	set start $end
+	set end [getbytes]
+    }
+    set leakedBytes [expr {$end - $start}]
+} -cleanup {
+    rename getbytes {}
+    unset i ns start end
+} -result 0
+
+test namespace-55.1 {compiled ensembles inside compiled ensembles: Bug 6d2f249a01} {
+    info class [format %s constructor] oo::object
+} ""
+
+>>>>>>> upstream/master
+=======
 
 test namespace-54.1 {leak on namespace deletion} -constraints {memory} \
 -setup {

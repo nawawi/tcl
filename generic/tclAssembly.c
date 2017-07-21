@@ -138,6 +138,11 @@ typedef enum TalInstType {
     ASSEM_BOOL,			/* One Boolean operand */
     ASSEM_BOOL_LVT4,		/* One Boolean, one 4-byte LVT ref. */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ASSEM_CLOCK_READ,		/* 1-byte unsigned-integer case number, in the
+				 * range 0-3 */
+>>>>>>> upstream/master
 =======
     ASSEM_CLOCK_READ,		/* 1-byte unsigned-integer case number, in the
 				 * range 0-3 */
@@ -356,6 +361,10 @@ static const TalInstDesc TalInstructionTable[] = {
     {"bitor",		ASSEM_1BYTE,	INST_BITOR,		2,	1},
     {"bitxor",		ASSEM_1BYTE,	INST_BITXOR,		2,	1},
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    {"clockRead",	ASSEM_CLOCK_READ, INST_CLOCK_READ,	0,	1},
+>>>>>>> upstream/master
 =======
     {"clockRead",	ASSEM_CLOCK_READ, INST_CLOCK_READ,	0,	1},
 >>>>>>> upstream/master
@@ -878,7 +887,11 @@ CompileAssembleObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	FreeAssembleCodeInternalRep(objPtr);
+=======
+	TclFreeIntRep(objPtr);
+>>>>>>> upstream/master
 =======
 	TclFreeIntRep(objPtr);
 >>>>>>> upstream/master
@@ -915,8 +928,12 @@ CompileAssembleObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     TclInitByteCodeObj(objPtr, &compEnv);
     objPtr->typePtr = &assembleCodeType;
+=======
+    codePtr = TclInitByteCodeObj(objPtr, &assembleCodeType, &compEnv);
+>>>>>>> upstream/master
 =======
     codePtr = TclInitByteCodeObj(objPtr, &assembleCodeType, &compEnv);
 >>>>>>> upstream/master
@@ -935,7 +952,10 @@ CompileAssembleObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     codePtr = objPtr->internalRep.twoPtrValue.ptr1;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1345,6 +1365,7 @@ AssembleOneLine(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	operand1 = Tcl_GetStringFromObj(operand1Obj, &operand1Len);
 =======
 	operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
@@ -1352,6 +1373,10 @@ AssembleOneLine(
 >>>>>>> upstream/master
 	litIndex = TclRegisterNewLiteral(envPtr, operand1, operand1Len);
 =======
+	litIndex = TclRegisterLiteral(envPtr, operand1, operand1Len, 0);
+>>>>>>> upstream/master
+=======
+	operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
 	litIndex = TclRegisterLiteral(envPtr, operand1, operand1Len, 0);
 >>>>>>> upstream/master
 =======
@@ -1419,7 +1444,10 @@ AssembleOneLine(
 	break;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     case ASSEM_CLOCK_READ:
 	if (parsePtr->numWords != 2) {
 	    Tcl_WrongNumArgs(interp, 1, &instNameObj, "imm8");
@@ -1437,6 +1465,9 @@ AssembleOneLine(
 	BBEmitInstInt1(assemEnvPtr, tblIdx, opnd, opnd);
 	break;
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     case ASSEM_CONCAT1:
 	if (parsePtr->numWords != 2) {
@@ -1527,6 +1558,7 @@ AssembleOneLine(
 	} else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    operand1 = Tcl_GetStringFromObj(operand1Obj, &operand1Len);
 =======
 	    operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
@@ -1534,6 +1566,10 @@ AssembleOneLine(
 >>>>>>> upstream/master
 	    litIndex = TclRegisterNewLiteral(envPtr, operand1, operand1Len);
 =======
+	    litIndex = TclRegisterLiteral(envPtr, operand1, operand1Len, 0);
+>>>>>>> upstream/master
+=======
+	    operand1 = TclGetStringFromObj(operand1Obj, &operand1Len);
 	    litIndex = TclRegisterLiteral(envPtr, operand1, operand1Len, 0);
 >>>>>>> upstream/master
 =======
@@ -2380,7 +2416,11 @@ FindLocalVar(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     varNameStr = Tcl_GetStringFromObj(varNameObj, &varNameLen);
+=======
+    varNameStr = TclGetStringFromObj(varNameObj, &varNameLen);
+>>>>>>> upstream/master
 =======
     varNameStr = TclGetStringFromObj(varNameObj, &varNameLen);
 >>>>>>> upstream/master
@@ -4345,7 +4385,11 @@ AddBasicBlockRangeToErrorInfo(
     Tcl_AddErrorInfo(interp, " and ");
     if (bbPtr->successor1 != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetIntObj(lineNo, bbPtr->successor1->startLine);
+=======
+	TclSetLongObj(lineNo, bbPtr->successor1->startLine);
+>>>>>>> upstream/master
 =======
 	TclSetLongObj(lineNo, bbPtr->successor1->startLine);
 >>>>>>> upstream/master
@@ -4418,11 +4462,15 @@ FreeAssembleCodeInternalRep(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     codePtr->refCount--;
     if (codePtr->refCount <= 0) {
 	TclCleanupByteCode(codePtr);
     }
     objPtr->typePtr = NULL;
+=======
+    TclReleaseByteCode(codePtr);
+>>>>>>> upstream/master
 =======
     TclReleaseByteCode(codePtr);
 >>>>>>> upstream/master

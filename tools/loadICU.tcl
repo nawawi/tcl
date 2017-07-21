@@ -28,6 +28,12 @@
 #----------------------------------------------------------------------
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+puts stdout "TODO: output in UTF-8 in stead of using \\uhhhh sequences"
+exit; # Remove those two lines after modifying this tool.
+
+>>>>>>> upstream/master
 =======
 puts stdout "TODO: output in UTF-8 in stead of using \\uhhhh sequences"
 exit; # Remove those two lines after modifying this tool.

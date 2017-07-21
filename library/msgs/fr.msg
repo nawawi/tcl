@@ -19,7 +19,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset fr MONTHS_ABBREV [list \
         "janv."\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "f\u00e9vr."\
+=======
+        "févr."\
+>>>>>>> upstream/master
 =======
         "févr."\
 >>>>>>> upstream/master
@@ -29,14 +33,19 @@ namespace eval ::tcl::clock {
         "juin"\
         "juil."\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "ao\u00fbt"\
+=======
+        "août"\
+>>>>>>> upstream/master
         "sept."\
         "oct."\
         "nov."\
-        "d\u00e9c."\
+        "déc."\
         ""]
     ::msgcat::mcset fr MONTHS_FULL [list \
         "janvier"\
+<<<<<<< HEAD
         "f\u00e9vrier"\
 =======
         "août"\
@@ -49,17 +58,28 @@ namespace eval ::tcl::clock {
         "janvier"\
         "février"\
 >>>>>>> upstream/master
+=======
+        "février"\
+>>>>>>> upstream/master
         "mars"\
         "avril"\
         "mai"\
         "juin"\
         "juillet"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "ao\u00fbt"\
         "septembre"\
         "octobre"\
         "novembre"\
         "d\u00e9cembre"\
+=======
+        "août"\
+        "septembre"\
+        "octobre"\
+        "novembre"\
+        "décembre"\
+>>>>>>> upstream/master
 =======
         "août"\
         "septembre"\

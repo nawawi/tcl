@@ -115,6 +115,10 @@ proc ::tcl::clock::Initialize {} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
+>>>>>>> upstream/master
 =======
     ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
 >>>>>>> upstream/master
@@ -1334,27 +1338,7 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-=======
->>>>>>> upstream/master
-
-    # Parse the date.  The parser will return a list comprising date, time,
-    # time zone, relative month/day/seconds, relative weekday, ordinal month.
-
-    try {
-	set scanned [Oldscan $string \
-		     [dict get $date year] \
-		     [dict get $date month] \
-		     [dict get $date dayOfMonth]]
-	lassign $scanned \
-	    parseDate parseTime parseZone parseRel \
-	    parseWeekday parseOrdinalMonth
-    } on error message {
-	return -code error \
-	    "unable to convert date-time string \"$string\": $message"
-    }
-
 <<<<<<< HEAD
-=======
 =======
 >>>>>>> upstream/master
 =======
@@ -1378,6 +1362,32 @@ proc ::tcl::clock::FreeScan { string base timezone locale } {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+=======
+>>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
+
+    # Parse the date.  The parser will return a list comprising date, time,
+    # time zone, relative month/day/seconds, relative weekday, ordinal month.
+
+    try {
+	set scanned [Oldscan $string \
+		     [dict get $date year] \
+		     [dict get $date month] \
+		     [dict get $date dayOfMonth]]
+	lassign $scanned \
+	    parseDate parseTime parseZone parseRel \
+	    parseWeekday parseOrdinalMonth
+    } on error message {
+	return -code error \
+	    "unable to convert date-time string \"$string\": $message"
+    }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2369,10 +2379,17 @@ proc ::tcl::clock::EnterLocale { locale } {
 	    # loaded
 
 	    mcpackagelocale set [mclocale]
+<<<<<<< HEAD
 
 	    # Make a new locale string for the system locale, and get the
 	    # Control Panel information
 
+=======
+
+	    # Make a new locale string for the system locale, and get the
+	    # Control Panel information
+
+>>>>>>> upstream/master
 	    set locale [mclocale]_windows
 	    if { ! [mcpackagelocale present $locale] } {
 		LoadWindowsDateTimeFormats $locale
@@ -4358,6 +4375,9 @@ proc ::tcl::clock::add { clockval args } {
     if { [catch { expr { wide($clockval) } } result] } {
 	return -code error "expected integer but got \"$clockval\""
     }
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4639,7 +4659,10 @@ proc ::tcl::clock::AddDays { days clockval timezone changeover } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4670,10 +4693,17 @@ proc ::tcl::clock::ChangeCurrentLocale {args} {
 
     foreach p [info procs [namespace current]::scanproc'*'current] {
         rename $p {}
+<<<<<<< HEAD
     }
     foreach p [info procs [namespace current]::formatproc'*'current] {
         rename $p {}
     }
+=======
+    }
+    foreach p [info procs [namespace current]::formatproc'*'current] {
+        rename $p {}
+    }
+>>>>>>> upstream/master
 
     catch {array unset FormatProc *'current}
     set LocaleNumeralCache {}

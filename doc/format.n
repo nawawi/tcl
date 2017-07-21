@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -101,6 +105,8 @@ For \fBx\fR or \fBX\fR conversions, \fB0x\fR or \fB0X\fR (respectively)
 will be added to the beginning of the result unless it is zero.
 For \fBb\fR conversions, \fB0b\fR
 will be added to the beginning of the result unless it is zero.
+For \fBd\fR conversions, \fB0d\fR will be added to the beginning
+of the result unless it is zero.
 For all floating-point conversions (\fBe\fR, \fBE\fR, \fBf\fR,
 \fBg\fR, and \fBG\fR) it guarantees that the result always
 has a decimal point.
@@ -150,7 +156,11 @@ truncated to a 16-bit range before converting.  This option is rarely useful.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If it is \fBl\fR it specifies that the integer value is 
+=======
+If it is \fBl\fR it specifies that the integer value is
+>>>>>>> upstream/master
 =======
 If it is \fBl\fR it specifies that the integer value is
 >>>>>>> upstream/master
@@ -205,8 +215,13 @@ No conversion; just insert string.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Convert number to signed decimal string of 
 the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by 
+=======
+Convert number to signed decimal string of
+the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by
+>>>>>>> upstream/master
 =======
 Convert number to signed decimal string of
 the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by
@@ -226,8 +241,13 @@ If the precision is 0 then no decimal point is output.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Convert number to scientific notation in the 
 form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined 
+=======
+Convert number to scientific notation in the
+form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined
+>>>>>>> upstream/master
 =======
 Convert number to scientific notation in the
 form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined
@@ -249,8 +269,13 @@ printed instead of \fBe\fR.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If the exponent is less than \-4 or greater than or equal to the 
 precision, then convert number as for \fB%e\fR or 
+=======
+If the exponent is less than \-4 or greater than or equal to the
+precision, then convert number as for \fB%e\fR or
+>>>>>>> upstream/master
 =======
 If the exponent is less than \-4 or greater than or equal to the
 precision, then convert number as for \fB%e\fR or
@@ -317,6 +342,7 @@ reordering the data values passed to \fBformat\fR:
 .CS
 set fmt1 "Today, %d shares in %s were bought at $%.2f each"
 puts [\fBformat\fR $fmt1 123 "Global BigCorp" 19.37]
+<<<<<<< HEAD
 
 set fmt2 "Bought %2\e$s equity ($%3$.2f x %1\e$d) today"
 puts [\fBformat\fR $fmt2 123 "Global BigCorp" 19.37]
@@ -341,6 +367,8 @@ puts $sep
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 # Make a nice header (with separator) for the table first
 set sep +-[string repeat - $w1]-+-[string repeat - $w2]-+

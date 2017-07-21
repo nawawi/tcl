@@ -38,9 +38,15 @@ testConstraint y2038 \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	[clock format] - tests of bad and empty arguments 
 #
 # clock-2 
+=======
+#	[clock format] - tests of bad and empty arguments
+#
+# clock-2
+>>>>>>> upstream/master
 =======
 #	[clock format] - tests of bad and empty arguments
 #
@@ -216,7 +222,11 @@ namespace eval ::tcl::clock {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    lxxx lxxxi lxxxii lxxxiii lxxxiv lxxxv lxxxvi lxxxvii lxxxviii 
+=======
+	    lxxx lxxxi lxxxii lxxxiii lxxxiv lxxxv lxxxvi lxxxvii lxxxviii
+>>>>>>> upstream/master
 =======
 	    lxxx lxxxi lxxxii lxxxiii lxxxiv lxxxv lxxxvi lxxxvii lxxxviii
 >>>>>>> upstream/master
@@ -304,7 +314,11 @@ test clock-1.4 "clock format - bad flag" {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -35285,6 +35299,7 @@ test clock-30.25 {clock add seconds at DST conversion} {
 
 test clock-31.1 {system locale} \
     -constraints win \
+<<<<<<< HEAD
     -setup { 
 =======
 =======
@@ -35353,6 +35368,9 @@ test clock-31.1 {system locale} \
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+    -setup {
+>>>>>>> upstream/master
 	namespace eval ::tcl::clock {
 	    namespace import -force ::testClock::registry
 	}
@@ -35378,7 +35396,11 @@ test clock-31.2 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35413,7 +35435,11 @@ test clock-31.3 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35448,7 +35474,11 @@ test clock-31.4 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35497,7 +35527,11 @@ test clock-31.5 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35546,7 +35580,11 @@ test clock-31.6 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35628,7 +35666,11 @@ test clock-32.1 {scan/format across the Gregorian change} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			 
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -35674,7 +35716,11 @@ test clock-33.5 {clock clicks tests, millisecond timing test} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	  "ok" : 
+=======
+	  "ok" :
+>>>>>>> upstream/master
 =======
 	  "ok" :
 >>>>>>> upstream/master
@@ -35698,7 +35744,11 @@ test clock-33.5a {clock tests, millisecond timing test} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	  "ok" : 
+=======
+	  "ok" :
+>>>>>>> upstream/master
 =======
 	  "ok" :
 >>>>>>> upstream/master
@@ -36034,7 +36084,11 @@ test clock-34.48 {more than one ToD} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {10:00 11:00}} 
+=======
+    -body {clock scan {10:00 11:00}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {10:00 11:00}}
 >>>>>>> upstream/master
@@ -36052,7 +36106,11 @@ test clock-34.49 {more than one date} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {1/1/2001 2/2/2002}} 
+=======
+    -body {clock scan {1/1/2001 2/2/2002}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {1/1/2001 2/2/2002}}
 >>>>>>> upstream/master
@@ -36070,7 +36128,11 @@ test clock-34.50 {more than one time zone} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {10:00 EST CST}} 
+=======
+    -body {clock scan {10:00 EST CST}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {10:00 EST CST}}
 >>>>>>> upstream/master
@@ -36088,7 +36150,11 @@ test clock-34.51 {more than one weekday} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {Monday Tuesday}} 
+=======
+    -body {clock scan {Monday Tuesday}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {Monday Tuesday}}
 >>>>>>> upstream/master
@@ -36106,7 +36172,11 @@ test clock-34.52 {more than one ordinal month} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {next January next March}} 
+=======
+    -body {clock scan {next January next March}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {next January next March}}
 >>>>>>> upstream/master
@@ -36214,7 +36284,11 @@ test clock-38.2 {make sure TZ is not cached after unset} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -36298,7 +36372,11 @@ test clock-44.1 {regression test - time zone name containing hyphen } \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -36355,7 +36433,11 @@ test clock-49.1 {regression test - localtime with negative arg (Bug 1237907)} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	list [catch { 
+=======
+	list [catch {
+>>>>>>> upstream/master
 =======
 	list [catch {
 >>>>>>> upstream/master
@@ -36606,7 +36688,11 @@ test clock-56.1 {use of zoneinfo, version 1} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -36668,7 +36754,11 @@ test clock-56.2 {use of zoneinfo, version 2} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -36890,7 +36980,11 @@ test clock-56.3 {use of zoneinfo, version 2, Y2038 compliance} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37054,7 +37148,11 @@ test clock-56.4 {Bug 3470928} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37077,7 +37175,11 @@ test clock-58.1 {clock l10n - Japanese localisation} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -37195,39 +37297,44 @@ test clock-60.1 {case insensitive weekday names} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"] 
+=======
+} [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"]
+>>>>>>> upstream/master
 test clock-60.2 {case insensitive weekday names} {
     clock scan "2000-W01 Monday" -gmt true -format "%G-W%V %a"
-} [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"] 
+} [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"]
 test clock-60.3 {case insensitive weekday names} {
     clock scan "2000-W01 MONDAY" -gmt true -format "%G-W%V %a"
-} [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"] 
+} [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"]
 test clock-60.4 {case insensitive weekday names} {
     clock scan "2000-W01 friday" -gmt true -format "%G-W%V %a"
-} [clock scan "2000-W01-5" -gmt true -format "%G-W%V-%u"] 
+} [clock scan "2000-W01-5" -gmt true -format "%G-W%V-%u"]
 test clock-60.5 {case insensitive weekday names} {
     clock scan "2000-W01 Friday" -gmt true -format "%G-W%V %a"
-} [clock scan "2000-W01-5" -gmt true -format "%G-W%V-%u"] 
+} [clock scan "2000-W01-5" -gmt true -format "%G-W%V-%u"]
 test clock-60.6 {case insensitive weekday names} {
     clock scan "2000-W01 FRIDAY" -gmt true -format "%G-W%V %a"
-} [clock scan "2000-W01-5" -gmt true -format "%G-W%V-%u"] 
+} [clock scan "2000-W01-5" -gmt true -format "%G-W%V-%u"]
 test clock-60.7 {case insensitive month names} {
     clock scan "1 january 2000" -gmt true -format "%d %b %Y"
-} [clock scan "2000-01-01" -gmt true -format "%Y-%m-%d"] 
+} [clock scan "2000-01-01" -gmt true -format "%Y-%m-%d"]
 test clock-60.8 {case insensitive month names} {
     clock scan "1 January 2000" -gmt true -format "%d %b %Y"
-} [clock scan "2000-01-01" -gmt true -format "%Y-%m-%d"] 
+} [clock scan "2000-01-01" -gmt true -format "%Y-%m-%d"]
 test clock-60.9 {case insensitive month names} {
     clock scan "1 JANUARY 2000" -gmt true -format "%d %b %Y"
-} [clock scan "2000-01-01" -gmt true -format "%Y-%m-%d"] 
+} [clock scan "2000-01-01" -gmt true -format "%Y-%m-%d"]
 test clock-60.10 {case insensitive month names} {
     clock scan "1 december 2000" -gmt true -format "%d %b %Y"
-} [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"] 
+} [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"]
 test clock-60.11 {case insensitive month names} {
     clock scan "1 December 2000" -gmt true -format "%d %b %Y"
-} [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"] 
+} [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"]
 test clock-60.12 {case insensitive month names} {
     clock scan "1 DECEMBER 2000" -gmt true -format "%d %b %Y"
+<<<<<<< HEAD
 } [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"] 
 =======
 =======
@@ -37274,6 +37381,9 @@ test clock-60.12 {case insensitive month names} {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+} [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"]
 >>>>>>> upstream/master
 
 test clock-61.1 {overflow of a wide integer on output} {*}{
@@ -37282,7 +37392,11 @@ test clock-61.1 {overflow of a wide integer on output} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37301,7 +37415,11 @@ test clock-61.2 {overflow of a wide integer on output} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37387,6 +37505,7 @@ test clock-67.2 {Bug d19a30db57} -body {
     # error, not segfault
     tcl::clock::GetJulianDayFromEraYearMonthDay {} 2361222
 } -returnCodes error -match glob -result *
+<<<<<<< HEAD
 
 test clock-67.3 {Bug d19a30db57} -body {
     # error, not segfault
@@ -37406,20 +37525,47 @@ test clock-67.4 {Change format %x output on global locale change [Bug 4a0c163d24
 } -result {1 1}
 
 test clock-67.5 {Change scan %x output on global locale change [Bug 4a0c163d24]} -setup {
+=======
+
+test clock-67.3 {Bug d19a30db57} -body {
+    # error, not segfault
+    tcl::clock::GetJulianDayFromEraYearWeekDay {} 2361222
+} -returnCodes error -match glob -result *
+
+test clock-67.4 {Change format %x output on global locale change [Bug 4a0c163d24]} -setup {
+>>>>>>> upstream/master
     package require msgcat
     set current [msgcat::mclocale]
 } -body {
     msgcat::mclocale de_de
+<<<<<<< HEAD
 <<<<<<< HEAD
     set res [clock scan "01.01.1970" -locale current -format %x]
     msgcat::mclocale en_uk
     # This will fail without the bug fix, as still de_de is active
     expr {$res == [clock scan "01/01/1970" -locale current -format %x]}
 =======
+=======
+    set res [regexp {^\d{2}\.\d{2}\.\d{4}$} [clock format 1 -locale current -format %x]]
+    msgcat::mclocale en_uk
+    lappend res [regexp {^\d{2}/\d{2}/\d{4}$} [clock format 1 -locale current -format %x]]
+} -cleanup {
+    msgcat::mclocale $current
+} -result {1 1}
+
+test clock-67.5 {Change scan %x output on global locale change [Bug 4a0c163d24]} -setup {
+    package require msgcat
+    set current [msgcat::mclocale]
+} -body {
+    msgcat::mclocale de_de
+>>>>>>> upstream/master
     set res [clock scan "01.01.1970" -locale current -format %x -gmt 1]
     msgcat::mclocale en_uk
     # This will fail without the bug fix, as still de_de is active
     expr {$res == [clock scan "01/01/1970" -locale current -format %x -gmt 1]}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } -cleanup {
     msgcat::mclocale $current

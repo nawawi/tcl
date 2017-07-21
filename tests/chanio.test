@@ -40,7 +40,11 @@ namespace eval ::tcl::test::io {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -145,11 +149,14 @@ test chan-io-1.8 {Tcl_WriteChars: WriteChars} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set f [open $path(test2) w] 
     chan configure      $f -encoding iso2022-jp 
     chan puts -nonewline $f [format %s%c [string repeat " " 4] 12399] 
     chan close           $f 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -160,6 +167,9 @@ test chan-io-1.8 {Tcl_WriteChars: WriteChars} {
     chan close           $f
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -282,7 +292,11 @@ test chan-io-3.4 {WriteChars: loop over stage buffer} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan configure $f -encoding jis0208 -buffersize 16 
+=======
+    chan configure $f -encoding jis0208 -buffersize 16
+>>>>>>> upstream/master
 =======
     chan configure $f -encoding jis0208 -buffersize 16
 >>>>>>> upstream/master
@@ -305,7 +319,11 @@ test chan-io-3.5 {WriteChars: saved != 0} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan configure $f -encoding jis0208 -buffersize 17 
+=======
+    chan configure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     chan configure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -346,7 +364,11 @@ test chan-io-3.7 {WriteChars: (bufPtr->nextAdded > bufPtr->length)} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan configure $f -encoding jis0208 -buffersize 17 
+=======
+    chan configure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     chan configure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -423,7 +445,11 @@ test chan-io-5.1 {CheckFlush: not full} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan configure $f 
+=======
+    chan configure $f
+>>>>>>> upstream/master
 =======
     chan configure $f
 >>>>>>> upstream/master
@@ -523,7 +549,11 @@ test chan-io-6.6 {Tcl_GetsObj: loop test} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # if (dst >= dstEnd) 
+=======
+    # if (dst >= dstEnd)
+>>>>>>> upstream/master
 =======
     # if (dst >= dstEnd)
 >>>>>>> upstream/master
@@ -844,7 +874,11 @@ test chan-io-6.34 {Tcl_GetsObj: crlf mode: buffer exhausted, not followed by \n}
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
+=======
+    # not (*eol == '\n')
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 >>>>>>> upstream/master
@@ -966,7 +1000,11 @@ test chan-io-6.43 {Tcl_GetsObj: input saw cr} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lappend x [chan gets $f line] $line [testchannel queuedcr $f] 
+=======
+    lappend x [chan gets $f line] $line [testchannel queuedcr $f]
+>>>>>>> upstream/master
 =======
     lappend x [chan gets $f line] $line [testchannel queuedcr $f]
 >>>>>>> upstream/master
@@ -989,7 +1027,11 @@ test chan-io-6.44 {Tcl_GetsObj: input saw cr, not followed by cr} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
+=======
+    # not (*eol == '\n')
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 >>>>>>> upstream/master
@@ -1008,7 +1050,11 @@ test chan-io-6.44 {Tcl_GetsObj: input saw cr, not followed by cr} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lappend x [chan gets $f line] $line [testchannel queuedcr $f] 
+=======
+    lappend x [chan gets $f line] $line [testchannel queuedcr $f]
+>>>>>>> upstream/master
 =======
     lappend x [chan gets $f line] $line [testchannel queuedcr $f]
 >>>>>>> upstream/master
@@ -1099,7 +1145,11 @@ test chan-io-6.50 {Tcl_GetsObj: auto mode: \r not followed by \n} -constraints {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
+=======
+    # not (*eol == '\n')
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 >>>>>>> upstream/master
@@ -1337,7 +1387,11 @@ test chan-io-8.6 {PeekAhead: change to non-blocking mode} -constraints {stdio te
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0) 
+=======
+    # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
+>>>>>>> upstream/master
 =======
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
 >>>>>>> upstream/master
@@ -1589,7 +1643,11 @@ test chan-io-13.3 {TranslateInputEOL: crlf mode: naked cr} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # (src >= srcMax) 
+=======
+    # (src >= srcMax)
+>>>>>>> upstream/master
 =======
     # (src >= srcMax)
 >>>>>>> upstream/master
@@ -1613,7 +1671,11 @@ test chan-io-13.4 {TranslateInputEOL: crlf mode: cr followed by not \n} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # (src >= srcMax) 
+=======
+    # (src >= srcMax)
+>>>>>>> upstream/master
 =======
     # (src >= srcMax)
 >>>>>>> upstream/master
@@ -1637,7 +1699,11 @@ test chan-io-13.5 {TranslateInputEOL: crlf mode: naked lf} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # (src >= srcMax) 
+=======
+    # (src >= srcMax)
+>>>>>>> upstream/master
 =======
     # (src >= srcMax)
 >>>>>>> upstream/master
@@ -1717,7 +1783,11 @@ test chan-io-13.10 {TranslateInputEOL: auto mode: \n} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*src == '\r') 
+=======
+    # not (*src == '\r')
+>>>>>>> upstream/master
 =======
     # not (*src == '\r')
 >>>>>>> upstream/master
@@ -4115,7 +4185,11 @@ test chan-io-31.31 {Tcl_Write crlf on block boundary, Tcl_Gets crlf} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan configure $f -translation crlf 
+=======
+    chan configure $f -translation crlf
+>>>>>>> upstream/master
 =======
     chan configure $f -translation crlf
 >>>>>>> upstream/master
@@ -4385,8 +4459,11 @@ test chan-io-33.4 {Tcl_Gets with long line} -setup {
 } -result {abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test chan-io-33.5 {Tcl_Gets with long line} {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test chan-io-33.5 {Tcl_Gets with long line} -setup {
@@ -4399,6 +4476,9 @@ test chan-io-33.5 {Tcl_Gets with long line} -setup {
     close $f
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4408,7 +4488,11 @@ test chan-io-33.5 {Tcl_Gets with long line} -setup {
     list $x $y
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {260 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}
+=======
+} -result {260 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}
+>>>>>>> upstream/master
 =======
 } -result {260 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ}
 >>>>>>> upstream/master
@@ -5407,7 +5491,11 @@ test chan-io-39.14 {Tcl_SetChannelOption: -encoding, binary & utf-8} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan configure $f -encoding {} 
+=======
+    chan configure $f -encoding {}
+>>>>>>> upstream/master
 =======
     chan configure $f -encoding {}
 >>>>>>> upstream/master
@@ -5564,7 +5652,11 @@ test chan-io-39.24 {Tcl_SetChannelOption, server socket is not readable or\
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -body { 
+=======
+} -body {
+>>>>>>> upstream/master
 =======
 } -body {
 >>>>>>> upstream/master
@@ -5604,7 +5696,11 @@ test chan-io-40.2 {POSIX open access modes: CREAT} -setup {
     set f [open $path(test3) {WRONLY CREAT} 0600]
     file stat $path(test3) stats
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x [format "0%o" [expr $stats(mode)&0o777]]
+=======
+    set x [format "%#o" [expr $stats(mode)&0o777]]
+>>>>>>> upstream/master
 =======
     set x [format "%#o" [expr $stats(mode)&0o777]]
 >>>>>>> upstream/master
@@ -5622,8 +5718,13 @@ test chan-io-40.3 {POSIX open access modes: CREAT} -setup {
     chan close [open $path(test3) {WRONLY CREAT}]
     file stat $path(test3) stats
 <<<<<<< HEAD
+<<<<<<< HEAD
     format "0%o" [expr $stats(mode)&0o777]
 } -result [format %04o [expr {0o666 & ~ $umaskValue}]]
+=======
+    format "%#o" [expr $stats(mode)&0o777]
+} -result [format %#4o [expr {0o666 & ~ $umaskValue}]]
+>>>>>>> upstream/master
 =======
     format "%#o" [expr $stats(mode)&0o777]
 } -result [format %#4o [expr {0o666 & ~ $umaskValue}]]
@@ -5738,7 +5839,11 @@ test chan-io-40.13 {POSIX open access modes: WRONLY} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match glob -result {1 {channel "*" wasn't opened for reading} abzzy} 
+=======
+} -match glob -result {1 {channel "*" wasn't opened for reading} abzzy}
+>>>>>>> upstream/master
 =======
 } -match glob -result {1 {channel "*" wasn't opened for reading} abzzy}
 >>>>>>> upstream/master
@@ -7061,6 +7166,7 @@ test chan-io-52.10 {TclCopyChannel & encodings} {fcopy} {
 } 5
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test chan-io-52.11 {TclCopyChannel & encodings} {fcopy} {
 =======
 test chan-io-52.11 {TclCopyChannel & encodings} -setup {
@@ -7071,12 +7177,17 @@ test chan-io-52.11 {TclCopyChannel & encodings} -setup {
 } -constraints {fcopy} -body {
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 test chan-io-52.11 {TclCopyChannel & encodings} -setup {
     set f [open $path(utf8-fcopy.txt) w]
     fconfigure $f -encoding utf-8 -translation lf
     puts $f "\u0410\u0410"
     close $f
 } -constraints {fcopy} -body {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     # binary to encoding => the input has to be in utf-8 to make sense to the
     # encoder
@@ -7091,7 +7202,13 @@ test chan-io-52.11 {TclCopyChannel & encodings} -setup {
     file size $path(kyrillic.txt)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 3
+=======
+} -cleanup {
+    file delete $path(utf8-fcopy.txt)
+} -result 3
+>>>>>>> upstream/master
 =======
 } -cleanup {
     file delete $path(utf8-fcopy.txt)

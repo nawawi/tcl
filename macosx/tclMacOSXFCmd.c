@@ -108,7 +108,11 @@ typedef	struct finderinfo {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct fileinfobuf {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -327,7 +331,7 @@ TclMacOSXSetFileAttribute(
     } else {
 	Tcl_WideInt newRsrcForkSize;
 
-	if (Tcl_GetWideIntFromObj(interp, attributePtr,
+	if (TclGetWideIntFromObj(interp, attributePtr,
 		&newRsrcForkSize) != TCL_OK) {
 	    return TCL_ERROR;
 	}
@@ -651,11 +655,16 @@ SetOSTypeFromAny(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     string = Tcl_GetStringFromObj(objPtr, &length);
 =======
     string = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
     Tcl_UtfToExternalDString(encoding, string, length, &ds);
+=======
+    string = TclGetString(objPtr);
+    Tcl_UtfToExternalDString(encoding, string, objPtr->length, &ds);
+>>>>>>> upstream/master
 =======
     string = TclGetString(objPtr);
     Tcl_UtfToExternalDString(encoding, string, objPtr->length, &ds);

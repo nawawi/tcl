@@ -1,6 +1,10 @@
 /* zutil.c -- target dependent utility functions for the compression library
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2005, 2010, 2011, 2012 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2017 Jean-loup Gailly
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2017 Jean-loup Gailly
 >>>>>>> upstream/master
@@ -12,6 +16,7 @@
 #include "zutil.h"
 #ifndef Z_SOLO
 #  include "gzguts.h"
+<<<<<<< HEAD
 #endif
 
 <<<<<<< HEAD
@@ -32,6 +37,11 @@ z_const char * const z_errmsg[10] = {
 ""};
 =======
 z_const char * const z_errmsg[10] = {
+=======
+#endif
+
+z_const char * const z_errmsg[10] = {
+>>>>>>> upstream/master
     (z_const char *)"need dictionary",     /* Z_NEED_DICT       2  */
     (z_const char *)"stream end",          /* Z_STREAM_END      1  */
     (z_const char *)"",                    /* Z_OK              0  */
@@ -43,6 +53,9 @@ z_const char * const z_errmsg[10] = {
     (z_const char *)"incompatible version",/* Z_VERSION_ERROR (-6) */
     (z_const char *)""
 };
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 
@@ -81,7 +94,11 @@ uLong ZEXPORT zlibCompileFlags()
     default:    flags += 3 << 6;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -139,8 +156,13 @@ uLong ZEXPORT zlibCompileFlags()
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
 
+=======
+#ifdef ZLIB_DEBUG
+#include <stdlib.h>
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 #include <stdlib.h>
@@ -248,9 +270,17 @@ local ptr_table table[MAX_PTR];
 voidpf ZLIB_INTERNAL zcalloc (voidpf opaque, unsigned items, unsigned size)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     voidpf buf = opaque; /* just to make some compilers happy */
     ulg bsize = (ulg)items*size;
 
+=======
+    voidpf buf;
+    ulg bsize = (ulg)items*size;
+
+    (void)opaque;
+
+>>>>>>> upstream/master
 =======
     voidpf buf;
     ulg bsize = (ulg)items*size;
@@ -281,6 +311,12 @@ void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
 {
     int n;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+    (void)opaque;
+
+>>>>>>> upstream/master
 =======
 
     (void)opaque;
@@ -302,7 +338,10 @@ void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
         return;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     ptr = opaque; /* just to make some compilers happy */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     Assert(0, "zcfree: ptr not found");
@@ -324,7 +363,11 @@ void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
 voidpf ZLIB_INTERNAL zcalloc (voidpf opaque, uInt items, uInt size)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (opaque) opaque = 0; /* to make compiler happy */
+=======
+    (void)opaque;
+>>>>>>> upstream/master
 =======
     (void)opaque;
 >>>>>>> upstream/master
@@ -334,7 +377,11 @@ voidpf ZLIB_INTERNAL zcalloc (voidpf opaque, uInt items, uInt size)
 void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (opaque) opaque = 0; /* to make compiler happy */
+=======
+    (void)opaque;
+>>>>>>> upstream/master
 =======
     (void)opaque;
 >>>>>>> upstream/master
@@ -360,7 +407,11 @@ voidpf ZLIB_INTERNAL zcalloc (opaque, items, size)
     unsigned size;
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (opaque) items += size - size; /* make compiler happy */
+=======
+    (void)opaque;
+>>>>>>> upstream/master
 =======
     (void)opaque;
 >>>>>>> upstream/master
@@ -373,8 +424,13 @@ void ZLIB_INTERNAL zcfree (opaque, ptr)
     voidpf ptr;
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     free(ptr);
     if (opaque) return; /* make compiler happy */
+=======
+    (void)opaque;
+    free(ptr);
+>>>>>>> upstream/master
 =======
     (void)opaque;
     free(ptr);

@@ -6,7 +6,11 @@ namespace eval ::tcl::clock {
         "Tor"\
         "Sre"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u010cet"\
+=======
+        "Čet"\
+>>>>>>> upstream/master
 =======
         "Čet"\
 >>>>>>> upstream/master
@@ -18,7 +22,11 @@ namespace eval ::tcl::clock {
         "Torek"\
         "Sreda"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u010cetrtek"\
+=======
+        "Četrtek"\
+>>>>>>> upstream/master
 =======
         "Četrtek"\
 >>>>>>> upstream/master
@@ -53,7 +61,11 @@ namespace eval ::tcl::clock {
         "december"\
         ""]
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset sl BCE "pr.n.\u0161."
+=======
+    ::msgcat::mcset sl BCE "pr.n.š."
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset sl BCE "pr.n.š."
 >>>>>>> upstream/master

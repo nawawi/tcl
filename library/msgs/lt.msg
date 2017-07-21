@@ -8,7 +8,11 @@ namespace eval ::tcl::clock {
         "Kt"\
         "Pn"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0160t"]
+=======
+        "Št"]
+>>>>>>> upstream/master
 =======
         "Št"]
 >>>>>>> upstream/master
@@ -17,10 +21,17 @@ namespace eval ::tcl::clock {
         "Pirmadienis"\
         "Antradienis"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Tre\u010diadienis"\
         "Ketvirtadienis"\
         "Penktadienis"\
         "\u0160e\u0161tadienis"]
+=======
+        "Trečiadienis"\
+        "Ketvirtadienis"\
+        "Penktadienis"\
+        "Šeštadienis"]
+>>>>>>> upstream/master
 =======
         "Trečiadienis"\
         "Ketvirtadienis"\
@@ -46,13 +57,20 @@ namespace eval ::tcl::clock {
         "Vasario"\
         "Kovo"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Baland\u017eio"\
         "Gegu\u017e\u0117s"\
         "Bir\u017eelio"\
+=======
+        "Balandžio"\
+        "Gegužės"\
+        "Birželio"\
+>>>>>>> upstream/master
         "Liepos"\
-        "Rugpj\u016b\u010dio"\
-        "Rugs\u0117jo"\
+        "Rugpjūčio"\
+        "Rugsėjo"\
         "Spalio"\
+<<<<<<< HEAD
         "Lapkri\u010dio"\
         "Gruod\u017eio"\
 =======
@@ -63,6 +81,10 @@ namespace eval ::tcl::clock {
         "Rugpjūčio"\
         "Rugsėjo"\
         "Spalio"\
+        "Lapkričio"\
+        "Gruodžio"\
+>>>>>>> upstream/master
+=======
         "Lapkričio"\
         "Gruodžio"\
 >>>>>>> upstream/master

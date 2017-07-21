@@ -33,6 +33,10 @@ typedef struct PkgAvail {
 				 * the package. Malloc'ed and protected by
 				 * Tcl_Preserve and Tcl_Release. */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    char *pkgIndex;		/* Full file name of pkgIndex file */
+>>>>>>> upstream/master
 =======
     char *pkgIndex;		/* Full file name of pkgIndex file */
 >>>>>>> upstream/master
@@ -101,7 +105,11 @@ static const char *	PkgRequireCore(Tcl_Interp *interp, const char *name,
 #define DupString(v,s) \
     do { \
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unsigned local__len = (unsigned) (strlen(s) + 1); \
+=======
+	size_t local__len = strlen(s) + 1; \
+>>>>>>> upstream/master
 =======
 	size_t local__len = strlen(s) + 1; \
 >>>>>>> upstream/master
@@ -213,6 +221,7 @@ Tcl_PkgProvideEx(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #undef Tcl_PkgRequire
 const char *
 Tcl_PkgRequire(
@@ -253,6 +262,31 @@ static void PkgFilesCleanupProc(ClientData clientData,
     return;
 }
 
+=======
+static void PkgFilesCleanupProc(ClientData clientData,
+    			    Tcl_Interp *interp)
+{
+    PkgFiles *pkgFiles = (PkgFiles *) clientData;
+    Tcl_HashSearch search;
+    Tcl_HashEntry *entry;
+
+    while (pkgFiles->names) {
+	PkgName *name = pkgFiles->names;
+	pkgFiles->names = name->nextPtr;
+	ckfree(name);
+    }
+    entry = Tcl_FirstHashEntry(&pkgFiles->table, &search);
+    while (entry) {
+	Tcl_Obj *obj = (Tcl_Obj *)Tcl_GetHashValue(entry);
+	Tcl_DecrRefCount(obj);
+	entry = Tcl_NextHashEntry(&search);
+    }
+    Tcl_DeleteHashTable(&pkgFiles->table);
+    ckfree(pkgFiles);
+    return;
+}
+
+>>>>>>> upstream/master
 void *TclInitPkgFiles(Tcl_Interp *interp)
 {
     /* If assocdata "tclPkgFiles" doesn't exist yet, create it */
@@ -569,6 +603,7 @@ PkgRequireCore(
 	}
 
 	if (bestVersion != NULL) {
+<<<<<<< HEAD
 	    ckfree(bestVersion);
 	}
 
@@ -576,6 +611,8 @@ PkgRequireCore(
 	}
 
 	if (bestVersion != NULL) {
+=======
+>>>>>>> upstream/master
 	    ckfree(bestVersion);
 	}
 
@@ -601,6 +638,7 @@ PkgRequireCore(
 
 	    char *versionToProvide = bestPtr->version;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    script = bestPtr->script;
 
 	    pkgPtr->clientData = versionToProvide;
@@ -608,6 +646,8 @@ PkgRequireCore(
 	    Tcl_Preserve(versionToProvide);
 	    code = Tcl_EvalEx(interp, script, -1, TCL_EVAL_GLOBAL);
 =======
+=======
+>>>>>>> upstream/master
 	    PkgFiles *pkgFiles;
 	    PkgName *pkgName;
 	    script = bestPtr->script;
@@ -628,6 +668,9 @@ PkgRequireCore(
 	    /* Pop the "ifneeded" package name from "tclPkgFiles" assocdata*/
 	    pkgFiles->names = pkgName->nextPtr;
 	    ckfree(pkgName);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    Tcl_Release(script);
 
@@ -899,6 +942,7 @@ Tcl_PackageObjCmd(
 {
     static const char *const pkgOptions[] = {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"forget",  "ifneeded", "names",   "prefer",   "present",
 	"provide", "require",  "unknown", "vcompare", "versions",
 	"vsatisfies", NULL
@@ -907,6 +951,16 @@ Tcl_PackageObjCmd(
 	PKG_FORGET,  PKG_IFNEEDED, PKG_NAMES,   PKG_PREFER,   PKG_PRESENT,
 	PKG_PROVIDE, PKG_REQUIRE,  PKG_UNKNOWN, PKG_VCOMPARE, PKG_VERSIONS,
 	PKG_VSATISFIES
+=======
+	"files",  "forget",  "ifneeded", "names",   "prefer",
+	"present", "provide", "require",  "unknown", "vcompare",
+	"versions", "vsatisfies", NULL
+    };
+    enum pkgOptions {
+	PKG_FILES,  PKG_FORGET,  PKG_IFNEEDED, PKG_NAMES,   PKG_PREFER,
+	PKG_PRESENT, PKG_PROVIDE, PKG_REQUIRE,  PKG_UNKNOWN, PKG_VCOMPARE,
+	PKG_VERSIONS, PKG_VSATISFIES
+>>>>>>> upstream/master
 =======
 	"files",  "forget",  "ifneeded", "names",   "prefer",
 	"present", "provide", "require",  "unknown", "vcompare",
@@ -940,11 +994,43 @@ Tcl_PackageObjCmd(
     }
     switch ((enum pkgOptions) optionIndex) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    case PKG_FILES: {
+	PkgFiles *pkgFiles;
+
+	if (objc != 3) {
+	    Tcl_WrongNumArgs(interp, 2, objv, "package");
+	    return TCL_ERROR;
+	}
+	pkgFiles = (PkgFiles *) Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+	if (pkgFiles) {
+	    Tcl_HashEntry *entry = Tcl_FindHashEntry(&pkgFiles->table, Tcl_GetString(objv[2]));
+	    if (entry) {
+		Tcl_SetObjResult(interp, (Tcl_Obj *)Tcl_GetHashValue(entry));
+	    }
+	}
+	break;
+    }
+>>>>>>> upstream/master
     case PKG_FORGET: {
 	const char *keyString;
+	PkgFiles *pkgFiles = (PkgFiles *) Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
 
 	for (i = 2; i < objc; i++) {
 	    keyString = TclGetString(objv[i]);
+<<<<<<< HEAD
+=======
+	    if (pkgFiles) {
+		hPtr = Tcl_FindHashEntry(&pkgFiles->table, keyString);
+		if (hPtr) {
+		    Tcl_Obj *obj = Tcl_GetHashValue(hPtr);
+		    Tcl_DeleteHashEntry(hPtr);
+		    Tcl_DecrRefCount(obj);
+		}
+	    }
+
+>>>>>>> upstream/master
 	    hPtr = Tcl_FindHashEntry(&iPtr->packageTable, keyString);
 	    if (hPtr == NULL) {
 		continue;
@@ -959,6 +1045,12 @@ Tcl_PackageObjCmd(
 		pkgPtr->availPtr = availPtr->nextPtr;
 		Tcl_EventuallyFree(availPtr->version, TCL_DYNAMIC);
 		Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
+<<<<<<< HEAD
+=======
+		if (availPtr->pkgIndex) {
+		    Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
+		}
+>>>>>>> upstream/master
 		ckfree(availPtr);
 	    }
 	    ckfree(pkgPtr);
@@ -989,7 +1081,11 @@ Tcl_PackageObjCmd(
 	    pkgPtr = FindPackage(interp, argv2);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	argv3 = Tcl_GetStringFromObj(objv[3], &length);
+=======
+	argv3 = TclGetStringFromObj(objv[3], &length);
+>>>>>>> upstream/master
 =======
 	argv3 = TclGetStringFromObj(objv[3], &length);
 >>>>>>> upstream/master
@@ -1011,6 +1107,7 @@ Tcl_PackageObjCmd(
 		    Tcl_SetObjResult(interp,
 			    Tcl_NewStringObj(availPtr->script, -1));
 		    return TCL_OK;
+<<<<<<< HEAD
 =======
     case PKG_FILES: {
 	PkgFiles *pkgFiles;
@@ -1116,6 +1213,16 @@ Tcl_PackageObjCmd(
 		break;
 	    }
 	}
+=======
+		}
+		Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
+		if (availPtr->pkgIndex) {
+		    Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
+		}
+		break;
+	    }
+	}
+>>>>>>> upstream/master
 	ckfree(argv3i);
 
 	if (objc == 4) {
@@ -1157,6 +1264,7 @@ Tcl_PackageObjCmd(
 		if ((pkgPtr->version != NULL) || (pkgPtr->availPtr != NULL)) {
 		    Tcl_ListObjAppendElement(NULL,resultObj, Tcl_NewStringObj(
 			    Tcl_GetHashKey(tablePtr, hPtr), -1));
+<<<<<<< HEAD
 >>>>>>> upstream/master
 		}
 		Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
@@ -1179,7 +1287,11 @@ Tcl_PackageObjCmd(
 	    } else {
 		availPtr->nextPtr = prevPtr->nextPtr;
 		prevPtr->nextPtr = availPtr;
+=======
+		}
+>>>>>>> upstream/master
 	    }
+	    Tcl_SetObjResult(interp, resultObj);
 	}
 <<<<<<< HEAD
 	argv4 = Tcl_GetStringFromObj(objv[4], &length);
@@ -1188,6 +1300,7 @@ Tcl_PackageObjCmd(
 >>>>>>> upstream/master
 	DupBlock(availPtr->script, argv4, (unsigned) length + 1);
 	break;
+<<<<<<< HEAD
     }
     case PKG_NAMES:
 	if (objc != 2) {
@@ -1209,6 +1322,8 @@ Tcl_PackageObjCmd(
 	    Tcl_SetObjResult(interp, resultObj);
 	}
 	break;
+=======
+>>>>>>> upstream/master
     case PKG_PRESENT: {
 	const char *name;
 
@@ -1306,6 +1421,7 @@ Tcl_PackageObjCmd(
 	    /*
 	     * Create a new-style requirement for the exact version.
 	     */
+<<<<<<< HEAD
 
 	    ov = Tcl_NewStringObj(version, -1);
 	    Tcl_AppendStringsToObj(ov, "-", version, NULL);
@@ -1452,6 +1568,8 @@ Tcl_PackageObjCmd(
 	    /*
 	     * Create a new-style requirement for the exact version.
 	     */
+=======
+>>>>>>> upstream/master
 
 	    ov = Tcl_NewStringObj(version, -1);
 	    Tcl_AppendStringsToObj(ov, "-", version, NULL);
@@ -1576,6 +1694,7 @@ Tcl_PackageObjCmd(
 		    Tcl_ListObjAppendElement(NULL, resultObj,
 			    Tcl_NewStringObj(availPtr->version, -1));
 		}
+<<<<<<< HEAD
 	    }
 	    Tcl_SetObjResult(interp, resultObj);
 	}
@@ -1688,6 +1807,8 @@ Tcl_PackageObjCmd(
 		    Tcl_ListObjAppendElement(NULL, resultObj,
 			    Tcl_NewStringObj(availPtr->version, -1));
 		}
+=======
+>>>>>>> upstream/master
 	    }
 	    Tcl_SetObjResult(interp, resultObj);
 	}
@@ -1781,7 +1902,11 @@ FindPackage(
 void
 TclFreePackageInfo(
 <<<<<<< HEAD
+<<<<<<< HEAD
     Interp *iPtr)		/* Interpereter that is being deleted. */
+=======
+    Interp *iPtr)		/* Interpreter that is being deleted. */
+>>>>>>> upstream/master
 =======
     Interp *iPtr)		/* Interpreter that is being deleted. */
 >>>>>>> upstream/master
@@ -1803,6 +1928,12 @@ TclFreePackageInfo(
 	    Tcl_EventuallyFree(availPtr->version, TCL_DYNAMIC);
 	    Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    if (availPtr->pkgIndex) {
+		Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
+	    }
+>>>>>>> upstream/master
 =======
 	    if (availPtr->pkgIndex) {
 		Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
@@ -2363,7 +2494,11 @@ AddRequirementsToResult(
 
     for (i = 0; i < reqc; i++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *v = Tcl_GetStringFromObj(reqv[i], &length);
+=======
+	const char *v = TclGetStringFromObj(reqv[i], &length);
+>>>>>>> upstream/master
 =======
 	const char *v = TclGetStringFromObj(reqv[i], &length);
 >>>>>>> upstream/master
@@ -2450,6 +2585,7 @@ SomeRequirementSatisfied(
     }
     return 0;
 }
+<<<<<<< HEAD
 
 /*
  *----------------------------------------------------------------------
@@ -2754,6 +2890,8 @@ SomeRequirementSatisfied(
     }
     return 0;
 }
+=======
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -2832,6 +2970,9 @@ RequirementSatisfied(
 	return satisfied;
     }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     /*
      * We have both min and max, and generate their internal reps. When
@@ -2850,6 +2991,9 @@ RequirementSatisfied(
 	satisfied = ((CompareVersions(min, havei, NULL) <= 0) &&
 		(CompareVersions(havei, max, NULL) < 0));
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
     }
 
     ckfree(min);
@@ -2885,6 +3029,7 @@ Tcl_PkgInitStubsCheck(
 {
     const char *actualVersion = Tcl_PkgPresent(interp, "Tcl", version, 0);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (exact && actualVersion) {
 =======
@@ -2944,6 +3089,8 @@ Tcl_PkgInitStubsCheck(
 {
     const char *actualVersion = Tcl_PkgPresent(interp, "Tcl", version, 0);
 
+=======
+>>>>>>> upstream/master
     if ((exact&1) && actualVersion) {
 	const char *p = version;
 	int count = 0;

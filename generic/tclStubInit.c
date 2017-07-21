@@ -42,7 +42,10 @@
 #undef TclpGetPid
 #undef TclSockMinimumBuffers
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define TclBackgroundException Tcl_BackgroundException
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #undef Tcl_SetIntObj
@@ -51,9 +54,16 @@
 #undef TclWinGetSockOpt
 #undef TclWinSetSockOpt
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 /* See bug 510001: TclSockMinimumBuffers needs plat imp */
 #ifdef _WIN64
+=======
+#undef TclWinNToHS
+
+/* See bug 510001: TclSockMinimumBuffers needs plat imp */
+#if defined(_WIN64) || defined(TCL_NO_DEPRECATED)
+>>>>>>> upstream/master
 =======
 #undef TclWinNToHS
 
@@ -67,6 +77,7 @@ static int TclSockMinimumBuffersOld(int sock, int size)
 {
     return TclSockMinimumBuffers(INT2PTR(sock), size);
 }
+<<<<<<< HEAD
 <<<<<<< HEAD
 #endif
 
@@ -366,6 +377,69 @@ static unsigned short TclWinNToHS(unsigned short ns) {
 #   define TclWinFlushDirtyChannels doNothing
 #   define TclWinResetInterfaces doNothing
 
+=======
+#endif
+
+#if defined(TCL_NO_DEPRECATED)
+#   define TclSetStartupScriptPath 0
+#   define TclGetStartupScriptPath 0
+#   define TclSetStartupScriptFileName 0
+#   define TclGetStartupScriptFileName 0
+#   define TclpInetNtoa 0
+#   define TclWinGetServByName 0
+#   define TclWinGetSockOpt 0
+#   define TclWinSetSockOpt 0
+#   define TclWinNToHS 0
+#else
+#define TclSetStartupScriptPath setStartupScriptPath
+static void TclSetStartupScriptPath(Tcl_Obj *path)
+{
+    Tcl_SetStartupScript(path, NULL);
+}
+#define TclGetStartupScriptPath getStartupScriptPath
+static Tcl_Obj *TclGetStartupScriptPath(void)
+{
+    return Tcl_GetStartupScript(NULL);
+}
+#define TclSetStartupScriptFileName setStartupScriptFileName
+static void TclSetStartupScriptFileName(
+    const char *fileName)
+{
+    Tcl_SetStartupScript(Tcl_NewStringObj(fileName,-1), NULL);
+}
+#define TclGetStartupScriptFileName getStartupScriptFileName
+static const char *TclGetStartupScriptFileName(void)
+{
+    Tcl_Obj *path = Tcl_GetStartupScript(NULL);
+    if (path == NULL) {
+	return NULL;
+    }
+    return Tcl_GetString(path);
+}
+
+#if defined(_WIN32) || defined(__CYGWIN__)
+#undef TclWinNToHS
+#define TclWinNToHS winNToHS
+static unsigned short TclWinNToHS(unsigned short ns) {
+	return ntohs(ns);
+}
+#endif
+#endif /* TCL_NO_DEPRECATED */
+
+#ifdef _WIN32
+#   define TclUnixWaitForFile 0
+#   define TclUnixCopyFile 0
+#   define TclUnixOpenTemporaryFile 0
+#   define TclpReaddir 0
+#   define TclpIsAtty 0
+#elif defined(__CYGWIN__)
+#   define TclpIsAtty TclPlatIsAtty
+#   define TclWinSetInterfaces (void (*) (int)) doNothing
+#   define TclWinAddProcess (void (*) (void *, unsigned int)) doNothing
+#   define TclWinFlushDirtyChannels doNothing
+#   define TclWinResetInterfaces doNothing
+
+>>>>>>> upstream/master
 static Tcl_Encoding winTCharEncoding;
 
 static int
@@ -912,6 +986,14 @@ static const TclIntStubs tclIntStubs = {
     TclDoubleDigits, /* 249 */
     TclSetSlaveCancelFlags, /* 250 */
     TclRegisterLiteral, /* 251 */
+<<<<<<< HEAD
+=======
+    TclPtrGetVar, /* 252 */
+    TclPtrSetVar, /* 253 */
+    TclPtrIncrObjVar, /* 254 */
+    TclPtrObjMakeUpvar, /* 255 */
+    TclPtrUnsetVar, /* 256 */
+>>>>>>> upstream/master
 };
 
 static const TclIntPlatStubs tclIntPlatStubs = {
@@ -1769,6 +1851,10 @@ const TclStubs tclStubs = {
     Tcl_FSUnloadFile, /* 629 */
     Tcl_ZlibStreamSetCompressionDictionary, /* 630 */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_OpenTcpServerEx, /* 631 */
+>>>>>>> upstream/master
 =======
     Tcl_OpenTcpServerEx, /* 631 */
 >>>>>>> upstream/master

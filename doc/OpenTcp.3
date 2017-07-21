@@ -5,7 +5,11 @@
 '\" of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 '\"
 <<<<<<< HEAD
+<<<<<<< HEAD
 .TH Tcl_OpenTcpClient 3 8.0 Tcl "Tcl Library Procedures"
+=======
+.TH Tcl_OpenTcpClient 3 8.7 Tcl "Tcl Library Procedures"
+>>>>>>> upstream/master
 =======
 .TH Tcl_OpenTcpClient 3 8.7 Tcl "Tcl Library Procedures"
 >>>>>>> upstream/master
@@ -38,6 +42,12 @@ error occurs, an error message is left in the interpreter's result.
 .AP int port in
 A port number to connect to as a client or to listen on as a server.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+.AP "const char" *service in
+A string specifying the port number to connect to as a client or to listen on as
+ a server.
+>>>>>>> upstream/master
 =======
 .AP "const char" *service in
 A string specifying the port number to connect to as a client or to listen on as
@@ -175,12 +185,18 @@ If one of the standard channels, \fBstdin\fR, \fBstdout\fR or \fBstderr\fR was
 previously closed, the act of creating the new channel also assigns it as a
 replacement for the standard channel.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 .SS TCL_OPENTCPSERVEREX
 .PP
 \fBTcl_OpenTcpServerEx\fR behaviour is identical to \fBTcl_OpenTcpServer\fR but
 gives more flexibility to the user by providing a mean to further customize some
 aspects of the socket via the \fIflags\fR parameter.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .SH "PLATFORM ISSUES"
 .PP

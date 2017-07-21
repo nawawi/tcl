@@ -14,6 +14,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # interpreted as white space.
 
 if {$::tcl_platform(platform) eq "windows"} {
@@ -41,6 +42,15 @@ if {![info exists ::tcl_nonwordchars]} {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+# interpreted as word characters. See bug [f1253530cdd8]. Will
+# probably be removed in Tcl 9.
+
+if {![info exists ::tcl_wordchars]} {
+    set ::tcl_wordchars {\w}
+}
+if {![info exists ::tcl_nonwordchars]} {
 >>>>>>> upstream/master
     set ::tcl_nonwordchars {\W}
 }

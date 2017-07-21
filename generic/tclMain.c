@@ -85,16 +85,23 @@ NewNativeObj(
 extern CRTIMPORT int	isatty(int fd);
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 /*
  * The thread-local variables for this file's functions.
  */
+<<<<<<< HEAD
 
 =======
 
 /*
  * The thread-local variables for this file's functions.
  */
+
+>>>>>>> upstream/master
+=======
 
 >>>>>>> upstream/master
 typedef struct {
@@ -122,7 +129,11 @@ typedef enum {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct InteractiveState {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -190,6 +201,7 @@ Tcl_SetStartupScript(
 	Tcl_IncrRefCount(tsdPtr->path);
     }
 
+<<<<<<< HEAD
 =======
 
     if (tsdPtr->path != NULL) {
@@ -204,6 +216,11 @@ Tcl_SetStartupScript(
     if (tsdPtr->encoding != NULL) {
 	Tcl_DecrRefCount(tsdPtr->encoding);
     }
+=======
+    if (tsdPtr->encoding != NULL) {
+	Tcl_DecrRefCount(tsdPtr->encoding);
+    }
+>>>>>>> upstream/master
     tsdPtr->encoding = newEncoding;
     if (tsdPtr->encoding != NULL) {
 	Tcl_IncrRefCount(tsdPtr->encoding);
@@ -276,7 +293,11 @@ Tcl_SourceRCFile(
     Tcl_Channel chan;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     fileName = Tcl_GetVar(interp, "tcl_rcFileName", TCL_GLOBAL_ONLY);
+=======
+    fileName = Tcl_GetVar2(interp, "tcl_rcFileName", NULL, TCL_GLOBAL_ONLY);
+>>>>>>> upstream/master
 =======
     fileName = Tcl_GetVar2(interp, "tcl_rcFileName", NULL, TCL_GLOBAL_ONLY);
 >>>>>>> upstream/master
@@ -300,8 +321,16 @@ Tcl_SourceRCFile(
 	    c = Tcl_OpenFileChannel(NULL, fullName, "r", 0);
 	    if (c != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_Close(NULL, c);
 		if (Tcl_EvalFile(interp, fullName) != TCL_OK) {
+=======
+		Tcl_Obj *fullNameObj = Tcl_NewStringObj(fullName, -1);
+
+		Tcl_Close(NULL, c);
+		Tcl_IncrRefCount(fullNameObj);
+		if (Tcl_FSEvalFileEx(interp, fullNameObj, NULL) != TCL_OK) {
+>>>>>>> upstream/master
 =======
 		Tcl_Obj *fullNameObj = Tcl_NewStringObj(fullName, -1);
 
@@ -316,6 +345,10 @@ Tcl_SourceRCFile(
 		    }
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		Tcl_DecrRefCount(fullNameObj);
+>>>>>>> upstream/master
 =======
 		Tcl_DecrRefCount(fullNameObj);
 >>>>>>> upstream/master
@@ -328,6 +361,7 @@ Tcl_SourceRCFile(
 
 /*----------------------------------------------------------------------
  *
+<<<<<<< HEAD
 <<<<<<< HEAD
  * Tcl_Main, Tcl_MainEx --
 =======
@@ -422,6 +456,9 @@ Tcl_SourceRCFile(
  *
  * Tcl_MainEx --
 >>>>>>> upstream/master
+=======
+ * Tcl_MainEx --
+>>>>>>> upstream/master
  *
  *	Main program for tclsh and most other Tcl-based applications.
  *
@@ -506,6 +543,7 @@ Tcl_MainEx(
 
     Tcl_SetVar2Ex(interp, "argc", NULL, Tcl_NewIntObj(argc), TCL_GLOBAL_ONLY);
 
+<<<<<<< HEAD
 =======
 
     Tcl_SetVar2Ex(interp, "argc", NULL, Tcl_NewIntObj(argc), TCL_GLOBAL_ONLY);
@@ -513,6 +551,10 @@ Tcl_MainEx(
 >>>>>>> upstream/master
 =======
 
+    Tcl_SetVar2Ex(interp, "argc", NULL, Tcl_NewIntObj(argc), TCL_GLOBAL_ONLY);
+
+>>>>>>> upstream/master
+=======
     Tcl_SetVar2Ex(interp, "argc", NULL, Tcl_NewIntObj(argc), TCL_GLOBAL_ONLY);
 
 >>>>>>> upstream/master
@@ -623,17 +665,23 @@ Tcl_MainEx(
 
     Tcl_IncrRefCount(is.commandPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /*
      * Get a new value for tty if anyone writes to ::tcl_interactive
      */
 
 =======
+=======
+>>>>>>> upstream/master
 
     /*
      * Get a new value for tty if anyone writes to ::tcl_interactive
      */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_LinkVar(interp, "tcl_interactive", (char *) &is.tty, TCL_LINK_BOOLEAN);
     is.input = Tcl_GetStdChannel(TCL_STDIN);
@@ -682,6 +730,7 @@ Tcl_MainEx(
 		break;
 	    }
 
+<<<<<<< HEAD
 	    /*
 	     * Add the newline removed by Tcl_GetsObj back to the string. Have
 	     * to add it back before testing completeness, because it can make
@@ -700,12 +749,17 @@ Tcl_MainEx(
 		break;
 	    }
 
+=======
+>>>>>>> upstream/master
 	    /*
 	     * Add the newline removed by Tcl_GetsObj back to the string. Have
 	     * to add it back before testing completeness, because it can make
 	     * a difference. [Bug 1775878]
 	     */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    if (Tcl_IsShared(is.commandPtr)) {
 		Tcl_DecrRefCount(is.commandPtr);
@@ -727,7 +781,11 @@ Tcl_MainEx(
 	     */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(is.commandPtr, &length);
+=======
+	    TclGetStringFromObj(is.commandPtr, &length);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(is.commandPtr, &length);
 >>>>>>> upstream/master
@@ -748,7 +806,11 @@ Tcl_MainEx(
 		resultPtr = Tcl_GetObjResult(interp);
 		Tcl_IncrRefCount(resultPtr);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(resultPtr, &length);
+=======
+		TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
 =======
 		TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
@@ -780,6 +842,7 @@ Tcl_MainEx(
 
 	    if (is.input) {
 		Tcl_DeleteChannelHandler(is.input, StdinProc, &is);
+<<<<<<< HEAD
 	    }
 =======
 	    }
@@ -837,6 +900,9 @@ Tcl_MainEx(
 
 	    if (is.input) {
 		Tcl_DeleteChannelHandler(is.input, StdinProc, &is);
+	    }
+>>>>>>> upstream/master
+=======
 	    }
 >>>>>>> upstream/master
 	    is.input = Tcl_GetStdChannel(TCL_STDIN);
@@ -871,6 +937,9 @@ Tcl_MainEx(
 	Tcl_DecrRefCount(is.commandPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     }
@@ -883,6 +952,7 @@ Tcl_MainEx(
 
     if (!Tcl_InterpDeleted(interp) && !Tcl_LimitExceeded(interp)) {
 	Tcl_Obj *cmd = Tcl_ObjPrintf("exit %d", exitCode);
+<<<<<<< HEAD
 
 	Tcl_IncrRefCount(cmd);
 	Tcl_EvalObjEx(interp, cmd, TCL_EVAL_GLOBAL);
@@ -903,12 +973,18 @@ Tcl_MainEx(
     if (!Tcl_InterpDeleted(interp) && !Tcl_LimitExceeded(interp)) {
 	Tcl_Obj *cmd = Tcl_ObjPrintf("exit %d", exitCode);
 
+=======
+
+>>>>>>> upstream/master
 	Tcl_IncrRefCount(cmd);
 	Tcl_EvalObjEx(interp, cmd, TCL_EVAL_GLOBAL);
 	Tcl_DecrRefCount(cmd);
     }
 
     /*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      * If Tcl_EvalObjEx returns, trying to eval [exit], something unusual is
      * happening. Maybe interp has been deleted; maybe [exit] was redefined,
@@ -997,7 +1073,48 @@ TclGetMainLoop(void)
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
     return tsdPtr->mainLoopProc;
+<<<<<<< HEAD
 }
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclFullFinalizationRequested --
+ *
+ *	This function returns true when either -DPURIFY is specified, or the
+ *	environment variable TCL_FINALIZE_ON_EXIT is set and not "0". This
+ *	predicate is called at places affecting the exit sequence, so that the
+ *	default behavior is a fast and deadlock-free exit, and the modified
+ *	behavior is a more thorough finalization for debugging purposes (leak
+ *	hunting etc).
+ *
+ * Results:
+ *	A boolean.
+ *
+ *----------------------------------------------------------------------
+ */
+
+MODULE_SCOPE int
+TclFullFinalizationRequested(void)
+{
+#ifdef PURIFY
+    return 1;
+#else
+    const char *fin;
+    Tcl_DString ds;
+    int finalize = 0;
+
+    fin = TclGetEnv("TCL_FINALIZE_ON_EXIT", &ds);
+    finalize = ((fin != NULL) && strcmp(fin, "0"));
+    if (fin != NULL) {
+	Tcl_DStringFree(&ds);
+    }
+    return finalize;
+#endif /* PURIFY */
+=======
+>>>>>>> upstream/master
+}
+#endif /* !TCL_ASCII_MAIN */
 
 /*
  *----------------------------------------------------------------------
@@ -1130,6 +1247,7 @@ StdinProc(
 	goto prompt;
     }
     isPtr->prompt = PROMPT_START;
+<<<<<<< HEAD
     Tcl_GetStringFromObj(commandPtr, &length);
 =======
     }
@@ -1145,6 +1263,9 @@ StdinProc(
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    TclGetStringFromObj(commandPtr, &length);
 >>>>>>> upstream/master
     Tcl_SetObjLength(commandPtr, --length);
 
@@ -1178,7 +1299,11 @@ StdinProc(
 	Tcl_IncrRefCount(resultPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(resultPtr, &length);
+=======
+	TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
 =======
 	TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
@@ -1347,6 +1472,9 @@ Prompt(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  * FreeMainInterp --

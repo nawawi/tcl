@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -83,7 +87,11 @@ indicate that the opened channel should be configured as if with the
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for 
+=======
+\fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for
+>>>>>>> upstream/master
 =======
 \fBfconfigure\fR \fB\-translation binary\fR option, making the channel suitable for
 >>>>>>> upstream/master
@@ -436,7 +444,11 @@ or if the command pipeline does not use standard input or output, but is
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 redirected from or to a file, then the above problems do not occur.  
+=======
+redirected from or to a file, then the above problems do not occur.
+>>>>>>> upstream/master
 =======
 redirected from or to a file, then the above problems do not occur.
 >>>>>>> upstream/master
@@ -468,7 +480,11 @@ not accessing the console, or if the command pipeline does not use standard
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 input, but is redirected from a file, then the above problem does not occur.  
+=======
+input, but is redirected from a file, then the above problem does not occur.
+>>>>>>> upstream/master
 =======
 input, but is redirected from a file, then the above problem does not occur.
 >>>>>>> upstream/master

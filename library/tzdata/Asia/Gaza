@@ -3,6 +3,7 @@
 set TZData(:Asia/Gaza) {
     {-9223372036854775808 8272 0 LMT}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2185409872 7200 0 EET}
     {-933645600 10800 1 EET}
     {-857358000 7200 0 EET}
@@ -15,6 +16,8 @@ set TZData(:Asia/Gaza) {
     {-748310400 10800 1 EET}
     {-731127600 7200 0 EET}
 =======
+=======
+>>>>>>> upstream/master
     {-2185409872 7200 0 EEST}
     {-933645600 10800 1 EEST}
     {-857358000 7200 0 EEST}
@@ -26,6 +29,9 @@ set TZData(:Asia/Gaza) {
     {-762656400 7200 0 EEST}
     {-748310400 10800 1 EEST}
     {-731127600 7200 0 EEST}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     {-682653600 7200 0 EET}
     {-399088800 10800 1 EEST}
@@ -121,6 +127,7 @@ set TZData(:Asia/Gaza) {
     {1414098000 7200 0 EET}
     {1427493600 10800 1 EEST}
     {1445547600 7200 0 EET}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -296,6 +303,8 @@ set TZData(:Asia/Gaza) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {1458946800 10800 1 EEST}
     {1477692000 7200 0 EET}
     {1490396400 10800 1 EEST}
@@ -466,10 +475,14 @@ set TZData(:Asia/Gaza) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     {4096386000 7200 0 EET}
+=======
+    {4097080800 7200 0 EET}
+>>>>>>> upstream/master
 =======
     {4097080800 7200 0 EET}
 >>>>>>> upstream/master

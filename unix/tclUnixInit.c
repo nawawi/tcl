@@ -14,11 +14,11 @@
 #ifdef HAVE_LANGINFO
 #   include <langinfo.h>
 #   ifdef __APPLE__
-#       if defined(HAVE_WEAK_IMPORT) && MAC_OS_X_VERSION_MIN_REQUIRED < 1030
+#	if defined(HAVE_WEAK_IMPORT) && MAC_OS_X_VERSION_MIN_REQUIRED < 1030
 	    /* Support for weakly importing nl_langinfo on Darwin. */
 #	    define WEAK_IMPORT_NL_LANGINFO
 	    extern char *nl_langinfo(nl_item) WEAK_IMPORT_ATTRIBUTE;
-#       endif
+#	endif
 #    endif
 #endif
 #include <sys/resource.h>
@@ -34,7 +34,11 @@
 
 #ifdef __CYGWIN__
 DLLIMPORT extern __stdcall unsigned char GetVersionExW(void *);
+<<<<<<< HEAD
 DLLIMPORT extern __stdcall void *LoadLibraryW(const void *);
+=======
+DLLIMPORT extern __stdcall void *GetModuleHandleW(const void *);
+>>>>>>> upstream/master
 DLLIMPORT extern __stdcall void FreeLibrary(void *);
 DLLIMPORT extern __stdcall void *GetProcAddress(void *, const char *);
 DLLIMPORT extern __stdcall void GetSystemInfo(void *);
@@ -45,12 +49,20 @@ static const char *const platforms[NUMPLATFORMS] = {
 };
 
 #define NUMPROCESSORS 11
+<<<<<<< HEAD
 static const char *const  processors[NUMPROCESSORS] = {
+=======
+static const char *const processors[NUMPROCESSORS] = {
+>>>>>>> upstream/master
     "intel", "mips", "alpha", "ppc", "shx", "arm", "ia64", "alpha64", "msil",
     "amd64", "ia32_on_win64"
 };
 
+<<<<<<< HEAD
 typedef struct _SYSTEM_INFO {
+=======
+typedef struct {
+>>>>>>> upstream/master
   union {
     DWORD  dwOemId;
     struct {
@@ -69,7 +81,11 @@ typedef struct _SYSTEM_INFO {
   int      wProcessorRevision;
 } SYSTEM_INFO;
 
+<<<<<<< HEAD
 typedef struct _OSVERSIONINFOW {
+=======
+typedef struct {
+>>>>>>> upstream/master
   DWORD dwOSVersionInfoSize;
   DWORD dwMajorVersion;
   DWORD dwMinorVersion;
@@ -117,7 +133,11 @@ static char pkgPath[sizeof(TCL_PACKAGE_PATH)+200] = TCL_PACKAGE_PATH;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct LocaleTable {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -387,6 +407,7 @@ TclpInitPlatform(void)
     }
 
     /*
+<<<<<<< HEAD
 =======
 
     /*
@@ -404,6 +425,8 @@ TclpInitPlatform(void)
     }
 
     /*
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      * The code below causes SIGPIPE (broken pipe) errors to be ignored. This
      * is needed so that Tcl processes don't die if they create child
@@ -572,6 +595,7 @@ TclpInitLibraryPath(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     str = TclGetStringFromObj(pathPtr, lengthPtr);
@@ -581,11 +605,16 @@ TclpInitLibraryPath(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     str = TclGetString(pathPtr);
     *lengthPtr = pathPtr->length;
     *valuePtr = ckalloc(*lengthPtr + 1);
     memcpy(*valuePtr, str, *lengthPtr + 1);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -620,6 +649,7 @@ void
 TclpSetInitialEncodings(void)
 <<<<<<< HEAD
 {
+<<<<<<< HEAD
     Tcl_DString encodingName;
     Tcl_SetSystemEncoding(NULL,
 	    Tcl_GetEncodingNameFromEnvironment(&encodingName));
@@ -661,6 +691,8 @@ Tcl_GetEncodingNameFromEnvironment(
 {
 =======
 {
+=======
+>>>>>>> upstream/master
     Tcl_DString encodingName;
     Tcl_SetSystemEncoding(NULL,
 	    Tcl_GetEncodingNameFromEnvironment(&encodingName));
@@ -879,13 +911,17 @@ TclpSetVariables(
     char tclLibPath[MAXPATHLEN + 1];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     /*
      * Set msgcat fallback locale to current CFLocale identifier.
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     CFLocaleRef localeRef;
 
@@ -913,6 +949,10 @@ TclpSetVariables(
 #if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
     InitMacLocaleInfoVar(CFLocaleCopyCurrent, CFLocaleGetIdentifier, interp);
 >>>>>>> upstream/master
+=======
+#if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+    InitMacLocaleInfoVar(CFLocaleCopyCurrent, CFLocaleGetIdentifier, interp);
+>>>>>>> upstream/master
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED > 1020 */
 
     if (MacOSXGetLibraryPath(interp, MAXPATHLEN, tclLibPath) == TCL_OK) {
@@ -921,9 +961,15 @@ TclpSetVariables(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tclDefaultLibrary", tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+	Tcl_SetVar2(interp, "tclDefaultLibrary", NULL, tclLibPath, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tclDefaultLibrary", NULL, tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath, TCL_GLOBAL_ONLY);
@@ -951,9 +997,15 @@ TclpSetVariables(
 	    } while (*p++);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_SetVar(interp, "tcl_pkgPath", Tcl_DStringValue(&ds),
 		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 	    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, Tcl_DStringValue(&ds),
+		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, Tcl_DStringValue(&ds),
 		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -980,9 +1032,15 @@ TclpSetVariables(
 			S_ISDIR(statBuf.st_mode)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 		    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
+			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -1005,9 +1063,15 @@ TclpSetVariables(
 			S_ISDIR(statBuf.st_mode)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 		    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
+			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -1025,7 +1089,11 @@ TclpSetVariables(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tcl_pkgPath", pkgPath,
+=======
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath,
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath,
 >>>>>>> upstream/master
@@ -1038,7 +1106,11 @@ TclpSetVariables(
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tcl_pkgPath", pkgPath, TCL_GLOBAL_ONLY);
+=======
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath, TCL_GLOBAL_ONLY);
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath, TCL_GLOBAL_ONLY);
 >>>>>>> upstream/master
@@ -1057,16 +1129,23 @@ TclpSetVariables(
 #ifdef __CYGWIN__
 	unameOK = 1;
     if (!osInfoInitialized) {
+<<<<<<< HEAD
 	HANDLE handle = LoadLibraryW(L"NTDLL");
+=======
+	HANDLE handle = GetModuleHandleW(L"NTDLL");
+>>>>>>> upstream/master
 	int(__stdcall *getversion)(void *) =
 		(int(__stdcall *)(void *))GetProcAddress(handle, "RtlGetVersion");
 	osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
 	if (!getversion || getversion(&osInfo)) {
 	    GetVersionExW(&osInfo);
 	}
+<<<<<<< HEAD
 	if (handle) {
 	    FreeLibrary(handle);
 	}
+=======
+>>>>>>> upstream/master
 	osInfoInitialized = 1;
     }
 
@@ -1224,7 +1303,10 @@ TclpFindVariable(
     return result;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 /*
  *----------------------------------------------------------------------
  *

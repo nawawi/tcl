@@ -5,10 +5,17 @@ namespace eval ::tcl::clock {
         "lun"\
         "mar"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "mi\u00e9"\
         "jue"\
         "vie"\
         "s\u00e1b"]
+=======
+        "mié"\
+        "jue"\
+        "vie"\
+        "sáb"]
+>>>>>>> upstream/master
 =======
         "mié"\
         "jue"\
@@ -20,10 +27,17 @@ namespace eval ::tcl::clock {
         "lunes"\
         "martes"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "mi\u00e9rcoles"\
         "jueves"\
         "viernes"\
         "s\u00e1bado"]
+=======
+        "miércoles"\
+        "jueves"\
+        "viernes"\
+        "sábado"]
+>>>>>>> upstream/master
 =======
         "miércoles"\
         "jueves"\

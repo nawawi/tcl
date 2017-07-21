@@ -6,7 +6,11 @@ namespace eval ::tcl::clock {
         "uto"\
         "sri"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u010det"\
+=======
+        "čet"\
+>>>>>>> upstream/master
 =======
         "čet"\
 >>>>>>> upstream/master
@@ -18,7 +22,11 @@ namespace eval ::tcl::clock {
         "utorak"\
         "srijeda"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u010detvrtak"\
+=======
+        "četvrtak"\
+>>>>>>> upstream/master
 =======
         "četvrtak"\
 >>>>>>> upstream/master
@@ -28,7 +36,11 @@ namespace eval ::tcl::clock {
         "sij"\
         "vel"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "o\u017eu"\
+=======
+        "ožu"\
+>>>>>>> upstream/master
 =======
         "ožu"\
 >>>>>>> upstream/master
@@ -44,9 +56,15 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset hr MONTHS_FULL [list \
 <<<<<<< HEAD
+<<<<<<< HEAD
         "sije\u010danj"\
         "velja\u010da"\
         "o\u017eujak"\
+=======
+        "siječanj"\
+        "veljača"\
+        "ožujak"\
+>>>>>>> upstream/master
 =======
         "siječanj"\
         "veljača"\

@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -48,7 +52,11 @@ with no special interpretation.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that the substitution of one kind can include substitution of 
+=======
+Note that the substitution of one kind can include substitution of
+>>>>>>> upstream/master
 =======
 Note that the substitution of one kind can include substitution of
 >>>>>>> upstream/master
@@ -152,6 +160,7 @@ not
 and the script
 .PP
 .CS
+<<<<<<< HEAD
 \fBsubst\fR {abc,[continue;expr {1+2}],def}
 .CE
 .PP
@@ -184,6 +193,8 @@ not
 and the script
 .PP
 .CS
+=======
+>>>>>>> upstream/master
 \fBsubst\fR {abc,[continue;expr {1+2}],def}
 .CE
 .PP

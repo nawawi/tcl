@@ -3,7 +3,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset nn DAYS_OF_WEEK_ABBREV [list \
         "su"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e5"\
+=======
+        "må"\
+>>>>>>> upstream/master
 =======
         "må"\
 >>>>>>> upstream/master
@@ -15,7 +19,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset nn DAYS_OF_WEEK_FULL [list \
         "sundag"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e5ndag"\
+=======
+        "måndag"\
+>>>>>>> upstream/master
 =======
         "måndag"\
 >>>>>>> upstream/master

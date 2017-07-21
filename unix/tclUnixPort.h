@@ -102,9 +102,12 @@ typedef off_t		Tcl_SeekOffset;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     __declspec(dllimport) extern int cygwin_conv_path_list(int, const void *, void *, int);
 #   define USE_PUTENV 1
 #   define USE_PUTENV_FOR_UNSET 1
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

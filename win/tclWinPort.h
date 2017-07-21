@@ -18,6 +18,9 @@
 /* See [Bug 3354324]: file mtime sets wrong time */
 #   define _USE_32BIT_TIME_T
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 #endif
 
 /*
@@ -26,6 +29,9 @@
  * WINVER = 0x0500 means Windows 2000 and above
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 #ifndef WINVER
 #   define WINVER 0x0501
@@ -64,6 +70,7 @@ typedef DWORD_PTR * PDWORD_PTR;
 #endif /* CHECK_UNICODE_CALLS */
 
 /*
+<<<<<<< HEAD
 =======
 
 #ifndef WINVER
@@ -131,6 +138,8 @@ typedef DWORD_PTR * PDWORD_PTR;
 
 /*
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -430,6 +439,23 @@ typedef DWORD_PTR * PDWORD_PTR;
 
 #ifndef S_IFLNK
 #   define S_IFLNK        0120000  /* Symbolic Link */
+<<<<<<< HEAD
+=======
+#endif
+
+/*
+ * Windows compilers do not define S_IFBLK. However, Tcl uses it in
+ * GetTypeFromMode to identify blockSpecial devices based on the
+ * value in the statsbuf st_mode field. We have no other way to pass this
+ * from NativeStat on Windows so are forced to define it here.
+ * The definition here is essentially what is seen on Linux and MingW.
+ * XXX - the root problem is Tcl using Unix definitions instead of
+ * abstracting the structure into a platform independent one. Sigh - perhaps
+ * Tcl 9
+ */
+#ifndef S_IFBLK
+#   define S_IFBLK (S_IFDIR | S_IFCHR)
+>>>>>>> upstream/master
 #endif
 
 <<<<<<< HEAD

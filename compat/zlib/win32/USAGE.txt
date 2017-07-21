@@ -3,6 +3,12 @@ Installing ZLIB1.DLL
 ====================
   Copy ZLIB1.DLL to the SYSTEM or the SYSTEM32 directory.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  
+  If you want to install the 32-bit dll on a 64-bit
+  machine, use the SysWOW64 directory instead.
+>>>>>>> upstream/master
 =======
   
   If you want to install the 32-bit dll on a 64-bit
@@ -27,7 +33,11 @@ Using ZLIB1.DLL with gcc/MinGW
       into the INCLUDE directory.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    2. Copy the supplied library file "zdll.lib" to "libzdll.a":
+=======
+   2. (32-bit): Copy the supplied library file "zdll.lib" to "libzdll.a":
+>>>>>>> upstream/master
 =======
    2. (32-bit): Copy the supplied library file "zdll.lib" to "libzdll.a":
 >>>>>>> upstream/master
@@ -36,14 +46,20 @@ Using ZLIB1.DLL with gcc/MinGW
       OR
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    2' Build the import library from the supplied "zlib.def":
 =======
+=======
+>>>>>>> upstream/master
    2'. (64-bit): Copy the supplied library file "libz.dll.a" to "libzdll.a":
         cp lib/libz.dll.a lib/libzdll.a
 
       OR
 
    2'' Build the import library from the supplied "zlib.def":
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         dlltool -D zlib1.dll -d lib/zlib.def -l lib/libzdll.a
 

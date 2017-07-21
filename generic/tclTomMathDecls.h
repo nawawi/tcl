@@ -285,7 +285,10 @@ EXTERN int		TclBN_mp_cnt_lsb(const mp_int *a);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -304,10 +307,16 @@ EXTERN void		TclBNInitBignumFromWideUInt(mp_int *bignum,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+/* 67 */
+EXTERN int		TclBN_mp_expt_d_ex(mp_int *a, mp_digit b, mp_int *c,
+				int fast);
 >>>>>>> upstream/master
 =======
 /* 67 */
@@ -392,6 +401,7 @@ typedef struct TclTomMathStubs {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     void (*tclBNInitBignumFromLong) (mp_int *bignum, long initVal); /* 64 */
     void (*tclBNInitBignumFromWideInt) (mp_int *bignum, Tcl_WideInt initVal); /* 65 */
@@ -412,10 +422,15 @@ typedef struct TclTomMathStubs {
     int (*tclBN_mp_expt_d_ex) (mp_int *a, mp_digit b, mp_int *c, int fast); /* 67 */
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     void (*tclBNInitBignumFromLong) (mp_int *bignum, long initVal); /* 64 */
     void (*tclBNInitBignumFromWideInt) (mp_int *bignum, Tcl_WideInt initVal); /* 65 */
     void (*tclBNInitBignumFromWideUInt) (mp_int *bignum, Tcl_WideUInt initVal); /* 66 */
     int (*tclBN_mp_expt_d_ex) (mp_int *a, mp_digit b, mp_int *c, int fast); /* 67 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } TclTomMathStubs;
 
@@ -563,7 +578,10 @@ extern const TclTomMathStubs *tclTomMathStubsPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -580,10 +598,15 @@ extern const TclTomMathStubs *tclTomMathStubsPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+#define TclBN_mp_expt_d_ex \
+	(tclTomMathStubsPtr->tclBN_mp_expt_d_ex) /* 67 */
 >>>>>>> upstream/master
 =======
 #define TclBN_mp_expt_d_ex \

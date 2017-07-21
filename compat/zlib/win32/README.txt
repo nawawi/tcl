@@ -7,7 +7,11 @@ What's here
 Source
 ======
 <<<<<<< HEAD
+<<<<<<< HEAD
   zlib version 1.2.8
+=======
+  zlib version 1.2.11
+>>>>>>> upstream/master
 =======
   zlib version 1.2.11
 >>>>>>> upstream/master
@@ -30,9 +34,15 @@ Build info
 
   Compiler:
 <<<<<<< HEAD
+<<<<<<< HEAD
     i686-w64-mingw32-gcc (GCC) 4.5.3
   Library:
     mingw64-i686-runtime/headers: 3.0b_svn5747-1
+=======
+    i686-w64-mingw32-gcc (GCC) 5.4.0
+  Library:
+    mingw64-i686-runtime/headers: 5.0.0
+>>>>>>> upstream/master
 =======
     i686-w64-mingw32-gcc (GCC) 5.4.0
   Library:
@@ -48,7 +58,11 @@ Build info
 Copyright notice
 ================
 <<<<<<< HEAD
+<<<<<<< HEAD
   Copyright (C) 1995-2010 Jean-loup Gailly and Mark Adler
+=======
+  Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
+>>>>>>> upstream/master
 =======
   Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
 >>>>>>> upstream/master

@@ -59,7 +59,10 @@ test namespace-old-1.9 {add elements to a namespace} {
 } {}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_simple {
@@ -69,6 +72,9 @@ namespace eval test_ns_simple {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -91,7 +97,10 @@ test namespace-old-1.13 {add to an existing namespace} {
 } ""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_simple {
@@ -101,6 +110,9 @@ namespace eval test_ns_simple {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -246,7 +258,10 @@ test namespace-old-4.3 {command "namespace delete" doesn't support patterns} {
 } {1 {unknown namespace "ns*" in namespace delete command}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_delete {
@@ -255,6 +270,9 @@ namespace eval test_ns_delete {
     namespace eval another {}
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -304,7 +322,10 @@ test namespace-old-5.3 {namespace qualifiers work in namespace command} {
 } {::test_ns_hier1 ::test_ns_hier1::test_ns_hier2 ::test_ns_hier1::test_ns_hier2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 set ::test_ns_var_global "var in ::"
@@ -326,6 +347,9 @@ namespace eval test_ns_hier1 {
     namespace eval test_ns_hier2b {}
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -425,6 +449,10 @@ test namespace-old-6.3 {relative ns names only looked up in current ns} {
 } {::test_ns_cache1::test_ns_cache2 ::test_ns_cache1::test_ns_cache2::test_ns_cache3}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+namespace eval test_ns_cache1::test_ns_cache2 {}
+>>>>>>> upstream/master
 =======
 namespace eval test_ns_cache1::test_ns_cache2 {}
 >>>>>>> upstream/master
@@ -438,6 +466,12 @@ test namespace-old-6.4 {relative ns names only looked up in current ns} {
 } {::test_ns_cache1::test_ns_cache2 ::test_ns_cache1::test_ns_cache2::test_ns_cache3}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+namespace eval test_ns_cache1 {
+    proc trigger {} {test_ns_cache_cmd}
+}
+>>>>>>> upstream/master
 =======
 namespace eval test_ns_cache1 {
     proc trigger {} {test_ns_cache_cmd}
@@ -462,22 +496,38 @@ test namespace-old-6.6 {one-level check for command shadowing} {
 } {cache1 version}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test namespace-old-6.7 {renaming commands changes command epoch} {
     namespace eval test_ns_cache1 {
         rename test_ns_cache_cmd test_ns_new
+=======
+proc test_ns_cache_cmd {} {
+    return "global version"
+}
+test namespace-old-6.7 {renaming commands changes command epoch} -setup {
+    proc test_ns_cache1::test_ns_cache_cmd {} {
+        return "cache1 version"
+>>>>>>> upstream/master
     }
-    test_ns_cache1::trigger
-} {global version}
-test namespace-old-6.8 {renaming back handles shadowing} {
-    namespace eval test_ns_cache1 {
-        rename test_ns_new test_ns_cache_cmd
+} -body {
+    list [test_ns_cache1::trigger] \
+	[namespace eval test_ns_cache1 {rename test_ns_cache_cmd test_ns_new}]\
+	[test_ns_cache1::trigger]
+} -result {{cache1 version} {} {global version}}
+test namespace-old-6.8 {renaming back handles shadowing} -setup {
+    proc test_ns_cache1::test_ns_new {} {
+        return "cache1 version"
     }
-    test_ns_cache1::trigger
-} {cache1 version}
-test namespace-old-6.9 {deleting commands changes command epoch} {
-    namespace eval test_ns_cache1 {
-        rename test_ns_cache_cmd ""
+} -body {
+    list [test_ns_cache1::trigger] \
+	[namespace eval test_ns_cache1 {rename test_ns_new test_ns_cache_cmd}]\
+	[test_ns_cache1::trigger]
+} -result {{global version} {} {cache1 version}}
+test namespace-old-6.9 {deleting commands changes command epoch} -setup {
+    proc test_ns_cache1::test_ns_cache_cmd {} {
+        return "cache1 version"
     }
+<<<<<<< HEAD
     test_ns_cache1::trigger
 } {global version}
 =======
@@ -533,12 +583,17 @@ test namespace-old-6.9 {deleting commands changes command epoch} -setup {
         return "cache1 version"
     }
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -body {
     list [test_ns_cache1::trigger] \
 	[namespace eval test_ns_cache1 {rename test_ns_cache_cmd ""}] \
 	[test_ns_cache1::trigger]
 } -result {{cache1 version} {} {global version}}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -562,7 +617,10 @@ test namespace-old-6.10 {define test namespaces} {
 } {{global cache2 version} {global version}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_cache1 {
@@ -572,6 +630,9 @@ namespace eval test_ns_cache1 {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -588,6 +649,10 @@ test namespace-old-6.12 {define test variables} {
 } {global version}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    set trigger {set test_ns_cache_var}
+>>>>>>> upstream/master
 =======
     set trigger {set test_ns_cache_var}
 >>>>>>> upstream/master
@@ -602,6 +667,10 @@ test namespace-old-6.13 {one-level check for variable shadowing} {
 } {cache1 version}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+variable ::test_ns_cache_var "global version"
+>>>>>>> upstream/master
 =======
 variable ::test_ns_cache_var "global version"
 >>>>>>> upstream/master
@@ -614,9 +683,12 @@ test namespace-old-6.14 {deleting variables changes variable epoch} {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     namespace eval test_ns_cache1 $trigger
 } {global version}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     list [namespace eval test_ns_cache1 $trigger] \
@@ -624,6 +696,9 @@ test namespace-old-6.14 {deleting variables changes variable epoch} {
 	[namespace eval test_ns_cache1 $trigger]
 } {{cache1 version} {} {global version}}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -637,6 +712,10 @@ test namespace-old-6.15 {define test namespaces} {
 } {{global cache2 version} {global version}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+set trigger2 {set test_ns_cache2::test_ns_cache_var}
+>>>>>>> upstream/master
 =======
 set trigger2 {set test_ns_cache2::test_ns_cache_var}
 >>>>>>> upstream/master
@@ -669,6 +748,10 @@ test namespace-old-6.20 {command "namespace which" may not find commands} {
 } {}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+variable test_ns_cache1::test_ns_cache2::test_ns_cache_var "cache2 version"
+>>>>>>> upstream/master
 =======
 variable test_ns_cache1::test_ns_cache2::test_ns_cache_var "cache2 version"
 >>>>>>> upstream/master
@@ -814,7 +897,10 @@ test namespace-old-9.3 {define test namespaces for import} {
 } {::test_ns_export::cmd1 ::test_ns_export::cmd2 ::test_ns_export::cmd3 ::test_ns_export::cmd4 ::test_ns_export::cmd5 ::test_ns_export::cmd6}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_export {
@@ -827,6 +913,9 @@ namespace eval test_ns_export {
     proc cmd6 {args} {return "cmd6: $args"}
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -843,7 +932,10 @@ test namespace-old-9.4 {check export status} {
 } {::test_ns_import::cmd1 ::test_ns_import::cmd2 ::test_ns_import::cmd3}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_import {
@@ -851,6 +943,9 @@ namespace eval test_ns_import {
     namespace import ::test_ns_export::*
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -879,6 +974,10 @@ test namespace-old-9.8 {only exported commands are imported} {
 } {cmd1 cmd2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+namespace import test_ns_import::cmd*
+>>>>>>> upstream/master
 =======
 namespace import test_ns_import::cmd*
 >>>>>>> upstream/master
@@ -901,7 +1000,10 @@ test namespace-old-9.10 {commands can be imported from many namespaces} {
 } {cmd1 cmd2 ncmd ncmd1 ncmd2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_import2 {
@@ -913,6 +1015,9 @@ namespace eval test_ns_import2 {
 }
 namespace import test_ns_import2::*
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -922,6 +1027,10 @@ test namespace-old-9.11 {imported commands can be removed by deleting them} {
 } {cmd2 ncmd ncmd1 ncmd2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+catch { rename cmd1 "" }
+>>>>>>> upstream/master
 =======
 catch { rename cmd1 "" }
 >>>>>>> upstream/master
@@ -1009,7 +1118,10 @@ test namespace-old-10.6 {with many args, each "scope" adds new args} {
 } {::namespace inscope ::test_ns_inscope {one two} three}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 namespace eval test_ns_inscope {
@@ -1018,6 +1130,9 @@ namespace eval test_ns_inscope {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1027,6 +1142,12 @@ test namespace-old-10.7 {scoped commands work with eval} {
 } {{show: a b c d e f}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+namespace eval test_ns_inscope {
+    variable x "x-value"
+}
+>>>>>>> upstream/master
 =======
 namespace eval test_ns_inscope {
     variable x "x-value"

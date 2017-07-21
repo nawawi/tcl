@@ -2,11 +2,14 @@
                 ChangeLog file for zlib
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Changes in 1.2.8 (28 Apr 2013)
 - Update contrib/minizip/iowin32.c for Windows RT [Vollant]
 - Do not force Z_CONST for C++
 - Clean up contrib/vstudio [Roß]
 =======
+=======
+>>>>>>> upstream/master
 Changes in 1.2.11 (15 Jan 2017)
 - Fix deflate stored bug when pulling last block from window
 - Permit immediate deflateParams changes before any deflate input
@@ -54,6 +57,9 @@ Changes in 1.2.8 (28 Apr 2013)
 - Update contrib/minizip/iowin32.c for Windows RT [Vollant]
 - Do not force Z_CONST for C++
 - Clean up contrib/vstudio [Ro√ü]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 - Correct spelling error in zlib.h
 - Fix mixed line endings in contrib/vstudio
@@ -85,7 +91,11 @@ Changes in 1.2.7.1 (24 Mar 2013)
 - Clean up examples/gzlog.[ch] comparisons of different types
 - Avoid shift equal to bits in type (caused endless loop)
 <<<<<<< HEAD
+<<<<<<< HEAD
 - Fix unintialized value bug in gzputc() introduced by const patches
+=======
+- Fix uninitialized value bug in gzputc() introduced by const patches
+>>>>>>> upstream/master
 =======
 - Fix uninitialized value bug in gzputc() introduced by const patches
 >>>>>>> upstream/master
@@ -249,7 +259,11 @@ Changes in 1.2.5.2 (17 Dec 2011)
 - Update python link in zlib man page
 - Get inffixed.h and MAKEFIXED result to match
 <<<<<<< HEAD
+<<<<<<< HEAD
 - Add a ./config --solo option to make zlib subset with no libary use
+=======
+- Add a ./config --solo option to make zlib subset with no library use
+>>>>>>> upstream/master
 =======
 - Add a ./config --solo option to make zlib subset with no library use
 >>>>>>> upstream/master
@@ -623,7 +637,11 @@ Changes in 1.2.3.1 (16 August 2006)
 - Use -fPIC for shared build in configure [Teredesai, Nicholson]
 - Use only major version number for libz.so on IRIX and OSF1 [Reinholdtsen]
 <<<<<<< HEAD
+<<<<<<< HEAD
 - Use fdopen() (not _fdopen()) for Interix in zutil.h [Bäck]
+=======
+- Use fdopen() (not _fdopen()) for Interix in zutil.h [B√§ck]
+>>>>>>> upstream/master
 =======
 - Use fdopen() (not _fdopen()) for Interix in zutil.h [B√§ck]
 >>>>>>> upstream/master
@@ -1241,7 +1259,11 @@ Changes in 1.0.6 (19 Jan 1998)
    contrib/iostream/ by Kevin Ruland <kevin@rodin.wustl.edu>
         A C++ I/O streams interface to the zlib gz* functions
 <<<<<<< HEAD
+<<<<<<< HEAD
    contrib/iostream2/  by Tyge L¯vset <Tyge.Lovset@cmr.no>
+=======
+   contrib/iostream2/  by Tyge L√∏vset <Tyge.Lovset@cmr.no>
+>>>>>>> upstream/master
 =======
    contrib/iostream2/  by Tyge L√∏vset <Tyge.Lovset@cmr.no>
 >>>>>>> upstream/master
@@ -1334,7 +1356,11 @@ Changes in 1.0.1 (20 May 96) [1.0 skipped to avoid confusion]
 - fix inflate bug with empty stored block
 - fix MSDOS medium model which was broken in 0.99
 <<<<<<< HEAD
+<<<<<<< HEAD
 - fix deflateParams() which could generated bad compressed data.
+=======
+- fix deflateParams() which could generate bad compressed data.
+>>>>>>> upstream/master
 =======
 - fix deflateParams() which could generate bad compressed data.
 >>>>>>> upstream/master

@@ -203,7 +203,11 @@ proc auto_mkindex {dir args} {
     }
 
     auto_mkindex_parser::init
+<<<<<<< HEAD
     foreach file [glob -- {*}$args] {
+=======
+    foreach file [lsort [glob -- {*}$args]] {
+>>>>>>> upstream/master
 	try {
 	    append index [auto_mkindex_parser::mkindex $file]
 	} on error {msg opts} {
@@ -236,7 +240,11 @@ proc auto_mkindex_old {dir args} {
     if {![llength $args]} {
 	set args *.tcl
     }
+<<<<<<< HEAD
     foreach file [glob -- {*}$args] {
+=======
+    foreach file [lsort [glob -- {*}$args]] {
+>>>>>>> upstream/master
 	set f ""
 	set error [catch {
 	    set f [open $file]

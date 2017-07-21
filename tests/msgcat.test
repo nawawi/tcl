@@ -54,7 +54,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     foreach setVars [PowerSet $envVars] { 
+=======
+    foreach setVars [PowerSet $envVars] {
+>>>>>>> upstream/master
 =======
     foreach setVars [PowerSet $envVars] {
 >>>>>>> upstream/master
@@ -82,6 +86,10 @@ namespace eval ::msgcat::test {
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -116,7 +124,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
     # Could add tests of initialization from Windows registry here.
     # Use a fake registry package.
 
@@ -1706,7 +1718,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1827,6 +1843,7 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 	test msgcat-9.2 {mcexists unknown option} -body {
 	    mcexists -unknown src 
@@ -1834,6 +1851,8 @@ namespace eval ::msgcat::test {
 	-result {unknown option "-unknown"}
     
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1846,6 +1865,9 @@ namespace eval ::msgcat::test {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1875,7 +1897,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1901,7 +1927,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1920,7 +1950,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1937,7 +1971,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1962,7 +2000,11 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2180,9 +2222,15 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     # Tests msgcat-14.*: callbacks: loadcmd, changecmd, unknowncmd
     
+=======
+
+    # Tests msgcat-14.*: callbacks: loadcmd, changecmd, unknowncmd
+
+>>>>>>> upstream/master
 =======
 
     # Tests msgcat-14.*: callbacks: loadcmd, changecmd, unknowncmd
@@ -2211,6 +2259,7 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 =======
 
@@ -2218,11 +2267,16 @@ namespace eval ::msgcat::test {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     variable locale
     if {![info exist locale]} { set locale [mclocale] }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2250,6 +2304,10 @@ namespace eval ::msgcat::test {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    after cancel set [namespace current]::resultvariable timeout
+>>>>>>> upstream/master
 =======
 	    after cancel set [namespace current]::resultvariable timeout
 >>>>>>> upstream/master
@@ -2333,7 +2391,11 @@ namespace eval ::msgcat::test {
 	-result {fail}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2349,6 +2411,12 @@ return
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+# Local Variables:
+# mode: tcl
+# End:
+>>>>>>> upstream/master
 =======
 # Local Variables:
 # mode: tcl

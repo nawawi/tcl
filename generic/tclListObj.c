@@ -375,7 +375,11 @@ Tcl_SetListObj(
 	ListSetIntRep(objPtr, listRepPtr);
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	objPtr->bytes = tclEmptyStringRep;
+=======
+	objPtr->bytes = &tclEmptyString;
+>>>>>>> upstream/master
 =======
 	objPtr->bytes = &tclEmptyString;
 >>>>>>> upstream/master
@@ -470,7 +474,11 @@ Tcl_ListObjGetElements(
 	int result;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (listPtr->bytes == tclEmptyStringRep) {
+=======
+	if (listPtr->bytes == &tclEmptyString) {
+>>>>>>> upstream/master
 =======
 	if (listPtr->bytes == &tclEmptyString) {
 >>>>>>> upstream/master
@@ -584,7 +592,11 @@ Tcl_ListObjAppendElement(
 	int result;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (listPtr->bytes == tclEmptyStringRep) {
+=======
+	if (listPtr->bytes == &tclEmptyString) {
+>>>>>>> upstream/master
 =======
 	if (listPtr->bytes == &tclEmptyString) {
 >>>>>>> upstream/master
@@ -752,7 +764,11 @@ Tcl_ListObjIndex(
 	int result;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (listPtr->bytes == tclEmptyStringRep) {
+=======
+	if (listPtr->bytes == &tclEmptyString) {
+>>>>>>> upstream/master
 =======
 	if (listPtr->bytes == &tclEmptyString) {
 >>>>>>> upstream/master
@@ -809,7 +825,11 @@ Tcl_ListObjLength(
 	int result;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (listPtr->bytes == tclEmptyStringRep) {
+=======
+	if (listPtr->bytes == &tclEmptyString) {
+>>>>>>> upstream/master
 =======
 	if (listPtr->bytes == &tclEmptyString) {
 >>>>>>> upstream/master
@@ -877,6 +897,7 @@ Tcl_ListObjReplace(
 {
     List *listRepPtr;
     register Tcl_Obj **elemPtrs;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2063,12 +2084,25 @@ TclListObjSetElement(
     /*
      * Ensure that the listPtr parameter designates an unshared list.
      */
+=======
+    int needGrow, numElems, numRequired, numAfterLast, start, i, j, isShared;
+>>>>>>> upstream/master
 
     if (Tcl_IsShared(listPtr)) {
 	Tcl_Panic("%s called with shared object", "TclListObjSetElement");
     }
     if (listPtr->typePtr != &tclListType) {
+<<<<<<< HEAD
 	int result;
+=======
+	if (listPtr->bytes == &tclEmptyString) {
+	    if (!objc) {
+		return TCL_OK;
+	    }
+	    Tcl_SetListObj(listPtr, objc, NULL);
+	} else {
+	    int result = SetListFromAny(interp, listPtr);
+>>>>>>> upstream/master
 
 	if (listPtr->bytes == tclEmptyStringRep) {
 	    if (interp != NULL) {
@@ -2085,10 +2119,22 @@ TclListObjSetElement(
 	}
     }
 
+<<<<<<< HEAD
     listRepPtr = ListRepPtr(listPtr);
 <<<<<<< HEAD
     elemCount = listRepPtr->elemCount;
 =======
+=======
+    /*
+     * Note that when count == 0 and objc == 0, this routine is logically a
+     * no-op, removing and adding no elements to the list. However, by flowing
+     * through this routine anyway, we get the important side effect that the
+     * resulting listPtr is a list in canoncial form. This is important.
+     * Resist any temptation to optimize this case.
+     */
+
+    listRepPtr = ListRepPtr(listPtr);
+>>>>>>> upstream/master
     elemPtrs = &listRepPtr->elements;
     numElems = listRepPtr->elemCount;
 
@@ -2102,6 +2148,7 @@ TclListObjSetElement(
 	count = 0;
     } else if (first > INT_MAX - count /* Handle integer overflow */
 	    || numElems < first+count) {
+<<<<<<< HEAD
 >>>>>>> upstream/master
 
     /*
@@ -2125,6 +2172,56 @@ TclListObjSetElement(
 	}
 	return TCL_ERROR;
     }
+=======
+
+	count = numElems - first;
+    }
+
+    if (objc > LIST_MAX - (numElems - count)) {
+	if (interp != NULL) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "max length of a Tcl list (%d elements) exceeded",
+		    LIST_MAX));
+	}
+	return TCL_ERROR;
+    }
+    isShared = (listRepPtr->refCount > 1);
+    numRequired = numElems - count + objc; /* Known <= LIST_MAX */
+    needGrow = numRequired > listRepPtr->maxElemCount;
+
+    for (i = 0;  i < objc;  i++) {
+	Tcl_IncrRefCount(objv[i]);
+    }
+
+    if (needGrow && !isShared) {
+	/* Try to use realloc */
+	List *newPtr = NULL;
+	int attempt = 2 * numRequired;
+	if (attempt <= LIST_MAX) {
+	    newPtr = attemptckrealloc(listRepPtr, LIST_SIZE(attempt));
+	}
+	if (newPtr == NULL) {
+	    attempt = numRequired + 1 + TCL_MIN_ELEMENT_GROWTH;
+	    if (attempt > LIST_MAX) {
+		attempt = LIST_MAX;
+	    }
+	    newPtr = attemptckrealloc(listRepPtr, LIST_SIZE(attempt));
+	}
+	if (newPtr == NULL) {
+	    attempt = numRequired;
+	    newPtr = attemptckrealloc(listRepPtr, LIST_SIZE(attempt));
+	}
+	if (newPtr) {
+	    listRepPtr = newPtr;
+	    listPtr->internalRep.twoPtrValue.ptr1 = listRepPtr;
+	    elemPtrs = &listRepPtr->elements;
+	    listRepPtr->maxElemCount = attempt;
+	    needGrow = numRequired > listRepPtr->maxElemCount;
+	}
+    }
+    if (!needGrow && !isShared) {
+	int shift;
+>>>>>>> upstream/master
 
     /*
      * If the internal rep is shared, replace it with an unshared copy.
@@ -2156,12 +2253,23 @@ TclListObjSetElement(
     }
     elemPtrs = &listRepPtr->elements;
 
+<<<<<<< HEAD
     /*
      * Add a reference to the new list element.
      */
+=======
+	    memmove(src+shift, src, (size_t) numAfterLast * sizeof(Tcl_Obj*));
+	}
+    } else {
+	/*
+	 * Cannot use the current List struct; it is shared, too small, or
+	 * both. Allocate a new struct and insert elements into it.
+	 */
+>>>>>>> upstream/master
 
     Tcl_IncrRefCount(valuePtr);
 
+<<<<<<< HEAD
     /*
      * Remove a reference from the old list element.
      */
@@ -2177,6 +2285,38 @@ TclListObjSetElement(
 =======
 
 =======
+=======
+	if (needGrow){
+	    newMax = 2 * numRequired;
+	} else {
+	    newMax = listRepPtr->maxElemCount;
+	}
+
+	listRepPtr = AttemptNewList(NULL, newMax, NULL);
+	if (listRepPtr == NULL) {
+	    unsigned int limit = LIST_MAX - numRequired;
+	    unsigned int extra = numRequired - numElems
+		    + TCL_MIN_ELEMENT_GROWTH;
+	    int growth = (int) ((extra > limit) ? limit : extra);
+
+	    listRepPtr = AttemptNewList(NULL, numRequired + growth, NULL);
+	    if (listRepPtr == NULL) {
+		listRepPtr = AttemptNewList(interp, numRequired, NULL);
+		if (listRepPtr == NULL) {
+		    for (i = 0;  i < objc;  i++) {
+			/* See bug 3598580 */
+#if TCL_MAJOR_VERSION > 8
+			Tcl_DecrRefCount(objv[i]);
+#else
+			objv[i]->refCount--;
+#endif
+		    }
+		    return TCL_ERROR;
+		}
+	    }
+	}
+
+>>>>>>> upstream/master
 	listPtr->internalRep.twoPtrValue.ptr1 = listRepPtr;
 	listRepPtr->refCount++;
 
@@ -2817,7 +2957,11 @@ TclListObjSetElement(
 	int result;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (listPtr->bytes == tclEmptyStringRep) {
+=======
+	if (listPtr->bytes == &tclEmptyString) {
+>>>>>>> upstream/master
 =======
 	if (listPtr->bytes == &tclEmptyString) {
 >>>>>>> upstream/master
@@ -3182,11 +3326,25 @@ UpdateStringOfList(
     listRepPtr->canonicalFlag = 1;
 
     /*
+<<<<<<< HEAD
+=======
+     * Mark the list as being canonical; although it will now have a string
+     * rep, it is one we derived through proper "canonical" quoting and so
+     * it's known to be free from nasties relating to [concat] and [eval].
+     */
+
+    listRepPtr->canonicalFlag = 1;
+
+    /*
+>>>>>>> upstream/master
      * Handle empty list case first, so rest of the routine is simpler.
      */
 
     if (numElems == 0) {
 	listPtr->bytes = &tclEmptyString;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	listPtr->length = 0;
 	return;
@@ -3220,6 +3378,7 @@ UpdateStringOfList(
     if (bytesNeeded > INT_MAX - numElems + 1) {
 	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
     }
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -3233,6 +3392,11 @@ UpdateStringOfList(
 >>>>>>> upstream/master
 =======
     }
+    if (bytesNeeded > INT_MAX - numElems + 1) {
+	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
+    }
+>>>>>>> upstream/master
+=======
     if (bytesNeeded > INT_MAX - numElems + 1) {
 	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
     }

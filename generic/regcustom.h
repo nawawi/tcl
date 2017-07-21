@@ -71,8 +71,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define	__REG_VOID_T	void
 #define	__REG_CONST	const
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

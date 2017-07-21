@@ -55,9 +55,14 @@ if {[catch {package present Thread}] == 0 && [file exists $httpdFile]} {
     set httpthread [thread::create -preserved]
     thread::send $httpthread [list source $httpdFile]
 <<<<<<< HEAD
+<<<<<<< HEAD
     thread::send $httpthread [list set port $port]
     thread::send $httpthread [list set bindata $bindata]
     thread::send $httpthread {httpd_init $port}
+=======
+    thread::send $httpthread [list set bindata $bindata]
+    thread::send $httpthread {httpd_init 0; set port} port
+>>>>>>> upstream/master
 =======
     thread::send $httpthread [list set bindata $bindata]
     thread::send $httpthread {httpd_init 0; set port} port
@@ -75,8 +80,6 @@ if {[catch {package present Thread}] == 0 && [file exists $httpdFile]} {
 	puts "Cannot start http server, http test skipped"
 	catch {unset port}
 	return
-    } else {
-	set port [lindex [fconfigure $listen -sockname] 2]
     }
 }
 
@@ -381,6 +384,7 @@ test http-3.27 {http::geturl: -headers override -type} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -400,6 +404,8 @@ Accept \*/\*
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
@@ -408,6 +414,9 @@ Accept \*/\*
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -428,6 +437,7 @@ test http-3.28 {http::geturl: -headers override -type default} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -447,6 +457,8 @@ Accept \*/\*
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
@@ -455,6 +467,9 @@ Accept \*/\*
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -495,7 +510,10 @@ test http-3.31 {http::geturl fragment without path} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -530,6 +548,9 @@ test http-3.33 {http::geturl application/xml is text} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -691,6 +712,17 @@ test http-4.15 {http::Event} -body {
 } -cleanup {
     catch {http::cleanup $token}
 } -returnCodes 1 -match glob -result "couldn't open socket*"
+<<<<<<< HEAD
+=======
+test http-4.16 {Leak with Close vs Keepalive (bug [6ca52aec14]} -body {
+    set before [chan names]
+    set token [http::geturl $url -headers {X-Connection keep-alive}]
+    http::cleanup $token
+    update
+    set after [chan names]
+    expr {$before eq $after}
+} -result 1
+>>>>>>> upstream/master
 
 test http-5.1 {http::formatQuery} {
     http::formatQuery name1 value1 name2 "value two"

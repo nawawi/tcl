@@ -197,13 +197,17 @@ GetCache(void)
     if (listLockPtr == NULL) {
 	Tcl_Mutex *initLockPtr;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unsigned int i;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
 	initLockPtr = Tcl_GetAllocMutex();
 	Tcl_MutexLock(initLockPtr);
 	if (listLockPtr == NULL) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    listLockPtr = TclpNewAllocMutex();
 	    objLockPtr = TclpNewAllocMutex();
@@ -214,6 +218,9 @@ GetCache(void)
 			1 << (NBUCKETS - 2 - i) : 1;
 		bucketInfo[i].lockPtr = TclpNewAllocMutex();
 	    }
+=======
+	    TclInitThreadAlloc();
+>>>>>>> upstream/master
 =======
 	    TclInitThreadAlloc();
 >>>>>>> upstream/master
@@ -1072,7 +1079,10 @@ GetBlocks(
     return 1;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
@@ -1107,6 +1117,9 @@ TclInitThreadAlloc(void)
     }
     TclpInitAllocCache();
 }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*

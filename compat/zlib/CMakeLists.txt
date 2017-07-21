@@ -4,7 +4,11 @@ set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 project(zlib C)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 set(VERSION "1.2.8")
+=======
+set(VERSION "1.2.11")
+>>>>>>> upstream/master
 =======
 set(VERSION "1.2.11")
 >>>>>>> upstream/master

@@ -5,7 +5,11 @@ namespace eval ::tcl::clock {
         "Pzt"\
         "Sal"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u00c7ar"\
+=======
+        "Çar"\
+>>>>>>> upstream/master
 =======
         "Çar"\
 >>>>>>> upstream/master
@@ -16,9 +20,15 @@ namespace eval ::tcl::clock {
         "Pazar"\
         "Pazartesi"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Sal\u0131"\
         "\u00c7ar\u015famba"\
         "Per\u015fembe"\
+=======
+        "Salı"\
+        "Çarşamba"\
+        "Perşembe"\
+>>>>>>> upstream/master
 =======
         "Salı"\
         "Çarşamba"\
@@ -29,7 +39,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset tr MONTHS_ABBREV [list \
         "Oca"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u015eub"\
+=======
+        "Şub"\
+>>>>>>> upstream/master
 =======
         "Şub"\
 >>>>>>> upstream/master
@@ -39,7 +53,11 @@ namespace eval ::tcl::clock {
         "Haz"\
         "Tem"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "A\u011fu"\
+=======
+        "Ağu"\
+>>>>>>> upstream/master
 =======
         "Ağu"\
 >>>>>>> upstream/master
@@ -51,15 +69,20 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset tr MONTHS_FULL [list \
         "Ocak"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u015eubat"\
+=======
+        "Şubat"\
+>>>>>>> upstream/master
         "Mart"\
         "Nisan"\
-        "May\u0131s"\
+        "Mayıs"\
         "Haziran"\
         "Temmuz"\
-        "A\u011fustos"\
-        "Eyl\u00fcl"\
+        "Ağustos"\
+        "Eylül"\
         "Ekim"\
+<<<<<<< HEAD
         "Kas\u0131m"\
         "Aral\u0131k"\
 =======
@@ -72,6 +95,10 @@ namespace eval ::tcl::clock {
         "Ağustos"\
         "Eylül"\
         "Ekim"\
+        "Kasım"\
+        "Aralık"\
+>>>>>>> upstream/master
+=======
         "Kasım"\
         "Aralık"\
 >>>>>>> upstream/master

@@ -21,6 +21,10 @@
 #include "tommath.h"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#include "tclStringRep.h"
+>>>>>>> upstream/master
 =======
 #include "tclStringRep.h"
 >>>>>>> upstream/master
@@ -56,13 +60,30 @@ static int		TeststringobjCmd(ClientData dummy, Tcl_Interp *interp,
 			    int objc, Tcl_Obj *const objv[]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+#define VARPTR_KEY "TCLOBJTEST_VARPTR"
+#define NUMBER_OF_OBJECT_VARS 20
 
-typedef struct TestString {
-    int numChars;
-    int allocated;
-    int maxChars;
-    Tcl_UniChar unicode[2];
-} TestString;
+static void VarPtrDeleteProc(ClientData clientData, Tcl_Interp *interp)
+{
+    register int i;
+    Tcl_Obj **varPtr = (Tcl_Obj **) clientData;
+    for (i = 0;  i < NUMBER_OF_OBJECT_VARS;  i++) {
+	if (varPtr[i]) Tcl_DecrRefCount(varPtr[i]);
+    }
+    Tcl_DeleteAssocData(interp, VARPTR_KEY);
+    ckfree(varPtr);
+}
+>>>>>>> upstream/master
+
+static Tcl_Obj **GetVarPtr(Tcl_Interp *interp)
+{
+    Tcl_InterpDeleteProc *proc;
+
+    return (Tcl_Obj **) Tcl_GetAssocData(interp, VARPTR_KEY, &proc);
+}
 
 #define VARPTR_KEY "TCLOBJTEST_VARPTR"
 #define NUMBER_OF_OBJECT_VARS 20
@@ -227,6 +248,7 @@ TestbignumobjCmd(
 	return TCL_ERROR;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	return TCL_ERROR;
     }
@@ -234,6 +256,8 @@ TestbignumobjCmd(
     if (GetVariableIndex(interp, string, &varIndex) != TCL_OK) {
 	return TCL_ERROR;
     }
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -355,6 +379,7 @@ TestbignumobjCmd(
 	    Tcl_SetBignumObj(varPtr[varIndex], &newValue);
 	} else {
 	    SetVarToObj(varPtr, varIndex, Tcl_NewBignumObj(&newValue));
+<<<<<<< HEAD
 	}
 	break;
 
@@ -366,6 +391,19 @@ TestbignumobjCmd(
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
+=======
+	}
+	break;
+
+    case BIGNUM_ISEVEN:
+	if (objc != 3) {
+	    Tcl_WrongNumArgs(interp, 2, objv, "varIndex");
+	    return TCL_ERROR;
+	}
+	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
+	    return TCL_ERROR;
+	}
+>>>>>>> upstream/master
 	if (Tcl_GetBignumFromObj(interp, varPtr[varIndex],
 		&bignumValue) != TCL_OK) {
 	    return TCL_ERROR;
@@ -717,6 +755,7 @@ TestindexobjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 
+<<<<<<< HEAD
     /*
      * Tcl_GetIndexFromObj assumes that the table is statically-allocated so
      * that its address is different for each index object. If we accidently
@@ -742,6 +781,11 @@ TestindexobjCmd(
 >>>>>>> upstream/master
 =======
 
+    result = Tcl_GetIndexFromObj((setError? interp : NULL), objv[3],
+	    argv, "token", INDEX_TEMP_TABLE|(allowAbbrev? 0 : TCL_EXACT),
+	    &index);
+>>>>>>> upstream/master
+=======
     result = Tcl_GetIndexFromObj((setError? interp : NULL), objv[3],
 	    argv, "token", INDEX_TEMP_TABLE|(allowAbbrev? 0 : TCL_EXACT),
 	    &index);
@@ -1014,6 +1058,7 @@ TestlistobjCmd(
     index = Tcl_GetString(objv[2]);
     if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	return TCL_ERROR;
     }
@@ -1113,6 +1158,8 @@ TestlistobjCmd(
     varPtr = GetVarPtr(interp);
     index = Tcl_GetString(objv[2]);
     if (GetVariableIndex(interp, index, &varIndex) != TCL_OK) {
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	return TCL_ERROR;
@@ -1245,9 +1292,12 @@ TestobjCmd(
 	    return TCL_ERROR;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	    return TCL_ERROR;
 	}
+=======
+>>>>>>> upstream/master
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
@@ -1355,8 +1405,12 @@ TestobjCmd(
 	if (CheckIfVarUnset(interp, varPtr,varIndex)) {
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	Tcl_SetObjResult(interp, Tcl_NewIntObj(varPtr[varIndex]->refCount));
+=======
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(varPtr[varIndex]->refCount));
+>>>>>>> upstream/master
 =======
 	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(varPtr[varIndex]->refCount));
 >>>>>>> upstream/master
@@ -1445,7 +1499,11 @@ TeststringobjCmd(
     const char *index, *string, *strings[MAX_STRINGS+1];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     TestString *strPtr;
+=======
+    String *strPtr;
+>>>>>>> upstream/master
 =======
     String *strPtr;
 >>>>>>> upstream/master

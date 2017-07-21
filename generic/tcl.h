@@ -41,6 +41,7 @@ extern "C" {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * unix/configure.in	(2 LOC Major, 2 LOC minor, 1 LOC patch)
  * win/configure.in	(as above)
 =======
@@ -53,6 +54,11 @@ extern "C" {
 >>>>>>> upstream/master
  * win/tcl.m4		(not patchlevel)
  * win/makefile.bc	(not patchlevel) 2 LOC
+=======
+ * unix/configure.ac	(2 LOC Major, 2 LOC minor, 1 LOC patch)
+ * win/configure.ac	(as above)
+ * win/tcl.m4		(not patchlevel)
+>>>>>>> upstream/master
 =======
  * unix/configure.ac	(2 LOC Major, 2 LOC minor, 1 LOC patch)
  * win/configure.ac	(as above)
@@ -73,6 +79,7 @@ extern "C" {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define TCL_MINOR_VERSION   6
 #define TCL_RELEASE_LEVEL   TCL_FINAL_RELEASE
 #define TCL_RELEASE_SERIAL  4
@@ -80,6 +87,8 @@ extern "C" {
 #define TCL_VERSION	    "8.6"
 #define TCL_PATCH_LEVEL	    "8.6.4"
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -92,10 +101,15 @@ extern "C" {
 #define TCL_PATCH_LEVEL	    "8.7a0"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
+=======
+
+#if !defined(TCL_NO_DEPRECATED) || defined(RC_INVOKED)
+>>>>>>> upstream/master
 =======
 
 #if !defined(TCL_NO_DEPRECATED) || defined(RC_INVOKED)
@@ -129,6 +143,7 @@ extern "C" {
 #  define JOIN1(a,b) a##b
 #endif
 #endif /* !TCL_NO_DEPRECATED */
+<<<<<<< HEAD
 
 /*
  * A special definition used to allow this header file to be included from
@@ -140,6 +155,8 @@ extern "C" {
  */
 
 #ifndef RC_INVOKED
+=======
+>>>>>>> upstream/master
 
 /*
 <<<<<<< HEAD
@@ -320,6 +337,29 @@ extern "C" {
 #	define TCL_NOINLINE /* nothing */
 #   endif
 #   define TCL_NORETURN1 /* nothing */
+<<<<<<< HEAD
+#endif
+
+/*
+ * Allow a part of Tcl's API to be explicitly marked as deprecated.
+ *
+ * Used to make TIP 330/336 generate moans even if people use the
+ * compatibility macros. Change your code, guys! We won't support you forever.
+ */
+
+#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+#   if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5))
+#	define TCL_DEPRECATED_API(msg)	__attribute__ ((__deprecated__ (msg)))
+#   else
+#	define TCL_DEPRECATED_API(msg)	__attribute__ ((__deprecated__))
+#   endif
+#else
+#   define TCL_DEPRECATED_API(msg)	/* nothing portable */
+#endif
+
+/*
+>>>>>>> upstream/master
+=======
 #endif
 
 /*
@@ -440,7 +480,7 @@ extern "C" {
 #ifndef TCL_NO_DEPRECATED
 #   undef _ANSI_ARGS_
 #   define _ANSI_ARGS_(x)	x
-#endif
+#endif /* !TCL_NO_DEPRECATED */
 
 /*
 >>>>>>> upstream/master
@@ -580,8 +620,13 @@ typedef long LONG;
  *
  * Also defines the following macros:
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TCL_WIDE_INT_IS_LONG - if wide ints are really longs (i.e. we're on a real
  *	64-bit system.)
+=======
+ * TCL_WIDE_INT_IS_LONG - if wide ints are really longs (i.e. we're on a
+ *	LP64 system such as modern Solaris or Linux ... not including Win64)
+>>>>>>> upstream/master
 =======
  * TCL_WIDE_INT_IS_LONG - if wide ints are really longs (i.e. we're on a
  *	LP64 system such as modern Solaris or Linux ... not including Win64)
@@ -603,11 +648,15 @@ typedef long LONG;
 #   if defined(_WIN32)
 #      define TCL_WIDE_INT_TYPE __int64
 <<<<<<< HEAD
+<<<<<<< HEAD
 #      ifdef __BORLANDC__
 #         define TCL_LL_MODIFIER	"L"
 #      else /* __BORLANDC__ */
 #         define TCL_LL_MODIFIER	"I64"
 #      endif /* __BORLANDC__ */
+=======
+#      define TCL_LL_MODIFIER	"I64"
+>>>>>>> upstream/master
 =======
 #      define TCL_LL_MODIFIER	"I64"
 >>>>>>> upstream/master
@@ -637,10 +686,13 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
 
 #ifdef TCL_WIDE_INT_IS_LONG
 <<<<<<< HEAD
+<<<<<<< HEAD
 #   define Tcl_WideAsLong(val)		((long)(val))
 #   define Tcl_LongAsWide(val)		((long)(val))
 #   define Tcl_WideAsDouble(val)	((double)((long)(val)))
 #   define Tcl_DoubleAsWide(val)	((long)((double)(val)))
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #   ifndef TCL_LL_MODIFIER
@@ -655,6 +707,7 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
 #      define TCL_LL_MODIFIER		"ll"
 #   endif /* !TCL_LL_MODIFIER */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #   define Tcl_WideAsLong(val)		((long)((Tcl_WideInt)(val)))
 #   define Tcl_LongAsWide(val)		((Tcl_WideInt)((long)(val)))
 #   define Tcl_WideAsDouble(val)	((double)((Tcl_WideInt)(val)))
@@ -664,11 +717,18 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
 =======
 #endif /* TCL_WIDE_INT_IS_LONG */
 
+=======
+#endif /* TCL_WIDE_INT_IS_LONG */
+
+>>>>>>> upstream/master
 #define Tcl_WideAsLong(val)	((long)((Tcl_WideInt)(val)))
 #define Tcl_LongAsWide(val)	((Tcl_WideInt)((long)(val)))
 #define Tcl_WideAsDouble(val)	((double)((Tcl_WideInt)(val)))
 #define Tcl_DoubleAsWide(val)	((Tcl_WideInt)((double)(val)))
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #if defined(_WIN32)
 #   ifdef __BORLANDC__
@@ -768,7 +828,11 @@ typedef struct Tcl_Interp
 #endif
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif /* TCL_NO_DEPRECATED */
+=======
+#endif /* !TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
 =======
 #endif /* !TCL_NO_DEPRECATED */
 >>>>>>> upstream/master
@@ -941,6 +1005,9 @@ typedef struct stat *Tcl_OldStat_;
 #define TCL_CONTINUE		4
 
 #define TCL_RESULT_SIZE		200
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*
@@ -1428,7 +1495,7 @@ typedef struct Tcl_DString {
 >>>>>>> upstream/master
 #ifndef TCL_NO_DEPRECATED
 #   define TCL_PARSE_PART1	0x400
-#endif
+#endif /* !TCL_NO_DEPRECATED */
 
 =======
 
@@ -1476,9 +1543,12 @@ typedef struct Tcl_DString {
 #define TCL_LINK_USHORT		9
 #define TCL_LINK_UINT		10
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define TCL_LINK_LONG		11
 #define TCL_LINK_ULONG		12
 =======
+=======
+>>>>>>> upstream/master
 #if defined(TCL_WIDE_INT_IS_LONG) || defined(_WIN32) || defined(__CYGWIN__)
 #define TCL_LINK_LONG		((sizeof(long) != sizeof(int)) ? TCL_LINK_WIDE_INT : TCL_LINK_INT)
 #define TCL_LINK_ULONG		((sizeof(long) != sizeof(int)) ? TCL_LINK_WIDE_UINT : TCL_LINK_UINT)
@@ -1486,6 +1556,9 @@ typedef struct Tcl_DString {
 #define TCL_LINK_LONG		11
 #define TCL_LINK_ULONG		12
 #endif
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #define TCL_LINK_FLOAT		13
 #define TCL_LINK_WIDE_UINT	14
@@ -1506,7 +1579,11 @@ typedef struct Tcl_HashEntry Tcl_HashEntry;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef unsigned (Tcl_HashKeyProc) (Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+typedef TCL_HASH_TYPE (Tcl_HashKeyProc) (Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 typedef TCL_HASH_TYPE (Tcl_HashKeyProc) (Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -1522,6 +1599,7 @@ typedef void (Tcl_FreeHashEntryProc) (Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
 
 /*
+<<<<<<< HEAD
  * This flag controls whether the hash table stores the hash of a key, or
  * recalculates it. There should be no reason for turning this flag off as it
  * is completely binary and source compatible unless you directly access the
@@ -1540,6 +1618,8 @@ typedef void (Tcl_FreeHashEntryProc) (Tcl_HashEntry *hPtr);
 >>>>>>> upstream/master
 
 /*
+=======
+>>>>>>> upstream/master
  * Structure definition for an entry in a hash table. No-one outside Tcl
  * should access any of these fields directly; use the macros defined below.
  */
@@ -1548,6 +1628,7 @@ struct Tcl_HashEntry {
     Tcl_HashEntry *nextPtr;	/* Pointer to next entry in this hash bucket,
 				 * or NULL for end of chain. */
     Tcl_HashTable *tablePtr;	/* Pointer to table containing entry. */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1560,6 +1641,11 @@ struct Tcl_HashEntry {
 				 * entry in this entry's chain: used for
 				 * deleting the entry. */
 #endif
+=======
+    void *hash;			/* Hash value, stored as pointer to ensure
+				 * that the offsets of the fields in this
+				 * structure are not changed. */
+>>>>>>> upstream/master
 =======
     void *hash;			/* Hash value, stored as pointer to ensure
 				 * that the offsets of the fields in this
@@ -2522,12 +2608,95 @@ typedef struct Tcl_Parse {
 				 * here. */
 } Tcl_Parse;
 
+<<<<<<< HEAD
+=======
 /*
  *----------------------------------------------------------------------------
  * The following structure represents a user-defined encoding. It collects
  * together all the functions that are used by the specific encoding.
  */
 
+typedef struct Tcl_EncodingType {
+    const char *encodingName;	/* The name of the encoding, e.g. "euc-jp".
+				 * This name is the unique key for this
+				 * encoding type. */
+    Tcl_EncodingConvertProc *toUtfProc;
+				/* Function to convert from external encoding
+				 * into UTF-8. */
+    Tcl_EncodingConvertProc *fromUtfProc;
+				/* Function to convert from UTF-8 into
+				 * external encoding. */
+    Tcl_EncodingFreeProc *freeProc;
+				/* If non-NULL, function to call when this
+				 * encoding is deleted. */
+    ClientData clientData;	/* Arbitrary value associated with encoding
+				 * type. Passed to conversion functions. */
+    int nullSize;		/* Number of zero bytes that signify
+				 * end-of-string in this encoding. This number
+				 * is used to determine the source string
+				 * length when the srcLen argument is
+				 * negative. Must be 1 or 2. */
+} Tcl_EncodingType;
+
+/*
+ * The following definitions are used as values for the conversion control
+ * flags argument when converting text from one character set to another:
+ *
+ * TCL_ENCODING_START -		Signifies that the source buffer is the first
+ *				block in a (potentially multi-block) input
+ *				stream. Tells the conversion function to reset
+ *				to an initial state and perform any
+ *				initialization that needs to occur before the
+ *				first byte is converted. If the source buffer
+ *				contains the entire input stream to be
+ *				converted, this flag should be set.
+ * TCL_ENCODING_END -		Signifies that the source buffer is the last
+ *				block in a (potentially multi-block) input
+ *				stream. Tells the conversion routine to
+ *				perform any finalization that needs to occur
+ *				after the last byte is converted and then to
+ *				reset to an initial state. If the source
+ *				buffer contains the entire input stream to be
+ *				converted, this flag should be set.
+ * TCL_ENCODING_STOPONERROR -	If set, then the converter will return
+ *				immediately upon encountering an invalid byte
+ *				sequence or a source character that has no
+ *				mapping in the target encoding. If clear, then
+ *				the converter will skip the problem,
+ *				substituting one or more "close" characters in
+ *				the destination buffer and then continue to
+ *				convert the source.
+ * TCL_ENCODING_NO_TERMINATE - 	If set, Tcl_ExternalToUtf will not append a
+ *				terminating NUL byte.  Knowing that it will
+ *				not need space to do so, it will fill all
+ *				dstLen bytes with encoded UTF-8 content, as
+ *				other circumstances permit.  If clear, the
+ *				default behavior is to reserve a byte in
+ *				the dst space for NUL termination, and to
+ *				append the NUL byte.
+ * TCL_ENCODING_CHAR_LIMIT -	If set and dstCharsPtr is not NULL, then
+ *				Tcl_ExternalToUtf takes the initial value
+ *				of *dstCharsPtr is taken as a limit of the
+ *				maximum number of chars to produce in the
+ *				encoded UTF-8 content.  Otherwise, the
+ *				number of chars produced is controlled only
+ *				by other limiting factors.
+ */
+
+#define TCL_ENCODING_START		0x01
+#define TCL_ENCODING_END		0x02
+#define TCL_ENCODING_STOPONERROR	0x04
+#define TCL_ENCODING_NO_TERMINATE	0x08
+#define TCL_ENCODING_CHAR_LIMIT		0x10
+
+>>>>>>> upstream/master
+/*
+ *----------------------------------------------------------------------------
+ * The following structure represents a user-defined encoding. It collects
+ * together all the functions that are used by the specific encoding.
+ */
+
+<<<<<<< HEAD
 typedef struct Tcl_EncodingType {
     const char *encodingName;	/* The name of the encoding, e.g. "euc-jp".
 				 * This name is the unique key for this
@@ -2629,6 +2798,8 @@ typedef struct Tcl_EncodingType {
  *				TCL_ENCODING_STOPONERROR was specified.
  */
 
+=======
+>>>>>>> upstream/master
 #define TCL_CONVERT_MULTIBYTE	(-1)
 #define TCL_CONVERT_SYNTAX	(-2)
 #define TCL_CONVERT_UNKNOWN	(-3)
@@ -2703,6 +2874,9 @@ typedef void (Tcl_LimitHandlerDeleteProc) (ClientData clientData);
  * Override definitions for libtommath.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  */
@@ -2719,6 +2893,9 @@ typedef unsigned int mp_digit;
  * Modifications from the original are copyright (c) Sam Bromley 2006
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  */
@@ -2778,6 +2955,7 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 /*
  *----------------------------------------------------------------------------
  * Definitions needed for Tcl_Zlib routines. [TIP #234]
+<<<<<<< HEAD
  *
  * Constants for the format flags describing what sort of data format is
  * desired/expected for the Tcl_ZlibDeflate, Tcl_ZlibInflate and
@@ -2882,6 +3060,8 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 /*
  *----------------------------------------------------------------------------
  * Definitions needed for Tcl_Zlib routines. [TIP #234]
+=======
+>>>>>>> upstream/master
  *
  * Constants for the format flags describing what sort of data format is
  * desired/expected for the Tcl_ZlibDeflate, Tcl_ZlibInflate and
@@ -2927,6 +3107,16 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 
 #define TCL_LOAD_GLOBAL 1
 #define TCL_LOAD_LAZY 2
+
+/*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+ *----------------------------------------------------------------------------
+ * Definitions needed for the Tcl_OpenTcpServerEx function. [TIP #456]
+ */
+#define TCL_TCPSERVER_REUSEADDR (1<<0)
+#define TCL_TCPSERVER_REUSEPORT (1<<1)
 
 /*
 >>>>>>> upstream/master
@@ -2941,6 +3131,7 @@ typedef int (Tcl_NRPostProc) (ClientData data[], Tcl_Interp *interp,
  *----------------------------------------------------------------------------
  * The following constant is used to test for older versions of Tcl in the
  * stubs tables.
+<<<<<<< HEAD
 =======
  */
 
@@ -3035,6 +3226,10 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+ */
+
+>>>>>>> upstream/master
 #define TCL_STUB_MAGIC		((int) 0xFCA3BACF)
 
 /*
@@ -3045,6 +3240,7 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
  */
 
 const char *		Tcl_InitStubs(Tcl_Interp *interp, const char *version,
+<<<<<<< HEAD
 			    int exact);
 const char *		TclTomMathInitializeStubs(Tcl_Interp *interp,
 			    const char *version, int epoch, int revision);
@@ -3106,10 +3302,28 @@ const char *		TclTomMathInitializeStubs(Tcl_Interp *interp,
 #define TCL_ZLIB_COMPRESS_BEST	9
 #define TCL_ZLIB_COMPRESS_DEFAULT (-1)
 
+=======
+			    int exact, int magic);
+const char *		TclTomMathInitializeStubs(Tcl_Interp *interp,
+			    const char *version, int epoch, int revision);
+
+#ifdef USE_TCL_STUBS
+#define Tcl_InitStubs(interp, version, exact) \
+    (Tcl_InitStubs)(interp, version, \
+	    (exact)|(TCL_MAJOR_VERSION<<8)|(TCL_MINOR_VERSION<<16), \
+	    TCL_STUB_MAGIC)
+#else
+#define Tcl_InitStubs(interp, version, exact) \
+    Tcl_PkgInitStubsCheck(interp, version, \
+	    (exact)|(TCL_MAJOR_VERSION<<8)|(TCL_MINOR_VERSION<<16))
+#endif
+
+>>>>>>> upstream/master
 /*
  * Constants for types of flushing, used with Tcl_ZlibFlush.
  */
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 #define TCL_ZLIB_NO_FLUSH	0
 #define TCL_ZLIB_FLUSH		2
@@ -3215,6 +3429,18 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 
 /*
  *----------------------------------------------------------------------------
+=======
+#define Tcl_Main(argc, argv, proc) Tcl_MainEx(argc, argv, proc, \
+	    ((Tcl_CreateInterp)()))
+EXTERN void		Tcl_MainEx(int argc, char **argv,
+			    Tcl_AppInitProc *appInitProc, Tcl_Interp *interp);
+EXTERN const char *	Tcl_PkgInitStubsCheck(Tcl_Interp *interp,
+			    const char *version, int exact);
+EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
+
+/*
+ *----------------------------------------------------------------------------
+>>>>>>> upstream/master
  * Include the public function declarations that are accessible via the stubs
  * table.
  */
@@ -3400,7 +3626,7 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
      Tcl_DbNewBignumObj(val, __FILE__, __LINE__)
 #  undef  Tcl_NewBooleanObj
 #  define Tcl_NewBooleanObj(val) \
-     Tcl_DbNewBooleanObj(val, __FILE__, __LINE__)
+     Tcl_DbNewLongObj((val)!=0, __FILE__, __LINE__)
 #  undef  Tcl_NewByteArrayObj
 #  define Tcl_NewByteArrayObj(bytes, len) \
      Tcl_DbNewByteArrayObj(bytes, len, __FILE__, __LINE__)
@@ -3497,7 +3723,10 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 #endif
 #   define panicVA		Tcl_PanicVA
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif /* !TCL_NO_DEPRECATED */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -3511,7 +3740,10 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 extern Tcl_AppInitProc Tcl_AppInit;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 #endif /* !TCL_NO_DEPRECATED */
 
 >>>>>>> upstream/master

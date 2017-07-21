@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -139,6 +143,7 @@ The \fBswitch\fR command can match against variables and not just
 literals, as shown here (the result is \fI2\fR):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 .PP
@@ -181,6 +186,8 @@ last) is taken.  This example has a result of \fI3\fR:
 .PP
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 .PP
 .CS
 set foo "abc"

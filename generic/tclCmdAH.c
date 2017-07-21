@@ -14,6 +14,12 @@
 #include "tclInt.h"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#ifdef _WIN32
+#   include "tclWinInt.h"
+#endif
+>>>>>>> upstream/master
 =======
 #ifdef _WIN32
 #   include "tclWinInt.h"
@@ -56,10 +62,13 @@ struct ForeachState {
 static int		CheckAccess(Tcl_Interp *interp, Tcl_Obj *pathPtr,
 			    int mode);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		EncodingDirsObjCmd(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
 =======
+=======
+>>>>>>> upstream/master
 static int		BadEncodingSubcommand(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
@@ -573,6 +582,7 @@ Tcl_EncodingObjCmd(
     switch ((enum options) index) {
     case ENC_CONVERTTO:
 <<<<<<< HEAD
+<<<<<<< HEAD
     case ENC_CONVERTFROM: {
 	Tcl_Obj *data;
 	Tcl_DString ds;
@@ -597,15 +607,99 @@ Tcl_EncodingObjCmd(
 	    /*
 	     * Treat the string as binary data.
 	     */
+=======
+	return EncodingConverttoObjCmd(dummy, interp, objc, objv);
+    case ENC_CONVERTFROM:
+	return EncodingConvertfromObjCmd(dummy, interp, objc, objv);
+    case ENC_DIRS:
+	return EncodingDirsObjCmd(dummy, interp, objc, objv);
+    case ENC_NAMES:
+	return EncodingNamesObjCmd(dummy, interp, objc, objv);
+    case ENC_SYSTEM:
+	return EncodingSystemObjCmd(dummy, interp, objc, objv);
+    }
+    return TCL_OK;
+}
+
+/*
+ *-----------------------------------------------------------------------------
+ *
+ * TclInitEncodingCmd --
+ *
+ *	This function creates the 'encoding' ensemble.
+ *
+ * Results:
+ *	Returns the Tcl_Command so created.
+ *
+ * Side effects:
+ *	The ensemble is initialized.
+ *
+ * This command is hidden in a safe interpreter.
+ */
 
-	    stringPtr = (char *) Tcl_GetByteArrayFromObj(data, &length);
-	    Tcl_ExternalToUtfDString(encoding, stringPtr, length, &ds);
+Tcl_Command
+TclInitEncodingCmd(
+    Tcl_Interp* interp)		/* Tcl interpreter */
+{
+    static const EnsembleImplMap encodingImplMap[] = {
+	{"convertfrom", EncodingConvertfromObjCmd, TclCompileBasic1Or2ArgCmd, NULL, NULL, 0},
+	{"convertto",   EncodingConverttoObjCmd,   TclCompileBasic1Or2ArgCmd, NULL, NULL, 0},
+	{"dirs",        EncodingDirsObjCmd,        TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
+	{"names",       EncodingNamesObjCmd,       TclCompileBasic0ArgCmd,    NULL, NULL, 0},
+	{"system",      EncodingSystemObjCmd,      TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
+	{NULL,          NULL,                      NULL,                      NULL, NULL, 0}
+    };
 
-	    /*
-	     * Note that we cannot use Tcl_DStringResult here because it will
-	     * truncate the string at the first null byte.
-	     */
+    return TclMakeEnsemble(interp, "encoding", encodingImplMap);
+}
+
+/*
+ *-----------------------------------------------------------------------------
+ *
+ * TclMakeEncodingCommandSafe --
+ *
+ *	This function hides the unsafe 'dirs' and 'system' subcommands of
+ *	the "encoding" Tcl command ensemble. It must be called only from
+ *	TclHideUnsafeCommands.
+ *
+ * Results:
+ *	A standard Tcl result
+ *
+ * Side effects:
+ *	Adds commands to the table of hidden commands.
+ *
+ *-----------------------------------------------------------------------------
+ */
 
+int
+TclMakeEncodingCommandSafe(
+    Tcl_Interp* interp)		/* Tcl interpreter */
+{
+    static const struct {
+	const char *cmdName;
+	int unsafe;
+    } unsafeInfo[] = {
+	{"convertfrom", 0},
+	{"convertto",   0},
+	{"dirs",        1},
+	{"names",       0},
+	{"system",      0},
+	{NULL,          0}
+    };
+>>>>>>> upstream/master
+
+    int i;
+    Tcl_DString oldBuf, newBuf;
+
+    Tcl_DStringInit(&oldBuf);
+    TclDStringAppendLiteral(&oldBuf, "::tcl::encoding::");
+    Tcl_DStringInit(&newBuf);
+    TclDStringAppendLiteral(&newBuf, "tcl:encoding:");
+    for (i=0 ; unsafeInfo[i].cmdName != NULL ; i++) {
+	if (unsafeInfo[i].unsafe) {
+	    const char *oldName, *newName;
+
+<<<<<<< HEAD
 	    Tcl_SetObjResult(interp, TclDStringToObj(&ds));
 	} else {
 	    /*
@@ -618,34 +712,200 @@ Tcl_EncodingObjCmd(
 		    (unsigned char *) Tcl_DStringValue(&ds),
 		    Tcl_DStringLength(&ds)));
 	    Tcl_DStringFree(&ds);
+=======
+	    Tcl_DStringSetLength(&oldBuf, 17);
+	    oldName = Tcl_DStringAppend(&oldBuf, unsafeInfo[i].cmdName, -1);
+	    Tcl_DStringSetLength(&newBuf, 13);
+	    newName = Tcl_DStringAppend(&newBuf, unsafeInfo[i].cmdName, -1);
+	    if (TclRenameCommand(interp, oldName, "___tmp") != TCL_OK
+		    || Tcl_HideCommand(interp, "___tmp", newName) != TCL_OK) {
+		Tcl_Panic("problem making 'encoding %s' safe: %s",
+			unsafeInfo[i].cmdName,
+			Tcl_GetString(Tcl_GetObjResult(interp)));
+	    }
+	    Tcl_CreateObjCommand(interp, oldName, BadEncodingSubcommand,
+		    (ClientData) unsafeInfo[i].cmdName, NULL);
+>>>>>>> upstream/master
 	}
-
-	Tcl_FreeEncoding(encoding);
-	break;
     }
+    Tcl_DStringFree(&oldBuf);
+    Tcl_DStringFree(&newBuf);
+
+    /*
+     * Ugh. The [encoding] command is now actually safe, but it is assumed by
+     * scripts that it is not, which messes up security policies.
+     */
+
+    if (Tcl_HideCommand(interp, "encoding", "encoding") != TCL_OK) {
+	Tcl_Panic("problem making 'encoding' safe: %s",
+		Tcl_GetString(Tcl_GetObjResult(interp)));
+    }
+<<<<<<< HEAD
     case ENC_DIRS:
 	return EncodingDirsObjCmd(dummy, interp, objc, objv);
     case ENC_NAMES:
 	if (objc > 2) {
 	    Tcl_WrongNumArgs(interp, 2, objv, NULL);
-	    return TCL_ERROR;
-	}
-	Tcl_GetEncodingNames(interp);
-	break;
-    case ENC_SYSTEM:
-	if (objc > 3) {
-	    Tcl_WrongNumArgs(interp, 2, objv, "?encoding?");
-	    return TCL_ERROR;
-	}
-	if (objc == 2) {
-	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
-		    Tcl_GetEncodingName(NULL), -1));
-	} else {
-	    return Tcl_SetSystemEncoding(interp, TclGetString(objv[2]));
-	}
-	break;
-    }
+=======
     return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * BadEncodingSubcommand --
+ *
+ *	Command used to act as a backstop implementation when subcommands of
+ *	"encoding" are unsafe (the real implementations of the subcommands are
+ *	hidden). The clientData is always the full official subcommand name.
+ *
+ * Results:
+ *	A standard Tcl result (always a TCL_ERROR).
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+BadEncodingSubcommand(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    const char *subcommandName = (const char *) clientData;
+
+    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+	    "not allowed to invoke subcommand %s of encoding", subcommandName));
+    Tcl_SetErrorCode(interp, "TCL", "SAFE", "SUBCOMMAND", NULL);
+    return TCL_ERROR;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * EncodingConvertfromObjCmd --
+ *
+ *	This command converts a byte array in an external encoding into a
+ *	Tcl string
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+EncodingConvertfromObjCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    Tcl_Obj *data;		/* Byte array to convert */
+    Tcl_DString ds;		/* Buffer to hold the string */
+    Tcl_Encoding encoding;	/* Encoding to use */
+    int length;			/* Length of the byte array being converted */
+    const char *bytesPtr;	/* Pointer to the first byte of the array */
+
+    if (objc == 2) {
+	encoding = Tcl_GetEncoding(interp, NULL);
+	data = objv[1];
+    } else if (objc == 3) {
+	if (Tcl_GetEncodingFromObj(interp, objv[1], &encoding) != TCL_OK) {
+>>>>>>> upstream/master
+	    return TCL_ERROR;
+	}
+	data = objv[2];
+    } else {
+	Tcl_WrongNumArgs(interp, 1, objv, "?encoding? data");
+	return TCL_ERROR;
+    }
+
+    /*
+     * Convert the string into a byte array in 'ds'
+     */
+    bytesPtr = (char *) Tcl_GetByteArrayFromObj(data, &length);
+    Tcl_ExternalToUtfDString(encoding, bytesPtr, length, &ds);
+
+    /*
+     * Note that we cannot use Tcl_DStringResult here because it will
+     * truncate the string at the first null byte.
+     */
+
+    Tcl_SetObjResult(interp, TclDStringToObj(&ds));
+
+    /*
+     * We're done with the encoding
+     */
+
+    Tcl_FreeEncoding(encoding);
+    return TCL_OK;
+
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * EncodingConverttoObjCmd --
+ *
+ *	This command converts a Tcl string into a byte array that
+ *	encodes the string according to some encoding.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+EncodingConverttoObjCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    Tcl_Obj *data;		/* String to convert */
+    Tcl_DString ds;		/* Buffer to hold the byte array */
+    Tcl_Encoding encoding;	/* Encoding to use */
+    int length;			/* Length of the string being converted */
+    const char *stringPtr;	/* Pointer to the first byte of the string */
+
+    /* TODO - ADJUST OBJ INDICES WHEN ENSEMBLIFYING THIS */
+
+    if (objc == 2) {
+	encoding = Tcl_GetEncoding(interp, NULL);
+	data = objv[1];
+    } else if (objc == 3) {
+	if (Tcl_GetEncodingFromObj(interp, objv[1], &encoding) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+	data = objv[2];
+    } else {
+	Tcl_WrongNumArgs(interp, 1, objv, "?encoding? data");
+	return TCL_ERROR;
+    }
+
+    /*
+     * Convert the string to a byte array in 'ds'
+     */
+
+    stringPtr = TclGetStringFromObj(data, &length);
+    Tcl_UtfToExternalDString(encoding, stringPtr, length, &ds);
+    Tcl_SetObjResult(interp,
+		     Tcl_NewByteArrayObj((unsigned char*) Tcl_DStringValue(&ds),
+					 Tcl_DStringLength(&ds)));
+    Tcl_DStringFree(&ds);
+
+    /*
+     * We're done with the encoding
+     */
+
+    Tcl_FreeEncoding(encoding);
+    return TCL_OK;
+
 }
 
 /*
@@ -673,8 +933,13 @@ EncodingDirsObjCmd(
 {
     Tcl_Obj *dirListObj;
 
+<<<<<<< HEAD
     if (objc > 3) {
 	Tcl_WrongNumArgs(interp, 2, objv, "?dirList?");
+=======
+    if (objc > 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "?dirList?");
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     if (objc == 2) {
@@ -683,7 +948,11 @@ EncodingDirsObjCmd(
 <<<<<<< HEAD
     }
 
+<<<<<<< HEAD
     dirListObj = objv[2];
+=======
+    dirListObj = objv[1];
+>>>>>>> upstream/master
     if (Tcl_SetEncodingSearchPath(dirListObj) == TCL_ERROR) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"expected directory list but got \"%s\"",
@@ -692,6 +961,7 @@ EncodingDirsObjCmd(
 		NULL);
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
 =======
 =======
 	return EncodingConverttoObjCmd(dummy, interp, objc, objv);
@@ -717,6 +987,71 @@ EncodingDirsObjCmd(
     }
 >>>>>>> upstream/master
     Tcl_SetObjResult(interp, dirListObj);
+=======
+    Tcl_SetObjResult(interp, dirListObj);
+    return TCL_OK;
+}
+
+/*
+ *-----------------------------------------------------------------------------
+ *
+ * EncodingNamesObjCmd --
+ *
+ *	This command returns a list of the available encoding names
+ *
+ * Results:
+ *	Returns a standard Tcl result
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+int
+EncodingNamesObjCmd(ClientData dummy,       /* Unused */
+		    Tcl_Interp* interp,	    /* Tcl interpreter */
+		    int objc,		    /* Number of command line args */
+		    Tcl_Obj* const objv[])  /* Vector of command line args */
+{
+    if (objc > 1) {
+	Tcl_WrongNumArgs(interp, 1, objv, NULL);
+	return TCL_ERROR;
+    }
+    Tcl_GetEncodingNames(interp);
+    return TCL_OK;
+}
+
+/*
+ *-----------------------------------------------------------------------------
+ *
+ * EncodingSystemObjCmd --
+ *
+ *	This command retrieves or changes the system encoding
+ *
+ * Results:
+ *	Returns a standard Tcl result
+ *
+ * Side effects:
+ *	May change the system encoding.
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+int
+EncodingSystemObjCmd(ClientData dummy,      /* Unused */
+		     Tcl_Interp* interp,    /* Tcl interpreter */
+		     int objc,		    /* Number of command line args */
+		     Tcl_Obj* const objv[]) /* Vector of command line args */
+{
+    if (objc > 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "?encoding?");
+	return TCL_ERROR;
+    }
+    if (objc == 1) {
+	Tcl_SetObjResult(interp,
+			 Tcl_NewStringObj(Tcl_GetEncodingName(NULL), -1));
+    } else {
+	return Tcl_SetSystemEncoding(interp, TclGetString(objv[1]));
+    }
+>>>>>>> upstream/master
     return TCL_OK;
 }
 
@@ -1092,8 +1427,22 @@ EncodingConverttoObjCmd(
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     return Tcl_NRCallObjProc(interp, TclNRExprObjCmd, dummy, objc, objv);
 }
+=======
+    return Tcl_NRCallObjProc(interp, TclNRExprObjCmd, dummy, objc, objv);
+}
+
+int
+TclNRExprObjCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    Tcl_Obj *resultPtr, *objPtr;
+>>>>>>> upstream/master
 
 int
 TclNRExprObjCmd(
@@ -1111,12 +1460,18 @@ TclNRExprObjCmd(
     const char *stringPtr;	/* Pointer to the first byte of the string */
 >>>>>>> upstream/master
 
+<<<<<<< HEAD
     /* TODO - ADJUST OBJ INDICES WHEN ENSEMBLIFYING THIS */
 
     TclNewObj(resultPtr);
     Tcl_IncrRefCount(resultPtr);
     if (objc == 2) {
 <<<<<<< HEAD
+=======
+    TclNewObj(resultPtr);
+    Tcl_IncrRefCount(resultPtr);
+    if (objc == 2) {
+>>>>>>> upstream/master
 	objPtr = objv[1];
 	TclNRAddCallback(interp, ExprCallback, resultPtr, NULL, NULL, NULL);
     } else {
@@ -1183,6 +1538,9 @@ ExprCallback(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
  * TclInitFileCmd --
  *
  *	This function builds the "file" Tcl command ensemble. See the user
@@ -1191,10 +1549,13 @@ ExprCallback(
  *	PLEASE NOTE THAT THIS FAILS WITH FILENAMES AND PATHS WITH EMBEDDED
  *	NULLS. With the object-based Tcl_FS APIs, the above NOTE may no longer
  *	be true. In any case this assertion should be tested.
+<<<<<<< HEAD
 =======
  * EncodingDirsObjCmd --
  *
  *	This command manipulates the encoding search path.
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  * Results:
@@ -1207,6 +1568,9 @@ ExprCallback(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 Tcl_Command
 TclInitFileCmd(
     Tcl_Interp *interp)
@@ -1253,6 +1617,7 @@ TclInitFileCmd(
 	{"volumes",	FilesystemVolumesCmd,	TclCompileBasic0ArgCmd, NULL, NULL, 0},
 	{"writable",	FileAttrIsWritableCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
 	{NULL, NULL, NULL, NULL, NULL, 0}
+<<<<<<< HEAD
     };
     return TclMakeEnsemble(interp, "file", initMap);
 }
@@ -1321,6 +1686,76 @@ TclMakeFileCommandSafe(
     int i;
     Tcl_DString oldBuf, newBuf;
 
+=======
+    };
+    return TclMakeEnsemble(interp, "file", initMap);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclMakeFileCommandSafe --
+ *
+ *	This function hides the unsafe subcommands of the "file" Tcl command
+ *	ensemble. It must only be called from TclHideUnsafeCommands.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	Adds commands to the table of hidden commands.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+TclMakeFileCommandSafe(
+    Tcl_Interp *interp)
+{
+    static const struct {
+	const char *cmdName;
+	int unsafe;
+    } unsafeInfo[] = {
+	{"atime",	 1},
+	{"attributes",	 1},
+	{"channels",	 0},
+	{"copy",	 1},
+	{"delete",	 1},
+	{"dirname",	 1},
+	{"executable",	 1},
+	{"exists",	 1},
+	{"extension",	 1},
+	{"isdirectory",	 1},
+	{"isfile",	 1},
+	{"join",	 0},
+	{"link",	 1},
+	{"lstat",	 1},
+	{"mtime",	 1},
+	{"mkdir",	 1},
+	{"nativename",	 1},
+	{"normalize",	 1},
+	{"owned",	 1},
+	{"pathtype",	 0},
+	{"readable",	 1},
+	{"readlink",	 1},
+	{"rename",	 1},
+	{"rootname",	 1},
+	{"separator",	 0},
+	{"size",	 1},
+	{"split",	 0},
+	{"stat",	 1},
+	{"system",	 0},
+	{"tail",	 1},
+	{"tempfile",	 1},
+	{"type",	 1},
+	{"volumes",	 1},
+	{"writable",	 1},
+	{NULL, 0}
+    };
+    int i;
+    Tcl_DString oldBuf, newBuf;
+
+>>>>>>> upstream/master
     Tcl_DStringInit(&oldBuf);
     TclDStringAppendLiteral(&oldBuf, "::tcl::file::");
     Tcl_DStringInit(&newBuf);
@@ -1328,6 +1763,7 @@ TclMakeFileCommandSafe(
     for (i=0 ; unsafeInfo[i].cmdName != NULL ; i++) {
 	if (unsafeInfo[i].unsafe) {
 	    const char *oldName, *newName;
+<<<<<<< HEAD
 
 =======
 int
@@ -1385,10 +1821,41 @@ EncodingNamesObjCmd(ClientData dummy,       /* Unused */
 	return TCL_ERROR;
     }
     Tcl_GetEncodingNames(interp);
+=======
+
+	    Tcl_DStringSetLength(&oldBuf, 13);
+	    oldName = Tcl_DStringAppend(&oldBuf, unsafeInfo[i].cmdName, -1);
+	    Tcl_DStringSetLength(&newBuf, 9);
+	    newName = Tcl_DStringAppend(&newBuf, unsafeInfo[i].cmdName, -1);
+	    if (TclRenameCommand(interp, oldName, "___tmp") != TCL_OK
+		    || Tcl_HideCommand(interp, "___tmp", newName) != TCL_OK) {
+		Tcl_Panic("problem making 'file %s' safe: %s",
+			unsafeInfo[i].cmdName,
+			Tcl_GetString(Tcl_GetObjResult(interp)));
+	    }
+	    Tcl_CreateObjCommand(interp, oldName, BadFileSubcommand,
+		    (ClientData) unsafeInfo[i].cmdName, NULL);
+	}
+    }
+    Tcl_DStringFree(&oldBuf);
+    Tcl_DStringFree(&newBuf);
+
+    /*
+     * Ugh. The [file] command is now actually safe, but it is assumed by
+     * scripts that it is not, which messes up security policies. [Bug
+     * 3211758]
+     */
+
+    if (Tcl_HideCommand(interp, "file", "file") != TCL_OK) {
+	Tcl_Panic("problem making 'file' safe: %s",
+		Tcl_GetString(Tcl_GetObjResult(interp)));
+    }
+>>>>>>> upstream/master
     return TCL_OK;
 }
 
 /*
+<<<<<<< HEAD
  *-----------------------------------------------------------------------------
  *
  * EncodingSystemObjCmd --
@@ -1596,11 +2063,205 @@ Tcl_ExitObjCmd(
     Tcl_Exit(value);
     /*NOTREACHED*/
     return TCL_OK;		/* Better not ever reach this! */
+=======
+ *----------------------------------------------------------------------
+ *
+ * BadFileSubcommand --
+ *
+ *	Command used to act as a backstop implementation when subcommands of
+ *	"file" are unsafe (the real implementations of the subcommands are
+ *	hidden). The clientData is always the full official subcommand name.
+ *
+ * Results:
+ *	A standard Tcl result (always a TCL_ERROR).
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+BadFileSubcommand(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    const char *subcommandName = (const char *) clientData;
+
+    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+	    "not allowed to invoke subcommand %s of file", subcommandName));
+    Tcl_SetErrorCode(interp, "TCL", "SAFE", "SUBCOMMAND", NULL);
+    return TCL_ERROR;
 }
 
 /*
  *----------------------------------------------------------------------
  *
+ * FileAttrAccessTimeCmd --
+ *
+ *	This function is invoked to process the "file atime" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	May update the access time on the file, if requested by the user.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrAccessTimeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+    struct utimbuf tval;
+
+    if (objc < 2 || objc > 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name ?time?");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+#if defined(_WIN32)
+    /* We use a value of 0 to indicate the access time not available */
+    if (buf.st_atime == 0) {
+        Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                             "could not get access time for file \"%s\"",
+                             TclGetString(objv[1])));
+        return TCL_ERROR;
+    }
+#endif
+
+    if (objc == 3) {
+	/*
+	 * Need separate variable for reading longs from an object on 64-bit
+	 * platforms. [Bug 698146]
+	 */
+
+	long newTime;
+
+	if (TclGetLongFromObj(interp, objv[2], &newTime) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+
+	tval.actime = newTime;
+	tval.modtime = buf.st_mtime;
+
+	if (Tcl_FSUtime(objv[1], &tval) != 0) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "could not set access time for file \"%s\": %s",
+		    TclGetString(objv[1]), Tcl_PosixError(interp)));
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * Do another stat to ensure that the we return the new recognized
+	 * atime - hopefully the same as the one we sent in. However, fs's
+	 * like FAT don't even know what atime is.
+	 */
+
+	if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+    }
+
+    Tcl_SetObjResult(interp, Tcl_NewLongObj((long) buf.st_atime));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrModifyTimeCmd --
+ *
+ *	This function is invoked to process the "file mtime" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	May update the modification time on the file, if requested by the
+ *	user.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrModifyTimeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+    struct utimbuf tval;
+
+    if (objc < 2 || objc > 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name ?time?");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+#if defined(_WIN32)
+    /* We use a value of 0 to indicate the modification time not available */
+    if (buf.st_mtime == 0) {
+        Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+                             "could not get modification time for file \"%s\"",
+                             TclGetString(objv[1])));
+        return TCL_ERROR;
+    }
+#endif
+    if (objc == 3) {
+	/*
+	 * Need separate variable for reading longs from an object on 64-bit
+	 * platforms. [Bug 698146]
+	 */
+
+	long newTime;
+
+	if (TclGetLongFromObj(interp, objv[2], &newTime) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+
+	tval.actime = buf.st_atime;
+	tval.modtime = newTime;
+
+	if (Tcl_FSUtime(objv[1], &tval) != 0) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "could not set modification time for file \"%s\": %s",
+		    TclGetString(objv[1]), Tcl_PosixError(interp)));
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * Do another stat to ensure that the we return the new recognized
+	 * mtime - hopefully the same as the one we sent in.
+	 */
+
+	if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	    return TCL_ERROR;
+	}
+    }
+
+    Tcl_SetObjResult(interp, Tcl_NewLongObj((long) buf.st_mtime));
+    return TCL_OK;
+>>>>>>> upstream/master
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
  * Tcl_ExprObjCmd --
  *
  *	This object-based procedure is invoked to process the "expr" Tcl
@@ -1618,10 +2279,417 @@ Tcl_ExitObjCmd(
  *
  * Side effects:
  *	See the user documentation.
+=======
+ * FileAttrLinkStatCmd --
+ *
+ *	This function is invoked to process the "file lstat" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	Writes to an array named by the user.
  *
  *----------------------------------------------------------------------
  */
 
+static int
+FileAttrLinkStatCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+
+    if (objc != 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name varName");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSLstat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    return StoreStatData(interp, objv[2], &buf);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrStatCmd --
+ *
+ *	This function is invoked to process the "file stat" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	Writes to an array named by the user.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrStatCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+
+    if (objc != 3) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name varName");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    return StoreStatData(interp, objv[2], &buf);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrTypeCmd --
+ *
+ *	This function is invoked to process the "file type" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrTypeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSLstat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+	    GetTypeFromMode((unsigned short) buf.st_mode), -1));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrSizeCmd --
+ *
+ *	This function is invoked to process the "file size" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrSizeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(interp, objv[1], Tcl_FSStat, &buf) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, Tcl_NewWideIntObj((Tcl_WideInt) buf.st_size));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsDirectoryCmd --
+ *
+ *	This function is invoked to process the "file isdirectory" Tcl
+ *	command. See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsDirectoryCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+    int value = 0;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(NULL, objv[1], Tcl_FSStat, &buf) == TCL_OK) {
+	value = S_ISDIR(buf.st_mode);
+    }
+    Tcl_SetObjResult(interp, Tcl_NewBooleanObj(value));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsExecutableCmd --
+ *
+ *	This function is invoked to process the "file executable" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsExecutableCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    return CheckAccess(interp, objv[1], X_OK);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsExistingCmd --
+ *
+ *	This function is invoked to process the "file exists" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsExistingCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    return CheckAccess(interp, objv[1], F_OK);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsFileCmd --
+ *
+ *	This function is invoked to process the "file isfile" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsFileCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_StatBuf buf;
+    int value = 0;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    if (GetStatBuf(NULL, objv[1], Tcl_FSStat, &buf) == TCL_OK) {
+	value = S_ISREG(buf.st_mode);
+    }
+    Tcl_SetObjResult(interp, Tcl_NewBooleanObj(value));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsOwnedCmd --
+ *
+ *	This function is invoked to process the "file owned" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsOwnedCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+#ifdef __CYGWIN__
+#define geteuid() (short)(geteuid)()
+#endif
+#if !defined(_WIN32)
+    Tcl_StatBuf buf;
+#endif
+    int value = 0;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+#if defined(_WIN32)
+    value = TclWinFileOwned(objv[1]);
+#else
+    if (GetStatBuf(NULL, objv[1], Tcl_FSStat, &buf) == TCL_OK) {
+	value = (geteuid() == buf.st_uid);
+    }
+#endif
+    Tcl_SetObjResult(interp, Tcl_NewBooleanObj(value));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsReadableCmd --
+ *
+ *	This function is invoked to process the "file readable" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsReadableCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    return CheckAccess(interp, objv[1], R_OK);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * FileAttrIsWritableCmd --
+ *
+ *	This function is invoked to process the "file writable" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+FileAttrIsWritableCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    return CheckAccess(interp, objv[1], W_OK);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathDirNameCmd --
+ *
+ *	This function is invoked to process the "file dirname" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
 	/* ARGSUSED */
 int
 Tcl_ExprObjCmd(
@@ -3745,6 +4813,334 @@ PathSplitCmd(
 		NULL);
 	return TCL_ERROR;
     }
+=======
+static int
+PathDirNameCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *dirPtr;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    dirPtr = TclPathPart(interp, objv[1], TCL_PATH_DIRNAME);
+    if (dirPtr == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, dirPtr);
+    Tcl_DecrRefCount(dirPtr);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathExtensionCmd --
+ *
+ *	This function is invoked to process the "file extension" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathExtensionCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *dirPtr;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    dirPtr = TclPathPart(interp, objv[1], TCL_PATH_EXTENSION);
+    if (dirPtr == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, dirPtr);
+    Tcl_DecrRefCount(dirPtr);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathRootNameCmd --
+ *
+ *	This function is invoked to process the "file root" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathRootNameCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *dirPtr;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    dirPtr = TclPathPart(interp, objv[1], TCL_PATH_ROOT);
+    if (dirPtr == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, dirPtr);
+    Tcl_DecrRefCount(dirPtr);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathTailCmd --
+ *
+ *	This function is invoked to process the "file tail" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathTailCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *dirPtr;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    dirPtr = TclPathPart(interp, objv[1], TCL_PATH_TAIL);
+    if (dirPtr == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, dirPtr);
+    Tcl_DecrRefCount(dirPtr);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathFilesystemCmd --
+ *
+ *	This function is invoked to process the "file system" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathFilesystemCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *fsInfo;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    fsInfo = Tcl_FSFileSystemInfo(objv[1]);
+    if (fsInfo == NULL) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj("unrecognised path", -1));
+	Tcl_SetErrorCode(interp, "TCL", "LOOKUP", "FILESYSTEM",
+		Tcl_GetString(objv[1]), NULL);
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, fsInfo);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathJoinCmd --
+ *
+ *	This function is invoked to process the "file join" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathJoinCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    if (objc < 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name ?name ...?");
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, TclJoinPath(objc - 1, objv + 1));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathNativeNameCmd --
+ *
+ *	This function is invoked to process the "file nativename" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathNativeNameCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_DString ds;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    if (Tcl_TranslateFileName(interp, TclGetString(objv[1]), &ds) == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, TclDStringToObj(&ds));
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathNormalizeCmd --
+ *
+ *	This function is invoked to process the "file normalize" Tcl command.
+ *	See the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathNormalizeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *fileName;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    fileName = Tcl_FSGetNormalizedPath(interp, objv[1]);
+    if (fileName == NULL) {
+	return TCL_ERROR;
+    }
+    Tcl_SetObjResult(interp, fileName);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * PathSplitCmd --
+ *
+ *	This function is invoked to process the "file split" Tcl command. See
+ *	the user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+PathSplitCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *res;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "name");
+	return TCL_ERROR;
+    }
+    res = Tcl_FSSplitPath(objv[1], NULL);
+    if (res == NULL) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"could not read \"%s\": no such file or directory",
+		TclGetString(objv[1])));
+	Tcl_SetErrorCode(interp, "TCL", "OPERATION", "PATHSPLIT", "NONESUCH",
+		NULL);
+	return TCL_ERROR;
+    }
+>>>>>>> upstream/master
     Tcl_SetObjResult(interp, res);
     return TCL_OK;
 }
@@ -3765,6 +5161,7 @@ PathSplitCmd(
  *
  *----------------------------------------------------------------------
  */
+<<<<<<< HEAD
 
 static int
 PathTypeCmd(
@@ -3843,6 +5240,18 @@ FilesystemSeparatorCmd(
 
 =======
 
+=======
+
+static int
+PathTypeCmd(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Tcl_Obj *typeName;
+
+>>>>>>> upstream/master
     if (objc != 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "name");
 	return TCL_ERROR;
@@ -3908,6 +5317,9 @@ FilesystemSeparatorCmd(
     } else {
 	Tcl_Obj *separatorObj = Tcl_FSPathSeparator(objv[1]);
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if (separatorObj == NULL) {
 	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
@@ -4257,6 +5669,7 @@ ForSetupCallback(
     }
     TclNRAddCallback(interp, TclNRForIterCallback, iterPtr, NULL, NULL, NULL);
     return TCL_OK;
+<<<<<<< HEAD
 }
 
 int
@@ -4331,6 +5744,8 @@ ForCondCallback(
     }
     TclSmallFreeEx(interp, iterPtr);
     return result;
+=======
+>>>>>>> upstream/master
 }
 
 static int
@@ -4339,6 +5754,7 @@ ForNextCallback(
     Tcl_Interp *interp,
     int result)
 {
+<<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
     ForIterData *iterPtr = data[0];
     Tcl_Obj *next = iterPtr->next;
@@ -4374,6 +5790,70 @@ ForPostNextCallback(
 	return result;
     }
 =======
+=======
+    ForIterData *iterPtr = data[0];
+    Tcl_Obj *boolObj;
+
+    switch (result) {
+    case TCL_OK:
+    case TCL_CONTINUE:
+	/*
+	 * We need to reset the result before evaluating the expression.
+	 * Otherwise, any error message will be appended to the result of the
+	 * last evaluation.
+	 */
+
+	Tcl_ResetResult(interp);
+	TclNewObj(boolObj);
+	TclNRAddCallback(interp, ForCondCallback, iterPtr, boolObj, NULL,
+		NULL);
+	return Tcl_NRExprObj(interp, iterPtr->cond, boolObj);
+    case TCL_BREAK:
+	result = TCL_OK;
+	Tcl_ResetResult(interp);
+	break;
+    case TCL_ERROR:
+	Tcl_AppendObjToErrorInfo(interp,
+		Tcl_ObjPrintf(iterPtr->msg, Tcl_GetErrorLine(interp)));
+    }
+    TclSmallFreeEx(interp, iterPtr);
+    return result;
+}
+
+static int
+ForCondCallback(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Interp *iPtr = (Interp *) interp;
+    ForIterData *iterPtr = data[0];
+    Tcl_Obj *boolObj = data[1];
+    int value;
+
+    if (result != TCL_OK) {
+	Tcl_DecrRefCount(boolObj);
+	TclSmallFreeEx(interp, iterPtr);
+	return result;
+    } else if (Tcl_GetBooleanFromObj(interp, boolObj, &value) != TCL_OK) {
+	Tcl_DecrRefCount(boolObj);
+	TclSmallFreeEx(interp, iterPtr);
+	return TCL_ERROR;
+    }
+    Tcl_DecrRefCount(boolObj);
+
+    if (value) {
+	/* TIP #280. */
+	if (iterPtr->next) {
+	    TclNRAddCallback(interp, ForNextCallback, iterPtr, NULL, NULL,
+		    NULL);
+	} else {
+	    TclNRAddCallback(interp, TclNRForIterCallback, iterPtr, NULL,
+		    NULL, NULL);
+	}
+	return TclNREvalObjEx(interp, iterPtr->body, 0, iPtr->cmdFramePtr,
+		iterPtr->word);
+>>>>>>> upstream/master
     }
     TclSmallFreeEx(interp, iterPtr);
     return result;
@@ -4419,6 +5899,9 @@ ForPostNextCallback(
 	}
 	return result;
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     TclNRAddCallback(interp, TclNRForIterCallback, iterPtr, NULL, NULL, NULL);
     return result;
@@ -4675,6 +6158,7 @@ ForeachLoopStep(
 	statePtr->resultList = NULL;	/* Don't clean it up */
     }
 
+<<<<<<< HEAD
 =======
 
     if (statePtr->maxj > ++statePtr->j) {
@@ -4700,6 +6184,8 @@ ForeachLoopStep(
 	statePtr->resultList = NULL;	/* Don't clean it up */
     }
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
   done:
     ForeachCleanup(interp, statePtr);

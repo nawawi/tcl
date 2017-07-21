@@ -152,6 +152,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 	AC_MSG_CHECKING([for Tk configuration])
 	AC_CACHE_VAL(ac_cv_c_tkconfig,[
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 	    # First check to see if --with-tkconfig was specified.
 	    if test x"${with_tkconfig}" != x ; then
@@ -168,6 +171,7 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		    AC_MSG_ERROR([${with_tkconfig} directory doesn't contain tkConfig.sh])
 		fi
 	    fi
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	    # then check for a private Tk library
@@ -253,6 +257,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		fi
 	    fi
 
+=======
+
+>>>>>>> upstream/master
 	    # then check for a private Tk library
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
 		for i in \
@@ -275,6 +282,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		done
 	    fi
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    # check in a few common install locations
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
@@ -296,6 +306,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 	    fi
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -354,6 +367,9 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
         AC_MSG_RESULT([could not find ${TCL_BIN_DIR}/tclConfig.sh])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     fi
@@ -810,6 +826,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    AC_MSG_ERROR([${CC} cannot produce win32 executables.])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	fi
@@ -830,6 +849,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    extra_ldflags="$extra_ldflags -municode"
 	else
 	    extra_cflags="$extra_cflags -DTCL_BROKEN_MAINARGS"
+<<<<<<< HEAD
 	fi
 <<<<<<< HEAD
 =======
@@ -854,6 +874,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	fi
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	fi
 >>>>>>> upstream/master
     fi
 
@@ -918,12 +941,16 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall -Wdeclaration-after-statement"
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
+=======
+	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement"
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement"
@@ -999,6 +1026,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	    esac
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	fi
 	MAKE_DLL="\${SHLIB_LD} \$(LDFLAGS) -out:\[$]@"
 	# DLLSUFFIX is separate because it is the building block for
@@ -1029,12 +1059,18 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    if test ! -d "${PATH64}" ; then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK to enable 64bit mode])
 		AC_MSG_WARN([Ensure latest Platform SDK is installed])
 		do64bit="no"
 	    else
 		AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
 	    fi
+=======
+		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
+	    fi
+	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
+>>>>>>> upstream/master
 =======
 		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
 	    fi
@@ -1052,6 +1088,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	esac
 
+<<<<<<< HEAD
 	if test "$do64bit" != "no" ; then
 	    # The space-based-path will work for the Makefile, but will
 	    # not work if AC_TRY_COMPILE is called.  TEA has the
@@ -1184,6 +1221,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	esac
 
+=======
+>>>>>>> upstream/master
 	if test "$do64bit" != "no" ; then
 	    # The space-based-path will work for the Makefile, but will
 	    # not work if AC_TRY_COMPILE is called.  TEA has the
@@ -1449,6 +1488,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	fi
     fi
 
+<<<<<<< HEAD
 =======
     fi
 
@@ -1548,6 +1588,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     fi
 
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     # DL_LIBS is empty, but then we match the Unix version
     AC_SUBST(DL_LIBS)
     AC_SUBST(CFLAGS_DEBUG)
@@ -1576,12 +1618,18 @@ AC_DEFUN([SC_WITH_TCL], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if test -d ../../tcl8.6$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.6$1/win
+=======
+    if test -d ../../tcl8.7$1/win;  then
+	TCL_BIN_DEFAULT=../../tcl8.7$1/win
+>>>>>>> upstream/master
     else
-	TCL_BIN_DEFAULT=../../tcl8.6/win
+	TCL_BIN_DEFAULT=../../tcl8.7/win
     fi
 
+<<<<<<< HEAD
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.6 binaries from DIR],
 =======
 =======
@@ -1601,6 +1649,9 @@ AC_DEFUN([SC_WITH_TCL], [
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
 >>>>>>> upstream/master
 	    TCL_BIN_DIR=$withval, TCL_BIN_DIR=`cd $TCL_BIN_DEFAULT; pwd`)
     if test ! -d $TCL_BIN_DIR; then

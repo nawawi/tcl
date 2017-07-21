@@ -53,6 +53,7 @@ MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
 MODULE_SCOPE void	TclUnsetEnv(const char *name);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #if defined(__CYGWIN__)
     static void TclCygwinPutenv(char *string);
@@ -69,6 +70,8 @@ static void		ReplaceString(const char *oldStr, char *newStr);
 MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
 MODULE_SCOPE void	TclUnsetEnv(const char *name);
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -477,7 +480,11 @@ TclUnsetEnv(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(_WIN32) || defined(__CYGWIN__)
+=======
+#if defined(_WIN32)
+>>>>>>> upstream/master
 =======
 #if defined(_WIN32)
 >>>>>>> upstream/master
@@ -805,6 +812,7 @@ TclFinalizeEnvironment(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(__CYGWIN__)
 
 /*
@@ -897,6 +905,8 @@ TclCygwinPutenv(
 }
 #endif /* __CYGWIN__ */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

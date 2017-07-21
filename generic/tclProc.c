@@ -24,7 +24,10 @@
 typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int isRootEnsemble;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -78,9 +81,14 @@ const Tcl_ObjType tclProcBodyType = {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * The [upvar]/[uplevel] level reference type. Uses the twoPtrValue field,
  * encoding the type of level reference in ptr and the actual parsed out
  * offset in ptr2.
+=======
+ * The [upvar]/[uplevel] level reference type. Uses the longValue field
+ * to remember the integer value of a parsed #<integer> format.
+>>>>>>> upstream/master
 =======
  * The [upvar]/[uplevel] level reference type. Uses the longValue field
  * to remember the integer value of a parsed #<integer> format.
@@ -368,7 +376,11 @@ Tcl_ProcObjCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	procBody = Tcl_GetStringFromObj(objv[3], &numBytes);
+=======
+	procBody = TclGetStringFromObj(objv[3], &numBytes);
+>>>>>>> upstream/master
 =======
 	procBody = TclGetStringFromObj(objv[3], &numBytes);
 >>>>>>> upstream/master
@@ -532,7 +544,12 @@ TclCreateProc(
 
     for (i = 0; i < numArgs; i++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int fieldCount, nameLength, valueLength;
+=======
+	int fieldCount, nameLength;
+	size_t valueLength;
+>>>>>>> upstream/master
 =======
 	int fieldCount, nameLength;
 	size_t valueLength;
@@ -639,12 +656,20 @@ TclCreateProc(
 
 	    if (localPtr->defValuePtr != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		int tmpLength;
 		const char *tmpPtr = TclGetStringFromObj(localPtr->defValuePtr,
 			&tmpLength);
 
 		if ((valueLength != tmpLength) ||
 			strncmp(fieldValues[1], tmpPtr, (size_t) tmpLength)) {
+=======
+		const char *tmpPtr = TclGetString(localPtr->defValuePtr);
+		size_t tmpLength = localPtr->defValuePtr->length;
+
+		if ((valueLength != tmpLength) ||
+			strncmp(fieldValues[1], tmpPtr, tmpLength)) {
+>>>>>>> upstream/master
 =======
 		const char *tmpPtr = TclGetString(localPtr->defValuePtr);
 		size_t tmpLength = localPtr->defValuePtr->length;
@@ -821,6 +846,7 @@ TclGetFrame(
   levelError:
     Tcl_SetObjResult(interp, Tcl_ObjPrintf("bad level \"%s\"", name));
     Tcl_SetErrorCode(interp, "TCL", "VALUE", "STACKLEVEL", NULL);
+<<<<<<< HEAD
 =======
      */
 
@@ -859,6 +885,8 @@ TclGetFrame(
   levelError:
     Tcl_SetObjResult(interp, Tcl_ObjPrintf("bad level \"%s\"", name));
     Tcl_SetErrorCode(interp, "TCL", "VALUE", "STACKLEVEL", NULL);
+=======
+>>>>>>> upstream/master
     return -1;
 }
 
@@ -961,6 +989,9 @@ TclObjGetFrame(
 
     Tcl_SetObjResult(interp, Tcl_ObjPrintf("bad level \"%s\"", name));
     Tcl_SetErrorCode(interp, "TCL", "LOOKUP", "LEVEL", name, NULL);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return -1;
 }
@@ -1074,6 +1105,9 @@ TclNRUplevelObjCmd(
 	goto uplevelSyntax;
     }
     objv += result + 1;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /*
@@ -1088,6 +1122,7 @@ TclNRUplevelObjCmd(
      * a generation of a stringrep.
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (objPtr == NULL) {
 	/* Do nothing */
@@ -1143,6 +1178,8 @@ TclNRUplevelObjCmd(
 >>>>>>> upstream/master
     return -1;
 =======
+=======
+>>>>>>> upstream/master
     if (objc == 1) {
 	/*
 	 * TIP #280. Make actual argument location available to eval'd script
@@ -1599,6 +1636,7 @@ ProcWrongNumArgs(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int
 TclObjGetFrame(
     Tcl_Interp *interp,		/* Interpreter in which to find frame. */
@@ -1693,6 +1731,8 @@ TclFindProc(
     return TclIsProc(cmdPtr);
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 void
 TclInitCompiledLocals(
     Tcl_Interp *interp,		/* Current interpreter. */
@@ -1922,15 +1962,21 @@ InitLocalCache(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Tcl_UplevelObjCmd --
  *
  *	This object function is invoked to process the "uplevel" Tcl command.
  *	See the user documentation for details on what it does.
 =======
+=======
+>>>>>>> upstream/master
  * InitArgsAndLocals --
  *
  *	This routine is invoked in order to initialize the arguments and other
  *	compiled locals table for a new call frame.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  * Results:
@@ -1938,12 +1984,18 @@ InitLocalCache(
  *
  * Side effects:
 <<<<<<< HEAD
+<<<<<<< HEAD
  *	See the user documentation.
 =======
+=======
+>>>>>>> upstream/master
  *	Allocates memory on the stack for the compiled local variables, the
  *	caller is responsible for freeing them. Initialises all variables. May
  *	invoke various name resolvers in order to determine which variables
  *	are being referenced at runtime.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
@@ -2488,12 +2540,21 @@ InterpProcNR2(
     if (result != TCL_OK) {
 	goto process;
     }
+<<<<<<< HEAD
 
     done:
     if (TCL_DTRACE_PROC_RESULT_ENABLED()) {
 	int l = iPtr->varFramePtr->isProcCallFrame & FRAME_IS_LAMBDA ? 1 : 0;
 	Tcl_Obj *r = Tcl_GetObjResult(interp);
 
+=======
+
+    done:
+    if (TCL_DTRACE_PROC_RESULT_ENABLED()) {
+	int l = iPtr->varFramePtr->isProcCallFrame & FRAME_IS_LAMBDA ? 1 : 0;
+	Tcl_Obj *r = Tcl_GetObjResult(interp);
+
+>>>>>>> upstream/master
 	TCL_DTRACE_PROC_RESULT(l < iPtr->varFramePtr->objc ?
 		TclGetString(iPtr->varFramePtr->objv[l]) : NULL, result,
 		TclGetString(r), r);
@@ -2547,6 +2608,9 @@ InterpProcNR2(
 	errorProc(interp, procNameObj);
     }
     goto done;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }
 
@@ -2581,6 +2645,7 @@ InterpProcNR2(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 Proc *
 TclFindProc(
     Interp *iPtr,		/* Interpreter in which to look. */
@@ -2599,6 +2664,8 @@ TclFindProc(
  *----------------------------------------------------------------------
  */
 
+=======
+>>>>>>> upstream/master
 int
 TclProcCompileProc(
     Tcl_Interp *interp,		/* Interpreter containing procedure. */
@@ -2788,6 +2855,7 @@ TclIsProc(
     Command *cmdPtr)		/* Command to test. */
 <<<<<<< HEAD
 {
+<<<<<<< HEAD
     Tcl_Command origCmd = TclGetOriginalCommand((Tcl_Command) cmdPtr);
 
     if (origCmd != NULL) {
@@ -2798,6 +2866,16 @@ TclIsProc(
 <<<<<<< HEAD
     }
     return NULL;
+=======
+    int overflow, limit = 60, nameLen;
+    const char *procName = TclGetStringFromObj(procNameObj, &nameLen);
+
+    overflow = (nameLen > limit);
+    Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
+	    "\n    (procedure \"%.*s%s\" line %d)",
+	    (overflow ? limit : nameLen), procName,
+	    (overflow ? "..." : ""), Tcl_GetErrorLine(interp)));
+>>>>>>> upstream/master
 }
 
 static int
@@ -2812,6 +2890,7 @@ ProcWrongNumArgs(
     Tcl_Obj **desiredObjs;
     const char *final = NULL;
 
+<<<<<<< HEAD
     /*
      * Build up desired argument list for Tcl_WrongNumArgs
      */
@@ -2819,6 +2898,41 @@ ProcWrongNumArgs(
     numArgs = framePtr->procPtr->numArgs;
     desiredObjs = TclStackAlloc(interp,
 	    (int) sizeof(Tcl_Obj *) * (numArgs+1));
+=======
+    if (procPtr->refCount-- <= 1) {
+	TclProcCleanupProc(procPtr);
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclProcCleanupProc --
+ *
+ *	This function does all the real work of freeing up a Proc structure.
+ *	It's called only when the structure's reference count becomes zero.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Memory gets freed.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+TclProcCleanupProc(
+    register Proc *procPtr)	/* Procedure to be deleted. */
+{
+    register CompiledLocal *localPtr;
+    Tcl_Obj *bodyPtr = procPtr->bodyPtr;
+    Tcl_Obj *defPtr;
+    Tcl_ResolvedVarInfo *resVarInfo;
+    Tcl_HashEntry *hePtr = NULL;
+    CmdFrame *cfPtr = NULL;
+    Interp *iPtr = procPtr->iPtr;
+>>>>>>> upstream/master
 
     if (framePtr->isProcCallFrame & FRAME_IS_LAMBDA) {
 	desiredObjs[0] = Tcl_NewStringObj("lambdaExpr", -1);
@@ -2833,10 +2947,21 @@ ProcWrongNumArgs(
     }
     Tcl_IncrRefCount(desiredObjs[0]);
 
+<<<<<<< HEAD
     defPtr = (Var *) (&framePtr->localCachePtr->varName0 + localCt);
     for (i=1 ; i<=numArgs ; i++, defPtr++) {
 	Tcl_Obj *argObj;
 	Tcl_Obj *namePtr = localName(framePtr, i-1);
+=======
+	resVarInfo = localPtr->resolveInfo;
+	if (resVarInfo) {
+	    if (resVarInfo->deleteProc) {
+		resVarInfo->deleteProc(resVarInfo);
+	    } else {
+		ckfree(resVarInfo);
+	    }
+	}
+>>>>>>> upstream/master
 
 	if (defPtr->value.objPtr != NULL) {
 	    TclNewObj(argObj);
@@ -2849,6 +2974,7 @@ ProcWrongNumArgs(
 	    argObj = namePtr;
 	    Tcl_IncrRefCount(namePtr);
 	}
+<<<<<<< HEAD
 	desiredObjs[i] = argObj;
     }
 
@@ -2886,6 +3012,22 @@ ProcWrongNumArgs(
     numArgs = framePtr->procPtr->numArgs;
     desiredObjs = TclStackAlloc(interp,
 	    (int) sizeof(Tcl_Obj *) * (numArgs+1));
+=======
+	ckfree(localPtr);
+	localPtr = nextPtr;
+    }
+    ckfree(procPtr);
+
+    /*
+     * TIP #280: Release the location data associated with this Proc
+     * structure, if any. The interpreter may not exist (For example for
+     * procbody structures created by tbcload.
+     */
+
+    if (iPtr == NULL) {
+	return;
+    }
+>>>>>>> upstream/master
 
     if (framePtr->isProcCallFrame & FRAME_IS_LAMBDA) {
 	desiredObjs[0] = Tcl_NewStringObj("lambdaExpr", -1);
@@ -2905,6 +3047,7 @@ ProcWrongNumArgs(
 	Tcl_Obj *argObj;
 	Tcl_Obj *namePtr = localName(framePtr, i-1);
 
+<<<<<<< HEAD
 	if (defPtr->value.objPtr != NULL) {
 	    TclNewObj(argObj);
 	    Tcl_AppendStringsToObj(argObj, "?", TclGetString(namePtr), "?", NULL);
@@ -2921,6 +3064,45 @@ ProcWrongNumArgs(
 
     Tcl_ResetResult(interp);
     Tcl_WrongNumArgs(interp, numArgs+1, desiredObjs, final);
+=======
+    if (cfPtr) {
+	if (cfPtr->type == TCL_LOCATION_SOURCE) {
+	    Tcl_DecrRefCount(cfPtr->data.eval.path);
+	    cfPtr->data.eval.path = NULL;
+	}
+	ckfree(cfPtr->line);
+	cfPtr->line = NULL;
+	ckfree(cfPtr);
+    }
+    Tcl_DeleteHashEntry(hePtr);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclUpdateReturnInfo --
+ *
+ *	This function is called when procedures return, and at other points
+ *	where the TCL_RETURN code is used. It examines the returnLevel and
+ *	returnCode to determine the real return status.
+ *
+ * Results:
+ *	The return value is the true completion code to use for the procedure
+ *	or script, instead of TCL_RETURN.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+TclUpdateReturnInfo(
+    Interp *iPtr)		/* Interpreter for which TCL_RETURN exception
+				 * is being processed. */
+{
+    int code = TCL_RETURN;
+>>>>>>> upstream/master
 
     for (i=0 ; i<=numArgs ; i++) {
 	Tcl_DecrRefCount(desiredObjs[i]);
@@ -2938,11 +3120,22 @@ MakeProcError(
     int overflow, limit = 60, nameLen;
     const char *procName = TclGetStringFromObj(procNameObj, &nameLen);
 
+<<<<<<< HEAD
     overflow = (nameLen > limit);
     Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
 	    "\n    (procedure \"%.*s%s\" line %d)",
 	    (overflow ? limit : nameLen), procName,
 	    (overflow ? "..." : ""), Tcl_GetErrorLine(interp)));
+>>>>>>> upstream/master
+=======
+	code = iPtr->returnCode;
+	iPtr->returnLevel = 1;
+	iPtr->returnCode = TCL_OK;
+	if (code == TCL_ERROR) {
+	    iPtr->flags |= ERR_LEGACY_COPY;
+	}
+    }
+    return code;
 >>>>>>> upstream/master
 }
 
@@ -2998,6 +3191,7 @@ TclInitCompiledLocals(
     }
     codePtr = bodyPtr->internalRep.twoPtrValue.ptr1;
 
+<<<<<<< HEAD
     if (framePtr->numCompiledLocals) {
 	if (!codePtr->localCachePtr) {
 	    InitLocalCache(framePtr->procPtr) ;
@@ -3009,6 +3203,12 @@ TclProcDeleteProc(
     ClientData clientData)	/* Procedure to be deleted. */
 {
     Proc *procPtr = clientData;
+=======
+    TclNewObj(objPtr);
+    if (objPtr) {
+	objPtr->typePtr = &tclProcBodyType;
+	objPtr->internalRep.twoPtrValue.ptr1 = procPtr;
+>>>>>>> upstream/master
 
     if (procPtr->refCount-- <= 1) {
 	TclProcCleanupProc(procPtr);
@@ -3043,6 +3243,7 @@ TclProcDeleteProc(
 
 <<<<<<< HEAD
 static void
+<<<<<<< HEAD
 InitResolvedLocals(
     Tcl_Interp *interp,		/* Current interpreter. */
     ByteCode *codePtr,
@@ -3210,6 +3411,17 @@ TclProcCleanupProc(
 	ckfree(cfPtr);
     }
     Tcl_DeleteHashEntry(hePtr);
+=======
+ProcBodyDup(
+    Tcl_Obj *srcPtr,		/* Object to copy. */
+    Tcl_Obj *dupPtr)		/* Target object for the duplication. */
+{
+    Proc *procPtr = srcPtr->internalRep.twoPtrValue.ptr1;
+
+    dupPtr->typePtr = &tclProcBodyType;
+    dupPtr->internalRep.twoPtrValue.ptr1 = procPtr;
+    procPtr->refCount++;
+>>>>>>> upstream/master
 }
 
 /*
@@ -6404,6 +6616,7 @@ TclNRApplyObjCmd(
     Proc *procPtr = NULL;
     Tcl_Obj *lambdaPtr, *nsObjPtr;
     int result;
+<<<<<<< HEAD
     Tcl_Namespace *nsPtr;
     ApplyExtraData *extraPtr;
 
@@ -6547,6 +6760,8 @@ TclNRApplyObjCmd(
     Tcl_Obj *lambdaPtr, *nsObjPtr;
     int result;
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     Tcl_Namespace *nsPtr;
     ApplyExtraData *extraPtr;
 
@@ -6565,6 +6780,7 @@ TclNRApplyObjCmd(
 	procPtr = lambdaPtr->internalRep.twoPtrValue.ptr1;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #define JOE_EXTENSION 0
 /*
@@ -6590,6 +6806,8 @@ TclNRApplyObjCmd(
     }
 #endif
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     if ((procPtr == NULL) || (procPtr->iPtr != iPtr)) {
@@ -6633,6 +6851,7 @@ TclNRApplyObjCmd(
     extraPtr->cmd.clientData = &extraPtr->efi;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     isRootEnsemble = (iPtr->ensembleRewrite.sourceObjs == NULL);
     if (isRootEnsemble) {
 	iPtr->ensembleRewrite.sourceObjs = objv;
@@ -6643,6 +6862,8 @@ TclNRApplyObjCmd(
     }
     extraPtr->isRootEnsemble = isRootEnsemble;
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     result = TclPushProcCallFrame(procPtr, interp, objc, objv, 1);
@@ -6662,10 +6883,13 @@ ApplyNR2(
     ApplyExtraData *extraPtr = data[0];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (extraPtr->isRootEnsemble) {
 	((Interp *) interp)->ensembleRewrite.sourceObjs = NULL;
     }
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     TclStackFree(interp, extraPtr);
@@ -6702,7 +6926,11 @@ MakeLambdaError(
     int overflow, limit = 60, nameLen;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *procName = Tcl_GetStringFromObj(procNameObj, &nameLen);
+=======
+    const char *procName = TclGetStringFromObj(procNameObj, &nameLen);
+>>>>>>> upstream/master
 =======
     const char *procName = TclGetStringFromObj(procNameObj, &nameLen);
 >>>>>>> upstream/master
@@ -6725,12 +6953,21 @@ MakeLambdaError(
  * TclGetCmdFrameForProcedure --
  *
  *	How to get the CmdFrame information for a procedure.
+<<<<<<< HEAD
  *
  * Results:
  *	A pointer to the CmdFrame (only guaranteed to be valid until the next
  *	Tcl command is processed or the interpreter's state is otherwise
  *	modified) or a NULL if the information is not available.
  *
+=======
+ *
+ * Results:
+ *	A pointer to the CmdFrame (only guaranteed to be valid until the next
+ *	Tcl command is processed or the interpreter's state is otherwise
+ *	modified) or a NULL if the information is not available.
+ *
+>>>>>>> upstream/master
  * Side effects:
  *	none.
  *

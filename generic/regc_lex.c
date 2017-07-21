@@ -281,6 +281,7 @@ static const chr brbacks[] = {	/* \s within brackets */
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const chr backw[] = {	/* \w */
     CHR('['), CHR('['), CHR(':'),
     CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
@@ -314,6 +315,25 @@ static const chr backw[] = {	/* \w */
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+
+#define PUNCT_CONN \
+	CHR('_'), \
+	0x203f /* UNDERTIE */, \
+	0x2040 /* CHARACTER TIE */,\
+	0x2054 /* INVERTED UNDERTIE */,\
+	0xfe33 /* PRESENTATION FORM FOR VERTICAL LOW LINE */, \
+	0xfe34 /* PRESENTATION FORM FOR VERTICAL WAVY LOW LINE */, \
+	0xfe4d /* DASHED LOW LINE */, \
+	0xfe4e /* CENTRELINE LOW LINE */, \
+	0xfe4f /* WAVY LOW LINE */, \
+	0xff3f /* FULLWIDTH LOW LINE */
+
+static const chr backw[] = {	/* \w */
+    CHR('['), CHR('['), CHR(':'),
+    CHR('a'), CHR('l'), CHR('n'), CHR('u'), CHR('m'),
+    CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
+>>>>>>> upstream/master
 };
 static const chr backW[] = {	/* \W */
     CHR('['), CHR('^'), CHR('['), CHR(':'),
@@ -321,7 +341,11 @@ static const chr backW[] = {	/* \W */
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     CHR(':'), CHR(']'), CHR('_'), CHR(']')
+=======
+    CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
+>>>>>>> upstream/master
 =======
     CHR(':'), CHR(']'), PUNCT_CONN, CHR(']')
 >>>>>>> upstream/master
@@ -338,7 +362,11 @@ static const chr brbackw[] = {	/* \w within brackets */
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     CHR(':'), CHR(']'), CHR('_')
+=======
+    CHR(':'), CHR(']'), PUNCT_CONN
+>>>>>>> upstream/master
 =======
     CHR(':'), CHR(']'), PUNCT_CONN
 >>>>>>> upstream/master
@@ -1475,6 +1503,7 @@ lexescape(
 	}
 	RETV(PLAIN, (uchr) i);
 	break;
+<<<<<<< HEAD
     case CHR('v'):
 	RETV(PLAIN, CHR('\v'));
 	break;
@@ -1533,6 +1562,27 @@ lexescape(
 	/*
 >>>>>>> upstream/master
 =======
+=======
+    case L_BRACK:		/* brackets are not too hard */
+	switch (c) {
+	case CHR(']'):
+	    if (LASTTYPE('[')) {
+		RETV(PLAIN, c);
+	    } else {
+		INTOCON((v->cflags&REG_EXTENDED) ? L_ERE : L_BRE);
+		RET(']');
+	    }
+	    break;
+	case CHR('\\'):
+	    NOTE(REG_UBBS);
+	    if (!(v->cflags&REG_ADVF)) {
+		RETV(PLAIN, c);
+	    }
+	    NOTE(REG_UNONPOSIX);
+	    if (ATEOS()) {
+		FAILW(REG_EESCAPE);
+	    }
+>>>>>>> upstream/master
 	    (void)lexescape(v);
 	    switch (v->nexttype) {	/* not all escapes okay here */
 	    case PLAIN:

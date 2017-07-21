@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -70,6 +74,7 @@ Split a string into its constituent characters
 .PP
 .CS
 \fBsplit\fR "Hello world" {}
+<<<<<<< HEAD
       \fI\(-> H e l l o { } w o r l d\fR
 .CE
 =======
@@ -127,6 +132,10 @@ Split a string into its constituent characters
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+      \fI\(-> H e l l o { } w o r l d\fR
+.CE
+>>>>>>> upstream/master
 .SS "PARSING RECORD-ORIENTED FILES"
 .PP
 Parse a Unix /etc/passwd file, which consists of one entry per line,
@@ -140,6 +149,7 @@ close $fid
 <<<<<<< HEAD
 
 ## Split into records on newlines
+<<<<<<< HEAD
 set records [\fBsplit\fR $content "\en"]
 
 ## Iterate over the records
@@ -148,11 +158,16 @@ foreach rec $records {
 =======
 
 ## Split into records on newlines
+=======
+>>>>>>> upstream/master
 set records [\fBsplit\fR $content "\en"]
 
 ## Iterate over the records
 foreach rec $records {
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ## Split into fields on colons
     set fields [\fBsplit\fR $rec ":"]

@@ -219,7 +219,11 @@ typedef struct FileHandler {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct FileHandlerEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -242,7 +246,11 @@ typedef struct {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct SelectMasks {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -380,6 +388,7 @@ static pthread_t notifierThread;
  * Custom runloop mode for running with only the runloop source for the
  * notifier thread.
  */
+<<<<<<< HEAD
 
 #ifndef TCL_EVENTS_ONLY_RUN_LOOP_MODE
 #define TCL_EVENTS_ONLY_RUN_LOOP_MODE	"com.tcltk.tclEventsOnlyRunLoopMode"
@@ -493,6 +502,116 @@ Tcl_InitNotifier(void)
      * Initialize CFRunLoopSource and add it to CFRunLoop of this thread.
      */
 
+=======
+
+#ifndef TCL_EVENTS_ONLY_RUN_LOOP_MODE
+#define TCL_EVENTS_ONLY_RUN_LOOP_MODE	"com.tcltk.tclEventsOnlyRunLoopMode"
+#endif
+#ifdef __CONSTANT_CFSTRINGS__
+#define tclEventsOnlyRunLoopMode	CFSTR(TCL_EVENTS_ONLY_RUN_LOOP_MODE)
+#else
+static CFStringRef tclEventsOnlyRunLoopMode = NULL;
+#endif
+
+/*
+ * CFTimeInterval to wait forever.
+ */
+
+#define CF_TIMEINTERVAL_FOREVER 5.05e8
+
+/*
+ * Static routines defined in this file.
+ */
+
+static void		StartNotifierThread(void);
+static TCL_NORETURN void NotifierThreadProc(ClientData clientData);
+static int		FileHandlerEventProc(Tcl_Event *evPtr, int flags);
+static void		TimerWakeUp(CFRunLoopTimerRef timer, void *info);
+static void		QueueFileEvents(void *info);
+static void		UpdateWaitingListAndServiceEvents(
+			    CFRunLoopObserverRef observer,
+			    CFRunLoopActivity activity, void *info);
+static int		OnOffWaitingList(ThreadSpecificData *tsdPtr,
+			    int onList, int signalNotifier);
+
+#ifdef HAVE_PTHREAD_ATFORK
+static int atForkInit = 0;
+static void		AtForkPrepare(void);
+static void		AtForkParent(void);
+static void		AtForkChild(void);
+#if defined(HAVE_WEAK_IMPORT) && MAC_OS_X_VERSION_MIN_REQUIRED < 1040
+/* Support for weakly importing pthread_atfork. */
+#define WEAK_IMPORT_PTHREAD_ATFORK
+extern int		pthread_atfork(void (*prepare)(void),
+			    void (*parent)(void), void (*child)(void))
+			    WEAK_IMPORT_ATTRIBUTE;
+#define MayUsePthreadAtfork()	(pthread_atfork != NULL)
+#else
+#define MayUsePthreadAtfork()	(1)
+#endif /* HAVE_WEAK_IMPORT */
+
+/*
+ * On Darwin 9 and later, it is not possible to call CoreFoundation after
+ * a fork.
+ */
+
+#if !defined(MAC_OS_X_VERSION_MIN_REQUIRED) || \
+	MAC_OS_X_VERSION_MIN_REQUIRED < 1050
+MODULE_SCOPE long tclMacOSXDarwinRelease;
+#define noCFafterFork	(tclMacOSXDarwinRelease >= 9)
+#else /* MAC_OS_X_VERSION_MIN_REQUIRED */
+#define noCFafterFork	1
+#endif /* MAC_OS_X_VERSION_MIN_REQUIRED */
+#endif /* HAVE_PTHREAD_ATFORK */
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_InitNotifier --
+ *
+ *	Initializes the platform specific notifier state.
+ *
+ * Results:
+ *	Returns a handle to the notifier state for this thread.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+ClientData
+Tcl_InitNotifier(void)
+{
+    ThreadSpecificData *tsdPtr;
+
+    if (tclNotifierHooks.initNotifierProc) {
+	return tclNotifierHooks.initNotifierProc();
+    }
+
+    tsdPtr = TCL_TSD_INIT(&dataKey);
+
+#ifdef WEAK_IMPORT_SPINLOCKLOCK
+    /*
+     * Initialize support for weakly imported spinlock API.
+     */
+
+    if (pthread_once(&spinLockLockInitControl, SpinLockLockInit)) {
+	Tcl_Panic("Tcl_InitNotifier: pthread_once failed");
+    }
+#endif
+
+#ifndef __CONSTANT_CFSTRINGS__
+    if (!tclEventsOnlyRunLoopMode) {
+	tclEventsOnlyRunLoopMode = CFSTR(TCL_EVENTS_ONLY_RUN_LOOP_MODE);
+    }
+#endif
+
+    /*
+     * Initialize CFRunLoopSource and add it to CFRunLoop of this thread.
+     */
+
+>>>>>>> upstream/master
     if (!tsdPtr->runLoop) {
 	CFRunLoopRef runLoop = CFRunLoopGetCurrent();
 	CFRunLoopSourceRef runLoopSource;
@@ -1774,7 +1893,11 @@ TclUnixWaitForFile(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void
+=======
+static TCL_NORETURN void
+>>>>>>> upstream/master
 =======
 static TCL_NORETURN void
 >>>>>>> upstream/master

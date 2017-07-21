@@ -1321,7 +1321,11 @@ proc inthread {chan script args} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     thread::send -async $tid {	
+=======
+    thread::send -async $tid {
+>>>>>>> upstream/master
 =======
     thread::send -async $tid {
 >>>>>>> upstream/master

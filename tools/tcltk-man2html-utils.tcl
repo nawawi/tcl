@@ -156,9 +156,12 @@ proc process-text {text} {
 	    {\.}	. \
 	    {\(bu}	"&#8226;" \
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    {\*(qo}	"&ocirc;" \
 	    ]
 =======
+=======
+>>>>>>> upstream/master
 	    ]
     # This might make a few invalid mappings, but we don't use them
     foreach c {a e i o u y A E I O U Y} {
@@ -168,6 +171,9 @@ proc process-text {text} {
 	    lappend charmap "\\\[${prefix}${c}\]" "&${c}${suffix};"
 	}
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     lappend charmap {\-\|\-} --        ; # two hyphens
     lappend charmap {\-} -             ; # a hyphen

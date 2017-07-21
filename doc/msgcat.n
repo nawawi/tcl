@@ -6,7 +6,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -236,6 +240,7 @@ to \fB::msgcat::mc\fR.
 .VS "TIP 412"
 .RS
 <<<<<<< HEAD
+<<<<<<< HEAD
 .PP
 Note that this routine is only called if the concerned package did not set a package locale unknown command name.
 .RE
@@ -254,6 +259,8 @@ The calling package clears all its state within the \fBmsgcat\fR package includi
 .PP
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 .PP
 Note that this routine is only called if the concerned package did not set a package locale unknown command name.
 .RE
@@ -294,7 +301,11 @@ to extract its parts.  The initial locale is then set by calling
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB::msgcat::mclocale\fR with the argument 
+=======
+\fB::msgcat::mclocale\fR with the argument
+>>>>>>> upstream/master
 =======
 \fB::msgcat::mclocale\fR with the argument
 >>>>>>> upstream/master
@@ -431,7 +442,11 @@ namespace eval ::mypackage {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     \fB::msgcat::mcflset\fR "Free Beer!" "Cerveza Gracias!"
+=======
+    \fB::msgcat::mcflset\fR "Free Beer" "Cerveza Gratis"
+>>>>>>> upstream/master
 =======
     \fB::msgcat::mcflset\fR "Free Beer" "Cerveza Gratis"
 >>>>>>> upstream/master
@@ -640,6 +655,9 @@ To register to a callback, use:
 namespace eval gui {
     msgcat::mcpackageconfig changecmd updateGUI
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
     proc updateGui args {
         puts "New locale is '[lindex $args 0]'."
@@ -655,6 +673,7 @@ If locales (or additional locales) are contained in another source like a data b
 namespace eval db {
     msgcat::mcpackageconfig loadcmd loadMessages
 
+<<<<<<< HEAD
 =======
 
     proc updateGui args {
@@ -671,6 +690,8 @@ If locales (or additional locales) are contained in another source like a data b
 namespace eval db {
     msgcat::mcpackageconfig loadcmd loadMessages
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     proc loadMessages args {
         foreach locale $args {

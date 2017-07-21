@@ -13,15 +13,21 @@
 
 #if defined(_WIN32) && defined(UNICODE)
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* On Windows, we need to do proper Unicode->UTF-8 conversion. */
 
 typedef struct ThreadSpecificData {
 =======
+=======
+>>>>>>> upstream/master
 /*
  * On Windows, we need to do proper Unicode->UTF-8 conversion.
  */
 
 typedef struct {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     int initialized;
     Tcl_DString errorMsg; /* UTF-8 encoded error-message */
@@ -29,6 +35,7 @@ typedef struct {
 static Tcl_ThreadDataKey dataKey;
 
 #undef gai_strerror
+<<<<<<< HEAD
 <<<<<<< HEAD
 static const char *gai_strerror(int code) {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
@@ -46,12 +53,17 @@ static const char *gai_strerror(int code) {
 
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 static const char *
 gai_strerror(
     int code)
 {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if (tsdPtr->initialized) {
 	Tcl_DStringFree(&tsdPtr->errorMsg);
@@ -156,7 +168,11 @@ TclSockMinimumBuffers(
     len = sizeof(int);
     getsockopt((SOCKET)(size_t) sock, SOL_SOCKET, SO_RCVBUF,
 <<<<<<< HEAD
+<<<<<<< HEAD
 		(char *) &current, &len);
+=======
+	    (char *) &current, &len);
+>>>>>>> upstream/master
 =======
 	    (char *) &current, &len);
 >>>>>>> upstream/master
@@ -207,7 +223,11 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int result, i;
+=======
+    int result;
+>>>>>>> upstream/master
 =======
     int result;
 >>>>>>> upstream/master
@@ -237,6 +257,7 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -249,11 +270,14 @@ TclCreateSocketAddress(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
 
     /*
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -283,6 +307,8 @@ TclCreateSocketAddress(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
      * Magic variable to enforce a certain address family; to be superseded
      * by a TIP that adds explicit switches to [socket].
      */
@@ -297,6 +323,9 @@ TclCreateSocketAddress(
 	    }
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -310,7 +339,11 @@ TclCreateSocketAddress(
      * have no networking besides the loopback interface and want to resolve
      * localhost. See [Bugs 3385024, 3382419, 3382431]. As the advantage of
 <<<<<<< HEAD
+<<<<<<< HEAD
      * using AI_ADDRCONFIG in situations where it works, is probably low,
+=======
+     * using AI_ADDRCONFIG is probably low even in situations where it works,
+>>>>>>> upstream/master
 =======
      * using AI_ADDRCONFIG is probably low even in situations where it works,
 >>>>>>> upstream/master
@@ -331,7 +364,11 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -398,6 +435,7 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     i = 0;
     for (p = *addrlist; p != NULL; p = p->ai_next) {
 	i++;
@@ -413,12 +451,17 @@ TclCreateSocketAddress(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     return 1;
 }
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
  *----------------------------------------------------------------------
  *
  * Tcl_OpenTcpServer --
@@ -451,6 +494,9 @@ Tcl_OpenTcpServer(
 }
 
 /*
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  * Local Variables:
  * mode: c

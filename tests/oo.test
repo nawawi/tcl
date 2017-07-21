@@ -283,7 +283,11 @@ test oo-1.18.2 {Bug 21c144f0f5} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> upstream/master
 =======
 }
 >>>>>>> upstream/master
@@ -653,7 +657,10 @@ test oo-3.9 {Bug 2944404: deleting the object in the destructor} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -711,6 +718,9 @@ test oo-3.12 {Bug 3d96b7076e: killing the object's class in a method call} -setu
 } -result ok
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1652,7 +1662,10 @@ test oo-12.7 {OO: filters} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1693,6 +1706,9 @@ test oo-12.8 {OO: filters and destructors} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2046,7 +2062,11 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	variable var 
+=======
+	variable var
+>>>>>>> upstream/master
 =======
 	variable var
 >>>>>>> upstream/master
@@ -2079,13 +2099,54 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
 } -cleanup {
     FooClass destroy
 } -result {foo bar grill bar}
+<<<<<<< HEAD
+=======
+test oo-15.11 {OO: object cloning} -returnCodes error -body {
+    oo::copy
+} -result {wrong # args: should be "oo::copy sourceName ?targetName? ?targetNamespace?"}
+test oo-15.12 {OO: object cloning with target NS} -setup {
+    oo::class create Super
+    oo::class create Cls {superclass Super}
+} -body {
+    namespace eval ::existing {}
+    oo::copy Cls {} ::existing
+} -returnCodes error -cleanup {
+    Super destroy
+    catch {namespace delete ::existing}
+} -result {::existing refers to an existing namespace}
+test oo-15.13 {OO: object cloning with target NS} -setup {
+    oo::class create Super
+    oo::class create Cls {superclass Super}
+} -body {
+    list [namespace exist ::dupens] [oo::copy Cls Cls2 ::dupens] [namespace exist ::dupens]
+} -cleanup {
+    Super destroy
+} -result {0 ::Cls2 1}
+test oo-15.14 {OO: object cloning with target NS} -setup {
+    oo::class create Cls {export eval}
+    set result {}
+} -body {
+    Cls create obj
+    obj eval {
+	proc test-15.14 {} {}
+    }
+    lappend result [info commands ::dupens::t*]
+    oo::copy obj obj2 ::dupens
+    lappend result [info commands ::dupens::t*]
+} -cleanup {
+    Cls destroy
+} -result {{} ::dupens::test-15.14}
+>>>>>>> upstream/master
 
 test oo-16.1 {OO: object introspection} -body {
     info object
 } -returnCodes 1 -result "wrong \# args: should be \"info object subcommand ?arg ...?\""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test oo-16.1.1 {OO: object introspection} -body {
@@ -2095,6 +2156,9 @@ test oo-16.1.1 {OO: object introspection} -body {
     while executing
 \"info object\""
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2239,7 +2303,10 @@ test oo-17.1 {OO: class introspection} -body {
 } -returnCodes 1 -result "wrong \# args: should be \"info class subcommand ?arg ...?\""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test oo-17.1.1 {OO: class introspection} -body {
@@ -2249,6 +2316,9 @@ test oo-17.1.1 {OO: class introspection} -body {
     while executing
 \"info class\""
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2326,7 +2396,10 @@ test oo-17.10 {OO: class introspection} -setup {
     info class methods foo -all
 } -result {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 set stdmethods {<cloned> destroy eval unknown variable varname}
 test oo-17.11 {OO: object method unexport (bug 900cb0284bc)} -setup {
     oo::object create o
@@ -2365,6 +2438,9 @@ test oo-17.14 {OO: instance method unexport (bug 900cb0284bc)} -setup {
     c destroy
 } -result $stdmethods
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test oo-18.1 {OO: define command support} {
@@ -2567,6 +2643,109 @@ test oo-18.11 {OO: define/self command support} -setup {
 "self {error foobar}"
     (in definition script for class "::foo" line 1)
     invoked from within
+<<<<<<< HEAD
+"obj eval {error bar}"}}
+test oo-18.6 {class construction reference management and errors} -setup {
+    oo::class create super_abc
+} -body {
+    catch {
+oo::class create abc {
+    superclass super_abc
+    ::rename abc ::def
+    ::error foo
+}
+    } msg opt
+    dict get $opt -errorinfo
+} -cleanup {
+    super_abc destroy
+} -result {foo
+    while executing
+"::error foo"
+    (in definition script for class "::def" line 4)
+    invoked from within
+"oo::class create abc {
+    superclass super_abc
+    ::rename abc ::def
+    ::error foo
+}"}
+test oo-18.7 {OO: objdefine command support} -setup {
+    oo::object create ::inst
+} -body {
+    list [catch {oo::objdefine inst {rename ::inst ::INST;error foo}} msg] $msg $errorInfo
+} -cleanup {
+    catch {::inst destroy}
+    catch {::INST destroy}
+} -result {1 foo {foo
+    while executing
+"error foo"
+    (in definition script for object "::INST" line 1)
+    invoked from within
+"oo::objdefine inst {rename ::inst ::INST;error foo}"}}
+test oo-18.8 {OO: define/self command support} -setup {
+    oo::class create master
+    oo::class create ::foo {superclass master}
+} -body {
+    catch {oo::define foo {rename ::foo ::bar; self {error foobar}}} msg opt
+    dict get $opt -errorinfo
+} -cleanup {
+    master destroy
+} -result {foobar
+    while executing
+"error foobar"
+    (in definition script for class object "::bar" line 1)
+    invoked from within
+"self {error foobar}"
+    (in definition script for class "::bar" line 1)
+    invoked from within
+"oo::define foo {rename ::foo ::bar; self {error foobar}}"}
+test oo-18.9 {OO: define/self command support} -setup {
+    oo::class create master
+    set c [oo::class create now_this_is_a_very_very_long_class_name_indeed {
+        superclass master
+    }]
+} -body {
+    catch {oo::define $c {error err}} msg opt
+    dict get $opt -errorinfo
+} -cleanup {
+    master destroy
+} -result {err
+    while executing
+"error err"
+    (in definition script for class "::now_this_is_a_very_very_long..." line 1)
+    invoked from within
+"oo::define $c {error err}"}
+test oo-18.10 {OO: define/self command support} -setup {
+    oo::class create master
+    oo::class create ::foo {superclass master}
+} -body {
+    catch {oo::define foo {self {rename ::foo {}; error foobar}}} msg opt
+    dict get $opt -errorinfo
+} -cleanup {
+    master destroy
+} -result {foobar
+    while executing
+"error foobar"
+    (in definition script for class object "::foo" line 1)
+    invoked from within
+"self {rename ::foo {}; error foobar}"
+    (in definition script for class "::foo" line 1)
+    invoked from within
+"oo::define foo {self {rename ::foo {}; error foobar}}"}
+test oo-18.11 {OO: define/self command support} -setup {
+    oo::class create master
+    oo::class create ::foo {superclass master}
+} -body {
+    catch {oo::define foo {rename ::foo {}; self {error foobar}}} msg opt
+    dict get $opt -errorinfo
+} -cleanup {
+    master destroy
+} -result {this command cannot be called when the object has been deleted
+    while executing
+"self {error foobar}"
+    (in definition script for class "::foo" line 1)
+    invoked from within
+=======
+>>>>>>> upstream/master
 "oo::define foo {rename ::foo {}; self {error foobar}}"}
 
 test oo-19.1 {OO: varname method} -setup {
@@ -2759,7 +2938,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    my variable np_name 
+=======
+	    my variable np_name
+>>>>>>> upstream/master
 =======
 	    my variable np_name
 >>>>>>> upstream/master
@@ -2786,7 +2969,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		} else { 
+=======
+		} else {
+>>>>>>> upstream/master
 =======
 		} else {
 >>>>>>> upstream/master
@@ -3575,7 +3762,10 @@ test oo-27.22 {variables declaration uniqueifies: Bug 3396896} -setup {
 } -result {v t}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test oo-27.23 {variable resolver leakage: Bug 1493a43044} -setup {
@@ -3611,6 +3801,9 @@ test oo-27.23 {variable resolver leakage: Bug 1493a43044} -setup {
     Super destroy
 } -result {master1 master2 master1 master2 master1 master2 master1 master2}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -3876,7 +4069,10 @@ test oo-35.2 {Bug 9d61624b3d: Empty superclass must not cause crash} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -3896,10 +4092,120 @@ test oo-35.4 {Bug 593baa032c: mixins list teardown} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+test oo-36.1 {TIP #470: introspection within oo::define} {
+    oo::define oo::object self
+} ::oo::object
+test oo-36.2 {TIP #470: introspection within oo::define} -setup {
+    oo::class create Cls
+} -body {
+    oo::define Cls self
+} -cleanup {
+    Cls destroy
+} -result ::Cls
+test oo-36.3 {TIP #470: introspection within oo::define} -setup {
+    oo::class create Super
+    set result uncalled
+} -body {
+    oo::class create Sub {
+	superclass Super
+	::set ::result [self]
+    }
+    return $result
+} -cleanup {
+    Super destroy
+} -result ::Sub
+test oo-36.4 {TIP #470: introspection within oo::define} -setup {
+    oo::class create Super
+    set result uncalled
+} -body {
+    oo::class create Sub {
+	superclass Super
+	::set ::result [self {}]
+    }
+    return $result
+} -cleanup {
+    Super destroy
+} -result {}
+test oo-36.5 {TIP #470: introspection within oo::define} -setup {
+    oo::class create Super
+    set result uncalled
+} -body {
+    oo::class create Sub {
+	superclass Super
+	::set ::result [self self]
+    }
+} -cleanup {
+    Super destroy
+} -result ::Sub
+test oo-36.6 {TIP #470: introspection within oo::objdefine} -setup {
+    oo::class create Cls
+    set result uncalled
+} -body {
+    Cls create obj
+    oo::objdefine obj {
+	::set ::result [self]
+    }
+} -cleanup {
+    Cls destroy
+} -result ::obj
+test oo-36.7 {TIP #470: introspection within oo::objdefine} -setup {
+    oo::class create Cls
+} -body {
+    Cls create obj
+    oo::objdefine obj {
+	self
+    }
+} -cleanup {
+    Cls destroy
+} -result ::obj
+test oo-36.8 {TIP #470: introspection within oo::objdefine} -setup {
+    oo::class create Cls
+} -body {
+    Cls create obj
+    oo::objdefine obj {
+	self anything
+    }
+} -returnCodes error -cleanup {
+    Cls destroy
+} -result {wrong # args: should be "self"}
+test oo-36.9 {TIP #470: introspection within oo::define} -setup {
+    oo::class create Cls
+    set result uncalled
+} -body {
+    proc oo::define::testself {} {
+	global result
+	set result [list [catch {self} msg] $msg \
+			[catch {uplevel 1 self} msg] $msg]
+	return
+    }
+    list [oo::define Cls testself] $result
+} -cleanup {
+    Cls destroy
+    catch {rename oo::define::testself {}}
+} -result {{} {1 {this command may only be called from within the context of an ::oo::define or ::oo::objdefine command} 0 ::Cls}}
+test oo-36.10 {TIP #470: introspection within oo::define} -setup {
+    oo::class create Cls
+    set result uncalled
+} -body {
+    proc oo::objdefine::testself {} {
+	global result
+	set result [list [catch {self} msg] $msg \
+			[catch {uplevel 1 self} msg] $msg]
+	return
+    }
+    Cls create obj
+    list [oo::objdefine obj testself] $result
+} -cleanup {
+    Cls destroy
+    catch {rename oo::objdefine::testself {}}
+} -result {{} {1 {this command may only be called from within the context of an ::oo::define or ::oo::objdefine command} 0 ::obj}}
 >>>>>>> upstream/master
 
 cleanupTests

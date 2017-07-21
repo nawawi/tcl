@@ -6,7 +6,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -96,7 +100,11 @@ The type of the uncompressed data (\fBbinary\fR or \fBtext\fR) if known.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR? 
+=======
+\fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR?
+>>>>>>> upstream/master
 =======
 \fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR?
 >>>>>>> upstream/master
@@ -200,8 +208,11 @@ Sets the compression dictionary to use when working with compressing or
 decompressing the data to be \fIbinData\fR. Not valid for transformations that
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 work with gzip-format data.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 work with gzip-format data.  The dictionary should consist of strings (byte
@@ -210,6 +221,9 @@ with the most commonly used strings preferably put towards the end of the
 dictionary. Tcl provides no mechanism for choosing a good such dictionary for
 a particular data sequence.
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -247,12 +261,15 @@ compression algorithm depends on what format is being produced or consumed.
 .VS "TIP 400"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 This read-write options gets or sets the compression dictionary to use when
 working with compressing or decompressing the data to be \fIbinData\fR. It is
 not valid for transformations that work with gzip-format data, and should not
 normally be set on compressing transformations other than at the point where
 the transformation is stacked.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 This read-write options gets or sets the initial compression dictionary to use
@@ -263,6 +280,9 @@ the transformation is stacked. Note that this cannot be used to get the
 current active compression dictionary mid-stream, as that information is not
 exposed by the underlying library.
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

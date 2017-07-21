@@ -143,10 +143,13 @@ test cmdAH-2.6.2 {cd} -constraints {unix nonPortable} -setup {
 } -result {/}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test cmdAH-2.6.3 {Tcl_CdObjCmd, bug #3118489} -returnCodes error -body {
     cd .\0
 } -result "couldn't change working directory to \".\0\": no such file or directory"
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test cmdAH-2.6.3 {Tcl_CdObjCmd, bug #3118489} -setup {
@@ -157,6 +160,9 @@ test cmdAH-2.6.3 {Tcl_CdObjCmd, bug #3118489} -setup {
     cd $dir
 } -match glob -result "couldn't change working directory to \".\0\": *"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -180,10 +186,17 @@ test cmdAH-3.2 {Tcl_ContinueObjCmd, success} {
 test cmdAH-4.1 {Tcl_EncodingObjCmd} -returnCodes error -body {
     encoding
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {wrong # args: should be "encoding option ?arg ...?"}
 test cmdAH-4.2 {Tcl_EncodingObjCmd} -returnCodes error -body {
     encoding foo
 } -result {bad option "foo": must be convertfrom, convertto, dirs, names, or system}
+=======
+} -result {wrong # args: should be "encoding subcommand ?arg ...?"}
+test cmdAH-4.2 {Tcl_EncodingObjCmd} -returnCodes error -body {
+    encoding foo
+} -result {unknown or ambiguous subcommand "foo": must be convertfrom, convertto, dirs, names, or system}
+>>>>>>> upstream/master
 =======
 } -result {wrong # args: should be "encoding subcommand ?arg ...?"}
 test cmdAH-4.2 {Tcl_EncodingObjCmd} -returnCodes error -body {
@@ -903,6 +916,7 @@ test cmdAH-18.5 {Tcl_FileObjCmd: executable} -constraints {win} -body {
     # On pc, must be a .exe, .com, etc.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x [file exe $gorpfile]
     set gorpexe [makeFile foo gorp.exe]
     lappend x [file exe $gorpexe]
@@ -930,11 +944,26 @@ test cmdAH-18.5.1 {Tcl_FileObjCmd: executable} -constraints {win} -body {
     }
     set x
 } -cleanup {
+=======
+    set x {}
+    set gorpexes {}
+    foreach ext {exe com cmd bat} {
+        lappend x [file exe nosuchfile.$ext]
+        set gorpexe [makeFile foo gorp.$ext]
+        lappend gorpexes $gorpexe
+        lappend x [file exe $gorpexe] [file exe [string toupper $gorpexe]]
+    }
+    set x
+} -cleanup {
+>>>>>>> upstream/master
     foreach gorpexe $gorpexes {
         removeFile $gorpexe
     }
 } -result {0 1 1 0 1 1 0 1 1 0 1 1}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1075,6 +1104,19 @@ test cmdAH-20.6 {Tcl_FileObjCmd: atime touch} -setup {
 } -result 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+test cmdAH-20.7 {
+    Tcl_FileObjCmd: atime (built-in Windows names)
+} -constraints {win} -body {
+    file atime con
+} -result "could not get access time for file \"con\"" -returnCodes error
+test cmdAH-20.7.1 {
+    Tcl_FileObjCmd: atime (built-in Windows names with dir path and extension)
+} -constraints {win} -body {
+    file atime [file join [temporaryDirectory] CON.txt]
+} -result "could not get access time for file \"[file join [temporaryDirectory] CON.txt]\"" -returnCodes error
+>>>>>>> upstream/master
 
 if {[testConstraint unix] && [file exists /tmp]} {
     removeFile touch.me /tmp
@@ -1353,7 +1395,10 @@ test cmdAH-24.13 {Tcl_FileObjCmd: directory mtime} -setup {
 } -result {0 1}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test cmdAH-24.14 {
@@ -1367,6 +1412,9 @@ test cmdAH-24.14.1 {
     file mtime [file join [temporaryDirectory] CON.txt]
 } -result "could not get modification time for file \"[file join [temporaryDirectory] CON.txt]\"" -returnCodes error
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1427,7 +1475,10 @@ test cmdAH-27.3 {Tcl_FileObjCmd: size} {
 } {1 {could not read "_bogus_": no such file or directory} {POSIX ENOENT {no such file or directory}}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test cmdAH-27.4 {
@@ -1441,6 +1492,9 @@ test cmdAH-27.4.1 {
     file size [file join [temporaryDirectory] con.txt]
 } -result 0
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1537,7 +1591,10 @@ test cmdAH-28.12 {Tcl_FileObjCmd: stat} -setup {
 } -result 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test cmdAH-28.13 {Tcl_FileObjCmd: stat (built-in Windows names)} -constraints {win} -setup {
@@ -1553,6 +1610,9 @@ test cmdAH-28.13.1 {Tcl_FileObjCmd: stat (built-in Windows names)} -constraints 
     lmap elem {atime ctime dev gid ino mode mtime nlink size type uid} {set stat($elem)}
 } -result {0 0 -1 0 0 8630 0 0 0 characterSpecial 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1562,8 +1622,13 @@ unset -nocomplain stat
 test cmdAH-29.1 {Tcl_FileObjCmd: type} -returnCodes error -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     file size a b
 } -result {wrong # args: should be "file size name"}
+=======
+    file type a b
+} -result {wrong # args: should be "file type name"}
+>>>>>>> upstream/master
 =======
     file type a b
 } -result {wrong # args: should be "file type name"}
@@ -1608,7 +1673,10 @@ test cmdAH-29.5 {Tcl_FileObjCmd: type} {
 } {1 {could not read "_bogus_": no such file or directory} {POSIX ENOENT {no such file or directory}}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test cmdAH-29.6 {
@@ -1622,6 +1690,9 @@ test cmdAH-29.6.1 {
     file type [file join [temporaryDirectory] CON.txt]
 } -result "characterSpecial"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

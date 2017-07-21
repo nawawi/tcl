@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -86,7 +90,11 @@ elements to
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

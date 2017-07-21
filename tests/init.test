@@ -31,7 +31,11 @@ test init-1.3 {auto_qualify - no colons cmd - global} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } nocolons 
+=======
+} nocolons
+>>>>>>> upstream/master
 =======
 } nocolons
 >>>>>>> upstream/master
@@ -108,6 +112,7 @@ test init-2.6 {load setLogCmd from safe:: - stage 1} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     namespace eval safe setLogCmd 
     rename ::safe::setLogCmd {}  ;# should not fail
 } {}
@@ -122,6 +127,15 @@ test init-2.7 {oad setLogCmd from safe::  - stage 2} {
 >>>>>>> upstream/master
     rename ::safe::setLogCmd {}  ;# should not fail
 } {}
+=======
+    namespace eval safe setLogCmd
+    rename ::safe::setLogCmd {}  ;# should not fail
+} {}
+test init-2.7 {oad setLogCmd from safe::  - stage 2} {
+    namespace eval safe setLogCmd
+    rename ::safe::setLogCmd {}  ;# should not fail
+} {}
+>>>>>>> upstream/master
 =======
     namespace eval safe setLogCmd
     rename ::safe::setLogCmd {}  ;# should not fail
@@ -180,7 +194,11 @@ foreach arg [subst -nocommands -novariables {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {contrived example: rare circumstance 
+=======
+    {contrived example: rare circumstance
+>>>>>>> upstream/master
 =======
     {contrived example: rare circumstance
 >>>>>>> upstream/master
@@ -220,6 +238,19 @@ foreach arg [subst -nocommands -novariables {
     incr count
 }
 
+<<<<<<< HEAD
+=======
+test init-4.$count {[Bug 46f801ed5a]} -setup {
+    auto_reset
+    array set auto_index {demo {proc demo {} {tailcall error foo}}}
+} -body {
+    demo
+} -cleanup {
+    array unset auto_index demo
+    rename demo {}
+} -returnCodes error -result foo
+
+>>>>>>> upstream/master
 test init-5.0 {return options passed through ::unknown} -setup {
     catch {rename xxx {}}
     set ::auto_index(::xxx) {proc ::xxx {} {

@@ -17,6 +17,7 @@
 #include "tclInt.h"
 #include <dde.h>
 #include <ddeml.h>
+<<<<<<< HEAD
 
 #ifndef UNICODE
 #   undef CP_WINUNICODE
@@ -34,19 +35,31 @@
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
-/*
- * TCL_STORAGE_CLASS is set unconditionally to DLLEXPORT because the Dde_Init
- * declaration is in the source file itself, which is only accessed when we
- * are building a library. DO NOT MOVE BEFORE ANY #include LINES. ONLY USE
- * EXTERN TO INDICATE EXPORTED FUNCTIONS FROM NOW ON.
- */
+#ifndef UNICODE
+#   undef CP_WINUNICODE
+#   define CP_WINUNICODE CP_WINANSI
+#   undef Tcl_WinTCharToUtf
+#   define Tcl_WinTCharToUtf(a,b,c) Tcl_ExternalToUtfDString(NULL,a,b,c)
+#   undef Tcl_WinUtfToTChar
+#   define Tcl_WinUtfToTChar(a,b,c) Tcl_UtfToExternalDString(NULL,a,b,c)
+#endif
 
+<<<<<<< HEAD
 #undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLEXPORT
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+#if !defined(NDEBUG)
+    /* test POKE server Implemented for debug mode only */
+#   undef CBF_FAIL_POKES
+#   define CBF_FAIL_POKES 0
+#endif
 >>>>>>> upstream/master
 
 /*
@@ -77,7 +90,11 @@ typedef struct Conversation {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct DdeEnumServices {
+=======
+struct DdeEnumServices {
+>>>>>>> upstream/master
 =======
 struct DdeEnumServices {
 >>>>>>> upstream/master
@@ -91,9 +108,15 @@ struct DdeEnumServices {
     HWND hwnd;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } DdeEnumServices;
 
 typedef struct ThreadSpecificData {
+=======
+};
+
+typedef struct {
+>>>>>>> upstream/master
 =======
 };
 
@@ -163,8 +186,13 @@ static int		DdeObjCmd(ClientData clientData,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int		Dde_Init(Tcl_Interp *interp);
 EXTERN int		Dde_SafeInit(Tcl_Interp *interp);
+=======
+DLLEXPORT int	Dde_Init(Tcl_Interp *interp);
+DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
+>>>>>>> upstream/master
 =======
 DLLEXPORT int	Dde_Init(Tcl_Interp *interp);
 DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
@@ -437,7 +465,11 @@ DdeSetServerName(
 		Tcl_ListObjIndex(interp, srvPtrPtr[n], 1, &namePtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
+=======
+		Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
+>>>>>>> upstream/master
 =======
 		Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
 >>>>>>> upstream/master
@@ -785,6 +817,7 @@ DdeServerProc(
 	 * execute.
 	 */
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 
@@ -848,6 +881,8 @@ DdeServerProc(
 	 */
 
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	if ((uFmt != CF_TEXT) && (uFmt != CF_UNICODETEXT)) {
 	    return (HDDEDATA) FALSE;
 	}
@@ -875,6 +910,7 @@ DdeServerProc(
 			    Tcl_GetStringFromObj(convPtr->returnPackagePtr, &len);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 		} else {
@@ -890,6 +926,8 @@ DdeServerProc(
 		} else {
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 		} else {
 		    returnString = (char *)
 			    Tcl_GetUnicodeFromObj(convPtr->returnPackagePtr, &len);
@@ -901,6 +939,9 @@ DdeServerProc(
 		if (Tcl_IsSafe(convPtr->riPtr->interp)) {
 		    ddeReturn = NULL;
 		} else {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -969,6 +1010,28 @@ DdeServerProc(
 	     */
 	}
 
+<<<<<<< HEAD
+=======
+#if !CBF_FAIL_POKES
+    case XTYP_POKE:
+	/*
+	 * This is a poke for a Tcl variable, only implemented in
+	 * debug/UNICODE mode.
+	 */
+	ddeReturn = DDE_FNOTPROCESSED;
+
+	if ((uFmt != CF_TEXT) && (uFmt != CF_UNICODETEXT)) {
+	    return ddeReturn;
+	}
+
+	for (convPtr = tsdPtr->currentConversations; (convPtr != NULL)
+		&& (convPtr->hConv != hConv); convPtr = convPtr->nextPtr) {
+	    /*
+	     * Empty loop body.
+	     */
+	}
+
+>>>>>>> upstream/master
 	if (convPtr && !Tcl_IsSafe(convPtr->riPtr->interp)) {
 	    Tcl_DString ds;
 	    Tcl_Obj *variableObjPtr;
@@ -1180,6 +1243,7 @@ MakeDdeConnection(
  * DdeGetServicesList --
  *
  *	This function obtains the list of DDE services.
+<<<<<<< HEAD
  *
  *	The functions between here and this function are all involved with
  *	handling the DDE callbacks for this. They are: DdeCreateClient,
@@ -1392,6 +1456,8 @@ DdeGetServicesList(
  *----------------------------------------------------------------------
  *
  * SetDdeError --
+=======
+>>>>>>> upstream/master
  *
  *	Sets the interp result to a cogent error message describing the last
  *	DDE error.
@@ -1409,7 +1475,13 @@ static void
 SetDdeError(
     Tcl_Interp *interp)	    /* The interp to put the message in. */
 {
+<<<<<<< HEAD
     const char *errorMessage, *errorCode;
+=======
+    WNDCLASSEX wc;
+    static const TCHAR *szDdeClientClassName = TEXT("TclEval client class");
+    static const TCHAR *szDdeClientWindowName = TEXT("TclEval client window");
+>>>>>>> upstream/master
 
     switch (DdeGetLastError(ddeInstance)) {
     case DMLERR_DATAACKTIMEOUT:
@@ -1656,6 +1728,9 @@ SetDdeError(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 static int
 DdeObjCmd(
@@ -1896,6 +1971,7 @@ DdeObjCmd(
     case DDE_EXECUTE: {
 	int dataLength;
 	const Tcl_UniChar *dataString;
+<<<<<<< HEAD
 
 	if (flags & DDE_FLAG_BINARY) {
 	    dataString = (const Tcl_UniChar *)
@@ -1906,6 +1982,18 @@ DdeObjCmd(
 	    dataLength = (dataLength + 1) * sizeof(Tcl_UniChar);
 	}
 
+=======
+
+	if (flags & DDE_FLAG_BINARY) {
+	    dataString = (const Tcl_UniChar *)
+		    Tcl_GetByteArrayFromObj(objv[firstArg + 2], &dataLength);
+	} else {
+	    dataString =
+		    Tcl_GetUnicodeFromObj(objv[firstArg + 2], &dataLength);
+	    dataLength = (dataLength + 1) * sizeof(Tcl_UniChar);
+	}
+
+>>>>>>> upstream/master
 	if (dataLength <= 0) {
 	    Tcl_SetObjResult(interp,
 		    Tcl_NewStringObj("cannot execute null data", -1));
@@ -2192,8 +2280,7 @@ DdeObjCmd(
 		    objPtr = Tcl_GetVar2Ex(sendInterp, "errorInfo", NULL,
 			    TCL_GLOBAL_ONLY);
 		    if (objPtr) {
-			string = Tcl_GetStringFromObj(objPtr, &length);
-			Tcl_AddObjErrorInfo(interp, string, length);
+			Tcl_AppendObjToErrorInfo(interp, objPtr);
 		    }
 
 		    objPtr = Tcl_GetVar2Ex(sendInterp, "errorCode", NULL,
@@ -2206,6 +2293,7 @@ DdeObjCmd(
 	    }
 	    Tcl_Release(riPtr);
 	    Tcl_Release(sendInterp);
+<<<<<<< HEAD
 	} else {
 	    /*
 	     * This is a non-local request. Send the script to the server and
@@ -2324,6 +2412,8 @@ DdeObjCmd(
 	    }
 	    Tcl_Release(riPtr);
 	    Tcl_Release(sendInterp);
+=======
+>>>>>>> upstream/master
 	} else {
 	    /*
 	     * This is a non-local request. Send the script to the server and
@@ -2412,9 +2502,13 @@ DdeObjCmd(
 		    }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    length = -1;
 		    string = Tcl_GetStringFromObj(objPtr, &length);
 		    Tcl_AddObjErrorInfo(interp, string, length);
+=======
+		    Tcl_AppendObjToErrorInfo(interp, objPtr);
+>>>>>>> upstream/master
 =======
 		    Tcl_AppendObjToErrorInfo(interp, objPtr);
 >>>>>>> upstream/master

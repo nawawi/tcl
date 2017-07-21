@@ -19,7 +19,11 @@ typedef struct AcceptCallback {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     char *script;		/* Script to invoke. */
+=======
+    Tcl_Obj *script;		/* Script to invoke. */
+>>>>>>> upstream/master
 =======
     Tcl_Obj *script;		/* Script to invoke. */
 >>>>>>> upstream/master
@@ -38,7 +42,11 @@ typedef struct AcceptCallback {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -56,8 +64,12 @@ static void		FinalizeIOCmdTSD(ClientData clientData);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		AcceptCallbackProc(ClientData callbackData,
 			    Tcl_Channel chan, char *address, int port);
+=======
+static Tcl_TcpAcceptProc AcceptCallbackProc;
+>>>>>>> upstream/master
 =======
 static Tcl_TcpAcceptProc AcceptCallbackProc;
 >>>>>>> upstream/master
@@ -143,7 +155,10 @@ Tcl_PutsObjCmd(
     int result;			/* Result of puts operation. */
     int mode;			/* Mode in which channel is opened. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     ThreadSpecificData *tsdPtr;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -193,7 +208,11 @@ Tcl_PutsObjCmd(
 
     if (chanObjPtr == NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	tsdPtr = TCL_TSD_INIT(&dataKey);
+=======
+	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+>>>>>>> upstream/master
 =======
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 >>>>>>> upstream/master
@@ -1445,14 +1464,23 @@ AcceptCallbackProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	char portBuf[TCL_INTEGER_SPACE];
 	char *script = acceptCallbackPtr->script;
+=======
+>>>>>>> upstream/master
 	Tcl_Interp *interp = acceptCallbackPtr->interp;
-	int result;
+	Tcl_Obj *script, *objv[2];
+	int result = TCL_OK;
 
-	Tcl_Preserve(script);
-	Tcl_Preserve(interp);
+	objv[0] = acceptCallbackPtr->script;
+	objv[1] = Tcl_NewListObj(3, NULL);
+	Tcl_ListObjAppendElement(NULL, objv[1], Tcl_NewStringObj(
+		Tcl_GetChannelName(chan), -1));
+	Tcl_ListObjAppendElement(NULL, objv[1], Tcl_NewStringObj(address, -1));
+	Tcl_ListObjAppendElement(NULL, objv[1], Tcl_NewIntObj(port));
 
+<<<<<<< HEAD
 	TclFormatInt(portBuf, port);
 =======
 =======
@@ -1470,6 +1498,8 @@ AcceptCallbackProc(
 	Tcl_ListObjAppendElement(NULL, objv[1], Tcl_NewStringObj(address, -1));
 	Tcl_ListObjAppendElement(NULL, objv[1], Tcl_NewIntObj(port));
 
+=======
+>>>>>>> upstream/master
 	script = Tcl_ConcatObj(2, objv);
 	Tcl_IncrRefCount(script);
 	Tcl_DecrRefCount(objv[1]);
@@ -1477,6 +1507,9 @@ AcceptCallbackProc(
 	Tcl_Preserve(interp);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1494,8 +1527,14 @@ AcceptCallbackProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	result = Tcl_VarEval(interp, script, " ", Tcl_GetChannelName(chan),
 		" ", address, " ", portBuf, NULL);
+=======
+	result = Tcl_EvalObjEx(interp, script, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
+	Tcl_DecrRefCount(script);
+
+>>>>>>> upstream/master
 =======
 	result = Tcl_EvalObjEx(interp, script, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
 	Tcl_DecrRefCount(script);
@@ -1527,6 +1566,7 @@ AcceptCallbackProc(
 	Tcl_UnregisterChannel(NULL, chan);
 
 	Tcl_Release(interp);
+<<<<<<< HEAD
 	Tcl_Release(script);
 =======
 
@@ -1576,6 +1616,8 @@ AcceptCallbackProc(
 	Tcl_UnregisterChannel(NULL, chan);
 
 	Tcl_Release(interp);
+=======
+>>>>>>> upstream/master
     } else {
 	/*
 	 * The interpreter has been deleted, so there is no useful way to use
@@ -1623,7 +1665,11 @@ TcpServerCloseProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_EventuallyFree(acceptCallbackPtr->script, TCL_DYNAMIC);
+=======
+    Tcl_DecrRefCount(acceptCallbackPtr->script);
+>>>>>>> upstream/master
 =======
     Tcl_DecrRefCount(acceptCallbackPtr->script);
 >>>>>>> upstream/master
@@ -1662,11 +1708,18 @@ Tcl_SocketObjCmd(
 {
     static const char *const socketOptions[] = {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"-async", "-myaddr", "-myport", "-server", NULL
+=======
+	"-async", "-myaddr", "-myport", "-reuseaddr", "-reuseport", "-server",
+	NULL
+>>>>>>> upstream/master
     };
     enum socketOptions {
-	SKT_ASYNC, SKT_MYADDR, SKT_MYPORT, SKT_SERVER
+	SKT_ASYNC, SKT_MYADDR, SKT_MYPORT, SKT_REUSEADDR, SKT_REUSEPORT,
+	SKT_SERVER
     };
+<<<<<<< HEAD
     int optionIndex, a, server = 0, port, myport = 0, async = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1687,11 +1740,16 @@ Tcl_SocketObjCmd(
 	SKT_ASYNC, SKT_MYADDR, SKT_MYPORT, SKT_REUSEADDR, SKT_REUSEPORT,
 	SKT_SERVER
     };
+=======
+>>>>>>> upstream/master
     int optionIndex, a, server = 0, myport = 0, async = 0, reusep = -1,
 	reusea = -1;
     unsigned int flags = 0;
     const char *host, *port, *myaddr = NULL;
     Tcl_Obj *script = NULL;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_Channel chan;
 
@@ -1773,6 +1831,7 @@ Tcl_SocketObjCmd(
 	    if (a >= objc) {
 		Tcl_SetObjResult(interp, Tcl_NewStringObj(
 			"no argument given for -server option", -1));
+<<<<<<< HEAD
 		return TCL_ERROR;
 	    }
 <<<<<<< HEAD
@@ -1796,6 +1855,33 @@ Tcl_SocketObjCmd(
 	    if (a >= objc) {
 		Tcl_SetObjResult(interp, Tcl_NewStringObj(
 			"no argument given for -server option", -1));
+		return TCL_ERROR;
+	    }
+	    script = objv[a];
+	    break;
+	case SKT_REUSEADDR:
+	    a++;
+	    if (a >= objc) {
+		Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			"no argument given for -reuseaddr option", -1));
+		return TCL_ERROR;
+	    }
+	    if (Tcl_GetBooleanFromObj(interp, objv[a], &reusea) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+	    break;
+	case SKT_REUSEPORT:
+	    a++;
+	    if (a >= objc) {
+		Tcl_SetObjResult(interp, Tcl_NewStringObj(
+			"no argument given for -reuseport option", -1));
+		return TCL_ERROR;
+	    }
+	    if (Tcl_GetBooleanFromObj(interp, objv[a], &reusep) != TCL_OK) {
+		return TCL_ERROR;
+	    }
+>>>>>>> upstream/master
+=======
 		return TCL_ERROR;
 	    }
 	    script = objv[a];
@@ -1847,6 +1933,7 @@ Tcl_SocketObjCmd(
 	iPtr->flags |= INTERP_ALTERNATE_WRONG_ARGS;
 	Tcl_WrongNumArgs(interp, 1, objv,
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"-server command ?-myaddr addr? port");
 	return TCL_ERROR;
     }
@@ -1863,6 +1950,13 @@ Tcl_SocketObjCmd(
 	return TCL_ERROR;
     }
 
+=======
+		"-server command ?-reuseaddr boolean? ?-reuseport boolean? "
+		"?-myaddr addr? port");
+	return TCL_ERROR;
+    }
+
+>>>>>>> upstream/master
     if (!server && (reusea != -1 || reusep != -1)) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"options -reuseaddr and -reuseport are only valid for servers",
@@ -1899,6 +1993,9 @@ Tcl_SocketObjCmd(
      */
 
     if (a != objc-1) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	goto wrongNumArgs;
     }
@@ -1906,6 +2003,7 @@ Tcl_SocketObjCmd(
     port = TclGetString(objv[a]);
 
     if (server) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	AcceptCallback *acceptCallbackPtr =
 		ckalloc(sizeof(AcceptCallback));
@@ -1926,10 +2024,18 @@ Tcl_SocketObjCmd(
 	Tcl_IncrRefCount(script);
 	acceptCallbackPtr->script = script;
 >>>>>>> upstream/master
+=======
+	AcceptCallback *acceptCallbackPtr = ckalloc(sizeof(AcceptCallback));
+
+	Tcl_IncrRefCount(script);
+	acceptCallbackPtr->script = script;
+>>>>>>> upstream/master
 	acceptCallbackPtr->interp = interp;
-	chan = Tcl_OpenTcpServer(interp, port, host, AcceptCallbackProc,
-		acceptCallbackPtr);
+
+	chan = Tcl_OpenTcpServerEx(interp, port, host, flags,
+		AcceptCallbackProc, acceptCallbackPtr);
 	if (chan == NULL) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	    ckfree(copyScript);
@@ -1949,6 +2055,9 @@ Tcl_SocketObjCmd(
 	chan = Tcl_OpenTcpServerEx(interp, port, host, flags,
 		AcceptCallbackProc, acceptCallbackPtr);
 	if (chan == NULL) {
+	    Tcl_DecrRefCount(script);
+>>>>>>> upstream/master
+=======
 	    Tcl_DecrRefCount(script);
 >>>>>>> upstream/master
 	    ckfree(acceptCallbackPtr);
@@ -1973,8 +2082,11 @@ Tcl_SocketObjCmd(
 	Tcl_CreateCloseHandler(chan, TcpServerCloseProc, acceptCallbackPtr);
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	chan = Tcl_OpenTcpClient(interp, port, host, myaddr, myport, async);
 =======
+=======
+>>>>>>> upstream/master
 	int portNum;
 
 	if (TclSockGetPort(interp, port, "tcp", &portNum) != TCL_OK) {
@@ -1982,6 +2094,9 @@ Tcl_SocketObjCmd(
 	}
 
 	chan = Tcl_OpenTcpClient(interp, portNum, host, myaddr, myport, async);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	if (chan == NULL) {
 	    return TCL_ERROR;

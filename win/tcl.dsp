@@ -37,7 +37,11 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Cmd_Line "nmake -nologo -f makefile.vc OPTS=none MSVCDIR=IDE"
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Release\tclsh85.exe"
+=======
+# PROP BASE Target_File "Release\tclsh87.exe"
+>>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh87.exe"
 >>>>>>> upstream/master
@@ -50,7 +54,11 @@ CFG=tcl - Win32 Debug Static
 # PROP Cmd_Line "nmake -nologo -f makefile.vc OPTS=threads MSVCDIR=IDE"
 # PROP Rebuild_Opt "clean release"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Release\tclsh85t.exe"
+=======
+# PROP Target_File "Release\tclsh87t.exe"
+>>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh87t.exe"
 >>>>>>> upstream/master
@@ -66,7 +74,11 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Cmd_Line "nmake -nologo -f makefile.vc OPTS=symbols MSVCDIR=IDE"
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Debug\tclsh85g.exe"
+=======
+# PROP BASE Target_File "Debug\tclsh87g.exe"
+>>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh87g.exe"
 >>>>>>> upstream/master
@@ -79,7 +91,11 @@ CFG=tcl - Win32 Debug Static
 # PROP Cmd_Line "nmake -nologo -f makefile.vc OPTS=threads,symbols MSVCDIR=IDE"
 # PROP Rebuild_Opt "clean release"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Debug\tclsh85tg.exe"
+=======
+# PROP Target_File "Debug\tclsh87tg.exe"
+>>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh87tg.exe"
 >>>>>>> upstream/master
@@ -95,7 +111,11 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Cmd_Line "nmake -nologo -f makefile.vc OPTS=symbols,static MSVCDIR=IDE"
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Debug\tclsh85sg.exe"
+=======
+# PROP BASE Target_File "Debug\tclsh87sg.exe"
+>>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh87sg.exe"
 >>>>>>> upstream/master
@@ -108,7 +128,11 @@ CFG=tcl - Win32 Debug Static
 # PROP Cmd_Line "nmake -nologo -f makefile.vc OPTS=symbols,static MSVCDIR=IDE"
 # PROP Rebuild_Opt "-a"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Debug\tclsh85sg.exe"
+=======
+# PROP Target_File "Debug\tclsh87sg.exe"
+>>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh87sg.exe"
 >>>>>>> upstream/master
@@ -124,7 +148,11 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Cmd_Line "nmake -nologo -f makefile.vc OPTS=static MSVCDIR=IDE"
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Release\tclsh85s.exe"
+=======
+# PROP BASE Target_File "Release\tclsh87s.exe"
+>>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh87s.exe"
 >>>>>>> upstream/master
@@ -137,7 +165,11 @@ CFG=tcl - Win32 Debug Static
 # PROP Cmd_Line "nmake -nologo -f makefile.vc OPTS=static MSVCDIR=IDE"
 # PROP Rebuild_Opt "-a"
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Release\tclsh85s.exe"
+=======
+# PROP Target_File "Release\tclsh87s.exe"
+>>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh87s.exe"
 >>>>>>> upstream/master
@@ -1459,6 +1491,7 @@ SOURCE=.\configure
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 SOURCE=.\configure.in
 =======
 SOURCE=.\configure.ac
@@ -1470,6 +1503,9 @@ SOURCE=.\configure.ac
 # Begin Source File
 
 SOURCE=.\makefile.bc
+=======
+SOURCE=.\configure.ac
+>>>>>>> upstream/master
 =======
 SOURCE=.\configure.ac
 >>>>>>> upstream/master

@@ -680,7 +680,11 @@ TclRegAbout(
     resultObj = Tcl_NewObj();
     Tcl_ListObjAppendElement(NULL, resultObj,
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_NewIntObj((int) regexpPtr->re.re_nsub));
+=======
+	    Tcl_NewWideIntObj((Tcl_WideInt) regexpPtr->re.re_nsub));
+>>>>>>> upstream/master
 =======
 	    Tcl_NewWideIntObj((Tcl_WideInt) regexpPtr->re.re_nsub));
 >>>>>>> upstream/master

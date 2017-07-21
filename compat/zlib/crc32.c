@@ -1,6 +1,10 @@
 /* crc32.c -- compute the CRC-32 of a data stream
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2006, 2010, 2011, 2012 Mark Adler
+=======
+ * Copyright (C) 1995-2006, 2010, 2011, 2012, 2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2006, 2010, 2011, 2012, 2016 Mark Adler
 >>>>>>> upstream/master
@@ -35,8 +39,11 @@
 #include "zutil.h"      /* for STDC and FAR definitions */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define local static
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 /* Definitions for doing the crc four data bytes at a time. */
@@ -46,9 +53,15 @@
 #ifdef BYFOUR
    local unsigned long crc32_little OF((unsigned long,
 <<<<<<< HEAD
+<<<<<<< HEAD
                         const unsigned char FAR *, unsigned));
    local unsigned long crc32_big OF((unsigned long,
                         const unsigned char FAR *, unsigned));
+=======
+                        const unsigned char FAR *, z_size_t));
+   local unsigned long crc32_big OF((unsigned long,
+                        const unsigned char FAR *, z_size_t));
+>>>>>>> upstream/master
 =======
                         const unsigned char FAR *, z_size_t));
    local unsigned long crc32_big OF((unsigned long,
@@ -215,10 +228,17 @@ const z_crc_t FAR * ZEXPORT get_crc_table()
 
 /* ========================================================================= */
 <<<<<<< HEAD
+<<<<<<< HEAD
 unsigned long ZEXPORT crc32(crc, buf, len)
     unsigned long crc;
     const unsigned char FAR *buf;
     uInt len;
+=======
+unsigned long ZEXPORT crc32_z(crc, buf, len)
+    unsigned long crc;
+    const unsigned char FAR *buf;
+    z_size_t len;
+>>>>>>> upstream/master
 =======
 unsigned long ZEXPORT crc32_z(crc, buf, len)
     unsigned long crc;
@@ -256,6 +276,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef BYFOUR
 
 =======
@@ -270,6 +291,19 @@ unsigned long ZEXPORT crc32(crc, buf, len)
 
 #ifdef BYFOUR
 
+=======
+/* ========================================================================= */
+unsigned long ZEXPORT crc32(crc, buf, len)
+    unsigned long crc;
+    const unsigned char FAR *buf;
+    uInt len;
+{
+    return crc32_z(crc, buf, len);
+}
+
+#ifdef BYFOUR
+
+>>>>>>> upstream/master
 /*
    This BYFOUR code accesses the passed unsigned char * buffer with a 32-bit
    integer pointer type. This violates the strict aliasing rule, where a
@@ -282,6 +316,9 @@ unsigned long ZEXPORT crc32(crc, buf, len)
    writes to the buffer that is passed to these routines.
  */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 /* ========================================================================= */
 #define DOLIT4 c ^= *buf4++; \
@@ -294,7 +331,11 @@ local unsigned long crc32_little(crc, buf, len)
     unsigned long crc;
     const unsigned char FAR *buf;
 <<<<<<< HEAD
+<<<<<<< HEAD
     unsigned len;
+=======
+    z_size_t len;
+>>>>>>> upstream/master
 =======
     z_size_t len;
 >>>>>>> upstream/master
@@ -329,7 +370,11 @@ local unsigned long crc32_little(crc, buf, len)
 
 /* ========================================================================= */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define DOBIG4 c ^= *++buf4; \
+=======
+#define DOBIG4 c ^= *buf4++; \
+>>>>>>> upstream/master
 =======
 #define DOBIG4 c ^= *buf4++; \
 >>>>>>> upstream/master
@@ -342,7 +387,11 @@ local unsigned long crc32_big(crc, buf, len)
     unsigned long crc;
     const unsigned char FAR *buf;
 <<<<<<< HEAD
+<<<<<<< HEAD
     unsigned len;
+=======
+    z_size_t len;
+>>>>>>> upstream/master
 =======
     z_size_t len;
 >>>>>>> upstream/master
@@ -359,7 +408,10 @@ local unsigned long crc32_big(crc, buf, len)
 
     buf4 = (const z_crc_t FAR *)(const void FAR *)buf;
 <<<<<<< HEAD
+<<<<<<< HEAD
     buf4--;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     while (len >= 32) {
@@ -371,7 +423,10 @@ local unsigned long crc32_big(crc, buf, len)
         len -= 4;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     buf4++;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     buf = (const unsigned char FAR *)buf4;

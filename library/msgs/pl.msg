@@ -5,7 +5,11 @@ namespace eval ::tcl::clock {
         "Pn"\
         "Wt"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u015ar"\
+=======
+        "Śr"\
+>>>>>>> upstream/master
 =======
         "Śr"\
 >>>>>>> upstream/master
@@ -15,16 +19,24 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset pl DAYS_OF_WEEK_FULL [list \
         "niedziela"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "poniedzia\u0142ek"\
+=======
+        "poniedziałek"\
+>>>>>>> upstream/master
         "wtorek"\
-        "\u015broda"\
+        "środa"\
         "czwartek"\
+<<<<<<< HEAD
         "pi\u0105tek"\
 =======
         "poniedziałek"\
         "wtorek"\
         "środa"\
         "czwartek"\
+        "piątek"\
+>>>>>>> upstream/master
+=======
         "piątek"\
 >>>>>>> upstream/master
         "sobota"]
@@ -39,7 +51,11 @@ namespace eval ::tcl::clock {
         "sie"\
         "wrz"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "pa\u017a"\
+=======
+        "paź"\
+>>>>>>> upstream/master
 =======
         "paź"\
 >>>>>>> upstream/master
@@ -48,17 +64,22 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset pl MONTHS_FULL [list \
 <<<<<<< HEAD
+<<<<<<< HEAD
         "stycze\u0144"\
+=======
+        "styczeń"\
+>>>>>>> upstream/master
         "luty"\
         "marzec"\
-        "kwiecie\u0144"\
+        "kwiecień"\
         "maj"\
         "czerwiec"\
         "lipiec"\
-        "sierpie\u0144"\
-        "wrzesie\u0144"\
-        "pa\u017adziernik"\
+        "sierpień"\
+        "wrzesień"\
+        "październik"\
         "listopad"\
+<<<<<<< HEAD
         "grudzie\u0144"\
 =======
         "styczeń"\
@@ -72,6 +93,9 @@ namespace eval ::tcl::clock {
         "wrzesień"\
         "październik"\
         "listopad"\
+        "grudzień"\
+>>>>>>> upstream/master
+=======
         "grudzień"\
 >>>>>>> upstream/master
         ""]

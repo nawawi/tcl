@@ -6,7 +6,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -229,6 +233,7 @@ proc waittime ms {
     yield
 }
 
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -376,6 +381,8 @@ proc waittime ms {
 }
 
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

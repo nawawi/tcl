@@ -125,7 +125,11 @@ test compile-3.4 {TclCompileCatchCmd: bcc'ed [return] is caught} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}] ; # {}	
+=======
+	}] ; # {}
+>>>>>>> upstream/master
 =======
 	}] ; # {}
 >>>>>>> upstream/master
@@ -147,8 +151,13 @@ test compile-3.5 {TclCompileCatchCmd: recover from error, [Bug 705406]} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    }   
 	}   
+=======
+	    }
+	}
+>>>>>>> upstream/master
 =======
 	    }
 	}
@@ -371,6 +380,7 @@ test compile-11.9 {Tcl_Append*: ensure Tcl_ResetResult is used properly} -body {
     list [catch {p} msg] $msg
 } -returnCodes error -result {unmatched open brace in list}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -379,6 +389,10 @@ test compile-11.9 {Tcl_Append*: ensure Tcl_ResetResult is used properly} -body {
 #
 >>>>>>> upstream/master
 =======
+#
+>>>>>>> upstream/master
+=======
+
 #
 >>>>>>> upstream/master
 # Special section for tests of tclLiteral.c
@@ -405,6 +419,7 @@ test compile-12.1 {testing literal leak on interp delete} -setup {
     for {set i 0} {$i < 5} {incr i} {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	interp create foo 
 	foo eval { 
 	    namespace eval bar {}
@@ -419,6 +434,12 @@ test compile-12.1 {testing literal leak on interp delete} -setup {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	interp create foo
+	foo eval {
+	    namespace eval bar {}
+	}
 >>>>>>> upstream/master
 	interp delete foo
 	set tmp $end
@@ -442,7 +463,11 @@ test compile-12.2 {testing error on literal deletion} -constraints {memory exec}
     } source.file]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     exec [interpreter] $sourceFile 
+=======
+    exec [interpreter] $sourceFile
+>>>>>>> upstream/master
 =======
     exec [interpreter] $sourceFile
 >>>>>>> upstream/master
@@ -521,6 +546,7 @@ test compile-12.4 {TclCleanupLiteralTable segfault} -body {
 
 # Special test for underestimating the maxStackSize required for a compiled
 # command. A failure will cause a segfault in the child process.
+<<<<<<< HEAD
 test compile-13.1 {testing underestimate of maxStackSize in list cmd} {exec} {
     set body {set x [list}
     for {set i 0} {$i < 3000} {incr i} {
@@ -655,6 +681,8 @@ test compile-12.4 {TclCleanupLiteralTable segfault} -body {
 
 # Special test for underestimating the maxStackSize required for a compiled
 # command. A failure will cause a segfault in the child process.
+=======
+>>>>>>> upstream/master
 test compile-13.1 {testing underestimate of maxStackSize in list cmd} {exec} {
     set body {set x [list}
     for {set i 0} {$i < 3000} {incr i} {
@@ -665,6 +693,9 @@ test compile-13.1 {testing underestimate of maxStackSize in list cmd} {exec} {
     list [catch {exec [interpreter] << $script} msg] $msg
 } {0 OK}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # Tests compile-14.* for [Bug 599788] [Bug 0c043a175a47da8c2342]
 test compile-14.1 {testing errors in element name; segfault?} {} {
@@ -680,6 +711,7 @@ test compile-14.2 {testing element name "$"} -body {
     set a($) 3
     list [set a()] [set a(1)] [set a($)] [unset a() a(1); lindex [array names a] 0]
 } -cleanup {unset a} -result [list 1 2 3 {$}]
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -704,6 +736,9 @@ test compile-14.2 {testing element name "$"} -body {
     set a($) 3
     list [set a()] [set a(1)] [set a($)] [unset a() a(1); lindex [array names a] 0]
 } -cleanup {unset a} -result [list 1 2 3 {$}]
+=======
+
+>>>>>>> upstream/master
 
 # Tests compile-15.* cover Tcl Bug 633204
 test compile-15.1 {proper TCL_RETURN code from [return]} {
@@ -722,6 +757,7 @@ test compile-15.5 {proper TCL_RETURN code from [return]} {
     apply {{} {catch {set a 1}; return}}
 } ""
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 for {set noComp 0} {$noComp <= 1} {incr noComp} {
 
@@ -751,6 +787,8 @@ test compile-15.5 {proper TCL_RETURN code from [return]} {
     apply {{} {catch {set a 1}; return}}
 } ""
 
+=======
+>>>>>>> upstream/master
 for {set noComp 0} {$noComp <= 1} {incr noComp} {
 
 if $noComp {
@@ -896,6 +934,7 @@ test compile-16.26.$noComp {TclCompileScript: word expansion, protected backslas
 } {a {\n} b}
 }	;# End of noComp loop
 
+<<<<<<< HEAD
 =======
 # Tests compile-15.* cover Tcl Bug 633204
 test compile-15.1 {proper TCL_RETURN code from [return]} {
@@ -2041,6 +2080,43 @@ test compile-17.2 {Command interpretation binding for non-compiled code} -setup 
 # does not check the format of disassembled bytecode though; that's liable to
 # change without warning.
 
+=======
+# These tests are messy because it wrecks the interpreter it runs in!  They
+# demonstrate issues arising from [FRQ 1101710]
+test compile-17.1 {Command interpretation binding for compiled code} -constraints knownBug -setup {
+    set i [interp create]
+} -body {
+    $i eval {
+	if 1 {
+	    expr [
+		proc expr args {return substituted}
+		format {[subst compiled]}
+	    ]
+	}
+    }
+} -cleanup {
+    interp delete $i
+} -result substituted
+test compile-17.2 {Command interpretation binding for non-compiled code} -setup {
+    set i [interp create]
+} -body {
+    $i eval {
+	if 1 {
+	    [subst expr] [
+		proc expr args {return substituted}
+		format {[subst compiled]}
+	    ]
+	}
+    }
+} -cleanup {
+    interp delete $i
+} -result substituted
+
+# This tests the supported parts of the unsupported [disassemble] command. It
+# does not check the format of disassembled bytecode though; that's liable to
+# change without warning.
+
+>>>>>>> upstream/master
 set disassemblables [linsert [join {
     constructor destructor lambda method objmethod proc script
 } ", "] end-1 or]
@@ -2403,6 +2479,9 @@ test compile-21.4 {stack balance management} {
     }} P Q R S T
 } {1 2 3 4 5 6 7 8 9 10}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # TODO sometime - check that bytecode from tbcload is *not* disassembled.
 

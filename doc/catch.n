@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -52,6 +56,7 @@ set to the result of the script evaluation.  When the return code from the
 script is 1 (\fBTCL_ERROR\fR), the value stored in \fIresultVarName\fR is an
 error message.  When the return code from the script is 0 (\fBTCL_OK\fR), the
 value stored in \fIresultVarName\fR is the value returned from \fIscript\fR.
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 .PP
@@ -113,6 +118,11 @@ separate elements for \fBforeach\fR constructs for example).
 .PP
 If the \fIoptionsVarName\fR argument is given, then the variable it
 names is set to a dictionary of return options returned by evaluation
+=======
+.PP
+If the \fIoptionsVarName\fR argument is given, then the variable it
+names is set to a dictionary of return options returned by evaluation
+>>>>>>> upstream/master
 of \fIscript\fR.  Tcl specifies two entries that are always
 defined in the dictionary: \fB\-code\fR and \fB\-level\fR.  When
 the return code from evaluation of \fIscript\fR is not \fBTCL_RETURN\fR,
@@ -160,6 +170,9 @@ separate elements for \fBforeach\fR constructs for example).
 .VE 8.6
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -191,7 +204,11 @@ documentation for the \fBreturn\fR command.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .SH "SEE ALSO" 
+=======
+.SH "SEE ALSO"
+>>>>>>> upstream/master
 =======
 .SH "SEE ALSO"
 >>>>>>> upstream/master

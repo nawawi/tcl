@@ -4,6 +4,7 @@ set TZData(:Asia/Khandyga) {
     {-9223372036854775808 32533 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1579424533 28800 0 YAKT}
     {-1247558400 32400 0 YAKMMTT}
     {354898800 36000 1 YAKST}
@@ -85,6 +86,8 @@ set TZData(:Asia/Khandyga) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1579424533 28800 0 +08}
     {-1247558400 32400 0 +10}
     {354898800 36000 1 +10}
@@ -154,6 +157,9 @@ set TZData(:Asia/Khandyga) {
     {1315832400 36000 0 +10}
     {1414252800 32400 0 +09}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

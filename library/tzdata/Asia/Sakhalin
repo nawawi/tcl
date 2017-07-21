@@ -4,6 +4,7 @@ set TZData(:Asia/Sakhalin) {
     {-9223372036854775808 34248 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2031039048 32400 0 JCST}
     {-1017824400 32400 0 JST}
     {-768560400 39600 0 SAKMMTT}
@@ -93,6 +94,8 @@ set TZData(:Asia/Sakhalin) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-2031039048 32400 0 +09}
     {-768560400 39600 0 +12}
     {354891600 43200 1 +12}
@@ -162,6 +165,9 @@ set TZData(:Asia/Sakhalin) {
     {1414249200 36000 0 +10}
     {1459008000 39600 0 +11}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

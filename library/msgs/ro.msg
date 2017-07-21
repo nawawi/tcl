@@ -10,12 +10,17 @@ namespace eval ::tcl::clock {
         "S"]
     ::msgcat::mcset ro DAYS_OF_WEEK_FULL [list \
 <<<<<<< HEAD
+<<<<<<< HEAD
         "duminic\u0103"\
+=======
+        "duminică"\
+>>>>>>> upstream/master
         "luni"\
-        "mar\u0163i"\
+        "marţi"\
         "miercuri"\
         "joi"\
         "vineri"\
+<<<<<<< HEAD
         "s\u00eemb\u0103t\u0103"]
 =======
         "duminică"\
@@ -24,6 +29,9 @@ namespace eval ::tcl::clock {
         "miercuri"\
         "joi"\
         "vineri"\
+        "sîmbătă"]
+>>>>>>> upstream/master
+=======
         "sîmbătă"]
 >>>>>>> upstream/master
     ::msgcat::mcset ro MONTHS_ABBREV [list \
@@ -56,7 +64,11 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset ro BCE "d.C."
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset ro CE "\u00ee.d.C."
+=======
+    ::msgcat::mcset ro CE "î.d.C."
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset ro CE "î.d.C."
 >>>>>>> upstream/master

@@ -2,6 +2,7 @@
 namespace eval ::tcl::clock {
     ::msgcat::mcset zh DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u661f\u671f\u65e5"\
         "\u661f\u671f\u4e00"\
         "\u661f\u671f\u4e8c"\
@@ -9,42 +10,52 @@ namespace eval ::tcl::clock {
         "\u661f\u671f\u56db"\
         "\u661f\u671f\u4e94"\
         "\u661f\u671f\u516d"]
+=======
+        "星期日"\
+        "星期一"\
+        "星期二"\
+        "星期三"\
+        "星期四"\
+        "星期五"\
+        "星期六"]
+>>>>>>> upstream/master
     ::msgcat::mcset zh DAYS_OF_WEEK_FULL [list \
-        "\u661f\u671f\u65e5"\
-        "\u661f\u671f\u4e00"\
-        "\u661f\u671f\u4e8c"\
-        "\u661f\u671f\u4e09"\
-        "\u661f\u671f\u56db"\
-        "\u661f\u671f\u4e94"\
-        "\u661f\u671f\u516d"]
+        "星期日"\
+        "星期一"\
+        "星期二"\
+        "星期三"\
+        "星期四"\
+        "星期五"\
+        "星期六"]
     ::msgcat::mcset zh MONTHS_ABBREV [list \
-        "\u4e00\u6708"\
-        "\u4e8c\u6708"\
-        "\u4e09\u6708"\
-        "\u56db\u6708"\
-        "\u4e94\u6708"\
-        "\u516d\u6708"\
-        "\u4e03\u6708"\
-        "\u516b\u6708"\
-        "\u4e5d\u6708"\
-        "\u5341\u6708"\
-        "\u5341\u4e00\u6708"\
-        "\u5341\u4e8c\u6708"\
+        "一月"\
+        "二月"\
+        "三月"\
+        "四月"\
+        "五月"\
+        "六月"\
+        "七月"\
+        "八月"\
+        "九月"\
+        "十月"\
+        "十一月"\
+        "十二月"\
         ""]
     ::msgcat::mcset zh MONTHS_FULL [list \
-        "\u4e00\u6708"\
-        "\u4e8c\u6708"\
-        "\u4e09\u6708"\
-        "\u56db\u6708"\
-        "\u4e94\u6708"\
-        "\u516d\u6708"\
-        "\u4e03\u6708"\
-        "\u516b\u6708"\
-        "\u4e5d\u6708"\
-        "\u5341\u6708"\
-        "\u5341\u4e00\u6708"\
-        "\u5341\u4e8c\u6708"\
+        "一月"\
+        "二月"\
+        "三月"\
+        "四月"\
+        "五月"\
+        "六月"\
+        "七月"\
+        "八月"\
+        "九月"\
+        "十月"\
+        "十一月"\
+        "十二月"\
         ""]
+<<<<<<< HEAD
     ::msgcat::mcset zh BCE "\u516c\u5143\u524d"
     ::msgcat::mcset zh CE "\u516c\u5143"
     ::msgcat::mcset zh AM "\u4e0a\u5348"
@@ -97,6 +108,8 @@ namespace eval ::tcl::clock {
         "十一月"\
         "十二月"\
         ""]
+=======
+>>>>>>> upstream/master
     ::msgcat::mcset zh BCE "公元前"
     ::msgcat::mcset zh CE "公元"
     ::msgcat::mcset zh AM "上午"
@@ -105,5 +118,8 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset zh LOCALE_DATE_FORMAT "公元%Y年%B%Od日"
     ::msgcat::mcset zh LOCALE_TIME_FORMAT "%OH时%OM分%OS秒"
     ::msgcat::mcset zh LOCALE_DATE_TIME_FORMAT "%A %Y年%B%Od日%OH时%OM分%OS秒 %z"
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }

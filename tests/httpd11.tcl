@@ -9,7 +9,11 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require Tcl 8.6
+=======
+package require Tcl 8.6-
+>>>>>>> upstream/master
 =======
 package require Tcl 8.6-
 >>>>>>> upstream/master

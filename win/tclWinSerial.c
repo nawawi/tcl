@@ -94,6 +94,10 @@ typedef struct SerialInfo {
     OVERLAPPED osRead;		/* OVERLAPPED structure for read operations. */
     OVERLAPPED osWrite;		/* OVERLAPPED structure for write operations */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    TclPipeThreadInfo *writeTI;	/* Thread info structure of writer worker. */
+>>>>>>> upstream/master
 =======
     TclPipeThreadInfo *writeTI;	/* Thread info structure of writer worker. */
 >>>>>>> upstream/master
@@ -103,12 +107,15 @@ typedef struct SerialInfo {
 				 * writer thread has finished waiting for the
 				 * current buffer to be written. */
 <<<<<<< HEAD
+<<<<<<< HEAD
     HANDLE evStartWriter;	/* Auto-reset event used by the main thread to
 				 * signal when the writer thread should
 				 * attempt to write to the serial. */
     HANDLE evStopWriter;	/* Auto-reset event used by the main thread to
 				 * signal when the writer thread should close.
 				 */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     DWORD writeError;		/* An error caused by the last background
@@ -145,7 +152,11 @@ static Tcl_ThreadDataKey dataKey;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct SerialEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -614,7 +625,6 @@ SerialCloseProc(
     int errorCode, result = 0;
     SerialInfo *infoPtr, **nextPtrPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    DWORD exitCode;
 
     errorCode = 0;
 
@@ -624,6 +634,7 @@ SerialCloseProc(
     }
     serialPtr->validMask &= ~TCL_READABLE;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (serialPtr->validMask & TCL_WRITABLE) {
 	/*
@@ -662,10 +673,13 @@ SerialCloseProc(
 		 */
 
 		Tcl_MutexLock(&serialMutex);
+=======
+    if (serialPtr->writeThread) {
+>>>>>>> upstream/master
 
-		/* BUG: this leaks memory */
-		TerminateThread(serialPtr->writeThread, 0);
+    	TclPipeThreadStop(&serialPtr->writeTI, serialPtr->writeThread);
 
+<<<<<<< HEAD
 		Tcl_MutexUnlock(&serialMutex);
 	    }
 	}
@@ -680,6 +694,11 @@ SerialCloseProc(
 
     	TclPipeThreadStop(&serialPtr->writeTI, serialPtr->writeThread);
 
+	CloseHandle(serialPtr->osWrite.hEvent);
+	CloseHandle(serialPtr->evWritable);
+	CloseHandle(serialPtr->writeThread);
+>>>>>>> upstream/master
+=======
 	CloseHandle(serialPtr->osWrite.hEvent);
 	CloseHandle(serialPtr->evWritable);
 	CloseHandle(serialPtr->writeThread);
@@ -1102,7 +1121,11 @@ SerialOutputProc(
 	infoPtr->toWrite = toWrite;
 	ResetEvent(infoPtr->evWritable);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	SetEvent(infoPtr->evStartWriter);
+=======
+	TclPipeThreadSignal(&infoPtr->writeTI);
+>>>>>>> upstream/master
 =======
 	TclPipeThreadSignal(&infoPtr->writeTI);
 >>>>>>> upstream/master
@@ -1343,35 +1366,28 @@ SerialWriterThread(
     LPVOID arg)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     SerialInfo *infoPtr = (SerialInfo *)arg;
     DWORD bytesWritten, toWrite, waitResult;
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    SerialInfo *infoPtr = NULL; /* access info only after success init/wait */
+    DWORD bytesWritten, toWrite;
+>>>>>>> upstream/master
     char *buf;
     OVERLAPPED myWrite;		/* Have an own OVERLAPPED in this thread. */
-    HANDLE wEvents[2];
-
-    /*
-     * The stop event takes precedence by being first in the list.
-     */
-
-    wEvents[0] = infoPtr->evStopWriter;
-    wEvents[1] = infoPtr->evStartWriter;
 
     for (;;) {
 	/*
 	 * Wait for the main thread to signal before attempting to write.
 	 */
-
-	waitResult = WaitForMultipleObjects(2, wEvents, FALSE, INFINITE);
-
-	if (waitResult != (WAIT_OBJECT_0 + 1)) {
-	    /*
-	     * The start event was not signaled. It might be the stop event or
-	     * an error, so exit.
-	     */
-
+	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
+	    /* exit */
 	    break;
 	}
+	infoPtr = (SerialInfo *)pipeTI->clientData;
 
+<<<<<<< HEAD
 	buf = infoPtr->writeBuf;
 	toWrite = infoPtr->toWrite;
 
@@ -1426,6 +1442,8 @@ SerialWriterThread(
 	}
 	infoPtr = (SerialInfo *)pipeTI->clientData;
 
+=======
+>>>>>>> upstream/master
 	buf = infoPtr->writeBuf;
 	toWrite = infoPtr->toWrite;
 
@@ -1489,6 +1507,9 @@ SerialWriterThread(
 	}
 	Tcl_MutexUnlock(&serialMutex);
     }
+
+    /* Worker exit, so inform the main thread or free TI-structure (if owned) */
+    TclPipeThreadExit(&pipeTI);
 
     return 0;
 }
@@ -1563,13 +1584,13 @@ TclWinOpenSerialChannel(
     int permissions)
 {
     SerialInfo *infoPtr;
-    DWORD id;
 
     SerialInit();
 
     infoPtr = ckalloc(sizeof(SerialInfo));
     memset(infoPtr, 0, sizeof(SerialInfo));
 
+<<<<<<< HEAD
     infoPtr->validMask = permissions;
     infoPtr->handle = handle;
     infoPtr->channel = (Tcl_Channel) NULL;
@@ -1702,6 +1723,8 @@ TclWinOpenSerialChannel(
     infoPtr = ckalloc(sizeof(SerialInfo));
     memset(infoPtr, 0, sizeof(SerialInfo));
 
+=======
+>>>>>>> upstream/master
     infoPtr->validMask = permissions;
     infoPtr->handle = handle;
     infoPtr->channel = (Tcl_Channel) NULL;
@@ -1749,10 +1772,16 @@ TclWinOpenSerialChannel(
 	infoPtr->osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	infoPtr->evWritable = CreateEvent(NULL, TRUE, TRUE, NULL);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	infoPtr->evStartWriter = CreateEvent(NULL, FALSE, FALSE, NULL);
 	infoPtr->evStopWriter = CreateEvent(NULL, FALSE, FALSE, NULL);
 	infoPtr->writeThread = CreateThread(NULL, 256, SerialWriterThread,
 		infoPtr, 0, &id);
+=======
+	infoPtr->writeThread = CreateThread(NULL, 256, SerialWriterThread,
+		TclPipeThreadCreateTI(&infoPtr->writeTI, infoPtr,
+			infoPtr->evWritable), 0, NULL);
+>>>>>>> upstream/master
 =======
 	infoPtr->writeThread = CreateThread(NULL, 256, SerialWriterThread,
 		TclPipeThreadCreateTI(&infoPtr->writeTI, infoPtr,
@@ -2342,6 +2371,7 @@ SerialGetOptionProc(
 	Tcl_DStringAppendElement(dsPtr, "-sysbuffer");
 	Tcl_DStringStartSublist(dsPtr);
     }
+<<<<<<< HEAD
     if (len==0 || (len>1 && strncmp(optionName, "-sysbuffer", len) == 0)) {
 	char buf[TCL_INTEGER_SPACE + 1];
 	valid = 1;
@@ -2398,10 +2428,15 @@ SerialGetOptionProc(
 	Tcl_DStringAppendElement(dsPtr, "-sysbuffer");
 	Tcl_DStringStartSublist(dsPtr);
     }
+=======
+>>>>>>> upstream/master
     if (len==0 || (len>1 && strncmp(optionName, "-sysbuffer", len) == 0)) {
 	char buf[TCL_INTEGER_SPACE + 1];
 	valid = 1;
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	wsprintfA(buf, "%d", infoPtr->sysBufRead);
 	Tcl_DStringAppendElement(dsPtr, buf);

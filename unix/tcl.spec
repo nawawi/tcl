@@ -7,7 +7,11 @@ Summary:       Tcl scripting language development environment
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Version:       8.6.4
+=======
+Version:       8.7a0
+>>>>>>> upstream/master
 =======
 Version:       8.7a0
 >>>>>>> upstream/master

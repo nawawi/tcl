@@ -240,9 +240,15 @@ test set-1.26 {TclCompileSetCmd: various array constructs} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test set-2.1 {set command: runtime error, bad variable name} {
+=======
+test set-2.1 {set command: runtime error, bad variable name} -setup {
+>>>>>>> upstream/master
     unset -nocomplain {"foo}
+} -body {
     list [catch {set {"foo}} msg] $msg $::errorInfo
+<<<<<<< HEAD
 } {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
 =======
 =======
@@ -255,6 +261,9 @@ test set-2.1 {set command: runtime error, bad variable name} -setup {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+} -result {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
 >>>>>>> upstream/master
     while executing
 "set {"foo}"}}
@@ -272,9 +281,12 @@ test set-2.3 {set command: runtime error, errors in reading variables} -setup {
     list [catch {set a(18)} msg] $msg
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {can't read "a(18)": no such element in array}}
 test set-2.4 {set command: runtime error, readonly variable} -body {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {1 {can't read "a(18)": no such element in array}}
@@ -282,6 +294,9 @@ test set-2.4 {set command: runtime error, readonly variable} -setup {
     unset -nocomplain x
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -520,10 +535,16 @@ test set-3.24 {uncompiled set command: too many arguments} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test set-4.1 {uncompiled set command: runtime error, bad variable name} {
+=======
+test set-4.1 {uncompiled set command: runtime error, bad variable name} -setup {
+>>>>>>> upstream/master
     unset -nocomplain {"foo}
+} -body {
     set z set
     list [catch {$z {"foo}} msg] $msg $::errorInfo
+<<<<<<< HEAD
 } {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
 =======
 test set-4.1 {uncompiled set command: runtime error, bad variable name} -setup {
@@ -539,6 +560,9 @@ test set-4.1 {uncompiled set command: runtime error, bad variable name} -setup {
 } -body {
     set z set
     list [catch {$z {"foo}} msg] $msg $::errorInfo
+} -result {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
+>>>>>>> upstream/master
+=======
 } -result {1 {can't read ""foo": no such variable} {can't read ""foo": no such variable
 >>>>>>> upstream/master
     while executing
@@ -559,7 +583,11 @@ test set-4.3 {uncompiled set command: runtime error, errors in reading variables
     list [catch {$z a(18)} msg] $msg
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {can't read "a(18)": no such element in array}}
+=======
+} -result {1 {can't read "a(18)": no such element in array}}
+>>>>>>> upstream/master
 =======
 } -result {1 {can't read "a(18)": no such element in array}}
 >>>>>>> upstream/master
@@ -591,13 +619,20 @@ test set-4.6 {set command: runtime error, basic array operations} -setup {
     list [catch {$z a} msg] $msg
 } -result {1 {can't read "a": variable is array}}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 test set-5.1 {error on malformed array name} testset2 {
+=======
+
+test set-5.1 {error on malformed array name} -constraints testset2 -setup {
+>>>>>>> upstream/master
     unset -nocomplain z
+} -body {
     catch {testset2 z(a) b} msg
     catch {testset2 z(b) a} msg1
     list $msg $msg1
+<<<<<<< HEAD
 } {{can't read "z(a)(b)": variable isn't array} {can't read "z(b)(a)": variable isn't array}}
 
 =======
@@ -615,13 +650,20 @@ test set-5.1 {error on malformed array name} -constraints testset2 -setup {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+} -result {{can't read "z(a)(b)": variable isn't array} {can't read "z(b)(a)": variable isn't array}}
+>>>>>>> upstream/master
 # In a mem-debug build, this test will crash unless Bug 3602706 is fixed.
 test set-5.2 {Bug 3602706} -body {
     testset2 ::tcl_platform not-in-there
 } -returnCodes error -result * -match glob
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -638,7 +680,10 @@ catch {unset z}
 return
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -646,6 +691,9 @@ return
 # mode: tcl
 # End:
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

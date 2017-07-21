@@ -46,6 +46,10 @@ testConstraint testmainthread   [llength [info commands testmainthread]]
 testConstraint thread [expr {0 == [catch {package require Thread 2.7-}]}]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+testConstraint testobj		[llength [info commands testobj]]
+>>>>>>> upstream/master
 =======
 testConstraint testobj		[llength [info commands testobj]]
 >>>>>>> upstream/master
@@ -134,11 +138,14 @@ test io-1.8 {Tcl_WriteChars: WriteChars} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set f [open $path(test2) w] 
     fconfigure      $f -encoding iso2022-jp 
     puts -nonewline $f [format %s%c [string repeat " " 4] 12399] 
     close           $f 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -149,6 +156,9 @@ test io-1.8 {Tcl_WriteChars: WriteChars} {
     close           $f
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -222,7 +232,11 @@ test io-2.1 {WriteBytes} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -256,7 +270,11 @@ test io-2.3 {WriteBytes: flush on line} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -288,7 +306,11 @@ test io-3.1 {WriteChars: compatibility with WriteBytes} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -322,7 +344,11 @@ test io-3.3 {WriteChars: compatibility with WriteBytes: flush on line} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -346,7 +372,11 @@ test io-3.4 {WriteChars: loop over stage buffer} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 16 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 16
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 16
 >>>>>>> upstream/master
@@ -370,7 +400,11 @@ test io-3.5 {WriteChars: saved != 0} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 17 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -413,7 +447,11 @@ test io-3.7 {WriteChars: (bufPtr->nextAdded > bufPtr->length)} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 17 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -495,7 +533,11 @@ test io-5.1 {CheckFlush: not full} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f 
+=======
+    fconfigure $f
+>>>>>>> upstream/master
 =======
     fconfigure $f
 >>>>>>> upstream/master
@@ -895,7 +937,11 @@ test io-6.33 {Tcl_GetsObj: crlf mode: buffer exhausted, at eof} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -919,8 +965,13 @@ test io-6.34 {Tcl_GetsObj: crlf mode: buffer exhausted, not followed by \n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
     
+=======
+    # not (*eol == '\n')
+
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 
@@ -1051,7 +1102,11 @@ test io-6.44 {Tcl_GetsObj: input saw cr, not followed by cr} {stdio testchannel 
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
+=======
+    # not (*eol == '\n')
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 >>>>>>> upstream/master
@@ -1127,7 +1182,11 @@ test io-6.48 {Tcl_GetsObj: auto mode: \r at end of buffer, no more avail} {testc
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1152,7 +1211,11 @@ test io-6.49 {Tcl_GetsObj: auto mode: \r followed by \n} {testchannel} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1175,8 +1238,13 @@ test io-6.50 {Tcl_GetsObj: auto mode: \r not followed by \n} {testchannel} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
     
+=======
+    # not (*eol == '\n')
+
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 
@@ -1203,7 +1271,11 @@ test io-6.51 {Tcl_GetsObj: auto mode: \n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1308,7 +1380,11 @@ test io-7.2 {FilterInputBytes: split up character in middle of buffer} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1445,7 +1521,11 @@ test io-8.6 {PeekAhead: change to non-blocking mode} {stdio testchannel openpipe
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0) 
+=======
+    # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
+>>>>>>> upstream/master
 =======
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
 >>>>>>> upstream/master
@@ -2304,7 +2384,11 @@ test io-20.1 {Tcl_CreateChannel: initial settings} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {ascii}    
+=======
+} {ascii}
+>>>>>>> upstream/master
 =======
 } {ascii}
 >>>>>>> upstream/master
@@ -4237,7 +4321,11 @@ test io-31.31 {Tcl_Write crlf on block boundary, Tcl_Gets crlf} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation crlf 
+=======
+    fconfigure $f -translation crlf
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation crlf
 >>>>>>> upstream/master
@@ -4392,10 +4480,54 @@ test io-32.11.1 {Tcl_Read from a pipe} {stdio openpipe} {
     file delete $path(pipe)
     set f1 [open $path(pipe) w]
     puts $f1 {chan configure stdout -translation crlf}
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
     puts $f1 {puts [gets stdin]}
     puts $f1 {puts [gets stdin]}
+=======
+    puts $f1 {puts [gets stdin]}
+    puts $f1 {puts [gets stdin]}
+    close $f1
+    set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+    puts $f1 hello
+    flush $f1
+    set x ""
+    lappend x [read $f1 6]
+    puts $f1 hello
+    flush $f1
+    lappend x [read $f1]
+    close $f1
+    set x
+} {{hello
+} {hello
+}}
+test io-32.11.2 {Tcl_Read from a pipe} {stdio openpipe} {
+    file delete $path(pipe)
+    set f1 [open $path(pipe) w]
+    puts $f1 {chan configure stdout -translation crlf}
+    puts $f1 {puts [gets stdin]}
+    puts $f1 {puts [gets stdin]}
+    close $f1
+    set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+    puts $f1 hello
+    flush $f1
+    set x ""
+    lappend x [read $f1 6]
+    puts $f1 hello
+    flush $f1
+    lappend x [read $f1]
+    close $f1
+    set x
+} {{hello
+} {hello
+}}
+test io-32.12 {Tcl_Read, -nonewline} {
+    file delete $path(test1)
+    set f1 [open $path(test1) w]
+    puts $f1 hello
+    puts $f1 bye
+>>>>>>> upstream/master
     close $f1
     set f1 [open "|[list [interpreter] $path(pipe)]" r+]
     puts $f1 hello
@@ -5856,7 +5988,11 @@ test io-39.14 {Tcl_SetChannelOption: -encoding, binary & utf-8} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding {} 
+=======
+    fconfigure $f -encoding {}
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding {}
 >>>>>>> upstream/master
@@ -6043,8 +6179,13 @@ test io-40.3 {POSIX open access modes: CREAT} {unix umask} {
     close $f
     file stat $path(test3) stats
 <<<<<<< HEAD
+<<<<<<< HEAD
     format "0%o" [expr $stats(mode)&0o777]
 } [format %04o [expr {0o666 & ~ $umaskValue}]]
+=======
+    format "%#o" [expr $stats(mode)&0o777]
+} [format %#4o [expr {0o666 & ~ $umaskValue}]]
+>>>>>>> upstream/master
 =======
     format "%#o" [expr $stats(mode)&0o777]
 } [format %#4o [expr {0o666 & ~ $umaskValue}]]
@@ -7361,6 +7502,7 @@ test io-52.4 {TclCopyChannel} {fcopy} {
     fconfigure $f2 -translation cr -blocking 0
     fcopy $f1 $f2 -size 40
     set result [list [fblocked $f1] [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
+<<<<<<< HEAD
     close $f1
     close $f2
     lappend result [file size $path(test1)]
@@ -7373,10 +7515,13 @@ test io-52.4.1 {TclCopyChannel} {fcopy} {
     fconfigure $f2 -translation cr -blocking 0
     fcopy $f1 $f2 -size 40
     set result [list [fblocked $f1] [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
+=======
+>>>>>>> upstream/master
     close $f1
     close $f2
     lappend result [file size $path(test1)]
 } {0 0 0 40}
+<<<<<<< HEAD
 test io-52.5 {TclCopyChannel, all} {fcopy} {
     file delete $path(test1)
     set f1 [open $thisScript]
@@ -7401,15 +7546,34 @@ test io-52.5 {TclCopyChannel, all} {fcopy} {
     set result
 } {0 0 ok}
 test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
+=======
+test io-52.4.1 {TclCopyChannel} {fcopy} {
+    file delete $path(test1)
+    set f1 [open $thisScript]
+    set f2 [open $path(test1) w]
+    fconfigure $f1 -translation lf -blocking 0 -buffersize 10000000
+    fconfigure $f2 -translation cr -blocking 0
+    fcopy $f1 $f2 -size 40
+    set result [list [fblocked $f1] [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
+    close $f1
+    close $f2
+    lappend result [file size $path(test1)]
+} {0 0 0 40}
+test io-52.5 {TclCopyChannel, all} {fcopy} {
+>>>>>>> upstream/master
     file delete $path(test1)
     set f1 [open $thisScript]
     set f2 [open $path(test1) w]
     fconfigure $f1 -translation lf -blocking 0
     fconfigure $f2 -translation lf -blocking 0
+<<<<<<< HEAD
     fcopy $f1 $f2 -size -2 ;# < 0 behaves like -1, copy all
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    fcopy $f1 $f2 -size -1 ;# -1 means 'copy all', same as if no -size specified.
 >>>>>>> upstream/master
     set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
     close $f1
@@ -7421,6 +7585,7 @@ test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
     }
     set result
 } {0 0 ok}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
@@ -7430,11 +7595,15 @@ test io-52.5b {TclCopyChannel, all, wrap to negative value} {fcopy} {
 =======
 test io-52.5b {TclCopyChannel, all, wrap to negative value} {fcopy} {
 >>>>>>> upstream/master
+=======
+test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
+>>>>>>> upstream/master
     file delete $path(test1)
     set f1 [open $thisScript]
     set f2 [open $path(test1) w]
     fconfigure $f1 -translation lf -blocking 0
     fconfigure $f2 -translation lf -blocking 0
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     fcopy $f1 $f2 -size -2 ;# < 0 behaves like -1, copy all
@@ -7445,6 +7614,9 @@ test io-52.5b {TclCopyChannel, all, wrap to negative value} {fcopy} {
 >>>>>>> upstream/master
 =======
     fcopy $f1 $f2 -size 3221176172 ;# Wrapped to < 0, behaves like -1, copy all
+>>>>>>> upstream/master
+=======
+    fcopy $f1 $f2 -size -2 ;# < 0 behaves like -1, copy all
 >>>>>>> upstream/master
     set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
     close $f1
@@ -7470,8 +7642,11 @@ test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
     fconfigure $f2 -translation lf -blocking 0
 <<<<<<< HEAD
     fcopy $f1 $f2 -size 3221176172 ;# Wrapped to < 0, behaves like -1, copy all
+<<<<<<< HEAD
 =======
     fcopy $f1 $f2 -size -2 ;# < 0 behaves like -1, copy all
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
     close $f1
@@ -7483,6 +7658,7 @@ test io-52.5a {TclCopyChannel, all, other negative value} {fcopy} {
     }
     set result
 } {0 0 ok}
+<<<<<<< HEAD
 <<<<<<< HEAD
 test io-52.6 {TclCopyChannel} {fcopy} {
     file delete $path(test1)
@@ -7518,6 +7694,8 @@ test io-52.6 {TclCopyChannel} {fcopy} {
     set f2 [open $path(test1) w]
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 test io-52.6 {TclCopyChannel} {fcopy} {
     file delete $path(test1)
     set f1 [open $thisScript]
@@ -7641,6 +7819,7 @@ test io-52.10 {TclCopyChannel & encodings} {fcopy} {
 	    [file size $path(utf8-fcopy.txt)] \
 	    [file size $path(utf8-rp.txt)]
 } {3 5 5}
+<<<<<<< HEAD
 test io-52.10 {TclCopyChannel & encodings} {fcopy} {
     # encoding to binary (=> implies that the
     # internal utf-8 is written)
@@ -7652,6 +7831,8 @@ test io-52.10 {TclCopyChannel & encodings} {fcopy} {
 	    [file size $path(utf8-fcopy.txt)] \
 	    [file size $path(utf8-rp.txt)]
 } {3 5 5}
+=======
+>>>>>>> upstream/master
 test io-52.10 {TclCopyChannel & encodings} {fcopy} {
     # encoding to binary (=> implies that the
     # internal utf-8 is written)
@@ -7672,8 +7853,11 @@ test io-52.10 {TclCopyChannel & encodings} {fcopy} {
 } 5
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test io-52.11 {TclCopyChannel & encodings} {fcopy} {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test io-52.11 {TclCopyChannel & encodings} -setup {
@@ -7683,6 +7867,9 @@ test io-52.11 {TclCopyChannel & encodings} -setup {
     close $out
 } -constraints {fcopy} -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -7703,7 +7890,11 @@ test io-52.11 {TclCopyChannel & encodings} -setup {
     file size $path(kyrillic.txt)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 3
+=======
+} -result 3
+>>>>>>> upstream/master
 =======
 } -result 3
 >>>>>>> upstream/master
@@ -8800,6 +8991,9 @@ test io-59.1 {Thread reference of channels} {testmainthread testchannel} {
     # threads, i.e. 'Threads'.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
     set f [open $path(longfile) r]
     set result [testchannel mthread $f]
@@ -8809,6 +9003,7 @@ test io-59.1 {Thread reference of channels} {testmainthread testchannel} {
 <<<<<<< HEAD
 
 test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring} {
+<<<<<<< HEAD
     # This test will hang in older revisions of the core.
 =======
 =======
@@ -8820,6 +9015,8 @@ test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring}
 } {1}
 
 test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring} {
+=======
+>>>>>>> upstream/master
     # This test will hang in older revisions of the core.
 
     set out [open $path(script) w]
@@ -8876,6 +9073,9 @@ test io-61.1 {Reset eof state after changing the eof char} -setup {
 } -cleanup {
     removeFile eofchar
 } -result {77 = 23431}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     set f [open $path(longfile) r]
@@ -9079,6 +9279,7 @@ test io-70.0 {Cutting & Splicing channels} {testchannel} {
     lappend res [catch {seek $c 0 start}]
     testchannel splice $c
 
+<<<<<<< HEAD
     lappend res [catch {seek $c 0 start}]
     close $c
 
@@ -9096,6 +9297,8 @@ test io-70.1 {Transfer channel} {testchannel thread} {
     set c [open $f r]
 
 <<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 test io-70.1 {Transfer channel} {testchannel thread} {
     set f [makeFile {... dummy ...} cutsplice]
     set c [open $f r]
@@ -9116,8 +9319,11 @@ test io-70.1 {Transfer channel} {testchannel thread} {
     }]
 
     thread::release $tid
+<<<<<<< HEAD
 =======
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     removeFile cutsplice
 
@@ -9320,6 +9526,7 @@ test io-73.1 {channel Tcl_Obj SetChannelFromAny} {} {
     catch {close [lreplace [list a] 0 end]}
 } {1}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 test io-73.2 {channel Tcl_Obj SetChannelFromAny, bug 2407783} -setup {
     # Invalidate intrep of 'channel' Tcl_Obj when transiting between interpreters.
@@ -9615,6 +9822,8 @@ test io-73.1 {channel Tcl_Obj SetChannelFromAny} {} {
     catch {close [lreplace [list a] 0 end]}
 } {1}
 
+=======
+>>>>>>> upstream/master
 test io-73.2 {channel Tcl_Obj SetChannelFromAny, bug 2407783} -setup {
     # Invalidate intrep of 'channel' Tcl_Obj when transiting between interpreters.
     set f [open [info script] r]

@@ -45,7 +45,11 @@ static Tcl_HashEntry *	AllocArrayEntry(Tcl_HashTable *tablePtr, void *keyPtr);
 static int		CompareArrayKeys(void *keyPtr, Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+static TCL_HASH_TYPE	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -75,7 +79,11 @@ static Tcl_HashEntry *	AllocStringEntry(Tcl_HashTable *tablePtr,
 static int		CompareStringKeys(void *keyPtr, Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+static TCL_HASH_TYPE	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -288,6 +296,7 @@ Tcl_CreateHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				 * entry. */
     int *newPtr)		/* Store info here telling whether a new entry
 				 * was created. */
@@ -324,6 +333,8 @@ CreateHashEntry(
 =======
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 				 * entry. */
     int *newPtr)		/* Store info here telling whether a new entry
 				 * was created. */
@@ -380,11 +391,17 @@ CreateHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
 	    }
 #endif
+=======
+	    if (hash != PTR2UINT(hPtr->hash)) {
+		continue;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
@@ -413,7 +430,10 @@ CreateHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -453,6 +473,7 @@ CreateHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
     hPtr->hash = UINT2PTR(hash);
     hPtr->nextPtr = tablePtr->buckets[index];
@@ -462,6 +483,11 @@ CreateHashEntry(
     hPtr->nextPtr = *hPtr->bucketPtr;
     *hPtr->bucketPtr = hPtr;
 #endif
+=======
+    hPtr->hash = UINT2PTR(hash);
+    hPtr->nextPtr = tablePtr->buckets[index];
+    tablePtr->buckets[index] = hPtr;
+>>>>>>> upstream/master
 =======
     hPtr->hash = UINT2PTR(hash);
     hPtr->nextPtr = tablePtr->buckets[index];
@@ -534,7 +560,10 @@ Tcl_DeleteHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -552,9 +581,12 @@ Tcl_DeleteHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else
     bucketPtr = entryPtr->bucketPtr;
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -908,7 +940,11 @@ CompareArrayKeys(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int
+=======
+static TCL_HASH_TYPE
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE
 >>>>>>> upstream/master
@@ -1012,7 +1048,11 @@ CompareStringKeys(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned
+=======
+static TCL_HASH_TYPE
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE
 >>>>>>> upstream/master
@@ -1060,6 +1100,7 @@ HashStringKey(
      * main use for string hashes in modern Tcl) speed is far more important
      * than strength.
 <<<<<<< HEAD
+<<<<<<< HEAD
      *
 <<<<<<< HEAD
 =======
@@ -1093,10 +1134,15 @@ HashStringKey(
      *
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
      *
      * See also HashString in tclLiteral.c.
      * See also TclObjHashKey in tclObj.c.
      *
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      * See [tcl-Feature Request #2958832]
      */
@@ -1239,7 +1285,10 @@ RebuildTable(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1254,6 +1303,7 @@ RebuildTable(
 	    }
 	    hPtr->nextPtr = tablePtr->buckets[index];
 	    tablePtr->buckets[index] = hPtr;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1277,6 +1327,8 @@ RebuildTable(
 	    hPtr->nextPtr = *hPtr->bucketPtr;
 	    *hPtr->bucketPtr = hPtr;
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

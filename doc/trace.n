@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -112,6 +116,7 @@ Invoke \fIcommandPrefix\fR whenever the command \fIname\fR is executed,
 just after the actual execution takes place.
 .TP
 \fBenterstep\fR
+<<<<<<< HEAD
 .
 Invoke \fIcommandPrefix\fR for every Tcl command which is executed from the
 start of the execution of the procedure \fIname\fR until that
@@ -226,6 +231,8 @@ Invoke \fIcommandPrefix\fR whenever the command \fIname\fR is executed,
 just after the actual execution takes place.
 .TP
 \fBenterstep\fR
+=======
+>>>>>>> upstream/master
 .
 Invoke \fIcommandPrefix\fR for every Tcl command which is executed from the
 start of the execution of the procedure \fIname\fR until that

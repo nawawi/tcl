@@ -701,7 +701,11 @@ test execute-6.12 {Tcl_ExprObj: exprcode interp validation} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     interp alias {} e slave expr 
+=======
+    interp alias {} e slave expr
+>>>>>>> upstream/master
 =======
     interp alias {} e slave expr
 >>>>>>> upstream/master
@@ -792,6 +796,9 @@ test execute-6.18 {Tcl_ExprObj: exprcode context validation} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1022,6 +1029,7 @@ test execute-9.1 {Interp result resetting [Bug 1522803]} {
     set result
 } SUCCESS
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1567,6 +1575,60 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+test execute-10.1 {TclExecuteByteCode, INST_CONCAT1, bytearrays} {
+    apply {s {binary scan $s c x; list $x [scan $s$s %c%c]}} \u0130
+} {48 {304 304}}
+test execute-10.2 {Bug 2802881} -setup {
+    interp create slave
+} -body {
+    # If [Bug 2802881] is not fixed, this will segfault
+    slave eval {
+	trace add variable ::errorInfo write {expr {$foo} ;#}
+	proc demo {} {a {}{}}
+	demo
+    }
+} -cleanup {
+    interp delete slave
+} -returnCodes error -match glob -result *
+test execute-10.3 {Bug 3072640} -setup {
+    proc generate {n} {
+	for {set i 0} {$i < $n} {incr i} {
+	    yield $i
+	}
+    }
+    proc t {args} {
+	incr ::foo
+    }
+    trace add execution ::generate enterstep ::t
+} -body {
+    coroutine coro generate 5
+    trace remove execution ::generate enterstep ::t
+    set ::foo
+} -cleanup {
+    unset ::foo
+    rename generate {}
+    rename t {}
+    rename coro {}
+} -result 4
+
+test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
+    interp create slave
+} -body {
+    slave eval {
+	set x [lrepeat 1320 199]
+	for {set i 0} {$i < 20} {incr i} {
+	    lappend x $i
+	    lsort -integer $x
+	}
+	# Crashes on failure
+	return ok
+    }
+} -cleanup {
+    interp delete slave
+} -result ok
+
+>>>>>>> upstream/master
 test execute-11.2 {Bug 268b23df11} -setup {
     proc zero {} {return 0}
     proc crash {} {expr {abs([zero])}}
@@ -1585,8 +1647,11 @@ test execute-11.2 {Bug 268b23df11} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1608,6 +1673,9 @@ test execute-11.3 {Bug a0ece9d6d4} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

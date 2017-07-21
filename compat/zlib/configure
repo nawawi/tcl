@@ -19,7 +19,10 @@ echo $0 $* >> configure.log
 date >> configure.log
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 # get source directory
 SRCDIR=`dirname $0`
 if test $SRCDIR = "."; then
@@ -32,6 +35,9 @@ else
     SRCDIR="$SRCDIR/"
 fi
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # set command prefix for cross-compilation
 if [ -n "${CHOST}" ]; then
@@ -44,15 +50,21 @@ STATICLIB=libz.a
 
 # extract zlib version numbers from zlib.h
 <<<<<<< HEAD
+<<<<<<< HEAD
 VER=`sed -n -e '/VERSION "/s/.*"\(.*\)".*/\1/p' < zlib.h`
 VER3=`sed -n -e '/VERSION "/s/.*"\([0-9]*\\.[0-9]*\\.[0-9]*\).*/\1/p' < zlib.h`
 VER2=`sed -n -e '/VERSION "/s/.*"\([0-9]*\\.[0-9]*\)\\..*/\1/p' < zlib.h`
 VER1=`sed -n -e '/VERSION "/s/.*"\([0-9]*\)\\..*/\1/p' < zlib.h`
 =======
+=======
+>>>>>>> upstream/master
 VER=`sed -n -e '/VERSION "/s/.*"\(.*\)".*/\1/p' < ${SRCDIR}zlib.h`
 VER3=`sed -n -e '/VERSION "/s/.*"\([0-9]*\\.[0-9]*\\.[0-9]*\).*/\1/p' < ${SRCDIR}zlib.h`
 VER2=`sed -n -e '/VERSION "/s/.*"\([0-9]*\\.[0-9]*\)\\..*/\1/p' < ${SRCDIR}zlib.h`
 VER1=`sed -n -e '/VERSION "/s/.*"\([0-9]*\)\\..*/\1/p' < ${SRCDIR}zlib.h`
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # establish commands for library building
@@ -96,6 +108,11 @@ zconst=0
 build64=0
 gcc=0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+warn=0
+debug=0
+>>>>>>> upstream/master
 =======
 warn=0
 debug=0
@@ -149,6 +166,11 @@ case "$1" in
     --localstatedir=*) echo "ignored option: --localstatedir" | tee -a configure.log; shift ;;
     -c* | --const) zconst=1; shift ;;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    -w* | --warn) warn=1; shift ;;
+    -d* | --debug) debug=1; shift ;;
+>>>>>>> upstream/master
 =======
     -w* | --warn) warn=1; shift ;;
     -d* | --debug) debug=1; shift ;;
@@ -192,6 +214,10 @@ esac
 case `$cc -v 2>&1` in
   *gcc*) gcc=1 ;;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  *clang*) gcc=1 ;;
+>>>>>>> upstream/master
 =======
   *clang*) gcc=1 ;;
 >>>>>>> upstream/master
@@ -202,23 +228,33 @@ if test "$gcc" -eq 1 && ($cc -c $test.c) >> configure.log 2>&1; then
   echo ... using gcc >> configure.log
   CC="$cc"
 <<<<<<< HEAD
+<<<<<<< HEAD
   CFLAGS="${CFLAGS--O3} ${ARCHS}"
   SFLAGS="${CFLAGS--O3} -fPIC"
   LDFLAGS="${LDFLAGS} ${ARCHS}"
 =======
+=======
+>>>>>>> upstream/master
   CFLAGS="${CFLAGS--O3}"
   SFLAGS="${CFLAGS--O3} -fPIC"
   if test "$ARCHS"; then
     CFLAGS="${CFLAGS} ${ARCHS}"
     LDFLAGS="${LDFLAGS} ${ARCHS}"
   fi
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
   if test $build64 -eq 1; then
     CFLAGS="${CFLAGS} -m64"
     SFLAGS="${SFLAGS} -m64"
   fi
 <<<<<<< HEAD
+<<<<<<< HEAD
   if test "${ZLIBGCCWARN}" = "YES"; then
+=======
+  if test "$warn" -eq 1; then
+>>>>>>> upstream/master
 =======
   if test "$warn" -eq 1; then
 >>>>>>> upstream/master
@@ -229,11 +265,17 @@ if test "$gcc" -eq 1 && ($cc -c $test.c) >> configure.log 2>&1; then
     fi
   fi
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
   if test $debug -eq 1; then
     CFLAGS="${CFLAGS} -DZLIB_DEBUG"
     SFLAGS="${SFLAGS} -DZLIB_DEBUG"
   fi
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
   if test -z "$uname"; then
     uname=`(uname -s || echo unknown) 2>/dev/null`
@@ -241,9 +283,15 @@ if test "$gcc" -eq 1 && ($cc -c $test.c) >> configure.log 2>&1; then
   case "$uname" in
   Linux* | linux* | GNU | GNU/* | solaris*)
 <<<<<<< HEAD
+<<<<<<< HEAD
         LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,zlib.map"} ;;
   *BSD | *bsd* | DragonFly)
         LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,zlib.map"}
+=======
+        LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,${SRCDIR}zlib.map"} ;;
+  *BSD | *bsd* | DragonFly)
+        LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,${SRCDIR}zlib.map"}
+>>>>>>> upstream/master
 =======
         LDSHARED=${LDSHARED-"$cc -shared -Wl,-soname,libz.so.1,--version-script,${SRCDIR}zlib.map"} ;;
   *BSD | *bsd* | DragonFly)
@@ -350,6 +398,12 @@ else
              fi
          fi
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+         if test -n "$ZINC"; then
+             ZINC='-I- -I. -I$(SRCDIR)'
+         fi
+>>>>>>> upstream/master
 =======
          if test -n "$ZINC"; then
              ZINC='-I- -I. -I$(SRCDIR)'
@@ -406,6 +460,7 @@ if ($CC -c $CFLAGS $test.c) 2>/dev/null; then
   echo - using any output from compiler to indicate an error >> configure.log
 else
 <<<<<<< HEAD
+<<<<<<< HEAD
 try()
 {
   show $*
@@ -417,6 +472,8 @@ try()
   return $ret
 }
 =======
+=======
+>>>>>>> upstream/master
   try()
   {
     show $*
@@ -427,6 +484,9 @@ try()
     fi
     return $ret
   }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 fi
 
@@ -482,6 +542,7 @@ if test $shared -eq 0; then
   SHAREDLIBV=""
   SHAREDLIBM=""
   echo Building static library $STATICLIB version $VER with $CC. | tee -a configure.log
+<<<<<<< HEAD
 else
   ALL="static shared"
   TEST="all teststatic testshared"
@@ -557,6 +618,81 @@ EOF
   fi
 fi
 
+=======
+else
+  ALL="static shared"
+  TEST="all teststatic testshared"
+fi
+
+# check for underscores in external names for use by assembler code
+CPP=${CPP-"$CC -E"}
+case $CFLAGS in
+  *ASMV*)
+    echo >> configure.log
+    show "$NM $test.o | grep _hello"
+    if test "`$NM $test.o | grep _hello | tee -a configure.log`" = ""; then
+      CPP="$CPP -DNO_UNDERLINE"
+      echo Checking for underline in external names... No. | tee -a configure.log
+    else
+      echo Checking for underline in external names... Yes. | tee -a configure.log
+    fi ;;
+esac
+
+echo >> configure.log
+
+# check for size_t
+cat > $test.c <<EOF
+#include <stdio.h>
+#include <stdlib.h>
+size_t dummy = 0;
+EOF
+if try $CC -c $CFLAGS $test.c; then
+  echo "Checking for size_t... Yes." | tee -a configure.log
+  need_sizet=0
+else
+  echo "Checking for size_t... No." | tee -a configure.log
+  need_sizet=1
+fi
+
+echo >> configure.log
+
+# find the size_t integer type, if needed
+if test $need_sizet -eq 1; then
+  cat > $test.c <<EOF
+long long dummy = 0;
+EOF
+  if try $CC -c $CFLAGS $test.c; then
+    echo "Checking for long long... Yes." | tee -a configure.log
+    cat > $test.c <<EOF
+#include <stdio.h>
+int main(void) {
+    if (sizeof(void *) <= sizeof(int)) puts("int");
+    else if (sizeof(void *) <= sizeof(long)) puts("long");
+    else puts("z_longlong");
+    return 0;
+}
+EOF
+  else
+    echo "Checking for long long... No." | tee -a configure.log
+    cat > $test.c <<EOF
+#include <stdio.h>
+int main(void) {
+    if (sizeof(void *) <= sizeof(int)) puts("int");
+    else puts("long");
+    return 0;
+}
+EOF
+  fi
+  if try $CC $CFLAGS -o $test $test.c; then
+    sizet=`./$test`
+    echo "Checking for a pointer-size integer type..." $sizet"." | tee -a configure.log
+  else
+    echo "Failed to find a pointer-size integer type." | tee -a configure.log
+    leave 1
+  fi
+fi
+
+>>>>>>> upstream/master
 if test $need_sizet -eq 1; then
   CFLAGS="${CFLAGS} -DNO_SIZE_T=${sizet}"
   SFLAGS="${SFLAGS} -DNO_SIZE_T=${sizet}"
@@ -564,6 +700,9 @@ fi
 
 echo >> configure.log
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 # check for large file support, and if none, check for fseeko()
 cat > $test.c <<EOF
@@ -614,7 +753,11 @@ fi
 
 # copy clean zconf.h for subsequent edits
 <<<<<<< HEAD
+<<<<<<< HEAD
 cp -p zconf.h.in zconf.h
+=======
+cp -p ${SRCDIR}zconf.h.in zconf.h
+>>>>>>> upstream/master
 =======
 cp -p ${SRCDIR}zconf.h.in zconf.h
 >>>>>>> upstream/master
@@ -630,6 +773,7 @@ if try $CC -c $CFLAGS $test.c; then
   sed < zconf.h "/^#ifdef HAVE_UNISTD_H.* may be/s/def HAVE_UNISTD_H\(.*\) may be/ 1\1 was/" > zconf.temp.h
   mv zconf.temp.h zconf.h
   echo "Checking for unistd.h... Yes." | tee -a configure.log
+<<<<<<< HEAD
 else
   echo "Checking for unistd.h... No." | tee -a configure.log
 fi
@@ -674,10 +818,59 @@ if test $cover -eq 1; then
   if test -n "$GCC_CLASSIC"; then
     CC=$GCC_CLASSIC
   fi
+=======
+else
+  echo "Checking for unistd.h... No." | tee -a configure.log
+>>>>>>> upstream/master
 fi
 
 echo >> configure.log
 
+<<<<<<< HEAD
+=======
+# check for stdarg.h and save result in zconf.h
+cat > $test.c <<EOF
+#include <stdarg.h>
+int main() { return 0; }
+EOF
+if try $CC -c $CFLAGS $test.c; then
+  sed < zconf.h "/^#ifdef HAVE_STDARG_H.* may be/s/def HAVE_STDARG_H\(.*\) may be/ 1\1 was/" > zconf.temp.h
+  mv zconf.temp.h zconf.h
+  echo "Checking for stdarg.h... Yes." | tee -a configure.log
+else
+  echo "Checking for stdarg.h... No." | tee -a configure.log
+fi
+
+# if the z_ prefix was requested, save that in zconf.h
+if test $zprefix -eq 1; then
+  sed < zconf.h "/#ifdef Z_PREFIX.* may be/s/def Z_PREFIX\(.*\) may be/ 1\1 was/" > zconf.temp.h
+  mv zconf.temp.h zconf.h
+  echo >> configure.log
+  echo "Using z_ prefix on all symbols." | tee -a configure.log
+fi
+
+# if --solo compilation was requested, save that in zconf.h and remove gz stuff from object lists
+if test $solo -eq 1; then
+  sed '/#define ZCONF_H/a\
+#define Z_SOLO
+
+' < zconf.h > zconf.temp.h
+  mv zconf.temp.h zconf.h
+OBJC='$(OBJZ)'
+PIC_OBJC='$(PIC_OBJZ)'
+fi
+
+# if code coverage testing was requested, use older gcc if defined, e.g. "gcc-4.2" on Mac OS X
+if test $cover -eq 1; then
+  CFLAGS="${CFLAGS} -fprofile-arcs -ftest-coverage"
+  if test -n "$GCC_CLASSIC"; then
+    CC=$GCC_CLASSIC
+  fi
+fi
+
+echo >> configure.log
+
+>>>>>>> upstream/master
 # conduct a series of tests to resolve eight possible cases of using "vs" or "s" printf functions
 # (using stdarg or not), with or without "n" (proving size of buffer), and with or without a
 # return value.  The most secure result is vsnprintf() with a return value.  snprintf() with a
@@ -912,6 +1105,10 @@ echo TEST = $TEST >> configure.log
 echo VER = $VER >> configure.log
 echo Z_U4 = $Z_U4 >> configure.log
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+echo SRCDIR = $SRCDIR >> configure.log
+>>>>>>> upstream/master
 =======
 echo SRCDIR = $SRCDIR >> configure.log
 >>>>>>> upstream/master
@@ -925,7 +1122,11 @@ echo uname = $uname >> configure.log
 
 # udpate Makefile with the configure results
 <<<<<<< HEAD
+<<<<<<< HEAD
 sed < Makefile.in "
+=======
+sed < ${SRCDIR}Makefile.in "
+>>>>>>> upstream/master
 =======
 sed < ${SRCDIR}Makefile.in "
 >>>>>>> upstream/master
@@ -946,6 +1147,12 @@ sed < ${SRCDIR}Makefile.in "
 /^LDSHAREDLIBC *=/s#=.*#=$LDSHAREDLIBC#
 /^EXE *=/s#=.*#=$EXE#
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+/^SRCDIR *=/s#=.*#=$SRCDIR#
+/^ZINC *=/s#=.*#=$ZINC#
+/^ZINCOUT *=/s#=.*#=$ZINCOUT#
+>>>>>>> upstream/master
 =======
 /^SRCDIR *=/s#=.*#=$SRCDIR#
 /^ZINC *=/s#=.*#=$ZINC#
@@ -965,7 +1172,11 @@ sed < ${SRCDIR}Makefile.in "
 
 # create zlib.pc with the configure results
 <<<<<<< HEAD
+<<<<<<< HEAD
 sed < zlib.pc.in "
+=======
+sed < ${SRCDIR}zlib.pc.in "
+>>>>>>> upstream/master
 =======
 sed < ${SRCDIR}zlib.pc.in "
 >>>>>>> upstream/master

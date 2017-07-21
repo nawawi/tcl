@@ -5,10 +5,17 @@ namespace eval ::tcl::clock {
         "Lun"\
         "Mar"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "M\u00e9r"\
         "Xov"\
         "Ven"\
         "S\u00e1b"]
+=======
+        "Mér"\
+        "Xov"\
+        "Ven"\
+        "Sáb"]
+>>>>>>> upstream/master
 =======
         "Mér"\
         "Xov"\
@@ -20,10 +27,17 @@ namespace eval ::tcl::clock {
         "Luns"\
         "Martes"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "M\u00e9rcores"\
         "Xoves"\
         "Venres"\
         "S\u00e1bado"]
+=======
+        "Mércores"\
+        "Xoves"\
+        "Venres"\
+        "Sábado"]
+>>>>>>> upstream/master
 =======
         "Mércores"\
         "Xoves"\
@@ -37,7 +51,11 @@ namespace eval ::tcl::clock {
         "Abr"\
         "Mai"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Xu\u00f1"\
+=======
+        "Xuñ"\
+>>>>>>> upstream/master
 =======
         "Xuñ"\
 >>>>>>> upstream/master
@@ -55,7 +73,11 @@ namespace eval ::tcl::clock {
         "Abril"\
         "Maio"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Xu\u00f1o"\
+=======
+        "Xuño"\
+>>>>>>> upstream/master
 =======
         "Xuño"\
 >>>>>>> upstream/master

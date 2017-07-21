@@ -53,8 +53,14 @@ static int notifierCount = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const TCHAR classname[] = TEXT("TclNotifier");
 TCL_DECLARE_MUTEX(notifierMutex)
+=======
+static const TCHAR className[] = TEXT("TclNotifier");
+static int initialized = 0;
+static CRITICAL_SECTION notifierMutex;
+>>>>>>> upstream/master
 =======
 static const TCHAR className[] = TEXT("TclNotifier");
 static int initialized = 0;
@@ -106,11 +112,22 @@ Tcl_InitNotifier(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	TclpMasterLock();
+	if (!initialized) {
+	    initialized = 1;
+	    InitializeCriticalSection(&notifierMutex);
+	}
+	TclpMasterUnlock();
+
+>>>>>>> upstream/master
 	/*
 	 * Register Notifier window class if this is the first thread to use
 	 * this module.
 	 */
 
+<<<<<<< HEAD
 	Tcl_MutexLock(&notifierMutex);
 =======
 	TclpMasterLock();
@@ -127,6 +144,9 @@ Tcl_InitNotifier(void)
 
 	EnterCriticalSection(&notifierMutex);
 >>>>>>> upstream/master
+=======
+	EnterCriticalSection(&notifierMutex);
+>>>>>>> upstream/master
 	if (notifierCount == 0) {
 	    class.style = 0;
 	    class.cbClsExtra = 0;
@@ -135,7 +155,11 @@ Tcl_InitNotifier(void)
 	    class.hbrBackground = NULL;
 	    class.lpszMenuName = NULL;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    class.lpszClassName = classname;
+=======
+	    class.lpszClassName = className;
+>>>>>>> upstream/master
 =======
 	    class.lpszClassName = className;
 >>>>>>> upstream/master
@@ -148,6 +172,7 @@ Tcl_InitNotifier(void)
 	    }
 	}
 	notifierCount++;
+<<<<<<< HEAD
 <<<<<<< HEAD
 	Tcl_MutexUnlock(&notifierMutex);
 =======
@@ -166,6 +191,9 @@ Tcl_InitNotifier(void)
 	 * Register Notifier window class if this is the first thread to use
 	 * this module.
 	 */
+=======
+	LeaveCriticalSection(&notifierMutex);
+>>>>>>> upstream/master
 
 	EnterCriticalSection(&notifierMutex);
 	if (notifierCount == 0) {
@@ -301,6 +329,7 @@ Tcl_FinalizeNotifier(
 	 */
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 	Tcl_MutexLock(&notifierMutex);
 	notifierCount--;
 	if (notifierCount == 0) {
@@ -344,6 +373,16 @@ Tcl_FinalizeNotifier(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	EnterCriticalSection(&notifierMutex);
+	if (notifierCount) {
+	    notifierCount--;
+	    if (notifierCount == 0) {
+		UnregisterClass(className, TclWinGetTclInstance());
+	    }
+	}
+	LeaveCriticalSection(&notifierMutex);
 >>>>>>> upstream/master
     }
 }
@@ -509,7 +548,11 @@ Tcl_ServiceModeHook(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    tsdPtr->hwnd = CreateWindow(classname, classname,
+=======
+	    tsdPtr->hwnd = CreateWindow(className, className,
+>>>>>>> upstream/master
 =======
 	    tsdPtr->hwnd = CreateWindow(className, className,
 >>>>>>> upstream/master

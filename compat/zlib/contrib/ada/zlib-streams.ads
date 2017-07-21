@@ -32,7 +32,11 @@ package ZLib.Streams is
    --  Flush the written data to the back stream,
    --  all data placed to the compressor is flushing to the Back stream.
 <<<<<<< HEAD
+<<<<<<< HEAD
    --  Should not be used untill necessary, becouse it is decreasing
+=======
+   --  Should not be used until necessary, because it is decreasing
+>>>>>>> upstream/master
 =======
    --  Should not be used until necessary, because it is decreasing
 >>>>>>> upstream/master
@@ -102,7 +106,11 @@ private
       --  Buffer for Read operation.
       --  We need to have this buffer in the record
 <<<<<<< HEAD
+<<<<<<< HEAD
       --  becouse not all read data from back stream
+=======
+      --  because not all read data from back stream
+>>>>>>> upstream/master
 =======
       --  because not all read data from back stream
 >>>>>>> upstream/master
@@ -112,7 +120,11 @@ private
       --  Buffer size for write operation.
       --  We do not need to have this buffer
 <<<<<<< HEAD
+<<<<<<< HEAD
       --  in the record becouse all data could be
+=======
+      --  in the record because all data could be
+>>>>>>> upstream/master
 =======
       --  in the record because all data could be
 >>>>>>> upstream/master

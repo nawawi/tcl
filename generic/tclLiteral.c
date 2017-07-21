@@ -689,7 +689,11 @@ AddLocalLiteralEntry(
 	if (!found) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    bytes = Tcl_GetStringFromObj(objPtr, &length);
+=======
+	    bytes = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 =======
 	    bytes = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
@@ -919,15 +923,21 @@ HashString(
      * Tcl scripts tend to not have a big issue in this area, and literals
      * mostly aren't looked up by name anyway.
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
      *
      * See also HashStringKey in tclHash.c.
      * See also TclObjHashKey in tclObj.c.
      *
+<<<<<<< HEAD
 =======
      *
      * See also HashStringKey in tclHash.c.
      * See also TclObjHashKey in tclObj.c.
      *
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      * See [tcl-Feature Request #2958832]
      */
@@ -1180,7 +1190,11 @@ TclVerifyLocalLiteralTable(
 	    if (localPtr->refCount != -1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		bytes = Tcl_GetStringFromObj(localPtr->objPtr, &length);
+=======
+		bytes = TclGetStringFromObj(localPtr->objPtr, &length);
+>>>>>>> upstream/master
 =======
 		bytes = TclGetStringFromObj(localPtr->objPtr, &length);
 >>>>>>> upstream/master
@@ -1188,6 +1202,7 @@ TclVerifyLocalLiteralTable(
 			"TclVerifyLocalLiteralTable",
 			(length>60? 60 : length), bytes, localPtr->refCount);
 	    }
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    if (LookupLiteralEntry((Tcl_Interp *) envPtr->iPtr,
 		    localPtr->objPtr) == NULL) {
@@ -1206,6 +1221,8 @@ TclVerifyLocalLiteralTable(
 			(length>60? 60 : length), bytes, localPtr->refCount);
 >>>>>>> upstream/master
 	    }
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	    if (localPtr->objPtr->bytes == NULL) {
@@ -1256,7 +1273,11 @@ TclVerifyGlobalLiteralTable(
 	    if (globalPtr->refCount < 1) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		bytes = Tcl_GetStringFromObj(globalPtr->objPtr, &length);
+=======
+		bytes = TclGetStringFromObj(globalPtr->objPtr, &length);
+>>>>>>> upstream/master
 =======
 		bytes = TclGetStringFromObj(globalPtr->objPtr, &length);
 >>>>>>> upstream/master

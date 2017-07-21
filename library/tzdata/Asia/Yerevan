@@ -4,6 +4,7 @@ set TZData(:Asia/Yerevan) {
     {-9223372036854775808 10680 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441162680 10800 0 YERT}
     {-405140400 14400 0 YERT}
     {354916800 18000 1 YERST}
@@ -90,6 +91,8 @@ set TZData(:Asia/Yerevan) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1441162680 10800 0 +03}
     {-405140400 14400 0 +04}
     {354916800 18000 1 +05}
@@ -155,6 +158,9 @@ set TZData(:Asia/Yerevan) {
     {1301176800 18000 1 +05}
     {1319925600 14400 0 +04}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

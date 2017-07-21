@@ -15,7 +15,11 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require tcltest
+=======
+package require tcltest 2
+>>>>>>> upstream/master
 =======
 package require tcltest 2
 >>>>>>> upstream/master
@@ -555,12 +559,18 @@ set argv $savedArgv
 ::tcltest::cleanupTests
 return
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 # Local Variables:
 # mode: tcl
 # End:
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

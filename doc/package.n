@@ -6,7 +6,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -25,6 +29,10 @@ package \- Facilities for package loading and version control
 .SH SYNOPSIS
 .nf
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+\fBpackage files\fR \fIpackage\fR
+>>>>>>> upstream/master
 =======
 \fBpackage files\fR \fIpackage\fR
 >>>>>>> upstream/master
@@ -60,7 +68,10 @@ The behavior of the \fBpackage\fR command is determined by its first argument.
 The following forms are permitted:
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 \fBpackage files\fR \fIpackage\fR
 .
 Lists all files forming part of \fIpackage\fR. Auto-loaded files are not
@@ -68,6 +79,9 @@ included in this list, only files which were directly sourced during package
 initialization. The list order corresponds with the order in which the
 files were sourced.
 .TP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 \fBpackage forget\fR ?\fIpackage package ...\fR?
 .
@@ -121,7 +135,7 @@ provided by a previous \fBpackage provide\fR command.
 If the \fIversion\fR argument is omitted, then the command
 returns the version number that is currently provided, or an
 empty string if no \fBpackage provide\fR command has been
-invoked for \fIpackage\fR in this interpreter.  
+invoked for \fIpackage\fR in this interpreter.
 .TP
 \fBpackage require \fR\fIpackage \fR?\fIrequirement...\fR?
 .
@@ -312,8 +326,13 @@ When an interpreter is created, its initial selection mode value is set to
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR
 is set.  If that environment variable is defined (with any value) then
+=======
+unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR is set
+(to any value) or the Tcl package itself is unstable. Otherwise
+>>>>>>> upstream/master
 =======
 unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR is set
 (to any value) or the Tcl package itself is unstable. Otherwise

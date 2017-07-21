@@ -80,10 +80,14 @@ typedef struct {
 /*
  * Windows version dependend functions
  */
+<<<<<<< HEAD
 static TclWinProcs _tclWinProcs = {
     NULL
 };
 TclWinProcs *tclWinProcs = &_tclWinProcs;
+=======
+TclWinProcs tclWinProcs;
+>>>>>>> upstream/master
 
 /*
  * The following arrays contain the human readable strings for the Windows
@@ -142,8 +146,12 @@ TclpInitPlatform(void)
     WSADATA wsaData;
     WORD wVersionRequested = MAKEWORD(2, 2);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     HINSTANCE hInstance;
+>>>>>>> upstream/master
+=======
+    HMODULE handle;
 >>>>>>> upstream/master
 
     tclPlatform = TCL_PLATFORM_WINDOWS;
@@ -167,12 +175,19 @@ TclpInitPlatform(void)
     /*
      * Fill available functions depending on windows version
      */
+<<<<<<< HEAD
     hInstance = LoadLibraryW(L"kernel32");
     if (hInstance != NULL) {
 	_tclWinProcs.cancelSynchronousIo =
 	    (BOOL (WINAPI *)(HANDLE)) GetProcAddress(hInstance,
 	    "CancelSynchronousIo");
     }
+=======
+    handle = GetModuleHandle(TEXT("KERNEL32"));
+    tclWinProcs.cancelSynchronousIo =
+	    (BOOL (WINAPI *)(HANDLE)) GetProcAddress(handle,
+	    "CancelSynchronousIo");
+>>>>>>> upstream/master
 }
 
 /*
@@ -240,6 +255,7 @@ TclpInitLibraryPath(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     bytes = TclGetStringFromObj(pathPtr, lengthPtr);
@@ -249,11 +265,16 @@ TclpInitLibraryPath(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     bytes = TclGetString(pathPtr);
     *lengthPtr = pathPtr->length;
     *valuePtr = ckalloc(*lengthPtr + 1);
     memcpy(*valuePtr, bytes, *lengthPtr + 1);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -576,16 +597,23 @@ TclpSetVariables(
 	    TclGetProcessGlobalValue(&defaultLibraryDir), TCL_GLOBAL_ONLY);
 
     if (!osInfoInitialized) {
+<<<<<<< HEAD
 	HANDLE handle = LoadLibraryW(L"NTDLL");
+=======
+	HMODULE handle = GetModuleHandle(TEXT("NTDLL"));
+>>>>>>> upstream/master
 	int(__stdcall *getversion)(void *) =
 		(int(__stdcall *)(void *)) GetProcAddress(handle, "RtlGetVersion");
 	osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
 	if (!getversion || getversion(&osInfo)) {
 	    GetVersionExW(&osInfo);
 	}
+<<<<<<< HEAD
 	if (handle) {
 		FreeLibrary(handle);
 	}
+=======
+>>>>>>> upstream/master
 	osInfoInitialized = 1;
     }
     GetSystemInfo(&sys.info);

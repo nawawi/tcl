@@ -567,7 +567,11 @@ TclUnixCopyFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define DEFAULT_COPY_BLOCK_SIZE 4069
+=======
+#define DEFAULT_COPY_BLOCK_SIZE 4096
+>>>>>>> upstream/master
 =======
 #define DEFAULT_COPY_BLOCK_SIZE 4096
 >>>>>>> upstream/master
@@ -611,6 +615,9 @@ TclUnixCopyFile(
     blockSize = DEFAULT_COPY_BLOCK_SIZE;
 #endif /* HAVE_STRUCT_STAT_ST_BLKSIZE */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
     /*
      * [SF Tcl Bug 1586470] Even if we HAVE_STRUCT_STAT_ST_BLKSIZE, there are
@@ -618,6 +625,7 @@ TclUnixCopyFile(
      * is the Andrew Filesystem (afs), reporting a blocksize of 0. When
      * detecting such a situation we now simply fall back to a hardwired
      * default size.
+<<<<<<< HEAD
      */
 
 =======
@@ -628,6 +636,8 @@ TclUnixCopyFile(
      * is the Andrew Filesystem (afs), reporting a blocksize of 0. When
      * detecting such a situation we now simply fall back to a hardwired
      * default size.
+=======
+>>>>>>> upstream/master
      */
 
 >>>>>>> upstream/master
@@ -1911,6 +1921,9 @@ GetModeFromPermString(
 		    op = 1;
 		    op_found = 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 		    continue;
 		case '-':
 		    op = 2;
@@ -2008,9 +2021,14 @@ TclpObjNormalizePath(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *path = Tcl_GetStringFromObj(pathPtr, &pathLen);
 =======
     const char *path = TclGetStringFromObj(pathPtr, &pathLen);
+>>>>>>> upstream/master
+=======
+    const char *path = TclGetString(pathPtr);
+    size_t pathLen = pathPtr->length;
 >>>>>>> upstream/master
 =======
     const char *path = TclGetString(pathPtr);
@@ -2258,11 +2276,16 @@ TclUnixOpenTemporaryFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(dirObj, &len);
 =======
 	string = TclGetStringFromObj(dirObj, &len);
 >>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &template);
+=======
+	string = TclGetString(dirObj);
+	Tcl_UtfToExternalDString(NULL, string, dirObj->length, &template);
+>>>>>>> upstream/master
 =======
 	string = TclGetString(dirObj);
 	Tcl_UtfToExternalDString(NULL, string, dirObj->length, &template);
@@ -2282,11 +2305,16 @@ TclUnixOpenTemporaryFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(basenameObj, &len);
 =======
 	string = TclGetStringFromObj(basenameObj, &len);
 >>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &tmp);
+=======
+	string = TclGetString(basenameObj);
+	Tcl_UtfToExternalDString(NULL, string, basenameObj->length, &tmp);
+>>>>>>> upstream/master
 =======
 	string = TclGetString(basenameObj);
 	Tcl_UtfToExternalDString(NULL, string, basenameObj->length, &tmp);
@@ -2308,11 +2336,16 @@ TclUnixOpenTemporaryFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	string = Tcl_GetStringFromObj(extensionObj, &len);
 =======
 	string = TclGetStringFromObj(extensionObj, &len);
 >>>>>>> upstream/master
 	Tcl_UtfToExternalDString(NULL, string, len, &tmp);
+=======
+	string = TclGetString(extensionObj);
+	Tcl_UtfToExternalDString(NULL, string, extensionObj->length, &tmp);
+>>>>>>> upstream/master
 =======
 	string = TclGetString(extensionObj);
 	Tcl_UtfToExternalDString(NULL, string, extensionObj->length, &tmp);
@@ -2386,6 +2419,7 @@ DefaultTempDir(void)
      */
 
     return TCL_TEMPORARY_FILE_DIRECTORY;
+<<<<<<< HEAD
 }
 
 #if defined(__CYGWIN__)
@@ -2459,6 +2493,81 @@ GetUnixFileAttributes(
     return TCL_OK;
 }
 
+=======
+}
+
+#if defined(__CYGWIN__)
+
+static void
+StatError(
+    Tcl_Interp *interp,		/* The interp that has the error */
+    Tcl_Obj *fileName)		/* The name of the file which caused the
+				 * error. */
+{
+    TclWinConvertError(GetLastError());
+    Tcl_SetObjResult(interp, Tcl_ObjPrintf("could not read \"%s\": %s",
+	    TclGetString(fileName), Tcl_PosixError(interp)));
+}
+
+static WCHAR *
+winPathFromObj(
+    Tcl_Obj *fileName)
+{
+    int size;
+    const char *native =  Tcl_FSGetNativePath(fileName);
+    WCHAR *winPath;
+
+    size = cygwin_conv_path(1, native, NULL, 0);
+    winPath = ckalloc(size);
+    cygwin_conv_path(1, native, winPath, size);
+
+    return winPath;
+}
+
+static const int attributeArray[] = {
+    0x20, 0, 2, 0, 0, 1, 4};
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * GetUnixFileAttributes
+ *
+ *	Gets the readonly attribute of a file.
+ *
+ * Results:
+ *	Standard TCL result. Returns a new Tcl_Obj in attributePtrPtr if there
+ *	is no error. The object will have ref count 0.
+ *
+ * Side effects:
+ *	A new object is allocated.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+GetUnixFileAttributes(
+    Tcl_Interp *interp,		/* The interp we are using for errors. */
+    int objIndex,		/* The index of the attribute. */
+    Tcl_Obj *fileName,		/* The name of the file (UTF-8). */
+    Tcl_Obj **attributePtrPtr)	/* A pointer to return the object with. */
+{
+    int fileAttributes;
+    WCHAR *winPath = winPathFromObj(fileName);
+
+    fileAttributes = GetFileAttributesW(winPath);
+    ckfree(winPath);
+
+    if (fileAttributes == -1) {
+	StatError(interp, fileName);
+	return TCL_ERROR;
+    }
+
+    *attributePtrPtr = Tcl_NewIntObj((fileAttributes&attributeArray[objIndex])!=0);
+
+    return TCL_OK;
+}
+
+>>>>>>> upstream/master
 /*
  *---------------------------------------------------------------------------
  *

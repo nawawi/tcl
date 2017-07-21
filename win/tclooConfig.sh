@@ -19,6 +19,7 @@ TCLOO_CFLAGS=""
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 TCLOO_VERSION=1.0.3
 =======
 TCLOO_VERSION=1.0.4
@@ -28,4 +29,7 @@ TCLOO_VERSION=1.0.4
 >>>>>>> upstream/master
 =======
 TCLOO_VERSION=1.0.4
+>>>>>>> upstream/master
+=======
+TCLOO_VERSION=1.2.0
 >>>>>>> upstream/master

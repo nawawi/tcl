@@ -10,7 +10,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -310,10 +314,18 @@ This is actually the value of the \fBtcl_library\fR
 variable and may be changed by setting \fBtcl_library\fR.
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBinfo loaded \fR?\fIinterp\fR?
 .
 Returns a list describing all of the packages that have been loaded into
 \fIinterp\fR with the \fBload\fR command.
+=======
+\fBinfo loaded \fR?\fIinterp\fR? ?\fIpackage\fR?
+.
+Returns the filename loaded as part of \fIpackage\fR. If \fIpackage\fR
+is not specified, returns a list describing all of the packages
+that have been loaded into \fIinterp\fR with the \fBload\fR command.
+>>>>>>> upstream/master
 =======
 \fBinfo loaded \fR?\fIinterp\fR? ?\fIpackage\fR?
 .

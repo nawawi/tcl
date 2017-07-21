@@ -78,7 +78,11 @@ typedef struct {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct TtyAttrs {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -614,7 +618,10 @@ TtySetOptionProc(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     /*
@@ -898,6 +905,10 @@ TtyGetOptionProc(
      * returned by unnamed [fconfigure chan].
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -914,12 +925,19 @@ TtyGetOptionProc(
 	return TCL_OK;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     return Tcl_BadChannelOption(interp, optionName, "mode"
 	    " queue ttystatus xchar"
 	    );
 }
 
 
+=======
+    return Tcl_BadChannelOption(interp, optionName,
+		"mode queue ttystatus xchar");
+}
+
+>>>>>>> upstream/master
 =======
     return Tcl_BadChannelOption(interp, optionName,
 		"mode queue ttystatus xchar");
@@ -1342,7 +1360,12 @@ TtyParseMode(
 static void
 TtyInit(
 <<<<<<< HEAD
+<<<<<<< HEAD
     int fd)	/* Open file descriptor for serial port to be initialized. */
+=======
+    int fd)			/* Open file descriptor for serial port to be
+				 * initialized. */
+>>>>>>> upstream/master
 =======
     int fd)			/* Open file descriptor for serial port to be
 				 * initialized. */
@@ -1357,8 +1380,12 @@ TtyInit(
 	    || iostate.c_cflag & CREAD
 	    || iostate.c_cc[VMIN] != 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    || iostate.c_cc[VTIME] != 0)
     {
+=======
+	    || iostate.c_cc[VTIME] != 0) {
+>>>>>>> upstream/master
 =======
 	    || iostate.c_cc[VTIME] != 0) {
 >>>>>>> upstream/master
@@ -1761,6 +1788,7 @@ Tcl_GetOpenFile(
     return TCL_ERROR;
 }
 
+<<<<<<< HEAD
 #ifndef HAVE_COREFOUNDATION	/* Darwin/Mac OS X CoreFoundation notifier is
 				 * in tclMacOSXNotify.c */
 /*
@@ -1921,6 +1949,8 @@ TclUnixWaitForFile(
 }
 #endif /* HAVE_COREFOUNDATION */
 
+=======
+>>>>>>> upstream/master
 /*
  *----------------------------------------------------------------------
  *

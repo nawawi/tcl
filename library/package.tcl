@@ -489,7 +489,11 @@ proc tclPkgUnknown {name args} {
 		if {![info exists procdDirs($dir)]} {
 		    try {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			source $file
+=======
+			::tcl::Pkg::source $file
+>>>>>>> upstream/master
 =======
 			::tcl::Pkg::source $file
 >>>>>>> upstream/master
@@ -511,7 +515,11 @@ proc tclPkgUnknown {name args} {
 	    if {([interp issafe] || [file exists $file])} {
 		try {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    source $file
+=======
+		    ::tcl::Pkg::source $file
+>>>>>>> upstream/master
 =======
 		    ::tcl::Pkg::source $file
 >>>>>>> upstream/master
@@ -599,7 +607,11 @@ proc tcl::MacOSXPkgUnknown {original name args} {
 	    if {![info exists procdDirs($dir)]} {
 		try {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    source $file
+=======
+		    ::tcl::Pkg::source $file
+>>>>>>> upstream/master
 =======
 		    ::tcl::Pkg::source $file
 >>>>>>> upstream/master

@@ -330,7 +330,11 @@ struct ForwardingResult {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -951,7 +955,11 @@ ReflectClose(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -981,7 +989,11 @@ ReflectClose(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -1136,12 +1148,21 @@ ReflectInput(
 
 	if (toRead == 0) {
 	    goto stop;
+<<<<<<< HEAD
 	}
 
 	if (rtPtr->eofPending) {
 	    goto stop;
 	}
 
+=======
+	}
+
+	if (rtPtr->eofPending) {
+	    goto stop;
+	}
+
+>>>>>>> upstream/master
 
 	/*
 	 * The buffer is exhausted, but the caller wants even more. We now
@@ -1217,6 +1238,7 @@ ReflectInput(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 =======
 
@@ -1228,6 +1250,8 @@ ReflectInput(
 
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 		/*
@@ -2097,7 +2121,11 @@ InvokeTclMethod(
 		int cmdLen;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const char *cmdString = Tcl_GetStringFromObj(cmd, &cmdLen);
+=======
+		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
+>>>>>>> upstream/master
 =======
 		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
 >>>>>>> upstream/master
@@ -2869,7 +2897,11 @@ ForwardSetObjError(
     int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *msgStr = Tcl_GetStringFromObj(obj, &len);
+=======
+    const char *msgStr = TclGetStringFromObj(obj, &len);
+>>>>>>> upstream/master
 =======
     const char *msgStr = TclGetStringFromObj(obj, &len);
 >>>>>>> upstream/master

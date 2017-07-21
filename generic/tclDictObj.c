@@ -72,6 +72,7 @@ static inline Tcl_HashEntry *CreateChainEntry(struct Dict *dict,
 static inline int	DeleteChainEntry(struct Dict *dict, Tcl_Obj *keyPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeDictUpdate(ClientData data[],
 			    Tcl_Interp *interp, int result);
 static int		FinalizeDictWith(ClientData data[],
@@ -87,6 +88,8 @@ static int		DictMapLoopCallback(ClientData data[],
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 static Tcl_NRPostProc	FinalizeDictUpdate;
 static Tcl_NRPostProc	FinalizeDictWith;
 static Tcl_ObjCmdProc	DictForNRCmd;
@@ -94,6 +97,9 @@ static Tcl_ObjCmdProc	DictMapNRCmd;
 static Tcl_NRPostProc	DictForLoopCallback;
 static Tcl_NRPostProc	DictMapLoopCallback;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -528,7 +534,11 @@ UpdateStringOfDict(
     /* Handle empty list case first, simplifies what follows */
     if (numElems == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	dictPtr->bytes = tclEmptyStringRep;
+=======
+	dictPtr->bytes = &tclEmptyString;
+>>>>>>> upstream/master
 =======
 	dictPtr->bytes = &tclEmptyString;
 >>>>>>> upstream/master
@@ -2341,6 +2351,7 @@ DictAppendCmd(
 		    objc-3, objv+3, &appendObjPtr)) {
 		return TCL_ERROR;
 	    }
+<<<<<<< HEAD
 	}
 
 	if (appendObjPtr == NULL) {
@@ -2359,6 +2370,26 @@ DictAppendCmd(
 	    Tcl_AppendObjToObj(valuePtr, appendObjPtr);
 	}
 
+=======
+	}
+
+	if (appendObjPtr == NULL) {
+	    /* => (objc == 3) => (valuePtr == NULL) */
+	    TclNewObj(valuePtr);
+	} else if (valuePtr == NULL) {
+	    valuePtr = appendObjPtr;
+	    appendObjPtr = NULL;
+	}
+
+	if (appendObjPtr) {
+	    if (Tcl_IsShared(valuePtr)) {
+		valuePtr = Tcl_DuplicateObj(valuePtr);
+	    }
+
+	    Tcl_AppendObjToObj(valuePtr, appendObjPtr);
+	}
+
+>>>>>>> upstream/master
 	Tcl_DictObjPut(NULL, dictPtr, objv[2], valuePtr);
     }
 
@@ -2575,6 +2606,8 @@ DictForLoopCallback(
  *----------------------------------------------------------------------
  *
  * DictMapNRCmd --
+<<<<<<< HEAD
+=======
  *
  *	These functions implement the "dict map" Tcl command.  See the user
  *	documentation for details on what it does, and TIP#405 for the formal
@@ -2604,6 +2637,224 @@ DictMapNRCmd(
     if (objc != 4) {
 	Tcl_WrongNumArgs(interp, 1, objv,
 		"{keyVarName valueVarName} dictionary script");
+	return TCL_ERROR;
+    }
+
+    /*
+     * Parse arguments.
+     */
+
+    if (TclListObjGetElements(interp, objv[1], &varc, &varv) != TCL_OK) {
+	return TCL_ERROR;
+    }
+    if (varc != 2) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		"must have exactly two variable names", -1));
+	Tcl_SetErrorCode(interp, "TCL", "SYNTAX", "dict", "map", NULL);
+	return TCL_ERROR;
+    }
+    storagePtr = TclStackAlloc(interp, sizeof(DictMapStorage));
+    if (Tcl_DictObjFirst(interp, objv[2], &storagePtr->search, &keyObj,
+	    &valueObj, &done) != TCL_OK) {
+	TclStackFree(interp, storagePtr);
+	return TCL_ERROR;
+    }
+    if (done) {
+	/*
+	 * Note that this exit leaves an empty value in the result (due to
+	 * command calling conventions) but that is OK since an empty value is
+	 * an empty dictionary.
+	 */
+
+	TclStackFree(interp, storagePtr);
+	return TCL_OK;
+    }
+    TclNewObj(storagePtr->accumulatorObj);
+    TclListObjGetElements(NULL, objv[1], &varc, &varv);
+    storagePtr->keyVarObj = varv[0];
+    storagePtr->valueVarObj = varv[1];
+    storagePtr->scriptObj = objv[3];
+
+    /*
+     * Make sure that these objects (which we need throughout the body of the
+     * loop) don't vanish. Note that the dictionary internal rep is locked
+     * internally so that updates, shimmering, etc are not a problem.
+     */
+
+    Tcl_IncrRefCount(storagePtr->accumulatorObj);
+    Tcl_IncrRefCount(storagePtr->keyVarObj);
+    Tcl_IncrRefCount(storagePtr->valueVarObj);
+    Tcl_IncrRefCount(storagePtr->scriptObj);
+
+    /*
+     * Stop the value from getting hit in any way by any traces on the key
+     * variable.
+     */
+
+    Tcl_IncrRefCount(valueObj);
+    if (Tcl_ObjSetVar2(interp, storagePtr->keyVarObj, NULL, keyObj,
+	    TCL_LEAVE_ERR_MSG) == NULL) {
+	TclDecrRefCount(valueObj);
+	goto error;
+    }
+    if (Tcl_ObjSetVar2(interp, storagePtr->valueVarObj, NULL, valueObj,
+	    TCL_LEAVE_ERR_MSG) == NULL) {
+	TclDecrRefCount(valueObj);
+	goto error;
+    }
+    TclDecrRefCount(valueObj);
+
+    /*
+     * Run the script.
+     */
+
+    TclNRAddCallback(interp, DictMapLoopCallback, storagePtr, NULL,NULL,NULL);
+    return TclNREvalObjEx(interp, storagePtr->scriptObj, 0,
+	    iPtr->cmdFramePtr, 3);
+
+    /*
+     * For unwinding everything on error.
+     */
+
+  error:
+    TclDecrRefCount(storagePtr->keyVarObj);
+    TclDecrRefCount(storagePtr->valueVarObj);
+    TclDecrRefCount(storagePtr->scriptObj);
+    TclDecrRefCount(storagePtr->accumulatorObj);
+    Tcl_DictObjDone(&storagePtr->search);
+    TclStackFree(interp, storagePtr);
+    return TCL_ERROR;
+}
+
+static int
+DictMapLoopCallback(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Interp *iPtr = (Interp *) interp;
+    DictMapStorage *storagePtr = data[0];
+    Tcl_Obj *keyObj, *valueObj;
+    int done;
+
+    /*
+     * Process the result from the previous execution of the script body.
+     */
+
+    if (result == TCL_CONTINUE) {
+	result = TCL_OK;
+    } else if (result != TCL_OK) {
+	if (result == TCL_BREAK) {
+	    Tcl_ResetResult(interp);
+	    result = TCL_OK;
+	} else if (result == TCL_ERROR) {
+	    Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
+		    "\n    (\"dict map\" body line %d)",
+		    Tcl_GetErrorLine(interp)));
+	}
+	goto done;
+    } else {
+	keyObj = Tcl_ObjGetVar2(interp, storagePtr->keyVarObj, NULL,
+		TCL_LEAVE_ERR_MSG);
+	if (keyObj == NULL) {
+	    result = TCL_ERROR;
+	    goto done;
+	}
+	Tcl_DictObjPut(NULL, storagePtr->accumulatorObj, keyObj,
+		Tcl_GetObjResult(interp));
+    }
+
+    /*
+     * Get the next mapping from the dictionary.
+     */
+
+    Tcl_DictObjNext(&storagePtr->search, &keyObj, &valueObj, &done);
+    if (done) {
+	Tcl_SetObjResult(interp, storagePtr->accumulatorObj);
+	goto done;
+    }
+
+    /*
+     * Stop the value from getting hit in any way by any traces on the key
+     * variable.
+     */
+
+    Tcl_IncrRefCount(valueObj);
+    if (Tcl_ObjSetVar2(interp, storagePtr->keyVarObj, NULL, keyObj,
+	    TCL_LEAVE_ERR_MSG) == NULL) {
+	TclDecrRefCount(valueObj);
+	result = TCL_ERROR;
+	goto done;
+    }
+    if (Tcl_ObjSetVar2(interp, storagePtr->valueVarObj, NULL, valueObj,
+	    TCL_LEAVE_ERR_MSG) == NULL) {
+	TclDecrRefCount(valueObj);
+	result = TCL_ERROR;
+	goto done;
+    }
+    TclDecrRefCount(valueObj);
+
+    /*
+     * Run the script.
+     */
+
+    TclNRAddCallback(interp, DictMapLoopCallback, storagePtr, NULL,NULL,NULL);
+    return TclNREvalObjEx(interp, storagePtr->scriptObj, 0,
+	    iPtr->cmdFramePtr, 3);
+
+    /*
+     * For unwinding everything once the iterating is done.
+     */
+
+  done:
+    TclDecrRefCount(storagePtr->keyVarObj);
+    TclDecrRefCount(storagePtr->valueVarObj);
+    TclDecrRefCount(storagePtr->scriptObj);
+    TclDecrRefCount(storagePtr->accumulatorObj);
+    Tcl_DictObjDone(&storagePtr->search);
+    TclStackFree(interp, storagePtr);
+    return result;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * DictSetCmd --
+>>>>>>> upstream/master
+ *
+ *	These functions implement the "dict map" Tcl command.  See the user
+ *	documentation for details on what it does, and TIP#405 for the formal
+ *	specification.
+ *
+ * Results:
+ *	A standard Tcl result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+DictMapNRCmd(
+    ClientData dummy,
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const *objv)
+{
+    Interp *iPtr = (Interp *) interp;
+    Tcl_Obj **varv, *keyObj, *valueObj;
+    DictMapStorage *storagePtr;
+    int varc, done;
+
+<<<<<<< HEAD
+    if (objc != 4) {
+	Tcl_WrongNumArgs(interp, 1, objv,
+		"{keyVarName valueVarName} dictionary script");
+=======
+    if (objc < 4) {
+	Tcl_WrongNumArgs(interp, 1, objv, "dictVarName key ?key ...? value");
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
 
@@ -3099,7 +3350,11 @@ DictFilterCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master
@@ -3122,7 +3377,11 @@ DictFilterCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_AddErrorInfo(interp, 
+=======
+		Tcl_AddErrorInfo(interp,
+>>>>>>> upstream/master
 =======
 		Tcl_AddErrorInfo(interp,
 >>>>>>> upstream/master
@@ -3619,7 +3878,11 @@ TclDictWithFinish(
      * If the dictionary variable doesn't exist, drop everything silently.
      */
 
+<<<<<<< HEAD
     dictPtr = TclPtrGetVar(interp, varPtr, arrayPtr, part1Ptr, part2Ptr,
+=======
+    dictPtr = TclPtrGetVarIdx(interp, varPtr, arrayPtr, part1Ptr, part2Ptr,
+>>>>>>> upstream/master
 	    TCL_LEAVE_ERR_MSG, index);
     if (dictPtr == NULL) {
 	return TCL_OK;
@@ -3702,8 +3965,13 @@ TclDictWithFinish(
      * Write back the outermost dictionary to the variable.
      */
 
+<<<<<<< HEAD
     if (TclPtrSetVar(interp, varPtr, arrayPtr, part1Ptr, part2Ptr, dictPtr,
 	    TCL_LEAVE_ERR_MSG, index) == NULL) {
+=======
+    if (TclPtrSetVarIdx(interp, varPtr, arrayPtr, part1Ptr, part2Ptr,
+	    dictPtr, TCL_LEAVE_ERR_MSG, index) == NULL) {
+>>>>>>> upstream/master
 	if (allocdict) {
 	    TclDecrRefCount(dictPtr);
 	}

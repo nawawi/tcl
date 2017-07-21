@@ -47,7 +47,10 @@ testConstraint testsimplefilesystem \
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 proc loadIfNotPresent {pkg args} {
@@ -59,6 +62,9 @@ proc loadIfNotPresent {pkg args} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -92,7 +98,11 @@ set pkgua_unloaded {}
 test unload-2.1 {basic loading of non-unloadable package, with guess for package name} [list $dll $loaded] {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     load [file join $testDir pkga$ext]
+=======
+    loadIfNotPresent pkga
+>>>>>>> upstream/master
 =======
     loadIfNotPresent pkga
 >>>>>>> upstream/master
@@ -109,12 +119,15 @@ test unload-2.2 {basic loading of unloadable package, with guess for package nam
 } {{} {} {} {} 0 {pkgua_eq pkgua_quote} . {} {}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test unload-2.3 {basic unloading of non-unloadable package, with guess for package name} [list $dll $loaded] {
     list [catch {unload [file join $testDir pkga$ext]} msg] \
 	    [string map [list [file join $testDir pkga$ext] file] $msg]
 } {1 {file "file" cannot be unloaded under a trusted interpreter}}
 test unload-2.4 {basic unloading of unloadable package, with guess for package name} [list $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test unload-2.3 {basic unloading of non-unloadable package, with guess for package name} -setup {
@@ -126,6 +139,9 @@ test unload-2.4 {basic unloading of unloadable package, with guess for package n
     loadIfNotPresent pkgua
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -135,9 +151,12 @@ test unload-2.4 {basic unloading of unloadable package, with guess for package n
 	    $pkgua_loaded $pkgua_detached $pkgua_unloaded
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {. {} {} {} {} . . .}
 test unload-2.5 {reloading of unloaded package, with guess for package name} [list $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {. {} {} {} {} . . .}
@@ -148,6 +167,9 @@ test unload-2.5 {reloading of unloaded package, with guess for package name} -se
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -157,9 +179,12 @@ test unload-2.5 {reloading of unloaded package, with guess for package name} -se
 	    $pkgua_loaded $pkgua_detached $pkgua_unloaded
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {. . . {} 0 {pkgua_eq pkgua_quote} .. . .}
 test unload-2.6 {basic unloading of re-loaded package, with guess for package name} [list $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {. . . {} 0 {pkgua_eq pkgua_quote} .. . .}
@@ -172,6 +197,9 @@ test unload-2.6 {basic unloading of re-loaded package, with guess for package na
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -181,7 +209,11 @@ test unload-2.6 {basic unloading of re-loaded package, with guess for package na
 	    $pkgua_loaded $pkgua_detached $pkgua_unloaded
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {.. . . {} {} .. .. ..}
+=======
+} -result {.. . . {} {} .. .. ..}
+>>>>>>> upstream/master
 =======
 } -result {.. . . {} {} .. .. ..}
 >>>>>>> upstream/master
@@ -213,6 +245,7 @@ test unload-3.2 {basic loading of unloadable package in a safe interpreter, with
 } {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test unload-3.3 {unloading of a package that has never been loaded from a safe interpreter} \
 	[list $dll $loaded] {
     list [catch {unload [file join $testDir pkga$ext] {} child} msg] \
@@ -226,6 +259,8 @@ test unload-3.4 {basic unloading of a non-unloadable package from a safe interpr
 test unload-3.5 {basic unloading of an unloadable package from a safe interpreter, with guess for package name} \
 	[list $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test unload-3.3 {unloading of a package that has never been loaded from a safe interpreter} -setup {
@@ -246,6 +281,9 @@ test unload-3.5 {basic unloading of an unloadable package from a safe interprete
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -255,10 +293,13 @@ test unload-3.5 {basic unloading of an unloadable package from a safe interprete
 	    [child eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {{. {} {}} {} {} {. . .}}
 test unload-3.6 {reloading of unloaded package in a safe interpreter, with guess for package name} \
 	[list $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {{. {} {}} {} {} {. . .}}
@@ -269,6 +310,9 @@ test unload-3.6 {reloading of unloaded package in a safe interpreter, with guess
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -279,10 +323,13 @@ test unload-3.6 {reloading of unloaded package in a safe interpreter, with guess
 	    [child eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {{. . .} {} 0 {pkgua_eq pkgua_quote} {.. . .}}
 test unload-3.7 {basic unloading of re-loaded package from a safe interpreter, with package name conversion} \
 	[list $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 } -result {{. . .} {} 0 {pkgua_eq pkgua_quote} {.. . .}}
@@ -294,6 +341,9 @@ test unload-3.7 {basic unloading of re-loaded package from a safe interpreter, w
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -303,7 +353,11 @@ test unload-3.7 {basic unloading of re-loaded package from a safe interpreter, w
 	    [child eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {{.. . .} {} {} {.. .. ..}}
+=======
+} -result {{.. . .} {} {} {.. .. ..}}
+>>>>>>> upstream/master
 =======
 } -result {{.. . .} {} {} {.. .. ..}}
 >>>>>>> upstream/master
@@ -320,6 +374,7 @@ child-trusted eval {
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Load package in main trusted interpreter...
 test unload-4.1 {loading of unloadable package in trusted interpreter, with guess for package name} \
 	[list $dll $loaded] {
@@ -328,6 +383,10 @@ test unload-4.1 {loading of unloadable package in trusted interpreter, with gues
 >>>>>>> upstream/master
 array set load {M 0 C 0 T 0}
 ## Load package in main trusted interpreter...
+=======
+array set load {M 0 C 0 T 0}
+## Load package in main trusted interpreter...
+>>>>>>> upstream/master
 test unload-4.1 {loading of unloadable package in trusted interpreter, with guess for package name} -setup {
     set pkgua_loaded ""
     set pkgua_detached ""
@@ -335,6 +394,9 @@ test unload-4.1 {loading of unloadable package in trusted interpreter, with gues
     incr load(M)
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -342,6 +404,7 @@ test unload-4.1 {loading of unloadable package in trusted interpreter, with gues
 	    [load [file join $testDir pkgua$ext]] \
 	    [pkgua_eq abc def] [lsort [info commands pkgua_*]] \
 	    [list $pkgua_loaded $pkgua_detached $pkgua_unloaded]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 } {{.. .. ..} {} 0 {pkgua_eq pkgua_quote} {... .. ..}}
@@ -353,6 +416,10 @@ test unload-4.2 {basic loading of unloadable package in a safe interpreter, with
 >>>>>>> upstream/master
 } -result {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
 ## Load package in child-safe interpreter...
+=======
+} -result {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
+## Load package in child-safe interpreter...
+>>>>>>> upstream/master
 test unload-4.2 {basic loading of unloadable package in a safe interpreter, with package name conversion} -setup {
     child eval {
 	set pkgua_loaded ""
@@ -362,6 +429,9 @@ test unload-4.2 {basic loading of unloadable package in a safe interpreter, with
     incr load(C)
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -370,6 +440,7 @@ test unload-4.2 {basic loading of unloadable package in a safe interpreter, with
 	    [child eval pkgua_eq abc def] \
 	    [lsort [child eval info commands pkgua_*]] \
 	    [child eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 } {{.. .. ..} {} 0 {pkgua_eq pkgua_quote} {... .. ..}}
@@ -388,11 +459,19 @@ test unload-4.3 {basic loading of unloadable package in a second trusted interpr
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+} -result {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
+## Load package in child-trusted interpreter...
+test unload-4.3 {basic loading of unloadable package in a second trusted interpreter, with package name conversion} -setup {
+    incr load(T)
+} -constraints [list $dll $loaded] -body {
+>>>>>>> upstream/master
     list [child-trusted eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}] \
 	    [load [file join $testDir pkgua$ext] pkguA child-trusted] \
 	    [child-trusted eval pkgua_eq abc def] \
 	    [lsort [child-trusted eval info commands pkgua_*]] \
 	    [child-trusted eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 } {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
@@ -404,6 +483,10 @@ test unload-4.4 {basic unloading of unloadable package from trusted interpreter,
 >>>>>>> upstream/master
 } -result {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
 ## Unload the package from the main trusted interpreter...
+=======
+} -result {{{} {} {}} {} 0 {pkgua_eq pkgua_quote} {. {} {}}}
+## Unload the package from the main trusted interpreter...
+>>>>>>> upstream/master
 test unload-4.4 {basic unloading of unloadable package from trusted interpreter, with guess for package name} -setup {
     if {!$load(M)} {
 	load [file join $testDir pkgua$ext]
@@ -418,6 +501,9 @@ test unload-4.4 {basic unloading of unloadable package from trusted interpreter,
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -425,6 +511,7 @@ test unload-4.4 {basic unloading of unloadable package from trusted interpreter,
 	    [unload [file join $testDir pkgua$ext]] \
 	    [info commands pkgua_*] \
 	    [list $pkgua_loaded $pkgua_detached $pkgua_unloaded]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 } {{... .. ..} {} {} {... ... ..}}
@@ -436,6 +523,10 @@ test unload-4.5 {basic unloading of unloadable package from a safe interpreter, 
 >>>>>>> upstream/master
 } -result {{. {} {}} {} {} {. . {}}}
 ## Unload the package from the child safe interpreter...
+=======
+} -result {{. {} {}} {} {} {. . {}}}
+## Unload the package from the child safe interpreter...
+>>>>>>> upstream/master
 test unload-4.5 {basic unloading of unloadable package from a safe interpreter, with guess for package name} -setup {
     if {!$load(C)} {
 	load [file join $testDir pkgua$ext] {} child
@@ -446,6 +537,9 @@ test unload-4.5 {basic unloading of unloadable package from a safe interpreter, 
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -453,6 +547,7 @@ test unload-4.5 {basic unloading of unloadable package from a safe interpreter, 
 	    [unload [file join $testDir pkgua$ext] {} child] \
 	    [child eval info commands pkgua_*] \
 	    [child eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 } {{... .. ..} {} {} {... ... ..}}
@@ -464,12 +559,19 @@ test unload-4.6 {basic unloading of unloadable package from a safe interpreter, 
 >>>>>>> upstream/master
 } -result {{. {} {}} {} {} {. . {}}}
 ## Unload the package from the child trusted interpreter...
+=======
+} -result {{. {} {}} {} {} {. . {}}}
+## Unload the package from the child trusted interpreter...
+>>>>>>> upstream/master
 test unload-4.6 {basic unloading of unloadable package from a safe interpreter, with guess for package name} -setup {
     if {!$load(T)} {
 	load [file join $testDir pkgua$ext] {} child-trusted
     }
 } -constraints [list $dll $loaded] -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -477,6 +579,7 @@ test unload-4.6 {basic unloading of unloadable package from a safe interpreter, 
 	    [unload [file join $testDir pkgua$ext] {} child-trusted] \
 	    [child-trusted eval info commands pkgua_*] \
 	    [child-trusted eval {list $pkgua_loaded $pkgua_detached $pkgua_unloaded}]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 } {{. {} {}} {} {} {. . .}}
@@ -508,6 +611,23 @@ test unload-5.1 {unload a module loaded from vfs} \
 
 >>>>>>> upstream/master
 =======
+
+>>>>>>> upstream/master
+=======
+} -result {{. {} {}} {} {} {. . .}}
+
+test unload-5.1 {unload a module loaded from vfs} \
+     -constraints [list $dll $loaded testsimplefilesystem] \
+     -setup {
+	 set dir [pwd]
+	 cd $testDir
+	 testsimplefilesystem 1
+	 load simplefs:/pkgua$ext pkgua
+     } \
+    -body {
+	list [catch {unload simplefs:/pkgua$ext} msg] $msg
+    } \
+    -result {0 {}}
 
 >>>>>>> upstream/master
 # cleanup

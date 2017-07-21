@@ -75,6 +75,7 @@ Names=`sed -n '
 #                               print the result and exit
 	p;q
     }' $ManPage`
+<<<<<<< HEAD
 
 if test -z "$Names" ; then
     echo "warning: no target names found in $ManPage"
@@ -84,6 +85,17 @@ fi
 ### Remaining Set Up
 ###
 
+=======
+
+if test -z "$Names" ; then
+    echo "warning: no target names found in $ManPage"
+fi
+
+########################################################################
+### Remaining Set Up
+###
+
+>>>>>>> upstream/master
 case $ManPage in
     *.1) Section=1 ;;
     *.3) Section=3 ;;
@@ -93,11 +105,19 @@ case $ManPage in
 esac
 
 SrcDir=`dirname $ManPage`
+<<<<<<< HEAD
 
 ########################################################################
 ### Process Page to Create Target Pages
 ###
 
+=======
+
+########################################################################
+### Process Page to Create Target Pages
+###
+
+>>>>>>> upstream/master
 First=""
 for Target in $Names; do
     Target=$Target.$Section$Suffix
@@ -108,7 +128,11 @@ for Target in $Names; do
 	    $ManPage > $Dir/$First
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	chmod 444 $Dir/$First
+=======
+	chmod 644 $Dir/$First
+>>>>>>> upstream/master
 =======
 	chmod 644 $Dir/$First
 >>>>>>> upstream/master

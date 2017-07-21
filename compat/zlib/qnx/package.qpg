@@ -26,15 +26,21 @@
          <QPG:Add file="../zconf.h" install="/opt/include/" user="root:sys" permission="644"/>
          <QPG:Add file="../zlib.h" install="/opt/include/" user="root:sys" permission="644"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
          <QPG:Add file="../libz.so.1.2.8" install="/opt/lib/" user="root:bin" permission="644"/>
          <QPG:Add file="libz.so" install="/opt/lib/" component="dev" filetype="symlink" linkto="libz.so.1.2.8"/>
          <QPG:Add file="libz.so.1" install="/opt/lib/" filetype="symlink" linkto="libz.so.1.2.8"/>
          <QPG:Add file="../libz.so.1.2.8" install="/opt/lib/" component="slib"/>
 =======
+=======
+>>>>>>> upstream/master
          <QPG:Add file="../libz.so.1.2.11" install="/opt/lib/" user="root:bin" permission="644"/>
          <QPG:Add file="libz.so" install="/opt/lib/" component="dev" filetype="symlink" linkto="libz.so.1.2.11"/>
          <QPG:Add file="libz.so.1" install="/opt/lib/" filetype="symlink" linkto="libz.so.1.2.11"/>
          <QPG:Add file="../libz.so.1.2.11" install="/opt/lib/" component="slib"/>
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
       </QPG:Files>
 
@@ -71,7 +77,11 @@
 
             <QPM:ReleaseDescription>
 <<<<<<< HEAD
+<<<<<<< HEAD
                <QPM:ReleaseVersion>1.2.8</QPM:ReleaseVersion>
+=======
+               <QPM:ReleaseVersion>1.2.11</QPM:ReleaseVersion>
+>>>>>>> upstream/master
 =======
                <QPM:ReleaseVersion>1.2.11</QPM:ReleaseVersion>
 >>>>>>> upstream/master

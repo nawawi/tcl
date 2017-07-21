@@ -1,6 +1,10 @@
 /* adler32.c -- compute the Adler-32 checksum of a data stream
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2011 Mark Adler
+=======
+ * Copyright (C) 1995-2011, 2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2011, 2016 Mark Adler
 >>>>>>> upstream/master
@@ -12,11 +16,17 @@
 #include "zutil.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define local static
 
 local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 
 #define BASE 65521      /* largest prime smaller than 65536 */
+=======
+local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
+
+#define BASE 65521U     /* largest prime smaller than 65536 */
+>>>>>>> upstream/master
 =======
 local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 
@@ -37,6 +47,7 @@ local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 /* note that this assumes BASE is 65521, where 65536 % 65521 == 15
    (thank you to John Reiser for pointing this out) */
 #  define CHOP(a) \
+<<<<<<< HEAD
     do { \
         unsigned long tmp = a >> 16; \
         a &= 0xffffUL; \
@@ -44,6 +55,15 @@ local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
     } while (0)
 #  define MOD28(a) \
     do { \
+=======
+    do { \
+        unsigned long tmp = a >> 16; \
+        a &= 0xffffUL; \
+        a += (tmp << 4) - tmp; \
+    } while (0)
+#  define MOD28(a) \
+    do { \
+>>>>>>> upstream/master
         CHOP(a); \
         if (a >= BASE) a -= BASE; \
     } while (0)
@@ -73,10 +93,17 @@ local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 
 /* ========================================================================= */
 <<<<<<< HEAD
+<<<<<<< HEAD
 uLong ZEXPORT adler32(adler, buf, len)
     uLong adler;
     const Bytef *buf;
     uInt len;
+=======
+uLong ZEXPORT adler32_z(adler, buf, len)
+    uLong adler;
+    const Bytef *buf;
+    z_size_t len;
+>>>>>>> upstream/master
 =======
 uLong ZEXPORT adler32_z(adler, buf, len)
     uLong adler;
@@ -151,7 +178,10 @@ uLong ZEXPORT adler32_z(adler, buf, len)
 
 /* ========================================================================= */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 uLong ZEXPORT adler32(adler, buf, len)
     uLong adler;
     const Bytef *buf;
@@ -161,6 +191,9 @@ uLong ZEXPORT adler32(adler, buf, len)
 }
 
 /* ========================================================================= */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 local uLong adler32_combine_(adler1, adler2, len2)
     uLong adler1;
@@ -186,7 +219,11 @@ local uLong adler32_combine_(adler1, adler2, len2)
     if (sum1 >= BASE) sum1 -= BASE;
     if (sum1 >= BASE) sum1 -= BASE;
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (sum2 >= (BASE << 1)) sum2 -= (BASE << 1);
+=======
+    if (sum2 >= ((unsigned long)BASE << 1)) sum2 -= ((unsigned long)BASE << 1);
+>>>>>>> upstream/master
 =======
     if (sum2 >= ((unsigned long)BASE << 1)) sum2 -= ((unsigned long)BASE << 1);
 >>>>>>> upstream/master

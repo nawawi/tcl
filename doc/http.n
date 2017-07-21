@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -27,11 +31,19 @@ http \- Client-side implementation of the HTTP/1.1 protocol
 .SH SYNOPSIS
 \fBpackage require http ?2.7?\fR
 .\" See Also -useragent option documentation in body!
+<<<<<<< HEAD
 .sp
 \fB::http::config ?\fI\-option value\fR ...?
 .sp
 \fB::http::geturl \fIurl\fR ?\fI\-option value\fR ...?
 .sp
+=======
+.sp
+\fB::http::config ?\fI\-option value\fR ...?
+.sp
+\fB::http::geturl \fIurl\fR ?\fI\-option value\fR ...?
+.sp
+>>>>>>> upstream/master
 \fB::http::formatQuery\fR \fIkey value\fR ?\fIkey value\fR ...?
 .sp
 \fB::http::reset\fR \fItoken\fR ?\fIwhy\fR?
@@ -105,7 +117,11 @@ The Accept header of the request.  The default is */*, which means that
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 all types of documents are accepted.  Otherwise you can supply a 
+=======
+all types of documents are accepted.  Otherwise you can supply a
+>>>>>>> upstream/master
 =======
 all types of documents are accepted.  Otherwise you can supply a
 >>>>>>> upstream/master
@@ -159,7 +175,11 @@ The value of the User-Agent header in the HTTP request.  The default is
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR? 
+=======
+\fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
+>>>>>>> upstream/master
 =======
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
 >>>>>>> upstream/master
@@ -350,7 +370,11 @@ The block size used when posting query data to the URL.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 At most 
+=======
+At most
+>>>>>>> upstream/master
 =======
 At most
 >>>>>>> upstream/master
@@ -472,6 +496,7 @@ received from the URL in the \fB::http::geturl\fR call.
 =======
 >>>>>>> upstream/master
 .TP
+<<<<<<< HEAD
 \fB::http::meta\fR \fItoken\fR
 .
 This is a convenience procedure that returns the \fBmeta\fR
@@ -482,12 +507,17 @@ headers. See below for an explanation of this element.
 <<<<<<< HEAD
 =======
 .TP
+=======
+>>>>>>> upstream/master
 \fB::http::meta\fR \fItoken\fR
 .
 This is a convenience procedure that returns the \fBmeta\fR
 element of the state array which contains the HTTP response
 headers. See below for an explanation of this element.
 .TP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -1,6 +1,10 @@
 /* gzwrite.c -- zlib functions for writing gzip files
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 2004, 2005, 2010, 2011, 2012, 2013 Mark Adler
+=======
+ * Copyright (C) 2004-2017 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 2004-2017 Mark Adler
 >>>>>>> upstream/master
@@ -14,15 +18,21 @@ local int gz_init OF((gz_statep));
 local int gz_comp OF((gz_statep, int));
 local int gz_zero OF((gz_statep, z_off64_t));
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 /* Initialize state for writing a gzip file.  Mark initialization by setting
    state->size to non-zero.  Return -1 on failure or 0 on success. */
 =======
+=======
+>>>>>>> upstream/master
 local z_size_t gz_write OF((gz_statep, voidpc, z_size_t));
 
 /* Initialize state for writing a gzip file.  Mark initialization by setting
    state->size to non-zero.  Return -1 on a memory allocation failure, or 0 on
    success. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 local int gz_init(state)
     gz_statep state;
@@ -31,8 +41,13 @@ local int gz_init(state)
     z_streamp strm = &(state->strm);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* allocate input buffer */
     state->in = (unsigned char *)malloc(state->want);
+=======
+    /* allocate input buffer (double size for gzprintf) */
+    state->in = (unsigned char *)malloc(state->want << 1);
+>>>>>>> upstream/master
 =======
     /* allocate input buffer (double size for gzprintf) */
     state->in = (unsigned char *)malloc(state->want << 1);
@@ -65,6 +80,10 @@ local int gz_init(state)
             return -1;
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        strm->next_in = NULL;
+>>>>>>> upstream/master
 =======
         strm->next_in = NULL;
 >>>>>>> upstream/master
@@ -84,25 +103,36 @@ local int gz_init(state)
 
 /* Compress whatever is at avail_in and next_in and write to the output file.
 <<<<<<< HEAD
+<<<<<<< HEAD
    Return -1 if there is an error writing to the output file, otherwise 0.
    flush is assumed to be a valid deflate() flush value.  If flush is Z_FINISH,
    then the deflate() state is reset to start a new gzip stream.  If gz->direct
    is true, then simply write to the output file without compressing, and
    ignore flush. */
 =======
+=======
+>>>>>>> upstream/master
    Return -1 if there is an error writing to the output file or if gz_init()
    fails to allocate memory, otherwise 0.  flush is assumed to be a valid
    deflate() flush value.  If flush is Z_FINISH, then the deflate() state is
    reset to start a new gzip stream.  If gz->direct is true, then simply write
    to the output file without compressing, and ignore flush. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 local int gz_comp(state, flush)
     gz_statep state;
     int flush;
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int ret, got;
     unsigned have;
+=======
+    int ret, writ;
+    unsigned have, put, max = ((unsigned)-1 >> 2) + 1;
+>>>>>>> upstream/master
 =======
     int ret, writ;
     unsigned have, put, max = ((unsigned)-1 >> 2) + 1;
@@ -116,6 +146,7 @@ local int gz_comp(state, flush)
     /* write directly if requested */
     if (state->direct) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         got = write(state->fd, strm->next_in, strm->avail_in);
         if (got < 0 || (unsigned)got != strm->avail_in) {
             gz_error(state, Z_ERRNO, zstrerror());
@@ -123,6 +154,8 @@ local int gz_comp(state, flush)
         }
         strm->avail_in = 0;
 =======
+=======
+>>>>>>> upstream/master
         while (strm->avail_in) {
             put = strm->avail_in > max ? max : strm->avail_in;
             writ = write(state->fd, strm->next_in, put);
@@ -133,6 +166,9 @@ local int gz_comp(state, flush)
             strm->avail_in -= (unsigned)writ;
             strm->next_in += writ;
         }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         return 0;
     }
@@ -145,12 +181,15 @@ local int gz_comp(state, flush)
         if (strm->avail_out == 0 || (flush != Z_NO_FLUSH &&
             (flush != Z_FINISH || ret == Z_STREAM_END))) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             have = (unsigned)(strm->next_out - state->x.next);
             if (have && ((got = write(state->fd, state->x.next, have)) < 0 ||
                          (unsigned)got != have)) {
                 gz_error(state, Z_ERRNO, zstrerror());
                 return -1;
 =======
+=======
+>>>>>>> upstream/master
             while (strm->next_out > state->x.next) {
                 put = strm->next_out - state->x.next > (int)max ? max :
                       (unsigned)(strm->next_out - state->x.next);
@@ -160,14 +199,22 @@ local int gz_comp(state, flush)
                     return -1;
                 }
                 state->x.next += writ;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
             }
             if (strm->avail_out == 0) {
                 strm->avail_out = state->size;
                 strm->next_out = state->out;
 <<<<<<< HEAD
+<<<<<<< HEAD
             }
             state->x.next = strm->next_out;
+=======
+                state->x.next = state->out;
+            }
+>>>>>>> upstream/master
 =======
                 state->x.next = state->out;
             }
@@ -194,7 +241,12 @@ local int gz_comp(state, flush)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Compress len zeros to output.  Return -1 on error, 0 on success. */
+=======
+/* Compress len zeros to output.  Return -1 on a write error or memory
+   allocation failure by gz_comp(), or 0 on success. */
+>>>>>>> upstream/master
 =======
 /* Compress len zeros to output.  Return -1 on a write error or memory
    allocation failure by gz_comp(), or 0 on success. */
@@ -231,6 +283,7 @@ local int gz_zero(state, len)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* -- see zlib.h -- */
 int ZEXPORT gzwrite(file, buf, len)
     gzFile file;
@@ -258,6 +311,8 @@ int ZEXPORT gzwrite(file, buf, len)
         return 0;
     }
 =======
+=======
+>>>>>>> upstream/master
 /* Write len bytes from buf to file.  Return the number of bytes written.  If
    the returned value is less than len, then there was an error. */
 local z_size_t gz_write(state, buf, len)
@@ -266,6 +321,9 @@ local z_size_t gz_write(state, buf, len)
     z_size_t len;
 {
     z_size_t put = len;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /* if len is zero, avoid unnecessary operations */
@@ -290,21 +348,31 @@ local z_size_t gz_write(state, buf, len)
             unsigned have, copy;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (strm->avail_in == 0)
                 strm->next_in = state->in;
             have = (unsigned)((strm->next_in + strm->avail_in) - state->in);
 =======
+=======
+>>>>>>> upstream/master
             if (state->strm.avail_in == 0)
                 state->strm.next_in = state->in;
             have = (unsigned)((state->strm.next_in + state->strm.avail_in) -
                               state->in);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
             copy = state->size - have;
             if (copy > len)
                 copy = len;
             memcpy(state->in + have, buf, copy);
 <<<<<<< HEAD
+<<<<<<< HEAD
             strm->avail_in += copy;
+=======
+            state->strm.avail_in += copy;
+>>>>>>> upstream/master
 =======
             state->strm.avail_in += copy;
 >>>>>>> upstream/master
@@ -317,6 +385,7 @@ local z_size_t gz_write(state, buf, len)
     }
     else {
         /* consume whatever's left in the input buffer */
+<<<<<<< HEAD
 <<<<<<< HEAD
         if (strm->avail_in && gz_comp(state, Z_NO_FLUSH) == -1)
             return 0;
@@ -332,6 +401,8 @@ local z_size_t gz_write(state, buf, len)
     /* input was all buffered or compressed (put will fit in int) */
     return (int)put;
 =======
+=======
+>>>>>>> upstream/master
         if (state->strm.avail_in && gz_comp(state, Z_NO_FLUSH) == -1)
             return 0;
 
@@ -409,6 +480,9 @@ z_size_t ZEXPORT gzfwrite(buf, size, nitems, file)
 
     /* write len bytes to buf, return the number of full items written */
     return len ? gz_write(state, buf, len) / size : 0;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }
 
@@ -447,7 +521,11 @@ int ZEXPORT gzputc(file, c)
         have = (unsigned)((strm->next_in + strm->avail_in) - state->in);
         if (have < state->size) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             state->in[have] = c;
+=======
+            state->in[have] = (unsigned char)c;
+>>>>>>> upstream/master
 =======
             state->in[have] = (unsigned char)c;
 >>>>>>> upstream/master
@@ -459,8 +537,13 @@ int ZEXPORT gzputc(file, c)
 
     /* no room in buffer or not initialized, use gz_write() */
 <<<<<<< HEAD
+<<<<<<< HEAD
     buf[0] = c;
     if (gzwrite(file, buf, 1) != 1)
+=======
+    buf[0] = (unsigned char)c;
+    if (gz_write(state, buf, 1) != 1)
+>>>>>>> upstream/master
 =======
     buf[0] = (unsigned char)c;
     if (gz_write(state, buf, 1) != 1)
@@ -476,12 +559,15 @@ int ZEXPORT gzputs(file, str)
 {
     int ret;
 <<<<<<< HEAD
+<<<<<<< HEAD
     unsigned len;
 
     /* write string */
     len = (unsigned)strlen(str);
     ret = gzwrite(file, str, len);
 =======
+=======
+>>>>>>> upstream/master
     z_size_t len;
     gz_statep state;
 
@@ -497,6 +583,9 @@ int ZEXPORT gzputs(file, str)
     /* write string */
     len = strlen(str);
     ret = gz_write(state, str, len);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return ret == 0 && len != 0 ? -1 : ret;
 }
@@ -508,7 +597,13 @@ int ZEXPORT gzputs(file, str)
 int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int size, len;
+=======
+    int len;
+    unsigned left;
+    char *next;
+>>>>>>> upstream/master
 =======
     int len;
     unsigned left;
@@ -520,7 +615,11 @@ int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
     /* get internal structure */
     if (file == NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
         return -1;
+=======
+        return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
         return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -530,23 +629,30 @@ int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
     /* check that we're writing and that there's no error */
     if (state->mode != GZ_WRITE || state->err != Z_OK)
 <<<<<<< HEAD
+<<<<<<< HEAD
         return 0;
 
     /* make sure we have some buffer space */
     if (state->size == 0 && gz_init(state) == -1)
         return 0;
 =======
+=======
+>>>>>>> upstream/master
         return Z_STREAM_ERROR;
 
     /* make sure we have some buffer space */
     if (state->size == 0 && gz_init(state) == -1)
         return state->err;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /* check for seek request */
     if (state->seek) {
         state->seek = 0;
         if (gz_zero(state, state->skip) == -1)
+<<<<<<< HEAD
 <<<<<<< HEAD
             return 0;
     }
@@ -573,6 +679,8 @@ int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
 #  else
     len = vsnprintf((char *)(state->in), size, format, va);
 =======
+=======
+>>>>>>> upstream/master
             return state->err;
     }
 
@@ -597,11 +705,15 @@ int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
     len = strlen(next);
 #  else
     len = vsnprintf(next, state->size, format, va);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #  endif
 #endif
 
     /* check that printf() results fit in buffer */
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (len <= 0 || len >= (int)size || state->in[size - 1] != 0)
         return 0;
@@ -611,6 +723,8 @@ int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
     strm->next_in = state->in;
     state->x.pos += len;
 =======
+=======
+>>>>>>> upstream/master
     if (len == 0 || (unsigned)len >= state->size || next[state->size - 1] != 0)
         return 0;
 
@@ -626,6 +740,9 @@ int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)
         strm->next_in = state->in;
         strm->avail_in = left;
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return len;
 }
@@ -652,7 +769,12 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
         a11, a12, a13, a14, a15, a16, a17, a18, a19, a20;
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int size, len;
+=======
+    unsigned len, left;
+    char *next;
+>>>>>>> upstream/master
 =======
     unsigned len, left;
     char *next;
@@ -663,7 +785,11 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
     /* get internal structure */
     if (file == NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
         return -1;
+=======
+        return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
         return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -672,6 +798,7 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
 
     /* check that can really pass pointer in ints */
     if (sizeof(int) != sizeof(void *))
+<<<<<<< HEAD
 <<<<<<< HEAD
         return 0;
 
@@ -683,6 +810,8 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
     if (state->size == 0 && gz_init(state) == -1)
         return 0;
 =======
+=======
+>>>>>>> upstream/master
         return Z_STREAM_ERROR;
 
     /* check that we're writing and that there's no error */
@@ -692,12 +821,16 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
     /* make sure we have some buffer space */
     if (state->size == 0 && gz_init(state) == -1)
         return state->error;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /* check for seek request */
     if (state->seek) {
         state->seek = 0;
         if (gz_zero(state, state->skip) == -1)
+<<<<<<< HEAD
 <<<<<<< HEAD
             return 0;
     }
@@ -729,6 +862,8 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
                    a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18,
                    a19, a20);
 =======
+=======
+>>>>>>> upstream/master
             return state->error;
     }
 
@@ -758,11 +893,15 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
 #  else
     len = snprintf(next, state->size, format, a1, a2, a3, a4, a5, a6, a7, a8,
                    a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #  endif
 #endif
 
     /* check that printf() results fit in buffer */
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (len <= 0 || len >= (int)size || state->in[size - 1] != 0)
         return 0;
@@ -773,6 +912,8 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
     state->x.pos += len;
     return len;
 =======
+=======
+>>>>>>> upstream/master
     if (len == 0 || len >= state->size || next[state->size - 1] != 0)
         return 0;
 
@@ -789,6 +930,9 @@ int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
         strm->avail_in = left;
     }
     return (int)len;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }
 
@@ -804,7 +948,11 @@ int ZEXPORT gzflush(file, flush)
     /* get internal structure */
     if (file == NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
         return -1;
+=======
+        return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
         return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -823,17 +971,23 @@ int ZEXPORT gzflush(file, flush)
         state->seek = 0;
         if (gz_zero(state, state->skip) == -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
     }
 
     /* compress remaining data with requested flush */
     gz_comp(state, flush);
 =======
+=======
+>>>>>>> upstream/master
             return state->err;
     }
 
     /* compress remaining data with requested flush */
     (void)gz_comp(state, flush);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return state->err;
 }
@@ -866,7 +1020,11 @@ int ZEXPORT gzsetparams(file, level, strategy)
         state->seek = 0;
         if (gz_zero(state, state->skip) == -1)
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
+=======
+            return state->err;
+>>>>>>> upstream/master
 =======
             return state->err;
 >>>>>>> upstream/master
@@ -876,7 +1034,11 @@ int ZEXPORT gzsetparams(file, level, strategy)
     if (state->size) {
         /* flush previous input with previous parameters before changing */
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (strm->avail_in && gz_comp(state, Z_PARTIAL_FLUSH) == -1)
+=======
+        if (strm->avail_in && gz_comp(state, Z_BLOCK) == -1)
+>>>>>>> upstream/master
 =======
         if (strm->avail_in && gz_comp(state, Z_BLOCK) == -1)
 >>>>>>> upstream/master

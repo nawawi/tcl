@@ -116,7 +116,11 @@ Pkgc_UnsafeObjCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master
@@ -161,7 +165,11 @@ Pkgc_Init(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int
+=======
+DLLEXPORT int
+>>>>>>> upstream/master
 =======
 DLLEXPORT int
 >>>>>>> upstream/master

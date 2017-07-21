@@ -1,8 +1,14 @@
 /* blast.c
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 2003, 2012 Mark Adler
  * For conditions of distribution and use, see copyright notice in blast.h
  * version 1.2, 24 Oct 2012
+=======
+ * Copyright (C) 2003, 2012, 2013 Mark Adler
+ * For conditions of distribution and use, see copyright notice in blast.h
+ * version 1.3, 24 Aug 2013
+>>>>>>> upstream/master
 =======
  * Copyright (C) 2003, 2012, 2013 Mark Adler
  * For conditions of distribution and use, see copyright notice in blast.h
@@ -31,15 +37,21 @@
  * 1.2  24 Oct 2012     - Add note about using binary mode in stdio
  *                      - Fix comparisons of differently signed integers
 <<<<<<< HEAD
+<<<<<<< HEAD
  */
 
 =======
+=======
+>>>>>>> upstream/master
  * 1.3  24 Aug 2013     - Return unused input from blast()
  *                      - Fix test code to correctly report unused input
  *                      - Enable the provision of initial input to blast()
  */
 
 #include <stddef.h>             /* for NULL */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #include <setjmp.h>             /* for setjmp(), longjmp(), and jmp_buf */
 #include "blast.h"              /* prototype for blast() */
@@ -272,7 +284,11 @@ local int construct(struct huffman *h, const unsigned char *rep, int n)
  *
  * - If literals are uncoded, then the next eight bits are the literal, in the
 <<<<<<< HEAD
+<<<<<<< HEAD
  *   normal bit order in th stream, i.e. no bit-reversal is needed. Similarly,
+=======
+ *   normal bit order in the stream, i.e. no bit-reversal is needed. Similarly,
+>>>>>>> upstream/master
 =======
  *   normal bit order in the stream, i.e. no bit-reversal is needed. Similarly,
 >>>>>>> upstream/master
@@ -396,7 +412,12 @@ local int decomp(struct state *s)
 
 /* See comments in blast.h */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow)
+=======
+int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
+          unsigned *left, unsigned char **in)
+>>>>>>> upstream/master
 =======
 int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
           unsigned *left, unsigned char **in)
@@ -409,14 +430,20 @@ int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
     s.infun = infun;
     s.inhow = inhow;
 <<<<<<< HEAD
+<<<<<<< HEAD
     s.left = 0;
 =======
+=======
+>>>>>>> upstream/master
     if (left != NULL && *left) {
         s.left = *left;
         s.in = *in;
     }
     else
         s.left = 0;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     s.bitbuf = 0;
     s.bitcnt = 0;
@@ -434,13 +461,19 @@ int blast(blast_in infun, void *inhow, blast_out outfun, void *outhow,
         err = decomp(&s);               /* decompress */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     /* return unused input */
     if (left != NULL)
         *left = s.left;
     if (in != NULL)
         *in = s.left ? s.in : NULL;
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     /* write any leftover output and update the error code if needed */
     if (err != 1 && s.next && s.outfun(s.outhow, s.out, s.next) && err == 0)
@@ -472,6 +505,7 @@ local int outf(void *how, unsigned char *buf, unsigned len)
 int main(void)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int ret, n;
 
     /* decompress to stdout */
@@ -487,6 +521,12 @@ int main(void)
     unsigned left;
 
     /* decompress to stdout */
+=======
+    int ret;
+    unsigned left;
+
+    /* decompress to stdout */
+>>>>>>> upstream/master
     left = 0;
     ret = blast(inf, stdin, outf, stdout, &left, NULL);
     if (ret != 0)
@@ -497,6 +537,9 @@ int main(void)
         left++;
     if (left)
         fprintf(stderr, "blast warning: %u unused bytes of input\n", left);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /* return blast() error code */

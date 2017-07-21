@@ -115,7 +115,11 @@ TCL_SRCROOT user build setting, by default this is set to the project-relative
 path '../../tcl', if your tcl source directory is named differently, e.g.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '../../tcl8.6', you need to manually change the TCL_SRCROOT setting by editing
+=======
+'../../tcl8.7', you need to manually change the TCL_SRCROOT setting by editing
+>>>>>>> upstream/master
 =======
 '../../tcl8.7', you need to manually change the TCL_SRCROOT setting by editing
 >>>>>>> upstream/master
@@ -151,9 +155,15 @@ Detailed Instructions for building with macosx/GNUmakefile
 - The following instructions assume the Tcl source tree is named "tcl${ver}",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 (where ${ver} is a shell variable containing the Tcl version number e.g. '8.6').
 Setup this shell variable as follows:
 	ver="8.6"
+=======
+(where ${ver} is a shell variable containing the Tcl version number e.g. '8.7').
+Setup this shell variable as follows:
+	ver="8.7"
+>>>>>>> upstream/master
 =======
 (where ${ver} is a shell variable containing the Tcl version number e.g. '8.7').
 Setup this shell variable as follows:

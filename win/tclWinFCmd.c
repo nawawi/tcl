@@ -566,6 +566,7 @@ DoCopyFile(
      */
 =======
 
+<<<<<<< HEAD
     /*
      * The CopyFile API acts differently under Win95/98 and NT WRT NULL and
      * "". Avoid passing these values.
@@ -593,6 +594,10 @@ DoCopyFile(
 
 #if defined(HAVE_NO_SEH) && !defined(_WIN64)
     /*
+=======
+#if defined(HAVE_NO_SEH) && !defined(_WIN64)
+    /*
+>>>>>>> upstream/master
      * Don't have SEH available, do things the hard way. Note that this needs
      * to be one block of asm, to avoid stack imbalance; also, it is illegal
      * for one asm block to contain a jump to another.
@@ -1555,11 +1560,16 @@ GetWinFileAttributes(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int len;
 <<<<<<< HEAD
 	const char *str = Tcl_GetStringFromObj(fileName,&len);
 =======
 	const char *str = TclGetStringFromObj(fileName,&len);
+>>>>>>> upstream/master
+=======
+	const char *str = TclGetString(fileName);
+	size_t len = fileName->length;
 >>>>>>> upstream/master
 =======
 	const char *str = TclGetString(fileName);
@@ -1660,9 +1670,14 @@ ConvertFileNameFormat(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	pathv = Tcl_GetStringFromObj(elt, &pathLen);
 =======
 	pathv = TclGetStringFromObj(elt, &pathLen);
+>>>>>>> upstream/master
+=======
+	pathv = TclGetString(elt);
+	pathLen = elt->length;
 >>>>>>> upstream/master
 =======
 	pathv = TclGetString(elt);
@@ -1711,11 +1726,16 @@ ConvertFileNameFormat(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    tempString = Tcl_GetStringFromObj(tempPath,&tempLen);
 =======
 	    tempString = TclGetStringFromObj(tempPath,&tempLen);
 >>>>>>> upstream/master
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempLen, &ds);
+=======
+	    tempString = TclGetString(tempPath);
+	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);
+>>>>>>> upstream/master
 =======
 	    tempString = TclGetString(tempPath);
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);

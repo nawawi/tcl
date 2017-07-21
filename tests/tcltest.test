@@ -48,6 +48,10 @@ cd [temporaryDirectory]
 testConstraint exec [llength [info commands exec]]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2150,7 +2154,7 @@ test tcltest-26.2 {Bug/RFE 1017151} -setup {
 ---- errorInfo: body error
 *
 ---- errorInfo(cleanup): cleanup error*}
-
+
 cleanupTests
 }
 

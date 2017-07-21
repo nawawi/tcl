@@ -173,7 +173,11 @@ static const EnsembleImplMap decodeMap[] = {
  * This approach creates a one-to-one map between all bytearray values
  * and a subset of Tcl string values.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> upstream/master
 =======
  *
 >>>>>>> upstream/master
@@ -185,7 +189,11 @@ static const EnsembleImplMap decodeMap[] = {
  * setFromAnyProc signature has a completion code return value for just
  * this reason, to reject invalid inputs.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> upstream/master
 =======
  *
 >>>>>>> upstream/master
@@ -213,7 +221,11 @@ static const EnsembleImplMap decodeMap[] = {
  *
  * has a guarantee to always return a non-NULL value, but that value
 <<<<<<< HEAD
+<<<<<<< HEAD
  * points to a byte sequence that cannot be used by the caller to  
+=======
+ * points to a byte sequence that cannot be used by the caller to
+>>>>>>> upstream/master
 =======
  * points to a byte sequence that cannot be used by the caller to
 >>>>>>> upstream/master
@@ -231,7 +243,11 @@ static const EnsembleImplMap decodeMap[] = {
  * dance of testing.
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * The Tcl_ObjType "properByteArrayType" is (nearly) a correct 
+=======
+ * The Tcl_ObjType "properByteArrayType" is (nearly) a correct
+>>>>>>> upstream/master
 =======
  * The Tcl_ObjType "properByteArrayType" is (nearly) a correct
 >>>>>>> upstream/master
@@ -567,7 +583,11 @@ SetByteArrayFromAny(
 
     byteArrayPtr = ckalloc(BYTEARRAY_SIZE(length));
     for (dst = byteArrayPtr->bytes; src < srcEnd; ) {
+<<<<<<< HEAD
 	src += Tcl_UtfToUniChar(src, &ch);
+=======
+	src += TclUtfToUniChar(src, &ch);
+>>>>>>> upstream/master
 	improper = improper || (ch > 255);
 	*dst++ = UCHAR(ch);
     }
@@ -1319,7 +1339,7 @@ BinaryFormatCmd(
 	Tcl_UniChar ch;
 	char buf[TCL_UTF_MAX + 1];
 
-	Tcl_UtfToUniChar(errorString, &ch);
+	TclUtfToUniChar(errorString, &ch);
 	buf[Tcl_UniCharToUtf(ch, buf)] = '\0';
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"bad field specifier \"%s\"", buf));
@@ -1689,7 +1709,7 @@ BinaryScanCmd(
 	Tcl_UniChar ch;
 	char buf[TCL_UTF_MAX + 1];
 
-	Tcl_UtfToUniChar(errorString, &ch);
+	TclUtfToUniChar(errorString, &ch);
 	buf[Tcl_UniCharToUtf(ch, buf)] = '\0';
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"bad field specifier \"%s\"", buf));
@@ -1759,7 +1779,15 @@ GetFormatSpec(
 	(*formatPtr)++;
 	*countPtr = BINARY_ALL;
     } else if (isdigit(UCHAR(**formatPtr))) { /* INTL: digit */
-	*countPtr = strtoul(*formatPtr, (char **) formatPtr, 10);
+	unsigned long int count;
+
+	errno = 0;
+	count = strtoul(*formatPtr, (char **) formatPtr, 10);
+	if (errno || (count > (unsigned long) INT_MAX)) {
+	    *countPtr = INT_MAX;
+	} else {
+	    *countPtr = (int) count;
+	}
     } else {
 	*countPtr = BINARY_NOCOUNT;
     }
@@ -2498,6 +2526,7 @@ BinaryDecodeHex(
 		}
 		i--;
 		continue;
+<<<<<<< HEAD
 	    }
 
 	    value <<= 4;
@@ -2508,6 +2537,18 @@ BinaryDecodeHex(
 	    if (c > 16) {
 		c += ('A' - 'a');
 	    }
+=======
+	    }
+
+	    value <<= 4;
+	    c -= '0';
+	    if (c > 9) {
+		c += ('0' - 'A') + 10;
+	    }
+	    if (c > 16) {
+		c += ('A' - 'a');
+	    }
+>>>>>>> upstream/master
 	    value |= (c & 0xf);
 	}
 	if (i < 2) {
@@ -2608,7 +2649,11 @@ BinaryEncode64(
 	case OPT_WRAPCHAR:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    wrapchar = Tcl_GetStringFromObj(objv[i+1], &wrapcharlen);
+=======
+	    wrapchar = TclGetStringFromObj(objv[i+1], &wrapcharlen);
+>>>>>>> upstream/master
 =======
 	    wrapchar = TclGetStringFromObj(objv[i+1], &wrapcharlen);
 >>>>>>> upstream/master

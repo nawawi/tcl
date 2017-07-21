@@ -272,9 +272,14 @@ TclpMatchInDirectory(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	dirName = Tcl_GetStringFromObj(fileNamePtr, &dirLength);
 =======
 	dirName = TclGetStringFromObj(fileNamePtr, &dirLength);
+>>>>>>> upstream/master
+=======
+	dirName = TclGetString(fileNamePtr);
+	dirLength = fileNamePtr->length;
 >>>>>>> upstream/master
 =======
 	dirName = TclGetString(fileNamePtr);
@@ -967,11 +972,16 @@ TclpObjLink(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    target = Tcl_GetStringFromObj(transPtr, &targetLen);
 =======
 	    target = TclGetStringFromObj(transPtr, &targetLen);
 >>>>>>> upstream/master
 	    target = Tcl_UtfToExternalDString(NULL, target, targetLen, &ds);
+=======
+	    target = TclGetString(transPtr);
+	    target = Tcl_UtfToExternalDString(NULL, target, transPtr->length, &ds);
+>>>>>>> upstream/master
 =======
 	    target = TclGetString(transPtr);
 	    target = Tcl_UtfToExternalDString(NULL, target, transPtr->length, &ds);
@@ -1135,9 +1145,14 @@ TclNativeCreateNativeRep(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(validPathPtr, &len);
 =======
     str = TclGetStringFromObj(validPathPtr, &len);
+>>>>>>> upstream/master
+=======
+    str = TclGetString(validPathPtr);
+    len = validPathPtr->length;
 >>>>>>> upstream/master
 =======
     str = TclGetString(validPathPtr);

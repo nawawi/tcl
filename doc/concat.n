@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -53,6 +57,7 @@ session:
 \fI%\fR \fBconcat\fR " a b {c   " d "  e} f"
 \fIa b {c d e} f\fR
 .CE
+<<<<<<< HEAD
 .PP
 =======
 .CS
@@ -82,6 +87,9 @@ session:
 \fI%\fR \fBconcat\fR " a b {c   " d "  e} f"
 \fIa b {c d e} f\fR
 .CE
+.PP
+>>>>>>> upstream/master
+=======
 .PP
 >>>>>>> upstream/master
 Note also that the concatenation does not remove spaces from the middle of

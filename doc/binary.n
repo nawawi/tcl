@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -354,7 +358,11 @@ example,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -377,7 +385,11 @@ example,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -408,7 +420,11 @@ example,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -431,7 +447,11 @@ For example,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -448,6 +468,7 @@ script is running.
 To determine what the native byte order of the machine is, refer to
 the \fBbyteOrder\fR element of the \fBtcl_platform\fR array.
 .IP \fBw\fR 5
+<<<<<<< HEAD
 This form is the same as \fBc\fR except that it stores one or more
 64-bit integers in little-endian byte order in the output string.  The
 low-order 64-bits of each integer are stored as an eight-byte value at
@@ -482,6 +503,8 @@ script is running.
 To determine what the native byte order of the machine is, refer to
 the \fBbyteOrder\fR element of the \fBtcl_platform\fR array.
 .IP \fBw\fR 5
+=======
+>>>>>>> upstream/master
 This form is the same as \fBc\fR except that it stores one or more
 64-bit integers in little-endian byte order in the output string.  The
 low-order 64-bits of each integer are stored as an eight-byte value at
@@ -499,6 +522,7 @@ or more 64-bit integers in big-endian byte order in the output string.
 For example,
 .RS
 .CS
+<<<<<<< HEAD
 \fBbinary format\fR Wc 4785469626960341345 110
 .CE
 will return the string \fBBigEndian\fR
@@ -512,6 +536,8 @@ or more 64-bit integers in big-endian byte order in the output string.
 For example,
 .RS
 .CS
+=======
+>>>>>>> upstream/master
 \fBbinary format\fR Wc 4785469626960341345 110
 .CE
 will return the string \fBBigEndian\fR
@@ -544,7 +570,11 @@ on a Windows system running on an Intel Pentium processor,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -577,7 +607,11 @@ Windows system running on an Intel Pentium processor,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will return a string equivalent to 
+=======
+will return a string equivalent to
+>>>>>>> upstream/master
 =======
 will return a string equivalent to
 >>>>>>> upstream/master
@@ -916,7 +950,11 @@ will return \fB2\fR with \fB5 7\fR stored in \fIvar1\fR and \fB\-16\fR
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 stored in \fIvar2\fR. 
+=======
+stored in \fIvar2\fR.
+>>>>>>> upstream/master
 =======
 stored in \fIvar2\fR.
 >>>>>>> upstream/master

@@ -902,6 +902,7 @@ Tcl_AfterObjCmd(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	command = Tcl_GetStringFromObj(commandPtr, &length);
 	for (afterPtr = assocPtr->firstAfterPtr;  afterPtr != NULL;
 		afterPtr = afterPtr->nextPtr) {
@@ -916,6 +917,12 @@ Tcl_AfterObjCmd(
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	command = TclGetStringFromObj(commandPtr, &length);
+	for (afterPtr = assocPtr->firstAfterPtr;  afterPtr != NULL;
+		afterPtr = afterPtr->nextPtr) {
+	    tempCommand = TclGetStringFromObj(afterPtr->commandPtr,
 >>>>>>> upstream/master
 		    &tempLength);
 	    if ((length == tempLength)
@@ -1079,6 +1086,7 @@ AfterDelay(
 	    } else {
                 break;
             }
+<<<<<<< HEAD
 	} else {
 	    diff = TCL_TIME_DIFF_MS(iPtr->limit.time, now);
 #ifndef TCL_WIDE_INT_IS_LONG
@@ -1096,6 +1104,8 @@ AfterDelay(
 		Tcl_Sleep((long) diff);
                 if (diff < SLEEP_OFFLOAD_GETTIMEOFDAY) break;
 	    } else break;
+=======
+>>>>>>> upstream/master
 	} else {
 	    diff = TCL_TIME_DIFF_MS(iPtr->limit.time, now);
 #ifndef TCL_WIDE_INT_IS_LONG

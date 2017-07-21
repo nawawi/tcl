@@ -19,7 +19,11 @@ if {[info commands package] == ""} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require -exact Tcl 8.6.4
+=======
+package require -exact Tcl 8.7a0
+>>>>>>> upstream/master
 =======
 package require -exact Tcl 8.7a0
 >>>>>>> upstream/master
@@ -129,6 +133,11 @@ namespace eval tcl {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+namespace eval tcl::Pkg {}
+
+>>>>>>> upstream/master
 =======
 namespace eval tcl::Pkg {}
 
@@ -191,6 +200,7 @@ if {[interp issafe]} {
     namespace eval ::tcl::clock [list variable TclLibDir $::tcl_library]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc clock args {
 	namespace eval ::tcl::clock [list namespace ensemble create -command \
 		[uplevel 1 [list namespace origin [lindex [info level 0] 0]]] \
@@ -198,6 +208,9 @@ if {[interp issafe]} {
 		    add clicks format microseconds milliseconds scan seconds
 		}]
 
+=======
+    proc ::tcl::initClock {} {
+>>>>>>> upstream/master
 =======
     proc ::tcl::initClock {} {
 >>>>>>> upstream/master
@@ -212,8 +225,14 @@ if {[interp issafe]} {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return [uplevel 1 [info level 0]]
     }
+=======
+	rename ::tcl::initClock {}
+    }
+    ::tcl::initClock
+>>>>>>> upstream/master
 =======
 	rename ::tcl::initClock {}
     }
@@ -320,6 +339,7 @@ proc unknown args {
 		    }
 		    append cinfo ...
 		}
+<<<<<<< HEAD
 		append cinfo "\"\n    (\"uplevel\" body line 1)"
 		append cinfo "\n    invoked from within"
 		append cinfo "\n\"uplevel 1 \$args\""
@@ -328,6 +348,11 @@ proc unknown args {
 		# and trim the extra contribution from the matching case
 		#
 		set expect "$msg\n    while executing\n\"$cinfo"
+=======
+		set tail "\n    (\"uplevel\" body line 1)\n    invoked\
+			from within\n\"uplevel 1 \$args\""
+		set expect "$msg\n    while executing\n\"$cinfo\"$tail"
+>>>>>>> upstream/master
 		if {$errInfo eq $expect} {
 		    #
 		    # The stack has only the eval from the expanded command
@@ -341,6 +366,7 @@ proc unknown args {
 		# Stack trace is nested, trim off just the contribution
 		# from the extra "eval" of $args due to the "catch" above.
 		#
+<<<<<<< HEAD
 		set expect "\n    invoked from within\n\"$cinfo"
 		set exlen [string length $expect]
 		set eilen [string length $errInfo]
@@ -356,6 +382,34 @@ proc unknown args {
 		}
 		return -code error -errorcode $errCode \
 			-errorinfo $einfo $msg
+=======
+		set last [string last $tail $errInfo]
+		if {$last + [string length $tail] != [string length $errInfo]} {
+		    # Very likely cannot happen
+		    return -options $opts $msg
+		}
+		set errInfo [string range $errInfo 0 $last-1]
+		set tail "\"$cinfo\""
+		set last [string last $tail $errInfo]
+		if {$last + [string length $tail] != [string length $errInfo]} {
+		    return -code error -errorcode $errCode \
+			    -errorinfo $errInfo $msg
+		}
+		set errInfo [string range $errInfo 0 $last-1]
+		set tail "\n    invoked from within\n"
+		set last [string last $tail $errInfo]
+		if {$last + [string length $tail] == [string length $errInfo]} {
+		    return -code error -errorcode $errCode \
+			    -errorinfo [string range $errInfo 0 $last-1] $msg
+		}
+		set tail "\n    while executing\n"
+		set last [string last $tail $errInfo]
+		if {$last + [string length $tail] == [string length $errInfo]} {
+		    return -code error -errorcode $errCode \
+			    -errorinfo [string range $errInfo 0 $last-1] $msg
+		}
+		return -options $opts $msg
+>>>>>>> upstream/master
 	    } else {
 		dict incr opts -level
 		return -options $opts $msg
@@ -684,8 +738,14 @@ proc auto_execok name {
     set auto_execs($name) ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     set shellBuiltins [list cls copy date del dir echo erase md mkdir \
 	    mklink rd ren rename rmdir start time type ver vol]
+=======
+    set shellBuiltins [list assoc cls copy date del dir echo erase ftype \
+                           md mkdir mklink move rd ren rename rmdir start \
+                           time type ver vol]
+>>>>>>> upstream/master
 =======
     set shellBuiltins [list assoc cls copy date del dir echo erase ftype \
                            md mkdir mklink move rd ren rename rmdir start \

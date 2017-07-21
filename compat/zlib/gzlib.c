@@ -1,6 +1,10 @@
 /* gzlib.c -- zlib functions common to reading and writing gzip files
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 2004, 2010, 2011, 2012, 2013 Mark Adler
+=======
+ * Copyright (C) 2004-2017 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 2004-2017 Mark Adler
 >>>>>>> upstream/master
@@ -10,7 +14,11 @@
 #include "gzguts.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(_WIN32) && !defined(__BORLANDC__)
+=======
+#if defined(_WIN32) && !defined(__BORLANDC__) && !defined(__MINGW32__)
+>>>>>>> upstream/master
 =======
 #if defined(_WIN32) && !defined(__BORLANDC__) && !defined(__MINGW32__)
 >>>>>>> upstream/master
@@ -103,7 +111,11 @@ local gzFile gz_open(path, fd, mode)
 {
     gz_statep state;
 <<<<<<< HEAD
+<<<<<<< HEAD
     size_t len;
+=======
+    z_size_t len;
+>>>>>>> upstream/master
 =======
     z_size_t len;
 >>>>>>> upstream/master
@@ -201,15 +213,21 @@ local gzFile gz_open(path, fd, mode)
 
     /* save the path name for error messages */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef _WIN32
     if (fd == -2) {
         len = wcstombs(NULL, path, 0);
         if (len == (size_t)-1)
 =======
+=======
+>>>>>>> upstream/master
 #ifdef WIDECHAR
     if (fd == -2) {
         len = wcstombs(NULL, path, 0);
         if (len == (z_size_t)-1)
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
             len = 0;
     }
@@ -222,7 +240,11 @@ local gzFile gz_open(path, fd, mode)
         return NULL;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef _WIN32
+=======
+#ifdef WIDECHAR
+>>>>>>> upstream/master
 =======
 #ifdef WIDECHAR
 >>>>>>> upstream/master
@@ -235,7 +257,11 @@ local gzFile gz_open(path, fd, mode)
 #endif
 #if !defined(NO_snprintf) && !defined(NO_vsnprintf)
 <<<<<<< HEAD
+<<<<<<< HEAD
         snprintf(state->path, len + 1, "%s", (const char *)path);
+=======
+        (void)snprintf(state->path, len + 1, "%s", (const char *)path);
+>>>>>>> upstream/master
 =======
         (void)snprintf(state->path, len + 1, "%s", (const char *)path);
 >>>>>>> upstream/master
@@ -267,7 +293,11 @@ local gzFile gz_open(path, fd, mode)
     /* open the file with the appropriate flags (or just use fd) */
     state->fd = fd > -1 ? fd : (
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef _WIN32
+=======
+#ifdef WIDECHAR
+>>>>>>> upstream/master
 =======
 #ifdef WIDECHAR
 >>>>>>> upstream/master
@@ -280,13 +310,19 @@ local gzFile gz_open(path, fd, mode)
         return NULL;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (state->mode == GZ_APPEND)
         state->mode = GZ_WRITE;         /* simplify later checks */
 =======
+=======
+>>>>>>> upstream/master
     if (state->mode == GZ_APPEND) {
         LSEEK(state->fd, 0, SEEK_END);  /* so gzoffset() is correct */
         state->mode = GZ_WRITE;         /* simplify later checks */
     }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /* save the current position for rewinding (only if reading) */
@@ -330,7 +366,11 @@ gzFile ZEXPORT gzdopen(fd, mode)
         return NULL;
 #if !defined(NO_snprintf) && !defined(NO_vsnprintf)
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(path, 7 + 3 * sizeof(int), "<fd:%d>", fd); /* for debugging */
+=======
+    (void)snprintf(path, 7 + 3 * sizeof(int), "<fd:%d>", fd);
+>>>>>>> upstream/master
 =======
     (void)snprintf(path, 7 + 3 * sizeof(int), "<fd:%d>", fd);
 >>>>>>> upstream/master
@@ -344,7 +384,11 @@ gzFile ZEXPORT gzdopen(fd, mode)
 
 /* -- see zlib.h -- */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef _WIN32
+=======
+#ifdef WIDECHAR
+>>>>>>> upstream/master
 =======
 #ifdef WIDECHAR
 >>>>>>> upstream/master
@@ -376,6 +420,11 @@ int ZEXPORT gzbuffer(file, size)
 
     /* check and set requested size */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    if ((size << 1) < size)
+        return -1;              /* need to be able to double it */
+>>>>>>> upstream/master
 =======
     if ((size << 1) < size)
         return -1;              /* need to be able to double it */
@@ -656,8 +705,13 @@ void ZLIB_INTERNAL gz_error(state, err, msg)
     }
 #if !defined(NO_snprintf) && !defined(NO_vsnprintf)
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(state->msg, strlen(state->path) + strlen(msg) + 3,
              "%s%s%s", state->path, ": ", msg);
+=======
+    (void)snprintf(state->msg, strlen(state->path) + strlen(msg) + 3,
+                   "%s%s%s", state->path, ": ", msg);
+>>>>>>> upstream/master
 =======
     (void)snprintf(state->msg, strlen(state->path) + strlen(msg) + 3,
                    "%s%s%s", state->path, ": ", msg);
@@ -668,7 +722,10 @@ void ZLIB_INTERNAL gz_error(state, err, msg)
     strcat(state->msg, msg);
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
     return;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 }

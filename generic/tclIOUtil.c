@@ -58,7 +58,11 @@ typedef struct FilesystemRecord {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -77,8 +81,12 @@ typedef struct {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		EvalFileCallback(ClientData data[],
 			    Tcl_Interp *interp, int result);
+=======
+static Tcl_NRPostProc	EvalFileCallback;
+>>>>>>> upstream/master
 =======
 static Tcl_NRPostProc	EvalFileCallback;
 >>>>>>> upstream/master
@@ -559,8 +567,13 @@ TclFSCwdPointerEquals(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	str1 = Tcl_GetStringFromObj(tsdPtr->cwdPathPtr, &len1);
 	str2 = Tcl_GetStringFromObj(*pathPtrPtr, &len2);
+=======
+	str1 = TclGetStringFromObj(tsdPtr->cwdPathPtr, &len1);
+	str2 = TclGetStringFromObj(*pathPtrPtr, &len2);
+>>>>>>> upstream/master
 =======
 	str1 = TclGetStringFromObj(tsdPtr->cwdPathPtr, &len1);
 	str2 = TclGetStringFromObj(*pathPtrPtr, &len2);
@@ -635,6 +648,10 @@ FsRecacheFilesystemList(void)
     while (toFree) {
 	FilesystemRecord *next = toFree->nextPtr;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -720,7 +737,11 @@ FsUpdateCwd(
     if (cwdObj != NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	str = Tcl_GetStringFromObj(cwdObj, &len);
+=======
+	str = TclGetStringFromObj(cwdObj, &len);
+>>>>>>> upstream/master
 =======
 	str = TclGetStringFromObj(cwdObj, &len);
 >>>>>>> upstream/master
@@ -823,7 +844,13 @@ TclFinalizeFilesystem(void)
 	FilesystemRecord *tmpFsRecPtr = fsRecPtr->nextPtr;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* The native filesystem is static, so we don't free it. */
+=======
+	/*
+	 * The native filesystem is static, so we don't free it.
+	 */
+>>>>>>> upstream/master
 =======
 	/*
 	 * The native filesystem is static, so we don't free it.
@@ -992,7 +1019,11 @@ Tcl_FSRegister(
 int
 Tcl_FSUnregister(
 <<<<<<< HEAD
+<<<<<<< HEAD
     const Tcl_Filesystem *fsPtr)	/* The filesystem record to remove. */
+=======
+    const Tcl_Filesystem *fsPtr)/* The filesystem record to remove. */
+>>>>>>> upstream/master
 =======
     const Tcl_Filesystem *fsPtr)/* The filesystem record to remove. */
 >>>>>>> upstream/master
@@ -1274,8 +1305,13 @@ FsAddMountsToGlobResult(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		mount = Tcl_GetStringFromObj(mElt, &mlen);
 		path = Tcl_GetStringFromObj(norm, &len);
+=======
+		mount = TclGetStringFromObj(mElt, &mlen);
+		path = TclGetStringFromObj(norm, &len);
+>>>>>>> upstream/master
 =======
 		mount = TclGetStringFromObj(mElt, &mlen);
 		path = TclGetStringFromObj(norm, &len);
@@ -1292,7 +1328,11 @@ FsAddMountsToGlobResult(
 		    len--;
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		len++; /* account for '/' in the mElt [Bug 1602539] */
+=======
+		len++;		/* account for '/' in the mElt [Bug 1602539] */
+>>>>>>> upstream/master
 =======
 		len++;		/* account for '/' in the mElt [Bug 1602539] */
 >>>>>>> upstream/master
@@ -1466,7 +1506,11 @@ TclFSNormalizeToUniquePath(
      * special case, in which if we have a native filesystem handler, we call
      * it first. This is because the root of Tcl's filesystem is always a
 <<<<<<< HEAD
+<<<<<<< HEAD
      * native filesystem (i.e. '/' on unix is native).
+=======
+     * native filesystem (i.e., '/' on unix is native).
+>>>>>>> upstream/master
 =======
      * native filesystem (i.e., '/' on unix is native).
 >>>>>>> upstream/master
@@ -1592,7 +1636,11 @@ TclGetOpenModeEx(
 
     /*
 <<<<<<< HEAD
+<<<<<<< HEAD
      * Check for the simpler fopen-like access modes (e.g. "r"). They are
+=======
+     * Check for the simpler fopen-like access modes (e.g., "r"). They are
+>>>>>>> upstream/master
 =======
      * Check for the simpler fopen-like access modes (e.g., "r"). They are
 >>>>>>> upstream/master
@@ -1856,6 +1904,7 @@ Tcl_FSEvalFileEx(
      */
 
     if (Tcl_ReadChars(chan, objPtr, 1, 0) < 0) {
+<<<<<<< HEAD
 	Tcl_Close(interp, chan);
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"couldn't read file \"%s\": %s",
@@ -1871,10 +1920,30 @@ Tcl_FSEvalFileEx(
 
     if (Tcl_ReadChars(chan, objPtr, -1,
 	    memcmp(string, "\xef\xbb\xbf", 3)) < 0) {
+=======
+>>>>>>> upstream/master
 	Tcl_Close(interp, chan);
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"couldn't read file \"%s\": %s",
 		Tcl_GetString(pathPtr), Tcl_PosixError(interp)));
+<<<<<<< HEAD
+=======
+	goto end;
+    }
+    string = Tcl_GetString(objPtr);
+
+    /*
+     * If first character is not a BOM, append the remaining characters,
+     * otherwise replace them. [Bug 3466099]
+     */
+
+    if (Tcl_ReadChars(chan, objPtr, -1,
+	    memcmp(string, "\xef\xbb\xbf", 3)) < 0) {
+	Tcl_Close(interp, chan);
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"couldn't read file \"%s\": %s",
+		Tcl_GetString(pathPtr), Tcl_PosixError(interp)));
+>>>>>>> upstream/master
 	goto end;
     }
 
@@ -1888,7 +1957,11 @@ Tcl_FSEvalFileEx(
     Tcl_IncrRefCount(iPtr->scriptFile);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     string = Tcl_GetStringFromObj(objPtr, &length);
+=======
+    string = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 =======
     string = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
@@ -1923,7 +1996,11 @@ Tcl_FSEvalFileEx(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *pathString = Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	const char *pathString = TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 =======
 	const char *pathString = TclGetStringFromObj(pathPtr, &length);
 >>>>>>> upstream/master
@@ -1977,6 +2054,10 @@ TclNREvalFile(
 	return TCL_ERROR;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    TclPkgFileSeen(interp, Tcl_GetString(pathPtr));
+>>>>>>> upstream/master
 =======
     TclPkgFileSeen(interp, Tcl_GetString(pathPtr));
 >>>>>>> upstream/master
@@ -2010,6 +2091,8 @@ TclNREvalFile(
      */
 
     if (Tcl_ReadChars(chan, objPtr, 1, 0) < 0) {
+<<<<<<< HEAD
+=======
 	Tcl_Close(interp, chan);
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"couldn't read file \"%s\": %s",
@@ -2026,10 +2109,30 @@ TclNREvalFile(
 
     if (Tcl_ReadChars(chan, objPtr, -1,
 	    memcmp(string, "\xef\xbb\xbf", 3)) < 0) {
+>>>>>>> upstream/master
 	Tcl_Close(interp, chan);
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		"couldn't read file \"%s\": %s",
 		Tcl_GetString(pathPtr), Tcl_PosixError(interp)));
+<<<<<<< HEAD
+	Tcl_DecrRefCount(objPtr);
+	return TCL_ERROR;
+    }
+    string = Tcl_GetString(objPtr);
+
+    /*
+     * If first character is not a BOM, append the remaining characters,
+     * otherwise replace them. [Bug 3466099]
+     */
+
+    if (Tcl_ReadChars(chan, objPtr, -1,
+	    memcmp(string, "\xef\xbb\xbf", 3)) < 0) {
+	Tcl_Close(interp, chan);
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"couldn't read file \"%s\": %s",
+		Tcl_GetString(pathPtr), Tcl_PosixError(interp)));
+=======
+>>>>>>> upstream/master
 	Tcl_DecrRefCount(objPtr);
 	return TCL_ERROR;
     }
@@ -2086,7 +2189,11 @@ EvalFileCallback(
 	int length;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	const char *pathString = Tcl_GetStringFromObj(pathPtr, &length);
+=======
+	const char *pathString = TclGetStringFromObj(pathPtr, &length);
+>>>>>>> upstream/master
 =======
 	const char *pathString = TclGetStringFromObj(pathPtr, &length);
 >>>>>>> upstream/master
@@ -2769,6 +2876,10 @@ Tcl_FSGetCwd(
 	    ClientData retCd;
 	    TclFSGetCwdProc2 *proc2;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2950,8 +3061,13 @@ Tcl_FSGetCwd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    str1 = Tcl_GetStringFromObj(tsdPtr->cwdPathPtr, &len1);
 	    str2 = Tcl_GetStringFromObj(norm, &len2);
+=======
+	    str1 = TclGetStringFromObj(tsdPtr->cwdPathPtr, &len1);
+	    str2 = TclGetStringFromObj(norm, &len2);
+>>>>>>> upstream/master
 =======
 	    str1 = TclGetStringFromObj(tsdPtr->cwdPathPtr, &len1);
 	    str2 = TclGetStringFromObj(norm, &len2);
@@ -3255,8 +3371,13 @@ Tcl_FSLoadFile(
  * error) yet somehow trash some internal data structures which prevents the
  * second and further shared libraries from getting properly loaded. Only the
 <<<<<<< HEAD
+<<<<<<< HEAD
  * first is ok. We try to get around the issue by not unlinking,
  * i.e. emulating the behaviour of the older HPUX which denied removal.
+=======
+ * first is ok. We try to get around the issue by not unlinking, i.e.,
+ * emulating the behaviour of the older HPUX which denied removal.
+>>>>>>> upstream/master
 =======
  * first is ok. We try to get around the issue by not unlinking, i.e.,
  * emulating the behaviour of the older HPUX which denied removal.
@@ -3279,6 +3400,7 @@ Tcl_FSLoadFile(
 
 int
 <<<<<<< HEAD
+<<<<<<< HEAD
 TclSkipUnlink (Tcl_Obj* shlibFile)
 {
     /* Order of testing:
@@ -3294,6 +3416,8 @@ TclSkipUnlink (Tcl_Obj* shlibFile)
      * Ad 3: This is conditionally compiled in. Condition currently must be set manually.
      *       This part needs proper tests in the configure(.in).
 =======
+=======
+>>>>>>> upstream/master
 TclSkipUnlink(
     Tcl_Obj *shlibFile)
 {
@@ -3311,6 +3435,9 @@ TclSkipUnlink(
      *
      * Ad 3: This is conditionally compiled in. Condition currently must be
      *	     set manually. This part needs proper tests in the configure(.in).
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
      */
 
@@ -3318,9 +3445,14 @@ TclSkipUnlink(
     return 1;
 #else
 <<<<<<< HEAD
+<<<<<<< HEAD
     char* skipstr;
 
     skipstr = getenv ("TCL_TEMPLOAD_NO_UNLINK");
+=======
+    char *skipstr = getenv("TCL_TEMPLOAD_NO_UNLINK");
+
+>>>>>>> upstream/master
 =======
     char *skipstr = getenv("TCL_TEMPLOAD_NO_UNLINK");
 
@@ -3334,7 +3466,12 @@ TclSkipUnlink(
     {
 	struct statfs fs;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* Have fstatfs. May not have the AUFS super magic ... Indeed our build
+=======
+	/*
+	 * Have fstatfs. May not have the AUFS super magic ... Indeed our build
+>>>>>>> upstream/master
 =======
 	/*
 	 * Have fstatfs. May not have the AUFS super magic ... Indeed our build
@@ -3356,13 +3493,19 @@ TclSkipUnlink(
 #endif /* ... TCL_TEMPLOAD_NO_UNLINK */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* Fallback: !hpux, no EV override, no AUFS (detection, nor detected):
      * Don't skip */
 =======
+=======
+>>>>>>> upstream/master
     /*
      * Fallback: !hpux, no EV override, no AUFS (detection, nor detected):
      * Don't skip
      */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return 0;
 #endif /* hpux */
@@ -3569,9 +3712,14 @@ Tcl_LoadFile(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (
 	!TclSkipUnlink (copyToPtr) &&
 	(Tcl_FSDeleteFile(copyToPtr) == TCL_OK)) {
+=======
+    if (!TclSkipUnlink(copyToPtr) &&
+	    (Tcl_FSDeleteFile(copyToPtr) == TCL_OK)) {
+>>>>>>> upstream/master
 =======
     if (!TclSkipUnlink(copyToPtr) &&
 	    (Tcl_FSDeleteFile(copyToPtr) == TCL_OK)) {
@@ -3704,6 +3852,7 @@ DivertFindSymbol(
 
 /*
  *----------------------------------------------------------------------
+<<<<<<< HEAD
  *
  * DivertUnloadFile --
  *
@@ -3713,6 +3862,17 @@ DivertFindSymbol(
  * Parameters:
  *	loadHandle -- Handle of the file to unload
  *
+=======
+ *
+ * DivertUnloadFile --
+ *
+ *	Unloads a file that has been loaded by copying from VFS to the native
+ *	filesystem.
+ *
+ * Parameters:
+ *	loadHandle -- Handle of the file to unload
+ *
+>>>>>>> upstream/master
  *----------------------------------------------------------------------
  */
 
@@ -3805,6 +3965,9 @@ DivertUnloadFile(
  *	and leaves an error message in the interpreter result.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  *
@@ -3869,102 +4032,8 @@ Tcl_FSUnloadFile(
 void
 TclpUnloadFile(
     Tcl_LoadHandle handle)
-{
-    if (handle->unloadFileProcPtr != NULL) {
-	handle->unloadFileProcPtr(handle);
-    }
-}
->>>>>>> upstream/master
-
-/*
- *----------------------------------------------------------------------
- *
-<<<<<<< HEAD
- * Tcl_FSUnloadFile --
- *
- *	Unloads a library given its handle. Checks first that the library
- *	supports unloading.
-=======
- * TclFSUnloadTempFile --
- *
- *	This function is called when we loaded a library of code via an
- *	intermediate temporary file. This function ensures the library is
- *	correctly unloaded and the temporary file is correctly deleted.
- *
- * Results:
- *	None.
- *
- * Side effects:
- *	The effects of the 'unload' function called, and of course the
- *	temporary file will be deleted.
->>>>>>> upstream/master
- *
- *----------------------------------------------------------------------
- */
-
 <<<<<<< HEAD
 =======
- *
- * This function was once filesystem-specific, but has been made portable by
- * having TclpDlopen return a structure that includes procedure pointers.
- *
- *----------------------------------------------------------------------
- */
-
-void *
-Tcl_FindSymbol(
-    Tcl_Interp *interp,		/* Tcl interpreter */
-    Tcl_LoadHandle loadHandle,	/* Handle to the loaded library */
-    const char *symbol)		/* Name of the symbol to resolve */
-{
-    return loadHandle->findSymbolProcPtr(interp, loadHandle, symbol);
-}
-
-/*
- *----------------------------------------------------------------------
- *
- * Tcl_FSUnloadFile --
- *
- *	Unloads a library given its handle. Checks first that the library
- *	supports unloading.
- *
- *----------------------------------------------------------------------
- */
-
->>>>>>> upstream/master
-int
-Tcl_FSUnloadFile(
-    Tcl_Interp *interp,		/* Tcl interpreter */
-    Tcl_LoadHandle handle)	/* Handle of the file to unload */
-{
-    if (handle->unloadFileProcPtr == NULL) {
-	if (interp != NULL) {
-	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
-		    "cannot unload: filesystem does not support unloading",
-		    -1));
-	}
-	return TCL_ERROR;
-    }
-    TclpUnloadFile(handle);
-    return TCL_OK;
-}
-
-/*
- *----------------------------------------------------------------------
- *
- * TclpUnloadFile --
- *
- *	Unloads a library given its handle
- *
- * This function was once filesystem-specific, but has been made portable by
- * having TclpDlopen return a structure that includes procedure pointers.
- *
- *----------------------------------------------------------------------
- */
-
-void
-TclpUnloadFile(
-    Tcl_LoadHandle handle)
 {
     if (handle->unloadFileProcPtr != NULL) {
 	handle->unloadFileProcPtr(handle);
@@ -4018,6 +4087,359 @@ TclFSUnloadTempFile(
 	tvdlPtr->unloadProcPtr(tvdlPtr->loadHandle);
     }
 
+    if (tvdlPtr->divertedFilesystem == NULL) {
+	/*
+	 * It was the native filesystem, and we have a special function
+	 * available just for this purpose, which we know works even at this
+	 * late stage.
+	 */
+
+	TclpDeleteFile(tvdlPtr->divertedFileNativeRep);
+	NativeFreeInternalRep(tvdlPtr->divertedFileNativeRep);
+    } else {
+	/*
+	 * Remove the temporary file we created. Note, we may crash here
+	 * because encodings have been taken down already.
+	 */
+
+	if (tvdlPtr->divertedFilesystem->deleteFileProc(tvdlPtr->divertedFile)
+		!= TCL_OK) {
+	    /*
+	     * The above may have failed because the filesystem, or something
+	     * it depends upon (e.g. encodings) have been taken down because
+	     * Tcl is exiting.
+	     *
+	     * We may need to work out how to delete this file more robustly
+	     * (or give the filesystem the information it needs to delete the
+	     * file more robustly).
+	     *
+	     * In particular, one problem might be that the filesystem cannot
+	     * extract the information it needs from the above path object
+	     * because Tcl's entire filesystem apparatus (the code in this
+	     * file) has been finalized, and it refuses to pass the internal
+	     * representation to the filesystem.
+	     */
+	}
+
+	/*
+	 * And free up the allocations. This will also of course remove a
+	 * refCount from the Tcl_Filesystem to which this file belongs, which
+	 * could then free up the filesystem if we are exiting.
+	 */
+
+	Tcl_DecrRefCount(tvdlPtr->divertedFile);
+    }
+
+    ckfree(tvdlPtr);
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_FSLink --
+ *
+ *	This function replaces the library version of readlink() and can also
+ *	be used to make links. The appropriate function for the filesystem to
+ *	which pathPtr belongs will be called.
+ *
+ * Results:
+ *	If toPtr is NULL, then the result is a Tcl_Obj specifying the contents
+ *	of the symbolic link given by 'pathPtr', or NULL if the symbolic link
+ *	could not be read. The result is owned by the caller, which should
+ *	call Tcl_DecrRefCount when the result is no longer needed.
+ *
+ *	If toPtr is non-NULL, then the result is toPtr if the link action was
+ *	successful, or NULL if not. In this case the result has no additional
+ *	reference count, and need not be freed. The actual action to perform
+ *	is given by the 'linkAction' flags, which is an or'd combination of:
+ *
+ *		TCL_CREATE_SYMBOLIC_LINK
+ *		TCL_CREATE_HARD_LINK
+ *
+ *	Note that most filesystems will not support linking across to
+ *	different filesystems, so this function will usually fail unless toPtr
+ *	is in the same FS as pathPtr.
+ *
+ * Side effects:
+ *	See readlink() documentation. A new filesystem link object may appear.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+Tcl_Obj *
+Tcl_FSLink(
+    Tcl_Obj *pathPtr,		/* Path of file to readlink or link. */
+    Tcl_Obj *toPtr,		/* NULL or path to be linked to. */
+    int linkAction)		/* Action to perform. */
+>>>>>>> upstream/master
+{
+    if (handle->unloadFileProcPtr != NULL) {
+	handle->unloadFileProcPtr(handle);
+    }
+<<<<<<< HEAD
+=======
+
+    /*
+     * If S_IFLNK isn't defined it means that the machine doesn't support
+     * symbolic links, so the file can't possibly be a symbolic link. Generate
+     * an EINVAL error, which is what happens on machines that do support
+     * symbolic links when you invoke readlink on a file that isn't a symbolic
+     * link.
+     */
+
+#ifndef S_IFLNK
+    errno = EINVAL; /* TODO: Change to Tcl_SetErrno()? */
+#else
+    Tcl_SetErrno(ENOENT);
+#endif /* S_IFLNK */
+    return NULL;
+>>>>>>> upstream/master
+}
+>>>>>>> upstream/master
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * Tcl_FSUnloadFile --
+ *
+ *	Unloads a library given its handle. Checks first that the library
+ *	supports unloading.
+=======
+ * TclFSUnloadTempFile --
+ *
+ *	This function is called when we loaded a library of code via an
+ *	intermediate temporary file. This function ensures the library is
+ *	correctly unloaded and the temporary file is correctly deleted.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The effects of the 'unload' function called, and of course the
+ *	temporary file will be deleted.
+>>>>>>> upstream/master
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+=======
+=======
+ * Tcl_FSListVolumes --
+>>>>>>> upstream/master
+ *
+ * This function was once filesystem-specific, but has been made portable by
+ * having TclpDlopen return a structure that includes procedure pointers.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void *
+Tcl_FindSymbol(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    Tcl_LoadHandle loadHandle,	/* Handle to the loaded library */
+    const char *symbol)		/* Name of the symbol to resolve */
+{
+    return loadHandle->findSymbolProcPtr(interp, loadHandle, symbol);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_FSUnloadFile --
+ *
+ *	Unloads a library given its handle. Checks first that the library
+ *	supports unloading.
+ *
+ *----------------------------------------------------------------------
+ */
+
+>>>>>>> upstream/master
+int
+Tcl_FSUnloadFile(
+    Tcl_Interp *interp,		/* Tcl interpreter */
+    Tcl_LoadHandle handle)	/* Handle of the file to unload */
+{
+<<<<<<< HEAD
+    if (handle->unloadFileProcPtr == NULL) {
+	if (interp != NULL) {
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		    "cannot unload: filesystem does not support unloading",
+		    -1));
+=======
+    FilesystemRecord *fsRecPtr;
+    Tcl_Obj *resultPtr = Tcl_NewObj();
+
+    /*
+     * Call each of the "listVolumes" function in succession. A non-NULL
+     * return value indicates the particular function has succeeded. We call
+     * all the functions registered, since we want a list of all drives from
+     * all filesystems.
+     */
+
+    fsRecPtr = FsGetFirstFilesystem();
+    Claim();
+    while (fsRecPtr != NULL) {
+	if (fsRecPtr->fsPtr->listVolumesProc != NULL) {
+	    Tcl_Obj *thisFsVolumes = fsRecPtr->fsPtr->listVolumesProc();
+
+	    if (thisFsVolumes != NULL) {
+		Tcl_ListObjAppendList(NULL, resultPtr, thisFsVolumes);
+		Tcl_DecrRefCount(thisFsVolumes);
+	    }
+>>>>>>> upstream/master
+	}
+	return TCL_ERROR;
+    }
+<<<<<<< HEAD
+    TclpUnloadFile(handle);
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclpUnloadFile --
+ *
+ *	Unloads a library given its handle
+ *
+ * This function was once filesystem-specific, but has been made portable by
+ * having TclpDlopen return a structure that includes procedure pointers.
+ *
+ *----------------------------------------------------------------------
+ */
+
+void
+TclpUnloadFile(
+    Tcl_LoadHandle handle)
+{
+    if (handle->unloadFileProcPtr != NULL) {
+	handle->unloadFileProcPtr(handle);
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+=======
+    Disclaim();
+
+    return resultPtr;
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * FsListMounts --
+>>>>>>> upstream/master
+ *
+ * TclFSUnloadTempFile --
+ *
+ *	This function is called when we loaded a library of code via an
+ *	intermediate temporary file. This function ensures the library is
+ *	correctly unloaded and the temporary file is correctly deleted.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	The effects of the 'unload' function called, and of course the
+ *	temporary file will be deleted.
+ *
+ *----------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+void
+TclFSUnloadTempFile(
+    Tcl_LoadHandle loadHandle)	/* loadHandle returned by a previous call to
+				 * Tcl_FSLoadFile(). The loadHandle is a token
+				 * that represents the loaded file. */
+=======
+static Tcl_Obj *
+FsListMounts(
+    Tcl_Obj *pathPtr,		/* Contains path to directory to search. */
+    const char *pattern)	/* Pattern to match against. */
+{
+    FilesystemRecord *fsRecPtr;
+    Tcl_GlobTypeData mountsOnly = { TCL_GLOB_TYPE_MOUNT, 0, NULL, NULL };
+    Tcl_Obj *resultPtr = NULL;
+
+    /*
+     * Call each of the "matchInDirectory" functions in succession, with the
+     * specific type information 'mountsOnly'. A non-NULL return value
+     * indicates the particular function has succeeded. We call all the
+     * functions registered, since we want a list from each filesystems.
+     */
+
+    fsRecPtr = FsGetFirstFilesystem();
+    Claim();
+    while (fsRecPtr != NULL) {
+	if (fsRecPtr->fsPtr != &tclNativeFilesystem &&
+		fsRecPtr->fsPtr->matchInDirectoryProc != NULL) {
+	    if (resultPtr == NULL) {
+		resultPtr = Tcl_NewObj();
+	    }
+	    fsRecPtr->fsPtr->matchInDirectoryProc(NULL, resultPtr, pathPtr,
+		    pattern, &mountsOnly);
+	}
+	fsRecPtr = fsRecPtr->nextPtr;
+    }
+    Disclaim();
+
+    return resultPtr;
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_FSSplitPath --
+ *
+ *	This function takes the given Tcl_Obj, which should be a valid path,
+ *	and returns a Tcl List object containing each segment of that path as
+ *	an element.
+ *
+ * Results:
+ *	Returns list object with refCount of zero. If the passed in lenPtr is
+ *	non-NULL, we use it to return the number of elements in the returned
+ *	list.
+ *
+ * Side effects:
+ *	None.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+Tcl_Obj *
+Tcl_FSSplitPath(
+    Tcl_Obj *pathPtr,		/* Path to split. */
+    int *lenPtr)		/* int to store number of path elements. */
+>>>>>>> upstream/master
+{
+    FsDivertLoad *tvdlPtr = (FsDivertLoad *) loadHandle;
+
+    /*
+     * This test should never trigger, since we give the client data in the
+     * function above.
+     */
+
+    if (tvdlPtr == NULL) {
+	return;
+    }
+
+    /*
+     * Call the real 'unloadfile' proc we actually used. It is very important
+     * that we call this first, so that the shared library is actually
+     * unloaded by the OS. Otherwise, the following 'delete' may well fail
+     * because the shared library is still in use.
+     */
+
+    if (tvdlPtr->unloadProcPtr != NULL) {
+	tvdlPtr->unloadProcPtr(tvdlPtr->loadHandle);
+    }
+
+<<<<<<< HEAD
     if (tvdlPtr->divertedFilesystem == NULL) {
 	/*
 	 * It was the native filesystem, and we have a special function
@@ -4837,6 +5259,121 @@ TclFSNonnativePathType(
     Claim();
     while (fsRecPtr != NULL) {
 	/*
+=======
+    /*
+     * Compute the number of elements in the result.
+     */
+
+    if (lenPtr != NULL) {
+	TclListObjLength(NULL, result, lenPtr);
+    }
+    return result;
+}
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclGetPathType --
+ *
+ *	Helper function used by FSGetPathType.
+ *
+ * Results:
+ *	Returns one of TCL_PATH_ABSOLUTE, TCL_PATH_RELATIVE, or
+ *	TCL_PATH_VOLUME_RELATIVE. The filesystem reference will be set if and
+ *	only if it is non-NULL and the function's return value is
+ *	TCL_PATH_ABSOLUTE.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+Tcl_PathType
+TclGetPathType(
+    Tcl_Obj *pathPtr,		/* Path to determine type for. */
+    const Tcl_Filesystem **filesystemPtrPtr,
+				/* If absolute path and this is not NULL, then
+				 * set to the filesystem which claims this
+				 * path. */
+    int *driveNameLengthPtr,	/* If the path is absolute, and this is
+				 * non-NULL, then set to the length of the
+				 * driveName. */
+    Tcl_Obj **driveNameRef)	/* If the path is absolute, and this is
+				 * non-NULL, then set to the name of the
+				 * drive, network-volume which contains the
+				 * path, already with a refCount for the
+				 * caller. */
+{
+    int pathLen;
+    const char *path = TclGetStringFromObj(pathPtr, &pathLen);
+    Tcl_PathType type;
+
+    type = TclFSNonnativePathType(path, pathLen, filesystemPtrPtr,
+	    driveNameLengthPtr, driveNameRef);
+
+    if (type != TCL_PATH_ABSOLUTE) {
+	type = TclpGetNativePathType(pathPtr, driveNameLengthPtr,
+		driveNameRef);
+	if ((type == TCL_PATH_ABSOLUTE) && (filesystemPtrPtr != NULL)) {
+	    *filesystemPtrPtr = &tclNativeFilesystem;
+	}
+    }
+    return type;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclFSNonnativePathType --
+ *
+ *	Helper function used by TclGetPathType. Its purpose is to check
+ *	whether the given path starts with a string which corresponds to a
+ *	file volume in any registered filesystem except the native one. For
+ *	speed and historical reasons the native filesystem has special
+ *	hard-coded checks dotted here and there in the filesystem code.
+ *
+ * Results:
+ *	Returns one of TCL_PATH_ABSOLUTE or TCL_PATH_RELATIVE. The filesystem
+ *	reference will be set if and only if it is non-NULL and the function's
+ *	return value is TCL_PATH_ABSOLUTE.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+Tcl_PathType
+TclFSNonnativePathType(
+    const char *path,		/* Path to determine type for. */
+    int pathLen,		/* Length of the path. */
+    const Tcl_Filesystem **filesystemPtrPtr,
+				/* If absolute path and this is not NULL, then
+				 * set to the filesystem which claims this
+				 * path. */
+    int *driveNameLengthPtr,	/* If the path is absolute, and this is
+				 * non-NULL, then set to the length of the
+				 * driveName. */
+    Tcl_Obj **driveNameRef)	/* If the path is absolute, and this is
+				 * non-NULL, then set to the name of the
+				 * drive, network-volume which contains the
+				 * path, already with a refCount for the
+				 * caller. */
+{
+    FilesystemRecord *fsRecPtr;
+    Tcl_PathType type = TCL_PATH_RELATIVE;
+
+    /*
+     * Call each of the "listVolumes" function in succession, checking whether
+     * the given path is an absolute path on any of the volumes returned (this
+     * is done by checking whether the path's prefix matches).
+     */
+
+    fsRecPtr = FsGetFirstFilesystem();
+    Claim();
+    while (fsRecPtr != NULL) {
+	/*
+>>>>>>> upstream/master
 	 * We want to skip the native filesystem in this loop because
 	 * otherwise we won't necessarily pass all the Tcl testsuite - this is
 	 * because some of the tests artificially change the current platform
@@ -4883,7 +5420,11 @@ TclFSNonnativePathType(
 		    Tcl_ListObjIndex(NULL, thisFsVolumes, numVolumes, &vol);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    strVol = Tcl_GetStringFromObj(vol,&len);
+=======
+		    strVol = TclGetStringFromObj(vol,&len);
+>>>>>>> upstream/master
 =======
 		    strVol = TclGetStringFromObj(vol,&len);
 >>>>>>> upstream/master
@@ -5107,6 +5648,7 @@ Tcl_FSDeleteFile(
     Tcl_Obj *pathPtr)		/* Pathname of file to be removed (UTF-8). */
 {
     const Tcl_Filesystem *fsPtr = Tcl_FSGetFileSystemForPath(pathPtr);
+<<<<<<< HEAD
 
     if (fsPtr != NULL && fsPtr->deleteFileProc != NULL) {
 	return fsPtr->deleteFileProc(pathPtr);
@@ -5337,6 +5879,228 @@ Tcl_FSGetFileSystemForPath(
     for (; fsRecPtr!=NULL ; fsRecPtr=fsRecPtr->nextPtr) {
 	ClientData clientData = NULL;
 
+=======
+
+    if (fsPtr != NULL && fsPtr->deleteFileProc != NULL) {
+	return fsPtr->deleteFileProc(pathPtr);
+    }
+    Tcl_SetErrno(ENOENT);
+    return -1;
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_FSCreateDirectory --
+ *
+ *	The appropriate function for the filesystem to which pathPtr belongs
+ *	will be called.
+ *
+ * Results:
+ *	Standard Tcl error code.
+ *
+ * Side effects:
+ *	A directory may be created.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+int
+Tcl_FSCreateDirectory(
+    Tcl_Obj *pathPtr)		/* Pathname of directory to create (UTF-8). */
+{
+    const Tcl_Filesystem *fsPtr = Tcl_FSGetFileSystemForPath(pathPtr);
+
+    if (fsPtr != NULL && fsPtr->createDirectoryProc != NULL) {
+	return fsPtr->createDirectoryProc(pathPtr);
+    }
+    Tcl_SetErrno(ENOENT);
+    return -1;
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_FSCopyDirectory --
+ *
+ *	If the two paths given belong to the same filesystem, we call that
+ *	filesystems copy-directory function. Otherwise we simply return the
+ *	POSIX error 'EXDEV', and -1.
+ *
+ * Results:
+ *	Standard Tcl error code if a function was called.
+ *
+ * Side effects:
+ *	A directory may be copied.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+int
+Tcl_FSCopyDirectory(
+    Tcl_Obj *srcPathPtr,	/* Pathname of directory to be copied
+				 * (UTF-8). */
+    Tcl_Obj *destPathPtr,	/* Pathname of target directory (UTF-8). */
+    Tcl_Obj **errorPtr)		/* If non-NULL, then will be set to a new
+				 * object containing name of file causing
+				 * error, with refCount 1. */
+{
+    int retVal = -1;
+    const Tcl_Filesystem *fsPtr, *fsPtr2;
+
+    fsPtr = Tcl_FSGetFileSystemForPath(srcPathPtr);
+    fsPtr2 = Tcl_FSGetFileSystemForPath(destPathPtr);
+
+    if (fsPtr == fsPtr2 && fsPtr != NULL && fsPtr->copyDirectoryProc != NULL){
+	retVal = fsPtr->copyDirectoryProc(srcPathPtr, destPathPtr, errorPtr);
+    }
+    if (retVal == -1) {
+	Tcl_SetErrno(EXDEV);
+    }
+    return retVal;
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_FSRemoveDirectory --
+ *
+ *	The appropriate function for the filesystem to which pathPtr belongs
+ *	will be called.
+ *
+ * Results:
+ *	Standard Tcl error code.
+ *
+ * Side effects:
+ *	A directory may be deleted.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+int
+Tcl_FSRemoveDirectory(
+    Tcl_Obj *pathPtr,		/* Pathname of directory to be removed
+				 * (UTF-8). */
+    int recursive,		/* If non-zero, removes directories that are
+				 * nonempty. Otherwise, will only remove empty
+				 * directories. */
+    Tcl_Obj **errorPtr)		/* If non-NULL, then will be set to a new
+				 * object containing name of file causing
+				 * error, with refCount 1. */
+{
+    const Tcl_Filesystem *fsPtr = Tcl_FSGetFileSystemForPath(pathPtr);
+
+    if (fsPtr == NULL || fsPtr->removeDirectoryProc == NULL) {
+	Tcl_SetErrno(ENOENT);
+	return -1;
+    }
+
+    /*
+     * When working recursively, we check whether the cwd lies inside this
+     * directory and move it if it does.
+     */
+
+    if (recursive) {
+	Tcl_Obj *cwdPtr = Tcl_FSGetCwd(NULL);
+
+	if (cwdPtr != NULL) {
+	    const char *cwdStr, *normPathStr;
+	    int cwdLen, normLen;
+	    Tcl_Obj *normPath = Tcl_FSGetNormalizedPath(NULL, pathPtr);
+
+	    if (normPath != NULL) {
+		normPathStr = TclGetStringFromObj(normPath, &normLen);
+		cwdStr = TclGetStringFromObj(cwdPtr, &cwdLen);
+		if ((cwdLen >= normLen) && (strncmp(normPathStr, cwdStr,
+			(size_t) normLen) == 0)) {
+		    /*
+		     * The cwd is inside the directory, so we perform a 'cd
+		     * [file dirname $path]'.
+		     */
+
+		    Tcl_Obj *dirPtr = TclPathPart(NULL, pathPtr,
+			    TCL_PATH_DIRNAME);
+
+		    Tcl_FSChdir(dirPtr);
+		    Tcl_DecrRefCount(dirPtr);
+		}
+	    }
+	    Tcl_DecrRefCount(cwdPtr);
+	}
+    }
+    return fsPtr->removeDirectoryProc(pathPtr, recursive, errorPtr);
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+ * Tcl_FSGetFileSystemForPath --
+ *
+ *	This function determines which filesystem to use for a particular path
+ *	object, and returns the filesystem which accepts this file. If no
+ *	filesystem will accept this object as a valid file path, then NULL is
+ *	returned.
+ *
+ * Results:
+ *	NULL or a filesystem which will accept this path.
+ *
+ * Side effects:
+ *	The object may be converted to a path type.
+ *
+ *---------------------------------------------------------------------------
+ */
+
+const Tcl_Filesystem *
+Tcl_FSGetFileSystemForPath(
+    Tcl_Obj *pathPtr)
+{
+    FilesystemRecord *fsRecPtr;
+    const Tcl_Filesystem *retVal = NULL;
+
+    if (pathPtr == NULL) {
+	Tcl_Panic("Tcl_FSGetFileSystemForPath called with NULL object");
+	return NULL;
+    }
+
+    /*
+     * If the object has a refCount of zero, we reject it. This is to avoid
+     * possible segfaults or nondeterministic memory leaks (i.e. the user
+     * doesn't know if they should decrement the ref count on return or not).
+     */
+
+    if (pathPtr->refCount == 0) {
+	Tcl_Panic("Tcl_FSGetFileSystemForPath called with object with refCount == 0");
+	return NULL;
+    }
+
+    /*
+     * Check if the filesystem has changed in some way since this object's
+     * internal representation was calculated. Before doing that, assure we
+     * have the most up-to-date copy of the master filesystem. This is
+     * accomplished by the FsGetFirstFilesystem() call.
+     */
+
+    fsRecPtr = FsGetFirstFilesystem();
+    Claim();
+
+    if (TclFSEnsureEpochOk(pathPtr, &retVal) != TCL_OK) {
+	Disclaim();
+	return NULL;
+    } else if (retVal != NULL) {
+	/* TODO: Can this happen? */
+	Disclaim();
+	return retVal;
+    }
+
+    /*
+     * Call each of the "pathInFilesystem" functions in succession. A
+     * non-return value of -1 indicates the particular function has succeeded.
+     */
+
+    for (; fsRecPtr!=NULL ; fsRecPtr=fsRecPtr->nextPtr) {
+	ClientData clientData = NULL;
+
+>>>>>>> upstream/master
 	if (fsRecPtr->fsPtr->pathInFilesystemProc == NULL) {
 	    continue;
 	}
@@ -5353,6 +6117,7 @@ Tcl_FSGetFileSystemForPath(
 	}
     }
     Disclaim();
+<<<<<<< HEAD
 
     return NULL;
 }
@@ -5391,11 +6156,75 @@ Tcl_FSGetNativePath(
     Tcl_Obj *pathPtr)
 {
     return Tcl_FSGetInternalRep(pathPtr, &tclNativeFilesystem);
+=======
+
+    return NULL;
+>>>>>>> upstream/master
 }
 
 /*
  *---------------------------------------------------------------------------
  *
+<<<<<<< HEAD
+ * NativeFreeInternalRep --
+ *
+ *	Free a native internal representation, which will be non-NULL.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Memory is released.
+=======
+ * Tcl_FSGetNativePath --
+ *
+ *	This function is for use by the Win/Unix native filesystems, so that
+ *	they can easily retrieve the native (char* or TCHAR*) representation
+ *	of a path. Other filesystems will probably want to implement similar
+ *	functions. They basically act as a safety net around
+ *	Tcl_FSGetInternalRep. Normally your file-system functions will always
+ *	be called with path objects already converted to the correct
+ *	filesystem, but if for some reason they are called directly (i.e. by
+ *	functions not in this file), then one cannot necessarily guarantee
+ *	that the path object pointer is from the correct filesystem.
+ *
+ *	Note: in the future it might be desirable to have separate versions
+ *	of this function with different signatures, for example
+ *	Tcl_FSGetNativeWinPath, Tcl_FSGetNativeUnixPath etc. Right now, since
+ *	native paths are all string based, we use just one function.
+ *
+ * Results:
+ *	NULL or a valid native path.
+ *
+ * Side effects:
+ *	See Tcl_FSGetInternalRep.
+>>>>>>> upstream/master
+ *
+ *---------------------------------------------------------------------------
+ */
+
+<<<<<<< HEAD
+static void
+NativeFreeInternalRep(
+    ClientData clientData)
+{
+    ckfree(clientData);
+=======
+const void *
+Tcl_FSGetNativePath(
+    Tcl_Obj *pathPtr)
+{
+    return Tcl_FSGetInternalRep(pathPtr, &tclNativeFilesystem);
+>>>>>>> upstream/master
+}
+
+/*
+ *---------------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+ * Tcl_FSFileSystemInfo --
+ *
+=======
  * NativeFreeInternalRep --
  *
  *	Free a native internal representation, which will be non-NULL.
@@ -5421,6 +6250,7 @@ NativeFreeInternalRep(
  *
  * Tcl_FSFileSystemInfo --
  *
+>>>>>>> upstream/master
  *	This function returns a list of two elements. The first element is the
  *	name of the filesystem (e.g. "native" or "vfs"), and the second is the
  *	particular type of the given path within that filesystem.

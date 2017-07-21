@@ -1,6 +1,10 @@
 /* zconf.h -- configuration of the zlib compression library
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2013 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2016 Jean-loup Gailly, Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2016 Jean-loup Gailly, Mark Adler
 >>>>>>> upstream/master
@@ -22,7 +26,11 @@
 #  define Z_PREFIX_SET
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* all linked symbols */
+=======
+/* all linked symbols and init macros */
+>>>>>>> upstream/master
 =======
 /* all linked symbols and init macros */
 >>>>>>> upstream/master
@@ -38,6 +46,10 @@
 #  define adler32_combine       z_adler32_combine
 #  define adler32_combine64     z_adler32_combine64
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define adler32_z             z_adler32_z
+>>>>>>> upstream/master
 =======
 #  define adler32_z             z_adler32_z
 >>>>>>> upstream/master
@@ -50,6 +62,10 @@
 #  define crc32_combine         z_crc32_combine
 #  define crc32_combine64       z_crc32_combine64
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define crc32_z               z_crc32_z
+>>>>>>> upstream/master
 =======
 #  define crc32_z               z_crc32_z
 >>>>>>> upstream/master
@@ -58,6 +74,12 @@
 #  define deflateCopy           z_deflateCopy
 #  define deflateEnd            z_deflateEnd
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define deflateGetDictionary  z_deflateGetDictionary
+#  define deflateInit           z_deflateInit
+#  define deflateInit2          z_deflateInit2
+>>>>>>> upstream/master
 =======
 #  define deflateGetDictionary  z_deflateGetDictionary
 #  define deflateInit           z_deflateInit
@@ -90,6 +112,11 @@
 #    define gzerror               z_gzerror
 #    define gzflush               z_gzflush
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#    define gzfread               z_gzfread
+#    define gzfwrite              z_gzfwrite
+>>>>>>> upstream/master
 =======
 #    define gzfread               z_gzfread
 #    define gzfwrite              z_gzfwrite
@@ -106,7 +133,10 @@
 #    endif
 #    define gzprintf              z_gzprintf
 <<<<<<< HEAD
+<<<<<<< HEAD
 #    define gzvprintf             z_gzvprintf
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #    define gzputc                z_gzputc
@@ -120,6 +150,10 @@
 #    define gztell64              z_gztell64
 #    define gzungetc              z_gzungetc
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#    define gzvprintf             z_gzvprintf
+>>>>>>> upstream/master
 =======
 #    define gzvprintf             z_gzvprintf
 >>>>>>> upstream/master
@@ -129,11 +163,14 @@
 #  define inflateBack           z_inflateBack
 #  define inflateBackEnd        z_inflateBackEnd
 <<<<<<< HEAD
+<<<<<<< HEAD
 #  define inflateBackInit_      z_inflateBackInit_
 #  define inflateCopy           z_inflateCopy
 #  define inflateEnd            z_inflateEnd
 #  define inflateGetHeader      z_inflateGetHeader
 =======
+=======
+>>>>>>> upstream/master
 #  define inflateBackInit       z_inflateBackInit
 #  define inflateBackInit_      z_inflateBackInit_
 #  define inflateCodesUsed      z_inflateCodesUsed
@@ -143,6 +180,9 @@
 #  define inflateGetHeader      z_inflateGetHeader
 #  define inflateInit           z_inflateInit
 #  define inflateInit2          z_inflateInit2
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #  define inflateInit2_         z_inflateInit2_
 #  define inflateInit_          z_inflateInit_
@@ -151,11 +191,16 @@
 #  define inflateReset          z_inflateReset
 #  define inflateReset2         z_inflateReset2
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define inflateResetKeep      z_inflateResetKeep
+>>>>>>> upstream/master
 #  define inflateSetDictionary  z_inflateSetDictionary
 #  define inflateGetDictionary  z_inflateGetDictionary
 #  define inflateSync           z_inflateSync
 #  define inflateSyncPoint      z_inflateSyncPoint
 #  define inflateUndermine      z_inflateUndermine
+<<<<<<< HEAD
 #  define inflateResetKeep      z_inflateResetKeep
 =======
 #  define inflateResetKeep      z_inflateResetKeep
@@ -165,12 +210,19 @@
 #  define inflateUndermine      z_inflateUndermine
 #  define inflateValidate       z_inflateValidate
 >>>>>>> upstream/master
+=======
+#  define inflateValidate       z_inflateValidate
+>>>>>>> upstream/master
 #  define inflate_copyright     z_inflate_copyright
 #  define inflate_fast          z_inflate_fast
 #  define inflate_table         z_inflate_table
 #  ifndef Z_SOLO
 #    define uncompress            z_uncompress
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#    define uncompress2           z_uncompress2
+>>>>>>> upstream/master
 =======
 #    define uncompress2           z_uncompress2
 >>>>>>> upstream/master
@@ -284,10 +336,13 @@
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Some Mac compilers merge all .h files incorrectly: */
 #if defined(__MWERKS__)||defined(applec)||defined(THINK_C)||defined(__SC__)
 #  define NO_DUMMY_DECL
 =======
+=======
+>>>>>>> upstream/master
 #ifdef Z_SOLO
    typedef unsigned long z_size_t;
 #else
@@ -301,6 +356,9 @@
      typedef unsigned long z_size_t;
 #  endif
 #  undef z_longlong
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #endif
 
@@ -332,7 +390,11 @@
 
    The memory requirements for inflate are (in bytes) 1 << windowBits
 <<<<<<< HEAD
+<<<<<<< HEAD
  that is, 32K for windowBits=15 (default value) plus a few kilobytes
+=======
+ that is, 32K for windowBits=15 (default value) plus about 7 kilobytes
+>>>>>>> upstream/master
 =======
  that is, 32K for windowBits=15 (default value) plus about 7 kilobytes
 >>>>>>> upstream/master
@@ -504,6 +566,7 @@ typedef uLong FAR uLongf;
 #if defined(STDC) || defined(Z_HAVE_STDARG_H)
 #  ifndef Z_SOLO
 #    include <stdarg.h>         /* for va_list */
+<<<<<<< HEAD
 #  endif
 #endif
 
@@ -538,6 +601,42 @@ typedef uLong FAR uLongf;
 #  endif
 #endif
 
+=======
+#  endif
+#endif
+
+#ifdef _WIN32
+#  ifndef Z_SOLO
+#    include <stddef.h>         /* for wchar_t */
+#  endif
+#endif
+
+/* a little trick to accommodate both "#define _LARGEFILE64_SOURCE" and
+ * "#define _LARGEFILE64_SOURCE 1" as requesting 64-bit operations, (even
+ * though the former does not conform to the LFS document), but considering
+ * both "#undef _LARGEFILE64_SOURCE" and "#define _LARGEFILE64_SOURCE 0" as
+ * equivalently requesting no 64-bit operations
+ */
+#if defined(_LARGEFILE64_SOURCE) && -_LARGEFILE64_SOURCE - -1 == 1
+#  undef _LARGEFILE64_SOURCE
+#endif
+
+#if defined(__WATCOMC__) && !defined(Z_HAVE_UNISTD_H)
+#  define Z_HAVE_UNISTD_H
+#endif
+#ifndef Z_SOLO
+#  if defined(Z_HAVE_UNISTD_H) || defined(_LARGEFILE64_SOURCE)
+#    include <unistd.h>         /* for SEEK_*, off_t, and _LFS64_LARGEFILE */
+#    ifdef VMS
+#      include <unixio.h>       /* for off_t */
+#    endif
+#    ifndef z_off_t
+#      define z_off_t off_t
+#    endif
+#  endif
+#endif
+
+>>>>>>> upstream/master
 #if defined(_LFS64_LARGEFILE) && _LFS64_LARGEFILE-0
 #  define Z_LFS64
 #endif

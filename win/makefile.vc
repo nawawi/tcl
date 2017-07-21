@@ -880,6 +880,10 @@ $(OUT_DIR)\tclConfig.sh: $(WINDIR)\tclConfig.sh.in
 @DL_LIBS@
 @LDFLAGS@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+@TCL_CC_SEARCH_FLAGS@
+>>>>>>> upstream/master
 =======
 @TCL_CC_SEARCH_FLAGS@
 >>>>>>> upstream/master
@@ -1112,10 +1116,13 @@ install-libraries: tclConfig install-msgs install-tzdata
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@if not exist "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.2$(NULL)" \
 		$(MKDIR) "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.2"
 	@if not exist "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.3$(NULL)" \
 		$(MKDIR) "$(SCRIPT_INSTALL_DIR)\..\tcl8\8.3"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

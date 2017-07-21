@@ -196,7 +196,11 @@ Backslash
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The digits \fIooo\fR (one, two, or three of them) give a eight-bit octal 
+=======
+The digits \fIooo\fR (one, two, or three of them) give a eight-bit octal
+>>>>>>> upstream/master
 =======
 The digits \fIooo\fR (one, two, or three of them) give a eight-bit octal
 >>>>>>> upstream/master
@@ -229,7 +233,11 @@ character will be in the range U+000000\(enU+00FFFF).
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \e\fBU\fIhhhhhhhh\fR 
+=======
+\e\fBU\fIhhhhhhhh\fR
+>>>>>>> upstream/master
 =======
 \e\fBU\fIhhhhhhhh\fR
 >>>>>>> upstream/master
