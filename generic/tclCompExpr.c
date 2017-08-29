@@ -1933,7 +1933,7 @@ ParseLexeme(
 {
     const char *end;
     int scanned;
-    Tcl_UniChar ch;
+    Tcl_UniChar ch = 0;
     Tcl_Obj *literal = NULL;
     unsigned char byte;
 

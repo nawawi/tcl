@@ -1018,8 +1018,12 @@ TcpCloseProc(
 >>>>>>> upstream/master
 =======
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
         ckfree(fds);
+=======
+	ckfree(fds);
+>>>>>>> upstream/master
 	fds = next;
     }
     if (statePtr->addrlist != NULL) {
@@ -1122,8 +1126,13 @@ TcpClose2Proc(
 =======
 
 #ifndef NEED_FAKE_RFC2553
+#if defined (__clang__) || ((__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+#endif
 >>>>>>> upstream/master
 static inline int
 IPv6AddressNeedsNumericRendering(
@@ -1153,11 +1162,16 @@ IPv6AddressNeedsNumericRendering(
             && addr.s6_addr[14] == 0 && addr.s6_addr[15] == 0);
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif /* NEED_FAKE_RFC2553 */
 
 >>>>>>> upstream/master
 =======
+=======
+#if defined (__clang__) || ((__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+>>>>>>> upstream/master
 #pragma GCC diagnostic pop
+#endif
 #endif /* NEED_FAKE_RFC2553 */
 
 >>>>>>> upstream/master

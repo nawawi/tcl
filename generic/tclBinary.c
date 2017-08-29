@@ -568,7 +568,7 @@ SetByteArrayFromAny(
     const char *src, *srcEnd;
     unsigned char *dst;
     ByteArray *byteArrayPtr;
-    Tcl_UniChar ch;
+    Tcl_UniChar ch = 0;
 
     if (objPtr->typePtr == &properByteArrayType) {
 	return TCL_OK;
@@ -1336,7 +1336,7 @@ BinaryFormatCmd(
 
  badField:
     {
-	Tcl_UniChar ch;
+	Tcl_UniChar ch = 0;
 	char buf[TCL_UTF_MAX + 1];
 
 	TclUtfToUniChar(errorString, &ch);
@@ -1706,7 +1706,7 @@ BinaryScanCmd(
 
  badField:
     {
-	Tcl_UniChar ch;
+	Tcl_UniChar ch = 0;
 	char buf[TCL_UTF_MAX + 1];
 
 	TclUtfToUniChar(errorString, &ch);

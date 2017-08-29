@@ -41,6 +41,8 @@ static void		ReflectWatch(ClientData clientData, int mask);
 static int		ReflectBlock(ClientData clientData, int mode);
 #ifdef TCL_THREADS
 static void		ReflectThread(ClientData clientData, int action);
+static int		ReflectEventRun(Tcl_Event *ev, int flags);
+static int		ReflectEventDelete(Tcl_Event *ev, ClientData cd);
 #endif
 static Tcl_WideInt	ReflectSeekWide(ClientData clientData,
 			    Tcl_WideInt offset, int mode, int *errorCodePtr);
@@ -782,11 +784,15 @@ TclChanCreateObjCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ReflectEvent {
 =======
 typedef struct {
 >>>>>>> upstream/master
 =======
+=======
+#ifdef TCL_THREADS
+>>>>>>> upstream/master
 typedef struct {
 >>>>>>> upstream/master
     Tcl_Event header;
@@ -831,6 +837,7 @@ ReflectEventDelete(
     }
     return 1;
 }
+#endif
 
 int
 TclChanPostEventObjCmd(

@@ -671,8 +671,12 @@ test exec-19.1 {exec >> uses O_APPEND} -constraints {exec unix} -setup {
     exec /bin/sh -c \
 	    {for a in 1 2 3; do sleep 1; echo $a; done} >>$tmpfile &
     exec /bin/sh -c \
+	    {for a in 4 5 6; do sleep 1; echo $a >&2; done} 2>>$tmpfile &
+    exec /bin/sh -c \
 	    {for a in a b c; do sleep 1; echo $a; done} >>$tmpfile &
-    # The above two shell invokations take about 3 seconds to finish, so allow
+    exec /bin/sh -c \
+	    {for a in d e f; do sleep 1; echo $a >&2; done} 2>>$tmpfile &
+    # The above four shell invokations take about 3 seconds to finish, so allow
     # 5s (in case the machine is busy)
     after 5000
     # Check that no bytes have got lost through mixups with overlapping
@@ -681,6 +685,7 @@ test exec-19.1 {exec >> uses O_APPEND} -constraints {exec unix} -setup {
     file size $tmpfile
 } -cleanup {
     removeFile $tmpfile
+<<<<<<< HEAD
 } -result 14
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -689,6 +694,9 @@ test exec-19.1 {exec >> uses O_APPEND} -constraints {exec unix} -setup {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+} -result 26
 >>>>>>> upstream/master
 
 # Tests to ensure batch files and .CMD (Bug 9ece99d58b)

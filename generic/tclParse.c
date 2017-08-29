@@ -4223,12 +4223,20 @@ ParseTokens(
 				 * Updated with additional tokens and
 				 * termination information. */
 {
+<<<<<<< HEAD
     char type;
     int originalTokens;
     int noSubstCmds = !(flags & TCL_SUBST_COMMANDS);
     int noSubstVars = !(flags & TCL_SUBST_VARIABLES);
     int noSubstBS = !(flags & TCL_SUBST_BACKSLASHES);
     Tcl_Token *tokenPtr;
+=======
+    register const char *p = src+1;
+    Tcl_UniChar unichar = 0;
+    int result;
+    int count;
+    char buf[TCL_UTF_MAX];
+>>>>>>> upstream/master
 
     /*
      * Each iteration through the following loop adds one token of type
