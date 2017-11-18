@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Tcl 8.6 for Windows
 =======
 Tcl 8.7 for Windows
@@ -14,6 +15,9 @@ Tcl 8.7 for Windows
 >>>>>>> upstream/master
 =======
 Tcl 8.7 for Windows
+>>>>>>> upstream/master
+=======
+Tcl 9.0 for Windows
 >>>>>>> upstream/master
 
 1. Introduction
@@ -36,6 +40,7 @@ In order to compile Tcl for Windows, you need the following:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl 8.6 Source Distribution (plus any patches)
 =======
 	Tcl 8.7 Source Distribution (plus any patches)
@@ -48,6 +53,9 @@ In order to compile Tcl for Windows, you need the following:
 >>>>>>> upstream/master
 =======
 	Tcl 8.7 Source Distribution (plus any patches)
+>>>>>>> upstream/master
+=======
+	Tcl 9.0 Source Distribution (plus any patches)
 >>>>>>> upstream/master
 
 	and
@@ -115,6 +123,7 @@ structure.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that in order to run tclsh86.exe, you must ensure that tcl86.dll is
 on your path, in the system directory, or in the directory containing
 tclsh86.exe.
@@ -137,6 +146,11 @@ tclsh87.exe.
 Note that in order to run tclsh87.exe, you must ensure that tcl87.dll is
 on your path, in the system directory, or in the directory containing
 tclsh87.exe.
+>>>>>>> upstream/master
+=======
+Note that in order to run tclsh90.exe, you must ensure that tcl90.dll is
+on your path, in the system directory, or in the directory containing
+tclsh90.exe.
 >>>>>>> upstream/master
 
 Note: Tcl no longer provides support for Win32s.

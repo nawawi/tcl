@@ -46,6 +46,7 @@ TCL_DEFS = HAVE_TCL_CONFIG_H
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 VERSION = 8.6
 =======
 VERSION = 8.7
@@ -58,4 +59,7 @@ VERSION = 8.7
 >>>>>>> upstream/master
 =======
 VERSION = 8.7
+>>>>>>> upstream/master
+=======
+VERSION = 9.0
 >>>>>>> upstream/master

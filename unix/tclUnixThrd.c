@@ -18,6 +18,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
 =======
 typedef struct {
@@ -53,6 +54,8 @@ static Tcl_ThreadDataKey dataKey;
 =======
 >>>>>>> upstream/master
 
+=======
+>>>>>>> upstream/master
 /*
 =======
 
@@ -799,6 +802,7 @@ TclpFinalizeCondition(
 }
 #endif /* TCL_THREADS */
 
+<<<<<<< HEAD
 /*
  *----------------------------------------------------------------------
  *
@@ -875,6 +879,8 @@ TclpInetNtoa(
 >>>>>>> upstream/master
 #endif /* TCL_NO_DEPRECATED */
 
+=======
+>>>>>>> upstream/master
 #ifdef TCL_THREADS
 /*
  * Additions by AOL for specialized thread memory allocator.

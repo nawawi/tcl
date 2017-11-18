@@ -11,6 +11,7 @@ AC_PREREQ(2.69)
 # /bin/sh. The bash shell seems to suffer from some strange failures.
 SHELL=/bin/sh
 
+<<<<<<< HEAD
 TCL_VERSION=8.7
 TCL_MAJOR_VERSION=8
 <<<<<<< HEAD:win/configure.in
@@ -18,6 +19,11 @@ TCL_MINOR_VERSION=6
 TCL_PATCH_LEVEL=".4"
 =======
 TCL_MINOR_VERSION=7
+=======
+TCL_VERSION=9.0
+TCL_MAJOR_VERSION=9
+TCL_MINOR_VERSION=0
+>>>>>>> upstream/master
 TCL_PATCH_LEVEL="a0"
 >>>>>>> upstream/master:win/configure.ac
 VER=$TCL_MAJOR_VERSION$TCL_MINOR_VERSION

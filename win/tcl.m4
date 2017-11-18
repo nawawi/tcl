@@ -1619,6 +1619,7 @@ AC_DEFUN([SC_WITH_TCL], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if test -d ../../tcl8.6$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.6$1/win
 =======
@@ -1638,10 +1639,15 @@ AC_DEFUN([SC_WITH_TCL], [
 >>>>>>> upstream/master
     if test -d ../../tcl8.7$1/win;  then
 	TCL_BIN_DEFAULT=../../tcl8.7$1/win
+=======
+    if test -d ../../tcl9.0$1/win;  then
+	TCL_BIN_DEFAULT=../../tcl9.0$1/win
+>>>>>>> upstream/master
     else
-	TCL_BIN_DEFAULT=../../tcl8.7/win
+	TCL_BIN_DEFAULT=../../tcl9.0/win
     fi
 
+<<<<<<< HEAD
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1652,6 +1658,9 @@ AC_DEFUN([SC_WITH_TCL], [
 >>>>>>> upstream/master
 =======
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
+>>>>>>> upstream/master
+=======
+    AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 9.0 binaries from DIR],
 >>>>>>> upstream/master
 	    TCL_BIN_DIR=$withval, TCL_BIN_DIR=`cd $TCL_BIN_DEFAULT; pwd`)
     if test ! -d $TCL_BIN_DIR; then

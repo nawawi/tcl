@@ -6,12 +6,16 @@ if {[catch {package require Tcl 8.6-} msg]} {
 	NATIVE_TCLSH environment\nvariable to point to an installed\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	tclsh8.6 (or the equivalent tclsh86.exe\non Windows)."
 =======
 	tclsh8.7 (or the equivalent tclsh87.exe\non Windows)."
 >>>>>>> upstream/master
 =======
 	tclsh8.7 (or the equivalent tclsh87.exe\non Windows)."
+>>>>>>> upstream/master
+=======
+	tclsh9.0 (or the equivalent tclsh90.exe\non Windows)."
 >>>>>>> upstream/master
     exit 1
 }
@@ -32,12 +36,16 @@ if {[catch {package require Tcl 8.6-} msg]} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 set ::Version "50/8.6"
 =======
 set ::Version "50/8.7"
 >>>>>>> upstream/master
 =======
 set ::Version "50/8.7"
+>>>>>>> upstream/master
+=======
+set ::Version "50/9.0"
 >>>>>>> upstream/master
 set ::CSSFILE "docs.css"
 

@@ -9,6 +9,7 @@ TITLE=Tcl/Tk Reference Manual
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 CNT=tcl86.cnt
 COPYRIGHT=Copyright © 2000 Ajuba Solutions
 HLP=tcl86.hlp
@@ -31,6 +32,11 @@ HLP=tcl87.hlp
 CNT=tcl87.cnt
 COPYRIGHT=Copyright © 2000 Ajuba Solutions
 HLP=tcl87.hlp
+>>>>>>> upstream/master
+=======
+CNT=tcl90.cnt
+COPYRIGHT=Copyright © 2000 Ajuba Solutions
+HLP=tcl90.hlp
 >>>>>>> upstream/master
 
 [FILES]

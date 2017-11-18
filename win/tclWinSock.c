@@ -11446,6 +11446,7 @@ FindFDInList(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclWinGetSockOpt, et al. --
  *
  *	Those functions are historically exported by the stubs table and
@@ -11535,6 +11536,8 @@ TclWinGetServByName(
 /*
  *----------------------------------------------------------------------
  *
+=======
+>>>>>>> upstream/master
  * TcpThreadActionProc --
  *
  *	Insert or remove any thread local refs to this channel.

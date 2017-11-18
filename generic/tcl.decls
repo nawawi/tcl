@@ -489,7 +489,6 @@ declare 128 {
 declare 129 {
     int Tcl_Eval(Tcl_Interp *interp, const char *script)
 }
-# This is obsolete, use Tcl_FSEvalFile
 declare 130 {
     int Tcl_EvalFile(Tcl_Interp *interp, const char *fileName)
 }
@@ -800,10 +799,10 @@ declare 218 {
 declare 219 {
     int Tcl_ScanCountedElement(const char *src, int length, int *flagPtr)
 }
-# Obsolete
-declare 220 {
-    int Tcl_SeekOld(Tcl_Channel chan, int offset, int mode)
-}
+# Removed in 9.0:
+#declare 220 {
+#    int Tcl_SeekOld(Tcl_Channel chan, int offset, int mode)
+#}
 declare 221 {
     int Tcl_ServiceAll(void)
 }
@@ -888,10 +887,10 @@ declare 244 {
 declare 245 {
     int Tcl_StringMatch(const char *str, const char *pattern)
 }
-# Obsolete
-declare 246 {
-    int Tcl_TellOld(Tcl_Channel chan)
-}
+# Removed in 9.0:
+#declare 246 {
+#    int Tcl_TellOld(Tcl_Channel chan)
+#}
 declare 247 {
     int Tcl_TraceVar(Tcl_Interp *interp, const char *varName, int flags,
 	    Tcl_VarTraceProc *proc, ClientData clientData)
@@ -965,12 +964,14 @@ declare 265 {
 declare 266 {
     void Tcl_ValidateAllMemory(const char *file, int line)
 }
-declare 267 {
-    void Tcl_AppendResultVA(Tcl_Interp *interp, va_list argList)
-}
-declare 268 {
-    void Tcl_AppendStringsToObjVA(Tcl_Obj *objPtr, va_list argList)
-}
+# Removed in 9.0
+#declare 267 {
+#    void Tcl_AppendResultVA(Tcl_Interp *interp, va_list argList)
+#}
+# Removed in 9.0
+#declare 268 {
+#    void Tcl_AppendStringsToObjVA(Tcl_Obj *objPtr, va_list argList)
+#}
 declare 269 {
     char *Tcl_HashStats(Tcl_HashTable *tablePtr)
 }
@@ -996,18 +997,21 @@ declare 274 {
     CONST84_RETURN char *Tcl_PkgRequire(Tcl_Interp *interp, const char *name,
 	    const char *version, int exact)
 }
-declare 275 {
-    void Tcl_SetErrorCodeVA(Tcl_Interp *interp, va_list argList)
-}
-declare 276 {
-    int  Tcl_VarEvalVA(Tcl_Interp *interp, va_list argList)
-}
+# Removed in 9.0
+#declare 275 {
+#    void Tcl_SetErrorCodeVA(Tcl_Interp *interp, va_list argList)
+#}
+# Removed in 9.0
+#declare 276 {
+#    int  Tcl_VarEvalVA(Tcl_Interp *interp, va_list argList)
+#}
 declare 277 {
     Tcl_Pid Tcl_WaitPid(Tcl_Pid pid, int *statPtr, int options)
 }
-declare 278 {
-    TCL_NORETURN void Tcl_PanicVA(const char *format, va_list argList)
-}
+# Removed in 9.0
+#declare 278 {
+#    TCL_NORETURN void Tcl_PanicVA(const char *format, va_list argList)
+#}
 declare 279 {
     void Tcl_GetVersion(int *major, int *minor, int *patchLevel, int *type)
 }

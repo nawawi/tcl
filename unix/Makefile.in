@@ -414,7 +414,7 @@ TOMMATH_OBJS = bncore.o bn_reverse.o bn_fast_s_mp_mul_digs.o \
 	bn_mp_cnt_lsb.o bn_mp_copy.o \
 	bn_mp_count_bits.o bn_mp_div.o bn_mp_div_d.o bn_mp_div_2.o \
 	bn_mp_div_2d.o bn_mp_div_3.o \
-        bn_mp_exch.o bn_mp_expt_d.o bn_mp_expt_d_ex.o bn_mp_grow.o bn_mp_init.o \
+        bn_mp_exch.o bn_mp_expt_d.o bn_mp_expt_d_ex.o bn_mp_get_int.o bn_mp_get_long.o bn_mp_get_long_long.o bn_mp_grow.o bn_mp_init.o \
 	bn_mp_init_copy.o bn_mp_init_multi.o bn_mp_init_set.o \
 	bn_mp_init_set_int.o bn_mp_init_size.o bn_mp_karatsuba_mul.o \
 	bn_mp_karatsuba_sqr.o \
@@ -422,7 +422,7 @@ TOMMATH_OBJS = bncore.o bn_reverse.o bn_fast_s_mp_mul_digs.o \
         bn_mp_mul_2d.o bn_mp_mul_d.o bn_mp_neg.o bn_mp_or.o \
 	bn_mp_radix_size.o bn_mp_radix_smap.o \
         bn_mp_read_radix.o bn_mp_rshd.o bn_mp_set.o bn_mp_set_int.o \
-	bn_mp_shrink.o \
+	bn_mp_set_long.o bn_mp_set_long_long.o bn_mp_shrink.o \
 	bn_mp_sqr.o bn_mp_sqrt.o bn_mp_sub.o bn_mp_sub_d.o \
         bn_mp_to_unsigned_bin.o bn_mp_to_unsigned_bin_n.o \
 	bn_mp_toom_mul.o bn_mp_toom_sqr.o bn_mp_toradix_n.o \
@@ -640,6 +640,9 @@ TOMMATH_SRCS = \
 	$(TOMMATH_DIR)/bn_mp_exch.c \
 	$(TOMMATH_DIR)/bn_mp_expt_d.c \
 	$(TOMMATH_DIR)/bn_mp_expt_d_ex.c \
+	$(TOMMATH_DIR)/bn_mp_get_int.c \
+	$(TOMMATH_DIR)/bn_mp_get_long.c \
+	$(TOMMATH_DIR)/bn_mp_get_long_long.c \
 	$(TOMMATH_DIR)/bn_mp_grow.c \
 	$(TOMMATH_DIR)/bn_mp_init.c \
 	$(TOMMATH_DIR)/bn_mp_init_copy.c \
@@ -664,6 +667,8 @@ TOMMATH_SRCS = \
 	$(TOMMATH_DIR)/bn_mp_rshd.c \
 	$(TOMMATH_DIR)/bn_mp_set.c \
 	$(TOMMATH_DIR)/bn_mp_set_int.c \
+	$(TOMMATH_DIR)/bn_mp_set_long.c \
+	$(TOMMATH_DIR)/bn_mp_set_long_long.c \
 	$(TOMMATH_DIR)/bn_mp_shrink.c \
 	$(TOMMATH_DIR)/bn_mp_sqr.c \
 	$(TOMMATH_DIR)/bn_mp_sqrt.c \
@@ -1065,6 +1070,7 @@ install-strip:
 # (e.g. if installing as root).
 =======
 
+<<<<<<< HEAD
 test-tcl: ${TCLTEST_EXE}
 	$(SHELL_ENV) ./${TCLTEST_EXE} $(TOP_DIR)/tests/all.tcl $(TESTFLAGS)
 
@@ -1072,6 +1078,52 @@ test-tcl: ${TCLTEST_EXE}
 #--------------------------------------------------------------------------
 # Rules for testing
 #--------------------------------------------------------------------------
+=======
+install-libraries: libraries
+	@for i in "$(SCRIPT_INSTALL_DIR)"; \
+	    do \
+	    if [ ! -d "$$i" ] ; then \
+		echo "Making directory $$i"; \
+		$(INSTALL_DATA_DIR) "$$i"; \
+		else true; \
+		fi; \
+	    done;
+	@for i in opt0.4 http1.0 encoding ../tcl9 ../tcl9/9.0  ../tcl9/9.0/platform; \
+	    do \
+	    if [ ! -d "$(SCRIPT_INSTALL_DIR)"/$$i ] ; then \
+		echo "Making directory $(SCRIPT_INSTALL_DIR)/$$i"; \
+		$(INSTALL_DATA_DIR) "$(SCRIPT_INSTALL_DIR)"/$$i; \
+		else true; \
+		fi; \
+	    done;
+	@echo "Installing library files to $(SCRIPT_INSTALL_DIR)/";
+	@for i in $(TOP_DIR)/library/*.tcl $(TOP_DIR)/library/tclIndex \
+		$(UNIX_DIR)/tclAppInit.c @LDAIX_SRC@ @DTRACE_SRC@; \
+	    do \
+	    $(INSTALL_DATA) $$i "$(SCRIPT_INSTALL_DIR)"; \
+	    done;
+	@echo "Installing package http1.0 files to $(SCRIPT_INSTALL_DIR)/http1.0/";
+	@for i in $(TOP_DIR)/library/http1.0/*.tcl ; \
+	    do \
+	    $(INSTALL_DATA) $$i "$(SCRIPT_INSTALL_DIR)"/http1.0; \
+	    done;
+	@echo "Installing package http 2.8.12 as a Tcl Module";
+	@$(INSTALL_DATA) $(TOP_DIR)/library/http/http.tcl "$(SCRIPT_INSTALL_DIR)"/../tcl9/9.0/http-2.8.12.tm;
+	@echo "Installing package opt0.4 files to $(SCRIPT_INSTALL_DIR)/opt0.4/";
+	@for i in $(TOP_DIR)/library/opt/*.tcl ; \
+	    do \
+	    $(INSTALL_DATA) $$i "$(SCRIPT_INSTALL_DIR)"/opt0.4; \
+	    done;
+	@echo "Installing package msgcat 1.6.1 as a Tcl Module";
+	@$(INSTALL_DATA) $(TOP_DIR)/library/msgcat/msgcat.tcl "$(SCRIPT_INSTALL_DIR)"/../tcl9/9.0/msgcat-1.6.1.tm;
+	@echo "Installing package tcltest 2.4.1 as a Tcl Module";
+	@$(INSTALL_DATA) $(TOP_DIR)/library/tcltest/tcltest.tcl "$(SCRIPT_INSTALL_DIR)"/../tcl9/9.0/tcltest-2.4.1.tm;
+
+	@echo "Installing package platform 1.0.14 as a Tcl Module";
+	@$(INSTALL_DATA) $(TOP_DIR)/library/platform/platform.tcl "$(SCRIPT_INSTALL_DIR)"/../tcl9/9.0/platform-1.0.14.tm;
+	@echo "Installing package platform::shell 1.1.4 as a Tcl Module";
+	@$(INSTALL_DATA) $(TOP_DIR)/library/platform/shell.tcl "$(SCRIPT_INSTALL_DIR)"/../tcl9/9.0/platform/shell-1.1.4.tm;
+>>>>>>> upstream/master
 
 # Resetting the LIB_RUNTIME_DIR below is required so that the generated
 # tcltest executable gets the build directory burned into its ld search path.
@@ -2594,6 +2646,15 @@ bn_mp_expt_d.o: $(TOMMATH_DIR)/bn_mp_expt_d.c $(MATHHDRS)
 bn_mp_expt_d_ex.o: $(TOMMATH_DIR)/bn_mp_expt_d_ex.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_expt_d_ex.c
 
+bn_mp_get_int.o: $(TOMMATH_DIR)/bn_mp_get_int.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_get_int.c
+
+bn_mp_get_long.o: $(TOMMATH_DIR)/bn_mp_get_long.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_get_long.c
+
+bn_mp_get_long_long.o: $(TOMMATH_DIR)/bn_mp_get_long_long.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_get_long_long.c
+
 bn_mp_grow.o: $(TOMMATH_DIR)/bn_mp_grow.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_grow.c
 
@@ -2667,6 +2728,12 @@ bn_mp_set.o: $(TOMMATH_DIR)/bn_mp_set.c $(MATHHDRS)
 
 bn_mp_set_int.o: $(TOMMATH_DIR)/bn_mp_set_int.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_set_int.c
+
+bn_mp_set_long.o: $(TOMMATH_DIR)/bn_mp_set_long.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_set_long.c
+
+bn_mp_set_long_long.o: $(TOMMATH_DIR)/bn_mp_set_long_long.c $(MATHHDRS)
+	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_set_long_long.c
 
 bn_mp_shrink.o: $(TOMMATH_DIR)/bn_mp_shrink.c $(MATHHDRS)
 	$(CC) -c $(CC_SWITCHES) $(TOMMATH_DIR)/bn_mp_shrink.c
@@ -3426,7 +3493,7 @@ alldist: dist
 #--------------------------------------------------------------------------
 # This target creates the HTML folder for Tcl & Tk and places it in
 # DISTDIR/html. It uses the tcltk-man2html.tcl tool from the Tcl group's tool
-# workspace. It depends on the Tcl & Tk being in directories called tcl8.* &
+# workspace. It depends on the Tcl & Tk being in directories called tcl9.* &
 # tk8.* up two directories from the TOOL_DIR.
 #
 # Note that for platforms where this is important, it is more common to use a

@@ -9,8 +9,14 @@ compat/zlib/contrib/vstudio/*/zlib.rc
 compat/zlib/win32/*.txt
 compat/zlib/win64/*.txt
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+libtommath/*.dsp
+libtommath/*.sln
+libtommath/*.vcproj
 >>>>>>> upstream/master
 tools/tcl.hpj.in
 tools/tcl.wse.in

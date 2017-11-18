@@ -12,9 +12,13 @@ package require Tcl 8.6-
 # Keep this in sync with pkgIndex.tcl and with the install directories in
 # Makefiles
 <<<<<<< HEAD
+<<<<<<< HEAD
 package provide http 2.8.10
 =======
 package provide http 2.8.11
+>>>>>>> upstream/master
+=======
+package provide http 2.8.12
 >>>>>>> upstream/master
 
 namespace eval http {
@@ -1413,6 +1417,7 @@ proc http::Event {sock token} {
 	    # We have now read all headers
 	    # We ignore HTTP/1.1 100 Continue returns. RFC2616 sec 8.2.3
 	    if {$state(http) == "" || ([regexp {^\S+\s(\d+)} $state(http) {} x] && $x == 100)} {
+		set state(state) "connecting"
 		return
 	    }
 

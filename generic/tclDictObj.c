@@ -168,7 +168,7 @@ typedef struct Dict {
 				 * the dictionary. Used for doing traversal of
 				 * the entries in the order that they are
 				 * created. */
-    int epoch;			/* Epoch counter */
+    unsigned int epoch; 	/* Epoch counter */
     size_t refCount;		/* Reference counter (see above) */
     Tcl_Obj *chain;		/* Linked list used for invalidating the
 				 * string representations of updated nested
@@ -417,7 +417,7 @@ DupDictInternalRep(
      * Initialise other fields.
      */
 
-    newDict->epoch = 0;
+    newDict->epoch = 1;
     newDict->chain = NULL;
     newDict->refCount = 1;
 
@@ -514,15 +514,14 @@ static void
 UpdateStringOfDict(
     Tcl_Obj *dictPtr)
 {
-#define LOCAL_SIZE 20
-    int localFlags[LOCAL_SIZE], *flagPtr = NULL;
+#define LOCAL_SIZE 64
+    char localFlags[LOCAL_SIZE], *flagPtr = NULL;
     Dict *dict = DICT(dictPtr);
     ChainEntry *cPtr;
     Tcl_Obj *keyPtr, *valuePtr;
     int i, length, bytesNeeded = 0;
     const char *elem;
     char *dst;
-    const int maxFlags = UINT_MAX / sizeof(int);
 
     /*
      * This field is the most useful one in the whole hash structure, and it
@@ -552,10 +551,8 @@ UpdateStringOfDict(
 
     if (numElems <= LOCAL_SIZE) {
 	flagPtr = localFlags;
-    } else if (numElems > maxFlags) {
-	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
     } else {
-	flagPtr = ckalloc(numElems * sizeof(int));
+	flagPtr = ckalloc(numElems);
     }
     for (i=0,cPtr=dict->entryChainHead; i<numElems; i+=2,cPtr=cPtr->nextPtr) {
 	/*
@@ -745,7 +742,7 @@ SetDictFromAny(
      */
 
     TclFreeIntRep(objPtr);
-    dict->epoch = 0;
+    dict->epoch = 1;
     dict->chain = NULL;
     dict->refCount = 1;
     DICT(objPtr) = dict;
@@ -1144,7 +1141,7 @@ Tcl_DictObjFirst(
     dict = DICT(dictPtr);
     cPtr = dict->entryChainHead;
     if (cPtr == NULL) {
-	searchPtr->epoch = -1;
+	searchPtr->epoch = 0;
 	*donePtr = 1;
     } else {
 	*donePtr = 0;
@@ -1205,7 +1202,7 @@ Tcl_DictObjNext(
      * If the searh is done; we do no work.
      */
 
-    if (searchPtr->epoch == -1) {
+    if (!searchPtr->epoch) {
 	*donePtr = 1;
 	return;
     }
@@ -1262,8 +1259,8 @@ Tcl_DictObjDone(
 {
     Dict *dict;
 
-    if (searchPtr->epoch != -1) {
-	searchPtr->epoch = -1;
+    if (searchPtr->epoch) {
+	searchPtr->epoch = 0;
 	dict = (Dict *) searchPtr->dictionaryPtr;
 	if (dict->refCount-- <= 1) {
 	    DeleteDict(dict);
@@ -1415,7 +1412,7 @@ Tcl_NewDictObj(void)
     TclInvalidateStringRep(dictPtr);
     dict = ckalloc(sizeof(Dict));
     InitChainTable(dict);
-    dict->epoch = 0;
+    dict->epoch = 1;
     dict->chain = NULL;
     dict->refCount = 1;
     DICT(dictPtr) = dict;
@@ -1465,7 +1462,7 @@ Tcl_DbNewDictObj(
     TclInvalidateStringRep(dictPtr);
     dict = ckalloc(sizeof(Dict));
     InitChainTable(dict);
-    dict->epoch = 0;
+    dict->epoch = 1;
     dict->chain = NULL;
     dict->refCount = 1;
     DICT(dictPtr) = dict;
@@ -2367,7 +2364,9 @@ DictAppendCmd(
 		valuePtr = Tcl_DuplicateObj(valuePtr);
 	    }
 
+	    Tcl_IncrRefCount(appendObjPtr);
 	    Tcl_AppendObjToObj(valuePtr, appendObjPtr);
+	    Tcl_DecrRefCount(appendObjPtr);
 	}
 
 =======

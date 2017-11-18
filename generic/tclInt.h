@@ -66,6 +66,7 @@
 #include <stdio.h>
 
 #include <ctype.h>
+#include <stdarg.h>
 #ifdef NO_STDLIB_H
 #   include "../compat/stdlib.h"
 #else
@@ -2050,41 +2051,31 @@ typedef struct AllocCache {
 >>>>>>> upstream/master
 typedef struct Interp {
     /*
-     * Note: the first three fields must match exactly the fields in a
-     * Tcl_Interp struct (see tcl.h). If you change one, be sure to change the
-     * other.
-     *
-     * The interpreter's result is held in both the string and the
-     * objResultPtr fields. These fields hold, respectively, the result's
-     * string or object value. The interpreter's result is always in the
-     * result field if that is non-empty, otherwise it is in objResultPtr.
-     * The two fields are kept consistent unless some C code sets
-     * interp->result directly. Programs should not access result and
-     * objResultPtr directly; instead, they should always get and set the
-     * result using procedures such as Tcl_SetObjResult, Tcl_GetObjResult, and
-     * Tcl_GetStringResult. See the SetResult man page for details.
+     * The first two fields were named "result" and "freeProc" in earlier
+     * versions of Tcl.  They are no longer used within Tcl, and are no
+     * longer available to be accessed by extensions.  However, they cannot
+     * be removed.  Why?  There is a deployed base of stub-enabled extensions
+     * that query the value of iPtr->stubTable.  For them to continue to work,
+     * the location of the field "stubTable" within the Interp struct cannot
+     * change.  The most robust way to assure that is to leave all fields up to
+     * that one undisturbed.
      */
 
-    char *result;		/* If the last command returned a string
-				 * result, this points to it. Should not be
-				 * accessed directly; see comment above. */
-    Tcl_FreeProc *freeProc;	/* Zero means a string result is statically
-				 * allocated. TCL_DYNAMIC means string result
-				 * was allocated with ckalloc and should be
-				 * freed with ckfree. Other values give
-				 * address of procedure to invoke to free the
-				 * string result. Tcl_Eval must free it before
-				 * executing next command. */
+    const char *legacyResult;
+    void (*legacyFreeProc) (void);
     int errorLine;		/* When TCL_ERROR is returned, this gives the
 				 * line number in the command where the error
 				 * occurred (1 means first line). */
     const struct TclStubs *stubTable;
-				/* Pointer to the exported Tcl stub table. On
-				 * previous versions of Tcl this is a pointer
-				 * to the objResultPtr or a pointer to a
-				 * buckets array in a hash table. We therefore
-				 * have to do some careful checking before we
-				 * can use this. */
+				/* Pointer to the exported Tcl stub table.  In
+				 * ancient pre-8.1 versions of Tcl this was a
+				 * pointer to the objResultPtr or a pointer to a
+				 * buckets array in a hash table. Deployed stubs
+				 * enabled extensions check for a NULL pointer value
+				 * and for a TCL_STUBS_MAGIC value to verify they
+				 * are not [load]ing into one of those pre-stubs
+				 * interps.
+				 */
 
     TclHandle handle;		/* Handle used to keep track of when this
 				 * interp is deleted. */
@@ -2097,15 +2088,7 @@ typedef struct Interp {
     ClientData interpInfo;	/* Information used by tclInterp.c to keep
 				 * track of master/slave interps on a
 				 * per-interp basis. */
-    union {
-	void (*optimizer)(void *envPtr);
-	Tcl_HashTable unused2;	/* No longer used (was mathFuncTable). The
-				 * unused space in interp was repurposed for
-				 * pluggable bytecode optimizers. The core
-				 * contains one optimizer, which can be
-				 * selectively overriden by extensions. */
-    } extra;
-
+    void (*optimizer)(void *envPtr);
     /*
      * Information related to procedures and variables. See tclProc.c and
      * tclVar.c for usage.
@@ -2135,6 +2118,7 @@ typedef struct Interp {
 				 * TCL_EVAL_INVOKE call to Tcl_EvalObjv. */
 
     /*
+<<<<<<< HEAD
      * Information used by Tcl_AppendResult to keep track of partial results.
      * See Tcl_AppendResult code for details.
      */
@@ -2170,6 +2154,8 @@ typedef struct Interp {
 >>>>>>> upstream/master
 
     /*
+=======
+>>>>>>> upstream/master
      * Information about packages. Used only in tclPkg.c.
      */
 
@@ -2191,7 +2177,6 @@ typedef struct Interp {
 				 * Normally zero, but may be set before
 				 * calling Tcl_Eval. See below for valid
 				 * values. */
-    int unused1;		/* No longer used (was termOffset) */
     LiteralTable literalTable;	/* Contains LiteralEntry's describing all Tcl
 				 * objects holding literals of scripts
 				 * compiled by the interpreter. Indexed by the
@@ -2229,12 +2214,6 @@ typedef struct Interp {
 				 * string. Returned by Tcl_ObjSetVar2 when
 				 * variable traces change a variable in a
 				 * gross way. */
-#ifndef TCL_NO_DEPRECATED
-    char resultSpace[TCL_RESULT_SIZE+1];
-				/* Static space holding small results. */
-#else
-    char resultSpaceDontUse[TCL_RESULT_SIZE+1];
-#endif
     Tcl_Obj *objResultPtr;	/* If the last command returned an object
 				 * result, this points to it. Should not be
 				 * accessed directly; see comment above. */
@@ -8441,14 +8420,20 @@ MODULE_SCOPE ClientData tclTimeClientData;
 >>>>>>> upstream/master
 
 /*
+<<<<<<< HEAD
  *----------------------------------------------------------------
  * Macro used by the Tcl core to increment a namespace's export export epoch
  * counter. The ANSI C "prototype" for this macro is:
+=======
+ * Macros providing a faster path to integers: Tcl_GetLongFromObj,
+ * Tcl_GetIntFromObj and TclGetIntForIndex.
+>>>>>>> upstream/master
  *
  * MODULE_SCOPE void	TclInvalidateNsCmdLookup(Namespace *nsPtr);
  *----------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #define TclInvalidateNsCmdLookup(nsPtr) \
     if ((nsPtr)->numExportPatterns) {		\
@@ -8472,6 +8457,35 @@ MODULE_SCOPE const Tcl_ObjType tclStringType;
 MODULE_SCOPE const Tcl_ObjType tclEnsembleCmdType;
 #ifndef TCL_WIDE_INT_IS_LONG
 MODULE_SCOPE const Tcl_ObjType tclWideIntType;
+=======
+#define TclGetLongFromObj(interp, objPtr, longPtr) \
+    (((objPtr)->typePtr == &tclIntType)	\
+	    ? ((*(longPtr) = (objPtr)->internalRep.longValue), TCL_OK) \
+	    : Tcl_GetLongFromObj((interp), (objPtr), (longPtr)))
+
+#if (LONG_MAX == INT_MAX)
+#define TclGetIntFromObj(interp, objPtr, intPtr) \
+    (((objPtr)->typePtr == &tclIntType)	\
+	    ? ((*(intPtr) = (objPtr)->internalRep.longValue), TCL_OK) \
+	    : Tcl_GetIntFromObj((interp), (objPtr), (intPtr)))
+#define TclGetIntForIndexM(interp, objPtr, endValue, idxPtr) \
+    (((objPtr)->typePtr == &tclIntType)	\
+	    ? ((*(idxPtr) = (objPtr)->internalRep.longValue), TCL_OK) \
+	    : TclGetIntForIndex((interp), (objPtr), (endValue), (idxPtr)))
+#else
+#define TclGetIntFromObj(interp, objPtr, intPtr) \
+    (((objPtr)->typePtr == &tclIntType \
+	    && (objPtr)->internalRep.longValue >= -(Tcl_WideInt)(UINT_MAX) \
+	    && (objPtr)->internalRep.longValue <= (Tcl_WideInt)(UINT_MAX))	\
+	    ? ((*(intPtr) = (objPtr)->internalRep.longValue), TCL_OK) \
+	    : Tcl_GetIntFromObj((interp), (objPtr), (intPtr)))
+#define TclGetIntForIndexM(interp, objPtr, endValue, idxPtr) \
+    (((objPtr)->typePtr == &tclIntType \
+	    && (objPtr)->internalRep.longValue >= INT_MIN \
+	    && (objPtr)->internalRep.longValue <= INT_MAX)	\
+	    ? ((*(idxPtr) = (objPtr)->internalRep.longValue), TCL_OK) \
+	    : TclGetIntForIndex((interp), (objPtr), (endValue), (idxPtr)))
+>>>>>>> upstream/master
 #endif
 MODULE_SCOPE const Tcl_ObjType tclRegexpType;
 MODULE_SCOPE Tcl_ObjType tclCmdNameType;
@@ -8936,8 +8950,6 @@ MODULE_SCOPE int	TclByteArrayMatch(const unsigned char *string,
 MODULE_SCOPE double	TclCeil(const mp_int *a);
 MODULE_SCOPE void	TclChannelPreserve(Tcl_Channel chan);
 MODULE_SCOPE void	TclChannelRelease(Tcl_Channel chan);
-MODULE_SCOPE int	TclCheckBadOctal(Tcl_Interp *interp,
-			    const char *value);
 MODULE_SCOPE int	TclChanCaughtErrorBypass(Tcl_Interp *interp,
 			    Tcl_Channel chan);
 MODULE_SCOPE Tcl_ObjCmdProc TclChannelNamesCmd;
@@ -8956,7 +8968,7 @@ MODULE_SCOPE int	TclFindDictElement(Tcl_Interp *interp,
 			    const char *dict, int dictLength,
 			    const char **elementPtr, const char **nextPtr,
 			    int *sizePtr, int *literalPtr);
-/* TIP #280 - Modified token based evulation, with line information. */
+/* TIP #280 - Modified token based evaluation, with line information. */
 MODULE_SCOPE int	TclEvalEx(Tcl_Interp *interp, const char *script,
 			    int numBytes, int flags, int line,
 			    int *clNextOuter, const char *outerScript);
@@ -9049,6 +9061,9 @@ MODULE_SCOPE int	TclInfoLocalsCmd(ClientData dummy, Tcl_Interp *interp,
 MODULE_SCOPE int	TclInfoVarsCmd(ClientData dummy, Tcl_Interp *interp,
 			    int objc, Tcl_Obj *const objv[]);
 MODULE_SCOPE void	TclInitAlloc(void);
+MODULE_SCOPE void	TclInitBignumFromLong(mp_int *, long);
+MODULE_SCOPE void	TclInitBignumFromWideInt(mp_int *, Tcl_WideInt);
+MODULE_SCOPE void	TclInitBignumFromWideUInt(mp_int *, Tcl_WideUInt);
 MODULE_SCOPE void	TclInitDbCkalloc(void);
 MODULE_SCOPE void	TclInitDoubleConversion(void);
 MODULE_SCOPE void	TclInitEmbeddedConfigurationInformation(
@@ -9176,7 +9191,7 @@ MODULE_SCOPE int	TclReToGlob(Tcl_Interp *interp, const char *reStr,
 			    int reStrLen, Tcl_DString *dsPtr, int *flagsPtr,
 			    int *quantifiersFoundPtr);
 MODULE_SCOPE int	TclScanElement(const char *string, int length,
-			    int *flagPtr);
+			    char *flagPtr);
 MODULE_SCOPE void	TclSetBgErrorHandler(Tcl_Interp *interp,
 			    Tcl_Obj *cmdPrefix);
 MODULE_SCOPE void	TclSetBignumIntRep(Tcl_Obj *objPtr,
@@ -10800,7 +10815,7 @@ MODULE_SCOPE int	TclIsPureByteArray(Tcl_Obj *objPtr);
 
 /*
  *----------------------------------------------------------------
- * Macro used by the Tcl core to increment a namespace's export export epoch
+ * Macro used by the Tcl core to increment a namespace's export epoch
  * counter. The ANSI C "prototype" for this macro is:
  *
  * MODULE_SCOPE void	TclInvalidateNsCmdLookup(Namespace *nsPtr);

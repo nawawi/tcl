@@ -6987,6 +6987,7 @@ TclInitByteCode(
      * byte code object (internal rep), for use with the bc compiler.
      */
 
+<<<<<<< HEAD
     Tcl_SetHashValue(Tcl_CreateHashEntry(iPtr->lineBCPtr, codePtr,
 	    &isNew), envPtr->extCmdMapPtr);
     envPtr->extCmdMapPtr = NULL;
@@ -7006,6 +7007,11 @@ TclInitByteCode(
 
     /* We've used up the CompileEnv.  Mark as uninitialized. */
     envPtr->iPtr = NULL;
+=======
+    if (iPtr->optimizer) {
+	(iPtr->optimizer)(&compEnv);
+    }
+>>>>>>> upstream/master
 
     codePtr->localCachePtr = NULL;
     return codePtr;

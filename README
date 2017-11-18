@@ -3,6 +3,7 @@ README:  Tcl
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     This is the Tcl 8.6.4 source distribution.
 =======
     This is the Tcl 8.7a0 source distribution.
@@ -15,6 +16,9 @@ README:  Tcl
 >>>>>>> upstream/master
 =======
     This is the Tcl 8.7a0 source distribution.
+>>>>>>> upstream/master
+=======
+    This is the Tcl 9.0a0 source distribution.
 >>>>>>> upstream/master
 	http://sourceforge.net/projects/tcl/files/Tcl/
     You can get any source release of Tcl from the URL above.

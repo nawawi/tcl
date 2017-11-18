@@ -23,6 +23,7 @@
 #define SAMPLES		64
 
 /*
+<<<<<<< HEAD
  * The following arrays contain the day of year for the last day of each
  * month, where index 1 is January.
  */
@@ -51,6 +52,8 @@ static Tcl_ThreadDataKey dataKey;
 #endif /* TCL_NO_DEPRECATED */
 
 /*
+=======
+>>>>>>> upstream/master
  * Data for managing high-resolution timers.
  */
 
@@ -199,6 +202,7 @@ static TimeInfo timeInfo = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static struct tm *	ComputeGMT(const time_t *tp);
 =======
 #ifndef TCL_NO_DEPRECATED
@@ -209,6 +213,8 @@ static struct tm *	ComputeGMT(const time_t *tp);
 #ifndef TCL_NO_DEPRECATED
 static struct tm *	ComputeGMT(const time_t *tp);
 #endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 static void		StopCalibration(ClientData clientData);
 static DWORD WINAPI	CalibrationThread(LPVOID arg);
@@ -718,6 +724,7 @@ StopCalibration(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclpGetDate --
  *
  *	This function converts between seconds and struct tm. If useGMT is
@@ -964,6 +971,8 @@ ComputeGMT(
 /*
  *----------------------------------------------------------------------
  *
+=======
+>>>>>>> upstream/master
  * CalibrationThread --
  *
  *	Thread that manages calibration of the hi-resolution time derived from
@@ -1291,6 +1300,7 @@ AccumulateSample(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclpGmtime --
  *
  *	Wrapper around the 'gmtime' library function to make it thread safe.
@@ -1368,6 +1378,8 @@ TclpLocaltime(
 /*
  *----------------------------------------------------------------------
  *
+=======
+>>>>>>> upstream/master
  * Tcl_SetTimeProc --
  *
  *	TIP #233 (Virtualized Time): Registers two handlers for the

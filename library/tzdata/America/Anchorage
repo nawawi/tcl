@@ -2,6 +2,7 @@
 
 set TZData(:America/Anchorage) {
     {-9223372036854775808 50424 0 LMT}
+<<<<<<< HEAD
     {-3225362424 -35976 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -13,6 +14,9 @@ set TZData(:America/Anchorage) {
     {-757346400 -36000 0 CAT}
 =======
 =======
+>>>>>>> upstream/master
+=======
+    {-3225223727 -35976 0 LMT}
 >>>>>>> upstream/master
     {-2188951224 -36000 0 AST}
     {-883576800 -36000 0 AST}

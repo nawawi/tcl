@@ -8867,7 +8867,50 @@ TclGetsObjBinary(
      */
 
     chanPtr = statePtr->topChanPtr;
+<<<<<<< HEAD
     TclChannelPreserve((Tcl_Channel)chanPtr);
+=======
+
+    if (CheckChannelErrors(statePtr, TCL_WRITABLE) != 0) {
+	return TCL_ERROR;
+    }
+
+    result = FlushChannel(NULL, chanPtr, 0);
+    if (result != 0) {
+	return TCL_ERROR;
+    }
+
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * DiscardInputQueued --
+ *
+ *	Discards any input read from the channel but not yet consumed by Tcl
+ *	reading commands.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	May discard input from the channel. If discardLastBuffer is zero,
+ *	leaves one buffer in place for back-filling.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+DiscardInputQueued(
+    ChannelState *statePtr,	/* Channel on which to discard the queued
+				 * input. */
+    int discardSavedBuffers)	/* If non-zero, discard all buffers including
+				 * last one. */
+{
+    ChannelBuffer *bufPtr, *nxtPtr;
+				/* Loop variables. */
+>>>>>>> upstream/master
 
     bufPtr = statePtr->inQueueHead;
 

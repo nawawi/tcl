@@ -24,6 +24,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static Tcl_ThreadDataKey tmKey;
 <<<<<<< HEAD
 typedef struct ThreadSpecificData {
@@ -70,6 +71,8 @@ static void		CleanupMemory(ClientData clientData);
 =======
 #endif /* TCL_NO_DEPRECATED */
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 static void		NativeScaleTime(Tcl_Time *timebuf,
 			    ClientData clientData);
@@ -282,6 +285,7 @@ Tcl_GetTime(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclpGetDate --
  *
  *	This function converts between seconds and struct tm. If useGMT is
@@ -406,6 +410,8 @@ TclpLocaltime(
 /*
  *----------------------------------------------------------------------
  *
+=======
+>>>>>>> upstream/master
  * Tcl_SetTimeProc --
  *
  *	TIP #233 (Virtualized Time): Registers two handlers for the
@@ -517,6 +523,7 @@ NativeGetTime(
     timePtr->sec = tv.tv_sec;
     timePtr->usec = tv.tv_usec;
 }
+<<<<<<< HEAD
 /*
  *----------------------------------------------------------------------
  *
@@ -596,6 +603,8 @@ CleanupMemory(
 >>>>>>> upstream/master
 =======
 #endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*

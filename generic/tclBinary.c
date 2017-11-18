@@ -2320,7 +2320,7 @@ ScanNumber(
 	    Tcl_Obj *bigObj = NULL;
 	    mp_int big;
 
-	    TclBNInitBignumFromWideUInt(&big, uwvalue);
+	    TclInitBignumFromWideUInt(&big, uwvalue);
 	    bigObj = Tcl_NewBignumObj(&big);
 	    return bigObj;
 	}

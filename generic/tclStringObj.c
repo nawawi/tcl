@@ -2382,47 +2382,6 @@ AppendUtfToUtfRep(
 /*
  *----------------------------------------------------------------------
  *
- * Tcl_AppendStringsToObjVA --
- *
- *	This function appends one or more null-terminated strings to an
- *	object.
- *
- * Results:
- *	None.
- *
- * Side effects:
- *	The contents of all the string arguments are appended to the string
- *	representation of objPtr.
- *
- *----------------------------------------------------------------------
- */
-
-void
-Tcl_AppendStringsToObjVA(
-    Tcl_Obj *objPtr,		/* Points to the object to append to. */
-    va_list argList)		/* Variable argument list. */
-{
-    if (Tcl_IsShared(objPtr)) {
-	Tcl_Panic("%s called with shared object", "Tcl_AppendStringsToObj");
-    }
-
-    while (1) {
-	const char *bytes = va_arg(argList, char *);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> upstream/master
-
-	if (bytes == NULL) {
-	    break;
-	}
-	Tcl_AppendToObj(objPtr, bytes, -1);
-    }
-}
-
-/*
- *----------------------------------------------------------------------
- *
  * Tcl_AppendStringsToObj --
  *
  *	This function appends one or more null-terminated strings to an
@@ -2446,7 +2405,22 @@ Tcl_AppendStringsToObj(
     va_list argList;
 
     va_start(argList, objPtr);
-    Tcl_AppendStringsToObjVA(objPtr, argList);
+    if (Tcl_IsShared(objPtr)) {
+	Tcl_Panic("%s called with shared object", "Tcl_AppendStringsToObj");
+    }
+
+    while (1) {
+	const char *bytes = va_arg(argList, char *);
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
+
+	if (bytes == NULL) {
+	    break;
+	}
+	Tcl_AppendToObj(objPtr, bytes, -1);
+    }
     va_end(argList);
 }
 
@@ -2481,6 +2455,7 @@ Tcl_AppendFormatToObj(
     const char *span = format, *msg, *errCode;
     int numBytes = 0, objIndex = 0, gotXpg = 0, gotSequential = 0;
     int originalLength, limit;
+    Tcl_UniChar ch = 0;
     static const char *mixedXPG =
 	    "cannot mix \"%\" and \"%n$\" conversion specifiers";
     static const char *const badIndex[2] = {
@@ -2517,7 +2492,6 @@ Tcl_AppendFormatToObj(
 >>>>>>> upstream/master
 	int newXpg, numChars, allocSegment = 0, segmentLimit, segmentNumBytes;
 	Tcl_Obj *segment;
-	Tcl_UniChar ch = 0;
 	int step = TclUtfToUniChar(format, &ch);
 
 	format += step;
@@ -9031,6 +9005,7 @@ TclStringCatObjv(
 	    /* Ugly interface! No scheme to init array size. */
 	    objResultPtr = Tcl_NewUnicodeObj(&ch, 0);	/* PANIC? */
 	    if (0 == Tcl_AttemptSetObjLength(objResultPtr, length)) {
+		Tcl_DecrRefCount(objResultPtr);
 		if (interp) {
 		    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		    	"concatenation failed: unable to alloc %"
@@ -9078,6 +9053,7 @@ TclStringCatObjv(
 	} else {
 	    objResultPtr = Tcl_NewObj();	/* PANIC? */
 	    if (0 == Tcl_AttemptSetObjLength(objResultPtr, length)) {
+		Tcl_DecrRefCount(objResultPtr);
 		if (interp) {
 		    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		    	"concatenation failed: unable to alloc %u bytes",
@@ -9172,40 +9148,44 @@ TclStringFind(
 	return -1;
     }
 
+    /*
+     * Check if we have two strings of single-byte characters. If we have, we
+     * can use strstr() to do the search. Note that we can sometimes have
+     * multibyte characters when the string could be minimally represented
+     * using single byte characters; we can't assume that a mismatch here
+     * means no match.
+     */
+
     lh = Tcl_GetCharLength(haystack);
-    if (haystack->bytes && (lh == haystack->length)) {
-	/* haystack is all single-byte chars */
+    if (haystack->bytes && (lh == haystack->length) && needle->bytes
+		&& (ln == needle->length)) {
+	/*
+	 * Both haystack and needle are all single-byte chars.
+	 */
 
-	if (needle->bytes && (ln == needle->length)) {
-	    /* needle is also all single-byte chars */
-	    char *found = strstr(haystack->bytes + start, needle->bytes);
+	char *found = strstr(haystack->bytes + start, needle->bytes);
 
-	    if (found) {
-		return (found - haystack->bytes);
-	    } else {
-		return -1;
-	    }
+	if (found) {
+	    return (found - haystack->bytes);
 	} else {
-	    /*
-	     * Cannot find substring with a multi-byte char inside
-	     * a string with no multi-byte chars.
-	     */
 	    return -1;
 	}
     } else {
+	/*
+	 * Do the search on the unicode representation for simplicity.
+	 */
+
 	Tcl_UniChar *try, *end, *uh;
 	Tcl_UniChar *un = Tcl_GetUnicodeFromObj(needle, &ln);
 
 	uh = Tcl_GetUnicodeFromObj(haystack, &lh);
 	end = uh + lh;
 
-	try = uh + start;
-	while (try + ln <= end) {
-	    if ((*try == *un)
-		    && (0 == memcmp(try+1, un+1, (ln-1)*sizeof(Tcl_UniChar)))) {
+	for (try = uh + start; try + ln <= end; try++) {
+	    if ((*try == *un) && (0 ==
+		    memcmp(try + 1, un + 1, (ln-1) * sizeof(Tcl_UniChar)))) {
 		return (try - uh);
 	    }
-	    try++;
 	}
 	return -1;
     }
@@ -9388,7 +9368,6 @@ TclStringObjReverse(
 	     * Tcl_SetObjLength into growing the unicode rep buffer.
 	     */
 
-	    ch = 0;
 	    objPtr = Tcl_NewUnicodeObj(&ch, 1);
 	    Tcl_SetObjLength(objPtr, stringPtr->numChars);
 	    to = Tcl_GetUnicode(objPtr);
@@ -9507,7 +9486,7 @@ ExtendUnicodeRepWithString(
 {
     String *stringPtr = GET_STRING(objPtr);
     int needed, numOrigChars = 0;
-    Tcl_UniChar *dst;
+    Tcl_UniChar *dst, unichar = 0;
 
     if (stringPtr->hasUnicode) {
 	numOrigChars = stringPtr->numChars;
@@ -9534,7 +9513,8 @@ ExtendUnicodeRepWithString(
 	numAppendChars = 0;
     }
     for (dst=stringPtr->unicode + numOrigChars; numAppendChars-- > 0; dst++) {
-	bytes += TclUtfToUniChar(bytes, dst);
+	bytes += TclUtfToUniChar(bytes, &unichar);
+	*dst = unichar;
     }
     *dst = 0;
 }

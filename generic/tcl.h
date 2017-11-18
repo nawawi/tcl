@@ -75,6 +75,7 @@ extern "C" {
  * tools/tcl.hpj.in	(not patchlevel, for windows installer)
  */
 
+<<<<<<< HEAD
 #define TCL_MAJOR_VERSION   8
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -111,6 +112,15 @@ extern "C" {
 #if !defined(TCL_NO_DEPRECATED) || defined(RC_INVOKED)
 >>>>>>> upstream/master
 =======
+=======
+#define TCL_MAJOR_VERSION   9
+#define TCL_MINOR_VERSION   0
+#define TCL_RELEASE_LEVEL   TCL_ALPHA_RELEASE
+#define TCL_RELEASE_SERIAL  0
+
+#define TCL_VERSION	    "9.0"
+#define TCL_PATCH_LEVEL	    "9.0a0"
+>>>>>>> upstream/master
 
 #if !defined(TCL_NO_DEPRECATED) || defined(RC_INVOKED)
 >>>>>>> upstream/master
@@ -301,18 +311,6 @@ extern "C" {
 
 #include <stdio.h>
 
-/*
- *----------------------------------------------------------------------------
- * Support for functions with a variable number of arguments.
- *
- * The following TCL_VARARGS* macros are to support old extensions
- * written for older versions of Tcl where the macros permitted
- * support for the varargs.h system as well as stdarg.h .
- *
- * New code should just directly be written to use stdarg.h conventions.
- */
-
-#include <stdarg.h>
 #ifndef TCL_NO_DEPRECATED
 #    define TCL_VARARGS(type, name) (type name, ...)
 #    define TCL_VARARGS_DEF(type, name) (type name, ...)
@@ -796,6 +794,7 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
  * accessed with Tcl_GetObjResult() and Tcl_SetObjResult().
  */
 
+<<<<<<< HEAD
 typedef struct Tcl_Interp
 #ifndef TCL_NO_DEPRECATED
 {
@@ -837,6 +836,9 @@ typedef struct Tcl_Interp
 #endif /* !TCL_NO_DEPRECATED */
 >>>>>>> upstream/master
 Tcl_Interp;
+=======
+typedef struct Tcl_Interp Tcl_Interp;
+>>>>>>> upstream/master
 
 typedef struct Tcl_AsyncHandler_ *Tcl_AsyncHandler;
 typedef struct Tcl_Channel_ *Tcl_Channel;
@@ -1004,12 +1006,15 @@ typedef struct stat *Tcl_OldStat_;
 #define TCL_BREAK		3
 #define TCL_CONTINUE		4
 
+<<<<<<< HEAD
 #define TCL_RESULT_SIZE		200
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
+=======
+>>>>>>> upstream/master
 /*
  *----------------------------------------------------------------------------
  * Flags to control what substitutions are performed by Tcl_SubstObj():
@@ -1198,20 +1203,11 @@ int		Tcl_IsShared(Tcl_Obj *objPtr);
 
 /*
  *----------------------------------------------------------------------------
- * The following structure contains the state needed by Tcl_SaveResult. No-one
- * outside of Tcl should access any of these fields. This structure is
- * typically allocated on the stack.
+ * The following type contains the state needed by Tcl_SaveResult. It
+ * is typically allocated on the stack.
  */
 
-typedef struct Tcl_SavedResult {
-    char *result;
-    Tcl_FreeProc *freeProc;
-    Tcl_Obj *objResultPtr;
-    char *appendResult;
-    int appendAvl;
-    int appendUsed;
-    char resultSpace[TCL_RESULT_SIZE+1];
-} Tcl_SavedResult;
+typedef Tcl_Obj *Tcl_SavedResult;
 
 /*
  *----------------------------------------------------------------------------
@@ -1820,8 +1816,8 @@ typedef struct Tcl_HashSearch {
 typedef struct {
     void *next;			/* Search position for underlying hash
 				 * table. */
-    int epoch;			/* Epoch marker for dictionary being searched,
-				 * or -1 if search has terminated. */
+    unsigned int epoch; 	/* Epoch marker for dictionary being searched,
+				 * or 0 if search has terminated. */
     Tcl_Dict dictionaryPtr;	/* Reference to dictionary being searched. */
 } Tcl_DictSearch;
 
@@ -2885,6 +2881,8 @@ typedef struct mp_int mp_int;
 #define MP_INT_DECLARED
 typedef unsigned int mp_digit;
 #define MP_DIGIT_DECLARED
+typedef unsigned TCL_WIDE_INT_TYPE mp_word;
+#define MP_WORD_DECLARED
 
 /*
  *----------------------------------------------------------------------------
@@ -3048,6 +3046,7 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
  * Shorthand for commonly used argTable entries.
  */
 
+<<<<<<< HEAD
 #define TCL_ARGV_AUTO_HELP \
     {TCL_ARGV_HELP,	"-help",	NULL,	NULL, \
 	    "Print summary of command-line options and abort", NULL}
@@ -3056,6 +3055,36 @@ typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 	    "Marks the end of the options", NULL}
 #define TCL_ARGV_TABLE_END \
     {TCL_ARGV_END, NULL, NULL, NULL, NULL, NULL}
+=======
+const char *		Tcl_InitStubs(Tcl_Interp *interp, const char *version,
+			    int exact, int magic);
+const char *		TclTomMathInitializeStubs(Tcl_Interp *interp,
+			    const char *version, int epoch, int revision);
+
+#ifdef USE_TCL_STUBS
+#if TCL_RELEASE_LEVEL == TCL_FINAL_RELEASE
+#   define Tcl_InitStubs(interp, version, exact) \
+	(Tcl_InitStubs)(interp, version, \
+	    (exact)|(TCL_MAJOR_VERSION<<8)|(TCL_MINOR_VERSION<<16), \
+	    TCL_STUB_MAGIC)
+#else
+#   define Tcl_InitStubs(interp, version, exact) \
+	(Tcl_InitStubs)(interp, TCL_PATCH_LEVEL, \
+	    1|(TCL_MAJOR_VERSION<<8)|(TCL_MINOR_VERSION<<16), \
+	    TCL_STUB_MAGIC)
+#endif
+#else
+#if TCL_RELEASE_LEVEL == TCL_FINAL_RELEASE
+#   define Tcl_InitStubs(interp, version, exact) \
+	Tcl_PkgInitStubsCheck(interp, version, \
+		(exact)|(TCL_MAJOR_VERSION<<8)|(TCL_MINOR_VERSION<<16))
+#else
+#   define Tcl_InitStubs(interp, version, exact) \
+	Tcl_PkgInitStubsCheck(interp, TCL_PATCH_LEVEL, \
+		1|(TCL_MAJOR_VERSION<<8)|(TCL_MINOR_VERSION<<16))
+#endif
+#endif
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------------
@@ -3721,10 +3750,13 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 #if !defined(__APPLE__) /* On OSX, there is a conflict with "mach/mach.h" */
 #   define panic		Tcl_Panic
 #endif
+<<<<<<< HEAD
 #   define panicVA		Tcl_PanicVA
 <<<<<<< HEAD
 <<<<<<< HEAD
 #endif /* !TCL_NO_DEPRECATED */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

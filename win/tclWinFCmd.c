@@ -1663,7 +1663,6 @@ ConvertFileNameFormat(
     for (i = 0; i < pathc; i++) {
 	Tcl_Obj *elt;
 	char *pathv;
-	size_t pathLen;
 
 	Tcl_ListObjIndex(NULL, splitPath, i, &elt);
 
@@ -1685,9 +1684,13 @@ ConvertFileNameFormat(
 >>>>>>> upstream/master
 =======
 	pathv = TclGetString(elt);
+<<<<<<< HEAD
 	pathLen = elt->length;
 >>>>>>> upstream/master
 	if ((pathv[0] == '/') || ((pathLen == 3) && (pathv[1] == ':'))
+=======
+	if ((pathv[0] == '/') || ((elt->length == 3) && (pathv[1] == ':'))
+>>>>>>> upstream/master
 		|| (strcmp(pathv, ".") == 0) || (strcmp(pathv, "..") == 0)) {
 	    /*
 	     * Handle "/", "//machine/export", "c:/", "." or ".." by just
