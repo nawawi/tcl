@@ -15,6 +15,7 @@
  * Callback structure for accept callback in a TCP server.
  */
 
+<<<<<<< HEAD
 typedef struct AcceptCallback {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -22,6 +23,9 @@ typedef struct AcceptCallback {
 <<<<<<< HEAD
     char *script;		/* Script to invoke. */
 =======
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Obj *script;		/* Script to invoke. */
 >>>>>>> upstream/master
 =======

@@ -56,7 +56,7 @@ typedef int (*SortMemCmpFn_t) (const void *, const void *, size_t);
  * The following structure is used to pass this information.
  */
 
-typedef struct SortInfo {
+typedef struct {
     int isIncreasing;		/* Nonzero means sort in increasing order. */
     int sortMode;		/* The sort mode. One of SORTMODE_* values
 				 * defined below. */
@@ -3789,11 +3789,52 @@ Tcl_LsearchObjCmd(
 	}
     }
 
+<<<<<<< HEAD
     /*
 <<<<<<< HEAD
      * Make sure the list argument is a list object and get its length and a
      * pointer to its array of element pointers.
      */
+=======
+int
+Tcl_LsearchObjCmd(
+    ClientData clientData,	/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument values. */
+{
+    const char *bytes, *patternBytes;
+    int i, match, index, result, listc, length, elemLen, bisect;
+    int dataType, isIncreasing, lower, upper, offset;
+    Tcl_WideInt patWide, objWide;
+    int allMatches, inlineReturn, negatedMatch, returnSubindices, noCase;
+    double patDouble, objDouble;
+    SortInfo sortInfo;
+    Tcl_Obj *patObj, **listv, *listPtr, *startPtr, *itemPtr;
+    SortStrCmpFn_t strCmpFn = TclUtfCmp;
+    Tcl_RegExp regexp = NULL;
+    static const char *const options[] = {
+	"-all",	    "-ascii",   "-bisect", "-decreasing", "-dictionary",
+	"-exact",   "-glob",    "-increasing", "-index",
+	"-inline",  "-integer", "-nocase",     "-not",
+	"-real",    "-regexp",  "-sorted",     "-start",
+	"-subindices", NULL
+    };
+    enum options {
+	LSEARCH_ALL, LSEARCH_ASCII, LSEARCH_BISECT, LSEARCH_DECREASING,
+	LSEARCH_DICTIONARY, LSEARCH_EXACT, LSEARCH_GLOB, LSEARCH_INCREASING,
+	LSEARCH_INDEX, LSEARCH_INLINE, LSEARCH_INTEGER, LSEARCH_NOCASE,
+	LSEARCH_NOT, LSEARCH_REAL, LSEARCH_REGEXP, LSEARCH_SORTED,
+	LSEARCH_START, LSEARCH_SUBINDICES
+    };
+    enum datatypes {
+	ASCII, DICTIONARY, INTEGER, REAL
+    };
+    enum modes {
+	EXACT, GLOB, REGEXP, SORTED
+    };
+    enum modes mode;
+>>>>>>> upstream/master
 
 =======
      * Subindices only make sense if asked for with -index option set.
@@ -5266,7 +5307,7 @@ SortCompare(
     int order = 0;
 
     if (infoPtr->sortMode == SORTMODE_ASCII) {
-	order = strcmp(elemPtr1->collationKey.strValuePtr,
+	order = TclUtfCmp(elemPtr1->collationKey.strValuePtr,
 		elemPtr2->collationKey.strValuePtr);
     } else if (infoPtr->sortMode == SORTMODE_ASCII_NC) {
 	order = TclUtfCasecmp(elemPtr1->collationKey.strValuePtr,

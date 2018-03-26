@@ -471,10 +471,16 @@ DisassembleByteCodeObj(
 >>>>>>> upstream/master
 =======
     Tcl_AppendPrintfToObj(bufferObj,
+<<<<<<< HEAD
 	    "ByteCode %p, refCt %u, epoch %u, interp %p (epoch %u)\n",
 	    codePtr, codePtr->refCount, codePtr->compileEpoch, iPtr,
 >>>>>>> upstream/master
 	    iPtr->compileEpoch);
+=======
+	    "ByteCode %p, refCt %u, epoch %" TCL_LL_MODIFIER "d, interp %p (epoch %" TCL_LL_MODIFIER "d)\n",
+	    codePtr, codePtr->refCount, (Tcl_WideUInt)codePtr->compileEpoch, iPtr,
+		(Tcl_WideUInt)iPtr->compileEpoch);
+>>>>>>> upstream/master
     Tcl_AppendToObj(bufferObj, "  Source ", -1);
     PrintSourceToObj(bufferObj, codePtr->source,
 	    TclMin(codePtr->numSrcBytes, 55));

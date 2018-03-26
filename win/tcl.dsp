@@ -38,12 +38,16 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Release\tclsh85.exe"
 =======
 # PROP BASE Target_File "Release\tclsh87.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh87.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Release\tclsh90.exe"
 >>>>>>> upstream/master
 # PROP BASE Bsc_Name ""
 # PROP BASE Target_Dir ""
@@ -55,12 +59,16 @@ CFG=tcl - Win32 Debug Static
 # PROP Rebuild_Opt "clean release"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Release\tclsh85t.exe"
 =======
 # PROP Target_File "Release\tclsh87t.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh87t.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Release\tclsh90t.exe"
 >>>>>>> upstream/master
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
@@ -75,12 +83,16 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Debug\tclsh85g.exe"
 =======
 # PROP BASE Target_File "Debug\tclsh87g.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh87g.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Debug\tclsh90g.exe"
 >>>>>>> upstream/master
 # PROP BASE Bsc_Name ""
 # PROP BASE Target_Dir ""
@@ -92,12 +104,16 @@ CFG=tcl - Win32 Debug Static
 # PROP Rebuild_Opt "clean release"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Debug\tclsh85tg.exe"
 =======
 # PROP Target_File "Debug\tclsh87tg.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh87tg.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Debug\tclsh90tg.exe"
 >>>>>>> upstream/master
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
@@ -112,12 +128,16 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Debug\tclsh85sg.exe"
 =======
 # PROP BASE Target_File "Debug\tclsh87sg.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh87sg.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Debug\tclsh90sg.exe"
 >>>>>>> upstream/master
 # PROP BASE Bsc_Name ""
 # PROP BASE Target_Dir ""
@@ -129,12 +149,16 @@ CFG=tcl - Win32 Debug Static
 # PROP Rebuild_Opt "-a"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Debug\tclsh85sg.exe"
 =======
 # PROP Target_File "Debug\tclsh87sg.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh87sg.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Debug\tclsh90sg.exe"
 >>>>>>> upstream/master
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
@@ -149,12 +173,16 @@ CFG=tcl - Win32 Debug Static
 # PROP BASE Rebuild_Opt "-a"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Release\tclsh85s.exe"
 =======
 # PROP BASE Target_File "Release\tclsh87s.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh87s.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Release\tclsh90s.exe"
 >>>>>>> upstream/master
 # PROP BASE Bsc_Name ""
 # PROP BASE Target_Dir ""
@@ -166,12 +194,16 @@ CFG=tcl - Win32 Debug Static
 # PROP Rebuild_Opt "-a"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Release\tclsh85s.exe"
 =======
 # PROP Target_File "Release\tclsh87s.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh87s.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Release\tclsh90s.exe"
 >>>>>>> upstream/master
 # PROP Bsc_Name ""
 # PROP Target_Dir ""

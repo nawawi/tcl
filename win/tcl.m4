@@ -720,17 +720,6 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     AC_ARG_ENABLE(64bit,[  --enable-64bit          enable 64bit support (where applicable)], [do64bit=$enableval], [do64bit=no])
     AC_MSG_RESULT($do64bit)
 
-    # Cross-compiling options for Windows/CE builds
-
-    AC_MSG_CHECKING([if Windows/CE build is requested])
-    AC_ARG_ENABLE(wince,[  --enable-wince          enable Win/CE support (where applicable)], [doWince=$enableval], [doWince=no])
-    AC_MSG_RESULT($doWince)
-
-    AC_MSG_CHECKING([for Windows/CE celib directory])
-    AC_ARG_WITH(celib,[  --with-celib=DIR        use Windows/CE support library from DIR],
-	    CELIB_DIR=$withval, CELIB_DIR=NO_CELIB)
-    AC_MSG_RESULT([$CELIB_DIR])
-
     # Set some defaults (may get changed below)
     EXTRA_CFLAGS=""
 	AC_DEFINE(MODULE_SCOPE, [extern], [No need to mark inidividual symbols as hidden])
@@ -1253,6 +1242,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LINKBIN="link"
 	fi
 
+<<<<<<< HEAD
 	if test "$doWince" != "no" ; then
 	    # Set defaults for common evc4/PPC2003 setup
 	    # Currently Tcl requires 300+, possibly 420+ for sockets
@@ -1349,6 +1339,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	else
 	    LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
 	fi
+=======
+	LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
+>>>>>>> upstream/master
 
 	SHLIB_LD="${LINKBIN} -dll -incremental:no ${lflags}"
 	SHLIB_LD_LIBS='${LIBS}'
@@ -1379,7 +1372,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 
 	# Specify linker flags depending on the type of app being
 	# built -- Console vs. Window.
-	if test "$doWince" != "no" -a "${TARGETCPU}" != "X86"; then
+	if test "${TARGETCPU}" != "X86"; then
 	    LDFLAGS_CONSOLE="-link ${lflags}"
 	    LDFLAGS_WINDOW=${LDFLAGS_CONSOLE}
 	else

@@ -91,6 +91,7 @@ typedef struct Conversation {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct DdeEnumServices {
 =======
 struct DdeEnumServices {
@@ -101,11 +102,15 @@ struct DdeEnumServices {
 =======
 struct DdeEnumServices {
 >>>>>>> upstream/master
+=======
+typedef struct {
+>>>>>>> upstream/master
     Tcl_Interp *interp;
     int result;
     ATOM service;
     ATOM topic;
     HWND hwnd;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -124,6 +129,9 @@ typedef struct {
 >>>>>>> upstream/master
 =======
 };
+=======
+} DdeEnumServices;
+>>>>>>> upstream/master
 
 typedef struct {
 >>>>>>> upstream/master
@@ -163,7 +171,7 @@ TCL_DECLARE_MUTEX(ddeMutex)
 
 static LRESULT CALLBACK	DdeClientWindowProc(HWND hwnd, UINT uMsg,
 			    WPARAM wParam, LPARAM lParam);
-static int		DdeCreateClient(struct DdeEnumServices *es);
+static int		DdeCreateClient(DdeEnumServices *es);
 static BOOL CALLBACK	DdeEnumWindowsCallback(HWND hwndTarget,
 			    LPARAM lParam);
 static void		DdeExitProc(ClientData clientData);
@@ -187,6 +195,7 @@ static int		DdeObjCmd(ClientData clientData,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int		Dde_Init(Tcl_Interp *interp);
 EXTERN int		Dde_SafeInit(Tcl_Interp *interp);
 =======
@@ -200,6 +209,10 @@ DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
 =======
 DLLEXPORT int	Dde_Init(Tcl_Interp *interp);
 DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
+>>>>>>> upstream/master
+=======
+DLLEXPORT int		Dde_Init(Tcl_Interp *interp);
+DLLEXPORT int		Dde_SafeInit(Tcl_Interp *interp);
 >>>>>>> upstream/master
 
 /*
@@ -226,13 +239,6 @@ Dde_Init(
 	return TCL_ERROR;
     }
 
-#ifdef UNICODE
-    if (TclWinGetPlatformId() < VER_PLATFORM_WIN32_NT) {
-	Tcl_SetObjResult(interp, Tcl_NewStringObj(
-		"Win32s and Windows 9x are not supported platforms", -1));
-	return TCL_ERROR;
-    }
-#endif
     Tcl_CreateObjCommand(interp, "dde", DdeObjCmd, NULL, NULL);
     Tcl_CreateExitHandler(DdeExitProc, NULL);
     return Tcl_PkgProvide(interp, TCL_DDE_PACKAGE_NAME, TCL_DDE_VERSION);
@@ -1260,7 +1266,7 @@ MakeDdeConnection(
 
 static int
 DdeCreateClient(
-    struct DdeEnumServices *es)
+    DdeEnumServices *es)
 {
     WNDCLASSEX wc;
     static const TCHAR *szDdeClientClassName = TEXT("TclEval client class");
@@ -1270,7 +1276,7 @@ DdeCreateClient(
     wc.cbSize = sizeof(wc);
     wc.lpfnWndProc = DdeClientWindowProc;
     wc.lpszClassName = szDdeClientClassName;
-    wc.cbWndExtra = sizeof(struct DdeEnumServices *);
+    wc.cbWndExtra = sizeof(DdeEnumServices *);
 
     /*
      * Register and create the callback window.
@@ -1329,8 +1335,8 @@ DdeClientWindowProc(
     switch (uMsg) {
     case WM_CREATE: {
 	LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
-	struct DdeEnumServices *es =
-		(struct DdeEnumServices *) lpcs->lpCreateParams;
+	DdeEnumServices *es =
+		(DdeEnumServices *) lpcs->lpCreateParams;
 
 #ifdef _WIN64
 	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) es);
@@ -1356,14 +1362,14 @@ DdeServicesOnAck(
     HWND hwndRemote = (HWND)wParam;
     ATOM service = (ATOM)LOWORD(lParam);
     ATOM topic = (ATOM)HIWORD(lParam);
-    struct DdeEnumServices *es;
+    DdeEnumServices *es;
     TCHAR sz[255];
     Tcl_DString dString;
 
 #ifdef _WIN64
-    es = (struct DdeEnumServices *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+    es = (DdeEnumServices *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 #else
-    es = (struct DdeEnumServices *) GetWindowLong(hwnd, GWL_USERDATA);
+    es = (DdeEnumServices *) GetWindowLong(hwnd, GWL_USERDATA);
 #endif
 
     if ((es->service == (ATOM)0 || es->service == service)
@@ -1414,7 +1420,7 @@ DdeEnumWindowsCallback(
     LPARAM lParam)
 {
     DWORD_PTR dwResult = 0;
-    struct DdeEnumServices *es = (struct DdeEnumServices *) lParam;
+    DdeEnumServices *es = (DdeEnumServices *) lParam;
 
     SendMessageTimeout(hwndTarget, WM_DDE_INITIATE, (WPARAM)es->hwnd,
 	    MAKELONG(es->service, es->topic), SMTO_ABORTIFHUNG, 1000,
@@ -1428,7 +1434,7 @@ DdeGetServicesList(
     const TCHAR *serviceName,
     const TCHAR *topicName)
 {
-    struct DdeEnumServices es;
+    DdeEnumServices es;
 
     es.interp = interp;
     es.result = TCL_OK;

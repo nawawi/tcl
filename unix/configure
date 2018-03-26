@@ -49909,6 +49909,7 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: 64bit support being disabled -- don't know magic for this platform" >&5
 $as_echo "$as_me: WARNING: 64bit support being disabled -- don't know magic for this platform" >&2;}
 
+<<<<<<< HEAD
 fi
 
     if test "$do64bit" = yes -a "$do64bit_ok" = yes; then :
@@ -49925,6 +49926,13 @@ $as_echo "#define NO_VALUES_H 1" >>confdefs.h
 $as_echo "#define TCL_CFG_DO64BIT 1" >>confdefs.h
 
 
+=======
+    ac_fn_c_check_header_mongrel "$LINENO" "stdlib.h" "ac_cv_header_stdlib_h" "$ac_includes_default"
+if test "x$ac_cv_header_stdlib_h" = xyes; then :
+  tcl_ok=1
+else
+  tcl_ok=0
+>>>>>>> upstream/master
 fi
 
 
@@ -51460,11 +51468,58 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
+<<<<<<< HEAD
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     fi
     if test $ac_cv_c_bigendian = unknown; then
       # See if <limits.h> defines _LITTLE_ENDIAN or _BIG_ENDIAN (e.g., Solaris).
       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+=======
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_cygwin" >&5
+$as_echo "$ac_cv_cygwin" >&6; }
+	    if test "$ac_cv_cygwin" = "no"; then
+		as_fn_error $? "${CC} is not a cygwin compiler." "$LINENO" 5
+	    fi
+	    if test "x${TCL_THREADS}" = "x0"; then
+		as_fn_error $? "CYGWIN compile is only supported with --enable-threads" "$LINENO" 5
+	    fi
+	    do64bit_ok=yes
+	    if test "x${SHARED_BUILD}" = "x1"; then
+		echo "running cd ../win; ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args"
+		# The eval makes quoting arguments work.
+		if cd ../win; eval ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args; cd ../unix
+		then :
+		else
+		    { echo "configure: error: configure failed for ../win" 1>&2; exit 1; }
+		fi
+	    fi
+	    ;;
+	dgux*)
+	    SHLIB_CFLAGS="-K PIC"
+	    SHLIB_LD='${CC} -G'
+	    SHLIB_LD_LIBS=""
+	    SHLIB_SUFFIX=".so"
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS="-ldl"
+	    CC_SEARCH_FLAGS=""
+	    LD_SEARCH_FLAGS=""
+	    ;;
+	Haiku*)
+	    LDFLAGS="$LDFLAGS -Wl,--export-dynamic"
+	    SHLIB_CFLAGS="-fPIC"
+	    SHLIB_SUFFIX=".so"
+	    SHLIB_LD='${CC} ${CFLAGS} ${LDFLAGS} -shared'
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS="-lroot"
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_ntoa in -lnetwork" >&5
+$as_echo_n "checking for inet_ntoa in -lnetwork... " >&6; }
+if ${ac_cv_lib_network_inet_ntoa+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnetwork  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+>>>>>>> upstream/master
 /* end confdefs.h.  */
 #include <limits.h>
 
@@ -51659,6 +51714,14 @@ esac
 	USE_COMPAT=1
     fi
 
+<<<<<<< HEAD
+=======
+	    SHLIB_LD='${CC} ${CFLAGS} ${LDFLAGS} -shared'
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS="-ldl"
+	    LDFLAGS="$LDFLAGS -Wl,--export-dynamic"
+	    if test $doRpath = yes; then :
+>>>>>>> upstream/master
 
 #--------------------------------------------------------------------
 #	Under Solaris 2.4, strtod returns the wrong value for the
@@ -51734,6 +51797,28 @@ $as_echo "#define strtod fixstrtod" >>confdefs.h
 	fi
     fi
 
+<<<<<<< HEAD
+=======
+		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+		LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+fi
+	    ;;
+	OpenBSD-*)
+	    arch=`arch -s`
+	    case "$arch" in
+	    alpha|sparc64)
+		SHLIB_CFLAGS="-fPIC"
+		;;
+	    *)
+		SHLIB_CFLAGS="-fpic"
+		;;
+	    esac
+	    SHLIB_LD='${CC} ${SHLIB_CFLAGS} -shared'
+	    SHLIB_SUFFIX=".so"
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS=""
+	    if test $doRpath = yes; then :
+>>>>>>> upstream/master
 
 #--------------------------------------------------------------------
 #	Check for various typedefs and provide substitutes if
@@ -51761,6 +51846,22 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 fi
+<<<<<<< HEAD
+=======
+	    # OpenBSD doesn't do version numbers with dots.
+	    UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+	    TCL_LIB_VERSIONS_OK=nodots
+	    ;;
+	NetBSD-*)
+	    # NetBSD has ELF and can use 'cc -shared' to build shared libs
+	    SHLIB_CFLAGS="-fPIC"
+	    SHLIB_LD='${CC} ${SHLIB_CFLAGS} -shared'
+	    SHLIB_SUFFIX=".so"
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS=""
+	    LDFLAGS="$LDFLAGS -export-dynamic"
+	    if test $doRpath = yes; then :
+>>>>>>> upstream/master
 
 ac_fn_c_check_type "$LINENO" "size_t" "ac_cv_type_size_t" "$ac_includes_default"
 if test "x$ac_cv_type_size_t" = xyes; then :

@@ -44,6 +44,7 @@ MODULE_SCOPE TclWinProcs *tclWinProcs;
 MODULE_SCOPE TclWinProcs tclWinProcs;
 >>>>>>> upstream/master
 
+<<<<<<< HEAD
 /*
  * Some versions of Borland C have a define for the OSVERSIONINFO for
  * Win32s and for NT, but not for Windows 95.
@@ -58,6 +59,8 @@ MODULE_SCOPE TclWinProcs tclWinProcs;
 #endif
 <<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 #ifdef _WIN64
 #         define TCL_I_MODIFIER        "I"
 #else

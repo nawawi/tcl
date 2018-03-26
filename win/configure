@@ -1580,7 +1580,6 @@ CFLAGS_WARNING
 CFLAGS_OPTIMIZE
 CFLAGS_DEBUG
 DL_LIBS
-CELIB_DIR
 CYGPATH
 TCL_THREADS
 SET_MAKE
@@ -1642,8 +1641,6 @@ enable_threads
 with_encoding
 enable_shared
 enable_64bit
-enable_wince
-with_celib
 enable_symbols
 enable_embedded_manifest
 '
@@ -3012,7 +3009,6 @@ Optional Features:
   --enable-threads        build with threads (default: on)
   --enable-shared         build and link with shared libraries (default: on)
   --enable-64bit          enable 64bit support (where applicable)
-  --enable-wince          enable Win/CE support (where applicable)
   --enable-symbols        build with debugging symbols (default: off)
   --enable-embedded-manifest
                           embed manifest if possible (default: yes)
@@ -3021,7 +3017,6 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-encoding         encoding for configuration values
-  --with-celib=DIR        use Windows/CE support library from DIR
 
 Some influential environment variables:
   CC          C compiler command
@@ -21820,33 +21815,6 @@ fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $do64bit" >&5
 $as_echo "$do64bit" >&6; }
 
-    # Cross-compiling options for Windows/CE builds
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if Windows/CE build is requested" >&5
-$as_echo_n "checking if Windows/CE build is requested... " >&6; }
-    # Check whether --enable-wince was given.
-if test "${enable_wince+set}" = set; then :
-  enableval=$enable_wince; doWince=$enableval
-else
-  doWince=no
-fi
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $doWince" >&5
-$as_echo "$doWince" >&6; }
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Windows/CE celib directory" >&5
-$as_echo_n "checking for Windows/CE celib directory... " >&6; }
-
-# Check whether --with-celib was given.
-if test "${with_celib+set}" = set; then :
-  withval=$with_celib; CELIB_DIR=$withval
-else
-  CELIB_DIR=NO_CELIB
-fi
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CELIB_DIR" >&5
-$as_echo "$CELIB_DIR" >&6; }
-
     # Set some defaults (may get changed below)
     EXTRA_CFLAGS=""
 
@@ -22907,6 +22875,7 @@ fi
 	    LINKBIN="link"
 	fi
 
+<<<<<<< HEAD
 	if test "$doWince" != "no" ; then
 	    # Set defaults for common evc4/PPC2003 setup
 	    # Currently Tcl requires 300+, possibly 420+ for sockets
@@ -23118,6 +23087,9 @@ _ACEOF
 	else
 	    LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
 	fi
+=======
+	LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
+>>>>>>> upstream/master
 
 	SHLIB_LD="${LINKBIN} -dll -incremental:no ${lflags}"
 	SHLIB_LD_LIBS='${LIBS}'
@@ -23148,7 +23120,7 @@ _ACEOF
 
 	# Specify linker flags depending on the type of app being
 	# built -- Console vs. Window.
-	if test "$doWince" != "no" -a "${TARGETCPU}" != "X86"; then
+	if test "${TARGETCPU}" != "X86"; then
 	    LDFLAGS_CONSOLE="-link ${lflags}"
 	    LDFLAGS_WINDOW=${LDFLAGS_CONSOLE}
 	else
