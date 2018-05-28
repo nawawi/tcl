@@ -922,7 +922,7 @@ TclObjGetFrame(
 	level = curLevel - level;
 	result = 1;
     } else if (objPtr->typePtr == &levelReferenceType) {
-	level = (int) objPtr->internalRep.longValue;
+	level = (int) objPtr->internalRep.wideValue;
 	result = 1;
     } else {
 	name = TclGetString(objPtr);
@@ -930,7 +930,7 @@ TclObjGetFrame(
 	    if (TCL_OK == Tcl_GetInt(NULL, name+1, &level) && level >= 0) {
 		TclFreeIntRep(objPtr);
 		objPtr->typePtr = &levelReferenceType;
-		objPtr->internalRep.longValue = level;
+		objPtr->internalRep.wideValue = level;
 		result = 1;
 	    } else {
 		result = -1;
@@ -1517,11 +1517,7 @@ ProcWrongNumArgs(
     if (framePtr->isProcCallFrame & FRAME_IS_LAMBDA) {
 	desiredObjs[0] = Tcl_NewStringObj("lambdaExpr", -1);
     } else {
-#ifdef AVOID_HACKS_FOR_ITCL
 	desiredObjs[0] = framePtr->objv[skip-1];
-#else
-	desiredObjs[0] = Tcl_NewListObj(1, framePtr->objv + skip - 1);
-#endif /* AVOID_HACKS_FOR_ITCL */
     }
     Tcl_IncrRefCount(desiredObjs[0]);
 
@@ -1915,7 +1911,7 @@ InitLocalCache(
 	    *namePtr = NULL;
 	} else {
 	    *namePtr = TclCreateLiteral(iPtr, localPtr->name,
-		    localPtr->nameLength, /* hash */ (unsigned int) -1,
+		    localPtr->nameLength, /* hash */ -1,
 		    &new, /* nsPtr */ NULL, 0, NULL);
 	    Tcl_IncrRefCount(*namePtr);
 	}
@@ -6373,7 +6369,7 @@ FreeLambdaInternalRep(
     Proc *procPtr = objPtr->internalRep.twoPtrValue.ptr1;
     Tcl_Obj *nsObjPtr = objPtr->internalRep.twoPtrValue.ptr2;
 
-    if (procPtr->refCount-- == 1) {
+    if (procPtr->refCount-- <= 1) {
 	TclProcCleanupProc(procPtr);
     }
     TclDecrRefCount(nsObjPtr);

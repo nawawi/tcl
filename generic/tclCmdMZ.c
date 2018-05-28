@@ -1514,6 +1514,7 @@ StringFirstCmd(
 	if (TCL_OK != TclGetIntForIndexM(interp, objv[3], size - 1, &start)) {
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1571,6 +1572,10 @@ StringFirstCmd(
     Tcl_SetObjResult(interp, Tcl_NewIntObj(match));
 =======
     Tcl_SetObjResult(interp, Tcl_NewIntObj(TclStringFind(objv[1],
+=======
+    }
+    Tcl_SetObjResult(interp, Tcl_NewIntObj(TclStringFirst(objv[1],
+>>>>>>> upstream/master
 	    objv[2], start)));
 >>>>>>> upstream/master
     return TCL_OK;
@@ -1615,6 +1620,7 @@ StringLastCmd(
 	if (TCL_OK != TclGetIntForIndexM(interp, objv[3], size - 1, &last)) {
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 
 	if (last < 0) {
 	    Tcl_SetObjResult(interp, Tcl_NewIntObj(-1));
@@ -1646,6 +1652,8 @@ StringLastCmd(
 	    last = size - 1;
 >>>>>>> upstream/master
 	}
+=======
+>>>>>>> upstream/master
     }
     Tcl_SetObjResult(interp, Tcl_NewIntObj(TclStringLast(objv[1],
 	    objv[2], last)));
@@ -1838,10 +1846,8 @@ StringIsCmd(
 		string1 = TclGetStringFromObj(objPtr, &length1);
 		result = length1 == 0;
 	    }
-	} else if (((index == STR_IS_TRUE) &&
-		objPtr->internalRep.longValue == 0)
-	    || ((index == STR_IS_FALSE) &&
-		objPtr->internalRep.longValue != 0)) {
+	} else if ((objPtr->internalRep.wideValue != 0)
+		? (index == STR_IS_FALSE) : (index == STR_IS_TRUE)) {
 	    result = 0;
 	}
 	break;
@@ -1855,9 +1861,6 @@ StringIsCmd(
 	/* TODO */
 	if ((objPtr->typePtr == &tclDoubleType) ||
 		(objPtr->typePtr == &tclIntType) ||
-#ifndef TCL_WIDE_INT_IS_LONG
-		(objPtr->typePtr == &tclWideIntType) ||
-#endif
 		(objPtr->typePtr == &tclBignumType)) {
 	    break;
 	}
@@ -1892,9 +1895,6 @@ StringIsCmd(
 	goto failedIntParse;
     case STR_IS_ENTIER:
 	if ((objPtr->typePtr == &tclIntType) ||
-#ifndef TCL_WIDE_INT_IS_LONG
-		(objPtr->typePtr == &tclWideIntType) ||
-#endif
 		(objPtr->typePtr == &tclBignumType)) {
 <<<<<<< HEAD
 	    break;
@@ -3831,11 +3831,12 @@ StringReptCmd(
 	return TCL_OK;
     }
 
-    if (TCL_OK != TclStringRepeat(interp, objv[1], count, &resultPtr)) {
-	return TCL_ERROR;
+    resultPtr = TclStringRepeat(interp, objv[1], count, TCL_STRING_IN_PLACE);
+    if (resultPtr) {
+	Tcl_SetObjResult(interp, resultPtr);
+	return TCL_OK;
     }
-    Tcl_SetObjResult(interp, resultPtr);
-    return TCL_OK;
+    return TCL_ERROR;
 }
 
 /*
@@ -3863,42 +3864,50 @@ StringRplcCmd(
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
-    Tcl_UniChar *ustring;
-    int first, last, length;
+    int first, last, length, end;
 
     if (objc < 4 || objc > 5) {
 	Tcl_WrongNumArgs(interp, 1, objv, "string first last ?string?");
 	return TCL_ERROR;
     }
 
-    ustring = Tcl_GetUnicodeFromObj(objv[1], &length);
-    length--;
+    length = Tcl_GetCharLength(objv[1]);
+    end = length - 1;
 
-    if (TclGetIntForIndexM(interp, objv[2], length, &first) != TCL_OK ||
-	    TclGetIntForIndexM(interp, objv[3], length, &last) != TCL_OK){
+    if (TclGetIntForIndexM(interp, objv[2], end, &first) != TCL_OK ||
+	    TclGetIntForIndexM(interp, objv[3], end, &last) != TCL_OK){
 	return TCL_ERROR;
     }
 
-    if ((last < first) || (last < 0) || (first > length)) {
+    /*
+     * The following test screens out most empty substrings as
+     * candidates for replacement. When they are detected, no
+     * replacement is done, and the result is the original string,
+     */
+    if ((last < 0) ||		/* Range ends before start of string */
+	    (first > end) ||	/* Range begins after end of string */
+	    (last < first)) {	/* Range begins after it starts */
+
+	/*
+	 * BUT!!! when (end < 0) -- an empty original string -- we can
+	 * have (first <= end < 0 <= last) and an empty string is permitted
+	 * to be replaced.
+	 */
 	Tcl_SetObjResult(interp, objv[1]);
     } else {
 	Tcl_Obj *resultPtr;
 
-	ustring = Tcl_GetUnicodeFromObj(objv[1], &length);
-	length--;
-
 	if (first < 0) {
 	    first = 0;
 	}
+	if (last > end) {
+	    last = end;
+	}
 
-	resultPtr = Tcl_NewUnicodeObj(ustring, first);
-	if (objc == 5) {
-	    Tcl_AppendObjToObj(resultPtr, objv[4]);
-	}
-	if (last < length) {
-	    Tcl_AppendUnicodeToObj(resultPtr, ustring + last + 1,
-		    length - last);
-	}
+	resultPtr = TclStringReplace(interp, objv[1], first,
+		last + 1 - first, (objc == 5) ? objv[4] : NULL,
+		TCL_STRING_IN_PLACE);
+
 	Tcl_SetObjResult(interp, resultPtr);
     }
     return TCL_OK;
@@ -3934,7 +3943,7 @@ StringRevCmd(
 	return TCL_ERROR;
     }
 
-    Tcl_SetObjResult(interp, TclStringObjReverse(objv[1]));
+    Tcl_SetObjResult(interp, TclStringReverse(objv[1], TCL_STRING_IN_PLACE));
     return TCL_OK;
 }
 
@@ -4440,9 +4449,12 @@ StringCatCmd(
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int length;
 =======
     int code;
+=======
+>>>>>>> upstream/master
     Tcl_Obj *objResultPtr;
 >>>>>>> upstream/master
 
@@ -4453,23 +4465,15 @@ StringCatCmd(
 	 */
 	return TCL_OK;
     }
-    if (objc == 2) {
-	/*
-	 * Other trivial case, single arg, just return it.
-	 */
-	Tcl_SetObjResult(interp, objv[1]);
-	return TCL_OK;
-    }
 
-    code = TclStringCatObjv(interp, /* inPlace */ 1, objc-1, objv+1,
-	    &objResultPtr);
+    objResultPtr = TclStringCat(interp, objc-1, objv+1, TCL_STRING_IN_PLACE);
 
-    if (code == TCL_OK) {
+    if (objResultPtr) {
 	Tcl_SetObjResult(interp, objResultPtr);
 	return TCL_OK;
     }
 
-    return code;
+    return TCL_ERROR;
 }
 
 /*
@@ -4841,8 +4845,7 @@ StringTrimCmd(
     }
     string1 = TclGetStringFromObj(objv[1], &length1);
 
-    triml = TclTrimLeft(string1, length1, string2, length2);
-    trimr = TclTrimRight(string1 + triml, length1 - triml, string2, length2);
+    triml = TclTrim(string1, length1, string2, length2, &trimr);
 
     Tcl_SetObjResult(interp,
 	    Tcl_NewStringObj(string1 + triml, length1 - triml - trimr));
@@ -5940,7 +5943,7 @@ TclNRTryObjCmd(
 	    }
 
 	    info[0] = objv[i];			/* type */
-	    TclNewLongObj(info[1], code);	/* returnCode */
+	    TclNewIntObj(info[1], code);	/* returnCode */
 	    if (info[2] == NULL) {		/* errorCodePrefix */
 		TclNewObj(info[2]);
 	    }

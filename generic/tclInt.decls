@@ -115,7 +115,7 @@ declare 23 {
 }
 # Replaced with macro (see tclInt.h) in Tcl 8.5.0, restored in 8.5.10
 declare 24 {
-    int TclFormatInt(char *buffer, long n)
+    int TclFormatInt(char *buffer, Tcl_WideInt n)
 }
 declare 25 {
     void TclFreePackageInfo(Interp *iPtr)
@@ -184,11 +184,11 @@ declare 41 {
     Tcl_Command TclGetOriginalCommand(Tcl_Command command)
 }
 declare 42 {
-    CONST86 char *TclpGetUserHome(const char *name, Tcl_DString *bufferPtr)
+    const char *TclpGetUserHome(const char *name, Tcl_DString *bufferPtr)
 }
 # Removed in 8.5a2:
 #declare 43 {
-#    int TclGlobalInvoke(Tcl_Interp *interp, int argc, CONST84 char **argv,
+#    int TclGlobalInvoke(Tcl_Interp *interp, int argc, const char **argv,
 #	    int flags)
 #}
 declare 44 {
@@ -223,12 +223,12 @@ declare 51 {
 }
 # Removed in 8.5a2:
 #declare 52 {
-#    int TclInvoke(Tcl_Interp *interp, int argc, CONST84 char **argv,
+#    int TclInvoke(Tcl_Interp *interp, int argc, const char **argv,
 #	    int flags)
 #}
 declare 53 {
     int TclInvokeObjectCommand(ClientData clientData, Tcl_Interp *interp,
-	    int argc, CONST84 char **argv)
+	    int argc, const char **argv)
 }
 declare 54 {
     int TclInvokeStringCommand(ClientData clientData, Tcl_Interp *interp,
@@ -358,10 +358,11 @@ declare 81 {
 #  declare 87 {
 #      void TclPlatformInit(Tcl_Interp *interp)
 #  }
-declare 88 {
-    char *TclPrecTraceProc(ClientData clientData, Tcl_Interp *interp,
-	    const char *name1, const char *name2, int flags)
-}
+# Removed in 9.0:
+#declare 88 {
+#    char *TclPrecTraceProc(ClientData clientData, Tcl_Interp *interp,
+#	    const char *name1, const char *name2, int flags)
+#}
 declare 89 {
     int TclPreventAliasLoop(Tcl_Interp *interp, Tcl_Interp *cmdInterp,
 	    Tcl_Command cmd)
@@ -411,7 +412,7 @@ declare 98 {
 #	    Tcl_Obj *objPtr, int flags)
 #}
 declare 101 {
-    CONST86 char *TclSetPreInitScript(const char *string)
+    const char *TclSetPreInitScript(const char *string)
 }
 declare 102 {
     void TclSetupEnv(Tcl_Interp *interp)
@@ -565,7 +566,7 @@ declare 132 {
 #   int TclpChdir(const char *dirName)
 #}
 declare 138 {
-    CONST84_RETURN char *TclGetEnv(const char *name, Tcl_DString *valuePtr)
+    const char *TclGetEnv(const char *name, Tcl_DString *valuePtr)
 }
 #declare 139 {
 #    int TclpLoadFile(Tcl_Interp *interp, char *fileName, char *sym1,
@@ -577,7 +578,7 @@ declare 138 {
 #}
 # This is used by TclX, but should otherwise be considered private
 declare 141 {
-    CONST84_RETURN char *TclpGetCwd(Tcl_Interp *interp, Tcl_DString *cwdPtr)
+    const char *TclpGetCwd(Tcl_Interp *interp, Tcl_DString *cwdPtr)
 }
 declare 142 {
     int TclSetByteCodeFromAny(Tcl_Interp *interp, Tcl_Obj *objPtr,
@@ -1201,9 +1202,10 @@ declare 27 win {
 
 # Added in 8.4.2
 
-declare 28 win {
-    void TclWinResetInterfaces(void)
-}
+# Removed in 9.0:
+#declare 28 win {
+#    void TclWinResetInterfaces(void)
+#}
 
 ################################
 # Unix specific functions

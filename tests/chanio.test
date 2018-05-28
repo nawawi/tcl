@@ -5710,7 +5710,7 @@ test chan-io-40.2 {POSIX open access modes: CREAT} -setup {
     lappend x [chan gets $f]
 } -cleanup {
     chan close $f
-} -result {0600 {line 1}}
+} -result {0o600 {line 1}}
 test chan-io-40.3 {POSIX open access modes: CREAT} -setup {
     file delete $path(test3)
 } -constraints {unix umask} -body {
@@ -5727,7 +5727,11 @@ test chan-io-40.3 {POSIX open access modes: CREAT} -setup {
 >>>>>>> upstream/master
 =======
     format "%#o" [expr $stats(mode)&0o777]
+<<<<<<< HEAD
 } -result [format %#4o [expr {0o666 & ~ $umaskValue}]]
+>>>>>>> upstream/master
+=======
+} -result [format %#5o [expr {0o666 & ~ $umaskValue}]]
 >>>>>>> upstream/master
 test chan-io-40.4 {POSIX open access modes: CREAT} -setup {
     file delete $path(test3)
@@ -6257,6 +6261,8 @@ test chan-io-47.6 {file events on shared files, deleting file events} -setup {
     testfevent delete
     chan close $f
 } -result {{script 1} {}}
+unset path(foo)
+removeFile foo
 
 set path(bar) [makeFile {} bar]
 
@@ -6352,6 +6358,9 @@ test chan-io-48.3 {testing readability conditions} -setup {
 } -cleanup {
     chan close $f
 } -result {done {0 1 0 1 0 1 0 1 0 1 0 1 0 0}}
+unset path(bar)
+removeFile bar 
+
 test chan-io-48.4 {lf write, testing readability, ^Z termination, auto read mode} -setup {
     file delete $path(test1)
     set c 0
@@ -7203,6 +7212,7 @@ test chan-io-52.11 {TclCopyChannel & encodings} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 3
 =======
 } -cleanup {
@@ -7217,6 +7227,8 @@ test chan-io-52.11 {TclCopyChannel & encodings} -setup {
 =======
 } -cleanup {
     file delete $path(utf8-fcopy.txt)
+=======
+>>>>>>> upstream/master
 } -result 3
 >>>>>>> upstream/master
 

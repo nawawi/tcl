@@ -307,6 +307,7 @@ EXTERN int		TclBN_mp_cnt_lsb(const mp_int *a);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -338,6 +339,11 @@ void			TclBNInitBignumFromWideUInt(mp_int *bignum,
 =======
 >>>>>>> upstream/master
 =======
+=======
+/* Slot 64 is reserved */
+/* Slot 65 is reserved */
+/* Slot 66 is reserved */
+>>>>>>> upstream/master
 /* 67 */
 <<<<<<< HEAD
 EXTERN int		TclBN_mp_expt_d_ex(mp_int *a, mp_digit b, mp_int *c,
@@ -440,6 +446,7 @@ typedef struct TclTomMathStubs {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     void (*tclBNInitBignumFromLong) (mp_int *bignum, long initVal); /* 64 */
     void (*tclBNInitBignumFromWideInt) (mp_int *bignum, Tcl_WideInt initVal); /* 65 */
@@ -474,6 +481,11 @@ typedef struct TclTomMathStubs {
     TCL_DEPRECATED_API("Use mp_init() + mp_set_long_long()") void (*tclBNInitBignumFromLong) (mp_int *bignum, long initVal); /* 64 */
     TCL_DEPRECATED_API("Use mp_init() + mp_set_long_long()") void (*tclBNInitBignumFromWideInt) (mp_int *bignum, Tcl_WideInt initVal); /* 65 */
     TCL_DEPRECATED_API("Use mp_init() + mp_set_long_long()") void (*tclBNInitBignumFromWideUInt) (mp_int *bignum, Tcl_WideUInt initVal); /* 66 */
+=======
+    void (*reserved64)(void);
+    void (*reserved65)(void);
+    void (*reserved66)(void);
+>>>>>>> upstream/master
     int (*tclBN_mp_expt_d_ex) (const mp_int *a, mp_digit b, mp_int *c, int fast); /* 67 */
     int (*tclBN_mp_set_long_long) (mp_int *a, Tcl_WideUInt i); /* 68 */
     Tcl_WideUInt (*tclBN_mp_get_long_long) (const mp_int *a); /* 69 */
@@ -627,6 +639,7 @@ extern const TclTomMathStubs *tclTomMathStubsPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -661,6 +674,11 @@ extern const TclTomMathStubs *tclTomMathStubsPtr;
 	(tclTomMathStubsPtr->tclBN_mp_expt_d_ex) /* 67 */
 >>>>>>> upstream/master
 =======
+=======
+/* Slot 64 is reserved */
+/* Slot 65 is reserved */
+/* Slot 66 is reserved */
+>>>>>>> upstream/master
 #define TclBN_mp_expt_d_ex \
 	(tclTomMathStubsPtr->tclBN_mp_expt_d_ex) /* 67 */
 <<<<<<< HEAD

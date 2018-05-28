@@ -85,12 +85,16 @@ win/Release*
 win/pkgs/*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 win/tcl.hpj
 >>>>>>> upstream/master
 =======
 win/tcl.hpj
 >>>>>>> upstream/master
 =======
+=======
+win/coffbase.txt
+>>>>>>> upstream/master
 win/tcl.hpj
 win/nmhlp-out.txt
 >>>>>>> upstream/master

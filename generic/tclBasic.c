@@ -77,6 +77,7 @@
 #endif
 
 /*
+<<<<<<< HEAD
  * The following structure defines the client data for a math function
  * registered with Tcl_CreateMathFunc
 <<<<<<< HEAD
@@ -128,6 +129,8 @@ typedef struct OldMathFuncData {
 =======
 
 /*
+=======
+>>>>>>> upstream/master
  * This is the script cancellation struct and hash table. The hash table is
  * used to keep track of the information necessary to process script
  * cancellation requests, including the original interp, asynchronous handler
@@ -211,8 +214,6 @@ static Tcl_NRPostProc	NRCoroutineCallerCallback;
 static Tcl_NRPostProc	NRCoroutineExitCallback;
 static Tcl_NRPostProc	NRCommand;
 
-static Tcl_ObjCmdProc	OldMathFuncProc;
-static void		OldMathFuncDeleteProc(ClientData clientData);
 static void		ProcessUnexpectedResult(Tcl_Interp *interp,
 			    int returnCode);
 static int		RewindCoroutine(CoroutineData *corPtr, int result);
@@ -288,9 +289,6 @@ static const CmdInfo builtInCmds[] = {
     {"append",		Tcl_AppendObjCmd,	TclCompileAppendCmd,	NULL,	CMD_IS_SAFE},
     {"apply",		Tcl_ApplyObjCmd,	NULL,			TclNRApplyObjCmd,	CMD_IS_SAFE},
     {"break",		Tcl_BreakObjCmd,	TclCompileBreakCmd,	NULL,	CMD_IS_SAFE},
-#ifndef TCL_NO_DEPRECATED
-    {"case",		Tcl_CaseObjCmd,		NULL,			NULL,	CMD_IS_SAFE},
-#endif
     {"catch",		Tcl_CatchObjCmd,	TclCompileCatchCmd,	TclNRCatchObjCmd,	CMD_IS_SAFE},
     {"concat",		Tcl_ConcatObjCmd,	TclCompileConcatCmd,	NULL,	CMD_IS_SAFE},
     {"continue",	Tcl_ContinueObjCmd,	TclCompileContinueCmd,	NULL,	CMD_IS_SAFE},
@@ -319,7 +317,7 @@ static const CmdInfo builtInCmds[] = {
     {"lsearch",		Tcl_LsearchObjCmd,	NULL,			NULL,	CMD_IS_SAFE},
     {"lset",		Tcl_LsetObjCmd,		TclCompileLsetCmd,	NULL,	CMD_IS_SAFE},
     {"lsort",		Tcl_LsortObjCmd,	NULL,			NULL,	CMD_IS_SAFE},
-    {"package",		Tcl_PackageObjCmd,	NULL,			NULL,	CMD_IS_SAFE},
+    {"package",		Tcl_PackageObjCmd,	NULL,			TclNRPackageObjCmd,	CMD_IS_SAFE},
     {"proc",		Tcl_ProcObjCmd,		NULL,			NULL,	CMD_IS_SAFE},
     {"regexp",		Tcl_RegexpObjCmd,	TclCompileRegexpCmd,	NULL,	CMD_IS_SAFE},
     {"regsub",		Tcl_RegsubObjCmd,	TclCompileRegsubCmd,	NULL,	CMD_IS_SAFE},
@@ -19415,8 +19413,22 @@ TclEvalEx(
 			tokenPtr->start - outerScript);
 		wordStart = tokenPtr->start;
 
+<<<<<<< HEAD
 		lines[objectsUsed] = TclWordKnownAtCompileTime(tokenPtr, NULL)
 			? wordLine : -1;
+=======
+    TclInitArrayCmd(interp);
+    TclInitBinaryCmd(interp);
+    TclInitChanCmd(interp);
+    TclInitDictCmd(interp);
+    TclInitEncodingCmd(interp);
+    TclInitFileCmd(interp);
+    TclInitInfoCmd(interp);
+    TclInitNamespaceCmd(interp);
+    TclInitStringCmd(interp);
+    TclInitPrefixCmd(interp);
+    TclInitProcessCmd(interp);
+>>>>>>> upstream/master
 
 		if (eeFramePtr->type == TCL_LOCATION_SOURCE) {
 		    iPtr->evalFlags |= TCL_EVAL_FILE;
@@ -19820,6 +19832,7 @@ TclAdvanceContinuations(
 >>>>>>> upstream/master
      */
 
+<<<<<<< HEAD
     while (*clNextPtrPtr && (**clNextPtrPtr >= 0)
 	    && (loc >= **clNextPtrPtr)) {
 	/*
@@ -19827,6 +19840,11 @@ TclAdvanceContinuations(
 	 * line counter and step to the table entry holding the location of
 	 * the next continuation line to track.
 	 */
+=======
+    Tcl_SetVar2(interp, "tcl_patchLevel", NULL, TCL_PATCH_LEVEL, TCL_GLOBAL_ONLY);
+    Tcl_SetVar2(interp, "tcl_version", NULL, TCL_VERSION, TCL_GLOBAL_ONLY);
+    TclpSetVariables(interp);
+>>>>>>> upstream/master
 
 	(*line)++;
 	(*clNextPtrPtr)++;
@@ -22495,9 +22513,20 @@ EvalObjvCore(
 	return TCL_OK;
     }
 
+<<<<<<< HEAD
     if (TclLimitExceeded(iPtr->limit)) {
 	return TCL_ERROR;
+=======
+    if ((newName == NULL) || (*newName == '\0')) {
+	Tcl_DeleteCommandFromToken(interp, cmd);
+	return TCL_OK;
+>>>>>>> upstream/master
     }
+
+    cmdNsPtr = cmdPtr->nsPtr;
+    oldFullName = Tcl_NewObj();
+    Tcl_IncrRefCount(oldFullName);
+    Tcl_GetCommandFullName(interp, cmd, oldFullName);
 
     /*
      * Configure evaluation context to match the requested flags.
@@ -22974,6 +23003,7 @@ NRCommand(
     Interp *iPtr = (Interp *) interp;
 =======
     cmdPtr->nsPtr->refCount++;
+
     if (cmdPtr->tracePtr != NULL) {
 	CommandTrace *tracePtr;
 	CallCommandTraces(iPtr,cmdPtr,NULL,NULL,TCL_TRACE_DELETE);
@@ -23272,6 +23302,7 @@ ExprRandFunc(
     if (iPtr->randSeed < 0) {
 	iPtr->randSeed += RAND_IM;
     }
+<<<<<<< HEAD
 
     /*
      * Since the recurrence keeps seed values in the range [1, RAND_IM - 1],
@@ -23427,12 +23458,18 @@ ExprSrandFunc(
      */
 
     return ExprRandFunc(clientData, interp, 1, objv);
+=======
+>>>>>>> upstream/master
 }
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * MathFuncWrongNumArgs --
+=======
+ * TclInterpReady --
+>>>>>>> upstream/master
  *
  *	Generate an error message when a math function presents the wrong
  *	number of arguments.
@@ -24153,7 +24190,7 @@ TclNRYieldToObjCmd(
 	if (result == TCL_RETURN) {
 	    result = TclUpdateReturnInfo(iPtr);
 	}
-	if ((result != TCL_ERROR) && !allowExceptions) {
+	if ((result != TCL_OK) && (result != TCL_ERROR) && !allowExceptions) {
 	    ProcessUnexpectedResult(interp, result);
 	    result = TCL_ERROR;
 	}
@@ -24614,6 +24651,7 @@ Tcl_EvalTokensStandard(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * NRCoroInjectObjCmd --
  *
  *      Implementation of [::tcl::unsupported::inject] command.
@@ -24778,6 +24816,8 @@ Tcl_EvalTokens(
  *      Implementation of [coroutine] command; see documentation for
  *      description of what this does.
 =======
+=======
+>>>>>>> upstream/master
  * Tcl_EvalEx, TclEvalEx --
  *
  *	This function evaluates a Tcl script without using the compiler or
@@ -26402,7 +26442,6 @@ Tcl_ExprLongObj(
 	resultPtr = Tcl_NewBignumObj(&big);
 	/* FALLTHROUGH */
     }
-    case TCL_NUMBER_LONG:
     case TCL_NUMBER_WIDE:
     case TCL_NUMBER_BIG:
 	result = TclGetLongFromObj(interp, resultPtr, ptr);
@@ -26764,7 +26803,7 @@ Tcl_AddObjErrorInfo(
 
     iPtr->flags |= ERR_LEGACY_COPY;
     if (iPtr->errorInfo == NULL) {
-        iPtr->errorInfo = iPtr->objResultPtr;
+	iPtr->errorInfo = iPtr->objResultPtr;
 	Tcl_IncrRefCount(iPtr->errorInfo);
 	if (!iPtr->errorCode) {
 	    Tcl_SetErrorCode(interp, "NONE", NULL);
@@ -27329,12 +27368,12 @@ ExprAbsFunc(
 	return TCL_ERROR;
     }
 
-    if (type == TCL_NUMBER_LONG) {
-	long l = *((const long *) ptr);
+    if (type == TCL_NUMBER_WIDE) {
+	Tcl_WideInt l = *((const Tcl_WideInt *) ptr);
 
-	if (l > (long)0) {
+	if (l > (Tcl_WideInt)0) {
 	    goto unChanged;
-	} else if (l == (long)0) {
+	} else if (l == (Tcl_WideInt)0) {
 	    const char *string = objv[1]->bytes;
 	    if (string) {
 		while (*string != '0') {
@@ -27346,11 +27385,11 @@ ExprAbsFunc(
 		}
 	    }
 	    goto unChanged;
-	} else if (l == LONG_MIN) {
-	    TclInitBignumFromLong(&big, l);
+	} else if (l == LLONG_MIN) {
+	    TclInitBignumFromWideInt(&big, l);
 	    goto tooLarge;
 	}
-	Tcl_SetObjResult(interp, Tcl_NewLongObj(-l));
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(-l));
 	return TCL_OK;
     }
 
@@ -27374,24 +27413,8 @@ ExprAbsFunc(
 	return TCL_OK;
     }
 
-#ifndef TCL_WIDE_INT_IS_LONG
-    if (type == TCL_NUMBER_WIDE) {
-	Tcl_WideInt w = *((const Tcl_WideInt *) ptr);
-
-	if (w >= (Tcl_WideInt)0) {
-	    goto unChanged;
-	}
-	if (w == LLONG_MIN) {
-	    TclInitBignumFromWideInt(&big, w);
-	    goto tooLarge;
-	}
-	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(-w));
-	return TCL_OK;
-    }
-#endif
-
     if (type == TCL_NUMBER_BIG) {
-	if (mp_cmp_d((const mp_int *) ptr, 0) == MP_LT) {
+	if (mp_isneg((const mp_int *) ptr)) {
 	    Tcl_GetBignumFromObj(NULL, objv[1], &big);
 	tooLarge:
 	    mp_neg(&big, &big);

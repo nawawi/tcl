@@ -50361,8 +50361,16 @@ _ACEOF
 
 
 
+<<<<<<< HEAD
+=======
+    #--------------------------------------------------------------------
+    # On a few very rare systems, all of the libm.a stuff is
+    # already in libc.a.  Set compiler flags accordingly.
+    #--------------------------------------------------------------------
+>>>>>>> upstream/master
 
 
+<<<<<<< HEAD
 
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for build with symbols" >&5
@@ -50379,6 +50387,8 @@ fi
     if test "$tcl_ok" = "no"; then
 	CFLAGS_DEFAULT='$(CFLAGS_OPTIMIZE)'
 	LDFLAGS_DEFAULT='$(LDFLAGS_OPTIMIZE)'
+=======
+>>>>>>> upstream/master
 
 $as_echo "#define NDEBUG 1" >>confdefs.h
 
@@ -53455,7 +53465,16 @@ if test "x$ac_cv_func_copyfile" = xyes; then :
 _ACEOF
 
 fi
+<<<<<<< HEAD
 done
+=======
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	# See if we could use long anyway  Note that we substitute in the
+	# type that is our current guess for a 64-bit type inside this check
+	# program, so it should be modified only carefully...
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+>>>>>>> upstream/master
 
     if test $tcl_corefoundation = yes; then
 	for ac_header in libkern/OSAtomic.h
@@ -53486,7 +53505,13 @@ if test "x$ac_cv_header_sys_modem_h" = xyes; then :
 >>>>>>> upstream/master
 _ACEOF
 
+<<<<<<< HEAD
 fi
+=======
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    else
+>>>>>>> upstream/master
 
 done
 

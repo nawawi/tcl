@@ -819,9 +819,6 @@ Tcl_AfterObjCmd(
      */
 
     if (objv[1]->typePtr == &tclIntType
-#ifndef TCL_WIDE_INT_IS_LONG
-	    || objv[1]->typePtr == &tclWideIntType
-#endif
 	    || objv[1]->typePtr == &tclBignumType
 	    || (Tcl_GetIndexFromObj(NULL, objv[1], afterSubCmds, "", 0,
 		    &index) != TCL_OK)) {
@@ -1065,6 +1062,7 @@ AfterDelay(
 	if (iPtr->limit.timeEvent == NULL
 		|| TCL_TIME_BEFORE(endTime, iPtr->limit.time)) {
 	    diff = TCL_TIME_DIFF_MS_CEILING(endTime, now);
+<<<<<<< HEAD
 #ifndef TCL_WIDE_INT_IS_LONG
 	    if (diff > LONG_MAX) {
 		diff = LONG_MAX;
@@ -1072,18 +1070,21 @@ AfterDelay(
 =======
 	    }
 #endif
+=======
+>>>>>>> upstream/master
 	    if (diff > TCL_TIME_MAXIMUM_SLICE) {
 		diff = TCL_TIME_MAXIMUM_SLICE;
 	    }
-            if (diff == 0 && TCL_TIME_BEFORE(now, endTime)) {
-                diff = 1;
-            }
+	    if (diff == 0 && TCL_TIME_BEFORE(now, endTime)) {
+		diff = 1;
+	    }
 	    if (diff > 0) {
-		Tcl_Sleep((long) diff);
-                if (diff < SLEEP_OFFLOAD_GETTIMEOFDAY) {
-                    break;
-                }
+		Tcl_Sleep((int) diff);
+		if (diff < SLEEP_OFFLOAD_GETTIMEOFDAY) {
+		    break;
+		}
 	    } else {
+<<<<<<< HEAD
                 break;
             }
 <<<<<<< HEAD
@@ -1106,20 +1107,19 @@ AfterDelay(
 	    } else break;
 =======
 >>>>>>> upstream/master
+=======
+		break;
+	    }
+>>>>>>> upstream/master
 	} else {
 	    diff = TCL_TIME_DIFF_MS(iPtr->limit.time, now);
-#ifndef TCL_WIDE_INT_IS_LONG
-	    if (diff > LONG_MAX) {
-		diff = LONG_MAX;
-	    }
-#endif
 	    if (diff > TCL_TIME_MAXIMUM_SLICE) {
 		diff = TCL_TIME_MAXIMUM_SLICE;
 	    }
 =======
 >>>>>>> upstream/master
 	    if (diff > 0) {
-		Tcl_Sleep((long) diff);
+		Tcl_Sleep((int) diff);
 	    }
 	    if (Tcl_AsyncReady()) {
 		if (Tcl_AsyncInvoke(interp, TCL_OK) != TCL_OK) {
@@ -1133,7 +1133,7 @@ AfterDelay(
 		return TCL_ERROR;
 	    }
 	}
-        Tcl_GetTime(&now);
+	Tcl_GetTime(&now);
     } while (TCL_TIME_BEFORE(now, endTime));
     return TCL_OK;
 }

@@ -611,11 +611,16 @@ test scan-5.19 {bigint scanning invalid} -setup {
     set a {};
 } -body {
     list [scan "207698809136909011942886895" \
+<<<<<<< HEAD
 	    %llu a] $a
 } -returnCodes 1 -result {unsigned bignum scans are invalid}
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+           %llu a] $a
+} -result {1 207698809136909011942886895}
 >>>>>>> upstream/master
 
 test scan-6.1 {floating-point scanning} -setup {

@@ -388,6 +388,7 @@ static int		TestlocaleCmd(ClientData dummy,
 			    Tcl_Obj *const objv[]);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 #ifndef TCL_NO_DEPRECATED
 >>>>>>> upstream/master
@@ -407,6 +408,8 @@ static int		TestMathFunc2(ClientData clientData,
 >>>>>>> upstream/master
 =======
 #endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 static int		TestmainthreadCmd(ClientData dummy,
 			    Tcl_Interp *interp, int argc, const char **argv);
@@ -773,10 +776,6 @@ int
 Tcltest_Init(
     Tcl_Interp *interp)		/* Interpreter for application. */
 {
-#ifndef TCL_NO_DEPRECATED
-    Tcl_ValueType t3ArgTypes[2];
-#endif /* TCL_NO_DEPRECATED */
-
     Tcl_Obj *listPtr;
     Tcl_Obj **objv;
     int objc, index;
@@ -981,10 +980,6 @@ Tcltest_Init(
     Tcl_CreateCommand(interp, "testtranslatefilename",
 	    TesttranslatefilenameCmd, NULL, NULL);
     Tcl_CreateCommand(interp, "testupvar", TestupvarCmd, NULL, NULL);
-#ifndef TCL_NO_DEPRECATED
-    Tcl_CreateMathFunc(interp, "T1", 0, NULL, TestMathFunc, (ClientData) 123);
-    Tcl_CreateMathFunc(interp, "T2", 0, NULL, TestMathFunc, (ClientData) 345);
-#endif /* TCL_NO_DEPRECATED */
     Tcl_CreateCommand(interp, "testmainthread", TestmainthreadCmd, NULL,
 	    NULL);
     Tcl_CreateCommand(interp, "testsetmainloop", TestsetmainloopCmd,
@@ -995,6 +990,7 @@ Tcltest_Init(
     Tcl_CreateObjCommand(interp, "testcpuid", TestcpuidCmd,
 	    (ClientData) 0, NULL);
 #endif
+<<<<<<< HEAD
 #ifndef TCL_NO_DEPRECATED
     t3ArgTypes[0] = TCL_EITHER;
     t3ArgTypes[1] = TCL_EITHER;
@@ -1022,6 +1018,8 @@ Tcltest_Init(
 =======
 >>>>>>> upstream/master
 
+=======
+>>>>>>> upstream/master
     Tcl_CreateObjCommand(interp, "testnreunwind", TestNREUnwind,
 	    NULL, NULL);
     Tcl_CreateObjCommand(interp, "testnrelevels", TestNRELevels,
@@ -11907,6 +11905,7 @@ TestpreferstableObjCmd(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TestprintObjCmd --
  *
  *	This procedure implements the "testprint" command.  It is
@@ -11998,6 +11997,21 @@ TesttranslatefilenameCmd(
 	Tcl_AppendResult(interp, statePtr->channelName, NULL);
 	return TCL_OK;
 =======
+=======
+ * CleanupTestSetassocdataTests --
+ *
+ *	This function is called when an interpreter is deleted to clean
+ *	up any data left over from running the testsetassocdata command.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Releases storage.
+ *
+ *----------------------------------------------------------------------
+ */
+>>>>>>> upstream/master
 	/* ARGSUSED */
 static int
 TestupvarCmd(
@@ -14777,7 +14791,7 @@ TestHashSystemHashCmd(
 	Tcl_DeleteHashTable(&hash);
 =======
     if (argc == 1) {
-	Tcl_Obj *idObj = Tcl_NewLongObj((long)(size_t)Tcl_GetCurrentThread());
+	Tcl_Obj *idObj = Tcl_NewWideIntObj((Tcl_WideInt)(size_t)Tcl_GetCurrentThread());
 
 	Tcl_SetObjResult(interp, idObj);
 	return TCL_OK;
@@ -15399,8 +15413,8 @@ TestChannelCmd(
 	    return TCL_ERROR;
 	}
 
-	TclFormatInt(buf, (size_t) Tcl_GetChannelThread(chan));
-	Tcl_AppendResult(interp, buf, NULL);
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(
+		(Tcl_WideInt) (size_t) Tcl_GetChannelThread(chan)));
 	return TCL_OK;
     }
 

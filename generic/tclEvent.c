@@ -97,7 +97,7 @@ static int subsystemsInitialized = 0;
  * non-NULL value.
  */
 
-static TCL_NORETURN1 Tcl_ExitProc *appExitPtr = NULL;
+static TCL_NORETURN Tcl_ExitProc *appExitPtr = NULL;
 
 typedef struct ThreadSpecificData {
     ExitHandler *firstExitPtr;	/* First in list of all exit handlers for this
@@ -922,7 +922,7 @@ Tcl_DeleteThreadExitHandler(
 
 Tcl_ExitProc *
 Tcl_SetExitProc(
-    TCL_NORETURN1 Tcl_ExitProc *proc)		/* New exit handler for app or NULL */
+    TCL_NORETURN Tcl_ExitProc *proc)		/* New exit handler for app or NULL */
 {
     Tcl_ExitProc *prevExitProc;
 
@@ -1003,6 +1003,7 @@ Tcl_Exit(
     int status)			/* Exit status for application; typically 0
 				 * for normal return, 1 for error return. */
 {
+<<<<<<< HEAD
     TCL_NORETURN1 Tcl_ExitProc *currentAppExitPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1025,6 +1026,9 @@ Tcl_Exit(
 >>>>>>> upstream/master
 =======
 =======
+>>>>>>> upstream/master
+=======
+    TCL_NORETURN Tcl_ExitProc *currentAppExitPtr;
 >>>>>>> upstream/master
 
     Tcl_MutexLock(&exitMutex);
@@ -1165,7 +1169,6 @@ TclInitSubsystems(void)
 					 * mutexes. */
 	    TclInitIOSubsystem();	/* Inits a tsd key (noop). */
 	    TclInitEncodingSubsystem();	/* Process wide encoding init. */
-	    TclpSetInterfaces();
 	    TclInitNamespaceSubsystem();/* Register ns obj type (mutexed). */
 	    subsystemsInitialized = 1;
 	}

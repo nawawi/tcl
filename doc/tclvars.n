@@ -26,7 +26,7 @@
 .BS
 '\" Note:  do not modify the .SH NAME line immediately below!
 .SH NAME
-argc, argv, argv0, auto_path, env, errorCode, errorInfo, tcl_interactive, tcl_library, tcl_nonwordchars, tcl_patchLevel, tcl_pkgPath, tcl_platform, tcl_precision, tcl_rcFileName, tcl_traceCompile, tcl_traceExec, tcl_wordchars, tcl_version \- Variables used by Tcl
+argc, argv, argv0, auto_path, env, errorCode, errorInfo, tcl_interactive, tcl_library, tcl_nonwordchars, tcl_patchLevel, tcl_pkgPath, tcl_platform, tcl_rcFileName, tcl_traceCompile, tcl_traceExec, tcl_wordchars, tcl_version \- Variables used by Tcl
 .BE
 .SH DESCRIPTION
 .PP
@@ -424,6 +424,7 @@ This gives the size of the native-machine word in bytes (strictly, it
 is same as the result of evaluating \fIsizeof(long)\fR in C.)
 .RE
 .TP
+<<<<<<< HEAD
 \fBtcl_precision\fR
 .
 This variable controls the number of digits to generate
@@ -504,6 +505,8 @@ of this file and \fBsource\fR it if it exists.  For example, for \fBwish\fR
 the variable is set to \fB~/.wishrc\fR for Unix and \fB~/wishrc.tcl\fR
 for Windows.
 .TP
+=======
+>>>>>>> upstream/master
 \fBtcl_traceCompile\fR
 .
 The value of this variable can be set to control
