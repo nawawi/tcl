@@ -1683,7 +1683,6 @@ ZLIB_INCLUDE
 ZLIB_SRCS
 ZLIB_OBJS
 TCLSH_PROG
-TCL_THREADS
 EGREP
 GREP
 CPP
@@ -1739,7 +1738,6 @@ enable_option_checking
 enable_man_symlinks
 enable_man_compression
 enable_man_suffix
-enable_threads
 with_encoding
 enable_shared
 enable_64bit
@@ -47976,8 +47974,42 @@ fi
 $as_echo "$tcl_cv_cc_m64" >&6; }
 		if test $tcl_cv_cc_m64 = yes; then :
 
+<<<<<<< HEAD
 		    CFLAGS="$CFLAGS -m64"
 		    do64bit_ok=yes
+=======
+if test -n "$ac_init_help"; then
+  case $ac_init_help in
+     short | recursive ) echo "Configuration of tcl 9.0:";;
+   esac
+  cat <<\_ACEOF
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-man-symlinks   use symlinks for the manpages (default: off)
+  --enable-man-compression=PROG
+                          compress the manpages with PROG (default: off)
+  --enable-man-suffix=STRING
+                          use STRING as a suffix to manpage file names
+                          (default: no, tcl if enabled without
+                          specifying STRING)
+  --enable-shared         build and link with shared libraries (default: on)
+  --enable-64bit          enable 64bit support (default: off)
+  --enable-64bit-vis      enable 64bit Sparc VIS support (default: off)
+  --disable-rpath         disable rpath support (default: on)
+  --enable-corefoundation use CoreFoundation API on MacOSX (default: on)
+  --enable-load           allow dynamic loading and "load" command (default:
+                          on)
+  --enable-symbols        build with debugging symbols (default: off)
+  --enable-langinfo       use nl_langinfo if possible to determine encoding at
+                          startup, otherwise use old heuristic (default: on)
+  --enable-dll-unloading  enable the 'unload' command (default: on)
+  --enable-dtrace         build with DTrace support (default: off)
+  --enable-framework      package shared libraries in MacOSX frameworks
+                          (default: off)
+>>>>>>> upstream/master
 
 fi
 
@@ -50406,12 +50438,26 @@ $as_echo "yes (standard debugging)" >&6; }
 	fi
     fi
 
+<<<<<<< HEAD
 
 
     if test "$tcl_ok" = "mem" -o "$tcl_ok" = "all"; then
+=======
+#------------------------------------------------------------------------
+# Embedded configuration information, encoding to use for the values, TIP #59
+#------------------------------------------------------------------------
+
+
+
+# Check whether --with-encoding was given.
+if test "${with_encoding+set}" = set; then :
+  withval=$with_encoding; with_tcencoding=${withval}
+fi
+>>>>>>> upstream/master
 
 $as_echo "#define TCL_MEM_DEBUG 1" >>confdefs.h
 
+<<<<<<< HEAD
     fi
 
     	if test "$tcl_ok" = "compile" -o "$tcl_ok" = "all"; then
@@ -50458,10 +50504,205 @@ main ()
 {
 char *p = (char *)strtoll; char *q = (char *)strtoull;
 >>>>>>> upstream/master
+=======
+    if test x"${with_tcencoding}" != x ; then
+
+cat >>confdefs.h <<_ACEOF
+#define TCL_CFGVAL_ENCODING "${with_tcencoding}"
+_ACEOF
+
+    else
+
+$as_echo "#define TCL_CFGVAL_ENCODING \"iso8859-1\"" >>confdefs.h
+
+    fi
+
+
+#--------------------------------------------------------------------
+# Look for libraries that we will need when compiling the Tcl shell
+#--------------------------------------------------------------------
+
+
+    #--------------------------------------------------------------------
+    # On a few very rare systems, all of the libm.a stuff is
+    # already in libc.a.  Set compiler flags accordingly.
+    #--------------------------------------------------------------------
+
+    ac_fn_c_check_func "$LINENO" "sin" "ac_cv_func_sin"
+if test "x$ac_cv_func_sin" = xyes; then :
+  MATH_LIBS=""
+else
+  MATH_LIBS="-lm"
+fi
+
+
+    #--------------------------------------------------------------------
+    # Interactive UNIX requires -linet instead of -lsocket, plus it
+    # needs net/errno.h to define the socket-related error codes.
+    #--------------------------------------------------------------------
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -linet" >&5
+$as_echo_n "checking for main in -linet... " >&6; }
+if ${ac_cv_lib_inet_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-linet  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
   ;
   return 0;
 }
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_inet_main=yes
+else
+  ac_cv_lib_inet_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_inet_main" >&5
+$as_echo "$ac_cv_lib_inet_main" >&6; }
+if test "x$ac_cv_lib_inet_main" = xyes; then :
+  LIBS="$LIBS -linet"
+fi
+
+    ac_fn_c_check_header_mongrel "$LINENO" "net/errno.h" "ac_cv_header_net_errno_h" "$ac_includes_default"
+if test "x$ac_cv_header_net_errno_h" = xyes; then :
+
+
+$as_echo "#define HAVE_NET_ERRNO_H 1" >>confdefs.h
+
+fi
+
+
+
+    #--------------------------------------------------------------------
+    #	Check for the existence of the -lsocket and -lnsl libraries.
+    #	The order here is important, so that they end up in the right
+    #	order in the command line generated by make.  Here are some
+    #	special considerations:
+    #	1. Use "connect" and "accept" to check for -lsocket, and
+    #	   "gethostbyname" to check for -lnsl.
+    #	2. Use each function name only once:  can't redo a check because
+    #	   autoconf caches the results of the last check and won't redo it.
+    #	3. Use -lnsl and -lsocket only if they supply procedures that
+    #	   aren't already present in the normal libraries.  This is because
+    #	   IRIX 5.2 has libraries, but they aren't needed and they're
+    #	   bogus:  they goof up name resolution if used.
+    #	4. On some SVR4 systems, can't use -lsocket without -lnsl too.
+    #	   To get around this problem, check for both libraries together
+    #	   if -lsocket doesn't work by itself.
+    #--------------------------------------------------------------------
+
+    tcl_checkBoth=0
+    ac_fn_c_check_func "$LINENO" "connect" "ac_cv_func_connect"
+if test "x$ac_cv_func_connect" = xyes; then :
+  tcl_checkSocket=0
+else
+  tcl_checkSocket=1
+fi
+
+    if test "$tcl_checkSocket" = 1; then
+	ac_fn_c_check_func "$LINENO" "setsockopt" "ac_cv_func_setsockopt"
+if test "x$ac_cv_func_setsockopt" = xyes; then :
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for setsockopt in -lsocket" >&5
+$as_echo_n "checking for setsockopt in -lsocket... " >&6; }
+if ${ac_cv_lib_socket_setsockopt+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lsocket  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char setsockopt ();
+int
+main ()
+{
+return setsockopt ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_socket_setsockopt=yes
+else
+  ac_cv_lib_socket_setsockopt=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_socket_setsockopt" >&5
+$as_echo "$ac_cv_lib_socket_setsockopt" >&6; }
+if test "x$ac_cv_lib_socket_setsockopt" = xyes; then :
+  LIBS="$LIBS -lsocket"
+else
+  tcl_checkBoth=1
+fi
+
+fi
+
+    fi
+    if test "$tcl_checkBoth" = 1; then
+	tk_oldLibs=$LIBS
+	LIBS="$LIBS -lsocket -lnsl"
+	ac_fn_c_check_func "$LINENO" "accept" "ac_cv_func_accept"
+if test "x$ac_cv_func_accept" = xyes; then :
+  tcl_checkNsl=0
+else
+  LIBS=$tk_oldLibs
+fi
+
+    fi
+    ac_fn_c_check_func "$LINENO" "gethostbyname" "ac_cv_func_gethostbyname"
+if test "x$ac_cv_func_gethostbyname" = xyes; then :
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gethostbyname in -lnsl" >&5
+$as_echo_n "checking for gethostbyname in -lnsl... " >&6; }
+if ${ac_cv_lib_nsl_gethostbyname+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnsl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char gethostbyname ();
+int
+main ()
+{
+return gethostbyname ();
+>>>>>>> upstream/master
+  ;
+  return 0;
+}
+_ACEOF
+<<<<<<< HEAD
 if ac_fn_c_try_compile "$LINENO"; then :
 <<<<<<< HEAD
   tcl_cv_api_gethostbyaddr_r_7=yes
@@ -50469,12 +50710,28 @@ else
   tcl_cv_api_gethostbyaddr_r_7=no
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+=======
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_nsl_gethostbyname=yes
+else
+  ac_cv_lib_nsl_gethostbyname=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_nsl_gethostbyname" >&5
+$as_echo "$ac_cv_lib_nsl_gethostbyname" >&6; }
+if test "x$ac_cv_lib_nsl_gethostbyname" = xyes; then :
+  LIBS="$LIBS -lnsl"
+>>>>>>> upstream/master
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_api_gethostbyaddr_r_7" >&5
 $as_echo "$tcl_cv_api_gethostbyaddr_r_7" >&6; }
     tcl_ok=$tcl_cv_api_gethostbyaddr_r_7
     if test "$tcl_ok" = yes; then
 
+<<<<<<< HEAD
 $as_echo "#define HAVE_GETHOSTBYADDR_R_7 1" >>confdefs.h
 
     else
@@ -50485,6 +50742,25 @@ if ${tcl_cv_api_gethostbyaddr_r_8+:} false; then :
 else
 
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+=======
+fi
+
+
+
+$as_echo "#define _REENTRANT 1" >>confdefs.h
+
+
+$as_echo "#define _THREAD_SAFE 1" >>confdefs.h
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_init in -lpthread" >&5
+$as_echo_n "checking for pthread_mutex_init in -lpthread... " >&6; }
+if ${ac_cv_lib_pthread_pthread_mutex_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+>>>>>>> upstream/master
 /* end confdefs.h.  */
 
 	    #include <netdb.h>
@@ -50492,6 +50768,7 @@ else
 int
 main ()
 {
+<<<<<<< HEAD
 
 	    char *addr;
 	    int length;
@@ -50516,10 +50793,62 @@ main ()
 {
 char *p = (char *)strtoll; char *q = (char *)strtoull;
 >>>>>>> upstream/master
+=======
+return pthread_mutex_init ();
   ;
   return 0;
 }
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_pthread_pthread_mutex_init=yes
+else
+  ac_cv_lib_pthread_pthread_mutex_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread_pthread_mutex_init" >&5
+$as_echo "$ac_cv_lib_pthread_pthread_mutex_init" >&6; }
+if test "x$ac_cv_lib_pthread_pthread_mutex_init" = xyes; then :
+  tcl_ok=yes
+else
+  tcl_ok=no
+fi
+
+    if test "$tcl_ok" = "no"; then
+	# Check a little harder for __pthread_mutex_init in the same
+	# library, as some systems hide it there until pthread.h is
+	# defined.  We could alternatively do an AC_TRY_COMPILE with
+	# pthread.h, but that will work with libpthread really doesn't
+	# exist, like AIX 4.2.  [Bug: 4359]
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for __pthread_mutex_init in -lpthread" >&5
+$as_echo_n "checking for __pthread_mutex_init in -lpthread... " >&6; }
+if ${ac_cv_lib_pthread___pthread_mutex_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char __pthread_mutex_init ();
+int
+main ()
+{
+return __pthread_mutex_init ();
+>>>>>>> upstream/master
+  ;
+  return 0;
+}
+_ACEOF
+<<<<<<< HEAD
 if ac_fn_c_try_compile "$LINENO"; then :
 <<<<<<< HEAD
   tcl_cv_api_gethostbyaddr_r_8=yes
@@ -50527,12 +50856,30 @@ else
   tcl_cv_api_gethostbyaddr_r_8=no
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+=======
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_pthread___pthread_mutex_init=yes
+else
+  ac_cv_lib_pthread___pthread_mutex_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread___pthread_mutex_init" >&5
+$as_echo "$ac_cv_lib_pthread___pthread_mutex_init" >&6; }
+if test "x$ac_cv_lib_pthread___pthread_mutex_init" = xyes; then :
+  tcl_ok=yes
+else
+  tcl_ok=no
+>>>>>>> upstream/master
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_api_gethostbyaddr_r_8" >&5
 $as_echo "$tcl_cv_api_gethostbyaddr_r_8" >&6; }
 	tcl_ok=$tcl_cv_api_gethostbyaddr_r_8
 	if test "$tcl_ok" = yes; then
 
+<<<<<<< HEAD
 $as_echo "#define HAVE_GETHOSTBYADDR_R_8 1" >>confdefs.h
 
 	fi
@@ -50545,9 +50892,12 @@ $as_echo "#define HAVE_GETHOSTBYADDR_R 1" >>confdefs.h
 
 fi
 
+=======
+>>>>>>> upstream/master
     fi
 fi
 
+<<<<<<< HEAD
 #---------------------------------------------------------------------------
 #	Check for serial port interface.
 #
@@ -50646,10 +50996,38 @@ main ()
 {
 struct stat64 buf; int i = stat64("/", &buf);
 >>>>>>> upstream/master
+=======
+    if test "$tcl_ok" = "yes"; then
+	# The space is needed
+	THREADS_LIBS=" -lpthread"
+    else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_init in -lpthreads" >&5
+$as_echo_n "checking for pthread_mutex_init in -lpthreads... " >&6; }
+if ${ac_cv_lib_pthreads_pthread_mutex_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthreads  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_mutex_init ();
+int
+main ()
+{
+return pthread_mutex_init ();
+>>>>>>> upstream/master
   ;
   return 0;
 }
 _ACEOF
+<<<<<<< HEAD
 if ac_fn_c_try_compile "$LINENO"; then :
 <<<<<<< HEAD
   tcl_cv_type_fd_set=yes
@@ -50690,9 +51068,27 @@ $as_echo "#define HAVE_SYS_SELECT_H 1" >>confdefs.h
 
 	tcl_ok=yes
     fi
+=======
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_pthreads_pthread_mutex_init=yes
+else
+  ac_cv_lib_pthreads_pthread_mutex_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthreads_pthread_mutex_init" >&5
+$as_echo "$ac_cv_lib_pthreads_pthread_mutex_init" >&6; }
+if test "x$ac_cv_lib_pthreads_pthread_mutex_init" = xyes; then :
+  _ok=yes
+else
+  tcl_ok=no
+>>>>>>> upstream/master
 fi
 if test $tcl_ok = no; then
 
+<<<<<<< HEAD
 $as_echo "#define NO_FD_SET 1" >>confdefs.h
 
 fi
@@ -50728,17 +51124,52 @@ int
 main ()
 {
 struct stat64 buf; int i = stat64("/", &buf);
+=======
+	if test "$tcl_ok" = "yes"; then
+	    # The space is needed
+	    THREADS_LIBS=" -lpthreads"
+	else
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_init in -lc" >&5
+$as_echo_n "checking for pthread_mutex_init in -lc... " >&6; }
+if ${ac_cv_lib_c_pthread_mutex_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lc  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_mutex_init ();
+int
+main ()
+{
+return pthread_mutex_init ();
+>>>>>>> upstream/master
   ;
   return 0;
 }
 _ACEOF
+<<<<<<< HEAD
 if ac_fn_c_try_compile "$LINENO"; then :
   tcl_cv_flag__largefile64_source=yes
 else
   tcl_cv_flag__largefile64_source=no
+=======
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_c_pthread_mutex_init=yes
+else
+  ac_cv_lib_c_pthread_mutex_init=no
+>>>>>>> upstream/master
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
+<<<<<<< HEAD
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 
@@ -50755,12 +51186,32 @@ $as_echo "#define _LARGEFILE64_SOURCE 1" >>confdefs.h
   $as_echo_n "(cached) " >&6
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+=======
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_c_pthread_mutex_init" >&5
+$as_echo "$ac_cv_lib_c_pthread_mutex_init" >&6; }
+if test "x$ac_cv_lib_c_pthread_mutex_init" = xyes; then :
+  tcl_ok=yes
+else
+  tcl_ok=no
+fi
+
+	    if test "$tcl_ok" = "no"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_mutex_init in -lc_r" >&5
+$as_echo_n "checking for pthread_mutex_init in -lc_r... " >&6; }
+if ${ac_cv_lib_c_r_pthread_mutex_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lc_r  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+>>>>>>> upstream/master
 /* end confdefs.h.  */
 <<<<<<< HEAD
 #include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>
 
+<<<<<<< HEAD
 int
 main ()
 {
@@ -50773,10 +51224,24 @@ main ()
 {
 char *p = (char *)open64;
 >>>>>>> upstream/master
+=======
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pthread_mutex_init ();
+int
+main ()
+{
+return pthread_mutex_init ();
+>>>>>>> upstream/master
   ;
   return 0;
 }
 _ACEOF
+<<<<<<< HEAD
 if ac_fn_c_try_compile "$LINENO"; then :
 <<<<<<< HEAD
   ac_cv_header_time=yes
@@ -50790,6 +51255,54 @@ $as_echo "$ac_cv_header_time" >&6; }
 if test $ac_cv_header_time = yes; then
 
 $as_echo "#define TIME_WITH_SYS_TIME 1" >>confdefs.h
+=======
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_c_r_pthread_mutex_init=yes
+else
+  ac_cv_lib_c_r_pthread_mutex_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_c_r_pthread_mutex_init" >&5
+$as_echo "$ac_cv_lib_c_r_pthread_mutex_init" >&6; }
+if test "x$ac_cv_lib_c_r_pthread_mutex_init" = xyes; then :
+  tcl_ok=yes
+else
+  tcl_ok=no
+fi
+
+		if test "$tcl_ok" = "yes"; then
+		    # The space is needed
+		    THREADS_LIBS=" -pthread"
+		else
+		    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Don't know how to find pthread lib on your system - you must edit the LIBS in the Makefile..." >&5
+$as_echo "$as_me: WARNING: Don't know how to find pthread lib on your system - you must edit the LIBS in the Makefile..." >&2;}
+		fi
+	    fi
+	fi
+    fi
+
+    # Does the pthread-implementation provide
+    # 'pthread_attr_setstacksize' ?
+
+    ac_saved_libs=$LIBS
+    LIBS="$LIBS $THREADS_LIBS"
+    for ac_func in pthread_attr_setstacksize pthread_atfork
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+    LIBS=$ac_saved_libs
+>>>>>>> upstream/master
 
 fi
 
@@ -51307,6 +51820,25 @@ fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
+<<<<<<< HEAD
+=======
+    case $system in
+	AIX-*)
+	    if test "$GCC" != "yes"; then :
+
+		# AIX requires the _r compiler when gcc isn't being used
+		case "${CC}" in
+		    *_r|*_r\ *)
+			# ok ...
+			;;
+		    *)
+			# Make sure only first arg gets _r
+		    	CC=`echo "$CC" | sed -e 's/^\([^ ]*\)/\1_r/'`
+			;;
+		esac
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using $CC for compiling with threads" >&5
+$as_echo "Using $CC for compiling with threads" >&6; }
+>>>>>>> upstream/master
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_strstr_unbroken" >&5
@@ -51453,9 +51985,66 @@ main ()
   return 0;
 }
 _ACEOF
+<<<<<<< HEAD
 if ac_fn_c_try_compile "$LINENO"; then :
   # It does; now see whether it defined to BIG_ENDIAN or not.
 	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+=======
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_bind_inet_ntoa=yes
+else
+  ac_cv_lib_bind_inet_ntoa=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_bind_inet_ntoa" >&5
+$as_echo "$ac_cv_lib_bind_inet_ntoa" >&6; }
+if test "x$ac_cv_lib_bind_inet_ntoa" = xyes; then :
+  LIBS="$LIBS -lbind -lsocket"
+fi
+
+	    ;;
+	BSD/OS-2.1*|BSD/OS-3*)
+	    SHLIB_CFLAGS=""
+	    SHLIB_LD="shlicc -r"
+	    SHLIB_SUFFIX=".so"
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS="-ldl"
+	    CC_SEARCH_FLAGS=""
+	    LD_SEARCH_FLAGS=""
+	    ;;
+	BSD/OS-4.*)
+	    SHLIB_CFLAGS="-export-dynamic -fPIC"
+	    SHLIB_LD='${CC} -shared'
+	    SHLIB_SUFFIX=".so"
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS="-ldl"
+	    LDFLAGS="$LDFLAGS -export-dynamic"
+	    CC_SEARCH_FLAGS=""
+	    LD_SEARCH_FLAGS=""
+	    ;;
+	CYGWIN_*)
+	    SHLIB_CFLAGS=""
+	    SHLIB_LD='${CC} -shared'
+	    SHLIB_SUFFIX=".dll"
+	    DL_OBJS="tclLoadDl.o"
+	    PLAT_OBJS='${CYGWIN_OBJS}'
+	    PLAT_SRCS='${CYGWIN_SRCS}'
+	    DL_LIBS="-ldl"
+	    CC_SEARCH_FLAGS=""
+	    LD_SEARCH_FLAGS=""
+	    TCL_NEEDS_EXP_FILE=1
+	    TCL_EXPORT_FILE_SUFFIX='${VERSION}\$\{DBGX\}.dll.a'
+	    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} -Wl,--out-implib,\$@.a"
+	    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Cygwin version of gcc" >&5
+$as_echo_n "checking for Cygwin version of gcc... " >&6; }
+if ${ac_cv_cygwin+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+>>>>>>> upstream/master
 /* end confdefs.h.  */
 #include <sys/types.h>
 		#include <sys/param.h>
@@ -51489,9 +52078,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 $as_echo "$ac_cv_cygwin" >&6; }
 	    if test "$ac_cv_cygwin" = "no"; then
 		as_fn_error $? "${CC} is not a cygwin compiler." "$LINENO" 5
-	    fi
-	    if test "x${TCL_THREADS}" = "x0"; then
-		as_fn_error $? "CYGWIN compile is only supported with --enable-threads" "$LINENO" 5
 	    fi
 	    do64bit_ok=yes
 	    if test "x${SHARED_BUILD}" = "x1"; then
@@ -51845,6 +52431,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 fi
+<<<<<<< HEAD
 
 ac_fn_c_check_type "$LINENO" "pid_t" "ac_cv_type_pid_t" "$ac_includes_default"
 if test "x$ac_cv_type_pid_t" = xyes; then :
@@ -51858,6 +52445,16 @@ _ACEOF
 fi
 <<<<<<< HEAD
 =======
+=======
+	    LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+	    SHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.so.${SHLIB_VERSION}'
+	    LDFLAGS="-Wl,-export-dynamic"
+	    CFLAGS_OPTIMIZE="-O2"
+	    # On OpenBSD:	Compile with -pthread
+	    #		Don't link with -lpthread
+	    LIBS=`echo $LIBS | sed s/-lpthread//`
+	    CFLAGS="$CFLAGS -pthread"
+>>>>>>> upstream/master
 	    # OpenBSD doesn't do version numbers with dots.
 	    UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
 	    TCL_LIB_VERSIONS_OK=nodots
@@ -51883,6 +52480,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 fi
+<<<<<<< HEAD
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for uid_t in sys/types.h" >&5
 $as_echo_n "checking for uid_t in sys/types.h... " >&6; }
@@ -51901,8 +52499,27 @@ else
   ac_cv_type_uid_t=no
 fi
 rm -f conftest*
+=======
+	    LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
+	    # The -pthread needs to go in the CFLAGS, not LIBS
+	    LIBS=`echo $LIBS | sed s/-pthread//`
+	    CFLAGS="$CFLAGS -pthread"
+	    LDFLAGS="$LDFLAGS -pthread"
+	    ;;
+	FreeBSD-*)
+	    # This configuration from FreeBSD Ports.
+	    SHLIB_CFLAGS="-fPIC"
+	    SHLIB_LD="${CC} -shared"
+	    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} -Wl,-soname,\$@"
+	    SHLIB_SUFFIX=".so"
+	    DL_OBJS="tclLoadDl.o"
+	    DL_LIBS=""
+	    LDFLAGS=""
+	    if test $doRpath = yes; then :
+>>>>>>> upstream/master
 
 fi
+<<<<<<< HEAD
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_type_uid_t" >&5
 $as_echo "$ac_cv_type_uid_t" >&6; }
 if test $ac_cv_type_uid_t = no; then
@@ -51913,6 +52530,35 @@ $as_echo "#define uid_t int" >>confdefs.h
 $as_echo "#define gid_t int" >>confdefs.h
 
 fi
+=======
+	    # The -pthread needs to go in the LDFLAGS, not LIBS
+	    LIBS=`echo $LIBS | sed s/-pthread//`
+	    CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+	    LDFLAGS="$LDFLAGS $PTHREAD_LIBS"
+	    case $system in
+	    FreeBSD-3.*)
+		# Version numbers are dot-stripped by system policy.
+		TCL_TRIM_DOTS=`echo ${VERSION} | tr -d .`
+		UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+		SHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.so'
+		TCL_LIB_VERSIONS_OK=nodots
+		;;
+	    esac
+	    ;;
+	Darwin-*)
+	    CFLAGS_OPTIMIZE="-Os"
+	    SHLIB_CFLAGS="-fno-common"
+	    # To avoid discrepancies between what headers configure sees during
+	    # preprocessing tests and compiling tests, move any -isysroot and
+	    # -mmacosx-version-min flags from CFLAGS to CPPFLAGS:
+	    CPPFLAGS="${CPPFLAGS} `echo " ${CFLAGS}" | \
+		awk 'BEGIN {FS=" +-";ORS=" "}; {for (i=2;i<=NF;i++) \
+		if ($i~/^(isysroot|mmacosx-version-min)/) print "-"$i}'`"
+	    CFLAGS="`echo " ${CFLAGS}" | \
+		awk 'BEGIN {FS=" +-";ORS=" "}; {for (i=2;i<=NF;i++) \
+		if (!($i~/^(isysroot|mmacosx-version-min)/)) print "-"$i}'`"
+	    if test $do64bit = yes; then :
+>>>>>>> upstream/master
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for socklen_t" >&5
@@ -52248,6 +52894,7 @@ _ACEOF
 else
   NEED_FAKE_RFC2553=1
 fi
+<<<<<<< HEAD
 ac_fn_c_check_type "$LINENO" "struct sockaddr_storage" "ac_cv_type_struct_sockaddr_storage" "
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -52256,15 +52903,29 @@ ac_fn_c_check_type "$LINENO" "struct sockaddr_storage" "ac_cv_type_struct_sockad
 
 "
 if test "x$ac_cv_type_struct_sockaddr_storage" = xyes; then :
+=======
+	    # see pthread_intro(3) for pthread support on osf1, k.furukawa
+	    CFLAGS="$CFLAGS -DHAVE_PTHREAD_ATTR_SETSTACKSIZE"
+	    CFLAGS="$CFLAGS -DTCL_THREAD_STACK_MIN=PTHREAD_STACK_MIN*64"
+	    LIBS=`echo $LIBS | sed s/-lpthreads//`
+	    if test "$GCC" = yes; then :
+
+		LIBS="$LIBS -lpthread -lmach -lexc"
+>>>>>>> upstream/master
 
 cat >>confdefs.h <<_ACEOF
 #define HAVE_STRUCT_SOCKADDR_STORAGE 1
 _ACEOF
 
+<<<<<<< HEAD
 
 else
   NEED_FAKE_RFC2553=1
 fi
+=======
+		CFLAGS="$CFLAGS -pthread"
+		LDFLAGS="$LDFLAGS -pthread"
+>>>>>>> upstream/master
 
 if test "x$NEED_FAKE_RFC2553" = "x1"; then
 
@@ -52703,6 +53364,7 @@ fi
 #	properly generate sign-extended ints from character values.
 #--------------------------------------------------------------------
 
+<<<<<<< HEAD
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether char is unsigned" >&5
 $as_echo_n "checking whether char is unsigned... " >&6; }
 if ${ac_cv_c_char_unsigned+:} false; then :
@@ -52722,6 +53384,18 @@ if ac_fn_c_try_compile "$LINENO"; then :
   tcl_cv_api_getpwnam_r_4=yes
 else
   tcl_cv_api_getpwnam_r_4=no
+=======
+	case $system in
+	    AIX-*) ;;
+	    BSD/OS*) ;;
+	    CYGWIN_*) ;;
+	    IRIX*) ;;
+	    NetBSD-*|FreeBSD-*|OpenBSD-*) ;;
+	    Darwin-*) ;;
+	    SCO_SV-3.2*) ;;
+	    *) SHLIB_CFLAGS="-fPIC" ;;
+	esac
+>>>>>>> upstream/master
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
@@ -53582,6 +54256,7 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
+<<<<<<< HEAD
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_type_fd_set" >&5
 $as_echo "$tcl_cv_type_fd_set" >&6; }
 tcl_ok=$tcl_cv_type_fd_set
@@ -53589,6 +54264,53 @@ if test $tcl_ok = no; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for fd_mask in sys/select" >&5
 $as_echo_n "checking for fd_mask in sys/select... " >&6; }
 if ${tcl_cv_grep_fd_mask+:} false; then :
+=======
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_struct_dirent64" >&5
+$as_echo "$tcl_cv_struct_dirent64" >&6; }
+	if test "x${tcl_cv_struct_dirent64}" = "xyes" ; then
+
+$as_echo "#define HAVE_STRUCT_DIRENT64 1" >>confdefs.h
+
+	fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for DIR64" >&5
+$as_echo_n "checking for DIR64... " >&6; }
+if ${tcl_cv_DIR64+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/types.h>
+#include <dirent.h>
+int
+main ()
+{
+struct dirent64 *p; DIR64 d = opendir64(".");
+            p = readdir64(d); rewinddir64(d); closedir64(d);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  tcl_cv_DIR64=yes
+else
+  tcl_cv_DIR64=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_DIR64" >&5
+$as_echo "$tcl_cv_DIR64" >&6; }
+	if test "x${tcl_cv_DIR64}" = "xyes" ; then
+
+$as_echo "#define HAVE_DIR64 1" >>confdefs.h
+
+	fi
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for struct stat64" >&5
+$as_echo_n "checking for struct stat64... " >&6; }
+if ${tcl_cv_struct_stat64+:} false; then :
+>>>>>>> upstream/master
   $as_echo_n "(cached) " >&6
 else
 
@@ -54403,6 +55125,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 ## M4sh Initialization.  ##
 ## --------------------- ##
 
+<<<<<<< HEAD
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -54412,6 +55135,13 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   alias -g '${1+"$@"}'='"$@"'
 elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
+=======
+if test "`uname -s`" = "Darwin" && \
+	test "`uname -r | awk -F. '{print $1}'`" -lt 7; then
+    # prior to Darwin 7, realpath is not threadsafe, so don't
+    # use it when threads are enabled, c.f. bug # 711232
+    ac_cv_func_realpath=no
+>>>>>>> upstream/master
 fi
 DUALCASE=1; export DUALCASE # for MKS sh
 
@@ -54605,6 +55335,20 @@ fi
 #	(mostly older ones), use the old BSD-style FIONBIO approach instead.
 #--------------------------------------------------------------------
 
+<<<<<<< HEAD
+=======
+ac_fn_c_check_func "$LINENO" "getpwuid_r" "ac_cv_func_getpwuid_r"
+if test "x$ac_cv_func_getpwuid_r" = xyes; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for getpwuid_r with 5 args" >&5
+$as_echo_n "checking for getpwuid_r with 5 args... " >&6; }
+if ${tcl_cv_api_getpwuid_r_5+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+>>>>>>> upstream/master
 
     for ac_header in sys/ioctl.h
 do :
@@ -54686,6 +55430,11 @@ $as_echo "O_NONBLOCK" >&6; }
 	    ;;
     esac
 
+<<<<<<< HEAD
+=======
+ac_fn_c_check_func "$LINENO" "getpwnam_r" "ac_cv_func_getpwnam_r"
+if test "x$ac_cv_func_getpwnam_r" = xyes; then :
+>>>>>>> upstream/master
 
 #------------------------------------------------------------------------
 
@@ -54861,9 +55610,14 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_ok" >&5
 $as_echo "$tcl_ok" >&6; }
 
+<<<<<<< HEAD
 #--------------------------------------------------------------------
 # The check below checks whether the cpuid instruction is usable.
 #--------------------------------------------------------------------
+=======
+ac_fn_c_check_func "$LINENO" "getgrgid_r" "ac_cv_func_getgrgid_r"
+if test "x$ac_cv_func_getgrgid_r" = xyes; then :
+>>>>>>> upstream/master
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the cpuid instruction is usable" >&5
 $as_echo_n "checking whether the cpuid instruction is usable... " >&6; }
@@ -54949,9 +55703,14 @@ if test "$ac_cv_cygwin" != "yes"; then
     ac_fn_c_check_member "$LINENO" "struct stat" "st_blocks" "ac_cv_member_struct_stat_st_blocks" "$ac_includes_default"
 if test "x$ac_cv_member_struct_stat_st_blocks" = xyes; then :
 
+<<<<<<< HEAD
 cat >>confdefs.h <<_ACEOF
 #define HAVE_STRUCT_STAT_ST_BLOCKS 1
 _ACEOF
+=======
+ac_fn_c_check_func "$LINENO" "getgrnam_r" "ac_cv_func_getgrnam_r"
+if test "x$ac_cv_func_getgrnam_r" = xyes; then :
+>>>>>>> upstream/master
 
 
 fi
@@ -55060,8 +55819,16 @@ esac
 #       compat/string.h}
 #--------------------------------------------------------------------
 
+<<<<<<< HEAD
 ac_fn_c_check_func "$LINENO" "memmove" "ac_cv_func_memmove"
 if test "x$ac_cv_func_memmove" = xyes; then :
+=======
+if test "`uname -s`" = "Darwin" && \
+	test "`uname -r | awk -F. '{print $1}'`" -gt 5; then
+    # Starting with Darwin 6 (Mac OSX 10.2), gethostbyX
+    # are actually MT-safe as they always return pointers
+    # from TSD instead of static storage.
+>>>>>>> upstream/master
 
 else
 
@@ -55069,7 +55836,15 @@ else
 $as_echo "#define NO_MEMMOVE 1" >>confdefs.h
 
 
+<<<<<<< HEAD
 $as_echo "#define NO_STRING_H 1" >>confdefs.h
+=======
+elif test "`uname -s`" = "HP-UX" && \
+	test "`uname -r|sed -e 's|B\.||' -e 's|\..*$||'`" -gt 10; then
+    # Starting with HPUX 11.00 (we believe), gethostbyX
+    # are actually MT-safe as they always return pointers
+    # from TSD instead of static storage.
+>>>>>>> upstream/master
 
 fi
 
@@ -55080,12 +55855,18 @@ fi
 #--------------------------------------------------------------------
 
 
+<<<<<<< HEAD
     ac_fn_c_check_func "$LINENO" "strstr" "ac_cv_func_strstr"
 if test "x$ac_cv_func_strstr" = xyes; then :
   tcl_ok=1
 else
   tcl_ok=0
 fi
+=======
+else
+    ac_fn_c_check_func "$LINENO" "gethostbyname_r" "ac_cv_func_gethostbyname_r"
+if test "x$ac_cv_func_gethostbyname_r" = xyes; then :
+>>>>>>> upstream/master
 
     if test "$tcl_ok" = 1; then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking proper strstr implementation" >&5
@@ -55250,6 +56031,28 @@ esac
 	USE_COMPAT=1
     fi
 
+<<<<<<< HEAD
+=======
+fi
+
+    ac_fn_c_check_func "$LINENO" "gethostbyaddr_r" "ac_cv_func_gethostbyaddr_r"
+if test "x$ac_cv_func_gethostbyaddr_r" = xyes; then :
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gethostbyaddr_r with 7 args" >&5
+$as_echo_n "checking for gethostbyaddr_r with 7 args... " >&6; }
+if ${tcl_cv_api_gethostbyaddr_r_7+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+	#include <netdb.h>
+
+int
+main ()
+{
+>>>>>>> upstream/master
 
 #--------------------------------------------------------------------
 #	Under Solaris 2.4, strtod returns the wrong value for the
@@ -55535,6 +56338,7 @@ _ACEOF
 
 fi
 
+<<<<<<< HEAD
 
 #--------------------------------------------------------------------
 #	If a system doesn't have an opendir function (man, that's old!)
@@ -55542,6 +56346,18 @@ fi
 #	is compatible with the substitute version of opendir that's
 #	provided.  This version only works with V7-style directories.
 #--------------------------------------------------------------------
+=======
+fi;;
+  xDarwin)
+	# Assume that we've got CoreFoundation present (checked elsewhere because
+	# of wider impact).
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OSX" >&5
+$as_echo "OSX" >&6; };;
+  *)
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
+$as_echo "none" >&6; };;
+esac
+>>>>>>> upstream/master
 
 ac_fn_c_check_func "$LINENO" "opendir" "ac_cv_func_opendir"
 if test "x$ac_cv_func_opendir" = xyes; then :

@@ -4520,7 +4520,8 @@ TEBCresume(
 	}
 	TRACE(("%s %u \"%.30s\" => ",
 		(flags ? "normal" : "noerr"), opnd, O2S(part2Ptr)));
-	if (TclIsVarArray(arrayPtr) && !UnsetTraced(arrayPtr)) {
+	if (TclIsVarArray(arrayPtr) && !UnsetTraced(arrayPtr)
+		&& !(arrayPtr->flags & VAR_SEARCH_ACTIVE)) {
 	    varPtr = VarHashFindVar(arrayPtr->value.tablePtr, part2Ptr);
 	    if (varPtr && TclIsVarDirectUnsettable(varPtr)) {
 		/*
@@ -4693,17 +4694,12 @@ TEBCresume(
 	varPtr = TclObjLookupVarEx(interp, part1Ptr, NULL, 0, NULL,
 		/*createPart1*/0, /*createPart2*/0, &arrayPtr);
     doArrayExists:
-	if (varPtr && (varPtr->flags & VAR_TRACED_ARRAY)
-		&& (TclIsVarArray(varPtr) || TclIsVarUndefined(varPtr))) {
-	    DECACHE_STACK_INFO();
-	    result = TclObjCallVarTraces(iPtr, arrayPtr, varPtr, part1Ptr,
-		    NULL, (TCL_LEAVE_ERR_MSG|TCL_NAMESPACE_ONLY|
-		    TCL_GLOBAL_ONLY|TCL_TRACE_ARRAY), 1, opnd);
-	    CACHE_STACK_INFO();
-	    if (result == TCL_ERROR) {
-		TRACE_ERROR(interp);
-		goto gotError;
-	    }
+	DECACHE_STACK_INFO();
+	result = TclCheckArrayTraces(interp, varPtr, arrayPtr, part1Ptr, opnd);
+	CACHE_STACK_INFO();
+	if (result == TCL_ERROR) {
+	    TRACE_ERROR(interp);
+	    goto gotError;
 	}
 	if (varPtr && TclIsVarArray(varPtr) && !TclIsVarUndefined(varPtr)) {
 	    objResultPtr = TCONST(1);
@@ -5419,6 +5415,7 @@ TEBCresume(
 	 * Call out to get the name; it's expensive to compute but cached.
 	 */
 
+<<<<<<< HEAD
 	objResultPtr = TclOOObjectName(interp, contextPtr->oPtr);
 	TRACE_WITH_OBJ(("=> "), objResultPtr);
 	NEXT_INST_F(1, 0, 1);
@@ -5440,6 +5437,21 @@ TEBCresume(
 	    DECACHE_STACK_INFO();
 	    Tcl_SetErrorCode(interp, "TCL", "OO", "CONTEXT_REQUIRED", NULL);
 	    CACHE_STACK_INFO();
+=======
+	valuePtr = OBJ_AT_TOS;
+	fromIdx = TclGetInt4AtPtr(pc+1);
+	toIdx = TclGetInt4AtPtr(pc+5);
+	TRACE(("\"%.30s\" %d %d => ", O2S(valuePtr), TclGetInt4AtPtr(pc+1),
+		TclGetInt4AtPtr(pc+5)));
+
+	/*
+	 * Get the length of the list, making sure that it really is a list
+	 * in the process.
+	 */
+
+	if (TclListObjLength(interp, valuePtr, &objc) != TCL_OK) {
+	    TRACE_ERROR(interp);
+>>>>>>> upstream/master
 	    goto gotError;
 =======
 
@@ -5463,6 +5475,7 @@ TEBCresume(
 	}
 	contextPtr = framePtr->clientData;
 
+<<<<<<< HEAD
 	oPtr = (Object *) Tcl_GetObjectFromObj(interp, valuePtr);
 	if (oPtr == NULL) {
 	    TRACE_APPEND(("ERROR: \"%.30s\" not object\n", O2S(valuePtr)));
@@ -5472,6 +5485,37 @@ TEBCresume(
 	    struct MInvoke *miPtr;
 	    int i;
 	    const char *methodType;
+=======
+	/* Every range of an empty list is an empty list */
+	if (objc == 0) {
+	    TRACE_APPEND(("\n"));
+	    NEXT_INST_F(9, 0, 0);
+	}
+
+	/* Decode index value operands. */
+
+	/* 
+	assert ( toIdx != TCL_INDEX_AFTER);
+	 *
+	 * Extra safety for legacy bytecodes:
+	 */
+	if (toIdx == TCL_INDEX_AFTER) {
+	    toIdx = TCL_INDEX_END;
+	}
+
+	if ((toIdx == TCL_INDEX_BEFORE) || (fromIdx == TCL_INDEX_AFTER)) {
+	emptyList:
+	    objResultPtr = Tcl_NewObj();
+	    TRACE_APPEND(("\"%.30s\"", O2S(objResultPtr)));
+	    NEXT_INST_F(9, 1, 1);
+	}
+	toIdx = TclIndexDecode(toIdx, objc - 1);
+	if (toIdx < 0) {
+	    goto emptyList;
+	} else if (toIdx >= objc) {
+	    toIdx = objc - 1;
+	}
+>>>>>>> upstream/master
 
 	    if (classPtr == NULL) {
 		TRACE_APPEND(("ERROR: \"%.30s\" not class\n", O2S(valuePtr)));
@@ -5483,6 +5527,7 @@ TEBCresume(
 		goto gotError;
 	    }
 
+<<<<<<< HEAD
 	    for (i=contextPtr->index+1 ; i<contextPtr->callPtr->numChain ; i++) {
 		miPtr = contextPtr->callPtr->chain + i;
 		if (!miPtr->isFilter &&
@@ -5542,6 +5587,11 @@ TEBCresume(
 	    CACHE_STACK_INFO();
 	    goto gotError;
 	}
+=======
+	fromIdx = TclIndexDecode(fromIdx, objc - 1);
+
+	objResultPtr = TclListObjRange(valuePtr, fromIdx, toIdx);
+>>>>>>> upstream/master
 
     case INST_TCLOO_NEXT:
 	opnd = TclGetUInt1AtPtr(pc+1);
@@ -5615,6 +5665,7 @@ TEBCresume(
 	    ArgumentBCEnter(interp, codePtr, TD, pc, opnd, objv);
 	}
 
+<<<<<<< HEAD
 	pcAdjustment = 2;
 	cleanup = opnd;
 	DECACHE_STACK_INFO();
@@ -5669,6 +5720,12 @@ TEBCresume(
 	if (oPtr == NULL) {
 	    TRACE(("%.30s => ERROR: not object\n", O2S(OBJ_AT_TOS)));
 	    goto gotError;
+=======
+	{
+	    int checkEq = ((*pc == INST_EQ) || (*pc == INST_NEQ)
+		    || (*pc == INST_STR_EQ) || (*pc == INST_STR_NEQ));
+	    match = TclStringCmp(valuePtr, value2Ptr, checkEq, 0, -1);
+>>>>>>> upstream/master
 	}
 
 	/*
@@ -5740,10 +5797,28 @@ TEBCresume(
 	    TRACE_APPEND(("ERROR: \"%.30s\" not object\n", O2S(valuePtr)));
 	    goto gotError;
 	} else {
+<<<<<<< HEAD
 	    Class *classPtr = oPtr->classPtr;
 	    struct MInvoke *miPtr;
 	    int i;
 	    const char *methodType;
+=======
+	    char buf[4];
+	    int ch = Tcl_GetUniChar(valuePtr, index);
+
+	    /*
+	     * This could be: Tcl_NewUnicodeObj((const Tcl_UniChar *)&ch, 1)
+	     * but creating the object as a string seems to be faster in
+	     * practical use.
+	     */
+
+	    length = (ch != -1) ? Tcl_UniCharToUtf(ch, buf) : 0;
+	    objResultPtr = Tcl_NewStringObj(buf, length);
+	}
+
+	TRACE_APPEND(("\"%s\"\n", O2S(objResultPtr)));
+	NEXT_INST_F(1, 2, 1);
+>>>>>>> upstream/master
 
 	    if (classPtr == NULL) {
 		TRACE_APPEND(("ERROR: \"%.30s\" not class\n", O2S(valuePtr)));
@@ -6125,8 +6200,24 @@ TEBCresume(
 	 * Set result.
 	 */
 
+<<<<<<< HEAD
 	TRACE_APPEND(("\"%.30s\"\n", O2S(objResultPtr)));
 	NEXT_INST_V(5, opnd, -1);
+=======
+	/*
+	    Try to determine, without triggering generation of a string
+	    representation, whether one value is not a number.
+	*/
+	if (TclCheckEmptyString(valuePtr) > 0 || TclCheckEmptyString(value2Ptr) > 0) {
+	    goto stringCompare;
+	}
+
+	if (GetNumberFromObj(NULL, valuePtr, &ptr1, &type1) != TCL_OK
+		|| GetNumberFromObj(NULL, value2Ptr, &ptr2, &type2) != TCL_OK) {
+	    /*
+	     * At least one non-numeric argument - compare as strings.
+	     */
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
     case INST_LSET_FLAT:

@@ -425,7 +425,8 @@ REG_OBJS = tclWinReg.$(OBJEXT)
 STUB_OBJS = \
 	tclStubLib.$(OBJEXT) \
 	tclTomMathStubLib.$(OBJEXT) \
-	tclOOStubLib.$(OBJEXT)
+	tclOOStubLib.$(OBJEXT) \
+	tclWinPanic.$(OBJEXT)
 
 TCLSH_OBJS = tclAppInit.$(OBJEXT)
 
@@ -632,6 +633,9 @@ tclTomMathStubLib.${OBJEXT}: tclTomMathStubLib.c
 tclOOStubLib.${OBJEXT}: tclOOStubLib.c
 	$(CC) -c $(CC_SWITCHES) -DSTATIC_BUILD @DEPARG@ $(CC_OBJNAME)
 
+tclWinPanic.${OBJEXT}: tclWinPanic.c
+	$(CC) -c $(CC_SWITCHES) -DSTATIC_BUILD @DEPARG@ $(CC_OBJNAME)
+
 # Implicit rule for all object files that will end up in the Tcl library
 
 %.${OBJEXT}: %.c
@@ -748,6 +752,7 @@ install-libraries: libraries install-tzdata install-msgs
 	    $(COPY) "$$i" "$(SCRIPT_INSTALL_DIR)"; \
 	    done;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@echo "Installing library http1.0 directory";
 	@for j in $(ROOT_DIR)/library/http1.0/*.tcl; \
 	    do \
@@ -766,6 +771,10 @@ install-libraries: libraries install-tzdata install-msgs
 >>>>>>> upstream/master
 	@echo "Installing package http 2.8.12 as a Tcl Module";
 	@$(COPY) $(ROOT_DIR)/library/http/http.tcl $(SCRIPT_INSTALL_DIR)/../tcl9/9.0/http-2.8.12.tm;
+>>>>>>> upstream/master
+=======
+	@echo "Installing package http 2.8.13 as a Tcl Module";
+	@$(COPY) $(ROOT_DIR)/library/http/http.tcl $(SCRIPT_INSTALL_DIR)/../tcl9/9.0/http-2.8.13.tm;
 >>>>>>> upstream/master
 	@echo "Installing library opt0.4 directory";
 	@for j in $(ROOT_DIR)/library/opt/*.tcl; \
@@ -925,7 +934,7 @@ packages:
 	      if [ ! -f $(PKG_DIR)/$$pkg/Makefile ]; then \
 	        ( cd $(PKG_DIR)/$$pkg; \
 	          echo "Configuring package '$$i' wd = `$(CYGPATH) $$(pwd -P)`"; \
-	          $$i/configure --with-tcl=$$builddir --with-tclinclude=$(GENERIC_DIR_NATIVE) $(PKG_CFG_ARGS) --enable-shared --enable-threads; ) \
+	          $$i/configure --with-tcl=$$builddir --with-tclinclude=$(GENERIC_DIR_NATIVE) $(PKG_CFG_ARGS) --enable-shared; ) \
 	      fi ; \
 	      echo "Building package '$$pkg'"; \
 	      ( cd $(PKG_DIR)/$$pkg; $(MAKE); ) \

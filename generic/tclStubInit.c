@@ -40,6 +40,7 @@
 #undef Tcl_CreateHashEntry
 #undef Tcl_Panic
 #undef Tcl_FindExecutable
+#undef Tcl_SetPanicProc
 #undef TclpGetPid
 #undef TclSockMinimumBuffers
 <<<<<<< HEAD
@@ -597,6 +598,15 @@ static int uniCharNcasecmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsig
 
 MODULE_SCOPE const TclStubs tclStubs;
 MODULE_SCOPE const TclTomMathStubs tclTomMathStubs;
+
+#ifdef __GNUC__
+/*
+ * The rest of this file shouldn't warn about deprecated functions; they're
+ * there because we intend them to be so and know that this file is OK to
+ * touch those fields.
+ */
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 /* !BEGIN!: Do not edit below this line. */
 

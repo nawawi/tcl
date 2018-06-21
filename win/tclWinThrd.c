@@ -60,7 +60,7 @@ static CRITICAL_SECTION initLock;
  * obvious reasons, cannot use any dyamically allocated storage.
  */
 
-#ifdef TCL_THREADS
+#if TCL_THREADS
 
 static struct Tcl_Mutex_ {
     CRITICAL_SECTION crit;
@@ -95,7 +95,7 @@ static CRITICAL_SECTION joinLock;
  * The per-thread event and queue pointers.
  */
 
-#ifdef TCL_THREADS
+#if TCL_THREADS
 
 typedef struct ThreadSpecificData {
     HANDLE condEvent;			/* Per-thread condition event */
@@ -675,7 +675,7 @@ TclpMasterUnlock(void)
 Tcl_Mutex *
 Tcl_GetAllocMutex(void)
 {
-#ifdef TCL_THREADS
+#if TCL_THREADS
     if (!allocOnce) {
 	InitializeCriticalSection(&allocLock.crit);
 	allocOnce = 1;
@@ -765,7 +765,7 @@ TclFinalizeLock(void)
     initialized = 0;
 >>>>>>> upstream/master
 
-#ifdef TCL_THREADS
+#if TCL_THREADS
     if (allocOnce) {
 	DeleteCriticalSection(&allocLock.crit);
 	allocOnce = 0;
@@ -781,7 +781,7 @@ TclFinalizeLock(void)
     DeleteCriticalSection(&initLock);
 }
 
-#ifdef TCL_THREADS
+#if TCL_THREADS
 
 /* locally used prototype */
 static void		FinalizeConditionEvent(ClientData data);

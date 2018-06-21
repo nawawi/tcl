@@ -1581,7 +1581,6 @@ CFLAGS_OPTIMIZE
 CFLAGS_DEBUG
 DL_LIBS
 CYGPATH
-TCL_THREADS
 SET_MAKE
 RC
 RANLIB
@@ -1637,7 +1636,6 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_threads
 with_encoding
 enable_shared
 enable_64bit
@@ -3006,7 +3004,6 @@ Optional Features:
 >>>>>>> upstream/master
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-threads        build with threads (default: on)
   --enable-shared         build and link with shared libraries (default: on)
   --enable-64bit          enable 64bit support (where applicable)
   --enable-symbols        build with debugging symbols (default: off)
@@ -21309,6 +21306,7 @@ if $ac_need_defaults; then
 fi
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 # Have a temporary directory for convenience.  Make it in the build tree
 # simply because there is no reason to put it here, and in addition,
 # creating and moving files from /tmp can sometimes cause problems.
@@ -21545,6 +21543,12 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
 done
 
 ac_configure_extra_args=
+=======
+#------------------------------------------------------------------------
+# Embedded configuration information, encoding to use for the values, TIP #59
+#------------------------------------------------------------------------
+
+>>>>>>> upstream/master
 
 if $ac_cs_silent; then
   exec 6>/dev/null

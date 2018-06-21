@@ -189,17 +189,17 @@ extern "C" {
 #ifndef RC_INVOKED
 
 /*
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
  * Special macro to define mutexes, that doesn't do anything if we are not
  * using threads.
+=======
+ * Special macro to define mutexes.
+>>>>>>> upstream/master
  */
 
-#ifdef TCL_THREADS
 #define TCL_DECLARE_MUTEX(name) static Tcl_Mutex name;
-#else
-#define TCL_DECLARE_MUTEX(name)
-#endif
 
 /*
  * Tcl's public routine Tcl_FSSeek() uses the values SEEK_SET, SEEK_CUR, and
@@ -323,6 +323,7 @@ extern "C" {
 #   define TCL_FORMAT_PRINTF(a,b) __attribute__ ((__format__ (__printf__, a, b)))
 #   define TCL_NORETURN __attribute__ ((noreturn))
 #   define TCL_NOINLINE __attribute__ ((noinline))
+#   define TCL_NORETURN1 __attribute__ ((noreturn))
 #else
 #   define TCL_FORMAT_PRINTF(a,b)
 #   if defined(_MSC_VER) && (_MSC_VER >= 1310)
@@ -332,6 +333,7 @@ extern "C" {
 #	define TCL_NORETURN /* nothing */
 #	define TCL_NOINLINE /* nothing */
 #   endif
+<<<<<<< HEAD
 <<<<<<< HEAD
 #   define TCL_NORETURN1 /* nothing */
 <<<<<<< HEAD
@@ -358,6 +360,9 @@ extern "C" {
 >>>>>>> upstream/master
 =======
 =======
+>>>>>>> upstream/master
+=======
+#   define TCL_NORETURN1 /* nothing */
 >>>>>>> upstream/master
 #endif
 
@@ -2780,16 +2785,16 @@ typedef struct Tcl_EncodingType {
 
 /*
  * The maximum number of bytes that are necessary to represent a single
- * Unicode character in UTF-8. The valid values should be 3, 4 or 6
- * (or perhaps 1 if we want to support a non-unicode enabled core). If 3 or
- * 4, then Tcl_UniChar must be 2-bytes in size (UCS-2) (the default). If 6,
+ * Unicode character in UTF-8. The valid values are 4 and 6
+ * (or perhaps 1 if we want to support a non-unicode enabled core). If 4,
+ * then Tcl_UniChar must be 2-bytes in size (UCS-2) (the default). If 6,
  * then Tcl_UniChar must be 4-bytes in size (UCS-4). At this time UCS-2 mode
  * is the default and recommended mode. UCS-4 is experimental and not
  * recommended. It works for the core, but most extensions expect UCS-2.
  */
 
 #ifndef TCL_UTF_MAX
-#define TCL_UTF_MAX		3
+#define TCL_UTF_MAX		4
 #endif
 
 /*
@@ -3010,6 +3015,7 @@ typedef struct {
 #define TCL_ARGV_END		23
 
 /*
+<<<<<<< HEAD
  * Types of callback functions for the TCL_ARGV_FUNC and TCL_ARGV_GENFUNC
  * argument types:
  */
@@ -3018,6 +3024,14 @@ typedef int (Tcl_ArgvFuncProc)(ClientData clientData, Tcl_Obj *objPtr,
 	void *dstPtr);
 typedef int (Tcl_ArgvGenFuncProc)(ClientData clientData, Tcl_Interp *interp,
 	int objc, Tcl_Obj *const *objv, void *dstPtr);
+=======
+ *----------------------------------------------------------------------------
+ * The following constant is used to test for older versions of Tcl in the
+ * stubs tables. If TCL_UTF_MAX>4 use a different value.
+ */
+
+#define TCL_STUB_MAGIC		((int) 0xFCA3BACF + (TCL_UTF_MAX>4))
+>>>>>>> upstream/master
 
 /*
  * Shorthand for commonly used argTable entries.
@@ -3037,6 +3051,11 @@ const char *		Tcl_InitStubs(Tcl_Interp *interp, const char *version,
 			    int exact, int magic);
 const char *		TclTomMathInitializeStubs(Tcl_Interp *interp,
 			    const char *version, int epoch, int revision);
+#if defined(_WIN32)
+    TCL_NORETURN1 void Tcl_ConsolePanic(const char *format, ...);
+#else
+#   define Tcl_ConsolePanic NULL
+#endif
 
 #ifdef USE_TCL_STUBS
 #if TCL_RELEASE_LEVEL == TCL_FINAL_RELEASE
@@ -3074,11 +3093,22 @@ const char *		TclTomMathInitializeStubs(Tcl_Interp *interp,
  * Tcl_ZlibStreamInit functions.
  */
 
+<<<<<<< HEAD
 #define TCL_ZLIB_FORMAT_RAW	1
 #define TCL_ZLIB_FORMAT_ZLIB	2
 #define TCL_ZLIB_FORMAT_GZIP	4
 #define TCL_ZLIB_FORMAT_AUTO	8
 
+=======
+#define Tcl_Main(argc, argv, proc) Tcl_MainEx(argc, argv, proc, \
+	    ((Tcl_SetPanicProc(Tcl_ConsolePanic), Tcl_CreateInterp)()))
+EXTERN void		Tcl_MainEx(int argc, char **argv,
+			    Tcl_AppInitProc *appInitProc, Tcl_Interp *interp);
+EXTERN const char *	Tcl_PkgInitStubsCheck(Tcl_Interp *interp,
+			    const char *version, int exact);
+EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
+
+>>>>>>> upstream/master
 /*
  * Constants that describe whether the stream is to operate in compressing or
  * decompressing mode.
@@ -3679,6 +3709,7 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 #define Tcl_CreateHashEntry(tablePtr, key, newPtr) \
 	(*((tablePtr)->createProc))(tablePtr, (const char *)(key), newPtr)
 
+<<<<<<< HEAD
 /*
  *----------------------------------------------------------------------------
  * Macros that eliminate the overhead of the thread synchronization functions
@@ -3748,6 +3779,8 @@ extern Tcl_AppInitProc Tcl_AppInit;
 >>>>>>> upstream/master
 #endif /* !TCL_NO_DEPRECATED */
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

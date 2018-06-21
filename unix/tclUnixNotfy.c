@@ -223,12 +223,17 @@ static Tcl_ThreadId notifierThread;
  */
 
 #include <poll.h>
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+#include "tclInt.h"
 >>>>>>> upstream/master
 
 /*
  * Static routines defined in this file.
  */
 
+<<<<<<< HEAD
 #ifdef NOTIFIER_SELECT
 #ifdef TCL_THREADS
 <<<<<<< HEAD
@@ -255,17 +260,28 @@ static void	AtForkChild(void);
 #endif /* HAVE_PTHREAD_ATFORK */
 #endif /* TCL_THREADS */
 =======
+=======
+static int	FileHandlerEventProc(Tcl_Event *evPtr, int flags);
+#if !TCL_THREADS
+# undef NOTIFIER_EPOLL
+# undef NOTIFIER_KQUEUE
+# define NOTIFIER_SELECT
+#elif !defined(NOTIFIER_EPOLL) && !defined(NOTIFIER_KQUEUE)
+# define NOTIFIER_SELECT
+>>>>>>> upstream/master
 static TCL_NORETURN void NotifierThreadProc(ClientData clientData);
-#if defined(HAVE_PTHREAD_ATFORK)
+# if defined(HAVE_PTHREAD_ATFORK)
 static void	AtForkChild(void);
+<<<<<<< HEAD
 #endif /* HAVE_PTHREAD_ATFORK */
 #endif /* TCL_THREADS */
 #endif /* NOTIFIER_SELECT */
 >>>>>>> upstream/master
 static int	FileHandlerEventProc(Tcl_Event *evPtr, int flags);
+=======
+# endif /* HAVE_PTHREAD_ATFORK */
+>>>>>>> upstream/master
 
-#ifdef NOTIFIER_SELECT
-#if TCL_THREADS
 /*
  * Import of Windows API when building threaded with Cygwin.
  */
@@ -383,7 +399,7 @@ StartNotifierThread(const char *proc)
  *
  * StartNotifierThread --
  *
- *	Start a notfier thread and wait for the notifier pipe to be created.
+ *	Start a notifier thread and wait for the notifier pipe to be created.
  *
  * Results:
  *	None.
@@ -705,7 +721,6 @@ Tcl_FinalizeNotifier(
 >>>>>>> upstream/master
     }
 }
-#endif /* TCL_THREADS */
 #endif /* NOTIFIER_SELECT */
 
 /*
@@ -742,7 +757,7 @@ Tcl_AlertNotifier(
 	return;
     } else {
 #ifdef NOTIFIER_SELECT
-#ifdef TCL_THREADS
+#if TCL_THREADS
 	ThreadSpecificData *tsdPtr = clientData;
 
 	pthread_mutex_lock(&notifierMutex);
@@ -1115,7 +1130,11 @@ NotifierProc(
 
 =======
 #ifdef NOTIFIER_SELECT
+<<<<<<< HEAD
 #ifdef TCL_THREADS
+>>>>>>> upstream/master
+=======
+#if TCL_THREADS
 >>>>>>> upstream/master
 /*
  *----------------------------------------------------------------------

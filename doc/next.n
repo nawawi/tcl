@@ -148,6 +148,7 @@ oo::class create theSuperclass {
         puts "in the superclass, args = $args"
     }
 }
+
 oo::class create theSubclass {
     superclass theSuperclass
     method example {args} {
@@ -157,6 +158,7 @@ oo::class create theSubclass {
         puts "after chaining from subclass"
     }
 }
+
 theSubclass create obj
 oo::objdefine obj method example args {
     puts "per-object method, args = $args"
@@ -219,6 +221,7 @@ oo::class create cache {
         \fI# Compute value, insert into cache, and return it\fR
         return [set ValueCache($key) [\fBnext\fR {*}$args]]
     }
+
     method flushCache {} {
         my variable ValueCache
         unset ValueCache
@@ -230,10 +233,12 @@ oo::class create cache {
 oo::object create demo
 oo::objdefine demo {
     mixin cache
+
     method compute {a b c} {
         after 3000 \fI;# Simulate deep thought\fR
         return [expr {$a + $b * $c}]
     }
+
     method compute2 {a b c} {
         after 3000 \fI;# Simulate deep thought\fR
         return [expr {$a * $b + $c}]

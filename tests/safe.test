@@ -399,6 +399,7 @@ test safe-8.7 {safe source control on file} -setup {
     unset log
     safe::interpDelete $i
 } -result [list 1 {no such file or directory} [list "ERROR for slave a : [file join [info library] xxxxxxxxxxx.tcl]:no such file or directory"]]
+<<<<<<< HEAD
 test safe-8.8 {safe source forbids -rsrc} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -417,6 +418,12 @@ test safe-8.8 {safe source forbids -rsrc} -setup {
 } -returnCodes error -cleanup {
     safe::interpDelete $i
 } -result {wrong # args: should be "source ?-encoding E? fileName"}
+=======
+test safe-8.8 {safe source forbids -rsrc} emptyTest {
+    # Disabled this test.  It was only useful for long unsupported
+    # Mac OS 9 systems. [Bug 860a9f1945]
+} {}
+>>>>>>> upstream/master
 test safe-8.9 {safe source and return} -setup {
     set returnScript [makeFile {return "ok"} return.tcl]
     catch {safe::interpDelete $i}
