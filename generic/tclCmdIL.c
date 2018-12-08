@@ -151,6 +151,8 @@ static int		InfoScriptCmd(ClientData dummy, Tcl_Interp *interp,
 			    int objc, Tcl_Obj *const objv[]);
 static int		InfoSharedlibCmd(ClientData dummy, Tcl_Interp *interp,
 			    int objc, Tcl_Obj *const objv[]);
+static int		InfoCmdTypeCmd(ClientData dummy, Tcl_Interp *interp,
+			    int objc, Tcl_Obj *const objv[]);
 static int		InfoTclVersionCmd(ClientData dummy, Tcl_Interp *interp,
 			    int objc, Tcl_Obj *const objv[]);
 static SortElement *	MergeLists(SortElement *leftPtr, SortElement *rightPtr,
@@ -169,6 +171,7 @@ static const EnsembleImplMap defaultInfoMap[] = {
     {"args",		   InfoArgsCmd,		    TclCompileBasic1ArgCmd, NULL, NULL, 0},
     {"body",		   InfoBodyCmd,		    TclCompileBasic1ArgCmd, NULL, NULL, 0},
     {"cmdcount",	   InfoCmdCountCmd,	    TclCompileBasic0ArgCmd, NULL, NULL, 0},
+    {"cmdtype",		   InfoCmdTypeCmd,	    TclCompileBasic1ArgCmd, NULL, NULL, 1},
     {"commands",	   InfoCommandsCmd,	    TclCompileInfoCommandsCmd, NULL, NULL, 0},
     {"complete",	   InfoCompleteCmd,	    TclCompileBasic1ArgCmd, NULL, NULL, 0},
     {"coroutine",	   TclInfoCoroutineCmd,     TclCompileInfoCoroutineCmd, NULL, NULL, 0},
@@ -183,7 +186,7 @@ static const EnsembleImplMap defaultInfoMap[] = {
     {"library",		   InfoLibraryCmd,	    TclCompileBasic0ArgCmd, NULL, NULL, 0},
     {"loaded",		   InfoLoadedCmd,	    TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
     {"locals",		   TclInfoLocalsCmd,	    TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
-    {"nameofexecutable",   InfoNameOfExecutableCmd, TclCompileBasic0ArgCmd, NULL, NULL, 0},
+    {"nameofexecutable",   InfoNameOfExecutableCmd, TclCompileBasic0ArgCmd, NULL, NULL, 1},
     {"patchlevel",	   InfoPatchLevelCmd,	    TclCompileBasic0ArgCmd, NULL, NULL, 0},
     {"procs",		   InfoProcsCmd,	    TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
     {"script",		   InfoScriptCmd,	    TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
@@ -549,9 +552,9 @@ InfoBodyCmd(
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
     register Interp *iPtr = (Interp *) interp;
-    const char *name;
+    const char *name, *bytes;
     Proc *procPtr;
-    Tcl_Obj *bodyPtr, *resultPtr;
+    int numBytes;
 
     if (objc != 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "procname");
@@ -576,18 +579,8 @@ InfoBodyCmd(
      * the object do not invalidate the internal rep.
      */
 
-    bodyPtr = procPtr->bodyPtr;
-    if (bodyPtr->bytes == NULL) {
-	/*
-	 * The string rep might not be valid if the procedure has never been
-	 * run before. [Bug #545644]
-	 */
-
-	TclGetString(bodyPtr);
-    }
-    resultPtr = Tcl_NewStringObj(bodyPtr->bytes, bodyPtr->length);
-
-    Tcl_SetObjResult(interp, resultPtr);
+    bytes = Tcl_GetStringFromObj(procPtr->bodyPtr, &numBytes);
+    Tcl_SetObjResult(interp, Tcl_NewStringObj(bytes, numBytes));
     return TCL_OK;
 }
 
@@ -671,7 +664,7 @@ InfoCommandsCmd(
     Tcl_Obj *listPtr, *elemObjPtr;
     int specificNsInPattern = 0;/* Init. to avoid compiler warning. */
     Tcl_Command cmd;
-    int i;
+    size_t i;
 
     /*
      * Get the pattern and find the "effective namespace" in which to list
@@ -1496,7 +1489,7 @@ TclInfoFrame(
 	    ADD_PAIR("proc", procNameObj);
 	} else if (procPtr->cmdPtr->clientData) {
 	    ExtraFrameInfo *efiPtr = procPtr->cmdPtr->clientData;
-	    int i;
+	    size_t i;
 
 	    /*
 	     * This is a non-standard command. Luckily, it's told us how to
@@ -2290,6 +2283,60 @@ InfoTclVersionCmd(
 /*
  *----------------------------------------------------------------------
  *
+ * InfoCmdTypeCmd --
+ *
+ *	Called to implement the "info cmdtype" command that returns the type
+ *	of a given command. Handles the following syntax:
+ *
+ *	    info cmdtype cmdName
+ *
+ * Results:
+ *	Returns TCL_OK if successful and TCL_ERROR if there is an error.
+ *
+ * Side effects:
+ *	Returns a type name. If there is an error, the result is an error
+ *	message.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+InfoCmdTypeCmd(
+    ClientData dummy,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+{
+    Tcl_Command command;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "commandName");
+	return TCL_ERROR;
+    }
+    command = Tcl_FindCommand(interp, Tcl_GetString(objv[1]), NULL,
+	    TCL_LEAVE_ERR_MSG);
+    if (command == NULL) {
+	return TCL_ERROR;
+    }
+
+    /*
+     * There's one special case: safe slave interpreters can't see aliases as
+     * aliases as they're part of the security mechanisms.
+     */
+
+    if (Tcl_IsSafe(interp)
+	    && (((Command *) command)->objProc == TclAliasObjCmd)) {
+	Tcl_AppendResult(interp, "native", NULL);
+    } else {
+	Tcl_SetObjResult(interp,
+		Tcl_NewStringObj(TclGetCommandTypeName(command), -1));
+    }
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
  * Tcl_JoinObjCmd --
  *
  *	This procedure is invoked to process the "join" Tcl command. See the
@@ -2311,7 +2358,8 @@ Tcl_JoinObjCmd(
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* The argument objects. */
 {
-    int length, listLen;
+    size_t length;
+    int listLen;
     Tcl_Obj *resObjPtr = NULL, *joinObjPtr, **elemPtrs;
 
     if ((objc < 2) || (objc > 3)) {
@@ -2354,7 +2402,7 @@ Tcl_JoinObjCmd(
     joinObjPtr = (objc == 2) ? Tcl_NewStringObj(" ", 1) : objv[2];
     Tcl_IncrRefCount(joinObjPtr);
 
-    (void) Tcl_GetStringFromObj(joinObjPtr, &length);
+    (void) TclGetStringFromObj(joinObjPtr, &length);
     if (length == 0) {
 	resObjPtr = TclStringCat(interp, listLen, elemPtrs, 0);
     } else {
@@ -2777,6 +2825,96 @@ Tcl_LlengthObjCmd(
 /*
  *----------------------------------------------------------------------
  *
+ * Tcl_LpopObjCmd --
+ *
+ *	This procedure is invoked to process the "lpop" Tcl command. See the
+ *	user documentation for details on what it does.
+ *
+ * Results:
+ *	A standard Tcl object result.
+ *
+ * Side effects:
+ *	See the user documentation.
+ *
+ *----------------------------------------------------------------------
+ */
+
+int
+Tcl_LpopObjCmd(
+    ClientData notUsed,		/* Not used. */
+    Tcl_Interp *interp,		/* Current interpreter. */
+    int objc,			/* Number of arguments. */
+    register Tcl_Obj *const objv[])
+				/* Argument objects. */
+{
+    int listLen, result;
+    Tcl_Obj *elemPtr;
+    Tcl_Obj *listPtr, **elemPtrs;
+
+    if (objc < 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "listvar ?index?");
+	return TCL_ERROR;
+    }
+
+    listPtr = Tcl_ObjGetVar2(interp, objv[1], NULL, TCL_LEAVE_ERR_MSG);
+    if (listPtr == NULL) {
+	return TCL_ERROR;
+    }
+
+    result = TclListObjGetElements(interp, listPtr, &listLen, &elemPtrs);
+    if (result != TCL_OK) {
+	return result;
+    }
+
+    /*
+     * First, extract the element to be returned.
+     * TclLindexFlat adds a ref count which is handled.
+     */
+    
+    if (objc == 2) {
+	elemPtr = elemPtrs[listLen - 1];
+	Tcl_IncrRefCount(elemPtr);
+    } else {
+	elemPtr = TclLindexFlat(interp, listPtr, objc-2, objv+2);
+
+	if (elemPtr == NULL) {
+	    return TCL_ERROR;
+	}
+    }
+    Tcl_SetObjResult(interp, elemPtr);
+    Tcl_DecrRefCount(elemPtr);
+
+    /*
+     * Second, remove the element.
+     */
+
+    if (objc == 2) {
+	if (Tcl_IsShared(listPtr)) {
+	    listPtr = TclListObjCopy(NULL, listPtr);
+	}
+	result = Tcl_ListObjReplace(interp, listPtr, listLen - 1, 1, 0, NULL);
+	if (result != TCL_OK) {
+	    return result;
+	}
+    } else {
+	listPtr = TclLsetFlat(interp, listPtr, objc-2, objv+2, NULL);
+
+	if (listPtr == NULL) {
+	    return TCL_ERROR;
+	}
+    }
+    
+    listPtr = Tcl_ObjSetVar2(interp, objv[1], NULL, listPtr, TCL_LEAVE_ERR_MSG);
+    if (listPtr == NULL) {
+	return TCL_ERROR;
+    }
+
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
  * Tcl_LrangeObjCmd --
  *
  *	This procedure is invoked to process the "lrange" Tcl command. See the
@@ -2998,6 +3136,7 @@ Tcl_LreplaceObjCmd(
     if (first < 0) {
 	first = 0;
     }
+<<<<<<< HEAD
 >>>>>>> upstream/master
 
     /* Final sanity check. Do not exceed limits on max list length. */
@@ -3021,7 +3160,12 @@ Tcl_LreplaceObjCmd(
 	Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LREPLACE", "BADIDX",
 		NULL);
 	return TCL_ERROR;
+=======
+    if (first > listLen) {
+	first = listLen;
+>>>>>>> upstream/master
     }
+
     if (last >= listLen) {
 	last = listLen - 1;
     }
@@ -3759,7 +3903,12 @@ Tcl_LsearchObjCmd(
     Tcl_Obj *const objv[])	/* Argument values. */
 {
     const char *bytes, *patternBytes;
+<<<<<<< HEAD
     int i, match, index, result=TCL_OK, listc, length, elemLen, bisect;
+=======
+    int i, match, index, result=TCL_OK, listc, bisect;
+    size_t length = 0, elemLen;
+>>>>>>> upstream/master
     int allocatedIndexVector = 0;
     int dataType, isIncreasing, lower, upper, start, groupSize, groupOffset;
     Tcl_WideInt patWide, objWide;
@@ -4254,7 +4403,7 @@ Tcl_LsearchObjCmd(
 	 * sense in doing this when the match sense is inverted.
 	 */
 
-	/* 
+	/*
 	 * With -stride, lower, upper and i are kept as multiples of groupSize.
 	 */
 
@@ -5069,7 +5218,11 @@ Tcl_LsortObjCmd(
 		/*
 		 * Do not shrink the actual memory block used; that doesn't
 		 * work with TclStackAlloc-allocated memory. [Bug 2918962]
+<<<<<<< HEAD
 		 * 
+=======
+		 *
+>>>>>>> upstream/master
 		 * TODO: Consider a pointer increment to replace this
 		 * array shift.
 		 */
@@ -5110,9 +5263,13 @@ Tcl_LsortObjCmd(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     elementArray = TclStackAlloc(interp, length * sizeof(SortElement));
 =======
     elementArray = ckalloc(length * sizeof(SortElement));
+>>>>>>> upstream/master
+=======
+    elementArray = Tcl_Alloc(length * sizeof(SortElement));
 >>>>>>> upstream/master
 
     for (i=0; i < length; i++){
@@ -5257,7 +5414,11 @@ Tcl_LsortObjCmd(
 	TclStackFree(interp, sortInfo.indexv);
     }
     if (elementArray) {
+<<<<<<< HEAD
 	ckfree(elementArray);
+>>>>>>> upstream/master
+=======
+	Tcl_Free(elementArray);
 >>>>>>> upstream/master
     }
     return sortInfo.resultCode;

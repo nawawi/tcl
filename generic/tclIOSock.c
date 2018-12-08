@@ -11,6 +11,7 @@
 
 #include "tclInt.h"
 
+<<<<<<< HEAD
 #if defined(_WIN32) && defined(UNICODE)
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -19,6 +20,9 @@
 typedef struct ThreadSpecificData {
 =======
 =======
+>>>>>>> upstream/master
+=======
+#if defined(_WIN32)
 >>>>>>> upstream/master
 /*
  * On Windows, we need to do proper Unicode->UTF-8 conversion.

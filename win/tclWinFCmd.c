@@ -337,7 +337,7 @@ DoRenameFile(
 	     * character is either end-of-string or a directory separator
 	     */
 
-	    if ((strncmp(src, dst, (size_t) Tcl_DStringLength(&srcString))==0)
+	    if ((strncmp(src, dst, Tcl_DStringLength(&srcString))==0)
 		    && (dst[Tcl_DStringLength(&srcString)] == '\\'
 		    || dst[Tcl_DStringLength(&srcString)] == '/'
 		    || dst[Tcl_DStringLength(&srcString)] == '\0')) {
@@ -376,8 +376,8 @@ DoRenameFile(
 		Tcl_SetErrno(EXDEV);
 	    }
 
-	    ckfree(srcArgv);
-	    ckfree(dstArgv);
+	    Tcl_Free(srcArgv);
+	    Tcl_Free(dstArgv);
 	}
 
 	/*
@@ -1059,7 +1059,8 @@ DoRemoveJustDirectory(
 
     if (nativePath == NULL || nativePath[0] == '\0') {
 	Tcl_SetErrno(ENOENT);
-	goto end;
+	Tcl_DStringInit(errorPtr);
+	return TCL_ERROR;
     }
 
     attr = GetFileAttributes(nativePath);
@@ -1141,9 +1142,7 @@ DoRemoveJustDirectory(
 
   end:
     if (errorPtr != NULL) {
-	char *p;
-	Tcl_WinTCharToUtf(nativePath, -1, errorPtr);
-	p = Tcl_DStringValue(errorPtr);
+	char *p = Tcl_WinTCharToUtf(nativePath, -1, errorPtr);
 	for (; *p; ++p) {
 	    if (*p == '\\') *p = '/';
 	}
@@ -1725,6 +1724,7 @@ ConvertFileNameFormat(
 	     * likely to lead to infinite loops.
 	     */
 
+<<<<<<< HEAD
 	    Tcl_DStringInit(&ds);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1744,6 +1744,8 @@ ConvertFileNameFormat(
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 	    tempString = TclGetString(tempPath);
 	    nativeName = Tcl_WinUtfToTChar(tempString, tempPath->length, &ds);
 >>>>>>> upstream/master

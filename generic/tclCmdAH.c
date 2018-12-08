@@ -63,6 +63,7 @@ static int		CheckAccess(Tcl_Interp *interp, Tcl_Obj *pathPtr,
 			    int mode);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		EncodingDirsObjCmd(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
@@ -72,6 +73,8 @@ static int		EncodingDirsObjCmd(ClientData dummy,
 static int		BadEncodingSubcommand(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
+=======
+>>>>>>> upstream/master
 static int		EncodingConvertfromObjCmd(ClientData dummy,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
@@ -108,7 +111,6 @@ static Tcl_NRPostProc	ForPostNextCallback;
 static Tcl_NRPostProc	ForeachLoopStep;
 static Tcl_NRPostProc	EvalCmdErrMsg;
 
-static Tcl_ObjCmdProc	BadFileSubcommand;
 static Tcl_ObjCmdProc FileAttrAccessTimeCmd;
 static Tcl_ObjCmdProc FileAttrIsDirectoryCmd;
 static Tcl_ObjCmdProc FileAttrIsExecutableCmd;
@@ -401,6 +403,7 @@ Tcl_ContinueObjCmd(
 }
 
 /*
+<<<<<<< HEAD
  *----------------------------------------------------------------------
  *
  * Tcl_EncodingObjCmd --
@@ -485,6 +488,8 @@ Tcl_EncodingObjCmd(
 }
 
 /*
+=======
+>>>>>>> upstream/master
  *-----------------------------------------------------------------------------
  *
  * TclInitEncodingCmd --
@@ -507,9 +512,9 @@ TclInitEncodingCmd(
     static const EnsembleImplMap encodingImplMap[] = {
 	{"convertfrom", EncodingConvertfromObjCmd, TclCompileBasic1Or2ArgCmd, NULL, NULL, 0},
 	{"convertto",   EncodingConverttoObjCmd,   TclCompileBasic1Or2ArgCmd, NULL, NULL, 0},
-	{"dirs",        EncodingDirsObjCmd,        TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
+	{"dirs",        EncodingDirsObjCmd,        TclCompileBasic0Or1ArgCmd, NULL, NULL, 1},
 	{"names",       EncodingNamesObjCmd,       TclCompileBasic0ArgCmd,    NULL, NULL, 0},
-	{"system",      EncodingSystemObjCmd,      TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
+	{"system",      EncodingSystemObjCmd,      TclCompileBasic0Or1ArgCmd, NULL, NULL, 1},
 	{NULL,          NULL,                      NULL,                      NULL, NULL, 0}
     };
 
@@ -517,6 +522,7 @@ TclInitEncodingCmd(
 }
 
 /*
+<<<<<<< HEAD
  *-----------------------------------------------------------------------------
  *
  * TclMakeEncodingCommandSafe --
@@ -647,6 +653,8 @@ BadEncodingSubcommand(
 }
 
 /*
+=======
+>>>>>>> upstream/master
  *----------------------------------------------------------------------
  *
  * EncodingConvertfromObjCmd --
@@ -670,7 +678,7 @@ EncodingConvertfromObjCmd(
     Tcl_Obj *data;		/* Byte array to convert */
     Tcl_DString ds;		/* Buffer to hold the string */
     Tcl_Encoding encoding;	/* Encoding to use */
-    int length;			/* Length of the byte array being converted */
+    size_t length;			/* Length of the byte array being converted */
     const char *bytesPtr;	/* Pointer to the first byte of the array */
 
     if (objc == 2) {
@@ -690,7 +698,7 @@ EncodingConvertfromObjCmd(
     /*
      * Convert the string into a byte array in 'ds'
      */
-    bytesPtr = (char *) Tcl_GetByteArrayFromObj(data, &length);
+    bytesPtr = (char *) TclGetByteArrayFromObj(data, &length);
     Tcl_ExternalToUtfDString(encoding, bytesPtr, length, &ds);
 
     /*
@@ -733,7 +741,7 @@ EncodingConverttoObjCmd(
     Tcl_Obj *data;		/* String to convert */
     Tcl_DString ds;		/* Buffer to hold the byte array */
     Tcl_Encoding encoding;	/* Encoding to use */
-    int length;			/* Length of the string being converted */
+    size_t length;			/* Length of the string being converted */
     const char *stringPtr;	/* Pointer to the first byte of the string */
 
     /* TODO - ADJUST OBJ INDICES WHEN ENSEMBLIFYING THIS */
@@ -1445,40 +1453,40 @@ TclInitFileCmd(
      */
 
     static const EnsembleImplMap initMap[] = {
-	{"atime",	FileAttrAccessTimeCmd,	TclCompileBasic1Or2ArgCmd, NULL, NULL, 0},
-	{"attributes",	TclFileAttrsCmd,	NULL, NULL, NULL, 0},
+	{"atime",	FileAttrAccessTimeCmd,	TclCompileBasic1Or2ArgCmd, NULL, NULL, 1},
+	{"attributes",	TclFileAttrsCmd,	NULL, NULL, NULL, 1},
 	{"channels",	TclChannelNamesCmd,	TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
-	{"copy",	TclFileCopyCmd,		NULL, NULL, NULL, 0},
-	{"delete",	TclFileDeleteCmd,	TclCompileBasicMin0ArgCmd, NULL, NULL, 0},
-	{"dirname",	PathDirNameCmd,		TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"executable",	FileAttrIsExecutableCmd, TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"exists",	FileAttrIsExistingCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"extension",	PathExtensionCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"isdirectory",	FileAttrIsDirectoryCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"isfile",	FileAttrIsFileCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
+	{"copy",	TclFileCopyCmd,		NULL, NULL, NULL, 1},
+	{"delete",	TclFileDeleteCmd,	TclCompileBasicMin0ArgCmd, NULL, NULL, 1},
+	{"dirname",	PathDirNameCmd,		TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"executable",	FileAttrIsExecutableCmd, TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"exists",	FileAttrIsExistingCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"extension",	PathExtensionCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"isdirectory",	FileAttrIsDirectoryCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"isfile",	FileAttrIsFileCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
 	{"join",	PathJoinCmd,		TclCompileBasicMin1ArgCmd, NULL, NULL, 0},
-	{"link",	TclFileLinkCmd,		TclCompileBasic1To3ArgCmd, NULL, NULL, 0},
-	{"lstat",	FileAttrLinkStatCmd,	TclCompileBasic2ArgCmd, NULL, NULL, 0},
-	{"mtime",	FileAttrModifyTimeCmd,	TclCompileBasic1Or2ArgCmd, NULL, NULL, 0},
-	{"mkdir",	TclFileMakeDirsCmd,	TclCompileBasicMin0ArgCmd, NULL, NULL, 0},
-	{"nativename",	PathNativeNameCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"normalize",	PathNormalizeCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"owned",	FileAttrIsOwnedCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
+	{"link",	TclFileLinkCmd,		TclCompileBasic1To3ArgCmd, NULL, NULL, 1},
+	{"lstat",	FileAttrLinkStatCmd,	TclCompileBasic2ArgCmd, NULL, NULL, 1},
+	{"mtime",	FileAttrModifyTimeCmd,	TclCompileBasic1Or2ArgCmd, NULL, NULL, 1},
+	{"mkdir",	TclFileMakeDirsCmd,	TclCompileBasicMin0ArgCmd, NULL, NULL, 1},
+	{"nativename",	PathNativeNameCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"normalize",	PathNormalizeCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"owned",	FileAttrIsOwnedCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
 	{"pathtype",	PathTypeCmd,		TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"readable",	FileAttrIsReadableCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"readlink",	TclFileReadLinkCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"rename",	TclFileRenameCmd,	NULL, NULL, NULL, 0},
-	{"rootname",	PathRootNameCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
+	{"readable",	FileAttrIsReadableCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"readlink",	TclFileReadLinkCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"rename",	TclFileRenameCmd,	NULL, NULL, NULL, 1},
+	{"rootname",	PathRootNameCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
 	{"separator",	FilesystemSeparatorCmd,	TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
-	{"size",	FileAttrSizeCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
+	{"size",	FileAttrSizeCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
 	{"split",	PathSplitCmd,		TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"stat",	FileAttrStatCmd,	TclCompileBasic2ArgCmd, NULL, NULL, 0},
+	{"stat",	FileAttrStatCmd,	TclCompileBasic2ArgCmd, NULL, NULL, 1},
 	{"system",	PathFilesystemCmd,	TclCompileBasic0Or1ArgCmd, NULL, NULL, 0},
-	{"tail",	PathTailCmd,		TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"tempfile",	TclFileTemporaryCmd,	TclCompileBasic0To2ArgCmd, NULL, NULL, 0},
-	{"type",	FileAttrTypeCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
-	{"volumes",	FilesystemVolumesCmd,	TclCompileBasic0ArgCmd, NULL, NULL, 0},
-	{"writable",	FileAttrIsWritableCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 0},
+	{"tail",	PathTailCmd,		TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"tempfile",	TclFileTemporaryCmd,	TclCompileBasic0To2ArgCmd, NULL, NULL, 1},
+	{"type",	FileAttrTypeCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
+	{"volumes",	FilesystemVolumesCmd,	TclCompileBasic0ArgCmd, NULL, NULL, 1},
+	{"writable",	FileAttrIsWritableCmd,	TclCompileBasic1ArgCmd, NULL, NULL, 1},
 	{NULL, NULL, NULL, NULL, NULL, 0}
 <<<<<<< HEAD
     };
@@ -1557,6 +1565,7 @@ TclMakeFileCommandSafe(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * TclMakeFileCommandSafe --
  *
  *	This function hides the unsafe subcommands of the "file" Tcl command
@@ -1757,6 +1766,9 @@ EncodingSystemObjCmd(ClientData dummy,      /* Unused */
  *----------------------------------------------------------------------
  *
  * Tcl_ErrorObjCmd --
+=======
+ * FileAttrAccessTimeCmd --
+>>>>>>> upstream/master
  *
  *	This procedure is invoked to process the "error" Tcl command. See the
  *	user documentation for details on what it does.
@@ -1787,6 +1799,7 @@ Tcl_ErrorObjCmd(
 
     TclNewLiteralStringObj(options, "-code error -level 0");
 
+<<<<<<< HEAD
     if (objc >= 3) {		/* Process the optional info argument */
 	TclNewLiteralStringObj(optName, "-errorinfo");
 	Tcl_ListObjAppendElement(NULL, options, optName);
@@ -2010,8 +2023,11 @@ FileAttrAccessTimeCmd(
 	 */
 
 	long newTime;
+=======
+	Tcl_WideInt newTime;
+>>>>>>> upstream/master
 
-	if (TclGetLongFromObj(interp, objv[2], &newTime) != TCL_OK) {
+	if (TclGetWideIntFromObj(interp, objv[2], &newTime) != TCL_OK) {
 	    return TCL_ERROR;
 	}
 
@@ -2090,9 +2106,9 @@ FileAttrModifyTimeCmd(
 	 * platforms. [Bug 698146]
 	 */
 
-	long newTime;
+	Tcl_WideInt newTime;
 
-	if (TclGetLongFromObj(interp, objv[2], &newTime) != TCL_OK) {
+	if (TclGetWideIntFromObj(interp, objv[2], &newTime) != TCL_OK) {
 	    return TCL_ERROR;
 	}
 

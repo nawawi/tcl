@@ -5,6 +5,7 @@ set TZData(:Africa/Accra) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1640995148 0 0 GMT}
     {-1556841600 1200 1 GHST}
     {-1546388400 0 0 GMT}
@@ -107,6 +108,8 @@ set TZData(:Africa/Accra) {
 =======
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     {-1640995148 0 0 GMT}
     {-1556841600 1200 1 GMT}
     {-1546388400 0 0 GMT}
@@ -154,5 +157,8 @@ set TZData(:Africa/Accra) {
     {-883700400 0 0 GMT}
     {-862617600 1200 1 GMT}
     {-852164400 0 0 GMT}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 }

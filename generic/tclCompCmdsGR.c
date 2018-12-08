@@ -34,7 +34,11 @@ static int		IndexTailVarIfKnown(Tcl_Interp *interp,
  * TclGetIndexFromToken --
  *
  *	Parse a token to determine if an index value is known at
+<<<<<<< HEAD
  *	compile time. 
+=======
+ *	compile time.
+>>>>>>> upstream/master
  *
  * Returns:
  *	TCL_OK if parsing succeeded, and TCL_ERROR if it failed.
@@ -133,6 +137,7 @@ TclCompileGlobalCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
 =======
 	/* TODO: Consider what value can pass throug the
@@ -155,12 +160,17 @@ TclCompileGlobalCmd(
 	 * IndexTailVarIfKnown() screen.  Full CompileWord()
 	 * likely does not apply here.  Push known value instead. */
 =======
+=======
+>>>>>>> upstream/master
 	/*
 	 * TODO: Consider what value can pass through the
 	 * IndexTailVarIfKnown() screen. Full CompileWord() likely does not
 	 * apply here. Push known value instead.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	CompileWord(envPtr, varTokenPtr, interp, i);
 	TclEmitInstInt4(	INST_NSUPVAR, localIndex,	envPtr);
@@ -211,7 +221,8 @@ TclCompileIfCmd(
 				 * determined. */
     Tcl_Token *tokenPtr, *testTokenPtr;
     int jumpIndex = 0;		/* Avoid compiler warning. */
-    int jumpFalseDist, numWords, wordIdx, numBytes, j, code;
+	size_t numBytes;
+    int jumpFalseDist, numWords, wordIdx, j, code;
     const char *word;
     int realCond = 1;		/* Set to 0 for static conditions:
 				 * "if 0 {..}" */
@@ -463,7 +474,7 @@ TclCompileIfCmd(
 		jumpFalseDist += 3;
 		TclStoreInt4AtPtr(jumpFalseDist, (ifFalsePc + 1));
 	    } else {
-		Tcl_Panic("TclCompileIfCmd: unexpected opcode \"%d\" updating ifFalse jump", (int) opCode);
+		Tcl_Panic("TclCompileIfCmd: unexpected opcode \"%u\" updating ifFalse jump", opCode);
 	    }
 	}
     }
@@ -529,7 +540,7 @@ TclCompileIncrCmd(
 	incrTokenPtr = TokenAfter(varTokenPtr);
 	if (incrTokenPtr->type == TCL_TOKEN_SIMPLE_WORD) {
 	    const char *word = incrTokenPtr[1].start;
-	    int numBytes = incrTokenPtr[1].size;
+	    size_t numBytes = incrTokenPtr[1].size;
 	    int code;
 	    Tcl_Obj *intObj = Tcl_NewStringObj(word, numBytes);
 
@@ -1541,7 +1552,11 @@ TclCompileLreplaceCmd(
 {
     Tcl_Token *tokenPtr, *listTokenPtr;
     DefineLineInformation;	/* TIP #280 */
+<<<<<<< HEAD
     int idx1, idx2, i, offset, offset2;
+=======
+    int idx1, idx2, i;
+>>>>>>> upstream/master
     int emptyPrefix=1, suffixStart = 0;
 
     if (parsePtr->numWords < 4) {
@@ -1561,6 +1576,7 @@ TclCompileLreplaceCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1684,6 +1700,35 @@ TclCompileLreplaceCmd(
 =======
 >>>>>>> upstream/master
 
+=======
+    /*
+     * General structure of the [lreplace] result is
+     *		prefix replacement suffix
+     * In a few cases we can predict various parts will be empty and
+     * take advantage.
+     *
+     * The proper suffix begins with the greater of indices idx1 or
+     * idx2 + 1. If we cannot tell at compile time which is greater,
+     * we must defer to direct evaluation.
+     */
+
+    if (idx1 == TCL_INDEX_AFTER) {
+	suffixStart = idx1;
+    } else if (idx2 == TCL_INDEX_BEFORE) {
+	suffixStart = idx1;
+    } else if (idx2 == TCL_INDEX_END) {
+	suffixStart = TCL_INDEX_AFTER;
+    } else if (((idx2 < TCL_INDEX_END) && (idx1 <= TCL_INDEX_END))
+	    || ((idx2 >= TCL_INDEX_START) && (idx1 >= TCL_INDEX_START))) {
+	suffixStart = (idx1 > idx2 + 1) ? idx1 : idx2 + 1;
+    } else {
+	return TCL_ERROR;
+    }
+
+    /* All paths start with computing/pushing the original value. */
+    CompileWord(envPtr, listTokenPtr, interp, 1);
+
+>>>>>>> upstream/master
     /*
      * Push all the replacement values next so any errors raised in
      * creating them get raised first.
@@ -1691,6 +1736,7 @@ TclCompileLreplaceCmd(
     if (parsePtr->numWords > 4) {
 	/* Push the replacement arguments */
 	tokenPtr = TokenAfter(tokenPtr);
+<<<<<<< HEAD
 <<<<<<< HEAD
     }
     TclEmitInstInt4(		INST_LIST, i - 4,		envPtr);
@@ -1913,11 +1959,31 @@ TclCompileLreplaceCmd(
 
 	TclEmitOpcode(		INST_DUP,			envPtr);
 	TclEmitOpcode(		INST_LIST_LENGTH,		envPtr);
+=======
+	for (i=4 ; i<parsePtr->numWords ; i++) {
+	    CompileWord(envPtr, tokenPtr, interp, i);
+	    tokenPtr = TokenAfter(tokenPtr);
+	}
 
+	/* Make a list of them... */
+	TclEmitInstInt4(	INST_LIST, i - 4,		envPtr);
+
+	emptyPrefix = 0;
+    }
+>>>>>>> upstream/master
+
+    if ((idx1 == suffixStart) && (parsePtr->numWords == 4)) {
 	/*
-	 * Check the list length vs idx1.
+	 * This is a "no-op". Example: [lreplace {a b c} 2 0]
+	 * We still do a list operation to get list-verification
+	 * and canonicalization side effects.
 	 */
+	TclEmitInstInt4(	INST_LIST_RANGE_IMM, 0,		envPtr);
+	TclEmitInt4(			TCL_INDEX_END,		envPtr);
+	return TCL_OK;
+    }
 
+<<<<<<< HEAD
 	TclEmitPush(TclAddLiteralObj(envPtr, tmpObj, NULL),	envPtr);
 	TclEmitOpcode(		INST_GE,			envPtr);
 	offset = CurrentOffset(envPtr);
@@ -1978,6 +2044,24 @@ TclCompileLreplaceCmd(
 >>>>>>> upstream/master
     }
 
+=======
+    if (idx1 != TCL_INDEX_START) {
+	/* Prefix may not be empty; generate bytecode to push it */
+	if (emptyPrefix) {
+	    TclEmitOpcode(	INST_DUP,			envPtr);
+	} else {
+	    TclEmitInstInt4(	INST_OVER, 1,			envPtr);
+	}
+	TclEmitInstInt4(	INST_LIST_RANGE_IMM, 0,		envPtr);
+	TclEmitInt4(			idx1 - 1,		envPtr);
+	if (!emptyPrefix) {
+	    TclEmitInstInt4(	INST_REVERSE, 2,		envPtr);
+	    TclEmitOpcode(	INST_LIST_CONCAT,		envPtr);
+	}
+	emptyPrefix = 0;
+    }
+
+>>>>>>> upstream/master
     if (!emptyPrefix) {
 	TclEmitInstInt4(	INST_REVERSE, 2,		envPtr);
     }
@@ -2492,7 +2576,8 @@ TclCompileRegexpCmd(
 {
     Tcl_Token *varTokenPtr;	/* Pointer to the Tcl_Token representing the
 				 * parse of the RE or string. */
-    int i, len, nocase, exact, sawLast, simple;
+    size_t len;
+    int i, nocase, exact, sawLast, simple;
     const char *str;
     DefineLineInformation;	/* TIP #280 */
 
@@ -3069,8 +3154,8 @@ TclCompileSyntaxError(
     CompileEnv *envPtr)
 {
     Tcl_Obj *msg = Tcl_GetObjResult(interp);
-    int numBytes;
-    const char *bytes = TclGetStringFromObj(msg, &numBytes);
+    const char *bytes = TclGetString(msg);
+    size_t numBytes = msg->length;
 
     TclErrorStackResetIf(interp, bytes, numBytes);
     TclEmitPush(TclRegisterLiteral(envPtr, bytes, numBytes, 0), envPtr);
@@ -3251,6 +3336,7 @@ TclCompileVariableCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* TODO: Consider what value can pass throug the 
 =======
 	/* TODO: Consider what value can pass throug the
@@ -3266,6 +3352,9 @@ TclCompileVariableCmd(
 >>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass throug the
+>>>>>>> upstream/master
+=======
+	/* TODO: Consider what value can pass through the
 >>>>>>> upstream/master
 =======
 	/* TODO: Consider what value can pass through the

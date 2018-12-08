@@ -103,6 +103,7 @@ MODULE_SCOPE int	TclWinSymLinkDelete(const TCHAR *LinkOriginal,
 MODULE_SCOPE int        TclWinFileOwned(Tcl_Obj *);
 
 MODULE_SCOPE const char*TclpGetUserName(Tcl_DString *bufferPtr);
+<<<<<<< HEAD
 
 /* Needed by tclWinFile.c and tclWinFCmd.c */
 #ifndef FILE_ATTRIBUTE_REPARSE_POINT
@@ -185,6 +186,8 @@ MODULE_SCOPE Tcl_Mutex *TclpNewAllocMutex(void);
 MODULE_SCOPE void *	TclpGetAllocCache(void);
 MODULE_SCOPE void	TclpSetAllocCache(void *);
 #endif /* TCL_THREADS */
+=======
+>>>>>>> upstream/master
 
 /* Needed by tclWinFile.c and tclWinFCmd.c */
 #ifndef FILE_ATTRIBUTE_REPARSE_POINT
@@ -240,12 +243,12 @@ typedef struct TclPipeThreadInfo {
 				 * to do read/write operation. Additionally
 				 * used as signal to stop (state set to -1) */
     volatile LONG state;	/* Indicates current state of the thread */
-    ClientData clientData;	/* Referenced data of the main thread */
+    void *clientData;	/* Referenced data of the main thread */
     HANDLE evWakeUp;		/* Optional wake-up event worker set by shutdown */
 } TclPipeThreadInfo;
 
 
-/* If pipe-workers will use some tcl subsystem, we can use ckalloc without
+/* If pipe-workers will use some tcl subsystem, we can use Tcl_Alloc without
  * more overhead for finalize thread (should be executed anyway)
  *
  * #define _PTI_USE_CKALLOC 1
@@ -267,7 +270,7 @@ typedef struct TclPipeThreadInfo {
 
 MODULE_SCOPE
 TclPipeThreadInfo *	TclPipeThreadCreateTI(TclPipeThreadInfo **pipeTIPtr,
-			    ClientData clientData, HANDLE wakeEvent);
+			    void *clientData, HANDLE wakeEvent);
 MODULE_SCOPE int	TclPipeThreadWaitForSignal(TclPipeThreadInfo **pipeTIPtr);
 
 static inline void

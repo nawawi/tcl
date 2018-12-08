@@ -362,6 +362,22 @@ Note that this routine is only called if the concerned package did not set a pac
 The calling package clears all its state within the \fBmsgcat\fR package including all settings and translations.
 .VE "TIP 412"
 .PP
+.VS "TIP 499"
+.TP
+\fB::msgcat::mcutil getpreferences\fR \fIlocale\fR
+.
+Return the preferences list of the given locale as described in section \fBLOCALE SPECIFICATION\fR.
+An example is the composition of a preference list for the bilingual region "Biel/Bienne" as a concatenation of swiss german and swiss french:
+.CS
+% concat [lrange [msgcat::mcutil getpreferences fr_CH] 0 end-1] [msgcat::mcutil getpreferences de_CH]
+fr_ch fr de_ch de {}
+.CE
+.TP
+\fB::msgcat::mcutil getsystemlocale\fR
+.
+The system locale is returned as described by the section \fBLOCALE SPECIFICATION\fR.
+.VE "TIP 499"
+.PP
 .SH "LOCALE SPECIFICATION"
 .PP
 >>>>>>> upstream/master

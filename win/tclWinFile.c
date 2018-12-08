@@ -570,6 +570,11 @@ TclWinSymLinkDelete(
  *--------------------------------------------------------------------
  */
 
+#if defined (__clang__) || ((__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
+
 static Tcl_Obj *
 WinReadLinkDirectory(
     const TCHAR *linkDirPath)
@@ -606,7 +611,6 @@ WinReadLinkDirectory(
 	 */
 
 	offset = 0;
-#ifdef UNICODE
 	if (reparseBuffer->MountPointReparseBuffer.PathBuffer[0] == L'\\') {
 	    /*
 	     * Check whether this is a mounted volume.
@@ -668,7 +672,6 @@ WinReadLinkDirectory(
 		offset = 4;
 	    }
 	}
-#endif /* UNICODE */
 
 	Tcl_WinTCharToUtf((const TCHAR *)
 		reparseBuffer->MountPointReparseBuffer.PathBuffer,
@@ -687,6 +690,10 @@ WinReadLinkDirectory(
     Tcl_SetErrno(EINVAL);
     return NULL;
 }
+
+#if defined (__clang__) || ((__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+#pragma GCC diagnostic pop
+#endif
 
 /*
  *--------------------------------------------------------------------
@@ -839,7 +846,7 @@ tclWinDebugPanic(
 {
 #define TCL_MAX_WARN_LEN 1024
     va_list argList;
-    char buf[TCL_MAX_WARN_LEN * TCL_UTF_MAX];
+    char buf[TCL_MAX_WARN_LEN * 3];
     WCHAR msgString[TCL_MAX_WARN_LEN];
 
     va_start(argList, format);
@@ -888,19 +895,15 @@ TclpFindExecutable(
 				 * ignore. */
 {
     WCHAR wName[MAX_PATH];
+<<<<<<< HEAD
     char name[MAX_PATH * TCL_UTF_MAX];
 
 #ifdef UNICODE
+=======
+    char name[MAX_PATH * 3];
+
+>>>>>>> upstream/master
     GetModuleFileNameW(NULL, wName, MAX_PATH);
-#else
-    GetModuleFileNameA(NULL, name, sizeof(name));
-
-    /*
-     * Convert to WCHAR to get out of ANSI codepage
-     */
-
-    MultiByteToWideChar(CP_ACP, 0, name, -1, wName, MAX_PATH);
-#endif
     WideCharToMultiByte(CP_UTF8, 0, wName, -1, name, sizeof(name), NULL, NULL);
     TclWinNoBackslash(name);
     TclSetObjNameOfExecutable(Tcl_NewStringObj(name, -1), NULL);
@@ -1496,9 +1499,15 @@ TclpGetUserHome(
     domain = Tcl_UtfFindFirst(name, '@');
     if (domain == NULL) {
 	const char *ptr;
+<<<<<<< HEAD
 	
 	/* no domain - firstly check it's the current user */
 	if ( (ptr = TclpGetUserName(&ds)) != NULL 
+=======
+
+	/* no domain - firstly check it's the current user */
+	if ( (ptr = TclpGetUserName(&ds)) != NULL
+>>>>>>> upstream/master
 	  && strcasecmp(name, ptr) == 0
 	) {
 	    /* try safest and fastest way to get current user home */
@@ -1521,7 +1530,11 @@ TclpGetUserHome(
 	Tcl_DStringInit(&ds);
 	wName = Tcl_UtfToUniCharDString(name, nameLen, &ds);
 	while (NetUserGetInfo(wDomain, wName, 1, (LPBYTE *) &uiPtr) != 0) {
+<<<<<<< HEAD
 	    /* 
+=======
+	    /*
+>>>>>>> upstream/master
 	     * user does not exists - if domain was not specified,
 	     * try again using current domain.
 	     */
@@ -1636,7 +1649,7 @@ NativeAccess(
 	return 0;
     }
 
-    /* 
+    /*
      * If it's not a directory (assume file), do several fast checks:
      */
     if (!(attr & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -1690,7 +1703,6 @@ NativeAccess(
      * what permissions the OS has set for a file.
      */
 
-#ifdef UNICODE
     {
 	SECURITY_DESCRIPTOR *sdPtr = NULL;
 	unsigned long size;
@@ -1870,7 +1882,6 @@ NativeAccess(
 	}
 
     }
-#endif /* !UNICODE */
     return 0;
 }
 
@@ -1906,6 +1917,7 @@ NativeIsExec(
     if (len < 5) {
 	return 0;
     }
+<<<<<<< HEAD
 
     if (path[len-4] != '.') {
 	return 0;
@@ -1922,11 +1934,14 @@ NativeIsExec(
     if (len < 5) {
 	return 0;
     }
+=======
+>>>>>>> upstream/master
 
     if (path[len-4] != '.') {
 	return 0;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if ((_tcsicmp(path+len-3, TEXT("exe")) == 0)
 	    || (_tcsicmp(path+len-3, TEXT("com")) == 0)
@@ -1934,12 +1949,17 @@ NativeIsExec(
 >>>>>>> upstream/master
 	    || (_tcsicmp(path+len-3, TEXT("bat")) == 0)) {
 =======
+=======
+>>>>>>> upstream/master
     path += len-3;
     if ((_tcsicmp(path, TEXT("exe")) == 0)
 	    || (_tcsicmp(path, TEXT("com")) == 0)
 	    || (_tcsicmp(path, TEXT("cmd")) == 0)
 	    || (_tcsicmp(path, TEXT("cmd")) == 0)
 	    || (_tcsicmp(path, TEXT("bat")) == 0)) {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	return 1;
     }
@@ -2133,7 +2153,8 @@ NativeStat(
      */
 
     fileHandle = CreateFile(nativePath, GENERIC_READ,
-	    FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+	    FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+	    NULL, OPEN_EXISTING,
 	    FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, NULL);
 
     if (fileHandle != INVALID_HANDLE_VALUE) {
@@ -5930,7 +5951,7 @@ TclNativeCreateNativeRep(
 	}
     }
     /* Overallocate 6 chars, making some room for extended paths */
-    wp = nativePathPtr = ckalloc( (len+6) * sizeof(WCHAR) );
+    wp = nativePathPtr = Tcl_Alloc( (len+6) * sizeof(WCHAR) );
     if (nativePathPtr==0) {
       goto done;
     }
@@ -6020,7 +6041,7 @@ TclNativeDupInternalRep(
 
     len = sizeof(TCHAR) * (_tcslen((const TCHAR *) clientData) + 1);
 
-    copy = ckalloc(len);
+    copy = Tcl_Alloc(len);
     memcpy(copy, clientData, len);
     return copy;
 }
@@ -6130,7 +6151,7 @@ TclWinFileOwned(
         bufsz = 0;
         GetTokenInformation(token, TokenUser, NULL, 0, &bufsz);
         if (bufsz) {
-            buf = ckalloc(bufsz);
+            buf = Tcl_Alloc(bufsz);
             if (GetTokenInformation(token, TokenUser, buf, bufsz, &bufsz)) {
                 owned = EqualSid(ownerSid, ((PTOKEN_USER) buf)->User.Sid);
             }
@@ -6142,7 +6163,7 @@ TclWinFileOwned(
     if (secd)
         LocalFree(secd);            /* Also frees ownerSid */
     if (buf)
-        ckfree(buf);
+        Tcl_Free(buf);
 
     return (owned != 0);        /* Convert non-0 to 1 */
 }

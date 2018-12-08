@@ -49,6 +49,9 @@ is identical to \fBlist element ...\fR.
 .CE
 .SH "SEE ALSO"
 list(n), lappend(n), linsert(n), llength(n), lset(n)
-
 .SH KEYWORDS
 element, index, list
+'\" Local Variables:
+'\" mode: nroff
+'\" fill-column: 78
+'\" End:

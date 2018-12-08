@@ -53,3 +53,7 @@ cd $savedDir
 file(n), cd(n), glob(n), filename(n)
 .SH KEYWORDS
 working directory
+'\" Local Variables:
+'\" mode: nroff
+'\" fill-column: 78
+'\" End:

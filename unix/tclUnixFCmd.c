@@ -554,7 +554,7 @@ TclUnixCopyFile(
     int dontCopyAtts)		/* If flag set, don't copy attributes. */
 {
     int srcFd, dstFd;
-    unsigned blockSize;		/* Optimal I/O blocksize for filesystem */
+    size_t blockSize;		/* Optimal I/O blocksize for filesystem */
     char *buffer;		/* Data buffer for copy */
     size_t nread;
 
@@ -644,7 +644,7 @@ TclUnixCopyFile(
     if (blockSize <= 0) {
 	blockSize = DEFAULT_COPY_BLOCK_SIZE;
     }
-    buffer = ckalloc(blockSize);
+    buffer = Tcl_Alloc(blockSize);
     while (1) {
 	nread = (size_t) read(srcFd, buffer, blockSize);
 	if ((nread == (size_t) -1) || (nread == 0)) {
@@ -656,7 +656,7 @@ TclUnixCopyFile(
 	}
     }
 
-    ckfree(buffer);
+    Tcl_Free(buffer);
     close(srcFd);
     if ((close(dstFd) != 0) || (nread == (size_t) -1)) {
 	unlink(dst);					/* INTL: Native. */
@@ -994,8 +994,8 @@ TraverseUnixTree(
 {
     Tcl_StatBuf statBuf;
     const char *source, *errfile;
-    int result, sourceLen;
-    int targetLen;
+    int result;
+    size_t targetLen, sourceLen;
 #ifndef HAVE_FTS
     int numProcessed = 0;
     Tcl_DirEntry *dirEntPtr;
@@ -2145,7 +2145,7 @@ TclpObjNormalizePath(
 
 	nativePath = Tcl_UtfToExternalDString(NULL, path,nextCheckpoint, &ds);
 	if (Realpath(nativePath, normPath) != NULL) {
-	    int newNormLen;
+	    size_t newNormLen;
 
 	wholeStringOk:
 	    newNormLen = strlen(normPath);
@@ -2179,7 +2179,7 @@ TclpObjNormalizePath(
 	     */
 
 	    Tcl_DStringFree(&ds);
-	    Tcl_ExternalToUtfDString(NULL, normPath, (int) newNormLen, &ds);
+	    Tcl_ExternalToUtfDString(NULL, normPath, newNormLen, &ds);
 
 	    if (path[nextCheckpoint] != '\0') {
 		/*
@@ -2439,19 +2439,20 @@ static WCHAR *
 winPathFromObj(
     Tcl_Obj *fileName)
 {
-    int size;
+    size_t size;
     const char *native =  Tcl_FSGetNativePath(fileName);
     WCHAR *winPath;
 
     size = cygwin_conv_path(1, native, NULL, 0);
-    winPath = ckalloc(size);
+    winPath = Tcl_Alloc(size);
     cygwin_conv_path(1, native, winPath, size);
 
     return winPath;
 }
 
 static const int attributeArray[] = {
-    0x20, 0, 2, 0, 0, 1, 4};
+    0x20, 0, 2, 0, 0, 1, 4
+};
 
 /*
  *----------------------------------------------------------------------
@@ -2481,15 +2482,15 @@ GetUnixFileAttributes(
     WCHAR *winPath = winPathFromObj(fileName);
 
     fileAttributes = GetFileAttributesW(winPath);
-    ckfree(winPath);
+    Tcl_Free(winPath);
 
     if (fileAttributes == -1) {
 	StatError(interp, fileName);
 	return TCL_ERROR;
     }
 
-    *attributePtrPtr = Tcl_NewIntObj((fileAttributes&attributeArray[objIndex])!=0);
-
+    *attributePtrPtr = Tcl_NewIntObj(
+	    (fileAttributes & attributeArray[objIndex]) != 0);
     return TCL_OK;
 }
 
@@ -2604,7 +2605,7 @@ SetUnixFileAttributes(
     fileAttributes = old = GetFileAttributesW(winPath);
 
     if (fileAttributes == -1) {
-	ckfree(winPath);
+	Tcl_Free(winPath);
 	StatError(interp, fileName);
 	return TCL_ERROR;
     }
@@ -2617,12 +2618,16 @@ SetUnixFileAttributes(
 
     if ((fileAttributes != old)
 	    && !SetFileAttributesW(winPath, fileAttributes)) {
-	ckfree(winPath);
+	Tcl_Free(winPath);
 	StatError(interp, fileName);
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     ckfree(winPath);
+=======
+    Tcl_Free(winPath);
+>>>>>>> upstream/master
     return TCL_OK;
 }
 #elif defined(HAVE_CHFLAGS) && defined(UF_IMMUTABLE)

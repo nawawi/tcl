@@ -6,6 +6,7 @@ set TZData(:Atlantic/Azores) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1830377128 -7200 0 AZOT}
     {-1689548400 -3600 1 AZOST}
     {-1677794400 -7200 0 AZOT}
@@ -353,6 +354,9 @@ set TZData(:Atlantic/Azores) {
 =======
 >>>>>>> upstream/master
     {-1830377128 -7200 0 -02}
+=======
+    {-1830376800 -7200 0 -02}
+>>>>>>> upstream/master
 =======
     {-1830376800 -7200 0 -02}
 >>>>>>> upstream/master

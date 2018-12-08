@@ -356,7 +356,7 @@ FileCloseProc(
 	    errorCode = errno;
 	}
     }
-    ckfree(fsPtr);
+    Tcl_Free(fsPtr);
     return errorCode;
 }
 
@@ -395,7 +395,7 @@ FileSeekProc(
      */
 
     oldLoc = TclOSseek(fsPtr->fd, (Tcl_SeekOffset) 0, SEEK_CUR);
-    if (oldLoc == Tcl_LongAsWide(-1)) {
+    if (oldLoc == -1) {
 	/*
 	 * Bad things are happening. Error out...
 	 */
@@ -410,14 +410,14 @@ FileSeekProc(
      * Check for expressability in our return type, and roll-back otherwise.
      */
 
-    if (newLoc > Tcl_LongAsWide(INT_MAX)) {
+    if (newLoc > INT_MAX) {
 	*errorCodePtr = EOVERFLOW;
 	TclOSseek(fsPtr->fd, (Tcl_SeekOffset) oldLoc, SEEK_SET);
 	return -1;
     } else {
-	*errorCodePtr = (newLoc == Tcl_LongAsWide(-1)) ? errno : 0;
+	*errorCodePtr = (newLoc == -1) ? errno : 0;
     }
-    return (int) Tcl_WideAsLong(newLoc);
+    return (int) newLoc;
 }
 
 /*
@@ -685,7 +685,7 @@ TtySetOptionProc(
 		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "FCONFIGURE",
 			"VALUE", NULL);
 	    }
-	    ckfree(argv);
+	    Tcl_Free(argv);
 	    return TCL_ERROR;
 	}
 
@@ -698,7 +698,7 @@ TtySetOptionProc(
 	Tcl_UtfToExternalDString(NULL, argv[1], -1, &ds);
 	iostate.c_cc[VSTOP] = *(const cc_t *) Tcl_DStringValue(&ds);
 	Tcl_DStringFree(&ds);
-	ckfree(argv);
+	Tcl_Free(argv);
 
 	tcsetattr(fsPtr->fd, TCSADRAIN, &iostate);
 	return TCL_OK;
@@ -743,14 +743,14 @@ TtySetOptionProc(
 		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "FCONFIGURE",
 			"VALUE", NULL);
 	    }
-	    ckfree(argv);
+	    Tcl_Free(argv);
 	    return TCL_ERROR;
 	}
 
 	ioctl(fsPtr->fd, TIOCMGET, &control);
 	for (i = 0; i < argc-1; i += 2) {
 	    if (Tcl_GetBoolean(interp, argv[i+1], &flag) == TCL_ERROR) {
-		ckfree(argv);
+		Tcl_Free(argv);
 		return TCL_ERROR;
 	    }
 	    if (Tcl_UtfNcasecmp(argv[i], "DTR", strlen(argv[i])) == 0) {
@@ -774,7 +774,7 @@ TtySetOptionProc(
 		}
 #else /* TIOCSBRK & TIOCCBRK */
 		UNSUPPORTED_OPTION("-ttycontrol BREAK");
-		ckfree(argv);
+		Tcl_Free(argv);
 		return TCL_ERROR;
 #endif /* TIOCSBRK & TIOCCBRK */
 	    } else {
@@ -785,13 +785,13 @@ TtySetOptionProc(
 		    Tcl_SetErrorCode(interp, "TCL", "OPERATION", "FCONFIGURE",
 			"VALUE", NULL);
 		}
-		ckfree(argv);
+		Tcl_Free(argv);
 		return TCL_ERROR;
 	    }
 	} /* -ttycontrol options loop */
 
 	ioctl(fsPtr->fd, TIOCMSET, &control);
-	ckfree(argv);
+	Tcl_Free(argv);
 	return TCL_OK;
 #else /* TIOCMGET&TIOCMSET */
 	UNSUPPORTED_OPTION("-ttycontrol");
@@ -1514,7 +1514,7 @@ TclpOpenFileChannel(
 	channelTypePtr = &fileChannelType;
     }
 
-    fsPtr = ckalloc(sizeof(FileState));
+    fsPtr = Tcl_Alloc(sizeof(FileState));
     fsPtr->validMask = channelPermissions | TCL_EXCEPTION;
     fsPtr->fd = fd;
 
@@ -1592,7 +1592,11 @@ Tcl_MakeFileChannel(
     channelTypePtr = &fileChannelType;
     sprintf(channelName, "file%d", fd);
 
+<<<<<<< HEAD
     fsPtr = ckalloc(sizeof(FileState));
+=======
+    fsPtr = Tcl_Alloc(sizeof(FileState));
+>>>>>>> upstream/master
     fsPtr->fd = fd;
     fsPtr->validMask = mode | TCL_EXCEPTION;
     fsPtr->channel = Tcl_CreateChannel(channelTypePtr, channelName,

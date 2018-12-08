@@ -206,6 +206,13 @@ proc genStubs::declare {args} {
 		|| ($index > $stubs($curName,generic,lastNum))} {
 	    set stubs($curName,generic,lastNum) $index
 	}
+    } elseif {([lindex $platformList 0] eq "nostub")} {
+	set stubs($curName,nostub,$index) [lindex $platformList 1]
+	set stubs($curName,generic,$index) $decl
+	if {![info exists stubs($curName,generic,lastNum)] \
+		|| ($index > $stubs($curName,generic,lastNum))} {
+	    set stubs($curName,generic,lastNum) $index
+	}
     } else {
 	foreach platform $platformList {
 	    if {$decl ne ""} {
@@ -653,6 +660,8 @@ proc genStubs::makeSlot {name decl index} {
 =======
     if {[info exists stubs($name,deprecated,$index)]} {
 	append text "TCL_DEPRECATED_API(\"$stubs($name,deprecated,$index)\") "
+    } elseif {[info exists stubs($name,nostub,$index)]} {
+	append text "TCL_DEPRECATED_API(\"$stubs($name,nostub,$index)\") "
     }
 >>>>>>> upstream/master
     if {$args eq ""} {
@@ -764,6 +773,9 @@ proc genStubs::forAllStubs {name slotProc onAll textVar
 	    set slots [array names stubs $name,*,$i]
 	    set emit 0
 	    if {[info exists stubs($name,deprecated,$i)]} {
+		append text [$slotProc $name $stubs($name,generic,$i) $i]
+		set emit 1
+	    } elseif {[info exists stubs($name,nostub,$i)]} {
 		append text [$slotProc $name $stubs($name,generic,$i) $i]
 		set emit 1
 	    } elseif {[info exists stubs($name,generic,$i)]} {

@@ -146,7 +146,7 @@ Tcl_LinkVar(
 	return TCL_ERROR;
     }
 
-    linkPtr = ckalloc(sizeof(Link));
+    linkPtr = Tcl_Alloc(sizeof(Link));
     linkPtr->interp = interp;
     linkPtr->varName = Tcl_NewStringObj(varName, -1);
     Tcl_IncrRefCount(linkPtr->varName);
@@ -169,7 +169,7 @@ Tcl_LinkVar(
     if (Tcl_ObjSetVar2(interp, linkPtr->varName, NULL, objPtr,
 	    TCL_GLOBAL_ONLY|TCL_LEAVE_ERR_MSG) == NULL) {
 	Tcl_DecrRefCount(linkPtr->varName);
-	ckfree(linkPtr);
+	Tcl_Free(linkPtr);
 	return TCL_ERROR;
     }
     code = Tcl_TraceVar2(interp, varName, NULL,
@@ -177,7 +177,7 @@ Tcl_LinkVar(
 	    LinkTraceProc, linkPtr);
     if (code != TCL_OK) {
 	Tcl_DecrRefCount(linkPtr->varName);
-	ckfree(linkPtr);
+	Tcl_Free(linkPtr);
     }
     return code;
 }
@@ -215,7 +215,7 @@ Tcl_UnlinkVar(
 	    TCL_GLOBAL_ONLY|TCL_TRACE_READS|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 	    LinkTraceProc, linkPtr);
     Tcl_DecrRefCount(linkPtr->varName);
-    ckfree(linkPtr);
+    Tcl_Free(linkPtr);
 }
 
 /*
@@ -319,7 +319,7 @@ LinkTraceProc(
     if (flags & TCL_TRACE_UNSETS) {
 	if (Tcl_InterpDeleted(interp)) {
 	    Tcl_DecrRefCount(linkPtr->varName);
-	    ckfree(linkPtr);
+	    Tcl_Free(linkPtr);
 	} else if (flags & TCL_TRACE_DESTROYED) {
 	    Tcl_ObjSetVar2(interp, linkPtr->varName, NULL, ObjValue(linkPtr),
 		    TCL_GLOBAL_ONLY);
@@ -504,7 +504,8 @@ LinkTraceProc(
     case TCL_LINK_DOUBLE:
 	if (Tcl_GetDoubleFromObj(NULL, valueObj, &linkPtr->lastValue.d) != TCL_OK) {
 #ifdef ACCEPT_NAN
-	    if (valueObj->typePtr != &tclDoubleType) {
+	    Tcl_ObjIntRep *irPtr = Tcl_FetchIntRep(valueObj, &tclDoubleType);
+	    if (irPtr == NULL) {
 #endif
 		if (GetInvalidDoubleFromObj(valueObj, &linkPtr->lastValue.d) != TCL_OK) {
 		    Tcl_ObjSetVar2(interp, linkPtr->varName, NULL, ObjValue(linkPtr),
@@ -513,7 +514,11 @@ LinkTraceProc(
 		}
 #ifdef ACCEPT_NAN
 	    }
+<<<<<<< HEAD
 	    linkPtr->lastValue.d = valueObj->internalRep.doubleValue;
+>>>>>>> upstream/master
+=======
+	    linkPtr->lastValue.d = irPtr->doubleValue;
 >>>>>>> upstream/master
 #endif
 	}
@@ -831,7 +836,7 @@ LinkTraceProc(
 	valueLength = valueObj->length + 1;
 	pp = (char **) linkPtr->addr;
 
-	*pp = ckrealloc(*pp, valueLength);
+	*pp = Tcl_Realloc(*pp, valueLength);
 	memcpy(*pp, value, valueLength);
 >>>>>>> upstream/master
 =======

@@ -47,12 +47,27 @@ test utf-1.6 {Tcl_UniCharToUtf: negative Tcl_UniChar} testbytestring {
 =======
 >>>>>>> upstream/master
 } 1
+<<<<<<< HEAD
 test utf-1.6 {Tcl_UniCharToUtf: negative Tcl_UniChar} testbytestring {
     expr {[format %c -1] eq [testbytestring "\xef\xbf\xbd"]}
 } 1
+=======
+>>>>>>> upstream/master
 test utf-1.7 {Tcl_UniCharToUtf: 4 byte sequences} -constraints testbytestring -body {
     expr {"\U014e4e" eq [testbytestring "\xf0\x94\xb9\x8e"]}
 } -result 1
+test utf-1.8 {Tcl_UniCharToUtf: 3 byte sequence, upper surrogate} testbytestring {
+    expr {"\ud842" eq [testbytestring "\xed\xa1\x82"]}
+} 1
+test utf-1.9 {Tcl_UniCharToUtf: 3 byte sequence, lower surrogate} testbytestring {
+    expr {"\udc42" eq [testbytestring "\xed\xb1\x82"]}
+} 1
+test utf-1.10 {Tcl_UniCharToUtf: 3 byte sequence, upper surrogate} testbytestring {
+    expr {[format %c 0xd842] eq [testbytestring "\xed\xa1\x82"]}
+} 1
+test utf-1.11 {Tcl_UniCharToUtf: 3 byte sequence, lower surrogate} testbytestring {
+    expr {[format %c 0xdc42] eq [testbytestring "\xed\xb1\x82"]}
+} 1
 
 test utf-2.1 {Tcl_UtfToUniChar: low ascii} {
     string length "abc"
@@ -77,10 +92,14 @@ test utf-2.7 {Tcl_UtfToUniChar: lead (3-byte) followed by 2 trail} testbytestrin
 } {1}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test utf-2.8 {Tcl_UtfToUniChar: longer UTF sequences not supported} testbytestring {
     string length [testbytestring "\xF4\xA2\xA2\xA2"]
 =======
 test utf-2.8 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail} -constraints {fullutf testbytestring} -body {
+=======
+test utf-2.8 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail} -constraints {tip389 testbytestring} -body {
+>>>>>>> upstream/master
 =======
 test utf-2.8 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail} -constraints {tip389 testbytestring} -body {
 >>>>>>> upstream/master
@@ -174,6 +193,12 @@ test utf-8.3 {Tcl_UniCharAtIndex: index > 0} {
 test utf-8.4 {Tcl_UniCharAtIndex: index > 0} {
     string index \u4e4e\u25a\xff\u543 2
 } "\uff"
+test utf-8.5 {Tcl_UniCharAtIndex: upper surrogate} {
+    string index \ud842 0
+} "\ud842"
+test utf-8.5 {Tcl_UniCharAtIndex: lower surrogate} {
+    string index \udc42 0
+} "\udc42"
 
 test utf-9.1 {Tcl_UtfAtIndex: index = 0} {
     string range abcd 0 2
@@ -261,6 +286,7 @@ bsCheck \Uffffffff	65533
 =======
 bsCheck \U0000004e21	78
 <<<<<<< HEAD
+<<<<<<< HEAD
 if {[testConstraint fullutf]} {
     bsCheck \U00110000	69632
     bsCheck \U01100000	69632
@@ -272,6 +298,8 @@ if {[testConstraint fullutf]} {
 }
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 bsCheck \U00110000	69632
 bsCheck \U01100000	69632
 bsCheck \U11000000	69632
@@ -279,6 +307,9 @@ bsCheck \U0010FFFF	1114111
 bsCheck \U010FFFF0	1114111
 bsCheck \U10FFFF00	1114111
 bsCheck \UFFFFFFFF	1048575
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test utf-11.1 {Tcl_UtfToUpper} {
@@ -296,6 +327,12 @@ test utf-11.4 {Tcl_UtfToUpper} {
 test utf-11.5 {Tcl_UtfToUpper Georgian (new in Unicode 11)} {
     string toupper \u10d0\u1c90
 } \u1c90\u1c90
+<<<<<<< HEAD
+=======
+test utf-11.6 {Tcl_UtfToUpper low/high surrogate)} {
+    string toupper \udc24\ud824
+} \udc24\ud824
+>>>>>>> upstream/master
 
 test utf-12.1 {Tcl_UtfToLower} {
     string tolower {}
@@ -312,6 +349,12 @@ test utf-12.4 {Tcl_UtfToLower} {
 test utf-12.5 {Tcl_UtfToLower Georgian (new in Unicode 11)} {
     string tolower \u10d0\u1c90
 } \u10d0\u10d0
+<<<<<<< HEAD
+=======
+test utf-12.6 {Tcl_UtfToUpper low/high surrogate)} {
+    string tolower \udc24\ud824
+} \udc24\ud824
+>>>>>>> upstream/master
 
 test utf-13.1 {Tcl_UtfToTitle} {
     string totitle {}
@@ -331,6 +374,12 @@ test utf-13.5 {Tcl_UtfToTitle Georgian (new in Unicode 11)} {
 test utf-13.6 {Tcl_UtfToTitle Georgian (new in Unicode 11)} {
     string totitle \u1c90\u10d0
 } \u1c90\u10d0
+<<<<<<< HEAD
+=======
+test utf-13.7 {Tcl_UtfToTitle low/high surrogate)} {
+    string totitle \udc24\ud824
+} \udc24\ud824
+>>>>>>> upstream/master
 
 test utf-14.1 {Tcl_UtfNcasecmp} {
     string compare -nocase a b

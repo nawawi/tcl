@@ -32,6 +32,7 @@
 #include "tclInt.h"
 #include "tclCompile.h"
 #include "tclOOInt.h"
+#include <assert.h>
 
 /*
  * Structure that represents a range of instructions in the bytecode.
@@ -279,15 +280,12 @@ static void		CompileEmbeddedScript(AssemblyEnv*, Tcl_Token*,
 			    const TalInstDesc*);
 static int		DefineLabel(AssemblyEnv* envPtr, const char* label);
 static void		DeleteMirrorJumpTable(JumptableInfo* jtPtr);
-static void		DupAssembleCodeInternalRep(Tcl_Obj* src,
-			    Tcl_Obj* dest);
 static void		FillInJumpOffsets(AssemblyEnv*);
 static int		CreateMirrorJumpTable(AssemblyEnv* assemEnvPtr,
 			    Tcl_Obj* jumpTable);
 static int		FindLocalVar(AssemblyEnv* envPtr,
 			    Tcl_Token** tokenPtrPtr);
 static int		FinishAssembly(AssemblyEnv*);
-static void		FreeAssembleCodeInternalRep(Tcl_Obj *objPtr);
 static void		FreeAssemblyEnv(AssemblyEnv*);
 static int		GetBooleanOperand(AssemblyEnv*, Tcl_Token**, int*);
 static int		GetListIndexOperand(AssemblyEnv*, Tcl_Token**, int*);
@@ -325,6 +323,9 @@ static void		UnstackExpiredCatches(CompileEnv*, BasicBlock*, int,
 /*
  * Tcl_ObjType that describes bytecode emitted by the assembler.
  */
+
+static Tcl_FreeInternalRepProc	FreeAssembleCodeInternalRep;
+static Tcl_DupInternalRepProc	DupAssembleCodeInternalRep;
 
 static const Tcl_ObjType assembleCodeType = {
     "assemblecode",
@@ -858,17 +859,17 @@ CompileAssembleObj(
 				 * names in the bytecode resolve */
     int status;			/* Status return from Tcl_AssembleCode */
     const char* source;		/* String representation of the source code */
-    int sourceLen;		/* Length of the source code in bytes */
-
+    size_t sourceLen;		/* Length of the source code in bytes */
 
     /*
      * Get the expression ByteCode from the object. If it exists, make sure it
      * is valid in the current context.
      */
 
-    if (objPtr->typePtr == &assembleCodeType) {
+    ByteCodeGetIntRep(objPtr, &assembleCodeType, codePtr);
+
+    if (codePtr) {
 	namespacePtr = iPtr->varFramePtr->nsPtr;
-	codePtr = objPtr->internalRep.twoPtrValue.ptr1;
 	if (((Interp *) *codePtr->interpHandle == iPtr)
 		&& (codePtr->compileEpoch == iPtr->compileEpoch)
 		&& (codePtr->nsPtr == namespacePtr)
@@ -886,6 +887,7 @@ CompileAssembleObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	FreeAssembleCodeInternalRep(objPtr);
 =======
 	TclFreeIntRep(objPtr);
@@ -898,6 +900,9 @@ CompileAssembleObj(
 >>>>>>> upstream/master
 =======
 	TclFreeIntRep(objPtr);
+>>>>>>> upstream/master
+=======
+	Tcl_StoreIntRep(objPtr, &assembleCodeType, NULL);
 >>>>>>> upstream/master
     }
 
@@ -1038,7 +1043,7 @@ TclCompileAssembleCmd(
 
 	Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
 		"\n    (\"%.*s\" body, line %d)",
-		parsePtr->tokenPtr->size, parsePtr->tokenPtr->start,
+		(int)parsePtr->tokenPtr->size, parsePtr->tokenPtr->start,
 		Tcl_GetErrorLine(interp)));
 	envPtr->numCommands = numCommands;
 	envPtr->codeNext = envPtr->codeStart + offset;
@@ -1265,14 +1270,14 @@ FreeAssemblyEnv(
 	    Tcl_DecrRefCount(thisBB->jumpTarget);
 	}
 	if (thisBB->foreignExceptions != NULL) {
-	    ckfree(thisBB->foreignExceptions);
+	    Tcl_Free(thisBB->foreignExceptions);
 	}
 	nextBB = thisBB->successor1;
 	if (thisBB->jtPtr != NULL) {
 	    DeleteMirrorJumpTable(thisBB->jtPtr);
 	    thisBB->jtPtr = NULL;
 	}
-	ckfree(thisBB);
+	Tcl_Free(thisBB);
     }
 
     /*
@@ -1318,7 +1323,7 @@ AssembleOneLine(
     Tcl_Obj* operand1Obj = NULL;
 				/* First operand to the instruction */
     const char* operand1;	/* String rep of the operand */
-    int operand1Len;		/* String length of the operand */
+    size_t operand1Len;		/* String length of the operand */
     int opnd;			/* Integer representation of an operand */
     int litIndex;		/* Literal pool index of a constant */
     int localVar;		/* LVT index of a local variable */
@@ -1635,7 +1640,7 @@ AssembleOneLine(
 	    goto cleanup;
 	}
 
-	jtPtr = ckalloc(sizeof(JumptableInfo));
+	jtPtr = Tcl_Alloc(sizeof(JumptableInfo));
 
 	Tcl_InitHashTable(&jtPtr->hashTable, TCL_STRING_KEYS);
 	assemEnvPtr->curr_bb->jumpLine = assemEnvPtr->cmdLine;
@@ -2034,7 +2039,7 @@ MoveExceptionRangesToBasicBlock(
     curr_bb->foreignExceptionBase = savedExceptArrayNext;
     curr_bb->foreignExceptionCount = exceptionCount;
     curr_bb->foreignExceptions =
-	    ckalloc(exceptionCount * sizeof(ExceptionRange));
+	    Tcl_Alloc(exceptionCount * sizeof(ExceptionRange));
     memcpy(curr_bb->foreignExceptions,
 	    envPtr->exceptArrayPtr + savedExceptArrayNext,
 	    exceptionCount * sizeof(ExceptionRange));
@@ -2099,7 +2104,7 @@ CreateMirrorJumpTable(
      * Allocate the jumptable.
      */
 
-    jtPtr = ckalloc(sizeof(JumptableInfo));
+    jtPtr = Tcl_Alloc(sizeof(JumptableInfo));
     jtHashPtr = &jtPtr->hashTable;
     Tcl_InitHashTable(jtHashPtr, TCL_STRING_KEYS);
 
@@ -2164,7 +2169,7 @@ DeleteMirrorJumpTable(
 	Tcl_SetHashValue(entry, NULL);
     }
     Tcl_DeleteHashTable(jtHashPtr);
-    ckfree(jtPtr);
+    Tcl_Free(jtPtr);
 }
 
 /*
@@ -2357,7 +2362,11 @@ GetListIndexOperand(
     if (GetNextOperand(assemEnvPtr, tokenPtrPtr, &value) != TCL_OK) {
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> upstream/master
     /* Convert to an integer, advance to the next token and return. */
     /*
      * NOTE: Indexing a list with an index before it yields the
@@ -2407,7 +2416,7 @@ FindLocalVar(
 				 * source code. */
     Tcl_Obj* varNameObj;	/* Name of the variable */
     const char* varNameStr;
-    int varNameLen;
+    size_t varNameLen;
     int localVar;		/* Index of the variable in the LVT */
 
     if (GetNextOperand(assemEnvPtr, tokenPtrPtr, &varNameObj) != TCL_OK) {
@@ -2759,7 +2768,7 @@ AllocBB(
     AssemblyEnv* assemEnvPtr)	/* Assembly environment */
 {
     CompileEnv* envPtr = assemEnvPtr->envPtr;
-    BasicBlock *bb = ckalloc(sizeof(BasicBlock));
+    BasicBlock *bb = Tcl_Alloc(sizeof(BasicBlock));
 
     bb->originalStartOffset =
 	    bb->startOffset = envPtr->codeNext - envPtr->codeStart;
@@ -4037,8 +4046,8 @@ BuildExceptionRanges(
      * Allocate memory for a stack of active catches.
      */
 
-    catches = ckalloc(maxCatchDepth * sizeof(BasicBlock*));
-    catchIndices = ckalloc(maxCatchDepth * sizeof(int));
+    catches = Tcl_Alloc(maxCatchDepth * sizeof(BasicBlock*));
+    catchIndices = Tcl_Alloc(maxCatchDepth * sizeof(int));
     for (i = 0; i < maxCatchDepth; ++i) {
 	catches[i] = NULL;
 	catchIndices[i] = -1;
@@ -4077,8 +4086,8 @@ BuildExceptionRanges(
 
     /* Free temp storage */
 
-    ckfree(catchIndices);
-    ckfree(catches);
+    Tcl_Free(catchIndices);
+    Tcl_Free(catches);
 
     return TCL_OK;
 }
@@ -4460,7 +4469,10 @@ static void
 FreeAssembleCodeInternalRep(
     Tcl_Obj *objPtr)
 {
-    ByteCode *codePtr = objPtr->internalRep.twoPtrValue.ptr1;
+    ByteCode *codePtr;
+
+    ByteCodeGetIntRep(objPtr, &assembleCodeType, codePtr);
+    assert(codePtr != NULL);
 
 <<<<<<< HEAD
 <<<<<<< HEAD

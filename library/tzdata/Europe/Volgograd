@@ -168,9 +168,13 @@ set TZData(:Europe/Volgograd) {
     {1414274400 10800 0 +03}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {1540681200 14400 0 +04}
 >>>>>>> upstream/master
 }

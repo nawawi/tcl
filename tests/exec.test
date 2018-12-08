@@ -17,6 +17,11 @@
 package require tcltest 2
 namespace import -force ::tcltest::*
 
+<<<<<<< HEAD
+=======
+loadTestedCommands
+catch [list package require -exact Tcltest [info patchlevel]]
+>>>>>>> upstream/master
 package require tcltests
 
 # All tests require the "exec" command.

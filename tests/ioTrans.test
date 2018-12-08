@@ -1240,6 +1240,7 @@ test iortrans-11.1 {origin interpreter of moved transform destroyed during acces
 	set res
     }]
 } -cleanup {
+    interp delete $idb
     tempdone
     interp delete $idb
 } -result {Owner lost}

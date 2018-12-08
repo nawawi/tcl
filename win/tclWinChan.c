@@ -320,8 +320,12 @@ FileCheckProc(
 =======
 	if (infoPtr->watchMask && !TEST_FLAG(infoPtr->flags, FILE_PENDING)) {
 	    SET_FLAG(infoPtr->flags, FILE_PENDING);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	    evPtr = ckalloc(sizeof(FileEvent));
+=======
+	    evPtr = Tcl_Alloc(sizeof(FileEvent));
+>>>>>>> upstream/master
 	    evPtr->header.proc = FileEventProc;
 	    evPtr->infoPtr = infoPtr;
 	    Tcl_QueueEvent((Tcl_Event *) evPtr, TCL_QUEUE_TAIL);
@@ -488,7 +492,7 @@ FileCloseProc(
 	    break;
 	}
     }
-    ckfree(fileInfoPtr);
+    Tcl_Free(fileInfoPtr);
     return errorCode;
 }
 
@@ -635,8 +639,8 @@ FileWideSeekProc(
 	moveMethod = FILE_END;
     }
 
-    newPosHigh = Tcl_WideAsLong(offset >> 32);
-    newPos = SetFilePointer(infoPtr->handle, Tcl_WideAsLong(offset),
+    newPosHigh = (LONG)(offset >> 32);
+    newPos = SetFilePointer(infoPtr->handle, (LONG)offset,
 	    &newPosHigh, moveMethod);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -664,7 +668,11 @@ FileWideSeekProc(
 >>>>>>> upstream/master
 =======
     return (((Tcl_WideInt)((unsigned)newPos))
+<<<<<<< HEAD
 	    | (Tcl_LongAsWide(newPosHigh) << 32));
+>>>>>>> upstream/master
+=======
+	    | ((Tcl_WideInt)newPosHigh << 32));
 >>>>>>> upstream/master
 }
 
@@ -722,8 +730,8 @@ FileTruncateProc(
      * Move to where we want to truncate
      */
 
-    newPosHigh = Tcl_WideAsLong(length >> 32);
-    newPos = SetFilePointer(infoPtr->handle, Tcl_WideAsLong(length),
+    newPosHigh = (LONG)(length >> 32);
+    newPos = SetFilePointer(infoPtr->handle, (LONG)length,
 	    &newPosHigh, FILE_BEGIN);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1624,7 +1632,7 @@ TclWinOpenFileChannel(
 	}
     }
 
-    infoPtr = ckalloc(sizeof(FileInfo));
+    infoPtr = Tcl_Alloc(sizeof(FileInfo));
 
     /*
      * TIP #218. Removed the code inserting the new structure into the global

@@ -119,6 +119,7 @@ test string-2.10.$noComp {string compare with special index} {
 } {1 {expected integer but got "end-3"}}
 test string-2.11.$noComp {string compare, unicode} {
     run {string compare ab\u7266 ab\u7267}
+<<<<<<< HEAD
 } -1
 test string-2.11.1.$noComp {string compare, unicode} {
     run {string compare \334 \u00dc}
@@ -126,6 +127,15 @@ test string-2.11.1.$noComp {string compare, unicode} {
 test string-2.11.2.$noComp {string compare, unicode} {
     run {string compare \334 \u00fc}
 } -1
+=======
+} -1
+test string-2.11.1.$noComp {string compare, unicode} {
+    run {string compare \334 \u00dc}
+} 0
+test string-2.11.2.$noComp {string compare, unicode} {
+    run {string compare \334 \u00fc}
+} -1
+>>>>>>> upstream/master
 test string-2.11.3.$noComp {string compare, unicode} {
     run {string compare \334\334\334\374\374 \334\334\334\334\334}
 } 1
@@ -149,6 +159,7 @@ test string-2.14.$noComp {string compare -nocase} {
 } 0
 test string-2.15.$noComp {string compare -nocase} {
     run {string compare -nocase abcde abcde}
+<<<<<<< HEAD
 } 0
 test string-2.15.1.$noComp {string compare -nocase} {
     run {string compare -nocase \334 \u00dc}
@@ -159,6 +170,18 @@ test string-2.15.2.$noComp {string compare -nocase} {
 test string-2.16.$noComp {string compare -nocase with length} {
     run {string compare -length 2 -nocase abcde Abxyz}
 } 0
+=======
+} 0
+test string-2.15.1.$noComp {string compare -nocase} {
+    run {string compare -nocase \334 \u00dc}
+} 0
+test string-2.15.2.$noComp {string compare -nocase} {
+    run {string compare -nocase \334\334\334\374\u00fc \334\334\334\334\334}
+} 0
+test string-2.16.$noComp {string compare -nocase with length} {
+    run {string compare -length 2 -nocase abcde Abxyz}
+} 0
+>>>>>>> upstream/master
 test string-2.17.$noComp {string compare -nocase with length} {
     run {string compare -nocase -length 3 abcde Abxyz}
 } -1
@@ -280,7 +303,11 @@ test string-3.17.$noComp {string equal, unicode} {
 } 1
 test string-3.18.$noComp {string equal, unicode} {
     run {string equal \334 \u00fc}
+<<<<<<< HEAD
 } 0 
+=======
+} 0
+>>>>>>> upstream/master
 test string-3.19.$noComp {string equal, unicode} {
     run {string equal \334\334\334\374\374 \334\334\334\334\334}
 } 0
@@ -307,7 +334,11 @@ test string-3.24.$noComp {string equal -nocase with length} {
 } 1
 test string-3.25.$noComp {string equal -nocase with length} {
     run {string equal -nocase -length 3 abcde Abxyz}
+<<<<<<< HEAD
 } 0 
+=======
+} 0
+>>>>>>> upstream/master
 test string-3.26.$noComp {string equal -nocase with length <= 0} {
     run {string equal -nocase -length -1 abcde AbCdEf}
 } 0
@@ -363,8 +394,13 @@ test string-3.41.$noComp {string equal, binary neq} {
 test string-3.42.$noComp {string equal, binary neq inequal length} {
     run {string equal [binary format a20a 0 1] [binary format a100a 0 0]}
 } 0
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> upstream/master
 test string-4.1.$noComp {string first, too few args} {
     list [catch {run {string first a}} msg] $msg
 } {1 {wrong # args: should be "string first needleString haystackString ?startIndex?"}}
@@ -531,10 +567,17 @@ test string-6.4.$noComp {string is, too many args} {
 } {1 {wrong # args: should be "string is class ?-strict? ?-failindex var? str"}}
 test string-6.5.$noComp {string is, class check} {
     list [catch {run {string is bogus str}} msg] $msg
+<<<<<<< HEAD
 } {1 {bad class "bogus": must be alnum, alpha, ascii, control, boolean, digit, double, entier, false, graph, integer, list, lower, print, punct, space, true, upper, wideinteger, wordchar, or xdigit}}
 test string-6.6.$noComp {string is, ambiguous class} {
     list [catch {run {string is al str}} msg] $msg
 } {1 {ambiguous class "al": must be alnum, alpha, ascii, control, boolean, digit, double, entier, false, graph, integer, list, lower, print, punct, space, true, upper, wideinteger, wordchar, or xdigit}}
+=======
+} {1 {bad class "bogus": must be alnum, alpha, ascii, control, boolean, dict, digit, double, entier, false, graph, integer, list, lower, print, punct, space, true, upper, wideinteger, wordchar, or xdigit}}
+test string-6.6.$noComp {string is, ambiguous class} {
+    list [catch {run {string is al str}} msg] $msg
+} {1 {ambiguous class "al": must be alnum, alpha, ascii, control, boolean, dict, digit, double, entier, false, graph, integer, list, lower, print, punct, space, true, upper, wideinteger, wordchar, or xdigit}}
+>>>>>>> upstream/master
 test string-6.7.$noComp {string is alpha, all ok} {
     run {string is alpha -strict -failindex var abc}
 } 1
@@ -635,6 +678,7 @@ test string-6.37.$noComp {string is double, false on int overflow} -setup {
 } -result {1 priorValue}
 # string-6.38 removed, underflow on input is no longer an error.
 <<<<<<< HEAD
+<<<<<<< HEAD
 test string-6.39 {string is double, false} {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -648,6 +692,9 @@ test string-6.39 {string is double, false} {
     # This test is non-portable because IRIX thinks
 >>>>>>> upstream/master
 =======
+=======
+test string-6.39.$noComp {string is double, false} {
+>>>>>>> upstream/master
     # This test is non-portable because IRIX thinks
 >>>>>>> upstream/master
 =======
@@ -710,9 +757,15 @@ test string-6.53.$noComp {string is integer, true with whitespace} {
 test string-6.54.$noComp {string is integer, false} {
     list [run {string is integer -fail var 123abc}] $var
 } {0 3}
+<<<<<<< HEAD
 test string-6.55.$noComp {string is integer, false on overflow} {
     list [run {string is integer -fail var +[largest_int]0}] $var
 } {0 -1}
+=======
+test string-6.55.$noComp {string is integer, no overflow possible} {
+    run {string is integer +[largest_int]0}
+} 1
+>>>>>>> upstream/master
 test string-6.56.$noComp {string is integer, false} {
     list [run {string is integer -fail var [expr double(1)]}] $var
 } {0 1}
@@ -843,15 +896,25 @@ test string-6.91.$noComp {string is double, bad doubles} {
     }
     return $result
 } {1 1 0 0 0 1 0 0}
+<<<<<<< HEAD
 test string-6.92.$noComp {string is integer, 32-bit overflow} {
     # Bug 718878
     set x 0x100000000
     list [run {string is integer -failindex var $x}] $var
 } {0 -1}
 test string-6.93.$noComp {string is integer, 32-bit overflow} {
+=======
+test string-6.92.$noComp {string is integer, no 64-bit overflow} {
     # Bug 718878
-    set x 0x100000000
+    set x 0x10000000000000000
+    run {string is integer $x}
+} 1
+test string-6.93.$noComp {string is integer, no 64-bit overflow} {
+>>>>>>> upstream/master
+    # Bug 718878
+    set x 0x10000000000000000
     append x ""
+<<<<<<< HEAD
     list [run {string is integer -failindex var $x}] $var
 } {0 -1}
 test string-6.94.$noComp {string is integer, 32-bit overflow} {
@@ -859,6 +922,15 @@ test string-6.94.$noComp {string is integer, 32-bit overflow} {
     set x 0x100000000
     list [run {string is integer -failindex var [expr {$x}]}] $var
 } {0 -1}
+=======
+    run {string is integer $x}
+} 1
+test string-6.94.$noComp {string is integer, no 64-bit overflow} {
+    # Bug 718878
+    set x 0x10000000000000000
+    run {string is integer [expr {$x}]}
+} 1
+>>>>>>> upstream/master
 test string-6.95.$noComp {string is wideinteger, true} {
     run {string is wideinteger +1234567890}
 } 1
@@ -2313,9 +2385,15 @@ test string-29.4.$noComp {string cat, many args} {
 } {0 0}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 test string-29.5 {string cat, efficiency} -body {
     tcl::unsupported::representation [string cat [list x] [list]]
+=======
+if {$noComp} {
+test string-29.5.$noComp {string cat, efficiency} -body {
+    tcl::unsupported::representation [run {string cat [list x] [list]}]
+>>>>>>> upstream/master
 =======
 if {$noComp} {
 test string-29.5.$noComp {string cat, efficiency} -body {
@@ -2366,11 +2444,96 @@ test string-29.15.$noComp {string cat, efficiency} -setup {
 } -match glob -result {*no string representation}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 
 
 
 =======
+=======
+}
+
+test string-30.1.1.$noComp {[Bug ba921a8d98]: string cat} {
+    run {string cat [set data [binary format a* hello]] [encoding convertto $data] [unset data]}
+} hellohello
+test string-30.1.2.$noComp {[Bug ba921a8d98]: inplace cat by subst (compiled to "strcat" instruction)} {
+    run {set x "[set data [binary format a* hello]][encoding convertto $data][unset data]"}
+} hellohello
+
+test string-31.1.$noComp {string is dict} {
+    string is dict {a b c d}
+} 1
+test string-31.1a.$noComp {string is dict} {
+    string is dict {a b c}
+} 0
+test string-31.2.$noComp {string is dict} {
+    string is dict "a \{b c"
+} 0
+test string-31.3.$noComp {string is dict} {
+    string is dict {a {b c}d e}
+} 0
+test string-31.4.$noComp {string is dict} {
+    string is dict {}
+} 1
+test string-31.5.$noComp {string is dict} {
+    string is dict -strict {a b c d}
+} 1
+test string-31.5a.$noComp {string is dict} {
+    string is dict -strict {a b c}
+} 0
+test string-31.6.$noComp {string is dict} {
+    string is dict -strict "a \{b c"
+} 0
+test string-31.7.$noComp {string is dict} {
+    string is dict -strict {a {b c}d e}
+} 0
+test string-31.8.$noComp {string is dict} {
+    string is dict -strict {}
+} 1
+test string-31.9.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x {a b c d}] $x
+} {1 {}}
+test string-31.9a.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x {a b c}] $x
+} {0 -1}
+test string-31.10.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x "a \{b c d"] $x
+} {0 2}
+test string-31.10a.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x "a \{b c"] $x
+} {0 2}
+test string-31.11.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x {a b {b c}d e}] $x
+} {0 4}
+test string-31.12.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x {}] $x
+} {1 {}}
+test string-31.13.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x {  {b c}d e}] $x
+} {0 2}
+test string-31.14.$noComp {string is dict} {
+    set x {}
+    list [string is dict -failindex x "\uabcd {b c}d e"] $x
+} {0 2}
+test string-31.15.$noComp {string is dict, valid dict} {
+    string is dict {a b c d e f}
+} 1
+test string-31.16.$noComp {string is dict, invalid dict} {
+    string is dict a
+} 0
+test string-31.17.$noComp {string is dict, valid dict packed in invalid dict} {
+    string is dict {{a b c d e f g h}}
+} 0
+
+};				# foreach noComp {0 1}
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 =======

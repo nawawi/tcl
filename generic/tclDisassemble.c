@@ -79,7 +79,7 @@ static void		UpdateStringOfInstName(Tcl_Obj *objPtr);
  * reporting of inner contexts in errorstack without string allocation.
  */
 
-static const Tcl_ObjType tclInstNameType = {
+static const Tcl_ObjType instNameType = {
     "instname",			/* name */
     NULL,			/* freeIntRepProc */
     NULL,			/* dupIntRepProc */
@@ -87,12 +87,21 @@ static const Tcl_ObjType tclInstNameType = {
     NULL,			/* setFromAnyProc */
 };
 
-/*
- * How to get the bytecode out of a Tcl_Obj.
- */
+#define InstNameSetIntRep(objPtr, inst)				\
+    do {							\
+	Tcl_ObjIntRep ir;					\
+	ir.wideValue = (inst);					\
+	Tcl_StoreIntRep((objPtr), &instNameType, &ir);		\
+    } while (0)
 
-#define BYTECODE(objPtr)					\
-    ((ByteCode *) (objPtr)->internalRep.twoPtrValue.ptr1)
+#define InstNameGetIntRep(objPtr, inst)				\
+    do {							\
+	const Tcl_ObjIntRep *irPtr;				\
+	irPtr = Tcl_FetchIntRep((objPtr), &instNameType);	\
+	assert(irPtr != NULL);					\
+	(inst) = (size_t)irPtr->wideValue;			\
+    } while (0)
+
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -411,7 +420,7 @@ DisassembleByteCodeObj(
 >>>>>>> upstream/master
     Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
 {
-    ByteCode *codePtr = BYTECODE(objPtr);
+    ByteCode *codePtr;
     unsigned char *codeStart, *codeLimit, *pc;
     unsigned char *codeDeltaNext, *codeLengthNext;
     unsigned char *srcDeltaNext, *srcLengthNext;
@@ -440,9 +449,13 @@ DisassembleByteCodeObj(
 >>>>>>> upstream/master
 =======
     int codeOffset, codeLen, srcOffset, srcLen, numCmds, delta, i, line;
-    Interp *iPtr = (Interp *) *codePtr->interpHandle;
+    Interp *iPtr;
     Tcl_Obj *bufferObj, *fileObj;
 >>>>>>> upstream/master
+
+    ByteCodeGetIntRep(objPtr, &tclByteCodeType, codePtr);
+
+    iPtr = (Interp *) *codePtr->interpHandle;
 
     TclNewObj(bufferObj);
     if (!codePtr->refCount) {
@@ -462,6 +475,7 @@ DisassembleByteCodeObj(
     sprintf(ptrBuf1, "%p", codePtr);
     sprintf(ptrBuf2, "%p", iPtr);
     Tcl_AppendPrintfToObj(bufferObj,
+<<<<<<< HEAD
 	    "ByteCode 0x%s, refCt %u, epoch %u, interp 0x%s (epoch %u)\n",
 	    ptrBuf1, codePtr->refCount, codePtr->compileEpoch, ptrBuf2,
 =======
@@ -485,6 +499,10 @@ DisassembleByteCodeObj(
 	    codePtr, (Tcl_WideUInt)codePtr->refCount, (Tcl_WideUInt)codePtr->compileEpoch, iPtr,
 >>>>>>> upstream/master
 		(Tcl_WideUInt)iPtr->compileEpoch);
+>>>>>>> upstream/master
+=======
+	    "ByteCode %p, refCt %" TCL_Z_MODIFIER "u, epoch %" TCL_Z_MODIFIER "u, interp %p (epoch %" TCL_Z_MODIFIER "u)\n",
+	    codePtr, codePtr->refCount, codePtr->compileEpoch, iPtr, iPtr->compileEpoch);
 >>>>>>> upstream/master
     Tcl_AppendToObj(bufferObj, "  Source ", -1);
     PrintSourceToObj(bufferObj, codePtr->source,
@@ -564,12 +582,17 @@ DisassembleByteCodeObj(
 =======
 	Tcl_AppendPrintfToObj(bufferObj,
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"  Proc %p, refCt %d, args %d, compiled locals %d\n",
 		procPtr, procPtr->refCount, procPtr->numArgs,
 >>>>>>> upstream/master
 =======
 		"  Proc %p, refCt %" TCL_LL_MODIFIER "d, args %d, compiled locals %d\n",
 		procPtr, (Tcl_WideUInt)procPtr->refCount, procPtr->numArgs,
+>>>>>>> upstream/master
+=======
+		"  Proc %p, refCt %" TCL_Z_MODIFIER "u, args %d, compiled locals %d\n",
+		procPtr, procPtr->refCount, procPtr->numArgs,
 >>>>>>> upstream/master
 		numCompiledLocals);
 	if (numCompiledLocals > 0) {
@@ -1081,9 +1104,8 @@ TclNewInstNameObj(
 {
     Tcl_Obj *objPtr = Tcl_NewObj();
 
-    objPtr->typePtr = &tclInstNameType;
-    objPtr->internalRep.wideValue = (long) inst;
-    objPtr->bytes = NULL;
+    TclInvalidateStringRep(objPtr);
+    InstNameSetIntRep(objPtr, (long) inst);
 
     return objPtr;
 }
@@ -1102,20 +1124,39 @@ static void
 UpdateStringOfInstName(
     Tcl_Obj *objPtr)
 {
+<<<<<<< HEAD
     size_t len, inst = (size_t)objPtr->internalRep.wideValue;
     char *s, buf[TCL_INTEGER_SPACE + 5];
 
     if (inst >= LAST_INST_OPCODE) {
         sprintf(buf, "inst_%" TCL_Z_MODIFIER "d", inst);
         s = buf;
+=======
+    size_t inst;	/* NOTE: We know this is really an unsigned char */
+    char *dst;
+
+    InstNameGetIntRep(objPtr, inst);
+
+    if (inst > LAST_INST_OPCODE) {
+	dst = Tcl_InitStringRep(objPtr, NULL, TCL_INTEGER_SPACE + 5);
+	TclOOM(dst, TCL_INTEGER_SPACE + 5);
+        sprintf(dst, "inst_%" TCL_Z_MODIFIER "u", inst);
+	(void) Tcl_InitStringRep(objPtr, NULL, strlen(dst));
+>>>>>>> upstream/master
     } else {
-        s = (char *) tclInstructionTable[inst].name;
+	const char *s = tclInstructionTable[inst].name;
+	unsigned int len = strlen(s);
+	dst = Tcl_InitStringRep(objPtr, s, len);
+	TclOOM(dst, len);
     }
+<<<<<<< HEAD
     len = strlen(s);
     /* assert (len < UINT_MAX) */
     objPtr->bytes = ckalloc(len + 1);
     memcpy(objPtr->bytes, s, len + 1);
     objPtr->length = len;
+=======
+>>>>>>> upstream/master
 }
 
 /*
@@ -1179,7 +1220,7 @@ PrintSourceToObj(
 		Tcl_AppendPrintfToObj(appendObj, "\\U%08x", ch);
 		i += 10;
 	    } else
-#elif TCL_UTF_MAX > 3
+#else
 	    /* If len == 0, this means we have a char > 0xffff, resulting in
 	     * TclUtfToUniChar producing a surrogate pair. We want to output
 	     * this pair as a single Unicode character.
@@ -1282,7 +1323,7 @@ DisassembleByteCodeAsDicts(
 >>>>>>> upstream/master
     Tcl_Obj *objPtr)		/* The bytecode-holding value to take apart */
 {
-    ByteCode *codePtr = BYTECODE(objPtr);
+    ByteCode *codePtr;
     Tcl_Obj *description, *literals, *variables, *instructions, *inst;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1313,6 +1354,8 @@ DisassembleByteCodeAsDicts(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+
+    ByteCodeGetIntRep(objPtr, &tclByteCodeType, codePtr);
 
     /*
      * Get the literals from the bytecode.
@@ -1720,10 +1763,14 @@ Tcl_DisassembleObjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     Method *methodPtr;
 >>>>>>> upstream/master
 =======
+=======
+    ByteCode *codePtr;
+>>>>>>> upstream/master
     Method *methodPtr;
 >>>>>>> upstream/master
 =======
@@ -1746,27 +1793,19 @@ Tcl_DisassembleObjCmd(
 
 	/*
 	 * Compile (if uncompiled) and disassemble a lambda term.
-	 *
-	 * WARNING! Pokes inside the lambda objtype.
 	 */
 
 	if (objc != 3) {
 	    Tcl_WrongNumArgs(interp, 2, objv, "lambdaTerm");
 	    return TCL_ERROR;
 	}
-	if (objv[2]->typePtr == &tclLambdaType) {
-	    procPtr = objv[2]->internalRep.twoPtrValue.ptr1;
-	}
-	if (procPtr == NULL || procPtr->iPtr != (Interp *) interp) {
-	    result = tclLambdaType.setFromAnyProc(interp, objv[2]);
-	    if (result != TCL_OK) {
-		return result;
-	    }
-	    procPtr = objv[2]->internalRep.twoPtrValue.ptr1;
+
+	procPtr = TclGetLambdaFromObj(interp, objv[2], &nsObjPtr);
+	if (procPtr == NULL) {
+	    return TCL_ERROR;
 	}
 
 	memset(&cmd, 0, sizeof(Command));
-	nsObjPtr = objv[2]->internalRep.twoPtrValue.ptr2;
 	result = TclGetNamespaceFromObj(interp, nsObjPtr, &nsPtr);
 	if (result != TCL_OK) {
 	    return result;
@@ -1816,8 +1855,9 @@ Tcl_DisassembleObjCmd(
 	    Tcl_WrongNumArgs(interp, 2, objv, "script");
 	    return TCL_ERROR;
 	}
-	if ((objv[2]->typePtr != &tclByteCodeType)
-		&& (TclSetByteCodeFromAny(interp, objv[2], NULL, NULL) != TCL_OK)) {
+
+	if ((NULL == Tcl_FetchIntRep(objv[2], &tclByteCodeType)) && (TCL_OK
+		!= TclSetByteCodeFromAny(interp, objv[2], NULL, NULL))) {
 	    return TCL_ERROR;
 	}
 	codeObjPtr = objv[2];
@@ -2032,7 +2072,7 @@ Tcl_DisassembleObjCmd(
 		    "METHODTYPE", NULL);
 	    return TCL_ERROR;
 	}
-	if (procPtr->bodyPtr->typePtr != &tclByteCodeType) {
+	if (NULL == Tcl_FetchIntRep(procPtr->bodyPtr, &tclByteCodeType)) {
 	    Command cmd;
 
 	    /*
@@ -2060,13 +2100,16 @@ Tcl_DisassembleObjCmd(
      * Do the actual disassembly.
      */
 
-    if (BYTECODE(codeObjPtr)->flags & TCL_BYTECODE_PRECOMPILED) {
+    ByteCodeGetIntRep(codeObjPtr, &tclByteCodeType, codePtr);
+
+    if (codePtr->flags & TCL_BYTECODE_PRECOMPILED) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"may not disassemble prebuilt bytecode", -1));
 	Tcl_SetErrorCode(interp, "TCL", "OPERATION", "DISASSEMBLE",
 		"BYTECODE", NULL);
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
     if (PTR2INT(clientData)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2081,6 +2124,9 @@ Tcl_DisassembleObjCmd(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    if (clientData) {
 >>>>>>> upstream/master
 	Tcl_SetObjResult(interp,
 		DisassembleByteCodeAsDicts(interp, codeObjPtr));

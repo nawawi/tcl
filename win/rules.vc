@@ -1162,11 +1162,15 @@ TCL_INCLUDES    = -I"$(WINDIR)" -I"$(GENERICDIR)"
 # of Tcl we are building against, this may or may not have a "t" suffix.
 # Try various possibilities in turn.
 <<<<<<< HEAD
+<<<<<<< HEAD
 TCLSH		= $(_TCLDIR)\bin\tclsh$(TCL_VERSION)$(SUFX).exe
 !if !exist("$(TCLSH)") && $(TCL_THREADS)
 TCLSH           = $(_TCLDIR)\bin\tclsh$(TCL_VERSION)t$(SUFX).exe
 >>>>>>> upstream/master
 !endif
+=======
+TCLSH		= $(_TCLDIR)\bin\tclsh$(TCL_VERSION)$(SUFX:t=).exe
+>>>>>>> upstream/master
 =======
 TCLSH		= $(_TCLDIR)\bin\tclsh$(TCL_VERSION)$(SUFX:t=).exe
 >>>>>>> upstream/master

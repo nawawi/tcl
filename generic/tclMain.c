@@ -470,7 +470,7 @@ Tcl_SourceRCFile(
  *----------------------------------------------------------------------
  */
 
-void
+TCL_NORETURN void
 Tcl_MainEx(
     int argc,			/* Number of arguments. */
     TCHAR **argv,		/* Array of argument strings. */
@@ -778,12 +778,16 @@ Tcl_MainEx(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(is.commandPtr, &length);
 =======
 	    TclGetStringFromObj(is.commandPtr, &length);
 >>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(is.commandPtr, &length);
+>>>>>>> upstream/master
+=======
+	    (void)TclGetStringFromObj(is.commandPtr, &length);
 >>>>>>> upstream/master
 	    Tcl_SetObjLength(is.commandPtr, --length);
 	    code = Tcl_RecordAndEvalObj(interp, is.commandPtr,
@@ -803,12 +807,16 @@ Tcl_MainEx(
 		Tcl_IncrRefCount(resultPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(resultPtr, &length);
 =======
 		TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
 =======
 		TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
+=======
+		(void)TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
 		chan = Tcl_GetStdChannel(TCL_STDOUT);
 		if ((length > 0) && chan) {
@@ -1255,6 +1263,7 @@ StdinProc(
 	goto prompt;
     }
     isPtr->prompt = PROMPT_START;
+<<<<<<< HEAD
     TclGetStringFromObj(commandPtr, &length);
 <<<<<<< HEAD
 >>>>>>> upstream/master
@@ -1262,6 +1271,9 @@ StdinProc(
 >>>>>>> upstream/master
 =======
     TclGetStringFromObj(commandPtr, &length);
+>>>>>>> upstream/master
+=======
+    (void)TclGetStringFromObj(commandPtr, &length);
 >>>>>>> upstream/master
     Tcl_SetObjLength(commandPtr, --length);
 
@@ -1296,6 +1308,7 @@ StdinProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(resultPtr, &length);
 =======
 	TclGetStringFromObj(resultPtr, &length);
@@ -1305,6 +1318,9 @@ StdinProc(
 >>>>>>> upstream/master
 =======
 	TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
+=======
+	(void)TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
 	if ((length > 0) && (chan != NULL)) {
 	    Tcl_WriteObj(chan, resultPtr);

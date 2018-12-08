@@ -119,7 +119,7 @@ static int		TclNRPackageObjCmdCleanup(ClientData data[], Tcl_Interp *interp, int
  */
 
 #define DupBlock(v,s,len) \
-    ((v) = ckalloc(len), memcpy((v),(s),(len)))
+    ((v) = Tcl_Alloc(len), memcpy((v),(s),(len)))
 #define DupString(v,s) \
     do { \
 <<<<<<< HEAD
@@ -190,13 +190,13 @@ Tcl_PkgProvideEx(
 	    NULL) != TCL_OK) {
 	return TCL_ERROR;
     } else if (CheckVersionAndConvert(interp, version, &vi, NULL) != TCL_OK) {
-	ckfree(pvi);
+	Tcl_Free(pvi);
 	return TCL_ERROR;
     }
 
     res = CompareVersions(pvi, vi, NULL);
-    ckfree(pvi);
-    ckfree(vi);
+    Tcl_Free(pvi);
+    Tcl_Free(vi);
 
     if (res == 0) {
 	if (clientData != NULL) {
@@ -291,7 +291,7 @@ static void PkgFilesCleanupProc(ClientData clientData,
     while (pkgFiles->names) {
 	PkgName *name = pkgFiles->names;
 	pkgFiles->names = name->nextPtr;
-	ckfree(name);
+	Tcl_Free(name);
     }
     entry = Tcl_FirstHashEntry(&pkgFiles->table, &search);
     while (entry) {
@@ -300,7 +300,7 @@ static void PkgFilesCleanupProc(ClientData clientData,
 	entry = Tcl_NextHashEntry(&search);
     }
     Tcl_DeleteHashTable(&pkgFiles->table);
-    ckfree(pkgFiles);
+    Tcl_Free(pkgFiles);
     return;
 }
 
@@ -310,7 +310,7 @@ void *TclInitPkgFiles(Tcl_Interp *interp)
     /* If assocdata "tclPkgFiles" doesn't exist yet, create it */
     PkgFiles *pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
     if (!pkgFiles) {
-	pkgFiles = ckalloc(sizeof(PkgFiles));
+	pkgFiles = Tcl_Alloc(sizeof(PkgFiles));
 	pkgFiles->names = NULL;
 	Tcl_InitHashTable(&pkgFiles->table, TCL_STRING_KEYS);
 	Tcl_SetAssocData(interp, "tclPkgFiles", PkgFilesCleanupProc, pkgFiles);
@@ -508,7 +508,7 @@ PkgRequireCore(ClientData data[], Tcl_Interp *interp, int result)
     if (code != TCL_OK) {
 	return code;
     }
-    reqPtr = ckalloc(sizeof(Require));
+    reqPtr = Tcl_Alloc(sizeof(Require));
     Tcl_NRAddCallback(interp, PkgRequireCoreCleanup, reqPtr, NULL, NULL, NULL);
     reqPtr->clientDataPtr = data[3];
     reqPtr->name = name;
@@ -606,7 +606,7 @@ PkgRequireCoreFinal(ClientData data[], Tcl_Interp *interp, int result) {
 	CheckVersionAndConvert(interp, reqPtr->pkgPtr->version, &pkgVersionI, NULL);
 	satisfies = SomeRequirementSatisfied(pkgVersionI, reqc, reqv);
 
-	ckfree(pkgVersionI);
+	Tcl_Free(pkgVersionI);
 
 	if (!satisfies) {
 	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -630,7 +630,7 @@ PkgRequireCoreFinal(ClientData data[], Tcl_Interp *interp, int result) {
 
 static int
 PkgRequireCoreCleanup(ClientData data[], Tcl_Interp *interp, int result) {
-    ckfree(data[0]);
+    Tcl_Free(data[0]);
     return result;
 }
 
@@ -640,7 +640,7 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
     PkgAvail *availPtr, *bestPtr, *bestStablePtr;
     char *availVersion, *bestVersion, *bestStableVersion;
 				/* Internal rep. of versions */
-    int availStable, satisfies; 
+    int availStable, satisfies;
     Require *reqPtr = data[0];
     int reqc = PTR2INT(data[1]);
     Tcl_Obj **const reqv = data[2];
@@ -692,7 +692,7 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 	if (reqc > 0) {
 	    satisfies = SomeRequirementSatisfied(availVersion, reqc, reqv);
 	    if (!satisfies) {
-		ckfree(availVersion);
+		Tcl_Free(availVersion);
 		availVersion = NULL;
 		continue;
 	    }
@@ -710,7 +710,7 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 		 * The version of the package sought is better than the
 		 * currently selected version.
 		 */
-		ckfree(bestVersion);
+		Tcl_Free(bestVersion);
 		bestVersion = NULL;
 		goto newbest;
 	    }
@@ -738,7 +738,7 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 	}
 
 	if (!availStable) {
-	    ckfree(availVersion);
+	    Tcl_Free(availVersion);
 	    availVersion = NULL;
 <<<<<<< HEAD
 	} /* end for */
@@ -885,7 +885,7 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 		 * This stable version of the package sought is better
 		 * than the currently selected stable version.
 		 */
-		ckfree(bestStableVersion);
+		Tcl_Free(bestStableVersion);
 		bestStableVersion = NULL;
 		goto newstable;
 	    }
@@ -896,7 +896,7 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 	    CheckVersionAndConvert(interp, bestStablePtr->version, &bestStableVersion, NULL);
 	}
 
-	ckfree(availVersion);
+	Tcl_Free(availVersion);
 	availVersion = NULL;
     } /* end for */
 
@@ -905,12 +905,12 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
      */
 
     if (bestVersion != NULL) {
-	ckfree(bestVersion);
+	Tcl_Free(bestVersion);
 	bestVersion = NULL;
     }
 
     if (bestStableVersion != NULL) {
-	ckfree(bestStableVersion);
+	Tcl_Free(bestStableVersion);
 	bestStableVersion = NULL;
     }
 
@@ -944,7 +944,11 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 
 	pkgFiles = TclInitPkgFiles(interp);
 	/* Push "ifneeded" package name in "tclPkgFiles" assocdata. */
+<<<<<<< HEAD
 	pkgName = ckalloc(sizeof(PkgName) + strlen(name));
+=======
+	pkgName = Tcl_Alloc(sizeof(PkgName) + strlen(name));
+>>>>>>> upstream/master
 	pkgName->nextPtr = pkgFiles->names;
 	strcpy(pkgName->name, name);
 	pkgFiles->names = pkgName;
@@ -970,7 +974,7 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
     PkgFiles *pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
     PkgName *pkgName = pkgFiles->names;
     pkgFiles->names = pkgName->nextPtr;
-    ckfree(pkgName);
+    Tcl_Free(pkgName);
 
     reqPtr->pkgPtr = FindPackage(interp, name);
     if (result == TCL_OK) {
@@ -991,13 +995,13 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
 		result = TCL_ERROR;
 	    } else if (CheckVersionAndConvert(interp,
 		    versionToProvide, &vi, NULL) != TCL_OK) {
-		ckfree(pvi);
+		Tcl_Free(pvi);
 		result = TCL_ERROR;
 	    } else {
 		int res = CompareVersions(pvi, vi, NULL);
 
-		ckfree(pvi);
-		ckfree(vi);
+		Tcl_Free(pvi);
+		Tcl_Free(vi);
 		if (res != 0) {
 		    result = TCL_ERROR;
 		    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -1042,7 +1046,7 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
 	 */
 
 	if (reqPtr->pkgPtr->version != NULL) {
-	    ckfree(reqPtr->pkgPtr->version);
+	    Tcl_Free(reqPtr->pkgPtr->version);
 	    reqPtr->pkgPtr->version = NULL;
 	}
 	reqPtr->pkgPtr->clientData = NULL;
@@ -1382,7 +1386,7 @@ TclNRPackageObjCmd(
 	    pkgPtr = Tcl_GetHashValue(hPtr);
 	    Tcl_DeleteHashEntry(hPtr);
 	    if (pkgPtr->version != NULL) {
-		ckfree(pkgPtr->version);
+		Tcl_Free(pkgPtr->version);
 	    }
 	    while (pkgPtr->availPtr != NULL) {
 		availPtr = pkgPtr->availPtr;
@@ -1393,9 +1397,9 @@ TclNRPackageObjCmd(
 		    Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
 		    availPtr->pkgIndex = NULL;
 		}
-		ckfree(availPtr);
+		Tcl_Free(availPtr);
 	    }
-	    ckfree(pkgPtr);
+	    Tcl_Free(pkgPtr);
 	}
 	break;
     }
@@ -1415,7 +1419,7 @@ TclNRPackageObjCmd(
 	if (objc == 4) {
 	    hPtr = Tcl_FindHashEntry(&iPtr->packageTable, argv2);
 	    if (hPtr == NULL) {
-		ckfree(argv3i);
+		Tcl_Free(argv3i);
 		return TCL_OK;
 	    }
 	    pkgPtr = Tcl_GetHashValue(hPtr);
@@ -1428,16 +1432,16 @@ TclNRPackageObjCmd(
 		prevPtr = availPtr, availPtr = availPtr->nextPtr) {
 	    if (CheckVersionAndConvert(interp, availPtr->version, &avi,
 		    NULL) != TCL_OK) {
-		ckfree(argv3i);
+		Tcl_Free(argv3i);
 		return TCL_ERROR;
 	    }
 
 	    res = CompareVersions(avi, argv3i, NULL);
-	    ckfree(avi);
+	    Tcl_Free(avi);
 
 	    if (res == 0){
 		if (objc == 4) {
-		    ckfree(argv3i);
+		    Tcl_Free(argv3i);
 		    Tcl_SetObjResult(interp,
 			    Tcl_NewStringObj(availPtr->script, -1));
 		    return TCL_OK;
@@ -1450,6 +1454,7 @@ TclNRPackageObjCmd(
 		break;
 	    }
 	}
+<<<<<<< HEAD
 =======
 		}
 		Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
@@ -1461,12 +1466,15 @@ TclNRPackageObjCmd(
 	}
 >>>>>>> upstream/master
 	ckfree(argv3i);
+=======
+	Tcl_Free(argv3i);
+>>>>>>> upstream/master
 
 	if (objc == 4) {
 	    return TCL_OK;
 	}
 	if (availPtr == NULL) {
-	    availPtr = ckalloc(sizeof(PkgAvail));
+	    availPtr = Tcl_Alloc(sizeof(PkgAvail));
 	    availPtr->pkgIndex = NULL;
 	    DupBlock(availPtr->version, argv3, (unsigned) length + 1);
 
@@ -1707,7 +1715,7 @@ TclNRPackageObjCmd(
 	    }
 	} else if (objc == 3) {
 	    if (iPtr->packageUnknown != NULL) {
-		ckfree(iPtr->packageUnknown);
+		Tcl_Free(iPtr->packageUnknown);
 	    }
 <<<<<<< HEAD
 	    argv2 = Tcl_GetStringFromObj(objv[2], &length);
@@ -1916,7 +1924,7 @@ TclNRPackageObjCmd(
 	if (CheckVersionAndConvert(interp, argv2, &iva, NULL) != TCL_OK ||
 		CheckVersionAndConvert(interp, argv3, &ivb, NULL) != TCL_OK) {
 	    if (iva != NULL) {
-		ckfree(iva);
+		Tcl_Free(iva);
 	    }
 
 	    /*
@@ -1932,8 +1940,8 @@ TclNRPackageObjCmd(
 
 	Tcl_SetObjResult(interp,
 		Tcl_NewIntObj(CompareVersions(iva, ivb, NULL)));
-	ckfree(iva);
-	ckfree(ivb);
+	Tcl_Free(iva);
+	Tcl_Free(ivb);
 	break;
     case PKG_VERSIONS:
 	if (objc != 3) {
@@ -1968,12 +1976,12 @@ TclNRPackageObjCmd(
 	if (CheckVersionAndConvert(interp, argv2, &argv2i, NULL) != TCL_OK) {
 	    return TCL_ERROR;
 	} else if (CheckAllRequirements(interp, objc-3, objv+3) != TCL_OK) {
-	    ckfree(argv2i);
+	    Tcl_Free(argv2i);
 	    return TCL_ERROR;
 	}
 
 	satisfies = SomeRequirementSatisfied(argv2i, objc-3, objv+3);
-	ckfree(argv2i);
+	Tcl_Free(argv2i);
 
 	Tcl_SetObjResult(interp, Tcl_NewBooleanObj(satisfies));
 	break;
@@ -2021,6 +2029,7 @@ TclNRPackageObjCmdCleanup(ClientData data[], Tcl_Interp *interp, int result) {
 	 * See tclInt.h for the enum, just before Interp.
 	 */
 
+<<<<<<< HEAD
 	if (objc > 3) {
 	    Tcl_WrongNumArgs(interp, 2, objv, "?latest|stable?");
 	    return TCL_ERROR;
@@ -2028,6 +2037,37 @@ TclNRPackageObjCmdCleanup(ClientData data[], Tcl_Interp *interp, int result) {
 	    /*
 	     * Seting the value.
 	     */
+=======
+    hPtr = Tcl_CreateHashEntry(&iPtr->packageTable, name, &isNew);
+    if (isNew) {
+	pkgPtr = Tcl_Alloc(sizeof(Package));
+	pkgPtr->version = NULL;
+	pkgPtr->availPtr = NULL;
+	pkgPtr->clientData = NULL;
+	Tcl_SetHashValue(hPtr, pkgPtr);
+    } else {
+	pkgPtr = Tcl_GetHashValue(hPtr);
+    }
+    return pkgPtr;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclFreePackageInfo --
+ *
+ *	This function is called during interpreter deletion to free all of the
+ *	package-related information for the interpreter.
+ *
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	Memory is freed.
+ *
+ *----------------------------------------------------------------------
+ */
+>>>>>>> upstream/master
 
 	    int newPref;
 
@@ -2044,7 +2084,7 @@ TclNRPackageObjCmdCleanup(ClientData data[], Tcl_Interp *interp, int result) {
 	    hPtr != NULL; hPtr = Tcl_NextHashEntry(&search)) {
 	pkgPtr = Tcl_GetHashValue(hPtr);
 	if (pkgPtr->version != NULL) {
-	    ckfree(pkgPtr->version);
+	    Tcl_Free(pkgPtr->version);
 	}
 	while (pkgPtr->availPtr != NULL) {
 	    availPtr = pkgPtr->availPtr;
@@ -2056,11 +2096,62 @@ TclNRPackageObjCmdCleanup(ClientData data[], Tcl_Interp *interp, int result) {
 		availPtr->pkgIndex = NULL;
 >>>>>>> upstream/master
 	    }
+<<<<<<< HEAD
 	}
 
 	/*
 	 * Always return current value.
 	 */
+=======
+	    Tcl_Free(availPtr);
+	}
+	Tcl_Free(pkgPtr);
+    }
+    Tcl_DeleteHashTable(&iPtr->packageTable);
+    if (iPtr->packageUnknown != NULL) {
+	Tcl_Free(iPtr->packageUnknown);
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * CheckVersionAndConvert --
+ *
+ *	This function checks to see whether a version number has valid syntax.
+ *	It also generates a semi-internal representation (string rep of a list
+ *	of numbers).
+ *
+ * Results:
+ *	If string is a properly formed version number the TCL_OK is returned.
+ *	Otherwise TCL_ERROR is returned and an error message is left in the
+ *	interp's result.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+CheckVersionAndConvert(
+    Tcl_Interp *interp,		/* Used for error reporting. */
+    const char *string,		/* Supposedly a version number, which is
+				 * groups of decimal digits separated by
+				 * dots. */
+    char **internal,		/* Internal normalized representation */
+    int *stable)		/* Flag: Version is (un)stable. */
+{
+    const char *p = string;
+    char prevChar;
+    int hasunstable = 0;
+    /*
+     * 4* assuming that each char is a separator (a,b become ' -x ').
+     * 4+ to have spce for an additional -2 at the end
+     */
+    char *ibuf = Tcl_Alloc(4 + 4*strlen(string));
+    char *ip = ibuf;
+>>>>>>> upstream/master
 
 	Tcl_SetObjResult(interp,
 		Tcl_NewStringObj(pkgPreferOptions[iPtr->packagePrefer], -1));
@@ -2357,7 +2448,7 @@ CheckVersionAndConvert(
 	if (internal != NULL) {
 	    *internal = ibuf;
 	} else {
-	    ckfree(ibuf);
+	    Tcl_Free(ibuf);
 	}
 	if (stable != NULL) {
 	    *stable = !hasunstable;
@@ -2887,7 +2978,17 @@ SomeRequirementSatisfied(
 	    return 1;
 	}
     }
+<<<<<<< HEAD
     return 0;
+=======
+
+  error:
+    Tcl_Free(ibuf);
+    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+	    "expected version number but got \"%s\"", string));
+    Tcl_SetErrorCode(interp, "TCL", "VALUE", "VERSION", NULL);
+    return TCL_ERROR;
+>>>>>>> upstream/master
 }
 <<<<<<< HEAD
 
@@ -3063,7 +3164,7 @@ CheckRequirement(
      * Exactly one dash is present. Copy the string, split at the location of
      * dash and check that both parts are versions. Note that the max part can
      * be empty. Also note that the string allocated with strdup() must be
-     * freed with free() and not ckfree().
+     * freed with free() and not Tcl_Free().
      */
 
     DupString(buf, string);
@@ -3074,11 +3175,11 @@ CheckRequirement(
     if ((CheckVersionAndConvert(interp, buf, NULL, NULL) != TCL_OK) ||
 	    ((*dash != '\0') &&
 	    (CheckVersionAndConvert(interp, dash, NULL, NULL) != TCL_OK))) {
-	ckfree(buf);
+	Tcl_Free(buf);
 	return TCL_ERROR;
     }
 
-    ckfree(buf);
+    Tcl_Free(buf);
     return TCL_OK;
 }
 
@@ -3245,7 +3346,7 @@ RequirementSatisfied(
 	strcat(reqi, " -2");
 	res = CompareVersions(havei, reqi, &thisIsMajor);
 	satisfied = (res == 0) || ((res == 1) && !thisIsMajor);
-	ckfree(reqi);
+	Tcl_Free(reqi);
 	return satisfied;
     }
 
@@ -3269,8 +3370,8 @@ RequirementSatisfied(
 	CheckVersionAndConvert(NULL, buf, &min, NULL);
 	strcat(min, " -2");
 	satisfied = (CompareVersions(havei, min, NULL) >= 0);
-	ckfree(min);
-	ckfree(buf);
+	Tcl_Free(min);
+	Tcl_Free(buf);
 	return satisfied;
     }
 
@@ -3360,9 +3461,9 @@ Tcl_PkgInitStubsCheck(
 =======
     }
 
-    ckfree(min);
-    ckfree(max);
-    ckfree(buf);
+    Tcl_Free(min);
+    Tcl_Free(max);
+    Tcl_Free(buf);
     return satisfied;
 }
 

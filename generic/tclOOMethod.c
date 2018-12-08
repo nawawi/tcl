@@ -172,19 +172,19 @@ Tcl_NewInstanceMethod(
     int isNew;
 
     if (nameObj == NULL) {
-	mPtr = ckalloc(sizeof(Method));
+	mPtr = Tcl_Alloc(sizeof(Method));
 	mPtr->namePtr = NULL;
 	mPtr->refCount = 1;
 	goto populate;
     }
     if (!oPtr->methodsPtr) {
-	oPtr->methodsPtr = ckalloc(sizeof(Tcl_HashTable));
+	oPtr->methodsPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_InitObjHashTable(oPtr->methodsPtr);
 	oPtr->flags &= ~USE_CLASS_CACHE;
     }
     hPtr = Tcl_CreateHashEntry(oPtr->methodsPtr, (char *) nameObj, &isNew);
     if (isNew) {
-	mPtr = ckalloc(sizeof(Method));
+	mPtr = Tcl_Alloc(sizeof(Method));
 	mPtr->namePtr = nameObj;
 	mPtr->refCount = 1;
 	Tcl_IncrRefCount(nameObj);
@@ -244,14 +244,14 @@ Tcl_NewMethod(
     int isNew;
 
     if (nameObj == NULL) {
-	mPtr = ckalloc(sizeof(Method));
+	mPtr = Tcl_Alloc(sizeof(Method));
 	mPtr->namePtr = NULL;
 	mPtr->refCount = 1;
 	goto populate;
     }
     hPtr = Tcl_CreateHashEntry(&clsPtr->classMethods, (char *)nameObj,&isNew);
     if (isNew) {
-	mPtr = ckalloc(sizeof(Method));
+	mPtr = Tcl_Alloc(sizeof(Method));
 	mPtr->refCount = 1;
 	mPtr->namePtr = nameObj;
 	Tcl_IncrRefCount(nameObj);
@@ -303,7 +303,7 @@ TclOODelMethodRef(
 	    Tcl_DecrRefCount(mPtr->namePtr);
 	}
 
-	ckfree(mPtr);
+	Tcl_Free(mPtr);
     }
 }
 
@@ -367,7 +367,7 @@ TclOONewProcInstanceMethod(
     if (Tcl_ListObjLength(interp, argsObj, &argsLen) != TCL_OK) {
 	return NULL;
     }
-    pmPtr = ckalloc(sizeof(ProcedureMethod));
+    pmPtr = Tcl_Alloc(sizeof(ProcedureMethod));
     memset(pmPtr, 0, sizeof(ProcedureMethod));
     pmPtr->version = TCLOO_PROCEDURE_METHOD_VERSION;
     pmPtr->flags = flags & USE_DECLARER_NS;
@@ -376,7 +376,7 @@ TclOONewProcInstanceMethod(
     method = TclOOMakeProcInstanceMethod(interp, oPtr, flags, nameObj,
 	    argsObj, bodyObj, &procMethodType, pmPtr, &pmPtr->procPtr);
     if (method == NULL) {
-	ckfree(pmPtr);
+	Tcl_Free(pmPtr);
     } else if (pmPtrPtr != NULL) {
 	*pmPtrPtr = pmPtr;
     }
@@ -428,7 +428,7 @@ TclOONewProcMethod(
 	procName = (nameObj==NULL ? "<constructor>" : TclGetString(nameObj));
     }
 
-    pmPtr = ckalloc(sizeof(ProcedureMethod));
+    pmPtr = Tcl_Alloc(sizeof(ProcedureMethod));
     memset(pmPtr, 0, sizeof(ProcedureMethod));
     pmPtr->version = TCLOO_PROCEDURE_METHOD_VERSION;
     pmPtr->flags = flags & USE_DECLARER_NS;
@@ -441,7 +441,7 @@ TclOONewProcMethod(
 	Tcl_DecrRefCount(argsObj);
     }
     if (method == NULL) {
-	ckfree(pmPtr);
+	Tcl_Free(pmPtr);
     } else if (pmPtrPtr != NULL) {
 	*pmPtrPtr = pmPtr;
     }
@@ -522,12 +522,12 @@ TclOOMakeProcInstanceMethod(
 	    if (context.line
 		    && (context.nline >= 4) && (context.line[3] >= 0)) {
 		int isNew;
-		CmdFrame *cfPtr = ckalloc(sizeof(CmdFrame));
+		CmdFrame *cfPtr = Tcl_Alloc(sizeof(CmdFrame));
 		Tcl_HashEntry *hPtr;
 
 		cfPtr->level = -1;
 		cfPtr->type = context.type;
-		cfPtr->line = ckalloc(sizeof(int));
+		cfPtr->line = Tcl_Alloc(sizeof(int));
 		cfPtr->line[0] = context.line[3];
 		cfPtr->nline = 1;
 		cfPtr->framePtr = NULL;
@@ -635,12 +635,12 @@ TclOOMakeProcMethod(
 	    if (context.line
 		    && (context.nline >= 4) && (context.line[3] >= 0)) {
 		int isNew;
-		CmdFrame *cfPtr = ckalloc(sizeof(CmdFrame));
+		CmdFrame *cfPtr = Tcl_Alloc(sizeof(CmdFrame));
 		Tcl_HashEntry *hPtr;
 
 		cfPtr->level = -1;
 		cfPtr->type = context.type;
-		cfPtr->line = ckalloc(sizeof(int));
+		cfPtr->line = Tcl_Alloc(sizeof(int));
 		cfPtr->line[0] = context.line[3];
 		cfPtr->nline = 1;
 		cfPtr->framePtr = NULL;
@@ -816,6 +816,7 @@ PushMethodCallFrame(
     register int result;
     const char *namePtr;
     CallFrame **framePtrPtr = &fdPtr->framePtr;
+    ByteCode *codePtr;
 
     /*
      * Compute basic information on the basis of the type of method it is.
@@ -881,10 +882,8 @@ PushMethodCallFrame(
      * alternative is *so* slow...
      */
 
-    if (pmPtr->procPtr->bodyPtr->typePtr == &tclByteCodeType) {
-	ByteCode *codePtr =
-		pmPtr->procPtr->bodyPtr->internalRep.twoPtrValue.ptr1;
-
+    ByteCodeGetIntRep(pmPtr->procPtr->bodyPtr, &tclByteCodeType, codePtr);
+    if (codePtr) {
 	codePtr->nsPtr = nsPtr;
     }
     result = TclProcCompileProc(interp, pmPtr->procPtr,
@@ -1120,7 +1119,7 @@ ProcedureMethodCompiledVarDelete(
 	TclCleanupVar((Var *) infoPtr->cachedObjectVar, NULL);
     }
     Tcl_DecrRefCount(infoPtr->variableObj);
-    ckfree(infoPtr);
+    Tcl_Free(infoPtr);
 }
 
 static int
@@ -1145,7 +1144,7 @@ ProcedureMethodCompiledVarResolver(
 	return TCL_CONTINUE;
     }
 
-    infoPtr = ckalloc(sizeof(OOResVarInfo));
+    infoPtr = Tcl_Alloc(sizeof(OOResVarInfo));
     infoPtr->info.fetchProc = ProcedureMethodCompiledVarConnect;
     infoPtr->info.deleteProc = ProcedureMethodCompiledVarDelete;
     infoPtr->cachedObjectVar = NULL;
@@ -1198,14 +1197,14 @@ RenderDeclarerName(
 
 #define LIMIT 60
 #define ELLIPSIFY(str,len) \
-	((len) > LIMIT ? LIMIT : (len)), (str), ((len) > LIMIT ? "..." : "")
+	((len) > LIMIT ? LIMIT : ((int)len)), (str), ((len) > LIMIT ? "..." : "")
 
 static void
 MethodErrorHandler(
     Tcl_Interp *interp,
     Tcl_Obj *methodNameObj)
 {
-    int nameLen, objectNameLen;
+    size_t nameLen, objectNameLen;
     CallContext *contextPtr = ((Interp *) interp)->varFramePtr->clientData;
     Method *mPtr = contextPtr->callPtr->chain[contextPtr->index].mPtr;
     const char *objectName, *kindName, *methodName =
@@ -1235,7 +1234,7 @@ MethodErrorHandler(
 	kindName = "class";
     }
 
-    objectName = Tcl_GetStringFromObj(TclOOObjectName(interp, declarerPtr),
+    objectName = TclGetStringFromObj(TclOOObjectName(interp, declarerPtr),
 	    &objectNameLen);
     Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
 	    "\n    (%s \"%.*s%s\" method \"%.*s%s\" line %d)",
@@ -1265,7 +1264,7 @@ ConstructorErrorHandler(
 	kindName = "class";
     }
 
-    objectName = Tcl_GetStringFromObj(TclOOObjectName(interp, declarerPtr),
+    objectName = TclGetStringFromObj(TclOOObjectName(interp, declarerPtr),
 	    &objectNameLen);
     Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
 	    "\n    (%s \"%.*s%s\" constructor line %d)", kindName,
@@ -1294,7 +1293,7 @@ DestructorErrorHandler(
 	kindName = "class";
     }
 
-    objectName = Tcl_GetStringFromObj(TclOOObjectName(interp, declarerPtr),
+    objectName = TclGetStringFromObj(TclOOObjectName(interp, declarerPtr),
 	    &objectNameLen);
     Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
 	    "\n    (%s \"%.*s%s\" destructor line %d)", kindName,
@@ -1319,7 +1318,7 @@ DeleteProcedureMethodRecord(
     if (pmPtr->deleteClientdataProc) {
 	pmPtr->deleteClientdataProc(pmPtr->clientData);
     }
-    ckfree(pmPtr);
+    Tcl_Free(pmPtr);
 }
 
 static void
@@ -1370,14 +1369,14 @@ CloneProcedureMethod(
 
     bodyObj = Tcl_DuplicateObj(pmPtr->procPtr->bodyPtr);
     Tcl_GetString(bodyObj);
-    TclFreeIntRep(bodyObj);
+    Tcl_StoreIntRep(pmPtr->procPtr->bodyPtr, &tclByteCodeType, NULL);
 
     /*
      * Create the actual copy of the method record, manufacturing a new proc
      * record.
      */
 
-    pm2Ptr = ckalloc(sizeof(ProcedureMethod));
+    pm2Ptr = Tcl_Alloc(sizeof(ProcedureMethod));
     memcpy(pm2Ptr, pmPtr, sizeof(ProcedureMethod));
     pm2Ptr->refCount = 1;
     Tcl_IncrRefCount(argsObj);
@@ -1386,7 +1385,7 @@ CloneProcedureMethod(
 	    &pm2Ptr->procPtr) != TCL_OK) {
 	Tcl_DecrRefCount(argsObj);
 	Tcl_DecrRefCount(bodyObj);
-	ckfree(pm2Ptr);
+	Tcl_Free(pm2Ptr);
 	return TCL_ERROR;
     }
     Tcl_DecrRefCount(argsObj);
@@ -1431,7 +1430,7 @@ TclOONewForwardInstanceMethod(
 	return NULL;
     }
 
-    fmPtr = ckalloc(sizeof(ForwardMethod));
+    fmPtr = Tcl_Alloc(sizeof(ForwardMethod));
     fmPtr->prefixObj = prefixObj;
     Tcl_IncrRefCount(prefixObj);
     return (Method *) Tcl_NewInstanceMethod(interp, (Tcl_Object) oPtr,
@@ -1470,7 +1469,7 @@ TclOONewForwardMethod(
 	return NULL;
     }
 
-    fmPtr = ckalloc(sizeof(ForwardMethod));
+    fmPtr = Tcl_Alloc(sizeof(ForwardMethod));
     fmPtr->prefixObj = prefixObj;
     Tcl_IncrRefCount(prefixObj);
     return (Method *) Tcl_NewMethod(interp, (Tcl_Class) clsPtr, nameObj,
@@ -1566,7 +1565,7 @@ DeleteForwardMethod(
     ForwardMethod *fmPtr = clientData;
 
     Tcl_DecrRefCount(fmPtr->prefixObj);
-    ckfree(fmPtr);
+    Tcl_Free(fmPtr);
 }
 
 static int
@@ -1576,7 +1575,7 @@ CloneForwardMethod(
     ClientData *newClientData)
 {
     ForwardMethod *fmPtr = clientData;
-    ForwardMethod *fm2Ptr = ckalloc(sizeof(ForwardMethod));
+    ForwardMethod *fm2Ptr = Tcl_Alloc(sizeof(ForwardMethod));
 
     fm2Ptr->prefixObj = fmPtr->prefixObj;
     Tcl_IncrRefCount(fm2Ptr->prefixObj);
@@ -1614,9 +1613,7 @@ TclOOGetMethodBody(
     if (mPtr->typePtr == &procMethodType) {
 	ProcedureMethod *pmPtr = mPtr->clientData;
 
-	if (pmPtr->procPtr->bodyPtr->bytes == NULL) {
-	    (void) Tcl_GetString(pmPtr->procPtr->bodyPtr);
-	}
+	(void) TclGetString(pmPtr->procPtr->bodyPtr);
 	return pmPtr->procPtr->bodyPtr;
     }
     return NULL;

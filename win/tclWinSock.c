@@ -634,6 +634,16 @@ static TclInitProcessGlobalValueProc InitializeHostName;
 static ProcessGlobalValue hostName =
 	{0, 0, NULL, NULL, InitializeHostName, NULL, NULL};
 
+<<<<<<< HEAD
+=======
+    *encodingPtr = Tcl_GetEncoding(NULL, "utf-8");
+    *lengthPtr = Tcl_DStringLength(&ds);
+    *valuePtr = Tcl_Alloc(*lengthPtr + 1);
+    memcpy(*valuePtr, Tcl_DStringValue(&ds), *lengthPtr + 1);
+    Tcl_DStringFree(&ds);
+}
+
+>>>>>>> upstream/master
 /*
  * Simple wrapper round the SendMessage syscall.
  */
@@ -1291,8 +1301,8 @@ WaitForConnect(
 	}
 
 	/*
-	 * A non blocking socket waiting for an asyncronous connect returns
-	 * directly the error EWOULDBLOCK.
+	 * A non blocking socket waiting for an asynchronous connect
+	 * returns directly the error EWOULDBLOCK
 	 */
 
 	if (GOT_BITS(statePtr->flags, TCP_NONBLOCKING)) {
@@ -1867,7 +1877,7 @@ TcpCloseProc(
 		TclWinConvertError((DWORD) WSAGetLastError());
 		errorCode = Tcl_GetErrno();
 	    }
-	    ckfree(thisfd);
+	    Tcl_Free(thisfd);
 	}
 >>>>>>> upstream/master
     }
@@ -1909,9 +1919,32 @@ TcpCloseProc(
      * socket stack after the first time EOF is detected.
      */
 
+<<<<<<< HEAD
     if (GOT_BITS(statePtr->flags, SOCKET_EOF)) {
 	return 0;
     }
+=======
+    Tcl_Free(statePtr);
+    return errorCode;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TcpClose2Proc --
+ *
+ *	This function is called by the generic IO level to perform the channel
+ *	type specific part of a half-close: namely, a shutdown() on a socket.
+ *
+ * Results:
+ *	0 if successful, the value of errno if failed.
+ *
+ * Side effects:
+ *	Shuts down one side of the socket.
+ *
+ *----------------------------------------------------------------------
+ */
+>>>>>>> upstream/master
 
     /*
      * Check if there is an async connect running.
@@ -2947,9 +2980,9 @@ TcpGetHandleProc(
  *
  *	This might be called in 3 circumstances:
  *	-   By a regular socket command
- *	-   By the event handler to continue an asynchroneous connect
+ *	-   By the event handler to continue an asynchronously connect
  *	-   By a blocking socket function (gets/puts) to terminate the
- *	    connect synchroneously
+ *	    connect synchronously
  *
  * Results:
  *      TCL_OK, if the socket was successfully connected or an asynchronous
@@ -2961,7 +2994,7 @@ TcpGetHandleProc(
  *
  * Remarks:
  *	A single host name may resolve to more than one IP address, e.g. for
- *	an IPv4/IPv6 dual stack host. For handling asyncronously connecting
+ *	an IPv4/IPv6 dual stack host. For handling asynchronously connecting
  *	sockets in the background for such hosts, this function can act as a
  *	coroutine. On the first call, it sets up the control variables for the
  *	two nested loops over the local and remote addresses. Once the first
@@ -2969,7 +3002,7 @@ TcpGetHandleProc(
  *	event handler for that socket, and returns. When the callback occurs,
  *	control is transferred to the "reenter" label, right after the initial
  *	return and the loops resume as if they had never been interrupted.
- *	For syncronously connecting sockets, the loops work the usual way.
+ *	For synchronously connecting sockets, the loops work the usual way.
  *
  *----------------------------------------------------------------------
  */
@@ -3073,7 +3106,7 @@ TcpConnect(
 	    }
 
 	    /*
-	     * For asyncroneous connect set the socket in nonblocking mode
+	     * For asynchroneous connect set the socket in nonblocking mode
 	     * and activate connect notification
 	     */
 
@@ -3187,8 +3220,8 @@ TcpConnect(
 	    }
 
 	    /*
-	     * Clear the tsd socket list pointer if we did not wait for the
-	     * FD_CONNECT asynchronously.
+	     * Clear the tsd socket list pointer if we did not wait for
+	     * the FD_CONNECT asynchroneously
 	     */
 
 	    tsdPtr->pendingTcpState = NULL;
@@ -3271,7 +3304,7 @@ TcpConnect(
 	}
 
 	/*
-	 * Error message on syncroneous connect
+	 * Error message on synchroneous connect
 	 */
 
 	if (interp != NULL) {
@@ -10481,12 +10514,20 @@ SocketCheckProc(
     WaitForSingleObject(tsdPtr->socketListLock, INFINITE);
     for (statePtr = tsdPtr->socketList; statePtr != NULL;
 	    statePtr = statePtr->nextPtr) {
+<<<<<<< HEAD
 	if ((statePtr->readyEvents &
 		(statePtr->watchEvents | FD_CONNECT | FD_ACCEPT))
 	    && !(statePtr->flags & SOCKET_PENDING)
 	) {
 	    statePtr->flags |= SOCKET_PENDING;
 	    evPtr = ckalloc(sizeof(SocketEvent));
+=======
+	if (GOT_BITS(statePtr->readyEvents,
+		statePtr->watchEvents | FD_CONNECT | FD_ACCEPT)
+                && !GOT_BITS(statePtr->flags, SOCKET_PENDING)) {
+	    SET_BITS(statePtr->flags, SOCKET_PENDING);
+	    evPtr = Tcl_Alloc(sizeof(SocketEvent));
+>>>>>>> upstream/master
 	    evPtr->header.proc = SocketEventProc;
 	    evPtr->socket = statePtr->sockets->fd;
 	    Tcl_QueueEvent((Tcl_Event *) evPtr, TCL_QUEUE_TAIL);
@@ -10782,9 +10823,18 @@ AddSocketInfoFd(
 {
     TcpFdList *fds = statePtr->sockets;
 
+<<<<<<< HEAD
     if ( fds == NULL ) {
 	/* Add the first FD */
 	statePtr->sockets = ckalloc(sizeof(TcpFdList));
+=======
+    if (fds == NULL) {
+	/*
+         * Add the first FD.
+         */
+
+	statePtr->sockets = Tcl_Alloc(sizeof(TcpFdList));
+>>>>>>> upstream/master
 	fds = statePtr->sockets;
     } else {
 	/* Find end of list and append FD */
@@ -10792,7 +10842,7 @@ AddSocketInfoFd(
 	    fds = fds->next;
 	}
 
-	fds->next = ckalloc(sizeof(TcpFdList));
+	fds->next = Tcl_Alloc(sizeof(TcpFdList));
 	fds = fds->next;
     }
 =======
@@ -10830,7 +10880,7 @@ NewSocketInfo(SOCKET socket)
 static TcpState *
 NewSocketInfo(SOCKET socket)
 {
-    TcpState *statePtr = ckalloc(sizeof(TcpState));
+    TcpState *statePtr = Tcl_Alloc(sizeof(TcpState));
 
     memset(statePtr, 0, sizeof(TcpState));
 

@@ -555,7 +555,7 @@ TclpInitLibraryPath(
 	    str = Tcl_JoinPath(pathc, pathv, &ds);
 	    Tcl_ListObjAppendElement(NULL, pathPtr, TclDStringToObj(&ds));
 	}
-	ckfree(pathv);
+	Tcl_Free(pathv);
     }
 
     /*
@@ -604,7 +604,7 @@ TclpInitLibraryPath(
 >>>>>>> upstream/master
     str = TclGetString(pathPtr);
     *lengthPtr = pathPtr->length;
-    *valuePtr = ckalloc(*lengthPtr + 1);
+    *valuePtr = Tcl_Alloc(*lengthPtr + 1);
     memcpy(*valuePtr, str, *lengthPtr + 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1242,7 +1242,7 @@ TclpSetVariables(
  *
  * Results:
  *	The return value is the index in environ of an entry with the name
- *	"name", or -1 if there is no such entry. The integer at *lengthPtr is
+ *	"name", or (size_t)-1 if there is no such entry. The integer at *lengthPtr is
  *	filled in with the length of name (if a matching entry is found) or
  *	the length of the environ array (if no matching entry is found).
  *
@@ -1252,16 +1252,16 @@ TclpSetVariables(
  *----------------------------------------------------------------------
  */
 
-int
+size_t
 TclpFindVariable(
     const char *name,		/* Name of desired environment variable
 				 * (native). */
-    int *lengthPtr)		/* Used to return length of name (for
+    size_t *lengthPtr)		/* Used to return length of name (for
 				 * successful searches) or number of non-NULL
 				 * entries in environ (for unsuccessful
 				 * searches). */
 {
-    int i, result = -1;
+    size_t i, result = (size_t)-1;
     register const char *env, *p1, *p2;
     Tcl_DString envString;
 

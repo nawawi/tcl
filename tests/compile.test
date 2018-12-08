@@ -788,9 +788,14 @@ test compile-15.5 {proper TCL_RETURN code from [return]} {
 } ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 for {set noComp 0} {$noComp <= 1} {incr noComp} {
+=======
+# Do all tests once byte compiled and once with direct string evaluation
+foreach noComp {0 1} {
+>>>>>>> upstream/master
 =======
 # Do all tests once byte compiled and once with direct string evaluation
 foreach noComp {0 1} {
