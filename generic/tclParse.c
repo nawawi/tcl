@@ -207,7 +207,7 @@ void
 TclParseInit(
     Tcl_Interp *interp,		/* Interpreter to use for error reporting */
     const char *start,		/* Start of string to be parsed. */
-    size_t numBytes,		/* Total number of bytes in string. If (size_t)-1,
+    size_t numBytes,		/* Total number of bytes in string. If -1,
 				 * the script consists of all bytes up to the
 				 * first null character. */
     Tcl_Parse *parsePtr)	/* Points to struct to initialize */
@@ -253,7 +253,7 @@ Tcl_ParseCommand(
 				 * NULL, then no error message is provided. */
     const char *start,		/* First character of string containing one or
 				 * more Tcl commands. */
-    size_t numBytes,		/* Total number of bytes in string. If (size_t)-1,
+    size_t numBytes,		/* Total number of bytes in string. If -1,
 				 * the script consists of all bytes up to the
 				 * first null character. */
     int nested,			/* Non-zero means this is a nested command:
@@ -283,7 +283,7 @@ Tcl_ParseCommand(
 	}
 	return TCL_ERROR;
     }
-    if (numBytes == (size_t)-1) {
+    if (numBytes == TCL_AUTO_LENGTH) {
 	numBytes = strlen(start);
     }
     TclParseInit(interp, start, numBytes, parsePtr);
@@ -4436,6 +4436,7 @@ TclParseBackslash(
 	    }
 
 	    /*
+<<<<<<< HEAD
 	     * This is a variable reference. Call Tcl_ParseVarName to do all
 	     * the dirty work of parsing the name.
 	     */
@@ -4520,6 +4521,33 @@ TclParseBackslash(
 
 	    /*
 	     * Backslash substitution.
+=======
+	     * No hexdigits -> This is just "x".
+	     */
+
+	    result = 'x';
+	} else {
+	    /*
+	     * Keep only the last byte (2 hex digits).
+	     */
+	    result = (unsigned char) result;
+	}
+	break;
+    case 'u':
+	count += TclParseHex(p+1, (numBytes > 5) ? 4 : numBytes-2, &result);
+	if (count == 2) {
+	    /*
+	     * No hexdigits -> This is just "u".
+	     */
+	    result = 'u';
+	}
+	break;
+    case 'U':
+	count += TclParseHex(p+1, (numBytes > 9) ? 8 : numBytes-2, &result);
+	if (count == 2) {
+	    /*
+	     * No hexdigits -> This is just "U".
+>>>>>>> upstream/master
 	     */
 
 	    TclParseBackslash(src, numBytes, &tokenPtr->size, NULL);
@@ -5170,7 +5198,11 @@ Tcl_ParseQuotedString(
 =======
     const char *start,		/* Start of variable substitution string.
 				 * First character must be "$". */
+<<<<<<< HEAD
     size_t numBytes,		/* Total number of bytes in string. If (size_t)-1,
+>>>>>>> upstream/master
+=======
+    size_t numBytes,		/* Total number of bytes in string. If -1,
 >>>>>>> upstream/master
 				 * the string consists of all bytes up to the
 				 * first null character. */
@@ -5197,7 +5229,7 @@ Tcl_ParseQuotedString(
     if ((numBytes == 0) || (start == NULL)) {
 	return TCL_ERROR;
     }
-    if (numBytes == (size_t)-1) {
+    if (numBytes == TCL_AUTO_LENGTH) {
 	numBytes = strlen(start);
     }
 
@@ -5578,7 +5610,7 @@ Tcl_ParseBraces(
 				 * NULL, then no error message is provided. */
     const char *start,		/* Start of string enclosed in braces. The
 				 * first character must be {'. */
-    size_t numBytes,		/* Total number of bytes in string. If (size_t)-1,
+    size_t numBytes,		/* Total number of bytes in string. If -1,
 				 * the string consists of all bytes up to the
 				 * first null character. */
     register Tcl_Parse *parsePtr,
@@ -5601,7 +5633,7 @@ Tcl_ParseBraces(
     if ((numBytes == 0) || (start == NULL)) {
 	return TCL_ERROR;
     }
-    if (numBytes == (size_t)-1) {
+    if (numBytes == TCL_AUTO_LENGTH) {
 	numBytes = strlen(start);
     }
 
@@ -5781,7 +5813,7 @@ Tcl_ParseQuotedString(
 				 * NULL, then no error message is provided. */
     const char *start,		/* Start of the quoted string. The first
 				 * character must be '"'. */
-    size_t numBytes,		/* Total number of bytes in string. If (size_t)-1,
+    size_t numBytes,		/* Total number of bytes in string. If -1,
 				 * the string consists of all bytes up to the
 				 * first null character. */
     register Tcl_Parse *parsePtr,
@@ -5799,7 +5831,7 @@ Tcl_ParseQuotedString(
     if ((numBytes == 0) || (start == NULL)) {
 	return TCL_ERROR;
     }
-    if (numBytes == (size_t)-1) {
+    if (numBytes == TCL_AUTO_LENGTH) {
 	numBytes = strlen(start);
     }
 

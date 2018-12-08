@@ -196,7 +196,7 @@ static void		ZlibStreamCleanup(ZlibStreamHandle *zshPtr);
 static int		ZlibStreamSubcmd(Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
 static inline void	ZlibTransformEventTimerKill(ZlibChannelData *cd);
-static void		ZlibTransformTimerRun(ClientData clientData);
+static void		ZlibTransformTimerRun(void *clientData);
 
 /*
  * Type of zlib-based compressing and decompressing channels.
@@ -602,7 +602,7 @@ ExtractHeader(
 	SetValue(dictObj, "os", Tcl_NewIntObj(headerPtr->os));
     }
     if (headerPtr->time != 0 /* magic - no time */) {
-	SetValue(dictObj, "time", Tcl_NewLongObj((long) headerPtr->time));
+	SetValue(dictObj, "time", Tcl_NewLongObj(headerPtr->time));
     }
     if (headerPtr->text != Z_UNKNOWN) {
 	SetValue(dictObj, "type",
@@ -932,7 +932,7 @@ Tcl_ZlibStreamInit(
 
 static void
 ZlibStreamCmdDelete(
-    ClientData cd)
+    void *cd)
 {
     ZlibStreamHandle *zshPtr = cd;
 
@@ -1691,7 +1691,7 @@ Tcl_ZlibStreamGet(
 	    count = 0;
 	    for (i=0; i<listLen; i++) {
 		Tcl_ListObjIndex(NULL, zshPtr->outData, i, &itemObj);
-		itemPtr = TclGetByteArrayFromObj(itemObj, &itemLen);
+		(void) TclGetByteArrayFromObj(itemObj, &itemLen);
 		if (i == 0) {
 		    count += itemLen - zshPtr->outPos;
 		} else {
@@ -2063,7 +2063,7 @@ Tcl_ZlibInflate(
     if (headerPtr != NULL) {
 	ExtractHeader(&header, gzipHeaderDictObj);
 	SetValue(gzipHeaderDictObj, "size",
-		Tcl_NewLongObj((long) stream.total_out));
+		Tcl_NewLongObj(stream.total_out));
 	Tcl_Free(nameBuf);
 	Tcl_Free(commentBuf);
     }
@@ -2123,7 +2123,7 @@ Tcl_ZlibAdler32(
 
 static int
 ZlibCmd(
-    ClientData notUsed,
+    void *notUsed,
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -2917,7 +2917,7 @@ ZlibPushSubcmd(
 
 static int
 ZlibStreamCmd(
-    ClientData cd,
+    void *cd,
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -3043,7 +3043,7 @@ ZlibStreamCmd(
 
 static int
 ZlibStreamAddCmd(
-    ClientData cd,
+    void *cd,
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -3167,7 +3167,7 @@ ZlibStreamAddCmd(
 
 static int
 ZlibStreamPutCmd(
-    ClientData cd,
+    void *cd,
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -3256,7 +3256,7 @@ ZlibStreamPutCmd(
 
 static int
 ZlibStreamHeaderCmd(
-    ClientData cd,
+    void *cd,
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -3295,7 +3295,7 @@ ZlibStreamHeaderCmd(
 
 static int
 ZlibTransformClose(
-    ClientData instanceData,
+    void *instanceData,
     Tcl_Interp *interp)
 {
     ZlibChannelData *cd = instanceData;
@@ -3405,7 +3405,7 @@ ZlibTransformClose(
 
 static int
 ZlibTransformInput(
-    ClientData instanceData,
+    void *instanceData,
     char *buf,
     int toRead,
     int *errorCodePtr)
@@ -3542,7 +3542,7 @@ ZlibTransformInput(
 
 static int
 ZlibTransformOutput(
-    ClientData instanceData,
+    void *instanceData,
     const char *buf,
     int toWrite,
     int *errorCodePtr)
@@ -3781,7 +3781,7 @@ ZlibTransformFlush(
 
 static int
 ZlibTransformSetOption(			/* not used */
-    ClientData instanceData,
+    void *instanceData,
     Tcl_Interp *interp,
     const char *optionName,
     const char *value)
@@ -3948,7 +3948,7 @@ ZlibTransformSetOption(			/* not used */
 
 static int
 ZlibTransformGetOption(
-    ClientData instanceData,
+    void *instanceData,
     Tcl_Interp *interp,
     const char *optionName,
     Tcl_DString *dsPtr)
@@ -4086,7 +4086,7 @@ ZlibTransformGetOption(
 
 static void
 ZlibTransformWatch(
-    ClientData instanceData,
+    void *instanceData,
     int mask)
 {
     ZlibChannelData *cd = instanceData;
@@ -4109,7 +4109,7 @@ ZlibTransformWatch(
 
 static int
 ZlibTransformEventHandler(
-    ClientData instanceData,
+    void *instanceData,
     int interestMask)
 {
     ZlibChannelData *cd = instanceData;
@@ -4130,7 +4130,7 @@ ZlibTransformEventTimerKill(
 
 static void
 ZlibTransformTimerRun(
-    ClientData clientData)
+    void *clientData)
 {
     ZlibChannelData *cd = clientData;
 
@@ -4151,9 +4151,9 @@ ZlibTransformTimerRun(
 
 static int
 ZlibTransformGetHandle(
-    ClientData instanceData,
+    void *instanceData,
     int direction,
-    ClientData *handlePtr)
+    void **handlePtr)
 {
     ZlibChannelData *cd = instanceData;
 
@@ -4172,7 +4172,7 @@ ZlibTransformGetHandle(
 
 static int
 ZlibTransformBlockMode(
-    ClientData instanceData,
+    void *instanceData,
     int mode)
 {
     ZlibChannelData *cd = instanceData;

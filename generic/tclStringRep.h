@@ -53,6 +53,7 @@ typedef struct String {
 =======
 typedef struct {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 typedef struct {
@@ -64,6 +65,9 @@ typedef struct {
 				 * this value has not been calculated. >= 0
 =======
     size_t numChars;		/* The number of chars in the string. (size_t)-1 means
+=======
+    size_t numChars;		/* The number of chars in the string. -1 means
+>>>>>>> upstream/master
 				 * this value has not been calculated. Any other
 >>>>>>> upstream/master
 				 * means that there is a valid Unicode rep, or

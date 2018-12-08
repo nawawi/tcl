@@ -1755,18 +1755,18 @@ TclFreeObj(
      * sure we do not accept a second free when falling from 0 to -1.
      * Skip that possibility so any double free will trigger the panic.
      */
-    objPtr->refCount = (size_t)-1;
+    objPtr->refCount = TCL_AUTO_LENGTH;
 
     /*
      * Invalidate the string rep first so we can use the bytes value for our
      * pointer chain, and signal an obj deletion (as opposed to shimmering)
-     * with 'length == (size_t)-1'.
+     * with 'length == TCL_AUTO_LENGTH'.
      */
 >>>>>>> upstream/master
 
 <<<<<<< HEAD
     TclInvalidateStringRep(objPtr);
-    objPtr->length = (size_t)-1;
+    objPtr->length = TCL_AUTO_LENGTH;
 
     if (ObjDeletePending(context)) {
 	PushObjToDelete(context, objPtr);
@@ -2266,6 +2266,7 @@ TclObjBeingDeleted(
     Tcl_Obj *objPtr)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     return (objPtr->length == -1);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2370,10 +2371,15 @@ TclFreeObj(
 #endif /* TCL_MEM_DEBUG */
 <<<<<<< HEAD
 =======
+=======
+    return (objPtr->length == TCL_AUTO_LENGTH);
+}
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
 <<<<<<< HEAD
  * TclObjBeingDeleted --
  *
@@ -2384,6 +2390,8 @@ TclFreeObj(
  * Results:
  *	1 if being deleted, 0 otherwise.
 =======
+=======
+>>>>>>> upstream/master
  * Tcl_DuplicateObj --
  *
  *	Create and return a new object that is a duplicate of the argument
@@ -2399,6 +2407,9 @@ TclFreeObj(
  *	  2) If the source object has an internal representation (i.e. its
  *	     typePtr is non-NULL), the new object's internal rep is set to a
  *	     copy; otherwise the new internal rep is marked invalid.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  * Side effects:
@@ -2568,7 +2579,7 @@ Tcl_GetString(
 		    objPtr->typePtr->name);
 	}
 	objPtr->typePtr->updateStringProc(objPtr);
-	if (objPtr->bytes == NULL || objPtr->length == (size_t)-1
+	if (objPtr->bytes == NULL || objPtr->length == TCL_AUTO_LENGTH
 		|| objPtr->bytes[objPtr->length] != '\0') {
 	    Tcl_Panic("UpdateStringProc for type '%s' "
 		    "failed to create a valid string rep",
@@ -11660,7 +11671,7 @@ Tcl_SetBooleanObj(
 		    objPtr->typePtr->name);
 	}
 	objPtr->typePtr->updateStringProc(objPtr);
-	if (objPtr->bytes == NULL || objPtr->length == (size_t)-1
+	if (objPtr->bytes == NULL || objPtr->length == TCL_AUTO_LENGTH
 		|| objPtr->bytes[objPtr->length] != '\0') {
 	    Tcl_Panic("UpdateStringProc for type '%s' "
 		    "failed to create a valid string rep",
@@ -11682,7 +11693,7 @@ Tcl_SetBooleanObj(
  *	the tools needed to set an object's string representation. The
  *	function is determined by the arguments.
  *	
- *	(objPtr->bytes != NULL && bytes != NULL) || (numBytes < 0)
+ *	(objPtr->bytes != NULL && bytes != NULL) || (numBytes == -1)
  *	    Invalid call -- panic!
  *	
  *	objPtr->bytes == NULL && bytes == NULL && numBytes >= 0
@@ -11721,35 +11732,31 @@ char *
 Tcl_InitStringRep(
     Tcl_Obj *objPtr,	/* Object whose string rep is to be set */
     const char *bytes,
-    unsigned int numBytes)
+    size_t numBytes)
 {
     assert(objPtr->bytes == NULL || bytes == NULL);
-
-    if (numBytes > INT_MAX) {
-	Tcl_Panic("max size for a Tcl value (%d bytes) exceeded", INT_MAX);
-    }
 
     /* Allocate */
     if (objPtr->bytes == NULL) {
 	/* Allocate only as empty - extend later if bytes copied */
 	objPtr->length = 0;
 	if (numBytes) {
-	    objPtr->bytes = attemptckalloc(numBytes + 1);
+	    objPtr->bytes = Tcl_AttemptAlloc(numBytes + 1);
 	    if (objPtr->bytes == NULL) {
 		return NULL;
 	    }
 	    if (bytes) {
 		/* Copy */
 		memcpy(objPtr->bytes, bytes, numBytes);
-		objPtr->length = (int) numBytes;
+		objPtr->length = numBytes;
 	    }
 	} else {
 	    TclInitStringRep(objPtr, NULL, 0);
 	}
     } else {
 	/* objPtr->bytes != NULL bytes == NULL - Truncate */
-	objPtr->bytes = ckrealloc(objPtr->bytes, numBytes + 1);
-	objPtr->length = (int)numBytes;
+	objPtr->bytes = Tcl_Realloc(objPtr->bytes, numBytes + 1);
+	objPtr->length = numBytes;
     }
 
     /* Terminate */
@@ -12870,19 +12877,6 @@ UpdateStringOfInt(
     (void) Tcl_InitStringRep(objPtr, NULL,
 	    TclFormatInt(dst, objPtr->internalRep.wideValue));
 }
-
-#if !defined(TCL_NO_DEPRECATED) && TCL_MAJOR_VERSION < 9 && !defined(TCL_WIDE_INT_IS_LONG)
-static void
-UpdateStringOfOldInt(
-    register Tcl_Obj *objPtr)	/* Int object whose string rep to update. */
-{
-    char *dst = Tcl_InitStringRep( objPtr, NULL, TCL_INTEGER_SPACE);
-
-    TclOOM(dst, TCL_INTEGER_SPACE + 1);
-    (void) Tcl_InitStringRep(objPtr, NULL,
-	    TclFormatInt(dst, objPtr->internalRep.longValue));
-}
-#endif
 
 /*
  *----------------------------------------------------------------------
@@ -13008,38 +13002,6 @@ Tcl_DbNewLongObj(
     return Tcl_NewLongObj(longValue);
 }
 #endif /* TCL_MEM_DEBUG */
-
-/*
- *----------------------------------------------------------------------
- *
- * Tcl_SetLongObj --
- *
- *	Modify an object to be an integer object and to have the specified
- *	long integer value.
- *
- * Results:
- *	None.
- *
- * Side effects:
- *	The object's old string rep, if any, is freed. Also, any old internal
- *	rep is freed.
- *
- *----------------------------------------------------------------------
- */
-
-#undef Tcl_SetLongObj
-void
-Tcl_SetLongObj(
-    register Tcl_Obj *objPtr,	/* Object whose internal rep to init. */
-    register long longValue)	/* Long integer used to initialize the
-				 * object's value. */
-{
-    if (Tcl_IsShared(objPtr)) {
-	Tcl_Panic("%s called with shared object", "Tcl_SetLongObj");
-    }
-
-    TclSetIntObj(objPtr, longValue);
-}
 
 /*
  *----------------------------------------------------------------------
@@ -14032,6 +13994,7 @@ TclGetNumberFromObj(
  *----------------------------------------------------------------------
  */
 
+#undef Tcl_IncrRefCount
 void
 Tcl_IncrRefCount(
     Tcl_Obj *objPtr)	/* The object we are registering a reference to. */
@@ -14052,6 +14015,7 @@ Tcl_IncrRefCount(
  *----------------------------------------------------------------------
  */
 
+#undef Tcl_DecrRefCount
 void
 Tcl_DecrRefCount(
     Tcl_Obj *objPtr)	/* The object we are releasing a reference to. */
@@ -14074,11 +14038,12 @@ Tcl_DecrRefCount(
  *----------------------------------------------------------------------
  */
 
+#undef Tcl_IsShared
 int
 Tcl_IsShared(
     Tcl_Obj *objPtr)	/* The object to test for being shared. */
 {
-    return ((objPtr)->refCount > 1);
+    return ((objPtr)->refCount + 1 > 2);
 }
 
 /*

@@ -65,10 +65,6 @@ extern "C" {
  * win/tcl.m4		(not patchlevel)
 >>>>>>> upstream/master
  * README		(sections 0 and 2, with and without separator)
- * macosx/Tcl.pbproj/project.pbxproj (not patchlevel) 1 LOC
- * macosx/Tcl.pbproj/default.pbxuser (not patchlevel) 1 LOC
- * macosx/Tcl.xcode/project.pbxproj (not patchlevel) 2 LOC
- * macosx/Tcl.xcode/default.pbxuser (not patchlevel) 1 LOC
  * macosx/Tcl-Common.xcconfig (not patchlevel) 1 LOC
  * win/README		(not patchlevel) (sections 0 and 2)
  * unix/tcl.spec	(1 LOC patch)
@@ -3135,6 +3131,14 @@ EXTERN TCL_NORETURN void		Tcl_MainEx(int argc, char **argv,
 EXTERN const char *	Tcl_PkgInitStubsCheck(Tcl_Interp *interp,
 			    const char *version, int exact);
 EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
+EXTERN void		Tcl_FindExecutable(const char *argv0);
+EXTERN void		Tcl_SetPanicProc(
+			    TCL_NORETURN1 Tcl_PanicProc *panicProc);
+EXTERN void		Tcl_StaticPackage(Tcl_Interp *interp,
+			    const char *pkgName,
+			    Tcl_PackageInitProc *initProc,
+			    Tcl_PackageInitProc *safeInitProc);
+EXTERN Tcl_ExitProc *Tcl_SetExitProc(TCL_NORETURN1 Tcl_ExitProc *proc);
 #ifndef _WIN32
 EXTERN int		TclZipfs_AppHook(int *argc, char ***argv);
 #endif

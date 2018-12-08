@@ -45,6 +45,7 @@
 #undef Tcl_CreateHashEntry
 #undef Tcl_Panic
 #undef Tcl_FindExecutable
+#undef Tcl_SetExitProc
 #undef Tcl_SetPanicProc
 #undef TclpGetPid
 #undef TclSockMinimumBuffers
@@ -56,6 +57,7 @@
 =======
 >>>>>>> upstream/master
 #undef Tcl_SetIntObj
+<<<<<<< HEAD
 <<<<<<< HEAD
 #undef TclpInetNtoa
 #undef TclWinGetServByName
@@ -327,6 +329,10 @@ static int formatInt(char *buffer, int n){
 #endif
 =======
 >>>>>>> upstream/master
+=======
+#undef TclStaticPackage
+#define TclStaticPackage Tcl_StaticPackage
+>>>>>>> upstream/master
 
 #ifdef TCL_MEM_DEBUG
 #   define Tcl_Alloc TclpAlloc
@@ -462,11 +468,68 @@ Tcl_WinUtfToTChar(
     size_t len,
     Tcl_DString *dsPtr)
 {
+#if TCL_UTF_MAX > 4
+    Tcl_UniChar ch = 0;
+    wchar_t *w, *wString;
+    const char *p, *end;
+    int oldLength;
+#endif
+
     Tcl_DStringInit(dsPtr);
     if (!string) {
 	return NULL;
     }
+#if TCL_UTF_MAX > 4
+
+    if (len < 0) {
+	len = strlen(string);
+    }
+
+    /*
+     * Unicode string length in Tcl_UniChars will be <= UTF-8 string length in
+     * bytes.
+     */
+
+    oldLength = Tcl_DStringLength(dsPtr);
+
+    Tcl_DStringSetLength(dsPtr,
+	    oldLength + (int) ((len + 1) * sizeof(wchar_t)));
+    wString = (wchar_t *) (Tcl_DStringValue(dsPtr) + oldLength);
+
+    w = wString;
+    p = string;
+    end = string + len - 4;
+    while (p < end) {
+	p += TclUtfToUniChar(p, &ch);
+	if (ch > 0xFFFF) {
+	    *w++ = (wchar_t) (0xD800 + ((ch -= 0x10000) >> 10));
+	    *w++ = (wchar_t) (0xDC00 | (ch & 0x3FF));
+	} else {
+	    *w++ = ch;
+	}
+    }
+    end += 4;
+    while (p < end) {
+	if (Tcl_UtfCharComplete(p, end-p)) {
+	    p += TclUtfToUniChar(p, &ch);
+	} else {
+	    ch = UCHAR(*p++);
+	}
+	if (ch > 0xFFFF) {
+	    *w++ = (wchar_t) (0xD800 + ((ch -= 0x10000) >> 10));
+	    *w++ = (wchar_t) (0xDC00 | (ch & 0x3FF));
+	} else {
+	    *w++ = ch;
+	}
+    }
+    *w = '\0';
+    Tcl_DStringSetLength(dsPtr,
+	    oldLength + ((char *) w - (char *) wString));
+
+    return (char *)wString;
+#else
     return (char *)Tcl_UtfToUniCharDString(string, len, dsPtr);
+#endif
 }
 
 char *
@@ -475,6 +538,12 @@ Tcl_WinTCharToUtf(
     size_t len,
     Tcl_DString *dsPtr)
 {
+#if TCL_UTF_MAX > 4
+    const wchar_t *w, *wEnd;
+    char *p, *result;
+    int oldLength, blen = 1;
+#endif
+
     Tcl_DStringInit(dsPtr);
     if (!string) {
 	return NULL;
@@ -484,7 +553,32 @@ Tcl_WinTCharToUtf(
     } else {
 	len /= 2;
     }
+#if TCL_UTF_MAX > 4
+    oldLength = Tcl_DStringLength(dsPtr);
+    Tcl_DStringSetLength(dsPtr, oldLength + (len + 1) * 4);
+    result = Tcl_DStringValue(dsPtr) + oldLength;
+
+    p = result;
+    wEnd = (wchar_t *)string + len;
+    for (w = (wchar_t *)string; w < wEnd; ) {
+	if (!blen && ((*w & 0xFC00) != 0xDC00)) {
+	    /* Special case for handling upper surrogates. */
+	    p += Tcl_UniCharToUtf(-1, p);
+	}
+	blen = Tcl_UniCharToUtf(*w, p);
+	p += blen;
+	w++;
+    }
+    if (!blen) {
+	/* Special case for handling upper surrogates. */
+	p += Tcl_UniCharToUtf(-1, p);
+    }
+    Tcl_DStringSetLength(dsPtr, oldLength + (p - result));
+
+    return result;
+#else
     return Tcl_UniCharToUtfDString((Tcl_UniChar *)string, len, dsPtr);
+#endif
 }
 
 #if defined(TCL_WIDE_INT_IS_LONG)
@@ -831,6 +925,10 @@ static const TclIntStubs tclIntStubs = {
     TclPtrIncrObjVar, /* 254 */
     TclPtrObjMakeUpvar, /* 255 */
     TclPtrUnsetVar, /* 256 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+    TclStaticPackage, /* 257 */
 >>>>>>> upstream/master
 };
 
@@ -1084,7 +1182,7 @@ const TclStubs tclStubs = {
     Tcl_DbNewObj, /* 27 */
     Tcl_DbNewStringObj, /* 28 */
     Tcl_DuplicateObj, /* 29 */
-    TclFreeObj, /* 30 */
+    0, /* 30 */
     Tcl_GetBoolean, /* 31 */
     Tcl_GetBooleanFromObj, /* 32 */
     Tcl_GetByteArrayFromObj, /* 33 */
@@ -1198,7 +1296,7 @@ const TclStubs tclStubs = {
     Tcl_ExprObj, /* 141 */
     Tcl_ExprString, /* 142 */
     Tcl_Finalize, /* 143 */
-    Tcl_FindExecutable, /* 144 */
+    0, /* 144 */
     Tcl_FirstHashEntry, /* 145 */
     Tcl_Flush, /* 146 */
     Tcl_FreeResult, /* 147 */
@@ -1292,7 +1390,7 @@ const TclStubs tclStubs = {
     Tcl_SetErrno, /* 227 */
     Tcl_SetErrorCode, /* 228 */
     Tcl_SetMaxBlockTime, /* 229 */
-    Tcl_SetPanicProc, /* 230 */
+    0, /* 230 */
     Tcl_SetRecursionLimit, /* 231 */
     0, /* 232 */
     Tcl_SetServiceMode, /* 233 */
@@ -1306,7 +1404,7 @@ const TclStubs tclStubs = {
     Tcl_SourceRCFile, /* 241 */
     Tcl_SplitList, /* 242 */
     Tcl_SplitPath, /* 243 */
-    Tcl_StaticPackage, /* 244 */
+    0, /* 244 */
     Tcl_StringMatch, /* 245 */
     0, /* 246 */
     0, /* 247 */
@@ -1581,7 +1679,7 @@ const TclStubs tclStubs = {
     Tcl_GetCommandFromObj, /* 516 */
     Tcl_GetCommandFullName, /* 517 */
     Tcl_FSEvalFileEx, /* 518 */
-    Tcl_SetExitProc, /* 519 */
+    0, /* 519 */
     Tcl_LimitAddHandler, /* 520 */
     Tcl_LimitRemoveHandler, /* 521 */
     Tcl_LimitReady, /* 522 */

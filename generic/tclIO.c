@@ -5683,10 +5683,15 @@ CloseChannelPart(
  *
  * Results:
 <<<<<<< HEAD
+<<<<<<< HEAD
  *	None.
 =======
  *	The number of bytes written or (size_t)-1 in case of error. If (size_t)-1,
  *	Tcl_GetErrno will return the error code.
+>>>>>>> upstream/master
+=======
+ *	The number of bytes written or TCL_IO_FAILURE in case of error. If
+ *	TCL_IO_FAILURE, Tcl_GetErrno will return the error code.
 >>>>>>> upstream/master
  *
  * Side effects:
@@ -5889,9 +5894,14 @@ Tcl_ClearChannelHandlers(
  *	No encoding conversions are applied to the bytes being read.
  *
  * Results:
+<<<<<<< HEAD
  *	The number of bytes written or (size_t)-1 in case of error. If (size_t)-1,
 >>>>>>> upstream/master
  *	Tcl_GetErrno will return the error code.
+=======
+ *	The number of bytes written or TCL_IO_FAILURE in case of error. If
+ *	TCL_IO_FAILURE, Tcl_GetErrno will return the error code.
+>>>>>>> upstream/master
  *
  * Side effects:
  *	May buffer up output and may cause output to be produced on the
@@ -5916,7 +5926,7 @@ Tcl_Write(
 >>>>>>> upstream/master
     Tcl_Channel chan,		/* The channel to buffer output for. */
     const char *src,		/* Data to queue in output buffer. */
-    size_t srcLen)		/* Length of data in bytes, or (size_t)-1 for
+    size_t srcLen)		/* Length of data in bytes, or -1 for
 				 * strlen(). */
 {
 <<<<<<< HEAD
@@ -5928,10 +5938,10 @@ Tcl_Write(
     size_t written;
 
     if (CheckChannelErrors(statePtr, TCL_WRITABLE | CHANNEL_RAW_MODE) != 0) {
-	return (size_t)-1;
+	return TCL_IO_FAILURE;
     }
 
-    if (srcLen == (size_t)-1) {
+    if (srcLen == TCL_AUTO_LENGTH) {
 	srcLen = strlen(src);
     }
 
@@ -5941,7 +5951,7 @@ Tcl_Write(
      */
 
     written = ChanWrite(chanPtr, src, srcLen, &errorCode);
-    if (written == (size_t)-1) {
+    if (written == TCL_IO_FAILURE) {
 	Tcl_SetErrno(errorCode);
     }
 
@@ -5996,8 +6006,8 @@ Tcl_Write(
 >>>>>>> upstream/master
  *
  * Results:
- *	The number of bytes written or (size_t)-1 in case of error. If (size_t)-1,
- *	Tcl_GetErrno will return the error code.
+ *	The number of bytes written or TCL_IO_FAILURE in case of error. If
+ *	TCL_IO_FAILURE, Tcl_GetErrno will return the error code.
  *
  * Side effects:
  *	May buffer up output and may cause output to be produced on the
@@ -6016,7 +6026,7 @@ Tcl_WriteChars(
     Tcl_Channel chan,		/* The channel to buffer output for. */
     const char *src,		/* UTF-8 characters to queue in output
 				 * buffer. */
-    size_t len)			/* Length of string in bytes, or (size_t)-1 for
+    size_t len)			/* Length of string in bytes, or -1 for
 				 * strlen(). */
 {
     Channel *chanPtr = (Channel *) chan;
@@ -8462,9 +8472,13 @@ Tcl_ReadChars(
  *	converted to UTF-8 using the encoding specified by the channel.
  *
  * Results:
+<<<<<<< HEAD
  *	Number of characters accumulated in the object or -1 if error,
  *	blocked, or EOF. If -1, use Tcl_GetErrno() to retrieve the POSIX error
  *	code for the error or condition that occurred.
+=======
+ *	The number of bytes stored in the channel, or TCL_IO_FAILURE on error.
+>>>>>>> upstream/master
  *
  * Side effects:
  *	Consumes input from the channel.
@@ -8531,10 +8545,17 @@ DoReadChars(
      * done on objPtr.
      */
 
+<<<<<<< HEAD
     if ((statePtr->encoding == NULL)
 	    && ((statePtr->inputTranslation == TCL_TRANSLATE_LF)
 		    || (statePtr->inputTranslation == TCL_TRANSLATE_CR))) {
 	return TclGetsObjBinary(chan, objPtr);
+=======
+    flags = statePtr->flags;
+    if (CheckChannelErrors(statePtr, TCL_READABLE) != 0) {
+	len = TCL_IO_FAILURE;
+	goto done;
+>>>>>>> upstream/master
     }
 
     /*

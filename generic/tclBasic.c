@@ -19985,6 +19985,7 @@ TclEvalEx(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 void
 TclAdvanceLines(
     int *line,
@@ -20019,6 +20020,14 @@ TclAdvanceLines(
  * TIP #280
  *----------------------------------------------------------------------
  */
+=======
+    Tcl_SetVar2Ex(interp, "tcl_platform", "wordSize",
+	    Tcl_NewWideIntObj(sizeof(long)), TCL_GLOBAL_ONLY);
+
+    /* TIP #291 */
+    Tcl_SetVar2Ex(interp, "tcl_platform", "pointerSize",
+	    Tcl_NewWideIntObj(sizeof(void *)), TCL_GLOBAL_ONLY);
+>>>>>>> upstream/master
 
 void
 TclAdvanceContinuations(

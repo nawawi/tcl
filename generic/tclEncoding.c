@@ -1693,7 +1693,9 @@ LoadTableEncoding(
     };
 
     Tcl_DStringInit(&lineString);
-    Tcl_Gets(chan, &lineString);
+    if (Tcl_Gets(chan, &lineString) == TCL_IO_FAILURE) {
+	return NULL;
+    }
     line = Tcl_DStringValue(&lineString);
 
     fallback = (int) strtol(line, &line, 16);
@@ -1733,8 +1735,11 @@ LoadTableEncoding(
     for (i = 0; i < numPages; i++) {
 	int ch;
 	const char *p;
+	size_t expected = 3 + 16 * (16 * 4 + 1);
 
-	Tcl_ReadChars(chan, objPtr, 3 + 16 * (16 * 4 + 1), 0);
+	if (Tcl_ReadChars(chan, objPtr, expected, 0) != expected) {
+	    return NULL;
+	}
 	p = TclGetString(objPtr);
 	hi = (staticHex[UCHAR(p[0])] << 4) + staticHex[UCHAR(p[1])];
 	dataPtr->toUnicode[hi] = pageMemPtr;
@@ -2116,7 +2121,7 @@ BinaryProc(
     *srcReadPtr = srcLen;
     *dstWrotePtr = srcLen;
     *dstCharsPtr = srcLen;
-    memcpy(dst, src, (size_t) srcLen);
+    memcpy(dst, src, srcLen);
     return result;
 }
 
@@ -3313,7 +3318,7 @@ EscapeFromUtfProc(
 	    *dstWrotePtr = 0;
 	    return TCL_CONVERT_NOSPACE;
 	}
-	memcpy(dst, dataPtr->init, (size_t)dataPtr->initLen);
+	memcpy(dst, dataPtr->init, dataPtr->initLen);
 	dst += dataPtr->initLen;
     } else {
 	state = PTR2INT(*statePtr);
@@ -3391,8 +3396,7 @@ EscapeFromUtfProc(
 		    result = TCL_CONVERT_NOSPACE;
 		    break;
 		}
-		memcpy(dst, subTablePtr->sequence,
-			(size_t) subTablePtr->sequenceLen);
+		memcpy(dst, subTablePtr->sequence, subTablePtr->sequenceLen);
 		dst += subTablePtr->sequenceLen;
 	    }
 	}
@@ -3435,7 +3439,7 @@ EscapeFromUtfProc(
 		memcpy(dst, dataPtr->subTables[0].sequence, len);
 		dst += len;
 	    }
-	    memcpy(dst, dataPtr->final, (size_t) dataPtr->finalLen);
+	    memcpy(dst, dataPtr->final, dataPtr->finalLen);
 	    dst += dataPtr->finalLen;
 	    state &= ~TCL_ENCODING_END;
 	}

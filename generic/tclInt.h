@@ -1195,7 +1195,7 @@ typedef struct CompiledLocal {
 				/* Customized variable resolution info
 				 * supplied by the Tcl_ResolveCompiledVarProc
 				 * associated with a namespace. Each variable
-				 * is marked by a unique ClientData tag during
+				 * is marked by a unique tag during
 				 * compilation, and that same tag is used to
 				 * find the variable at runtime. */
     char name[1];		/* Name of the local variable starts here. If
@@ -1772,7 +1772,7 @@ typedef struct LiteralEntry {
 				 * table, the number of ByteCode structures
 				 * that share the literal object; the literal
 				 * entry can be freed when refCount drops to
-				 * 0. If in a local literal table, (size_t)-1. */
+				 * 0. If in a local literal table, -1. */
     Namespace *nsPtr;		/* Namespace in which this literal is used. We
 				 * try to avoid sharing literal non-FQ command
 				 * names among different namespaces to reduce
@@ -2724,7 +2724,7 @@ typedef struct Interp {
  */
 
 #define TclOOM(ptr, size) \
-	((size) && ((ptr)||(Tcl_Panic("unable to alloc %zu bytes", (size_t)(size)),1)))
+	((size) && ((ptr)||(Tcl_Panic("unable to alloc %" TCL_Z_MODIFIER "u bytes", (size_t)(size)),1)))
 
 /*
  * The following enum values are used to specify the runtime platform setting
@@ -9249,7 +9249,8 @@ MODULE_SCOPE void	TclInitSubsystems(void);
 MODULE_SCOPE int	TclInterpReady(Tcl_Interp *interp);
 MODULE_SCOPE int	TclIsSpaceProc(char byte);
 MODULE_SCOPE int	TclIsBareword(char byte);
-MODULE_SCOPE Tcl_Obj *	TclJoinPath(int elements, Tcl_Obj * const objv[]);
+MODULE_SCOPE Tcl_Obj *	TclJoinPath(int elements, Tcl_Obj * const objv[],
+			    int forceRelative);
 MODULE_SCOPE int	TclJoinThread(Tcl_ThreadId id, int *result);
 MODULE_SCOPE void	TclLimitRemoveAllHandlers(Tcl_Interp *interp);
 MODULE_SCOPE Tcl_Obj *	TclLindexList(Tcl_Interp *interp,
@@ -10576,6 +10577,7 @@ MODULE_SCOPE int	TclObjCallVarTraces(Interp *iPtr, Var *arrayPtr,
  */
 
 MODULE_SCOPE int	TclCompareObjKeys(void *keyPtr, Tcl_HashEntry *hPtr);
+MODULE_SCOPE void	TclFreeObj(Tcl_Obj *objPtr);
 MODULE_SCOPE void	TclFreeObjEntry(Tcl_HashEntry *hPtr);
 MODULE_SCOPE TCL_HASH_TYPE TclHashObjKey(Tcl_HashTable *tablePtr, void *keyPtr);
 
