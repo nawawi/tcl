@@ -14,6 +14,15 @@
  *
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
+<<<<<<< HEAD
+=======
+ */
+
+/*
+ * On Windows, this file needs to be compiled twice, once with UNICODE and
+ * _UNICODE defined. This way both Tcl_Main and Tcl_MainExW can be
+ * implemented, sharing the same source code.
+>>>>>>> upstream/master
  */
 
 /*
@@ -53,6 +62,7 @@
 #   define _tcscmp strcmp
 #endif
 
+<<<<<<< HEAD
 /*
  * Further on, in UNICODE mode we just use Tcl_NewUnicodeObj, otherwise
  * NewNativeObj is needed (which provides proper conversion from native
@@ -73,6 +83,22 @@ NewNativeObj(
     return TclDStringToObj(&ds);
 }
 #endif /* !UNICODE */
+=======
+static inline Tcl_Obj *
+NewNativeObj(
+    TCHAR *string)
+{
+    Tcl_DString ds;
+
+#ifdef UNICODE
+    Tcl_DStringInit(&ds);
+    Tcl_WCharToUtfDString(string, -1, &ds);
+#else
+    Tcl_ExternalToUtfDString(NULL, (char *) string, -1, &ds);
+#endif
+    return TclDStringToObj(&ds);
+}
+>>>>>>> upstream/master
 
 /*
  * Declarations for various library functions and variables (don't want to
@@ -86,6 +112,7 @@ extern CRTIMPORT int	isatty(int fd);
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 
@@ -95,6 +122,8 @@ extern CRTIMPORT int	isatty(int fd);
 <<<<<<< HEAD
 
 =======
+=======
+>>>>>>> upstream/master
 
 /*
  * The thread-local variables for this file's functions.
@@ -130,7 +159,11 @@ typedef enum {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct InteractiveState {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -161,7 +194,11 @@ static void		Prompt(Tcl_Interp *interp, InteractiveState *isPtr);
 static void		StdinProc(ClientData clientData, int mask);
 static void		FreeMainInterp(ClientData clientData);
 
+<<<<<<< HEAD
 #ifndef TCL_ASCII_MAIN
+=======
+#if !defined(_WIN32) || defined(UNICODE)
+>>>>>>> upstream/master
 static Tcl_ThreadDataKey dataKey;
 
 /*
@@ -261,7 +298,7 @@ Tcl_GetStartupScript(
 	if (tsdPtr->encoding == NULL) {
 	    *encodingPtr = NULL;
 	} else {
-	    *encodingPtr = Tcl_GetString(tsdPtr->encoding);
+	    *encodingPtr = TclGetString(tsdPtr->encoding);
 	}
     }
     return tsdPtr->path;
@@ -292,6 +329,7 @@ Tcl_SourceRCFile(
     const char *fileName;
     Tcl_Channel chan;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     fileName = Tcl_GetVar(interp, "tcl_rcFileName", TCL_GLOBAL_ONLY);
@@ -413,6 +451,8 @@ Tcl_SourceRCFile(
     const char *fileName;
     Tcl_Channel chan;
 
+=======
+>>>>>>> upstream/master
     fileName = Tcl_GetVar2(interp, "tcl_rcFileName", NULL, TCL_GLOBAL_ONLY);
     if (fileName != NULL) {
 	Tcl_Channel c;
@@ -446,14 +486,21 @@ Tcl_SourceRCFile(
 	Tcl_DStringFree(&temp);
     }
 }
+<<<<<<< HEAD
 #endif /* !TCL_ASCII_MAIN */
+=======
+#endif /* !UNICODE */
+>>>>>>> upstream/master
 
 /*----------------------------------------------------------------------
  *
  * Tcl_MainEx --
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
  * Tcl_MainEx --
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  *
  *	Main program for tclsh and most other Tcl-based applications.
@@ -512,14 +559,24 @@ Tcl_MainEx(
 
 	if ((argc > 3) && (0 == _tcscmp(TEXT("-encoding"), argv[1]))
 		&& ('-' != argv[3][0])) {
+<<<<<<< HEAD
 	    Tcl_Obj *value = NewNativeObj(argv[2], -1);
 	    Tcl_SetStartupScript(NewNativeObj(argv[3], -1),
 		    Tcl_GetString(value));
+=======
+	    Tcl_Obj *value = NewNativeObj(argv[2]);
+	    Tcl_SetStartupScript(NewNativeObj(argv[3]),
+		    TclGetString(value));
+>>>>>>> upstream/master
 	    Tcl_DecrRefCount(value);
 	    argc -= 3;
 	    argv += 3;
 	} else if ((argc > 1) && ('-' != argv[1][0])) {
+<<<<<<< HEAD
 	    Tcl_SetStartupScript(NewNativeObj(argv[1], -1), NULL);
+=======
+	    Tcl_SetStartupScript(NewNativeObj(argv[1]), NULL);
+>>>>>>> upstream/master
 	    argc--;
 	    argv++;
 	}
@@ -527,7 +584,11 @@ Tcl_MainEx(
 
     path = Tcl_GetStartupScript(&encodingName);
     if (path == NULL) {
+<<<<<<< HEAD
 	appName = NewNativeObj(argv[0], -1);
+=======
+	appName = NewNativeObj(argv[0]);
+>>>>>>> upstream/master
     } else {
 	appName = path;
     }
@@ -556,7 +617,11 @@ Tcl_MainEx(
 >>>>>>> upstream/master
     argvPtr = Tcl_NewListObj(0, NULL);
     while (argc--) {
+<<<<<<< HEAD
 	Tcl_ListObjAppendElement(NULL, argvPtr, NewNativeObj(*argv++, -1));
+=======
+	Tcl_ListObjAppendElement(NULL, argvPtr, NewNativeObj(*argv++));
+>>>>>>> upstream/master
     }
     Tcl_SetVar2Ex(interp, "argv", NULL, argvPtr, TCL_GLOBAL_ONLY);
 
@@ -662,12 +727,15 @@ Tcl_MainEx(
     Tcl_IncrRefCount(is.commandPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     /*
      * Get a new value for tty if anyone writes to ::tcl_interactive
      */
 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -676,6 +744,9 @@ Tcl_MainEx(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -684,7 +755,11 @@ Tcl_MainEx(
     while ((is.input != NULL) && !Tcl_InterpDeleted(interp)) {
 	mainLoopProc = TclGetMainLoop();
 	if (mainLoopProc == NULL) {
+<<<<<<< HEAD
 	    int length;
+=======
+	    size_t length;
+>>>>>>> upstream/master
 
 	    if (is.tty) {
 		Prompt(interp, &is);
@@ -705,7 +780,11 @@ Tcl_MainEx(
 		Tcl_IncrRefCount(is.commandPtr);
 	    }
 	    length = Tcl_GetsObj(is.input, is.commandPtr);
+<<<<<<< HEAD
 	    if (length < 0) {
+=======
+	    if (length == TCL_AUTO_LENGTH) {
+>>>>>>> upstream/master
 		if (Tcl_InputBlocked(is.input)) {
 		    /*
 		     * This can only happen if stdin has been set to
@@ -733,6 +812,7 @@ Tcl_MainEx(
 	     * a difference. [Bug 1775878]
 	     */
 
+<<<<<<< HEAD
 =======
 
 		    continue;
@@ -762,6 +842,13 @@ Tcl_MainEx(
 		is.commandPtr = Tcl_DuplicateObj(is.commandPtr);
 		Tcl_IncrRefCount(is.commandPtr);
 	    }
+=======
+	    if (Tcl_IsShared(is.commandPtr)) {
+		Tcl_DecrRefCount(is.commandPtr);
+		is.commandPtr = Tcl_DuplicateObj(is.commandPtr);
+		Tcl_IncrRefCount(is.commandPtr);
+	    }
+>>>>>>> upstream/master
 	    Tcl_AppendToObj(is.commandPtr, "\n", 1);
 	    if (!TclObjCommandComplete(is.commandPtr)) {
 		is.prompt = PROMPT_CONTINUE;
@@ -779,12 +866,16 @@ Tcl_MainEx(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(is.commandPtr, &length);
 =======
 	    TclGetStringFromObj(is.commandPtr, &length);
 >>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(is.commandPtr, &length);
+>>>>>>> upstream/master
+=======
+	    (void)TclGetStringFromObj(is.commandPtr, &length);
 >>>>>>> upstream/master
 =======
 	    (void)TclGetStringFromObj(is.commandPtr, &length);
@@ -808,12 +899,16 @@ Tcl_MainEx(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_GetStringFromObj(resultPtr, &length);
 =======
 		TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
 =======
 		TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
+=======
+		(void)TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
 =======
 		(void)TclGetStringFromObj(resultPtr, &length);
@@ -847,6 +942,7 @@ Tcl_MainEx(
 	    if (is.input) {
 		Tcl_DeleteChannelHandler(is.input, StdinProc, &is);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    }
 =======
 	    }
@@ -904,6 +1000,9 @@ Tcl_MainEx(
 
 	    if (is.input) {
 		Tcl_DeleteChannelHandler(is.input, StdinProc, &is);
+	    }
+>>>>>>> upstream/master
+=======
 	    }
 >>>>>>> upstream/master
 =======
@@ -942,6 +1041,9 @@ Tcl_MainEx(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -956,6 +1058,7 @@ Tcl_MainEx(
 
     if (!Tcl_InterpDeleted(interp) && !Tcl_LimitExceeded(interp)) {
 	Tcl_Obj *cmd = Tcl_ObjPrintf("exit %d", exitCode);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	Tcl_IncrRefCount(cmd);
@@ -980,12 +1083,16 @@ Tcl_MainEx(
 =======
 
 >>>>>>> upstream/master
+=======
+
+>>>>>>> upstream/master
 	Tcl_IncrRefCount(cmd);
 	Tcl_EvalObjEx(interp, cmd, TCL_EVAL_GLOBAL);
 	Tcl_DecrRefCount(cmd);
     }
 
     /*
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -1014,6 +1121,8 @@ Tcl_Main(
 }
 #endif /* TCL_MAJOR_VERSION == 8 && !UNICODE */
 =======
+=======
+>>>>>>> upstream/master
      * If Tcl_EvalObjEx returns, trying to eval [exit], something unusual is
      * happening. Maybe interp has been deleted; maybe [exit] was redefined,
      * maybe we've blown up because of an exceeded limit. We still want to
@@ -1024,7 +1133,11 @@ Tcl_Main(
 }
 >>>>>>> upstream/master
 
+<<<<<<< HEAD
 #ifndef TCL_ASCII_MAIN
+=======
+#if !defined(_WIN32) || defined(UNICODE)
+>>>>>>> upstream/master
 
 /*
  *---------------------------------------------------------------
@@ -1161,6 +1274,44 @@ TclFullFinalizationRequested(void)
 /*
  *----------------------------------------------------------------------
  *
+ * TclFullFinalizationRequested --
+ *
+ *	This function returns true when either -DPURIFY is specified, or the
+ *	environment variable TCL_FINALIZE_ON_EXIT is set and not "0". This
+ *	predicate is called at places affecting the exit sequence, so that the
+ *	default behavior is a fast and deadlock-free exit, and the modified
+ *	behavior is a more thorough finalization for debugging purposes (leak
+ *	hunting etc).
+ *
+ * Results:
+ *	A boolean.
+ *
+ *----------------------------------------------------------------------
+ */
+
+MODULE_SCOPE int
+TclFullFinalizationRequested(void)
+{
+#ifdef PURIFY
+    return 1;
+#else
+    const char *fin;
+    Tcl_DString ds;
+    int finalize = 0;
+
+    fin = TclGetEnv("TCL_FINALIZE_ON_EXIT", &ds);
+    finalize = ((fin != NULL) && strcmp(fin, "0"));
+    if (fin != NULL) {
+	Tcl_DStringFree(&ds);
+    }
+    return finalize;
+#endif /* PURIFY */
+}
+#endif /* UNICODE */
+
+/*
+ *----------------------------------------------------------------------
+ *
  * StdinProc --
  *
  *	This function is invoked by the event dispatcher whenever standard
@@ -1183,7 +1334,12 @@ StdinProc(
     ClientData clientData,	/* The state of interactive cmd line */
     int mask)			/* Not used. */
 {
+<<<<<<< HEAD
     int code, length;
+=======
+    int code;
+    size_t length;
+>>>>>>> upstream/master
     InteractiveState *isPtr = clientData;
     Tcl_Channel chan = isPtr->input;
     Tcl_Obj *commandPtr = isPtr->commandPtr;
@@ -1222,7 +1378,7 @@ StdinProc(
     }
 <<<<<<< HEAD
     length = Tcl_GetsObj(chan, commandPtr);
-    if (length < 0) {
+    if (length == TCL_AUTO_LENGTH) {
 	if (Tcl_InputBlocked(chan)) {
 	    return;
 	}
@@ -1252,6 +1408,7 @@ StdinProc(
     }
     isPtr->prompt = PROMPT_START;
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_GetStringFromObj(commandPtr, &length);
 =======
     }
@@ -1271,6 +1428,9 @@ StdinProc(
 >>>>>>> upstream/master
 =======
     TclGetStringFromObj(commandPtr, &length);
+>>>>>>> upstream/master
+=======
+    (void)TclGetStringFromObj(commandPtr, &length);
 >>>>>>> upstream/master
 =======
     (void)TclGetStringFromObj(commandPtr, &length);
@@ -1309,6 +1469,7 @@ StdinProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_GetStringFromObj(resultPtr, &length);
 =======
 	TclGetStringFromObj(resultPtr, &length);
@@ -1318,6 +1479,9 @@ StdinProc(
 >>>>>>> upstream/master
 =======
 	TclGetStringFromObj(resultPtr, &length);
+>>>>>>> upstream/master
+=======
+	(void)TclGetStringFromObj(resultPtr, &length);
 >>>>>>> upstream/master
 =======
 	(void)TclGetStringFromObj(resultPtr, &length);
@@ -1485,6 +1649,9 @@ Prompt(
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

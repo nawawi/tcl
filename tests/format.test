@@ -17,6 +17,7 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
 
 # %u output depends on word length, so this test is not portable.
 <<<<<<< HEAD
+<<<<<<< HEAD
 testConstraint longIs32bit [expr {int(0x80000000) < 0}]
 testConstraint longIs64bit [expr {int(0x8000000000000000) < 0}]
 testConstraint wideIs64bit \
@@ -34,6 +35,13 @@ testConstraint pointerIs64bit [expr {$tcl_platform(pointerSize) >= 8}]
 >>>>>>> upstream/master
 =======
 testConstraint pointerIs64bit [expr {$tcl_platform(pointerSize) >= 8}]
+>>>>>>> upstream/master
+=======
+testConstraint longIs32bit [expr {$tcl_platform(wordSize) == 4}]
+testConstraint longIs64bit [expr {$tcl_platform(wordSize) == 8}]
+testConstraint wideIs64bit [expr {wide(0x8000000000000000) < 0}]
+testConstraint pointerIs64bit [expr {$tcl_platform(pointerSize) >= 8}]
+testConstraint knownMsvcBug [expr {![info exists ::env(TRAVIS_OS_NAME)] || ![string match windows $::env(TRAVIS_OS_NAME)]}]
 >>>>>>> upstream/master
 
 test format-1.1 {integer formatting} {
@@ -68,6 +76,7 @@ test format-1.7.1 {integer formatting} longIs64bit {
 test format-1.8 {integer formatting} longIs32bit {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     format "%#x %#X %#X %#x" 6 34 16923 -12 -1
 } {0x6 0X22 0X421B 0xfffffff4}
 =======
@@ -76,6 +85,10 @@ test format-1.8 {integer formatting} longIs32bit {
 } {0x0 0x6 0X22 0X421B 0xfffffff4}
 >>>>>>> upstream/master
 =======
+} {0 0x6 0x22 0x421B 0xfffffff4}
+>>>>>>> upstream/master
+=======
+    format "%#x %#x %#X %#X %#x" 0 6 34 16923 -12 -1
 } {0 0x6 0x22 0x421B 0xfffffff4}
 >>>>>>> upstream/master
 test format-1.8.1 {integer formatting} longIs64bit {
@@ -100,6 +113,7 @@ test format-1.11.1 {integer formatting} longIs64bit {
     format "%-#5o %-#20o %#-20o %#-20o %#-20o" 0 6 34 16923 -12 -1
 } {0     0o6                  0o42                 0o41033              0o1777777777777777777764}
 test format-1.12 {integer formatting} {
+<<<<<<< HEAD
 <<<<<<< HEAD
     format "%b %#b %llb" 5 5 [expr {2**100}]
 } {101 0b101 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}
@@ -132,6 +146,8 @@ test format-1.12 {integer formatting} {
 } {101 0b0 0b101 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     format "%b %#b %#b %llb" 5 0 5 [expr {2**100}]
 } {101 0 0b101 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000}
 test format-1.13 {integer formatting} {
@@ -144,6 +160,9 @@ test format-1.15 {integer formatting} {
     format "%-#05d %-#020d %-#020d %-#020d %-#020d" 0 6 34 16923 -12 -1
 } {00000 00000000000000000006 00000000000000000034 00000000000000016923 -0000000000000000012}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test format-2.1 {string formatting} {
@@ -321,13 +340,13 @@ test format-6.1 {floating-point zeroes} {eformat} {
 test format-6.2 {floating-point zeroes} {eformat} {
     format "%.4e %.4f %.4g" 0.0 0.0 0.0 0.0
 } {0.0000e+00 0.0000 0}
-test format-6.3 {floating-point zeroes} {eformat} {
+test format-6.3 {floating-point zeroes} {eformat knownMsvcBug} {
     format "%#.4e %#.4f %#.4g" 0.0 0.0 0.0 0.0
 } {0.0000e+00 0.0000 0.000}
 test format-6.4 {floating-point zeroes} {eformat} {
     format "%.0e %.0f %.0g" 0.0 0.0 0.0 0.0
 } {0e+00 0 0}
-test format-6.5 {floating-point zeroes} {eformat} {
+test format-6.5 {floating-point zeroes} {eformat knownMsvcBug} {
     format "%#.0e %#.0f %#.0g" 0.0 0.0 0.0 0.0
 } {0.e+00 0. 0.}
 test format-6.6 {floating-point zeroes} {
@@ -617,7 +636,10 @@ test format-17.4 {testing %l with non-integer} {
 } 1.000000
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test format-17.5 {testing %llu with positive bignum} -body {
@@ -627,6 +649,9 @@ test format-17.6 {testing %llu with negative number} -body {
     format %llu -1
 } -returnCodes 1 -result {unsigned bignum format is invalid}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

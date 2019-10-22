@@ -4,9 +4,15 @@ namespace eval ::tcl::clock {
         "Die"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "H\u00ebn"\
         "Mar"\
         "M\u00ebr"\
+=======
+        "Hën"\
+        "Mar"\
+        "Mër"\
+>>>>>>> upstream/master
 =======
         "Hën"\
         "Mar"\
@@ -24,12 +30,21 @@ namespace eval ::tcl::clock {
         "e diel"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "e h\u00ebn\u00eb"\
         "e mart\u00eb"\
         "e m\u00ebrkur\u00eb"\
         "e enjte"\
         "e premte"\
         "e shtun\u00eb"]
+=======
+        "e hënë"\
+        "e martë"\
+        "e mërkurë"\
+        "e enjte"\
+        "e premte"\
+        "e shtunë"]
+>>>>>>> upstream/master
 =======
         "e hënë"\
         "e martë"\
@@ -59,7 +74,11 @@ namespace eval ::tcl::clock {
         "Tet"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "N\u00ebn"\
+=======
+        "Nën"\
+>>>>>>> upstream/master
 =======
         "Nën"\
 >>>>>>> upstream/master
@@ -81,7 +100,11 @@ namespace eval ::tcl::clock {
         "tetor"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "n\u00ebntor"\
+=======
+        "nëntor"\
+>>>>>>> upstream/master
 =======
         "nëntor"\
 >>>>>>> upstream/master

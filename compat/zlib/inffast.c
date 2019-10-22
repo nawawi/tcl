@@ -1,7 +1,11 @@
 /* inffast.c -- fast decoding
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2008, 2010, 2013 Mark Adler
+=======
+ * Copyright (C) 1995-2017 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2017 Mark Adler
 >>>>>>> upstream/master
@@ -16,6 +20,7 @@
 #include "inflate.h"
 #include "inffast.h"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 #ifndef ASMINF
@@ -38,6 +43,11 @@
 #  define OFF 1
 #  define PUP(a) *++(a)
 #endif
+=======
+#ifdef ASMINF
+#  pragma message("Assembler code may have bugs -- use at your own risk")
+#else
+>>>>>>> upstream/master
 =======
 #ifdef ASMINF
 #  pragma message("Assembler code may have bugs -- use at your own risk")
@@ -118,9 +128,15 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
     state = (struct inflate_state FAR *)strm->state;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     in = strm->next_in - OFF;
     last = in + (strm->avail_in - 5);
     out = strm->next_out - OFF;
+=======
+    in = strm->next_in;
+    last = in + (strm->avail_in - 5);
+    out = strm->next_out;
+>>>>>>> upstream/master
 =======
     in = strm->next_in;
     last = in + (strm->avail_in - 5);
@@ -153,9 +169,15 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
         if (bits < 15) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             hold += (unsigned long)(PUP(in)) << bits;
             bits += 8;
             hold += (unsigned long)(PUP(in)) << bits;
+=======
+            hold += (unsigned long)(*in++) << bits;
+            bits += 8;
+            hold += (unsigned long)(*in++) << bits;
+>>>>>>> upstream/master
 =======
             hold += (unsigned long)(*in++) << bits;
             bits += 8;
@@ -180,7 +202,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     "inflate:         literal 0x%02x\n", here.val));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             PUP(out) = (unsigned char)(here.val);
+=======
+            *out++ = (unsigned char)(here.val);
+>>>>>>> upstream/master
 =======
             *out++ = (unsigned char)(here.val);
 >>>>>>> upstream/master
@@ -195,7 +221,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                 if (bits < op) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     hold += (unsigned long)(PUP(in)) << bits;
+=======
+                    hold += (unsigned long)(*in++) << bits;
+>>>>>>> upstream/master
 =======
                     hold += (unsigned long)(*in++) << bits;
 >>>>>>> upstream/master
@@ -212,9 +242,15 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
             if (bits < 15) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 hold += (unsigned long)(PUP(in)) << bits;
                 bits += 8;
                 hold += (unsigned long)(PUP(in)) << bits;
+=======
+                hold += (unsigned long)(*in++) << bits;
+                bits += 8;
+                hold += (unsigned long)(*in++) << bits;
+>>>>>>> upstream/master
 =======
                 hold += (unsigned long)(*in++) << bits;
                 bits += 8;
@@ -239,10 +275,17 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                 if (bits < op) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     hold += (unsigned long)(PUP(in)) << bits;
                     bits += 8;
                     if (bits < op) {
                         hold += (unsigned long)(PUP(in)) << bits;
+=======
+                    hold += (unsigned long)(*in++) << bits;
+                    bits += 8;
+                    if (bits < op) {
+                        hold += (unsigned long)(*in++) << bits;
+>>>>>>> upstream/master
 =======
                     hold += (unsigned long)(*in++) << bits;
                     bits += 8;
@@ -284,7 +327,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                             do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 PUP(out) = 0;
+=======
+                                *out++ = 0;
+>>>>>>> upstream/master
 =======
                                 *out++ = 0;
 >>>>>>> upstream/master
@@ -298,7 +345,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                         do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                             PUP(out) = 0;
+=======
+                            *out++ = 0;
+>>>>>>> upstream/master
 =======
                             *out++ = 0;
 >>>>>>> upstream/master
@@ -311,7 +362,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                             do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 PUP(out) = PUP(from);
+=======
+                                *out++ = *from++;
+>>>>>>> upstream/master
 =======
                                 *out++ = *from++;
 >>>>>>> upstream/master
@@ -325,7 +380,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     from = window - OFF;
+=======
+                    from = window;
+>>>>>>> upstream/master
 =======
                     from = window;
 >>>>>>> upstream/master
@@ -339,7 +398,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                             do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 PUP(out) = PUP(from);
+=======
+                                *out++ = *from++;
+>>>>>>> upstream/master
 =======
                                 *out++ = *from++;
 >>>>>>> upstream/master
@@ -358,9 +421,15 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                             do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 PUP(out) = PUP(from);
                             } while (--op);
                             from = window - OFF;
+=======
+                                *out++ = *from++;
+                            } while (--op);
+                            from = window;
+>>>>>>> upstream/master
 =======
                                 *out++ = *from++;
                             } while (--op);
@@ -377,7 +446,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                                 do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                     PUP(out) = PUP(from);
+=======
+                                    *out++ = *from++;
+>>>>>>> upstream/master
 =======
                                     *out++ = *from++;
 >>>>>>> upstream/master
@@ -396,7 +469,11 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                             do {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 PUP(out) = PUP(from);
+=======
+                                *out++ = *from++;
+>>>>>>> upstream/master
 =======
                                 *out++ = *from++;
 >>>>>>> upstream/master
@@ -410,9 +487,15 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     while (len > 2) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         PUP(out) = PUP(from);
                         PUP(out) = PUP(from);
                         PUP(out) = PUP(from);
+=======
+                        *out++ = *from++;
+                        *out++ = *from++;
+                        *out++ = *from++;
+>>>>>>> upstream/master
 =======
                         *out++ = *from++;
                         *out++ = *from++;
@@ -424,6 +507,7 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                         *out++ = *from++;
                         if (len > 1)
 <<<<<<< HEAD
+<<<<<<< HEAD
                             PUP(out) = PUP(from);
 =======
                         *out++ = *from++;
@@ -434,6 +518,9 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     if (len) {
                         *out++ = *from++;
                         if (len > 1)
+                            *out++ = *from++;
+>>>>>>> upstream/master
+=======
                             *out++ = *from++;
 >>>>>>> upstream/master
 =======
@@ -446,9 +533,15 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     do {                        /* minimum length is three */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         PUP(out) = PUP(from);
                         PUP(out) = PUP(from);
                         PUP(out) = PUP(from);
+=======
+                        *out++ = *from++;
+                        *out++ = *from++;
+                        *out++ = *from++;
+>>>>>>> upstream/master
 =======
                         *out++ = *from++;
                         *out++ = *from++;
@@ -460,6 +553,7 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                         *out++ = *from++;
                         if (len > 1)
 <<<<<<< HEAD
+<<<<<<< HEAD
                             PUP(out) = PUP(from);
 =======
                         *out++ = *from++;
@@ -470,6 +564,9 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     if (len) {
                         *out++ = *from++;
                         if (len > 1)
+                            *out++ = *from++;
+>>>>>>> upstream/master
+=======
                             *out++ = *from++;
 >>>>>>> upstream/master
 =======
@@ -513,8 +610,13 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
     /* update state and return */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     strm->next_in = in + OFF;
     strm->next_out = out + OFF;
+=======
+    strm->next_in = in;
+    strm->next_out = out;
+>>>>>>> upstream/master
 =======
     strm->next_in = in;
     strm->next_out = out;

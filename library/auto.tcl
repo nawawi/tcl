@@ -255,7 +255,11 @@ proc auto_mkindex {dir args} {
 
     auto_mkindex_parser::init
 <<<<<<< HEAD
+<<<<<<< HEAD
     foreach file [glob -- {*}$args] {
+=======
+    foreach file [lsort [glob -- {*}$args]] {
+>>>>>>> upstream/master
 =======
     foreach file [lsort [glob -- {*}$args]] {
 >>>>>>> upstream/master
@@ -292,7 +296,11 @@ proc auto_mkindex_old {dir args} {
 	set args *.tcl
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     foreach file [glob -- {*}$args] {
+=======
+    foreach file [lsort [glob -- {*}$args]] {
+>>>>>>> upstream/master
 =======
     foreach file [lsort [glob -- {*}$args]] {
 >>>>>>> upstream/master

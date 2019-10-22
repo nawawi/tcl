@@ -9,6 +9,7 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
  */
@@ -24,10 +25,21 @@ int mp_jacobi(const mp_int *a, const mp_int *n, int *c)
    int     k, s, r, res;
    mp_digit residue;
 
+=======
+ * SPDX-License-Identifier: Unlicense
+ */
+
+/* computes the jacobi c = (a | n) (or Legendre if n is prime)
+ * Kept for legacy reasons, please use mp_kronecker() instead
+ */
+int mp_jacobi(const mp_int *a, const mp_int *n, int *c)
+{
+>>>>>>> upstream/master
    /* if a < 0 return MP_VAL */
    if (mp_isneg(a) == MP_YES) {
       return MP_VAL;
    }
+<<<<<<< HEAD
 
    /* if n <= 0 return MP_VAL */
    if (mp_cmp_d(n, 0uL) != MP_GT) {
@@ -109,6 +121,15 @@ LBL_P1:
 LBL_A1:
    mp_clear(&a1);
    return res;
+=======
+
+   /* if n <= 0 return MP_VAL */
+   if (mp_cmp_d(n, 0uL) != MP_GT) {
+      return MP_VAL;
+   }
+
+   return mp_kronecker(a, n, c);
+>>>>>>> upstream/master
 }
 #endif
 

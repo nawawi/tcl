@@ -10,7 +10,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -58,7 +62,12 @@ not characters.  For example, in \fB\-dictionary\fR mode, \fBbigBoy\fR
 sorts between \fBbigbang\fR and \fBbigboy\fR, and \fBx10y\fR
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 sorts between \fBx9y\fR and \fBx11y\fR.
+=======
+sorts between \fBx9y\fR and \fBx11y\fR. Overrides the \fB\-nocase\fR
+option.
+>>>>>>> upstream/master
 =======
 sorts between \fBx9y\fR and \fBx11y\fR. Overrides the \fB\-nocase\fR
 option.
@@ -221,7 +230,11 @@ Causes comparisons to be handled in a case-insensitive manner.  Has no
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or 
+=======
+effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
+>>>>>>> upstream/master
 =======
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
 >>>>>>> upstream/master
@@ -244,7 +257,11 @@ elements found in the list will be retained.  Note that duplicates are
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 determined relative to the comparison used in the sort.  Thus if 
+=======
+determined relative to the comparison used in the sort.  Thus if
+>>>>>>> upstream/master
 =======
 determined relative to the comparison used in the sort.  Thus if
 >>>>>>> upstream/master
@@ -365,7 +382,11 @@ More complex sorting using a comparison function:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

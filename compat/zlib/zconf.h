@@ -1,7 +1,11 @@
 /* zconf.h -- configuration of the zlib compression library
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2013 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2016 Jean-loup Gailly, Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2016 Jean-loup Gailly, Mark Adler
 >>>>>>> upstream/master
@@ -27,7 +31,11 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* all linked symbols */
+=======
+/* all linked symbols and init macros */
+>>>>>>> upstream/master
 =======
 /* all linked symbols and init macros */
 >>>>>>> upstream/master
@@ -47,6 +55,10 @@
 #  define adler32_combine64     z_adler32_combine64
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define adler32_z             z_adler32_z
+>>>>>>> upstream/master
 =======
 #  define adler32_z             z_adler32_z
 >>>>>>> upstream/master
@@ -63,6 +75,10 @@
 #  define crc32_combine64       z_crc32_combine64
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define crc32_z               z_crc32_z
+>>>>>>> upstream/master
 =======
 #  define crc32_z               z_crc32_z
 >>>>>>> upstream/master
@@ -75,6 +91,12 @@
 #  define deflateEnd            z_deflateEnd
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#  define deflateGetDictionary  z_deflateGetDictionary
+#  define deflateInit           z_deflateInit
+#  define deflateInit2          z_deflateInit2
+>>>>>>> upstream/master
 =======
 #  define deflateGetDictionary  z_deflateGetDictionary
 #  define deflateInit           z_deflateInit
@@ -113,6 +135,11 @@
 #    define gzflush               z_gzflush
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#    define gzfread               z_gzfread
+#    define gzfwrite              z_gzfwrite
+>>>>>>> upstream/master
 =======
 #    define gzfread               z_gzfread
 #    define gzfwrite              z_gzfwrite
@@ -134,7 +161,10 @@
 #    define gzprintf              z_gzprintf
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #    define gzvprintf             z_gzvprintf
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -151,6 +181,10 @@
 #    define gzungetc              z_gzungetc
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#    define gzvprintf             z_gzvprintf
+>>>>>>> upstream/master
 =======
 #    define gzvprintf             z_gzvprintf
 >>>>>>> upstream/master
@@ -164,11 +198,14 @@
 #  define inflateBackEnd        z_inflateBackEnd
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #  define inflateBackInit_      z_inflateBackInit_
 #  define inflateCopy           z_inflateCopy
 #  define inflateEnd            z_inflateEnd
 #  define inflateGetHeader      z_inflateGetHeader
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #  define inflateBackInit       z_inflateBackInit
@@ -181,6 +218,9 @@
 #  define inflateInit           z_inflateInit
 #  define inflateInit2          z_inflateInit2
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -190,6 +230,7 @@
 #  define inflatePrime          z_inflatePrime
 #  define inflateReset          z_inflateReset
 #  define inflateReset2         z_inflateReset2
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -203,15 +244,20 @@
 <<<<<<< HEAD
 #  define inflateResetKeep      z_inflateResetKeep
 =======
+=======
+>>>>>>> upstream/master
 #  define inflateResetKeep      z_inflateResetKeep
 #  define inflateSetDictionary  z_inflateSetDictionary
 #  define inflateSync           z_inflateSync
 #  define inflateSyncPoint      z_inflateSyncPoint
 #  define inflateUndermine      z_inflateUndermine
 #  define inflateValidate       z_inflateValidate
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 #  define inflateValidate       z_inflateValidate
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #  define inflate_copyright     z_inflate_copyright
 #  define inflate_fast          z_inflate_fast
@@ -220,6 +266,10 @@
 #    define uncompress            z_uncompress
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#    define uncompress2           z_uncompress2
+>>>>>>> upstream/master
 =======
 #    define uncompress2           z_uncompress2
 >>>>>>> upstream/master
@@ -337,10 +387,13 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Some Mac compilers merge all .h files incorrectly: */
 #if defined(__MWERKS__)||defined(applec)||defined(THINK_C)||defined(__SC__)
 #  define NO_DUMMY_DECL
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #ifdef Z_SOLO
@@ -357,6 +410,9 @@
 #  endif
 #  undef z_longlong
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -391,7 +447,11 @@
    The memory requirements for inflate are (in bytes) 1 << windowBits
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  that is, 32K for windowBits=15 (default value) plus a few kilobytes
+=======
+ that is, 32K for windowBits=15 (default value) plus about 7 kilobytes
+>>>>>>> upstream/master
 =======
  that is, 32K for windowBits=15 (default value) plus about 7 kilobytes
 >>>>>>> upstream/master
@@ -567,6 +627,9 @@ typedef uLong FAR uLongf;
 #  ifndef Z_SOLO
 #    include <stdarg.h>         /* for va_list */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 #  endif
 #endif
 
@@ -598,6 +661,7 @@ typedef uLong FAR uLongf;
 #    ifndef z_off_t
 #      define z_off_t off_t
 #    endif
+<<<<<<< HEAD
 #  endif
 #endif
 
@@ -633,6 +697,11 @@ typedef uLong FAR uLongf;
 #    ifndef z_off_t
 #      define z_off_t off_t
 #    endif
+#  endif
+#endif
+
+>>>>>>> upstream/master
+=======
 #  endif
 #endif
 

@@ -3,12 +3,21 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset mt DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0126ad"\
         "Tne"\
         "Tli"\
         "Erb"\
         "\u0126am"\
         "\u0120im"]
+=======
+        "Ħad"\
+        "Tne"\
+        "Tli"\
+        "Erb"\
+        "Ħam"\
+        "Ġim"]
+>>>>>>> upstream/master
 =======
         "Ħad"\
         "Tne"\
@@ -33,7 +42,11 @@ namespace eval ::tcl::clock {
         "Mej"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0120un"\
+=======
+        "Ġun"\
+>>>>>>> upstream/master
 =======
         "Ġun"\
 >>>>>>> upstream/master

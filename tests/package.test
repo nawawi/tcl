@@ -21,6 +21,7 @@ if {"::tcltest" ni [namespace children]} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -45,6 +46,11 @@ testConstraint testpreferstable [llength [info commands testpreferstable]]
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+::tcltest::loadTestedCommands
+catch [list package require -exact Tcltest [info patchlevel]]
+
 >>>>>>> upstream/master
 # Do all this in a slave interp to avoid garbaging the package list
 set i [interp create]
@@ -605,13 +611,17 @@ test package-3.44 {Tcl_PkgRequire: exact version matching (1578344)} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -setup {
 =======
+=======
+>>>>>>> upstream/master
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
     interp create child
     load {} Tcltest child
     child eval {
     testpreferstable
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
@@ -624,6 +634,8 @@ test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -const
 =======
 test package-3.50 {Tcl_PkgRequire procedure, picking best stable version} -constraints testpreferstable -setup {
     testpreferstable
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     package forget t
     set x xxx
@@ -978,7 +990,11 @@ test package-4.53 {Tcl_PackageCmd procedure, "versions" option} -body {
     package foo
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes error -result {bad option "foo": must be forget, ifneeded, names, prefer, present, provide, require, unknown, vcompare, versions, or vsatisfies}
+=======
+} -returnCodes error -result {bad option "foo": must be files, forget, ifneeded, names, prefer, present, provide, require, unknown, vcompare, versions, or vsatisfies}
+>>>>>>> upstream/master
 =======
 } -returnCodes error -result {bad option "foo": must be files, forget, ifneeded, names, prefer, present, provide, require, unknown, vcompare, versions, or vsatisfies}
 >>>>>>> upstream/master
@@ -1396,6 +1412,7 @@ proc prefer {args} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-13.0 {package prefer defaults} {
     prefer
 } stable
@@ -1426,6 +1443,11 @@ test package-13.0 {package prefer defaults} -body {
     prefer
 } -result [expr {[string match {*[ab]*} [package provide Tcl]] ? "latest" : "stable"}]
 >>>>>>> upstream/master
+=======
+test package-13.0 {package prefer defaults} -body {
+    prefer
+} -result [expr {[string match {*[ab]*} [package provide Tcl]] ? "latest" : "stable"}]
+>>>>>>> upstream/master
 test package-13.1 {package prefer defaults} -body {
     set ::env(TCL_PKG_PREFER_LATEST) stable	;# value not relevant!
     prefer
@@ -1444,6 +1466,7 @@ test package-14.1 {bogus argument} -returnCodes error -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test package-15.0 {set, keep} {package prefer stable} stable
 test package-15.1 {set stable, keep} {prefer stable} {stable stable}
 test package-15.2 {set latest, change} {prefer latest} {stable latest}
@@ -1454,6 +1477,8 @@ test package-15.4 {set stable, rejected} {
     prefer latest stable
 } {stable latest latest}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1479,6 +1504,7 @@ test package-15.4 {set stable, rejected} -constraints testpreferstable -setup {
     testpreferstable
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
     prefer latest stable
 } -result {stable latest latest}
 <<<<<<< HEAD
@@ -1490,6 +1516,11 @@ test package-15.4 {set stable, rejected} -constraints testpreferstable -setup {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    package prefer latest
+    package prefer stable
+} -result latest
 >>>>>>> upstream/master
 =======
     package prefer latest

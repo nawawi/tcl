@@ -12,6 +12,10 @@
 #define TYPE_CLOSE_BRACK	0x20
 #define TYPE_BRACE		0x40
 
+<<<<<<< HEAD
 #define CHAR_TYPE(c) (tclCharTypeTable+128)[(int)(c)]
+=======
+#define CHAR_TYPE(c) tclCharTypeTable[(unsigned char)(c)]
+>>>>>>> upstream/master
 
 MODULE_SCOPE const char tclCharTypeTable[];

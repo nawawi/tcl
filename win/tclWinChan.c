@@ -62,7 +62,11 @@ static Tcl_ThreadDataKey dataKey;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct FileEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -112,6 +116,7 @@ static DWORD		FileGetType(HANDLE handle);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		NativeIsComPort(CONST TCHAR *nativeName);
 =======
 static int		NativeIsComPort(const TCHAR *nativeName);
@@ -123,6 +128,10 @@ static int		NativeIsComPort(const TCHAR *nativeName);
 =======
 >>>>>>> upstream/master
 static int		NativeIsComPort(const TCHAR *nativeName);
+
+>>>>>>> upstream/master
+=======
+static int		NativeIsComPort(const WCHAR *nativeName);
 
 >>>>>>> upstream/master
 /*
@@ -162,6 +171,9 @@ static const Tcl_ChannelType fileChannelType = {
 #define CLEAR_FLAG(var, flag)	((var) &= ~(flag))
 #define TEST_FLAG(value, flag)	(((value) & (flag)) != 0)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -188,7 +200,11 @@ FileInit(void)
     ThreadSpecificData *tsdPtr =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+=======
+	    (ThreadSpecificData *) TclThreadDataKeyGet(&dataKey);
+>>>>>>> upstream/master
 =======
 	    (ThreadSpecificData *) TclThreadDataKeyGet(&dataKey);
 >>>>>>> upstream/master
@@ -311,6 +327,7 @@ FileCheckProc(
 	    infoPtr = infoPtr->nextPtr) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (infoPtr->watchMask && !(infoPtr->flags & FILE_PENDING)) {
 	    infoPtr->flags |= FILE_PENDING;
 =======
@@ -324,6 +341,11 @@ FileCheckProc(
 >>>>>>> upstream/master
 	    evPtr = ckalloc(sizeof(FileEvent));
 =======
+	    evPtr = Tcl_Alloc(sizeof(FileEvent));
+>>>>>>> upstream/master
+=======
+	if (infoPtr->watchMask && !TEST_FLAG(infoPtr->flags, FILE_PENDING)) {
+	    SET_FLAG(infoPtr->flags, FILE_PENDING);
 	    evPtr = Tcl_Alloc(sizeof(FileEvent));
 >>>>>>> upstream/master
 	    evPtr->header.proc = FileEventProc;
@@ -542,8 +564,11 @@ FileSeekProc(
     oldPos = SetFilePointer(infoPtr->handle, 0, &oldPosHigh, FILE_CURRENT);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (oldPos == (LONG)INVALID_SET_FILE_POINTER) {
 =======
+=======
+>>>>>>> upstream/master
     if (oldPos == (LONG) INVALID_SET_FILE_POINTER) {
 	DWORD winError = GetLastError();
 
@@ -557,6 +582,7 @@ FileSeekProc(
     newPosHigh = (offset < 0 ? -1 : 0);
     newPos = SetFilePointer(infoPtr->handle, offset, &newPosHigh, moveMethod);
     if (newPos == (LONG) INVALID_SET_FILE_POINTER) {
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
     if (oldPos == (LONG) INVALID_SET_FILE_POINTER) {
@@ -577,6 +603,8 @@ FileSeekProc(
     if (newPos == (LONG)INVALID_SET_FILE_POINTER) {
 =======
     if (newPos == (LONG) INVALID_SET_FILE_POINTER) {
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	DWORD winError = GetLastError();
 
@@ -644,7 +672,11 @@ FileWideSeekProc(
 	    &newPosHigh, moveMethod);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (newPos == (LONG)INVALID_SET_FILE_POINTER) {
+=======
+    if (newPos == (LONG) INVALID_SET_FILE_POINTER) {
+>>>>>>> upstream/master
 =======
     if (newPos == (LONG) INVALID_SET_FILE_POINTER) {
 >>>>>>> upstream/master
@@ -661,6 +693,7 @@ FileWideSeekProc(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return (((Tcl_WideInt)((unsigned)newPos)) | (Tcl_LongAsWide(newPosHigh) << 32));
 =======
     return (((Tcl_WideInt)((unsigned)newPos))
@@ -672,6 +705,10 @@ FileWideSeekProc(
 	    | (Tcl_LongAsWide(newPosHigh) << 32));
 >>>>>>> upstream/master
 =======
+	    | ((Tcl_WideInt)newPosHigh << 32));
+>>>>>>> upstream/master
+=======
+    return (((Tcl_WideInt)((unsigned)newPos))
 	    | ((Tcl_WideInt)newPosHigh << 32));
 >>>>>>> upstream/master
 }
@@ -708,8 +745,14 @@ FileTruncateProc(
     oldPos = SetFilePointer(infoPtr->handle, 0, &oldPosHigh, FILE_CURRENT);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (oldPos == (LONG)INVALID_SET_FILE_POINTER) {
 	DWORD winError = GetLastError();
+=======
+    if (oldPos == (LONG) INVALID_SET_FILE_POINTER) {
+	DWORD winError = GetLastError();
+
+>>>>>>> upstream/master
 =======
     if (oldPos == (LONG) INVALID_SET_FILE_POINTER) {
 	DWORD winError = GetLastError();
@@ -735,8 +778,14 @@ FileTruncateProc(
 	    &newPosHigh, FILE_BEGIN);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (newPos == (LONG)INVALID_SET_FILE_POINTER) {
 	DWORD winError = GetLastError();
+=======
+    if (newPos == (LONG) INVALID_SET_FILE_POINTER) {
+	DWORD winError = GetLastError();
+
+>>>>>>> upstream/master
 =======
     if (newPos == (LONG) INVALID_SET_FILE_POINTER) {
 	DWORD winError = GetLastError();
@@ -805,9 +854,15 @@ FileInputProc(
     /*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * TODO: This comment appears to be out of date.  We *do* have a
      * console driver, over in tclWinConsole.c.  After some Windows
      * developer confirms, this comment should be revised.
+=======
+     * TODO: This comment appears to be out of date. We *do* have a console
+     * driver, over in tclWinConsole.c. After some Windows developer confirms,
+     * this comment should be revised.
+>>>>>>> upstream/master
 =======
      * TODO: This comment appears to be out of date. We *do* have a console
      * driver, over in tclWinConsole.c. After some Windows developer confirms,
@@ -876,7 +931,11 @@ FileOutputProc(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (infoPtr->flags & FILE_APPEND) {
+=======
+    if (TEST_FLAG(infoPtr->flags, FILE_APPEND)) {
+>>>>>>> upstream/master
 =======
     if (TEST_FLAG(infoPtr->flags, FILE_APPEND)) {
 >>>>>>> upstream/master
@@ -964,6 +1023,12 @@ FileGetHandleProc(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+    *handlePtr = (ClientData) infoPtr->handle;
+    return TCL_OK;
+>>>>>>> upstream/master
 =======
 
     *handlePtr = (ClientData) infoPtr->handle;
@@ -1006,13 +1071,14 @@ TclpOpenFileChannel(
     Tcl_Channel channel = 0;
     int channelPermissions = 0;
     DWORD accessMode = 0, createMode, shareMode, flags;
-    const TCHAR *nativeName;
+    const WCHAR *nativeName;
     HANDLE handle;
     char channelName[16 + TCL_INTEGER_SPACE];
     TclFile readFile = NULL, writeFile = NULL;
 
     nativeName = Tcl_FSGetNativePath(pathPtr);
     if (nativeName == NULL) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	if (interp != (Tcl_Interp *) NULL) {
@@ -1022,11 +1088,16 @@ TclpOpenFileChannel(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	if (interp) {
 	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		    "couldn't open \"%s\": filename is invalid on this platform",
 		    TclGetString(pathPtr)));
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1105,6 +1176,7 @@ TclpOpenFileChannel(
 
 	return channel;
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
     }
 
@@ -1141,14 +1213,24 @@ TclpOpenFileChannel(
 
     /*
 >>>>>>> upstream/master
+=======
+    }
+
+    /*
+>>>>>>> upstream/master
      * If the file is being created, get the file attributes from the
      * permissions argument, else use the existing file attributes.
      */
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (mode & O_CREAT) {
 	if (permissions & S_IWRITE) {
+=======
+    if (TEST_FLAG(mode, O_CREAT)) {
+	if (TEST_FLAG(permissions, S_IWRITE)) {
+>>>>>>> upstream/master
 =======
     if (TEST_FLAG(mode, O_CREAT)) {
 	if (TEST_FLAG(permissions, S_IWRITE)) {
@@ -1162,7 +1244,7 @@ TclpOpenFileChannel(
 	    flags = FILE_ATTRIBUTE_READONLY;
 	}
     } else {
-	flags = GetFileAttributes(nativeName);
+	flags = GetFileAttributesW(nativeName);
 	if (flags == 0xFFFFFFFF) {
 	    flags = 0;
 	}
@@ -1178,7 +1260,7 @@ TclpOpenFileChannel(
      * Now we get to create the file.
      */
 
-    handle = CreateFile(nativeName, accessMode, shareMode,
+    handle = CreateFileW(nativeName, accessMode, shareMode,
 	    NULL, createMode, flags, (HANDLE) NULL);
 
     if (handle == INVALID_HANDLE_VALUE) {
@@ -1191,7 +1273,11 @@ TclpOpenFileChannel(
 	TclWinConvertError(err);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (interp != (Tcl_Interp *) NULL) {
+=======
+	if (interp) {
+>>>>>>> upstream/master
 =======
 	if (interp) {
 >>>>>>> upstream/master
@@ -1212,9 +1298,15 @@ TclpOpenFileChannel(
 	/*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Natively named serial ports "com1-9", "\\\\.\\comXX" are
 	 * already done with the code above.
 	 * Here we handle all other serial port names.
+=======
+	 * Natively named serial ports "com1-9", "\\\\.\\comXX" are already
+	 * done with the code above.  Here we handle all other serial port
+	 * names.
+>>>>>>> upstream/master
 =======
 	 * Natively named serial ports "com1-9", "\\\\.\\comXX" are already
 	 * done with the code above.  Here we handle all other serial port
@@ -1235,7 +1327,11 @@ TclpOpenFileChannel(
 	    TclWinConvertError(GetLastError());
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if (interp != (Tcl_Interp *) NULL) {
+=======
+	    if (interp) {
+>>>>>>> upstream/master
 =======
 	    if (interp) {
 >>>>>>> upstream/master
@@ -1270,7 +1366,12 @@ TclpOpenFileChannel(
 	channel = TclWinOpenFileChannel(handle, channelName,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		channelPermissions, (mode & O_APPEND) ? FILE_APPEND : 0);
+=======
+		channelPermissions,
+		TEST_FLAG(mode, O_APPEND) ? FILE_APPEND : 0);
+>>>>>>> upstream/master
 =======
 		channelPermissions,
 		TEST_FLAG(mode, O_APPEND) ? FILE_APPEND : 0);
@@ -1345,10 +1446,17 @@ Tcl_MakeFileChannel(
     case FILE_TYPE_PIPE:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (mode & TCL_READABLE) {
 	    readFile = TclWinMakeFile(handle);
 	}
 	if (mode & TCL_WRITABLE) {
+=======
+	if (TEST_FLAG(mode, TCL_READABLE)) {
+	    readFile = TclWinMakeFile(handle);
+	}
+	if (TEST_FLAG(mode, TCL_WRITABLE)) {
+>>>>>>> upstream/master
 =======
 	if (TEST_FLAG(mode, TCL_READABLE)) {
 	    readFile = TclWinMakeFile(handle);
@@ -1809,6 +1917,7 @@ FileGetType(
  *
  * NativeIsComPort --
  *
+<<<<<<< HEAD
  *	Determines if a path refers to a Windows serial port.
  *	A simple and efficient solution is to use a "name hint" to detect
  *      COM ports by their filename instead of resorting to a syscall
@@ -1865,6 +1974,8 @@ FileGetType(
  *
  * NativeIsComPort --
  *
+=======
+>>>>>>> upstream/master
  *	Determines if a path refers to a Windows serial port.  A simple and
  *	efficient solution is to use a "name hint" to detect COM ports by
  *	their filename instead of resorting to a syscall to detect serialness
@@ -1881,12 +1992,18 @@ FileGetType(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 static int
 NativeIsComPort(
     const TCHAR *nativePath)	/* Path of file to access, native encoding. */
+=======
+static int
+NativeIsComPort(
+    const WCHAR *nativePath)	/* Path of file to access, native encoding. */
+>>>>>>> upstream/master
 {
     const WCHAR *p = (const WCHAR *) nativePath;
     int i, len = wcslen(p);
@@ -1895,6 +2012,7 @@ NativeIsComPort(
      * 1. Look for com[1-9]:?
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     if ( (len == 4) && (_wcsnicmp(p, L"com", 3) == 0) ) {
@@ -1906,15 +2024,21 @@ NativeIsComPort(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     if ((len == 4) && (_wcsnicmp(p, L"com", 3) == 0)) {
 	/*
 	 * The 4th character must be a digit 1..9
 	 */
 
+<<<<<<< HEAD
 	if ((p[3] < L'1') || (p[3] > L'9')) {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	if ((p[3] < '1') || (p[3] > '9')) {
 >>>>>>> upstream/master
 	    return 0;
 	}
@@ -1929,6 +2053,7 @@ NativeIsComPort(
 	/*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	* Charaters 8..end must be a digits 0..9
 	*/
 
@@ -1937,12 +2062,17 @@ NativeIsComPort(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	 * Charaters 8..end must be a digits 0..9
 	 */
 
 	for (i=7; i<len; i++) {
 	    if ((p[i] < '0') || (p[i] > '9')) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

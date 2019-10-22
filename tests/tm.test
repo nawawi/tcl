@@ -204,6 +204,7 @@ proc genpaths {base} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lassign [split [package present Tcl] .] major minor 
 =======
     lassign [split [package present Tcl] .] major minor
@@ -216,6 +217,9 @@ proc genpaths {base} {
 >>>>>>> upstream/master
 =======
     lassign [split [package present Tcl] .] major minor
+>>>>>>> upstream/master
+=======
+    regexp {^(\d+)\.(\d+)} [package provide Tcl] - major minor
 >>>>>>> upstream/master
     set results {}
     set base [file join $base tcl$major]

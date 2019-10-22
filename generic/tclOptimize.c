@@ -231,6 +231,7 @@ ConvertZeroEffectToNOP(
 		    && TclGetUInt1AtPtr(currentInstPtr + size + 1) == 2) {
 		Tcl_Obj *litPtr = TclFetchLiteral(envPtr,
 			TclGetUInt1AtPtr(currentInstPtr + 1));
+<<<<<<< HEAD
 		int numBytes;
 
 <<<<<<< HEAD
@@ -244,6 +245,11 @@ ConvertZeroEffectToNOP(
 		(void) TclGetStringFromObj(litPtr, &numBytes);
 >>>>>>> upstream/master
 =======
+		(void) TclGetStringFromObj(litPtr, &numBytes);
+>>>>>>> upstream/master
+=======
+		size_t numBytes;
+
 		(void) TclGetStringFromObj(litPtr, &numBytes);
 >>>>>>> upstream/master
 		if (numBytes == 0) {
@@ -258,6 +264,7 @@ ConvertZeroEffectToNOP(
 		    && TclGetUInt1AtPtr(currentInstPtr + size + 1) == 2) {
 		Tcl_Obj *litPtr = TclFetchLiteral(envPtr,
 			TclGetUInt4AtPtr(currentInstPtr + 1));
+<<<<<<< HEAD
 		int numBytes;
 
 <<<<<<< HEAD
@@ -271,6 +278,11 @@ ConvertZeroEffectToNOP(
 		(void) TclGetStringFromObj(litPtr, &numBytes);
 >>>>>>> upstream/master
 =======
+		(void) TclGetStringFromObj(litPtr, &numBytes);
+>>>>>>> upstream/master
+=======
+		size_t numBytes;
+
 		(void) TclGetStringFromObj(litPtr, &numBytes);
 >>>>>>> upstream/master
 		if (numBytes == 0) {

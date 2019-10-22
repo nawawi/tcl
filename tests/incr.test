@@ -496,7 +496,10 @@ test incr-2.31 {incr command (compiled): bad increment} {
 "incr x 1a"}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test incr-2.32 {incr command (compiled): bad pure list increment} {
@@ -512,6 +515,9 @@ test incr-2.33 {incr command (compiled): bad pure dict increment} {
     invoked from within
 "incr x [dict create 1 2]"}}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

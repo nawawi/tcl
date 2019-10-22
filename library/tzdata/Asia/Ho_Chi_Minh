@@ -5,6 +5,7 @@ set TZData(:Asia/Ho_Chi_Minh) {
     {-2004073600 25590 0 PLMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1851577590 25200 0 ICT}
     {-852105600 28800 0 IDT}
     {-782643600 32400 0 JST}
@@ -16,6 +17,8 @@ set TZData(:Asia/Ho_Chi_Minh) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1851577590 25200 0 +07}
     {-852105600 28800 0 +08}
     {-782643600 32400 0 +09}
@@ -25,6 +28,9 @@ set TZData(:Asia/Ho_Chi_Minh) {
     {-315648000 28800 0 +08}
     {171820800 25200 0 +07}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

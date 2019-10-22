@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* clear one (frees)  */
@@ -26,7 +30,11 @@ void mp_clear(mp_int *a)
       }
 
       /* free ram */
+<<<<<<< HEAD
       XFREE(a->dp);
+=======
+      XFREE(a->dp, sizeof (mp_digit) * (size_t)a->alloc);
+>>>>>>> upstream/master
 
       /* reset members to make debugging easier */
       a->dp    = NULL;

@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -87,7 +91,11 @@ Returns a list containing the names of all of the encodings that are
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 currently available. 
+=======
+currently available.
+>>>>>>> upstream/master
 =======
 currently available.
 >>>>>>> upstream/master

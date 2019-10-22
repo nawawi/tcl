@@ -7,7 +7,11 @@ namespace eval ::tcl::clock {
         "St"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0160t"\
+=======
+        "Št"\
+>>>>>>> upstream/master
 =======
         "Št"\
 >>>>>>> upstream/master
@@ -18,6 +22,7 @@ namespace eval ::tcl::clock {
         "Pondelok"\
         "Utorok"\
         "Streda"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "\u0160tvrtok"\
 =======
@@ -34,6 +39,9 @@ namespace eval ::tcl::clock {
 =======
         "Štvrtok"\
 >>>>>>> upstream/master
+=======
+        "Štvrtok"\
+>>>>>>> upstream/master
         "Piatok"\
         "Sobota"]
     ::msgcat::mcset sk MONTHS_ABBREV [list \
@@ -43,9 +51,15 @@ namespace eval ::tcl::clock {
         "apr"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e1j"\
         "j\u00fan"\
         "j\u00fal"\
+=======
+        "máj"\
+        "jún"\
+        "júl"\
+>>>>>>> upstream/master
 =======
         "máj"\
         "jún"\
@@ -65,8 +79,13 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset sk MONTHS_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "janu\u00e1r"\
         "febru\u00e1r"\
+=======
+        "január"\
+        "február"\
+>>>>>>> upstream/master
 =======
         "január"\
         "február"\
@@ -79,6 +98,7 @@ namespace eval ::tcl::clock {
         "august"\
         "september"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "okt\u00f3ber"\
 =======
         "január"\
@@ -90,6 +110,9 @@ namespace eval ::tcl::clock {
         "júl"\
         "august"\
         "september"\
+        "október"\
+>>>>>>> upstream/master
+=======
         "október"\
 >>>>>>> upstream/master
 =======

@@ -29,10 +29,8 @@
 #undef Tcl_Alloc
 #undef Tcl_Free
 #undef Tcl_Realloc
-#undef Tcl_NewBooleanObj
 #undef Tcl_NewByteArrayObj
 #undef Tcl_NewDoubleObj
-#undef Tcl_NewIntObj
 #undef Tcl_NewListObj
 #undef Tcl_NewLongObj
 #undef Tcl_DbNewLongObj
@@ -41,6 +39,7 @@
 #undef Tcl_GetUnicode
 #undef Tcl_DumpActiveMemory
 #undef Tcl_ValidateAllMemory
+<<<<<<< HEAD
 #undef Tcl_FindHashEntry
 #undef Tcl_CreateHashEntry
 #undef Tcl_Panic
@@ -333,6 +332,17 @@ static int formatInt(char *buffer, int n){
 #undef TclStaticPackage
 #define TclStaticPackage Tcl_StaticPackage
 >>>>>>> upstream/master
+=======
+#undef Tcl_SetExitProc
+#undef Tcl_SetPanicProc
+#undef TclpGetPid
+#undef TclStaticPackage
+#undef Tcl_BackgroundError
+#undef Tcl_UtfToUniChar
+#undef Tcl_UtfToUniCharDString
+#undef Tcl_UniCharToUtfDString
+#define TclStaticPackage Tcl_StaticPackage
+>>>>>>> upstream/master
 
 #ifdef TCL_MEM_DEBUG
 #   define Tcl_Alloc TclpAlloc
@@ -358,6 +368,7 @@ doNothing(void)
 }
 #   define TclWinAddProcess (void (*) (void *, size_t)) doNothing
 #   define TclWinFlushDirtyChannels doNothing
+<<<<<<< HEAD
 <<<<<<< HEAD
 #   define TclWinResetInterfaces doNothing
 
@@ -428,6 +439,8 @@ static Tcl_Encoding winTCharEncoding;
 
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 static int
 TclpIsAtty(int fd)
 {
@@ -462,6 +475,7 @@ TclpGetPid(Tcl_Pid pid)
     return (size_t) pid;
 }
 
+<<<<<<< HEAD
 char *
 Tcl_WinUtfToTChar(
     const char *string,
@@ -581,6 +595,8 @@ Tcl_WinTCharToUtf(
 #endif
 }
 
+=======
+>>>>>>> upstream/master
 #if defined(TCL_WIDE_INT_IS_LONG)
 /* On Cygwin64, long is 64-bit while on Win64 long is 32-bit. Therefore
  * we have to make sure that all stub entries on Cygwin64 follow the Win64
@@ -620,6 +636,7 @@ static int exprIntObj(Tcl_Interp *interp, Tcl_Obj*expr, int *ptr){
 }
 #define Tcl_ExprLongObj (int(*)(Tcl_Interp*,Tcl_Obj*,long*))exprIntObj
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int uniCharNcmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsigned int n){
    return Tcl_UniCharNcmp(ucs, uct, (unsigned long)n);
 }
@@ -637,6 +654,8 @@ static int uniCharNcasecmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsig
 }
 #define Tcl_UniCharNcasecmp (int(*)(const Tcl_UniChar*,const Tcl_UniChar*,unsigned long))uniCharNcasecmp
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #endif /* TCL_WIDE_INT_IS_LONG */
@@ -700,7 +719,7 @@ static const TclIntStubs tclIntStubs = {
     TclGetExtension, /* 31 */
     TclGetFrame, /* 32 */
     0, /* 33 */
-    TclGetIntForIndex, /* 34 */
+    0, /* 34 */
     0, /* 35 */
     0, /* 36 */
     TclGetLoadedPackages, /* 37 */
@@ -919,16 +938,24 @@ static const TclIntStubs tclIntStubs = {
     TclSetSlaveCancelFlags, /* 250 */
     TclRegisterLiteral, /* 251 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     TclPtrGetVar, /* 252 */
     TclPtrSetVar, /* 253 */
     TclPtrIncrObjVar, /* 254 */
     TclPtrObjMakeUpvar, /* 255 */
     TclPtrUnsetVar, /* 256 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
     TclStaticPackage, /* 257 */
+>>>>>>> upstream/master
+=======
+    TclStaticPackage, /* 257 */
+    TclpCreateTemporaryDirectory, /* 258 */
 >>>>>>> upstream/master
 };
 
@@ -1039,10 +1066,13 @@ static const TclIntPlatStubs tclIntPlatStubs = {
 static const TclPlatStubs tclPlatStubs = {
     TCL_STUB_MAGIC,
     0,
+<<<<<<< HEAD
 #if defined(_WIN32) || defined(__CYGWIN__) /* WIN */
     Tcl_WinUtfToTChar, /* 0 */
     Tcl_WinTCharToUtf, /* 1 */
 #endif /* WIN */
+=======
+>>>>>>> upstream/master
 #ifdef MAC_OSX_TCL /* MACOSX */
     Tcl_MacOSXOpenBundleResources, /* 0 */
     Tcl_MacOSXOpenVersionedBundleResources, /* 1 */
@@ -1102,6 +1132,7 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_mp_unsigned_bin_size, /* 47 */
     TclBN_mp_xor, /* 48 */
     TclBN_mp_zero, /* 49 */
+<<<<<<< HEAD
     TclBN_reverse, /* 50 */
     TclBN_fast_s_mp_mul_digs, /* 51 */
     TclBN_fast_s_mp_sqr, /* 52 */
@@ -1113,6 +1144,19 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_s_mp_mul_digs, /* 58 */
     TclBN_s_mp_sqr, /* 59 */
     TclBN_s_mp_sub, /* 60 */
+=======
+    0, /* 50 */
+    0, /* 51 */
+    0, /* 52 */
+    0, /* 53 */
+    0, /* 54 */
+    0, /* 55 */
+    0, /* 56 */
+    0, /* 57 */
+    0, /* 58 */
+    0, /* 59 */
+    0, /* 60 */
+>>>>>>> upstream/master
     TclBN_mp_init_set_int, /* 61 */
     TclBN_mp_set_int, /* 62 */
     TclBN_mp_cnt_lsb, /* 63 */
@@ -1125,6 +1169,14 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_mp_set_long, /* 70 */
     TclBN_mp_get_long, /* 71 */
     TclBN_mp_get_int, /* 72 */
+<<<<<<< HEAD
+=======
+    0, /* 73 */
+    0, /* 74 */
+    0, /* 75 */
+    TclBN_mp_signed_rsh, /* 76 */
+    TclBN_mp_get_bit, /* 77 */
+>>>>>>> upstream/master
 };
 
 static const TclStubHooks tclStubHooks = {
@@ -1228,7 +1280,11 @@ const TclStubs tclStubs = {
     Tcl_AsyncInvoke, /* 73 */
     Tcl_AsyncMark, /* 74 */
     Tcl_AsyncReady, /* 75 */
+<<<<<<< HEAD
     Tcl_BackgroundError, /* 76 */
+=======
+    0, /* 76 */
+>>>>>>> upstream/master
     0, /* 77 */
     Tcl_BadChannelOption, /* 78 */
     Tcl_CallWhenDeleted, /* 79 */
@@ -1334,7 +1390,11 @@ const TclStubs tclStubs = {
     Tcl_GetServiceMode, /* 171 */
     Tcl_GetSlave, /* 172 */
     Tcl_GetStdChannel, /* 173 */
+<<<<<<< HEAD
     Tcl_GetStringResult, /* 174 */
+=======
+    0, /* 174 */
+>>>>>>> upstream/master
     0, /* 175 */
     Tcl_GetVar2, /* 176 */
     0, /* 177 */
@@ -1405,7 +1465,11 @@ const TclStubs tclStubs = {
     Tcl_SplitList, /* 242 */
     Tcl_SplitPath, /* 243 */
     0, /* 244 */
+<<<<<<< HEAD
     Tcl_StringMatch, /* 245 */
+=======
+    0, /* 245 */
+>>>>>>> upstream/master
     0, /* 246 */
     0, /* 247 */
     Tcl_TraceVar2, /* 248 */
@@ -1496,7 +1560,7 @@ const TclStubs tclStubs = {
     Tcl_UtfToExternalDString, /* 333 */
     Tcl_UtfToLower, /* 334 */
     Tcl_UtfToTitle, /* 335 */
-    Tcl_UtfToUniChar, /* 336 */
+    Tcl_UtfToChar16, /* 336 */
     Tcl_UtfToUpper, /* 337 */
     Tcl_WriteChars, /* 338 */
     Tcl_WriteObj, /* 339 */
@@ -1514,8 +1578,8 @@ const TclStubs tclStubs = {
     Tcl_UniCharIsWordChar, /* 351 */
     Tcl_UniCharLen, /* 352 */
     Tcl_UniCharNcmp, /* 353 */
-    Tcl_UniCharToUtfDString, /* 354 */
-    Tcl_UtfToUniCharDString, /* 355 */
+    Tcl_Char16ToUtfDString, /* 354 */
+    Tcl_UtfToChar16DString, /* 355 */
     Tcl_GetRegExpFromObj, /* 356 */
     0, /* 357 */
     Tcl_FreeParse, /* 358 */
@@ -1793,6 +1857,7 @@ const TclStubs tclStubs = {
     Tcl_ZlibStreamSetCompressionDictionary, /* 630 */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     Tcl_OpenTcpServerEx, /* 631 */
 >>>>>>> upstream/master
@@ -1801,6 +1866,9 @@ const TclStubs tclStubs = {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+    Tcl_OpenTcpServerEx, /* 631 */
+>>>>>>> upstream/master
     TclZipfs_Mount, /* 632 */
     TclZipfs_Unmount, /* 633 */
     TclZipfs_TclLibrary, /* 634 */
@@ -1813,6 +1881,14 @@ const TclStubs tclStubs = {
     Tcl_IncrRefCount, /* 641 */
     Tcl_DecrRefCount, /* 642 */
     Tcl_IsShared, /* 643 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+    Tcl_LinkArray, /* 644 */
+    Tcl_GetIntForIndex, /* 645 */
+    Tcl_UtfToUniChar, /* 646 */
+    Tcl_UniCharToUtfDString, /* 647 */
+    Tcl_UtfToUniCharDString, /* 648 */
 >>>>>>> upstream/master
 };
 

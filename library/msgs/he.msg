@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset he DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u05d0"\
         "\u05d1"\
         "\u05d2"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u05d5"\
         "\u05e9"]
 =======
+=======
+>>>>>>> upstream/master
         "א"\
         "ב"\
         "ג"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "ה"\
         "ו"\
         "ש"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset he DAYS_OF_WEEK_FULL [list \
         "יום ראשון"\
@@ -55,6 +61,7 @@ namespace eval ::tcl::clock {
         "נובמבר"\
         "דצמבר"\
         ""]
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset he BCE "\u05dc\u05e1\u05d4\u0022\u05e0"
     ::msgcat::mcset he CE "\u05dc\u05e4\u05e1\u05d4\u0022\u05e0"
@@ -102,6 +109,10 @@ namespace eval ::tcl::clock {
         "נובמבר"\
         "דצמבר"\
         ""]
+    ::msgcat::mcset he BCE "לסה"נ"
+    ::msgcat::mcset he CE "לפסה"נ"
+>>>>>>> upstream/master
+=======
     ::msgcat::mcset he BCE "לסה"נ"
     ::msgcat::mcset he CE "לפסה"נ"
 >>>>>>> upstream/master

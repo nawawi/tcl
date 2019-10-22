@@ -1,7 +1,11 @@
 /* inftrees.c -- generate Huffman trees for efficient decoding
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2013 Mark Adler
+=======
+ * Copyright (C) 1995-2017 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2017 Mark Adler
 >>>>>>> upstream/master
@@ -19,7 +23,11 @@
 const char inflate_copyright[] =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    " inflate 1.2.8 Copyright 1995-2013 Mark Adler ";
+=======
+   " inflate 1.2.11 Copyright 1995-2017 Mark Adler ";
+>>>>>>> upstream/master
 =======
    " inflate 1.2.11 Copyright 1995-2017 Mark Adler ";
 >>>>>>> upstream/master
@@ -72,7 +80,11 @@ unsigned short FAR *work;
     const unsigned short FAR *extra;    /* extra bits table to use */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int end;                    /* use base and extra for symbol > end */
+=======
+    unsigned match;             /* use base and extra for symbol >= match */
+>>>>>>> upstream/master
 =======
     unsigned match;             /* use base and extra for symbol >= match */
 >>>>>>> upstream/master
@@ -88,7 +100,11 @@ unsigned short FAR *work;
         16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 72, 78};
+=======
+        19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 77, 202};
+>>>>>>> upstream/master
 =======
         19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 77, 202};
 >>>>>>> upstream/master
@@ -215,7 +231,11 @@ unsigned short FAR *work;
         base = extra = work;    /* dummy value--not used */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         end = 19;
+=======
+        match = 20;
+>>>>>>> upstream/master
 =======
         match = 20;
 >>>>>>> upstream/master
@@ -229,6 +249,7 @@ unsigned short FAR *work;
         base = dbase;
         extra = dext;
 <<<<<<< HEAD
+<<<<<<< HEAD
         end = -1;
 =======
         match = 20;
@@ -241,6 +262,9 @@ unsigned short FAR *work;
     default:    /* DISTS */
         base = dbase;
         extra = dext;
+        match = 0;
+>>>>>>> upstream/master
+=======
         match = 0;
 >>>>>>> upstream/master
 =======
@@ -270,6 +294,7 @@ unsigned short FAR *work;
         here.bits = (unsigned char)(len - drop);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((int)(work[sym]) < end) {
             here.op = (unsigned char)0;
             here.val = work[sym];
@@ -277,6 +302,15 @@ unsigned short FAR *work;
         else if ((int)(work[sym]) > end) {
             here.op = (unsigned char)(extra[work[sym]]);
             here.val = base[work[sym]];
+=======
+        if (work[sym] + 1U < match) {
+            here.op = (unsigned char)0;
+            here.val = work[sym];
+        }
+        else if (work[sym] >= match) {
+            here.op = (unsigned char)(extra[work[sym] - match]);
+            here.val = base[work[sym] - match];
+>>>>>>> upstream/master
 =======
         if (work[sym] + 1U < match) {
             here.op = (unsigned char)0;

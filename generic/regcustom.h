@@ -56,9 +56,12 @@
 #ifdef __REG_WIDE_EXEC
 #undef __REG_WIDE_EXEC
 #endif
+<<<<<<< HEAD
 #ifdef __REG_REGOFF_T
 #undef __REG_REGOFF_T
 #endif
+=======
+>>>>>>> upstream/master
 #ifdef __REG_NOFRONT
 #undef __REG_NOFRONT
 #endif
@@ -67,6 +70,7 @@
 #endif
 /* Interface types */
 #define	__REG_WIDE_T	Tcl_UniChar
+<<<<<<< HEAD
 #define	__REG_REGOFF_T	long	/* Not really right, but good enough... */
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -74,6 +78,8 @@
 <<<<<<< HEAD
 #define	__REG_VOID_T	void
 #define	__REG_CONST	const
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -145,7 +151,7 @@ typedef int celt;		/* Type to hold chr, or NOCELT */
 #if 1
 #define AllocVars(vPtr) \
     static Tcl_ThreadDataKey varsKey; \
-    register struct vars *vPtr = (struct vars *) \
+    struct vars *vPtr = (struct vars *) \
 	    Tcl_GetThreadData(&varsKey, sizeof(struct vars))
 #else
 /*
@@ -154,7 +160,7 @@ typedef int celt;		/* Type to hold chr, or NOCELT */
  * faster in practice (measured!)
  */
 #define AllocVars(vPtr) \
-    register struct vars *vPtr = (struct vars *) MALLOC(sizeof(struct vars))
+    struct vars *vPtr = (struct vars *) MALLOC(sizeof(struct vars))
 #define FreeVars(vPtr) \
     FREE(vPtr)
 #endif

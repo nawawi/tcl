@@ -41,7 +41,11 @@ TclpFindExecutable(
 {
     Tcl_Encoding encoding;
 #ifdef __CYGWIN__
+<<<<<<< HEAD
     int length;
+=======
+    size_t length;
+>>>>>>> upstream/master
     char buf[PATH_MAX * 2];
     char name[PATH_MAX * TCL_UTF_MAX + 1];
     GetModuleFileNameW(NULL, buf, PATH_MAX);
@@ -273,6 +277,7 @@ TclpMatchInDirectory(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	dirName = Tcl_GetStringFromObj(fileNamePtr, &dirLength);
 =======
 	dirName = TclGetStringFromObj(fileNamePtr, &dirLength);
@@ -288,6 +293,9 @@ TclpMatchInDirectory(
 =======
 	dirName = TclGetString(fileNamePtr);
 	dirLength = fileNamePtr->length;
+>>>>>>> upstream/master
+=======
+	dirName = TclGetStringFromObj(fileNamePtr, &dirLength);
 >>>>>>> upstream/master
 	Tcl_DStringAppend(&dsOrig, dirName, dirLength);
 
@@ -958,6 +966,7 @@ TclpObjLink(
 	if (linkAction & TCL_CREATE_SYMBOLIC_LINK) {
 	    Tcl_DString ds;
 	    Tcl_Obj *transPtr;
+	    size_t length;
 
 	    /*
 	     * Now we don't want to link to the absolute, normalized path.
@@ -969,6 +978,7 @@ TclpObjLink(
 	    if (transPtr == NULL) {
 		return NULL;
 	    }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -989,6 +999,10 @@ TclpObjLink(
 =======
 	    target = TclGetString(transPtr);
 	    target = Tcl_UtfToExternalDString(NULL, target, transPtr->length, &ds);
+>>>>>>> upstream/master
+=======
+	    target = TclGetStringFromObj(transPtr, &length);
+	    target = Tcl_UtfToExternalDString(NULL, target, length, &ds);
 >>>>>>> upstream/master
 	    Tcl_DecrRefCount(transPtr);
 
@@ -1146,6 +1160,7 @@ TclNativeCreateNativeRep(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(validPathPtr, &len);
 =======
     str = TclGetStringFromObj(validPathPtr, &len);
@@ -1161,6 +1176,9 @@ TclNativeCreateNativeRep(
 =======
     str = TclGetString(validPathPtr);
     len = validPathPtr->length;
+>>>>>>> upstream/master
+=======
+    str = TclGetStringFromObj(validPathPtr, &len);
 >>>>>>> upstream/master
     Tcl_UtfToExternalDString(NULL, str, len, &ds);
     len = Tcl_DStringLength(&ds) + sizeof(char);

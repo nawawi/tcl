@@ -11,11 +11,11 @@
  */
 
 #include "tclInt.h"
-#include <locale.h>
 #if defined(TCL_WIDE_CLICKS) && defined(MAC_OSX_TCL)
 #include <mach/mach_time.h>
 #endif
 
+<<<<<<< HEAD
 /*
  * TclpGetDate is coded to return a pointer to a 'struct tm'. For thread
  * safety, this structure must be in thread-specific data. The 'tmKey'
@@ -56,10 +56,13 @@ static char *lastTZ = NULL;	/* Holds the last setting of the TZ
 				 * environment variable, or an empty string if
 				 * the variable was not set. */
 
+=======
+>>>>>>> upstream/master
 /*
  * Static functions declared in this file.
  */
 
+<<<<<<< HEAD
 static void		SetTZIfNecessary(void);
 static void		CleanupMemory(ClientData clientData);
 <<<<<<< HEAD
@@ -71,6 +74,8 @@ static void		CleanupMemory(ClientData clientData);
 =======
 #endif /* TCL_NO_DEPRECATED */
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -113,12 +118,38 @@ TclpGetSeconds(void)
 /*
  *----------------------------------------------------------------------
  *
+ * TclpGetMicroseconds --
+ *
+ *	This procedure returns the number of microseconds from the epoch.
+ *	On most Unix systems the epoch is Midnight Jan 1, 1970 GMT.
+ *
+ * Results:
+ *	Number of microseconds from the epoch.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+Tcl_WideInt
+TclpGetMicroseconds(void)
+{
+    Tcl_Time time;
+
+    tclGetTimeProcPtr(&time, tclTimeClientData);
+    return ((Tcl_WideInt)time.sec)*1000000 + time.usec;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
  * TclpGetClicks --
  *
  *	This procedure returns a value that represents the highest resolution
  *	clock available on the system. There are no garantees on what the
  *	resolution will be. In Tcl we will call this value a "click". The
- *	start time is also system dependant.
+ *	start time is also system dependent.
  *
  * Results:
  *	Number of clicks from some start time.
@@ -189,7 +220,11 @@ TclpGetWideClicks(void)
 	tclGetTimeProcPtr(&time, tclTimeClientData);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	now = (Tcl_WideInt) (time.sec*1000000 + time.usec);
+=======
+	now = ((Tcl_WideInt)time.sec)*1000000 + time.usec;
+>>>>>>> upstream/master
 =======
 	now = ((Tcl_WideInt)time.sec)*1000000 + time.usec;
 >>>>>>> upstream/master
@@ -253,11 +288,59 @@ TclpWideClicksToNanoseconds(
 
     return nsec;
 }
+
+/*
+ *----------------------------------------------------------------------
+ *
+<<<<<<< HEAD
+=======
+ * TclpWideClickInMicrosec --
+ *
+ *	This procedure return scale to convert click values from the
+ *	TclpGetWideClicks native resolution to microsecond resolution
+ *	and back.
+ *
+ * Results:
+ * 	1 click in microseconds as double.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+
+double
+TclpWideClickInMicrosec(void)
+{
+    if (tclGetTimeProcPtr != NativeGetTime) {
+	return 1.0;
+    } else {
+#ifdef MAC_OSX_TCL
+	static int initialized = 0;
+	static double scale = 0.0;
+
+	if (initialized) {
+	    return scale;
+	} else {
+	    mach_timebase_info_data_t tb;
+
+	    mach_timebase_info(&tb);
+	    /* value of tb.numer / tb.denom = 1 click in nanoseconds */
+	    scale = ((double)tb.numer) / tb.denom / 1000;
+	    initialized = 1;
+	    return scale;
+	}
+#else
+#error Wide high-resolution clicks not implemented on this platform
+#endif
+    }
+}
 #endif /* TCL_WIDE_CLICKS */
 
 /*
  *----------------------------------------------------------------------
  *
+>>>>>>> upstream/master
  * Tcl_GetTime --
  *
  *	Gets the current system time in seconds and microseconds since the
@@ -285,6 +368,7 @@ Tcl_GetTime(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
 <<<<<<< HEAD
  * TclpGetDate --
  *
@@ -412,6 +496,8 @@ TclpLocaltime(
  *
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
  * Tcl_SetTimeProc --
  *
  *	TIP #233 (Virtualized Time): Registers two handlers for the
@@ -524,6 +610,7 @@ NativeGetTime(
     timePtr->usec = tv.tv_usec;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*
  *----------------------------------------------------------------------
  *
@@ -603,6 +690,8 @@ CleanupMemory(
 >>>>>>> upstream/master
 =======
 #endif /* TCL_NO_DEPRECATED */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

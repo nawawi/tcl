@@ -54,6 +54,7 @@ MODULE_SCOPE void	TclUnsetEnv(const char *name);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #if defined(__CYGWIN__)
     static void TclCygwinPutenv(char *string);
@@ -70,6 +71,8 @@ static void		ReplaceString(const char *oldStr, char *newStr);
 MODULE_SCOPE void	TclSetEnv(const char *name, const char *value);
 MODULE_SCOPE void	TclUnsetEnv(const char *name);
 <<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -155,7 +158,12 @@ TclSetupEnv(
 	Tcl_MutexLock(&envMutex);
 	for (i = 0; environ[i] != NULL; i++) {
 	    Tcl_Obj *obj1, *obj2;
+<<<<<<< HEAD
 	    char *p1, *p2;
+=======
+	    const char *p1;
+	    char *p2;
+>>>>>>> upstream/master
 
 	    p1 = Tcl_ExternalToUtfDString(NULL, environ[i], -1, &envString);
 	    p2 = strchr(p1, '=');
@@ -171,6 +179,21 @@ TclSetupEnv(
 	    }
 	    p2++;
 	    p2[-1] = '\0';
+<<<<<<< HEAD
+=======
+#if defined(_WIN32)
+	    /*
+	     * Enforce PATH and COMSPEC to be all uppercase. This eliminates
+	     * additional trace logic otherwise required in init.tcl.
+	     */
+
+	    if (strcasecmp(p1, "PATH") == 0) {
+		p1 = "PATH";
+	    } else if (strcasecmp(p1, "COMSPEC") == 0) {
+		p1 = "COMSPEC";
+	    }
+#endif
+>>>>>>> upstream/master
 	    obj1 = Tcl_NewStringObj(p1, -1);
 	    obj2 = Tcl_NewStringObj(p2, -1);
 	    Tcl_DStringFree(&envString);
@@ -239,7 +262,11 @@ TclSetEnv(
     const char *value)		/* New value for variable (UTF-8). */
 {
     Tcl_DString envString;
+<<<<<<< HEAD
     unsigned nameLength, valueLength;
+=======
+    size_t nameLength, valueLength;
+>>>>>>> upstream/master
     size_t index, length;
     char *p, *oldValue;
     const char *p2;
@@ -253,7 +280,11 @@ TclSetEnv(
     Tcl_MutexLock(&envMutex);
     index = TclpFindVariable(name, &length);
 
+<<<<<<< HEAD
     if (index == TCL_AUTO_LENGTH) {
+=======
+    if (index == TCL_INDEX_NONE) {
+>>>>>>> upstream/master
 #ifndef USE_PUTENV
 	/*
 	 * We need to handle the case where the environment may be changed
@@ -317,7 +348,11 @@ TclSetEnv(
      */
 
     p = Tcl_Realloc(p, Tcl_DStringLength(&envString) + 1);
+<<<<<<< HEAD
     memcpy(p, p2, (unsigned) Tcl_DStringLength(&envString) + 1);
+=======
+    memcpy(p, p2, Tcl_DStringLength(&envString) + 1);
+>>>>>>> upstream/master
     Tcl_DStringFree(&envString);
 
 #ifdef USE_PUTENV
@@ -337,7 +372,11 @@ TclSetEnv(
      * string in the cache.
      */
 
+<<<<<<< HEAD
     if ((index != TCL_AUTO_LENGTH) && (environ[index] == p)) {
+=======
+    if ((index != TCL_INDEX_NONE) && (environ[index] == p)) {
+>>>>>>> upstream/master
 	ReplaceString(oldValue, p);
 #ifdef HAVE_PUTENV_THAT_COPIES
     } else {
@@ -481,6 +520,7 @@ TclUnsetEnv(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(_WIN32) || defined(__CYGWIN__)
 =======
 #if defined(_WIN32)
@@ -506,18 +546,31 @@ TclUnsetEnv(
     string = Tcl_Alloc(length + 2);
 >>>>>>> upstream/master
     memcpy(string, name, (size_t) length);
+=======
+#if defined(_WIN32)
+    string = Tcl_Alloc(length + 2);
+    memcpy(string, name, length);
+>>>>>>> upstream/master
     string[length] = '=';
     string[length+1] = '\0';
 #else
     string = Tcl_Alloc(length + 1);
+<<<<<<< HEAD
     memcpy(string, name, (size_t) length);
+=======
+    memcpy(string, name, length);
+>>>>>>> upstream/master
     string[length] = '\0';
 #endif /* _WIN32 */
 
     Tcl_UtfToExternalDString(NULL, string, -1, &envString);
     string = Tcl_Realloc(string, Tcl_DStringLength(&envString) + 1);
     memcpy(string, Tcl_DStringValue(&envString),
+<<<<<<< HEAD
 	    (unsigned) Tcl_DStringLength(&envString)+1);
+=======
+	    Tcl_DStringLength(&envString)+1);
+>>>>>>> upstream/master
     Tcl_DStringFree(&envString);
 
     putenv(string);
@@ -768,7 +821,11 @@ ReplaceString(
 		(env.cacheSize + growth) * sizeof(char *));
 	env.cache[env.cacheSize] = newStr;
 	(void) memset(env.cache+env.cacheSize+1, 0,
+<<<<<<< HEAD
 		(size_t) (growth-1) * sizeof(char *));
+=======
+		(growth-1) * sizeof(char *));
+>>>>>>> upstream/master
 	env.cacheSize += growth;
     }
 }
@@ -817,6 +874,7 @@ TclFinalizeEnvironment(void)
 	if ((env.ourEnviron != NULL)) {
 	    Tcl_Free(env.ourEnviron);
 	    env.ourEnviron = NULL;
+<<<<<<< HEAD
 	}
 	env.ourEnvironSize = 0;
 #endif
@@ -916,9 +974,13 @@ TclCygwinPutenv(
 	}
 
 	SetEnvironmentVariableA(name, buf);
+=======
+	}
+	env.ourEnvironSize = 0;
+#endif
+>>>>>>> upstream/master
     }
 }
-#endif /* __CYGWIN__ */
 
 =======
 >>>>>>> upstream/master

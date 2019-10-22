@@ -1242,7 +1242,10 @@ test iortrans-11.1 {origin interpreter of moved transform destroyed during acces
 } -cleanup {
     interp delete $idb
     tempdone
+<<<<<<< HEAD
     interp delete $idb
+=======
+>>>>>>> upstream/master
 } -result {Owner lost}
 test iortrans-11.2 {delete interp of reflected transform} -setup {
     interp create slave
@@ -1325,7 +1328,11 @@ proc inthread {chan script args} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     thread::send -async $tid {	
+=======
+    thread::send -async $tid {
+>>>>>>> upstream/master
 =======
     thread::send -async $tid {
 >>>>>>> upstream/master

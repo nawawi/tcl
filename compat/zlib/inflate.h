@@ -1,7 +1,11 @@
 /* inflate.h -- internal inflate state definition
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2009 Mark Adler
+=======
+ * Copyright (C) 1995-2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2016 Mark Adler
 >>>>>>> upstream/master
@@ -28,7 +32,11 @@
 typedef enum {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     HEAD,       /* i: waiting for magic header */
+=======
+    HEAD = 16180,   /* i: waiting for magic header */
+>>>>>>> upstream/master
 =======
     HEAD = 16180,   /* i: waiting for magic header */
 >>>>>>> upstream/master
@@ -95,7 +103,12 @@ typedef enum {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* state maintained between inflate() calls.  Approximately 10K bytes. */
+=======
+/* State maintained between inflate() calls -- approximately 7K bytes, not
+   including the allocated sliding window, which is up to 32K bytes. */
+>>>>>>> upstream/master
 =======
 /* State maintained between inflate() calls -- approximately 7K bytes, not
    including the allocated sliding window, which is up to 32K bytes. */
@@ -105,6 +118,7 @@ struct inflate_state {
     inflate_mode mode;          /* current inflate mode */
     int last;                   /* true if processing last block */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int wrap;                   /* bit 0 true for zlib, bit 1 true for gzip */
 =======
 /* State maintained between inflate() calls -- approximately 7K bytes, not
@@ -113,6 +127,10 @@ struct inflate_state {
     z_streamp strm;             /* pointer back to this zlib stream */
     inflate_mode mode;          /* current inflate mode */
     int last;                   /* true if processing last block */
+    int wrap;                   /* bit 0 true for zlib, bit 1 true for gzip,
+                                   bit 2 true to validate check value */
+>>>>>>> upstream/master
+=======
     int wrap;                   /* bit 0 true for zlib, bit 1 true for gzip,
                                    bit 2 true to validate check value */
 >>>>>>> upstream/master

@@ -394,14 +394,22 @@ tclWinDebugPanic(
 	char buf[TCL_MAX_WARN_LEN * 3];
 
 	vsnprintf(buf, sizeof(buf), format, argList);
+<<<<<<< HEAD
 	msgString[TCL_MAX_WARN_LEN-1] = L'\0';
+=======
+	msgString[TCL_MAX_WARN_LEN-1] = '\0';
+>>>>>>> upstream/master
 	MultiByteToWideChar(CP_UTF8, 0, buf, -1, msgString, TCL_MAX_WARN_LEN);
 
 	/*
 	 * Truncate MessageBox string if it is too long to not overflow the buffer.
 	 */
 
+<<<<<<< HEAD
 	if (msgString[TCL_MAX_WARN_LEN-1] != L'\0') {
+=======
+	if (msgString[TCL_MAX_WARN_LEN-1] != '\0') {
+>>>>>>> upstream/master
 	    memcpy(msgString + (TCL_MAX_WARN_LEN - 5), L" ...", 5 * sizeof(WCHAR));
 	}
 	OutputDebugStringW(msgString);

@@ -4,6 +4,7 @@ set TZData(:Antarctica/Casey) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-9223372036854775808 0 0 zzz}
 =======
     {-9223372036854775808 0 0 -00}
@@ -21,6 +22,9 @@ set TZData(:Antarctica/Casey) {
 =======
     {-9223372036854775808 0 0 -00}
 >>>>>>> upstream/master
+=======
+    {-9223372036854775808 0 0 -00}
+>>>>>>> upstream/master
     {-31536000 28800 0 +08}
     {1255802400 39600 0 +11}
     {1267714800 28800 0 +08}
@@ -31,10 +35,14 @@ set TZData(:Antarctica/Casey) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {1520701200 28800 0 +08}
 >>>>>>> upstream/master
 =======
     {1520701200 28800 0 +08}

@@ -2,7 +2,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -220,7 +224,11 @@ generate an error.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB\-translation\fR \fB{\fIinMode outMode\fB}\fR 
+=======
+\fB\-translation\fR \fB{\fIinMode outMode\fB}\fR
+>>>>>>> upstream/master
 =======
 \fB\-translation\fR \fB{\fIinMode outMode\fB}\fR
 >>>>>>> upstream/master
@@ -276,7 +284,11 @@ for both input and output.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBbinary\fR 
+=======
+\fBbinary\fR
+>>>>>>> upstream/master
 =======
 \fBbinary\fR
 >>>>>>> upstream/master
@@ -338,6 +350,7 @@ The \fBchan copy\fR command transfers data from \fIinputChan\fR until
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 end of file or \fIsize\fR bytes have been transferred. If no
 \fB\-size\fR argument is given, then the copy goes until end of file.
 All the data read from \fIinputChan\fR is copied to \fIoutputChan\fR.
@@ -345,6 +358,8 @@ Without the \fB\-command\fR option, \fBchan copy\fR blocks until the
 copy is complete and returns the number of bytes written to
 \fIoutputChan\fR.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -359,6 +374,9 @@ complete and returns the number of bytes or characters (using the same
 rules as for the \fB\-size\fR option) written to \fIoutputChan\fR.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -605,8 +623,13 @@ returns the number of
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 bytes of input or output (respectively) currently buffered 
 internally for \fIchannelId\fR (especially useful in a readable event 
+=======
+bytes of input or output (respectively) currently buffered
+internally for \fIchannelId\fR (especially useful in a readable event
+>>>>>>> upstream/master
 =======
 bytes of input or output (respectively) currently buffered
 internally for \fIchannelId\fR (especially useful in a readable event
@@ -641,11 +664,14 @@ immediately close it in the parent. This is necessary to get an EOF on
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the read side once the child has exited or otherwise closed its output. 
 =======
 the read side once the child has exited or otherwise closed its output.
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -665,6 +691,9 @@ allowed for.
 .RE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

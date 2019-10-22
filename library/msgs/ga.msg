@@ -5,9 +5,15 @@ namespace eval ::tcl::clock {
         "Luan"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "M\u00e1irt"\
         "C\u00e9ad"\
         "D\u00e9ar"\
+=======
+        "Máirt"\
+        "Céad"\
+        "Déar"\
+>>>>>>> upstream/master
 =======
         "Máirt"\
         "Céad"\
@@ -30,6 +36,7 @@ namespace eval ::tcl::clock {
         "Aib"\
         "Beal"\
         "Meith"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "I\u00fail"\
         "L\u00fan"\
@@ -58,11 +65,16 @@ namespace eval ::tcl::clock {
         "Meith"\
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "Iúil"\
         "Lún"\
         "MFómh"\
         "DFómh"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -72,7 +84,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ga MONTHS_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Ean\u00e1ir"\
+=======
+        "Eanáir"\
+>>>>>>> upstream/master
 =======
         "Eanáir"\
 >>>>>>> upstream/master
@@ -81,6 +97,7 @@ namespace eval ::tcl::clock {
         "Aibreán"\
         "Mí na Bealtaine"\
         "Meith"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "I\u00fail"\
         "L\u00fanasa"\
@@ -97,6 +114,8 @@ namespace eval ::tcl::clock {
         "Meith"\
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "Iúil"\
         "Lúnasa"\
         "Meán Fómhair"\
@@ -104,6 +123,9 @@ namespace eval ::tcl::clock {
         "Mí na Samhna"\
         "Mí na Nollag"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

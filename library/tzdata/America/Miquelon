@@ -5,6 +5,7 @@ set TZData(:America/Miquelon) {
     {-1850328920 -14400 0 AST}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {326001600 -10800 0 PMST}
     {536468400 -10800 0 PMST}
     {544597200 -7200 1 PMDT}
@@ -236,6 +237,8 @@ set TZData(:America/Miquelon) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {326001600 -10800 0 -03}
     {536468400 -10800 0 -02}
     {544597200 -7200 1 -02}
@@ -465,6 +468,9 @@ set TZData(:America/Miquelon) {
     {4076629200 -7200 1 -02}
     {4097188800 -10800 0 -02}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

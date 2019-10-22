@@ -29,8 +29,16 @@ namespace eval ::tcl::test::io {
     variable msg
     variable expected
 
+<<<<<<< HEAD
     loadTestedCommands
     catch [list package require -exact Tcltest [info patchlevel]]
+=======
+    catch {
+	::tcltest::loadTestedCommands
+	package require -exact Tcltest [info patchlevel]
+	set ::tcltestlib [lindex [package ifneeded Tcltest [info patchlevel]] 1]
+    }
+>>>>>>> upstream/master
     package require tcltests
 
 testConstraint testbytestring [llength [info commands testbytestring]]
@@ -39,6 +47,7 @@ testConstraint openpipe         1
 testConstraint testfevent       [llength [info commands testfevent]]
 testConstraint testchannelevent [llength [info commands testchannelevent]]
 testConstraint testmainthread   [llength [info commands testmainthread]]
+<<<<<<< HEAD
 <<<<<<< HEAD
 testConstraint thread [expr {0 == [catch {package require Thread 2.7-}]}]
 <<<<<<< HEAD
@@ -54,6 +63,10 @@ testConstraint testobj		[llength [info commands testobj]]
 >>>>>>> upstream/master
 =======
 testConstraint testobj		[llength [info commands testobj]]
+>>>>>>> upstream/master
+=======
+testConstraint testobj		[llength [info commands testobj]]
+testConstraint knownMsvcBug [expr {![info exists ::env(TRAVIS_OS_NAME)] || ![string match windows $::env(TRAVIS_OS_NAME)]}]
 >>>>>>> upstream/master
 
 # You need a *very* special environment to do some tests.  In
@@ -138,11 +151,14 @@ test io-1.8 {Tcl_WriteChars: WriteChars} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set f [open $path(test2) w] 
     fconfigure      $f -encoding iso2022-jp 
     puts -nonewline $f [format %s%c [string repeat " " 4] 12399] 
     close           $f 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -156,6 +172,9 @@ test io-1.8 {Tcl_WriteChars: WriteChars} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -232,7 +251,11 @@ test io-2.1 {WriteBytes} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -270,7 +293,11 @@ test io-2.3 {WriteBytes: flush on line} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -306,7 +333,11 @@ test io-3.1 {WriteChars: compatibility with WriteBytes} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -344,7 +375,11 @@ test io-3.3 {WriteChars: compatibility with WriteBytes: flush on line} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -372,7 +407,11 @@ test io-3.4 {WriteChars: loop over stage buffer} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 16 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 16
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 16
 >>>>>>> upstream/master
@@ -400,7 +439,11 @@ test io-3.5 {WriteChars: saved != 0} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 17 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -447,7 +490,11 @@ test io-3.7 {WriteChars: (bufPtr->nextAdded > bufPtr->length)} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding jis0208 -buffersize 17 
+=======
+    fconfigure $f -encoding jis0208 -buffersize 17
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding jis0208 -buffersize 17
 >>>>>>> upstream/master
@@ -533,7 +580,11 @@ test io-5.1 {CheckFlush: not full} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f 
+=======
+    fconfigure $f
+>>>>>>> upstream/master
 =======
     fconfigure $f
 >>>>>>> upstream/master
@@ -937,7 +988,11 @@ test io-6.33 {Tcl_GetsObj: crlf mode: buffer exhausted, at eof} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -965,8 +1020,13 @@ test io-6.34 {Tcl_GetsObj: crlf mode: buffer exhausted, not followed by \n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
     
+=======
+    # not (*eol == '\n')
+
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 
@@ -1102,7 +1162,11 @@ test io-6.44 {Tcl_GetsObj: input saw cr, not followed by cr} {stdio testchannel 
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
+=======
+    # not (*eol == '\n')
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 >>>>>>> upstream/master
@@ -1135,7 +1199,7 @@ test io-6.45 {Tcl_GetsObj: input saw cr, skip right number of bytes} {stdio test
 
     set f [open "|[list [interpreter] $path(cat)]" w+]
     fconfigure $f -translation {auto lf} -buffering none
-    fconfigure $f -encoding unicode
+    fconfigure $f -encoding utf-16
     puts -nonewline $f "bbbbbbbbbbbbbbb\n123456789abcdef\r"
     fconfigure $f -buffersize 16
     gets $f
@@ -1182,7 +1246,11 @@ test io-6.48 {Tcl_GetsObj: auto mode: \r at end of buffer, no more avail} {testc
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1211,7 +1279,11 @@ test io-6.49 {Tcl_GetsObj: auto mode: \r followed by \n} {testchannel} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1238,8 +1310,13 @@ test io-6.50 {Tcl_GetsObj: auto mode: \r not followed by \n} {testchannel} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # not (*eol == '\n') 
     
+=======
+    # not (*eol == '\n')
+
+>>>>>>> upstream/master
 =======
     # not (*eol == '\n')
 
@@ -1271,7 +1348,11 @@ test io-6.51 {Tcl_GetsObj: auto mode: \n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1380,7 +1461,11 @@ test io-7.2 {FilterInputBytes: split up character in middle of buffer} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1463,7 +1548,7 @@ test io-8.2 {PeekAhead: only go to device if no more cached data} {stdio testcha
 	variable x
 	lappend x [gets $f line] $line [testchannel inputbuffered $f]
     }
-    fconfigure $f -encoding unicode -buffersize 16 -blocking 0
+    fconfigure $f -encoding utf-16 -buffersize 16 -blocking 0
     vwait [namespace which -variable x]
     fconfigure $f -translation auto -encoding ascii -blocking 1
     # here
@@ -1521,7 +1606,11 @@ test io-8.6 {PeekAhead: change to non-blocking mode} {stdio testchannel openpipe
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0) 
+=======
+    # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
+>>>>>>> upstream/master
 =======
     # ((chanPtr->flags & CHANNEL_NONBLOCKING) == 0)
 >>>>>>> upstream/master
@@ -2384,7 +2473,11 @@ test io-20.1 {Tcl_CreateChannel: initial settings} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {ascii}    
+=======
+} {ascii}
+>>>>>>> upstream/master
 =======
 } {ascii}
 >>>>>>> upstream/master
@@ -2544,7 +2637,7 @@ test io-27.4 {FlushChannel, implicit flush when buffer fills} {
     set l
 } {0 60 72}
 test io-27.5 {FlushChannel, implicit flush when buffer fills and on close} \
-	{unixOrPc} {
+	{unixOrWin} {
     file delete $path(test1)
     set f [open $path(test1) w]
     fconfigure $f -translation lf -buffersize 60 -eofchar {}
@@ -2561,7 +2654,11 @@ test io-27.5 {FlushChannel, implicit flush when buffer fills and on close} \
 set path(pipe)   [makeFile {} pipe]
 set path(output) [makeFile {} output]
 test io-27.6 {FlushChannel, async flushing, async close} \
+<<<<<<< HEAD
 	{stdio asyncPipeClose openpipe} {
+=======
+	{stdio asyncPipeClose openpipe knownMsvcBug} {
+>>>>>>> upstream/master
     # This test may fail on old Unix systems (seen on IRIX64 6.5) with
     # obsolete gettimeofday() calls.  See Tcl Bugs 3530533, 1942197.
     file delete $path(pipe)
@@ -3165,7 +3262,11 @@ test io-29.31 {Tcl_WriteChars, background flush} {stdio openpipe} {
     set result
 } ok
 test io-29.32 {Tcl_WriteChars, background flush to slow reader} \
+<<<<<<< HEAD
 	{stdio asyncPipeClose openpipe} {
+=======
+	{stdio asyncPipeClose openpipe knownMsvcBug} {
+>>>>>>> upstream/master
     # This test may fail on old Unix systems (seen on IRIX64 6.5) with
     # obsolete gettimeofday() calls.  See Tcl Bugs 3530533, 1942197.
     file delete $path(pipe)
@@ -4321,7 +4422,11 @@ test io-31.31 {Tcl_Write crlf on block boundary, Tcl_Gets crlf} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation crlf 
+=======
+    fconfigure $f -translation crlf
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation crlf
 >>>>>>> upstream/master
@@ -4480,15 +4585,56 @@ test io-32.11.1 {Tcl_Read from a pipe} {stdio openpipe} {
     set f1 [open $path(pipe) w]
     puts $f1 {chan configure stdout -translation crlf}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
     puts $f1 {puts [gets stdin]}
     puts $f1 {puts [gets stdin]}
 =======
+=======
     puts $f1 {puts [gets stdin]}
     puts $f1 {puts [gets stdin]}
     close $f1
     set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+    puts $f1 hello
+    flush $f1
+    set x ""
+    lappend x [read $f1 6]
+    puts $f1 hello
+    flush $f1
+    lappend x [read $f1]
+    close $f1
+    set x
+} {{hello
+} {hello
+}}
+test io-32.11.2 {Tcl_Read from a pipe} {stdio openpipe} {
+    file delete $path(pipe)
+    set f1 [open $path(pipe) w]
+    puts $f1 {chan configure stdout -translation crlf}
+>>>>>>> upstream/master
+    puts $f1 {puts [gets stdin]}
+    puts $f1 {puts [gets stdin]}
+    close $f1
+    set f1 [open "|[list [interpreter] $path(pipe)]" r+]
+<<<<<<< HEAD
+=======
+    puts $f1 hello
+    flush $f1
+    set x ""
+    lappend x [read $f1 6]
+    puts $f1 hello
+    flush $f1
+    lappend x [read $f1]
+    close $f1
+    set x
+} {{hello
+} {hello
+}}
+test io-32.12 {Tcl_Read, -nonewline} {
+    file delete $path(test1)
+    set f1 [open $path(test1) w]
+>>>>>>> upstream/master
     puts $f1 hello
     flush $f1
     set x ""
@@ -5988,7 +6134,11 @@ test io-39.14 {Tcl_SetChannelOption: -encoding, binary & utf-8} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -encoding {} 
+=======
+    fconfigure $f -encoding {}
+>>>>>>> upstream/master
 =======
     fconfigure $f -encoding {}
 >>>>>>> upstream/master
@@ -6179,6 +6329,7 @@ test io-40.3 {POSIX open access modes: CREAT} {unix umask} {
     file stat $path(test3) stats
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     format "0%o" [expr $stats(mode)&0o777]
 } [format %04o [expr {0o666 & ~ $umaskValue}]]
 =======
@@ -6191,6 +6342,10 @@ test io-40.3 {POSIX open access modes: CREAT} {unix umask} {
 } [format %#4o [expr {0o666 & ~ $umaskValue}]]
 >>>>>>> upstream/master
 =======
+} [format %#5o [expr {0o666 & ~ $umaskValue}]]
+>>>>>>> upstream/master
+=======
+    format "%#o" [expr $stats(mode)&0o777]
 } [format %#5o [expr {0o666 & ~ $umaskValue}]]
 >>>>>>> upstream/master
 test io-40.4 {POSIX open access modes: CREAT} {
@@ -6504,6 +6659,69 @@ test io-44.5 {FileEventProc procedure: end of file} {stdio unixExecs openpipe fi
 } {initial foo eof}
 
 close $f
+
+test chan-io-44.6 {FileEventProc procedure: write-only non-blocking channel} -setup {
+} -constraints {stdio unixExecs fileevent openpipe} -body {
+
+    namespace eval refchan {
+	namespace ensemble create
+	namespace export *
+
+
+	proc finalize {chan args} {
+	    namespace delete c_$chan
+	}
+
+	proc initialize {chan args} {
+	    namespace eval c_$chan {}
+	    namespace upvar c_$chan watching watching
+	    set watching {}
+	    list finalize initialize seek watch write
+	}
+
+
+	proc watch {chan args} {
+	    namespace upvar c_$chan watching watching
+	    foreach arg $args {
+		switch $arg {
+		    write {
+			if {$arg ni $watching} {
+			    lappend watching $arg
+			}
+			chan postevent $chan $arg
+		    }
+		}
+	    }
+	}
+
+
+	proc write {chan args} {
+	    chan postevent $chan write
+	    return 1
+	}
+    }
+    set f [chan create w [namespace which refchan]]
+    chan configure $f -blocking 0
+    set data "some data"
+    set x 0
+    chan event $f writable [namespace code {
+	puts $f $data
+	incr count [string length $data]
+	if {$count > 262144} {
+	    chan event $f writable {}
+	    set x done
+	}
+    }]
+    after 10000 [namespace code {
+	set x timeout
+    }]
+    vwait [namespace which -variable x]
+    return $x
+} -cleanup {
+    catch {chan close $f}
+} -result done
+
+
 makeFile "foo bar" foo
 
 test io-45.1 {DeleteFileEvent, cleanup on close} {fileevent} {
@@ -7511,6 +7729,7 @@ test io-52.4 {TclCopyChannel} {fcopy} {
     fcopy $f1 $f2 -size 40
     set result [list [fblocked $f1] [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
 <<<<<<< HEAD
+<<<<<<< HEAD
     close $f1
     close $f2
     lappend result [file size $path(test1)]
@@ -7544,6 +7763,8 @@ test io-52.5 {TclCopyChannel, all} {fcopy} {
 =======
 >>>>>>> upstream/master
     set result [list [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
+=======
+>>>>>>> upstream/master
     close $f1
     close $f2
     set s1 [file size $thisScript]
@@ -7567,6 +7788,21 @@ test io-52.4.1 {TclCopyChannel} {fcopy} {
     close $f2
     lappend result [file size $path(test1)]
 } {0 0 0 40}
+<<<<<<< HEAD
+=======
+test io-52.4.1 {TclCopyChannel} {fcopy} {
+    file delete $path(test1)
+    set f1 [open $thisScript]
+    set f2 [open $path(test1) w]
+    fconfigure $f1 -translation lf -blocking 0 -buffersize 10000000
+    fconfigure $f2 -translation cr -blocking 0
+    fcopy $f1 $f2 -size 40
+    set result [list [fblocked $f1] [fconfigure $f1 -blocking] [fconfigure $f2 -blocking]]
+    close $f1
+    close $f2
+    lappend result [file size $path(test1)]
+} {0 0 0 40}
+>>>>>>> upstream/master
 test io-52.5 {TclCopyChannel, all} {fcopy} {
 >>>>>>> upstream/master
     file delete $path(test1)
@@ -7862,8 +8098,11 @@ test io-52.10 {TclCopyChannel & encodings} {fcopy} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test io-52.11 {TclCopyChannel & encodings} {fcopy} {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -7876,6 +8115,9 @@ test io-52.11 {TclCopyChannel & encodings} -setup {
 } -constraints {fcopy} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -7899,7 +8141,11 @@ test io-52.11 {TclCopyChannel & encodings} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 3
+=======
+} -result 3
+>>>>>>> upstream/master
 =======
 } -result 3
 >>>>>>> upstream/master
@@ -8755,7 +9001,11 @@ test io-53.17 {[7c187a3773] MBWrite: proper inQueueTail handling} -setup {
     removeFile out
 } -result {line 100 line}
 
+<<<<<<< HEAD
 test io-54.1 {Recursive channel events} {socket fileevent} {
+=======
+test io-54.1 {Recursive channel events} {socket fileevent knownMsvcBug} {
+>>>>>>> upstream/master
     # This test checks to see if file events are delivered during recursive
     # event loops when there is buffered data on the channel.
 
@@ -8964,7 +9214,7 @@ test io-57.2 {buffered data and file events, read} {fileevent} {
     set result
 } {1 readable 234567890 timer}
 
-test io-58.1 {Tcl_NotifyChannel and error when closing} {stdio unixOrPc openpipe fileevent} {
+test io-58.1 {Tcl_NotifyChannel and error when closing} {stdio unixOrWin openpipe fileevent} {
     set out [open $path(script) w]
     puts $out {
 	puts "normal message from pipe"
@@ -8997,6 +9247,7 @@ test io-59.1 {Thread reference of channels} {testmainthread testchannel} {
     # channel is moved from thread to thread) can be done only in the
     # extension which fully implements the moving of channels between
     # threads, i.e. 'Threads'.
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -9085,6 +9336,8 @@ test io-61.1 {Reset eof state after changing the eof char} -setup {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     set f [open $path(longfile) r]
     set result [testchannel mthread $f]
@@ -9093,10 +9346,14 @@ test io-61.1 {Reset eof state after changing the eof char} -setup {
 } {1}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 test io-60.1 {writing illegal utf sequences} {openpipe fileevent testbytestring} {
     # This test will hang in older revisions of the core.
 
     set out [open $path(script) w]
+    puts $out "catch {load $::tcltestlib Tcltest}"
     puts $out {
 	puts [testbytestring \xe2]
 	exit 1
@@ -9301,6 +9558,7 @@ test io-70.0 {Cutting & Splicing channels} {testchannel} {
 } {0 1 0}
 
 test io-70.1 {Transfer channel} {testchannel thread} {
+<<<<<<< HEAD
     set f [makeFile {... dummy ...} cutsplice]
     set c [open $f r]
 
@@ -9611,6 +9869,8 @@ test io-73.5 {effect of eof on encoding end flags} -setup {
 
 =======
 test io-70.1 {Transfer channel} {testchannel thread} {
+=======
+>>>>>>> upstream/master
     set f [makeFile {... dummy ...} cutsplice]
     set c [open $f r]
 

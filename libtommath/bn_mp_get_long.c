@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* get the lower unsigned long of an mp_int, platform dependent */
@@ -19,11 +23,16 @@ unsigned long mp_get_long(const mp_int *a)
    int i;
    unsigned long res;
 
+<<<<<<< HEAD
    if (a->used == 0) {
+=======
+   if (IS_ZERO(a)) {
+>>>>>>> upstream/master
       return 0;
    }
 
    /* get number of digits of the lsb we have to read */
+<<<<<<< HEAD
    i = MIN(a->used, ((((int)sizeof(unsigned long) * CHAR_BIT) + DIGIT_BIT - 1) / DIGIT_BIT)) - 1;
 
    /* get most significant digit of result */
@@ -32,8 +41,25 @@ unsigned long mp_get_long(const mp_int *a)
 #if (ULONG_MAX != 0xffffffffuL) || (DIGIT_BIT < 32)
    while (--i >= 0) {
       res = (res << DIGIT_BIT) | DIGIT(a, i);
+=======
+   i = MIN(a->used, (((CHAR_BIT * (int)sizeof(unsigned long)) + DIGIT_BIT - 1) / DIGIT_BIT)) - 1;
+
+   /* get most significant digit of result */
+   res = (unsigned long)a->dp[i];
+
+#if (ULONG_MAX != 0xFFFFFFFFUL) || (DIGIT_BIT < 32)
+   while (--i >= 0) {
+      res = (res << DIGIT_BIT) | (unsigned long)a->dp[i];
+>>>>>>> upstream/master
    }
 #endif
    return res;
 }
 #endif
+<<<<<<< HEAD
+=======
+
+/* ref:         $Format:%D$ */
+/* git commit:  $Format:%H$ */
+/* commit time: $Format:%ai$ */
+>>>>>>> upstream/master

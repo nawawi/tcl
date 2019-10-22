@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* calc a value mod 2**b */

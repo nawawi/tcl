@@ -9,8 +9,6 @@
  */
 
 #include "tclInt.h"
-#include <stddef.h>
-#include <locale.h>
 #ifdef HAVE_LANGINFO
 #   include <langinfo.h>
 #   ifdef __APPLE__
@@ -35,7 +33,11 @@
 #ifdef __CYGWIN__
 DLLIMPORT extern __stdcall unsigned char GetVersionExW(void *);
 <<<<<<< HEAD
+<<<<<<< HEAD
 DLLIMPORT extern __stdcall void *LoadLibraryW(const void *);
+=======
+DLLIMPORT extern __stdcall void *GetModuleHandleW(const void *);
+>>>>>>> upstream/master
 =======
 DLLIMPORT extern __stdcall void *GetModuleHandleW(const void *);
 >>>>>>> upstream/master
@@ -45,7 +47,11 @@ DLLIMPORT extern __stdcall void GetSystemInfo(void *);
 
 #define NUMPROCESSORS 11
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const char *const  processors[NUMPROCESSORS] = {
+=======
+static const char *const processors[NUMPROCESSORS] = {
+>>>>>>> upstream/master
 =======
 static const char *const processors[NUMPROCESSORS] = {
 >>>>>>> upstream/master
@@ -54,7 +60,11 @@ static const char *const processors[NUMPROCESSORS] = {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct _SYSTEM_INFO {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -77,7 +87,11 @@ typedef struct {
 } SYSTEM_INFO;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct _OSVERSIONINFOW {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -129,7 +143,11 @@ static char pkgPath[sizeof(TCL_PACKAGE_PATH)+200] = TCL_PACKAGE_PATH;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct LocaleTable {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -363,7 +381,7 @@ long tclMacOSXDarwinRelease = 0;
  *
  * TclpInitPlatform --
  *
- *	Initialize all the platform-dependant things like signals and
+ *	Initialize all the platform-dependent things like signals and
  *	floating-point error handling.
  *
  *	Called at process initialization time.
@@ -461,7 +479,7 @@ TclpInitPlatform(void)
     /*
      * In case the initial locale is not "C", ensure that the numeric
      * processing is done in "C" locale regardless. This is needed because Tcl
-     * relies on routines like strtod, but should not have locale dependent
+     * relies on routines like strtol/strtoul, but should not have locale dependent
      * behavior.
      */
 
@@ -591,6 +609,7 @@ TclpInitLibraryPath(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     str = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     str = TclGetStringFromObj(pathPtr, lengthPtr);
@@ -612,6 +631,11 @@ TclpInitLibraryPath(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    str = TclGetStringFromObj(pathPtr, lengthPtr);
+    *valuePtr = Tcl_Alloc(*lengthPtr + 1);
+    memcpy(*valuePtr, str, *lengthPtr + 1);
 >>>>>>> upstream/master
     Tcl_DecrRefCount(pathPtr);
 }
@@ -651,12 +675,6 @@ TclpSetInitialEncodings(void)
     Tcl_DStringFree(&encodingName);
 }
 
-void
-TclpSetInterfaces(void)
-{
-    /* do nothing */
-}
-
 static const char *
 SearchKnownEncodings(
     const char *encoding)
@@ -665,6 +683,7 @@ SearchKnownEncodings(
     int right = sizeof(localeTable)/sizeof(LocaleTable);
 
     while (left < right) {
+<<<<<<< HEAD
 	int test = (left + right)/2;
 	int code = strcmp(localeTable[test].lang, encoding);
 
@@ -702,6 +721,8 @@ SearchKnownEncodings(
     int right = sizeof(localeTable)/sizeof(LocaleTable);
 
     while (left < right) {
+=======
+>>>>>>> upstream/master
 	int test = (left + right)/2;
 	int code = strcmp(localeTable[test].lang, encoding);
 
@@ -901,7 +922,10 @@ TclpSetVariables(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -910,6 +934,7 @@ TclpSetVariables(
      * Set msgcat fallback locale to current CFLocale identifier.
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     CFLocaleRef localeRef;
@@ -942,6 +967,10 @@ TclpSetVariables(
 #if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
     InitMacLocaleInfoVar(CFLocaleCopyCurrent, CFLocaleGetIdentifier, interp);
 >>>>>>> upstream/master
+=======
+#if MAC_OS_X_VERSION_MAX_ALLOWED > 1020
+    InitMacLocaleInfoVar(CFLocaleCopyCurrent, CFLocaleGetIdentifier, interp);
+>>>>>>> upstream/master
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED > 1020 */
 
     if (MacOSXGetLibraryPath(interp, MAXPATHLEN, tclLibPath) == TCL_OK) {
@@ -951,9 +980,15 @@ TclpSetVariables(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tclDefaultLibrary", tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+	Tcl_SetVar2(interp, "tclDefaultLibrary", NULL, tclLibPath, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath, TCL_GLOBAL_ONLY);
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tclDefaultLibrary", NULL, tclLibPath, TCL_GLOBAL_ONLY);
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath, TCL_GLOBAL_ONLY);
@@ -987,9 +1022,15 @@ TclpSetVariables(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_SetVar(interp, "tcl_pkgPath", Tcl_DStringValue(&ds),
 		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 	    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, Tcl_DStringValue(&ds),
+		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 	    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, Tcl_DStringValue(&ds),
 		    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -1022,9 +1063,15 @@ TclpSetVariables(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 		    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
+			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -1053,9 +1100,15 @@ TclpSetVariables(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    Tcl_SetVar(interp, "tcl_pkgPath", tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
 		    Tcl_SetVar(interp, "tcl_pkgPath", " ",
+=======
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
+			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
+		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, " ",
+>>>>>>> upstream/master
 =======
 		    Tcl_SetVar2(interp, "tcl_pkgPath", NULL, tclLibPath,
 			    TCL_GLOBAL_ONLY | TCL_APPEND_VALUE);
@@ -1079,7 +1132,11 @@ TclpSetVariables(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tcl_pkgPath", pkgPath,
+=======
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath,
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath,
 >>>>>>> upstream/master
@@ -1096,7 +1153,11 @@ TclpSetVariables(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_SetVar(interp, "tcl_pkgPath", pkgPath, TCL_GLOBAL_ONLY);
+=======
+	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath, TCL_GLOBAL_ONLY);
+>>>>>>> upstream/master
 =======
 	Tcl_SetVar2(interp, "tcl_pkgPath", NULL, pkgPath, TCL_GLOBAL_ONLY);
 >>>>>>> upstream/master
@@ -1119,7 +1180,11 @@ TclpSetVariables(
 	unameOK = 1;
     if (!osInfoInitialized) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	HANDLE handle = LoadLibraryW(L"NTDLL");
+=======
+	HANDLE handle = GetModuleHandleW(L"NTDLL");
+>>>>>>> upstream/master
 =======
 	HANDLE handle = GetModuleHandleW(L"NTDLL");
 >>>>>>> upstream/master
@@ -1130,9 +1195,12 @@ TclpSetVariables(
 	    GetVersionExW(&osInfo);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (handle) {
 	    FreeLibrary(handle);
 	}
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	osInfoInitialized = 1;
@@ -1262,7 +1330,11 @@ TclpFindVariable(
 				 * searches). */
 {
     size_t i, result = TCL_IO_FAILURE;
+<<<<<<< HEAD
     register const char *env, *p1, *p2;
+=======
+    const char *env, *p1, *p2;
+>>>>>>> upstream/master
     Tcl_DString envString;
 
     Tcl_DStringInit(&envString);
@@ -1290,7 +1362,10 @@ TclpFindVariable(
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 /*

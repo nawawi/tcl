@@ -5,6 +5,7 @@ set TZData(:America/Argentina/Salta) {
     {-2372096300 -15408 0 CMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1567453392 -14400 0 ART}
     {-1233432000 -10800 0 ARST}
     {-1222981200 -14400 0 ART}
@@ -68,6 +69,8 @@ set TZData(:America/Argentina/Salta) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1567453392 -14400 0 -04}
     {-1233432000 -10800 0 -04}
     {-1222981200 -14400 0 -04}
@@ -129,6 +132,9 @@ set TZData(:America/Argentina/Salta) {
     {1205632800 -10800 0 -03}
     {1224295200 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

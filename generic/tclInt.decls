@@ -152,10 +152,11 @@ declare 32 {
 #declare 33 {
 #    TclCmdProcType TclGetInterpProc(void)
 #}
-declare 34 {
-    int TclGetIntForIndex(Tcl_Interp *interp, Tcl_Obj *objPtr,
-	    int endValue, int *indexPtr)
-}
+# Removed in 9.0:
+#declare 34 {deprecated {Use Tcl_GetIntForIndex}} {
+#    int TclGetIntForIndex(Tcl_Interp *interp, Tcl_Obj *objPtr,
+#	    int endValue, int *indexPtr)
+#}
 # Removed in 8.4b2:
 #declare 35 {
 #    Tcl_Obj *TclGetIndexedScalar(Tcl_Interp *interp, int localIndex,
@@ -614,8 +615,13 @@ declare 150 {
     int TclRegAbout(Tcl_Interp *interp, Tcl_RegExp re)
 }
 declare 151 {
+<<<<<<< HEAD
     void TclRegExpRangeUniChar(Tcl_RegExp re, size_t index, int *startPtr,
 	    int *endPtr)
+=======
+    void TclRegExpRangeUniChar(Tcl_RegExp re, size_t index, size_t *startPtr,
+	    size_t *endPtr)
+>>>>>>> upstream/master
 }
 declare 152 {
     void TclSetLibraryPath(Tcl_Obj *pathPtr)
@@ -1028,7 +1034,10 @@ declare 251 {
 	    const char *bytes, size_t length, int flags)
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 # Exporting of the internal API to variables.
 
@@ -1056,11 +1065,23 @@ declare 256 {
 	    Tcl_Obj *part1Ptr, Tcl_Obj *part2Ptr, const int flags)
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 declare 257 {
     void TclStaticPackage(Tcl_Interp *interp, const char *pkgName,
 	    Tcl_PackageInitProc *initProc, Tcl_PackageInitProc *safeInitProc)
+}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+
+# TIP 431: temporary directory creation function
+declare 258 {
+    Tcl_Obj *TclpCreateTemporaryDirectory(Tcl_Obj *dirObj,
+	    Tcl_Obj *basenameObj)
 }
 >>>>>>> upstream/master
 

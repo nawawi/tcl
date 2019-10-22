@@ -14,7 +14,10 @@ if {"::tcltest" in [namespace children]} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 # The foundational objects oo::object and oo::class are sensitive to reference
@@ -23,7 +26,10 @@ if {"::tcltest" in [namespace children]} {
 # leaktests in order to leverage this sensitivity.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 testConstraint memory [llength [info commands memory]]
@@ -324,7 +330,11 @@ test oo-1.18.3 {Bug 21c144f0f5} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> upstream/master
 =======
 }
 >>>>>>> upstream/master
@@ -699,7 +709,10 @@ test oo-3.9 {Bug 2944404: deleting the object in the destructor} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -760,6 +773,9 @@ test oo-3.12 {Bug 3d96b7076e: killing the object's class in a method call} -setu
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1594,6 +1610,30 @@ test oo-10.3 {OO: invoke and modify} -setup {
     oo::define B deletemethod b c
     lappend result [C a] [C b] [C c]
 } -result {A.a,B.a A.b,B.b A.c,B.c - A.a,B.a A.b A.c,B.c - A.a A.b,B.a A.c,B.c - A.a A.b A.c}
+test oo-10.4 {OO: invoke and modify} -setup {
+    oo::class create A {
+	method a {} {return A.a}
+	method b {} {return A.b}
+	method c {} {return A.c}
+    }
+    A create B
+    oo::objdefine B {
+	method a {} {return [next],B.a}
+	method b {} {return [next],B.b}
+	method c {} {return [next],B.c}
+    }
+    set result {}
+} -cleanup {
+    A destroy
+} -body {
+    lappend result [B a] [B b] [B c] -
+    oo::objdefine B deletemethod b
+    lappend result [B a] [B b] [B c] -
+    oo::objdefine B renamemethod a b
+    lappend result [B a] [B b] [B c] -
+    oo::objdefine B deletemethod b c
+    lappend result [B a] [B b] [B c]
+} -result {A.a,B.a A.b,B.b A.c,B.c - A.a,B.a A.b A.c,B.c - A.a A.b,B.a A.c,B.c - A.a A.b A.c}
 
 test oo-11.1 {OO: cleanup} {
     oo::object create foo
@@ -1855,6 +1895,7 @@ test oo-12.7 {OO: filters} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -1910,6 +1951,38 @@ test oo-12.8 {OO: filters and destructors} -setup {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+
+test oo-13.1 {OO: changing an object's class} {
+=======
+test oo-12.8 {OO: filters and destructors} -setup {
+>>>>>>> upstream/master
+    oo::class create Aclass
+    Aclass create Aobject
+    set ::log {}
+} -body {
+    oo::define Aclass {
+	constructor {} {
+	    lappend ::log "in constructor"
+	}
+	destructor {
+	    lappend ::log "in destructor"
+	}
+	method bar {} {
+	    lappend ::log "in method"
+	}
+	method Boo args {
+	    lappend ::log [self target]
+	    next {*}$args
+	}
+	filter Boo
+    }
+    set obj [Aclass new]
+    $obj bar
+    $obj destroy
+    return $::log
+} -cleanup {
+    Aclass destroy
+} -result {{in constructor} {::Aclass bar} {in method} {::oo::object destroy} {in destructor}}
 
 test oo-13.1 {OO: changing an object's class} {
     oo::class create Aclass
@@ -2355,7 +2428,11 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	variable var 
+=======
+	variable var
+>>>>>>> upstream/master
 =======
 	variable var
 >>>>>>> upstream/master
@@ -2392,7 +2469,10 @@ test oo-15.10 {variable binding must not bleed through oo::copy} -setup {
     FooClass destroy
 } -result {foo bar grill bar}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 test oo-15.11 {OO: object cloning} -returnCodes error -body {
     oo::copy
 } -result {wrong # args: should be "oo::copy sourceName ?targetName? ?targetNamespace?"}
@@ -2419,7 +2499,11 @@ test oo-15.13.1 {
     Cls destroy
     Cls2 destroy
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result done 
+=======
+} -result done
+>>>>>>> upstream/master
 =======
 } -result done
 >>>>>>> upstream/master
@@ -2446,8 +2530,11 @@ test oo-15.14 {OO: object cloning with target NS} -setup {
     Cls destroy
 } -result {{} ::dupens::test-15.14}
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 test oo-15.15 {method cloning must ensure that there is a string representation of bodies} -setup {
     oo::class create cls
 } -body {
@@ -2459,6 +2546,9 @@ test oo-15.15 {method cloning must ensure that there is a string representation 
 } -cleanup {
     cls destroy
 } -result hello
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test oo-16.1 {OO: object introspection} -body {
@@ -2467,7 +2557,10 @@ test oo-16.1 {OO: object introspection} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -2480,6 +2573,9 @@ test oo-16.1.1 {OO: object introspection} -body {
 \"info object\""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2644,7 +2740,11 @@ test oo-16.17 {OO: object introspection: creationid #500} -body {
 test oo-16.18 {OO: object introspection: creationid #500} -body {
     info object creationid
 } -returnCodes error -result {wrong # args: should be "info object creationid objName"}
+<<<<<<< HEAD
 test oo-16.18 {OO: object introspection: creationid #500} -body {
+=======
+test oo-16.18.1 {OO: object introspection: creationid #500} -body {
+>>>>>>> upstream/master
     info object creationid oo::object gorp
 } -returnCodes error -result {wrong # args: should be "info object creationid objName"}
 test oo-16.19 {OO: object introspection: creationid #500} -setup {
@@ -2694,7 +2794,10 @@ test oo-17.1 {OO: class introspection} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -2707,6 +2810,9 @@ test oo-17.1.1 {OO: class introspection} -body {
 \"info class\""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2787,7 +2893,10 @@ test oo-17.10 {OO: class introspection} -setup {
 } -result {}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 set stdmethods {<cloned> destroy eval unknown variable varname}
@@ -2829,6 +2938,9 @@ test oo-17.14 {OO: instance method unexport (bug 900cb0284bc)} -setup {
 } -result $stdmethods
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -3034,6 +3146,7 @@ test oo-18.11 {OO: define/self command support} -setup {
     (in definition script for class "::foo" line 1)
     invoked from within
 <<<<<<< HEAD
+<<<<<<< HEAD
 "obj eval {error bar}"}}
 test oo-18.6 {class construction reference management and errors} -setup {
     oo::class create super_abc
@@ -3134,6 +3247,8 @@ test oo-18.11 {OO: define/self command support} -setup {
 "self {error foobar}"
     (in definition script for class "::foo" line 1)
     invoked from within
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 "oo::define foo {rename ::foo {}; self {error foobar}}"}
@@ -3329,7 +3444,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    my variable np_name 
+=======
+	    my variable np_name
+>>>>>>> upstream/master
 =======
 	    my variable np_name
 >>>>>>> upstream/master
@@ -3360,7 +3479,11 @@ test oo-20.11 {OO: variable mustn't crash when recursing} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		} else { 
+=======
+		} else {
+>>>>>>> upstream/master
 =======
 		} else {
 >>>>>>> upstream/master
@@ -4153,7 +4276,10 @@ test oo-27.22 {variables declaration uniqueifies: Bug 3396896} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4192,6 +4318,9 @@ test oo-27.23 {variable resolver leakage: Bug 1493a43044} -setup {
 } -result {master1 master2 master1 master2 master1 master2 master1 master2}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4301,12 +4430,18 @@ proc SampleSlotSetup script {
 		return
 	    }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 	    method Resolve {lst} {
 		variable ops
 		lappend ops [info level] Resolve $lst
 		return $lst
 	    }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	}
     }
@@ -4343,7 +4478,11 @@ test oo-32.3 {TIP 380: slots - class test} -setup [SampleSlotSetup {
 } -cleanup [SampleSlotCleanup {
     rename sampleSlot {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 }] -result {0 {} {a b c g h i} {1 Get 1 Set {a b c g h i}}}
+=======
+}] -result {0 {} {a b c g h i} {1 Resolve g 1 Resolve h 1 Resolve i 1 Get 1 Set {a b c g h i}}}
+>>>>>>> upstream/master
 =======
 }] -result {0 {} {a b c g h i} {1 Resolve g 1 Resolve h 1 Resolve i 1 Get 1 Set {a b c g h i}}}
 >>>>>>> upstream/master
@@ -4355,7 +4494,11 @@ test oo-32.4 {TIP 380: slots - class test} -setup [SampleSlotSetup {
 } -cleanup [SampleSlotCleanup {
     rename sampleSlot {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 }] -result {0 {} {d e f} {1 Set {d e f}}}
+=======
+}] -result {0 {} {d e f} {1 Resolve d 1 Resolve e 1 Resolve f 1 Set {d e f}}}
+>>>>>>> upstream/master
 =======
 }] -result {0 {} {d e f} {1 Resolve d 1 Resolve e 1 Resolve f 1 Set {d e f}}}
 >>>>>>> upstream/master
@@ -4366,9 +4509,12 @@ test oo-32.5 {TIP 380: slots - class test} -setup [SampleSlotSetup {
 	[sampleSlot contents] [sampleSlot ops]
 } -cleanup [SampleSlotCleanup {
 <<<<<<< HEAD
+<<<<<<< HEAD
     rename sampleSlot {}
 }] -result {0 {} {} {d e f g h i} {1 Set {d e f} 1 Get 1 Set {d e f g h i}}}
 =======
+=======
+>>>>>>> upstream/master
     rename sampleSlot {}
 }] -result {0 {} {} {d e f g h i} {1 Resolve d 1 Resolve e 1 Resolve f 1 Set {d e f} 1 Resolve g 1 Resolve h 1 Resolve i 1 Get 1 Set {d e f g h i}}}
 test oo-32.6 {TIP 516: slots - class test} -setup [SampleSlotSetup {
@@ -4379,7 +4525,11 @@ test oo-32.6 {TIP 516: slots - class test} -setup [SampleSlotSetup {
 } -cleanup [SampleSlotCleanup {
     rename sampleSlot {}
 }] -result {0 {} {g h i a b c} {1 Resolve g 1 Resolve h 1 Resolve i 1 Get 1 Set {g h i a b c}}}
+<<<<<<< HEAD
 test oo-32.6 {TIP 516: slots - class test} -setup [SampleSlotSetup {
+=======
+test oo-32.7 {TIP 516: slots - class test} -setup [SampleSlotSetup {
+>>>>>>> upstream/master
     SampleSlot create sampleSlot
 }] -body {
     list [info level] [sampleSlot -remove c a] \
@@ -4387,6 +4537,9 @@ test oo-32.6 {TIP 516: slots - class test} -setup [SampleSlotSetup {
 } -cleanup [SampleSlotCleanup {
     rename sampleSlot {}
 }] -result {0 {} b {1 Resolve c 1 Resolve a 1 Get 1 Set b}}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test oo-33.1 {TIP 380: slots - defaulting} -setup [SampleSlotSetup {
@@ -4411,7 +4564,11 @@ test oo-33.3 {TIP 380: slots - defaulting} -setup [SampleSlotSetup {
 } -cleanup [SampleSlotCleanup {
     rename $s {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 }] -result {{} unknown {1 Set destroy 1 Set unknown}}
+=======
+}] -result {{} unknown {1 Resolve destroy 1 Set destroy 1 Resolve unknown 1 Set unknown}}
+>>>>>>> upstream/master
 =======
 }] -result {{} unknown {1 Resolve destroy 1 Set destroy 1 Resolve unknown 1 Set unknown}}
 >>>>>>> upstream/master
@@ -4424,7 +4581,11 @@ test oo-33.4 {TIP 380: slots - errors} -setup [SampleSlotSetup {
     rename $s {}
 }] -result \
 <<<<<<< HEAD
+<<<<<<< HEAD
     {unknown method "-grill": must be -append, -clear, -set, contents or ops}
+=======
+    {unknown method "-grill": must be -append, -clear, -prepend, -remove, -set, contents or ops}
+>>>>>>> upstream/master
 =======
     {unknown method "-grill": must be -append, -clear, -prepend, -remove, -set, contents or ops}
 >>>>>>> upstream/master
@@ -4559,7 +4720,10 @@ test oo-35.2 {Bug 9d61624b3d: Empty superclass must not cause crash} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4579,6 +4743,7 @@ test oo-35.4 {Bug 593baa032c: mixins list teardown} {
     namespace eval [info object namespace D] [list [namespace which B] destroy]
 } {}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4590,6 +4755,8 @@ test oo-35.4 {Bug 593baa032c: mixins list teardown} {
 >>>>>>> upstream/master
 =======
 =======
+=======
+>>>>>>> upstream/master
 test oo-35.5 {Bug 1a56550e96: introspectors must traverse mixin links correctly} -setup {
     oo::class create base {
 	unexport destroy
@@ -4614,8 +4781,11 @@ test oo-35.5 {Bug 1a56550e96: introspectors must traverse mixin links correctly}
     base destroy
 } -result {{c d e} {c d e}}
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 test oo-35.6 {
     Bug : teardown of an object that is a class that is an instance of itself
 } -setup {
@@ -4639,9 +4809,12 @@ test oo-35.6 {
 } -result done
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -4754,8 +4927,11 @@ test oo-36.10 {TIP #470: introspection within oo::define} -setup {
 } -result {{} {1 {this command may only be called from within the context of an ::oo::define or ::oo::objdefine command} 0 ::obj}}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -5435,8 +5611,11 @@ test oo-40.3 {TIP 500: private and unexport} -setup {
     cls destroy
 } -result {{} {} foo {} foo {}}
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 
 test oo-41.1 {TIP 478: myclass command, including class morphing} -setup {
     oo::class create parent
@@ -5754,6 +5933,9 @@ test oo-43.13 {TIP 524: definition namespace control: user-level introspection} 
     parent destroy
     namespace delete foodef
 } -result {{} {} ::foodef {} {}}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 cleanupTests

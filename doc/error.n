@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -48,7 +52,11 @@ the first increment of unwind information
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will not be added by the Tcl interpreter.  
+=======
+will not be added by the Tcl interpreter.
+>>>>>>> upstream/master
 =======
 will not be added by the Tcl interpreter.
 >>>>>>> upstream/master
@@ -83,11 +91,14 @@ When working with Tcl 8.5 or later, the following code
 should be used instead:
 .PP
 .CS
+<<<<<<< HEAD
 catch {...} errMsg options
 <<<<<<< HEAD
 \&...
 =======
 .CS
+=======
+>>>>>>> upstream/master
 catch {...} errMsg
 set savedInfo $::errorInfo
 \&...
@@ -99,6 +110,7 @@ should be used instead:
 .PP
 .CS
 catch {...} errMsg options
+<<<<<<< HEAD
 \&...
 >>>>>>> upstream/master
 =======
@@ -120,6 +132,8 @@ return -options $options $errMsg
 .CE
 .PP
 =======
+=======
+>>>>>>> upstream/master
 \&...
 return -options $options $errMsg
 .CE

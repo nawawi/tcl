@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -57,7 +61,11 @@ zero).
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Otherwise, if it is not a \fB%\fR character then it 
+=======
+Otherwise, if it is not a \fB%\fR character then it
+>>>>>>> upstream/master
 =======
 Otherwise, if it is not a \fB%\fR character then it
 >>>>>>> upstream/master
@@ -88,7 +96,11 @@ conversion character is \fB[\fR or \fBc\fR).
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Then it converts the next input characters according to the 
+=======
+Then it converts the next input characters according to the
+>>>>>>> upstream/master
 =======
 Then it converts the next input characters according to the
 >>>>>>> upstream/master
@@ -147,7 +159,11 @@ truncated as required by the size modifier value.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The input substring must be an octal integer. It is read in and the 
+=======
+The input substring must be an octal integer. It is read in and the
+>>>>>>> upstream/master
 =======
 The input substring must be an octal integer. It is read in and the
 >>>>>>> upstream/master
@@ -196,7 +212,11 @@ truncated as required by the size modifier value.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 A single character is read in and its Unicode value is stored in 
+=======
+A single character is read in and its Unicode value is stored in
+>>>>>>> upstream/master
 =======
 A single character is read in and its Unicode value is stored in
 >>>>>>> upstream/master
@@ -219,7 +239,11 @@ substring may be a white-space character.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The input substring consists of all the characters up to the next 
+=======
+The input substring consists of all the characters up to the next
+>>>>>>> upstream/master
 =======
 The input substring consists of all the characters up to the next
 >>>>>>> upstream/master
@@ -240,7 +264,11 @@ white-space character; the characters are copied to the variable.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The input substring must be a floating-point number consisting 
+=======
+The input substring must be a floating-point number consisting
+>>>>>>> upstream/master
 =======
 The input substring must be a floating-point number consisting
 >>>>>>> upstream/master
@@ -300,7 +328,11 @@ The input substring for a given conversion terminates either when a
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 white-space character is encountered or when the maximum substring 
+=======
+white-space character is encountered or when the maximum substring
+>>>>>>> upstream/master
 =======
 white-space character is encountered or when the maximum substring
 >>>>>>> upstream/master

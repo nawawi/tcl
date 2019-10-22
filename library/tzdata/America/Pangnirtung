@@ -4,7 +4,11 @@ set TZData(:America/Pangnirtung) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-9223372036854775808 0 0 zzz}
+=======
+    {-9223372036854775808 0 0 -00}
+>>>>>>> upstream/master
 =======
     {-9223372036854775808 0 0 -00}
 >>>>>>> upstream/master

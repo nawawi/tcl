@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -101,7 +105,11 @@ The type of the uncompressed data (\fBbinary\fR or \fBtext\fR) if known.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR? 
+=======
+\fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR?
+>>>>>>> upstream/master
 =======
 \fBzlib gzip\fI string\fR ?\fB\-level \fIlevel\fR? ?\fB\-header \fIdict\fR?
 >>>>>>> upstream/master
@@ -209,8 +217,11 @@ decompressing the data to be \fIbinData\fR. Not valid for transformations that
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 work with gzip-format data.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -222,6 +233,9 @@ dictionary. Tcl provides no mechanism for choosing a good such dictionary for
 a particular data sequence.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -262,12 +276,15 @@ compression algorithm depends on what format is being produced or consumed.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 This read-write options gets or sets the compression dictionary to use when
 working with compressing or decompressing the data to be \fIbinData\fR. It is
 not valid for transformations that work with gzip-format data, and should not
 normally be set on compressing transformations other than at the point where
 the transformation is stacked.
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -281,6 +298,9 @@ current active compression dictionary mid-stream, as that information is not
 exposed by the underlying library.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

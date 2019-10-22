@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ko DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\uc77c"\
         "\uc6d4"\
         "\ud654"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\uae08"\
         "\ud1a0"]
 =======
+=======
+>>>>>>> upstream/master
         "일"\
         "월"\
         "화"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "목"\
         "금"\
         "토"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset ko DAYS_OF_WEEK_FULL [list \
         "일요일"\
@@ -60,6 +66,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ko DATE_FORMAT "%Y-%m-%d"
     ::msgcat::mcset ko TIME_FORMAT_12 "%P %l:%M:%S"
     ::msgcat::mcset ko DATE_TIME_FORMAT "%Y-%m-%d %P %l:%M:%S %z"
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset ko LOCALE_DATE_FORMAT "%Y\ub144%B%Od\uc77c"
     ::msgcat::mcset ko LOCALE_TIME_FORMAT "%H\uc2dc%M\ubd84%S\ucd08"
@@ -113,6 +120,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ko DATE_FORMAT "%Y-%m-%d"
     ::msgcat::mcset ko TIME_FORMAT_12 "%P %l:%M:%S"
     ::msgcat::mcset ko DATE_TIME_FORMAT "%Y-%m-%d %P %l:%M:%S %z"
+    ::msgcat::mcset ko LOCALE_DATE_FORMAT "%Y년%B%Od일"
+    ::msgcat::mcset ko LOCALE_TIME_FORMAT "%H시%M분%S초"
+    ::msgcat::mcset ko LOCALE_DATE_TIME_FORMAT "%A %Y년%B%Od일%H시%M분%S초 %z"
+>>>>>>> upstream/master
+=======
     ::msgcat::mcset ko LOCALE_DATE_FORMAT "%Y년%B%Od일"
     ::msgcat::mcset ko LOCALE_TIME_FORMAT "%H시%M분%S초"
     ::msgcat::mcset ko LOCALE_DATE_TIME_FORMAT "%A %Y년%B%Od일%H시%M분%S초 %z"

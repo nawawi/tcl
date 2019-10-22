@@ -2,8 +2,13 @@
 namespace eval ::tcl::clock {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset zh_SG AM "\u4e0a\u5348"
     ::msgcat::mcset zh_SG PM "\u4e2d\u5348"
+=======
+    ::msgcat::mcset zh_SG AM "上午"
+    ::msgcat::mcset zh_SG PM "中午"
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset zh_SG AM "上午"
     ::msgcat::mcset zh_SG PM "中午"

@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -114,7 +118,11 @@ If set, then it must contain a valid Tcl list giving directories to
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 search during auto-load operations.  Directories must be specified in 
+=======
+search during auto-load operations.  Directories must be specified in
+>>>>>>> upstream/master
 =======
 search during auto-load operations.  Directories must be specified in
 >>>>>>> upstream/master
@@ -325,7 +333,11 @@ The native byte order of this machine: either \fBlittleEndian\fR or
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBbigEndian\fR. 
+=======
+\fBbigEndian\fR.
+>>>>>>> upstream/master
 =======
 \fBbigEndian\fR.
 >>>>>>> upstream/master
@@ -366,6 +378,11 @@ created, this is always set to the string \fBTcl\fR.
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+.TP
+\fBengine\fR
+.
+The name of the Tcl language implementation.  When the interpreter is first
+created, this is always set to the string \fBTcl\fR.
 .TP
 \fBengine\fR
 .
@@ -424,6 +441,7 @@ This gives the size of the native-machine word in bytes (strictly, it
 is same as the result of evaluating \fIsizeof(long)\fR in C.)
 .RE
 .TP
+<<<<<<< HEAD
 <<<<<<< HEAD
 \fBtcl_precision\fR
 .
@@ -505,6 +523,8 @@ of this file and \fBsource\fR it if it exists.  For example, for \fBwish\fR
 the variable is set to \fB~/.wishrc\fR for Unix and \fB~/wishrc.tcl\fR
 for Windows.
 .TP
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 \fBtcl_traceCompile\fR

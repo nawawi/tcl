@@ -83,6 +83,19 @@ test uplevel-3.4 {uplevel to same level} {
     a1
 } 55
 
+<<<<<<< HEAD
+=======
+test uplevel-4.0.1 {error: non-existent level} -body {
+    uplevel #0 { uplevel { set y 222 } }
+} -returnCodes error -result {bad level "1"}
+test uplevel-4.0.2 {error: non-existent level} -setup {
+    interp create i
+} -body {
+    i eval { uplevel { set y 222 } }
+} -returnCodes error -result {bad level "1"} -cleanup {
+    interp delete i
+}
+>>>>>>> upstream/master
 test uplevel-4.1 {error: non-existent level} -returnCodes error -body {
     apply {{} {
 	uplevel #2 {set y 222}
@@ -105,7 +118,10 @@ test uplevel-4.4 {error: not enough args} -returnCodes error -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -214,6 +230,9 @@ test uplevel-4.36 {level parsing} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -262,7 +281,11 @@ test uplevel-7.1 {var access, no LVT in either level} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x 2 
+=======
+	set x 2
+>>>>>>> upstream/master
 =======
 	set x 2
 >>>>>>> upstream/master
@@ -297,7 +320,11 @@ test uplevel-7.2 {var access, no LVT in upper level} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x 2 
+=======
+	set x 2
+>>>>>>> upstream/master
 =======
 	set x 2
 >>>>>>> upstream/master
@@ -337,7 +364,11 @@ test uplevel-7.3 {var access, LVT in upper level} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set x 2 
+=======
+	set x 2
+>>>>>>> upstream/master
 =======
 	set x 2
 >>>>>>> upstream/master

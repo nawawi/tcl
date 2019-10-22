@@ -102,9 +102,15 @@ channel events.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The \fBchan configure\fR option \fB-connecting\fR may be used to check if the connect is still running. To verify a successful connect, the option \fB-error\fR may be checked when \fB-connecting\fR returned 0. 
 .PP
 Operation without the event queue requires at the moment calls to \fBchan configure\fR to advance the internal state machine. 
+=======
+The \fBchan configure\fR option \fB-connecting\fR may be used to check if the connect is still running. To verify a successful connect, the option \fB-error\fR may be checked when \fB-connecting\fR returned 0.
+.PP
+Operation without the event queue requires at the moment calls to \fBchan configure\fR to advance the internal state machine.
+>>>>>>> upstream/master
 =======
 The \fBchan configure\fR option \fB-connecting\fR may be used to check if the connect is still running. To verify a successful connect, the option \fB-error\fR may be checked when \fB-connecting\fR returned 0.
 .PP
@@ -157,7 +163,10 @@ addresses that are available on the local machine, the socket will
 listen on all of them.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 .TP
@@ -171,6 +180,9 @@ actively listening on it. This is the default on Windows.
 Tells the kernel whether to allow the binding of multiple sockets to the same
 address and port.
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

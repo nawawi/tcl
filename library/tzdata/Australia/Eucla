@@ -4,6 +4,7 @@ set TZData(:Australia/Eucla) {
     {-9223372036854775808 30928 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2337928528 31500 0 ACWST}
     {-1672562640 35100 1 ACWDT}
     {-1665387900 31500 0 ACWST}
@@ -27,6 +28,8 @@ set TZData(:Australia/Eucla) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-2337928528 31500 0 +0945}
     {-1672562640 35100 1 +0945}
     {-1665387900 31500 0 +0945}
@@ -48,6 +51,9 @@ set TZData(:Australia/Eucla) {
     {1224954900 35100 1 +0945}
     {1238260500 31500 0 +0945}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

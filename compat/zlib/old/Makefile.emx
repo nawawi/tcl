@@ -12,11 +12,15 @@ CC=gcc -Zwin32
 #CFLAGS=-MMD -O
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
 <<<<<<< HEAD:compat/zlib/old/Makefile.emx
+<<<<<<< HEAD:compat/zlib/old/Makefile.emx
 <<<<<<< HEAD
 #CFLAGS=-MMD -g -DDEBUG
 =======
 #CFLAGS=-MMD -g -DZLIB_DEBUG
 >>>>>>> upstream/master
+=======
+#CFLAGS=-MMD -g -DZLIB_DEBUG
+>>>>>>> upstream/master:compat/zlib/old/Makefile.emx
 =======
 #CFLAGS=-MMD -g -DZLIB_DEBUG
 >>>>>>> upstream/master:compat/zlib/old/Makefile.emx

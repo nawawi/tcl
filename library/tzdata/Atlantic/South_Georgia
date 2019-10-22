@@ -4,7 +4,11 @@ set TZData(:Atlantic/South_Georgia) {
     {-9223372036854775808 -8768 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2524512832 -7200 0 GST}
+=======
+    {-2524512832 -7200 0 -02}
+>>>>>>> upstream/master
 =======
     {-2524512832 -7200 0 -02}
 >>>>>>> upstream/master

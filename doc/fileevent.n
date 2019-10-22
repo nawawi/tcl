@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -132,7 +136,11 @@ read whatever binary data is currently available without blocking.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Here the channel has the fileevent removed when an end of file 
+=======
+Here the channel has the fileevent removed when an end of file
+>>>>>>> upstream/master
 =======
 Here the channel has the fileevent removed when an end of file
 >>>>>>> upstream/master

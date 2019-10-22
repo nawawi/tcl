@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* makes a truly random prime of a given size (bits),
@@ -47,19 +51,27 @@ int mp_prime_random_ex(mp_int *a, int t, int size, int flags, ltm_prime_callback
    bsize = (size>>3) + ((size&7)?1:0);
 
    /* we need a buffer of bsize bytes */
+<<<<<<< HEAD
    tmp = OPT_CAST(unsigned char) XMALLOC((size_t)bsize);
+=======
+   tmp = (unsigned char *) XMALLOC((size_t)bsize);
+>>>>>>> upstream/master
    if (tmp == NULL) {
       return MP_MEM;
    }
 
    /* calc the maskAND value for the MSbyte*/
-   maskAND = ((size&7) == 0) ? 0xFF : (0xFF >> (8 - (size & 7)));
+   maskAND = ((size&7) == 0) ? 0xFF : (unsigned char)(0xFF >> (8 - (size & 7)));
 
    /* calc the maskOR_msb */
    maskOR_msb        = 0;
    maskOR_msb_offset = ((size & 7) == 1) ? 1 : 0;
    if ((flags & LTM_PRIME_2MSB_ON) != 0) {
+<<<<<<< HEAD
       maskOR_msb       |= 0x80 >> ((9 - size) & 7);
+=======
+      maskOR_msb       |= (unsigned char)(0x80 >> ((9 - size) & 7));
+>>>>>>> upstream/master
    }
 
    /* get the maskOR_lsb */
@@ -77,7 +89,7 @@ int mp_prime_random_ex(mp_int *a, int t, int size, int flags, ltm_prime_callback
 
       /* work over the MSbyte */
       tmp[0]    &= maskAND;
-      tmp[0]    |= 1 << ((size - 1) & 7);
+      tmp[0]    |= (unsigned char)(1 << ((size - 1) & 7));
 
       /* mix in the maskORs */
       tmp[maskOR_msb_offset]   |= maskOR_msb;
@@ -124,7 +136,7 @@ int mp_prime_random_ex(mp_int *a, int t, int size, int flags, ltm_prime_callback
 
    err = MP_OKAY;
 error:
-   XFREE(tmp);
+   XFREE(tmp, bsize);
    return err;
 }
 

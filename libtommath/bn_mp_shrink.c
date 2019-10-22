@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* shrink a bignum */
@@ -24,7 +28,13 @@ int mp_shrink(mp_int *a)
    }
 
    if (a->alloc != used) {
+<<<<<<< HEAD
       if ((tmp = OPT_CAST(mp_digit) XREALLOC(a->dp, sizeof(mp_digit) * (size_t)used)) == NULL) {
+=======
+      if ((tmp = (mp_digit *) XREALLOC(a->dp,
+                                       (size_t)a->alloc * sizeof (mp_digit),
+                                       (size_t)used * sizeof(mp_digit))) == NULL) {
+>>>>>>> upstream/master
          return MP_MEM;
       }
       a->dp    = tmp;

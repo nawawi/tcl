@@ -39,7 +39,11 @@
 static int CheckForCompilerFeature(const char *option);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int CheckForLinkerFeature(const char *option);
+=======
+static int CheckForLinkerFeature(const char **options, int count);
+>>>>>>> upstream/master
 =======
 static int CheckForLinkerFeature(const char **options, int count);
 >>>>>>> upstream/master
@@ -108,9 +112,15 @@ main(
 	case 'l':
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if (argc != 3) {
 		chars = snprintf(msg, sizeof(msg) - 1,
 	       		"usage: %s -l <linker option>\n"
+=======
+	    if (argc < 3) {
+		chars = snprintf(msg, sizeof(msg) - 1,
+	       		"usage: %s -l <linker option> ?<mandatory option> ...?\n"
+>>>>>>> upstream/master
 =======
 	    if (argc < 3) {
 		chars = snprintf(msg, sizeof(msg) - 1,
@@ -129,7 +139,11 @@ main(
 	    }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    return CheckForLinkerFeature(argv[2]);
+=======
+	    return CheckForLinkerFeature(&argv[2], argc-2);
+>>>>>>> upstream/master
 =======
 	    return CheckForLinkerFeature(&argv[2], argc-2);
 >>>>>>> upstream/master
@@ -356,7 +370,12 @@ static int
 CheckForLinkerFeature(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const char *option)
+=======
+    const char **options,
+    int count)
+>>>>>>> upstream/master
 =======
     const char **options,
     int count)
@@ -375,7 +394,12 @@ CheckForLinkerFeature(
     HANDLE hProcess, h, pipeThreads[2];
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     char cmdline[100];
+=======
+    int i;
+    char cmdline[255];
+>>>>>>> upstream/master
 =======
     int i;
     char cmdline[255];
@@ -431,8 +455,11 @@ CheckForLinkerFeature(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     lstrcat(cmdline, option);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     for (i = 0; i < count; i++) {
@@ -441,6 +468,9 @@ CheckForLinkerFeature(
 	lstrcat(cmdline, "\"");
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -510,7 +540,13 @@ CheckForLinkerFeature(
 	    strstr(Out.buffer, "LNK4044") != NULL ||
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    strstr(Err.buffer, "LNK4044") != NULL);
+=======
+	    strstr(Err.buffer, "LNK4044") != NULL ||
+	    strstr(Out.buffer, "LNK4224") != NULL ||
+	    strstr(Err.buffer, "LNK4224") != NULL);
+>>>>>>> upstream/master
 =======
 	    strstr(Err.buffer, "LNK4044") != NULL ||
 	    strstr(Out.buffer, "LNK4224") != NULL ||
@@ -697,8 +733,13 @@ SubstituteFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		char *ks, *ke, *vs, *ve;
 		ks = szBuffer;
+=======
+		unsigned char *ks, *ke, *vs, *ve;
+		ks = (unsigned char*)szBuffer;
+>>>>>>> upstream/master
 =======
 		unsigned char *ks, *ke, *vs, *ve;
 		ks = (unsigned char*)szBuffer;
@@ -727,7 +768,11 @@ SubstituteFile(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		list_insert(&substPtr, ks, vs);
+=======
+		list_insert(&substPtr, (char*)ks, (char*)vs);
+>>>>>>> upstream/master
 =======
 		list_insert(&substPtr, (char*)ks, (char*)vs);
 >>>>>>> upstream/master
@@ -745,7 +790,7 @@ SubstituteFile(
 	}
 
 	/* debug: dump the list */
-#ifdef _DEBUG
+#ifndef NDEBUG
 	{
 	    int n = 0;
 	    list_item_t *p = NULL;
@@ -895,7 +940,11 @@ static int LocateDependencyHelper(const char *dir, const char *keypath)
 static int LocateDependency(const char *keypath)
 {
     int i, ret;
+<<<<<<< HEAD
     static char *paths[] = {"..", "..\\..", "..\\..\\.."};
+=======
+    static const char *paths[] = {"..", "..\\..", "..\\..\\.."};
+>>>>>>> upstream/master
 
     for (i = 0; i < (sizeof(paths)/sizeof(paths[0])); ++i) {
 	ret = LocateDependencyHelper(paths[i], keypath);

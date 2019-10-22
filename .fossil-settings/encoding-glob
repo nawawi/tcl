@@ -4,7 +4,10 @@ win/buildall.vc.bat
 win/coffbase.txt
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 win/makefile.bc
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -15,7 +18,11 @@ win/tcl.dsp
 win/tcl.dsw
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 win/tcl.hpj.in
+=======
+win/tcl.hpj.in
+>>>>>>> upstream/master
 =======
 win/tcl.hpj.in
 >>>>>>> upstream/master

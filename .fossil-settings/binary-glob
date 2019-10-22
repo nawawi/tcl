@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 *.bmp
 *.gif
 *.png
@@ -19,4 +20,17 @@ compat/zlib/zlib.3.pdf
 >>>>>>> upstream/master
 =======
 *.png
+>>>>>>> upstream/master
+=======
+*.a
+*.dll
+*.exe
+*.gif
+*.gz
+*.jpg
+*.lib
+*.pdf
+*.png
+*.xlsx
+*.zip
 >>>>>>> upstream/master

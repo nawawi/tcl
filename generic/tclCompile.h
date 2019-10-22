@@ -51,6 +51,9 @@ MODULE_SCOPE int 	tclTraceExec;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -60,6 +63,7 @@ MODULE_SCOPE int 	tclTraceExec;
  * The type of lambda expressions. Note that every lambda will *always* have a
  * string representation.
  */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -71,6 +75,8 @@ MODULE_SCOPE const Tcl_ObjType tclLambdaType;
  * The type of lambda expressions. Note that every lambda will *always* have a
  * string representation.
  */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -161,7 +167,11 @@ typedef struct ExceptionAux {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *breakTargets;		/* The offsets of the INST_JUMP4 instructions
+=======
+    unsigned int *breakTargets;	/* The offsets of the INST_JUMP4 instructions
+>>>>>>> upstream/master
 =======
     unsigned int *breakTargets;	/* The offsets of the INST_JUMP4 instructions
 >>>>>>> upstream/master
@@ -187,7 +197,11 @@ typedef struct ExceptionAux {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *continueTargets;	/* The offsets of the INST_JUMP4 instructions
+=======
+    unsigned int *continueTargets; /* The offsets of the INST_JUMP4 instructions
+>>>>>>> upstream/master
 =======
     unsigned int *continueTargets; /* The offsets of the INST_JUMP4 instructions
 >>>>>>> upstream/master
@@ -582,8 +596,13 @@ typedef struct ByteCode {
 #define ByteCodeGetIntRep(objPtr, typePtr, codePtr)			\
     do {								\
 	const Tcl_ObjIntRep *irPtr;					\
+<<<<<<< HEAD
 	irPtr = Tcl_FetchIntRep((objPtr), (typePtr));			\
 	(codePtr) = irPtr ? irPtr->twoPtrValue.ptr1 : NULL;		\
+=======
+	irPtr = TclFetchIntRep((objPtr), (typePtr));			\
+	(codePtr) = irPtr ? (ByteCode*)irPtr->twoPtrValue.ptr1 : NULL;		\
+>>>>>>> upstream/master
     } while (0)
 
 /*
@@ -594,6 +613,7 @@ typedef struct ByteCode {
  * tclExecute.c.
  */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 /* Opcodes 0 to 9 */
@@ -1151,6 +1171,9 @@ typedef struct ByteCode {
 =======
 enum TclInstruction {
 
+=======
+enum TclInstruction {
+>>>>>>> upstream/master
     /* Opcodes 0 to 9 */
     INST_DONE = 0,
     INST_PUSH1,
@@ -1427,6 +1450,7 @@ enum TclInstruction {
 
     INST_CLOCK_READ,
 
+<<<<<<< HEAD
     /* The last opcode */
     LAST_INST_OPCODE
 };
@@ -1710,11 +1734,23 @@ enum TclInstruction {
     INST_LAPPEND_LIST_STK,
 
     INST_CLOCK_READ,
+=======
+    INST_DICT_GET_DEF,
+
+	/* TIP 461 */
+	INST_STR_LT,
+	INST_STR_GT,
+	INST_STR_LE,
+	INST_STR_GE,
+>>>>>>> upstream/master
 
     /* The last opcode */
     LAST_INST_OPCODE
 };
+<<<<<<< HEAD
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*
@@ -1893,12 +1929,15 @@ typedef struct ForeachInfo {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULE_SCOPE const AuxDataType tclForeachInfoType;
 MODULE_SCOPE const AuxDataType tclNewForeachInfoType;
 
 #define FOREACHINFO(envPtr, index) \
     ((ForeachInfo*)((envPtr)->auxDataArrayPtr[TclGetUInt4AtPtr(index)].clientData))
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1923,7 +1962,10 @@ MODULE_SCOPE const AuxDataType tclJumptableInfoType;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -1986,6 +2028,7 @@ MODULE_SCOPE ByteCode *	TclCompileObj(Tcl_Interp *interp, Tcl_Obj *objPtr,
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct {
     int length;			/* Size of array */
     int varIndices[1];		/* Array of variable indices to manage when
@@ -1997,6 +2040,8 @@ typedef struct {
 } DictUpdateInfo;
 
 =======
+=======
+>>>>>>> upstream/master
 MODULE_SCOPE int	TclAttemptCompileProc(Tcl_Interp *interp,
 			    Tcl_Parse *parsePtr, int depth, Command *cmdPtr,
 			    CompileEnv *envPtr);
@@ -2011,7 +2056,11 @@ MODULE_SCOPE void	TclCompileExprWords(Tcl_Interp *interp,
 			    Tcl_Token *tokenPtr, int numWords,
 			    CompileEnv *envPtr);
 MODULE_SCOPE void	TclCompileInvocation(Tcl_Interp *interp,
+<<<<<<< HEAD
 			    Tcl_Token *tokenPtr, Tcl_Obj *cmdObj, int numWords,
+=======
+			    Tcl_Token *tokenPtr, Tcl_Obj *cmdObj, size_t numWords,
+>>>>>>> upstream/master
 			    CompileEnv *envPtr);
 MODULE_SCOPE void	TclCompileScript(Tcl_Interp *interp,
 			    const char *script, size_t numBytes,
@@ -2052,7 +2101,11 @@ MODULE_SCOPE int	TclFixupForwardJump(CompileEnv *envPtr,
 MODULE_SCOPE void	TclFreeCompileEnv(CompileEnv *envPtr);
 MODULE_SCOPE void	TclFreeJumpFixupArray(JumpFixupArray *fixupArrayPtr);
 MODULE_SCOPE int	TclGetIndexFromToken(Tcl_Token *tokenPtr,
+<<<<<<< HEAD
 			    int before, int after, int *indexPtr);
+=======
+			    size_t before, size_t after, int *indexPtr);
+>>>>>>> upstream/master
 MODULE_SCOPE ByteCode *	TclInitByteCode(CompileEnv *envPtr);
 MODULE_SCOPE ByteCode *	TclInitByteCodeObj(Tcl_Obj *objPtr,
 			    const Tcl_ObjType *typePtr, CompileEnv *envPtr);
@@ -2123,6 +2176,7 @@ MODULE_SCOPE Tcl_Obj	*TclGetInnerContext(Tcl_Interp *interp,
 			    const unsigned char *pc, Tcl_Obj **tosPtr);
 MODULE_SCOPE Tcl_Obj	*TclNewInstNameObj(unsigned char inst);
 MODULE_SCOPE int	TclPushProcCallFrame(void *clientData,
+<<<<<<< HEAD
 			    register Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[], int isLambda);
 
@@ -2142,6 +2196,11 @@ typedef struct {
 	int identity;
     } i;
 } TclOpCmdClientData;
+=======
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const objv[], int isLambda);
+
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------
@@ -2151,6 +2210,7 @@ typedef struct {
  *----------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 MODULE_SCOPE Tcl_ObjCmdProc	TclNRInterpCoroutine;
 
@@ -2174,11 +2234,40 @@ typedef struct JumptableInfo {
     Tcl_HashTable hashTable;	/* Hash that maps strings to signed ints (PC
 				 * offsets). */
 } JumptableInfo;
+=======
+/*
+ * Simplified form to access AuxData.
+ *
+ * void *TclFetchAuxData(CompileEng *envPtr, int index);
+ */
+
+#define TclFetchAuxData(envPtr, index) \
+    (envPtr)->auxDataArrayPtr[(index)].clientData
+
+#define LITERAL_ON_HEAP		0x01
+#define LITERAL_CMD_NAME	0x02
+#define LITERAL_UNSHARED	0x04
+>>>>>>> upstream/master
 
 MODULE_SCOPE const AuxDataType tclJumptableInfoType;
 
 #define JUMPTABLEINFO(envPtr, index) \
     ((JumptableInfo*)((envPtr)->auxDataArrayPtr[TclGetUInt4AtPtr(index)].clientData))
+
+#define TclGetStackDepth(envPtr)		\
+    ((envPtr)->currStackDepth)
+
+#define TclSetStackDepth(depth, envPtr)		\
+    (envPtr)->currStackDepth = (depth)
+
+#define TclCheckStackDepth(depth, envPtr)				\
+    do {								\
+	int _dd = (depth);						\
+	if (_dd != (envPtr)->currStackDepth) {				\
+	    Tcl_Panic("bad stack depth computations: is %i, should be %i", \
+		    (envPtr)->currStackDepth, _dd);		\
+	}								\
+    } while (0)
 
 /*
  * Structure used to hold information about a [dict update] command that is
@@ -3549,6 +3638,21 @@ MODULE_SCOPE void	TclDTraceInfo(Tcl_Obj *info, const char **args,
 /*
  * Macros used to update the flag that indicates if we are at the start of a
  * command, based on whether the opcode is INST_START_COMMAND.
+<<<<<<< HEAD
+=======
+ *
+ * void TclUpdateAtCmdStart(unsigned char op, CompileEnv *envPtr);
+ */
+
+#define TclUpdateAtCmdStart(op, envPtr) \
+    if ((envPtr)->atCmdStart < 2) {				     \
+	(envPtr)->atCmdStart = ((op) == INST_START_CMD ? 1 : 0);     \
+    }
+
+/*
+ * Macro to emit an opcode byte into a CompileEnv's code array. The ANSI C
+ * "prototype" for this macro is:
+>>>>>>> upstream/master
  *
  * void TclUpdateAtCmdStart(unsigned char op, CompileEnv *envPtr);
  */
@@ -3674,7 +3778,11 @@ MODULE_SCOPE void	TclDTraceInfo(Tcl_Obj *info, const char **args,
 =======
 #define TclEmitPush(objIndex, envPtr) \
     do {							 \
+<<<<<<< HEAD
 	register int _objIndexCopy = (objIndex);			 \
+=======
+	int _objIndexCopy = (objIndex);			 \
+>>>>>>> upstream/master
 	if (_objIndexCopy <= 255) {				 \
 	    TclEmitInstInt1(INST_PUSH1, _objIndexCopy, (envPtr)); \
 	} else {						 \
@@ -4058,6 +4166,9 @@ MODULE_SCOPE void	TclDTraceInfo(Tcl_Obj *info, const char **args,
 #define TCL_NO_LARGE_INDEX 1	/* Do not return localIndex value > 255 */
 #define TCL_NO_ELEMENT 2	/* Do not push the array element. */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 /*
  * DTrace probe macros (NOPs if DTrace support is not enabled).
@@ -4197,8 +4308,8 @@ MODULE_SCOPE void TclDTraceInfo(Tcl_Obj *info, const char **args, int *argsi);
     FILE *tclDTraceDebugLog = NULL;				\
     void TclDTraceOpenDebugLog(void) {				\
 	char n[35];						\
-	sprintf(n, "/tmp/tclDTraceDebug-%lu.log",		\
-		(unsigned long) getpid());			\
+	sprintf(n, "/tmp/tclDTraceDebug-%" TCL_Z_MODIFIER "u.log",		\
+		(size_t) getpid());			\
 	tclDTraceDebugLog = fopen(n, "a");			\
     }
 

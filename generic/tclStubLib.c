@@ -27,6 +27,7 @@ const TclIntPlatStubs *tclIntPlatStubsPtr = NULL;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Use our own isDigit to avoid linking to libc on windows
  */
 
@@ -34,6 +35,12 @@ static int isDigit(const int c)
 {
     return (c >= '0' && c <= '9');
 }
+=======
+ * Use our own ISDIGIT to avoid linking to libc on windows
+ */
+
+#define ISDIGIT(c) (((unsigned)((c)-'0')) <= 9)
+>>>>>>> upstream/master
 =======
  * Use our own ISDIGIT to avoid linking to libc on windows
  */
@@ -78,7 +85,12 @@ Tcl_InitStubs(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int exact)
+=======
+    int exact,
+    int magic)
+>>>>>>> upstream/master
 =======
     int exact,
     int magic)
@@ -106,6 +118,7 @@ Tcl_InitStubs(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!stubsPtr || (stubsPtr->magic != TCL_STUB_MAGIC)) {
 	iPtr->result = "interpreter uses an incompatible stubs mechanism";
 =======
@@ -128,6 +141,11 @@ Tcl_InitStubs(
 	iPtr->legacyResult = "interpreter uses an incompatible stubs mechanism";
 	iPtr->legacyFreeProc = 0; /* TCL_STATIC */
 >>>>>>> upstream/master
+=======
+    if (!stubsPtr || (stubsPtr->magic != (((exact&0xff00) >= 0x900) ? magic : TCL_STUB_MAGIC))) {
+	iPtr->legacyResult = "interpreter uses an incompatible stubs mechanism";
+	iPtr->legacyFreeProc = 0; /* TCL_STATIC */
+>>>>>>> upstream/master
 	return NULL;
     }
 
@@ -138,7 +156,11 @@ Tcl_InitStubs(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (exact) {
+=======
+    if (exact&1) {
+>>>>>>> upstream/master
 =======
     if (exact&1) {
 >>>>>>> upstream/master
@@ -155,7 +177,11 @@ Tcl_InitStubs(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    count += !isDigit(*p++);
+=======
+	    count += !ISDIGIT(*p++);
+>>>>>>> upstream/master
 =======
 	    count += !ISDIGIT(*p++);
 >>>>>>> upstream/master
@@ -176,7 +202,11 @@ Tcl_InitStubs(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if (*p || isDigit(*q)) {
+=======
+	    if (*p || ISDIGIT(*q)) {
+>>>>>>> upstream/master
 =======
 	    if (*p || ISDIGIT(*q)) {
 >>>>>>> upstream/master

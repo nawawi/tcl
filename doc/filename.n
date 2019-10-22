@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -104,7 +108,11 @@ general form \fB\e\eservername\esharename\epath\efile\fR, but must at
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the very least contain the server and share components, i.e. 
+=======
+the very least contain the server and share components, i.e.
+>>>>>>> upstream/master
 =======
 the very least contain the server and share components, i.e.
 >>>>>>> upstream/master
@@ -190,7 +198,11 @@ more than 3 characters.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 On Windows platforms there are file and path length restrictions. 
+=======
+On Windows platforms there are file and path length restrictions.
+>>>>>>> upstream/master
 =======
 On Windows platforms there are file and path length restrictions.
 >>>>>>> upstream/master

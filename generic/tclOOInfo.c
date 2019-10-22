@@ -206,6 +206,12 @@ InfoObjectClassCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	    if (!mixinPtr) {
+		continue;
+	    }
+>>>>>>> upstream/master
 =======
 	    if (!mixinPtr) {
 		continue;
@@ -501,6 +507,12 @@ InfoObjectIsACmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		if (!mixinPtr) {
+		    continue;
+		}
+>>>>>>> upstream/master
 =======
 		if (!mixinPtr) {
 		    continue;
@@ -654,7 +666,11 @@ InfoObjectMethodsCmd(
 		    Tcl_NewStringObj(names[i], -1));
 	}
 	if (numNames > 0) {
+<<<<<<< HEAD
 	    Tcl_Free(names);
+=======
+	    Tcl_Free((void *)names);
+>>>>>>> upstream/master
 	}
     } else if (oPtr->methodsPtr) {
 	FOREACH_HASH(namePtr, mPtr, oPtr->methodsPtr) {
@@ -761,6 +777,12 @@ InfoObjectMixinsCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 =======
 	if (!mixinPtr) {
 	    continue;
@@ -872,17 +894,28 @@ InfoObjectVariablesCmd(
 {
     Object *oPtr;
     Tcl_Obj *resultObj;
+<<<<<<< HEAD
     int i, private = 0;
+=======
+    int i, isPrivate = 0;
+>>>>>>> upstream/master
 
     if (objc != 2 && objc != 3) {
 	Tcl_WrongNumArgs(interp, 1, objv, "objName ?-private?");
 	return TCL_ERROR;
     }
     if (objc == 3) {
+<<<<<<< HEAD
 	if (strcmp("-private", Tcl_GetString(objv[2])) != 0) {
 	    return TCL_ERROR;
 	}
 	private = 1;
+=======
+	if (strcmp("-private", TclGetString(objv[2])) != 0) {
+	    return TCL_ERROR;
+	}
+	isPrivate = 1;
+>>>>>>> upstream/master
     }
     oPtr = (Object *) Tcl_GetObjectFromObj(interp, objv[1]);
     if (oPtr == NULL) {
@@ -890,7 +923,11 @@ InfoObjectVariablesCmd(
     }
 
     resultObj = Tcl_NewObj();
+<<<<<<< HEAD
     if (private) {
+=======
+    if (isPrivate) {
+>>>>>>> upstream/master
 	PrivateVariableMapping *privatePtr;
 
 	FOREACH_STRUCT(privatePtr, oPtr->privateVariables) {
@@ -1429,7 +1466,11 @@ InfoClassMethodsCmd(
 		    Tcl_NewStringObj(names[i], -1));
 	}
 	if (numNames > 0) {
+<<<<<<< HEAD
 	    Tcl_Free(names);
+=======
+	    Tcl_Free((void *)names);
+>>>>>>> upstream/master
 	}
     } else {
 	FOREACH_HASH_DECLS;
@@ -1532,6 +1573,12 @@ InfoClassMixinsCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	if (!mixinPtr) {
+	    continue;
+	}
+>>>>>>> upstream/master
 =======
 	if (!mixinPtr) {
 	    continue;
@@ -1672,17 +1719,28 @@ InfoClassVariablesCmd(
 {
     Class *clsPtr;
     Tcl_Obj *resultObj;
+<<<<<<< HEAD
     int i, private = 0;
+=======
+    int i, isPrivate = 0;
+>>>>>>> upstream/master
 
     if (objc != 2 && objc != 3) {
 	Tcl_WrongNumArgs(interp, 1, objv, "className ?-private?");
 	return TCL_ERROR;
     }
     if (objc == 3) {
+<<<<<<< HEAD
 	if (strcmp("-private", Tcl_GetString(objv[2])) != 0) {
 	    return TCL_ERROR;
 	}
 	private = 1;
+=======
+	if (strcmp("-private", TclGetString(objv[2])) != 0) {
+	    return TCL_ERROR;
+	}
+	isPrivate = 1;
+>>>>>>> upstream/master
     }
     clsPtr = GetClassFromObj(interp, objv[1]);
     if (clsPtr == NULL) {
@@ -1690,7 +1748,11 @@ InfoClassVariablesCmd(
     }
 
     resultObj = Tcl_NewObj();
+<<<<<<< HEAD
     if (private) {
+=======
+    if (isPrivate) {
+>>>>>>> upstream/master
 	PrivateVariableMapping *privatePtr;
 
 	FOREACH_STRUCT(privatePtr, clsPtr->privateVariables) {

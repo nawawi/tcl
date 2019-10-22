@@ -530,10 +530,17 @@ ly for Windows 95 and
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      There is a new memory allocator for the Macintosh 
 version, which should be
      more efficient than the old one.
      Tk's grid geometry manager has been completely 
+=======
+     There is a new memory allocator for the Macintosh
+version, which should be
+     more efficient than the old one.
+     Tk's grid geometry manager has been completely
+>>>>>>> upstream/master
 =======
      There is a new memory allocator for the Macintosh
 version, which should be
@@ -559,7 +566,11 @@ rewritten. The layout
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      There are new commands for creating common dialog 
+=======
+     There are new commands for creating common dialog
+>>>>>>> upstream/master
 =======
      There are new commands for creating common dialog
 >>>>>>> upstream/master

@@ -138,6 +138,12 @@ test resolver-1.5 {cmdNameObj sharing vs. cmd resolver: other than global NS} -s
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    namespace eval :: {
+	variable r2 ""
+    }
+>>>>>>> upstream/master
 =======
     namespace eval :: {
 	variable r2 ""

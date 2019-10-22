@@ -6,6 +6,7 @@ set TZData(:Asia/Yekaterinburg) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1592610305 14400 0 SVET}
     {-1247544000 18000 0 SVEMMTT}
     {354913200 21600 1 SVEST}
@@ -87,6 +88,8 @@ set TZData(:Asia/Yekaterinburg) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1592610305 14400 0 +04}
     {-1247544000 18000 0 +06}
     {354913200 21600 1 +06}
@@ -155,6 +158,9 @@ set TZData(:Asia/Yekaterinburg) {
     {1414267200 18000 0 +05}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

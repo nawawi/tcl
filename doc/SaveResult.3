@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -77,6 +81,7 @@ A pointer to storage for saved state.
 .PP
 These routines save the state of an interpreter before a call to a routine such
 as \fBTcl_Eval\fR, and restore the state afterwards.
+<<<<<<< HEAD
 .PP
 \fBTcl_SaveInterpState\fR saves the parts of \fIinterp\fR that comprise the
 result of a script, including the resulting value, the return code passed as
@@ -118,6 +123,23 @@ to release it.  A token used to discard or restore state must not be used
 again.
 >>>>>>> upstream/master
 .PP
+=======
+.PP
+\fBTcl_SaveInterpState\fR saves the parts of \fIinterp\fR that comprise the
+result of a script, including the resulting value, the return code passed as
+\fIstatus\fR, and any options such as \fB\-errorinfo\fR and \fB\-errorcode\fR.
+It returns a token for the saved state.  The interpreter result is not reset
+and no interpreter state is changed.
+.PP
+\fBTcl_RestoreInterpState\fR restores the state indicated by \fIstate\fR and
+returns the \fIstatus\fR originally passed in the corresponding call to
+\fBTcl_SaveInterpState\fR.
+.PP
+If a saved state is not restored, \fBTcl_DiscardInterpState\fR must be called
+to release it.  A token used to discard or restore state must not be used
+again.
+.PP
+>>>>>>> upstream/master
 \fBTcl_SaveResult\fR, \fBTcl_RestoreResult\fR, and \fBTcl_DiscardResult\fR are
 deprecated.  Instead use \fBTcl_SaveInterpState\fR,
 \fBTcl_RestoreInterpState\fR, and \fBTcl_DiscardInterpState\fR, which are more
@@ -138,6 +160,7 @@ then in an undefined state and must not be used until passed again to
 \fBTcl_SaveResult\fR.
 .PP
 <<<<<<< HEAD
+<<<<<<< HEAD
 Once \fBTcl_SaveResult\fR is called to save the interpreter
 result, either \fBTcl_RestoreResult\fR or
 \fBTcl_DiscardResult\fR must be called to properly clean up the
@@ -157,6 +180,10 @@ memory associated with the saved state.
 >>>>>>> upstream/master
 =======
 memory associated with the saved state.
+>>>>>>> upstream/master
+=======
+If a saved result is not restored, \fBTcl_DiscardResult\fR must be called to
+release it.
 >>>>>>> upstream/master
 =======
 If a saved result is not restored, \fBTcl_DiscardResult\fR must be called to

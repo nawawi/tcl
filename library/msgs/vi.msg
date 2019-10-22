@@ -11,6 +11,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset vi DAYS_OF_WEEK_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Th\u01b0\u0301 hai"\
         "Th\u01b0\u0301 ba"\
         "Th\u01b0\u0301 t\u01b0"\
@@ -21,6 +22,8 @@ namespace eval ::tcl::clock {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "Thứ hai"\
         "Thứ ba"\
         "Thứ tư"\
@@ -29,6 +32,9 @@ namespace eval ::tcl::clock {
         "Thứ bảy"\
         "Chủ nhật"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -49,6 +55,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset vi MONTHS_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Th\u00e1ng m\u00f4\u0323t"\
         "Th\u00e1ng hai"\
         "Th\u00e1ng ba"\
@@ -64,6 +71,8 @@ namespace eval ::tcl::clock {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "Tháng một"\
         "Tháng hai"\
         "Tháng ba"\
@@ -77,6 +86,9 @@ namespace eval ::tcl::clock {
         "Tháng mười một"\
         "Tháng mười hai"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

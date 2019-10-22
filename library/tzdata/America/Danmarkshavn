@@ -4,6 +4,7 @@ set TZData(:America/Danmarkshavn) {
     {-9223372036854775808 -4480 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1686091520 -10800 0 WGT}
     {323845200 -7200 0 WGST}
     {338950800 -10800 0 WGT}
@@ -40,6 +41,8 @@ set TZData(:America/Danmarkshavn) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1686091520 -10800 0 -03}
     {323845200 -7200 0 -02}
     {338950800 -10800 0 -03}
@@ -74,6 +77,9 @@ set TZData(:America/Danmarkshavn) {
     {796179600 -7200 1 -02}
     {811904400 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

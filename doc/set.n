@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -49,7 +53,11 @@ is unqualified (does not include the names of any containing namespaces)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 but no procedure is active, 
+=======
+but no procedure is active,
+>>>>>>> upstream/master
 =======
 but no procedure is active,
 >>>>>>> upstream/master
@@ -72,7 +80,11 @@ If a procedure is active and \fIvarName\fR is unqualified, then
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unless \fIvarName\fR was declared to resolve differently through one of the 
+=======
+unless \fIvarName\fR was declared to resolve differently through one of the
+>>>>>>> upstream/master
 =======
 unless \fIvarName\fR was declared to resolve differently through one of the
 >>>>>>> upstream/master

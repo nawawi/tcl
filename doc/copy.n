@@ -23,12 +23,15 @@ The \fBoo::copy\fR command creates a copy of an object or class. It takes the
 name of the object or class to be copied, \fIsourceObject\fR, and optionally
 the name of the object or class to create, \fItargetObject\fR, which will be
 <<<<<<< HEAD
+<<<<<<< HEAD
 resolved relative to the current namespace if not an absolute qualified name.
 If \fItargetObject\fR is omitted, a new name is chosen. The copied object will
 be of the same class as the source object, and will have all its per-object
 methods copied. If it is a class, it will also have all the class methods in
 the class copied, but it will not have any of its instances copied.
 =======
+=======
+>>>>>>> upstream/master
 resolved relative to the current namespace if not an absolute qualified name
 and
 .VS TIP473
@@ -44,6 +47,9 @@ The copied object will be of the same class as the source object, and will have
 all its per-object methods copied. If it is a class, it will also have all the
 class methods in the class copied, but it will not have any of its instances
 copied.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .PP
 .VS

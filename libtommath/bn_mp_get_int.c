@@ -9,13 +9,18 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* get the lower 32-bits of an mp_int */
 unsigned long mp_get_int(const mp_int *a)
 {
+<<<<<<< HEAD
    int i;
    mp_min_u32 res;
 
@@ -35,6 +40,10 @@ unsigned long mp_get_int(const mp_int *a)
 
    /* force result to 32-bits always so it is consistent on non 32-bit platforms */
    return res & 0xFFFFFFFFUL;
+=======
+   /* force result to 32-bits always so it is consistent on non 32-bit platforms */
+   return mp_get_long(a) & 0xFFFFFFFFUL;
+>>>>>>> upstream/master
 }
 #endif
 

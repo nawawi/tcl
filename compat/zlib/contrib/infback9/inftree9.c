@@ -1,7 +1,11 @@
 /* inftree9.c -- generate Huffman trees for efficient decoding
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2013 Mark Adler
+=======
+ * Copyright (C) 1995-2017 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2017 Mark Adler
 >>>>>>> upstream/master
@@ -19,7 +23,11 @@
 const char inflate9_copyright[] =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    " inflate9 1.2.8 Copyright 1995-2013 Mark Adler ";
+=======
+   " inflate9 1.2.11 Copyright 1995-2017 Mark Adler ";
+>>>>>>> upstream/master
 =======
    " inflate9 1.2.11 Copyright 1995-2017 Mark Adler ";
 >>>>>>> upstream/master
@@ -82,7 +90,11 @@ unsigned short FAR *work;
         130, 130, 130, 130, 131, 131, 131, 131, 132, 132, 132, 132,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         133, 133, 133, 133, 144, 72, 78};
+=======
+        133, 133, 133, 133, 144, 77, 202};
+>>>>>>> upstream/master
 =======
         133, 133, 133, 133, 144, 77, 202};
 >>>>>>> upstream/master

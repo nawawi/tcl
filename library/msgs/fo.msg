@@ -4,8 +4,13 @@ namespace eval ::tcl::clock {
         "sun"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e1n"\
         "t\u00fds"\
+=======
+        "mán"\
+        "týs"\
+>>>>>>> upstream/master
 =======
         "mán"\
         "týs"\
@@ -19,6 +24,7 @@ namespace eval ::tcl::clock {
         "mánadagur"\
         "týsdagur"\
         "mikudagur"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "h\u00f3sdagur"\
         "fr\u00edggjadagur"\
@@ -34,6 +40,10 @@ namespace eval ::tcl::clock {
         "mánadagur"\
         "týsdagur"\
         "mikudagur"\
+        "hósdagur"\
+        "fríggjadagur"\
+>>>>>>> upstream/master
+=======
         "hósdagur"\
         "fríggjadagur"\
 >>>>>>> upstream/master
@@ -62,7 +72,11 @@ namespace eval ::tcl::clock {
         "mars"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "apr\u00edl"\
+=======
+        "apríl"\
+>>>>>>> upstream/master
 =======
         "apríl"\
 >>>>>>> upstream/master

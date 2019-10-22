@@ -5,6 +5,7 @@ set TZData(:Asia/Anadyr) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441194596 43200 0 ANAT}
     {-1247572800 46800 0 ANAMMTT}
     {354884400 50400 1 ANAST}
@@ -87,6 +88,8 @@ set TZData(:Asia/Anadyr) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1441194596 43200 0 +12}
     {-1247572800 46800 0 +14}
     {354884400 50400 1 +14}
@@ -156,6 +159,9 @@ set TZData(:Asia/Anadyr) {
     {1301151600 43200 0 +12}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -53,6 +53,7 @@ static int notifierCount = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static const TCHAR classname[] = TEXT("TclNotifier");
 TCL_DECLARE_MUTEX(notifierMutex)
 =======
@@ -72,6 +73,11 @@ static CRITICAL_SECTION notifierMutex;
 >>>>>>> upstream/master
 =======
 static const TCHAR className[] = TEXT("TclNotifier");
+static int initialized = 0;
+static CRITICAL_SECTION notifierMutex;
+>>>>>>> upstream/master
+=======
+static const WCHAR className[] = L"TclNotifier";
 static int initialized = 0;
 static CRITICAL_SECTION notifierMutex;
 >>>>>>> upstream/master
@@ -106,7 +112,13 @@ Tcl_InitNotifier(void)
 	return tclNotifierHooks.initNotifierProc();
     } else {
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-	WNDCLASS class;
+
+	TclpMasterLock();
+	if (!initialized) {
+	    initialized = 1;
+	    InitializeCriticalSection(&notifierMutex);
+	}
+	TclpMasterUnlock();
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -126,6 +138,7 @@ Tcl_InitNotifier(void)
 	 * this module.
 	 */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	Tcl_MutexLock(&notifierMutex);
 =======
@@ -167,10 +180,29 @@ Tcl_InitNotifier(void)
 	    class.hCursor = NULL;
 
 	    if (!RegisterClass(&class)) {
+=======
+	EnterCriticalSection(&notifierMutex);
+	if (notifierCount == 0) {
+	    WNDCLASSW clazz;
+
+	    clazz.style = 0;
+	    clazz.cbClsExtra = 0;
+	    clazz.cbWndExtra = 0;
+	    clazz.hInstance = TclWinGetTclInstance();
+	    clazz.hbrBackground = NULL;
+	    clazz.lpszMenuName = NULL;
+	    clazz.lpszClassName = className;
+	    clazz.lpfnWndProc = NotifierProc;
+	    clazz.hIcon = NULL;
+	    clazz.hCursor = NULL;
+
+	    if (!RegisterClassW(&clazz)) {
+>>>>>>> upstream/master
 		Tcl_Panic("Unable to register TclNotifier window class");
 	    }
 	}
 	notifierCount++;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	Tcl_MutexUnlock(&notifierMutex);
@@ -227,6 +259,9 @@ Tcl_InitNotifier(void)
 	 * Register Notifier window class if this is the first thread to use
 	 * this module.
 	 */
+=======
+	LeaveCriticalSection(&notifierMutex);
+>>>>>>> upstream/master
 
 	EnterCriticalSection(&notifierMutex);
 	if (notifierCount == 0) {
@@ -256,7 +291,7 @@ Tcl_InitNotifier(void)
 
 	tsdPtr->hwnd = NULL;
 	tsdPtr->thread = GetCurrentThreadId();
-	tsdPtr->event = CreateEvent(NULL, TRUE /* manual */,
+	tsdPtr->event = CreateEventW(NULL, TRUE /* manual */,
 		FALSE /* !signaled */, NULL);
 
 	return tsdPtr;
@@ -329,6 +364,7 @@ Tcl_FinalizeNotifier(
 <<<<<<< HEAD
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_MutexLock(&notifierMutex);
 	notifierCount--;
 	if (notifierCount == 0) {
@@ -383,6 +419,16 @@ Tcl_FinalizeNotifier(
 	}
 	LeaveCriticalSection(&notifierMutex);
 >>>>>>> upstream/master
+=======
+	EnterCriticalSection(&notifierMutex);
+	if (notifierCount) {
+	    notifierCount--;
+	    if (notifierCount == 0) {
+		UnregisterClassW(className, TclWinGetTclInstance());
+	    }
+	}
+	LeaveCriticalSection(&notifierMutex);
+>>>>>>> upstream/master
     }
 }
 
@@ -431,7 +477,7 @@ Tcl_AlertNotifier(
 
 	    EnterCriticalSection(&tsdPtr->crit);
 	    if (!tsdPtr->pending) {
-		PostMessage(tsdPtr->hwnd, WM_WAKEUP, 0, 0);
+		PostMessageW(tsdPtr->hwnd, WM_WAKEUP, 0, 0);
 	    }
 	    tsdPtr->pending = 1;
 	    LeaveCriticalSection(&tsdPtr->crit);
@@ -547,6 +593,7 @@ Tcl_ServiceModeHook(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    tsdPtr->hwnd = CreateWindow(classname, classname,
 =======
 	    tsdPtr->hwnd = CreateWindow(className, className,
@@ -559,6 +606,9 @@ Tcl_ServiceModeHook(
 >>>>>>> upstream/master
 =======
 	    tsdPtr->hwnd = CreateWindow(className, className,
+>>>>>>> upstream/master
+=======
+	    tsdPtr->hwnd = CreateWindowW(className, className,
 >>>>>>> upstream/master
 		    WS_TILED, 0, 0, 0, 0, NULL, NULL, TclWinGetTclInstance(),
 		    NULL);
@@ -607,7 +657,7 @@ NotifierProc(
 	tsdPtr->pending = 0;
 	LeaveCriticalSection(&tsdPtr->crit);
     } else if (message != WM_TIMER) {
-	return DefWindowProc(hwnd, message, wParam, lParam);
+	return DefWindowProcW(hwnd, message, wParam, lParam);
     }
 
     /*
@@ -679,7 +729,7 @@ Tcl_WaitForEvent(
 	 * events currently sitting in the queue.
 	 */
 
-	if (!PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
+	if (!PeekMessageW(&msg, NULL, 0, 0, PM_NOREMOVE)) {
 	    /*
 	     * Wait for something to happen (a signal from another thread, a
 	     * message, or timeout) or loop servicing asynchronous procedure
@@ -701,12 +751,12 @@ Tcl_WaitForEvent(
 	 * Check to see if there are any messages to process.
 	 */
 
-	if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
+	if (PeekMessageW(&msg, NULL, 0, 0, PM_NOREMOVE)) {
 	    /*
 	     * Retrieve and dispatch the first message.
 	     */
 
-	    result = GetMessage(&msg, NULL, 0, 0);
+	    result = GetMessageW(&msg, NULL, 0, 0);
 	    if (result == 0) {
 		/*
 		 * We received a request to exit this thread (WM_QUIT), so
@@ -724,7 +774,7 @@ Tcl_WaitForEvent(
 		status = -1;
 	    } else {
 		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		DispatchMessageW(&msg);
 		status = 1;
 	    }
 	} else {

@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* get the lower unsigned long long of an mp_int, platform dependent */
@@ -19,11 +23,16 @@ Tcl_WideUInt mp_get_long_long(const mp_int *a)
    int i;
    Tcl_WideUInt res;
 
+<<<<<<< HEAD
    if (a->used == 0) {
+=======
+   if (IS_ZERO(a)) {
+>>>>>>> upstream/master
       return 0;
    }
 
    /* get number of digits of the lsb we have to read */
+<<<<<<< HEAD
    i = MIN(a->used, ((((int)sizeof(Tcl_WideUInt) * CHAR_BIT) + DIGIT_BIT - 1) / DIGIT_BIT)) - 1;
 
    /* get most significant digit of result */
@@ -32,8 +41,25 @@ Tcl_WideUInt mp_get_long_long(const mp_int *a)
 #if DIGIT_BIT < 64
    while (--i >= 0) {
       res = (res << DIGIT_BIT) | DIGIT(a, i);
+=======
+   i = MIN(a->used, (((CHAR_BIT * (int)sizeof(Tcl_WideUInt)) + DIGIT_BIT - 1) / DIGIT_BIT)) - 1;
+
+   /* get most significant digit of result */
+   res = (Tcl_WideUInt)a->dp[i];
+
+#if DIGIT_BIT < 64
+   while (--i >= 0) {
+      res = (res << DIGIT_BIT) | (Tcl_WideUInt)a->dp[i];
+>>>>>>> upstream/master
    }
 #endif
    return res;
 }
 #endif
+<<<<<<< HEAD
+=======
+
+/* ref:         $Format:%D$ */
+/* git commit:  $Format:%H$ */
+/* commit time: $Format:%ai$ */
+>>>>>>> upstream/master

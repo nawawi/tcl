@@ -46,8 +46,13 @@ BOOL APIENTRY		DllMain(HINSTANCE hInst, DWORD reason,
  */
 
 typedef struct MountPointMap {
+<<<<<<< HEAD
     TCHAR *volumeName;		/* Native wide string volume name. */
     TCHAR driveLetter;		/* Drive letter corresponding to the volume
+=======
+    WCHAR *volumeName;		/* Native wide string volume name. */
+    WCHAR driveLetter;		/* Drive letter corresponding to the volume
+>>>>>>> upstream/master
 				 * name. */
     struct MountPointMap *nextPtr;
 				/* Pointer to next structure in list, or
@@ -289,8 +294,13 @@ TclWinDriveLetterForVolMountPoint(
     const TCHAR *mountPoint)
 {
     MountPointMap *dlIter, *dlPtr2;
+<<<<<<< HEAD
     TCHAR Target[55];		/* Target of mount at mount point */
     TCHAR drive[4] = TEXT("A:\\");
+=======
+    WCHAR Target[55];		/* Target of mount at mount point */
+    WCHAR drive[4] = L"A:\\";
+>>>>>>> upstream/master
 
     /*
      * Detect the volume mounted there. Unfortunately, there is no simple way
@@ -308,13 +318,17 @@ TclWinDriveLetterForVolMountPoint(
 	     * mount points on the fly.
 	     */
 
+<<<<<<< HEAD
 	    drive[0] = (TCHAR) dlIter->driveLetter;
+=======
+	    drive[0] = (WCHAR) dlIter->driveLetter;
+>>>>>>> upstream/master
 
 	    /*
 	     * Try to read the volume mount point and see where it points.
 	     */
 
-	    if (GetVolumeNameForVolumeMountPoint(drive,
+	    if (GetVolumeNameForVolumeMountPointW(drive,
 		    Target, 55) != 0) {
 		if (_tcscmp(dlIter->volumeName, Target) == 0) {
 		    /*
@@ -368,12 +382,12 @@ TclWinDriveLetterForVolMountPoint(
      * We couldn't find it, so we must iterate over the letters.
      */
 
-    for (drive[0] = L'A'; drive[0] <= L'Z'; drive[0]++) {
+    for (drive[0] = 'A'; drive[0] <= 'Z'; drive[0]++) {
 	/*
 	 * Try to read the volume mount point and see where it points.
 	 */
 
-	if (GetVolumeNameForVolumeMountPoint(drive,
+	if (GetVolumeNameForVolumeMountPointW(drive,
 		Target, 55) != 0) {
 	    int alreadyStored = 0;
 
@@ -421,6 +435,7 @@ TclWinDriveLetterForVolMountPoint(
 }
 
 /*
+<<<<<<< HEAD
  *---------------------------------------------------------------------------
  *
  * Tcl_WinUtfToTChar, Tcl_WinTCharToUtf --
@@ -587,6 +602,8 @@ Tcl_WinTCharToUtf(
 }
 
 /*
+=======
+>>>>>>> upstream/master
  *------------------------------------------------------------------------
  *
  * TclWinCPUID --

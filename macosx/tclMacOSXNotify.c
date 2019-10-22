@@ -290,7 +290,11 @@ typedef struct FileHandler {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct FileHandlerEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -317,7 +321,11 @@ typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct SelectMasks {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -481,6 +489,7 @@ static CFStringRef tclEventsOnlyRunLoopMode = NULL;
 
 static void		StartNotifierThread(void);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		NotifierThreadProc(ClientData clientData)
 			    __attribute__ ((__noreturn__));
 =======
@@ -594,6 +603,8 @@ static CFStringRef tclEventsOnlyRunLoopMode = NULL;
  */
 
 static void		StartNotifierThread(void);
+=======
+>>>>>>> upstream/master
 static TCL_NORETURN void NotifierThreadProc(ClientData clientData);
 static int		FileHandlerEventProc(Tcl_Event *evPtr, int flags);
 static void		TimerWakeUp(CFRunLoopTimerRef timer, void *info);
@@ -1967,7 +1978,11 @@ TclUnixWaitForFile(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void
+=======
+static TCL_NORETURN void
+>>>>>>> upstream/master
 =======
 static TCL_NORETURN void
 >>>>>>> upstream/master

@@ -46,7 +46,11 @@ Tcl_SetPanicProc(
     TCL_NORETURN1 Tcl_PanicProc *proc)
 {
     panicProc = proc;
+<<<<<<< HEAD
     TclInitSubsystems();
+=======
+    Tcl_InitSubsystems();
+>>>>>>> upstream/master
 }
 
 /*

@@ -34,6 +34,10 @@ typedef struct PkgAvail {
 				 * Tcl_Preserve and Tcl_Release. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    char *pkgIndex;		/* Full file name of pkgIndex file */
+>>>>>>> upstream/master
 =======
     char *pkgIndex;		/* Full file name of pkgIndex file */
 >>>>>>> upstream/master
@@ -45,16 +49,30 @@ typedef struct PkgAvail {
 } PkgAvail;
 
 typedef struct PkgName {
+<<<<<<< HEAD
     struct PkgName *nextPtr;	/* Next in list of package names being initialized. */
+=======
+    struct PkgName *nextPtr;	/* Next in list of package names being
+				 * initialized. */
+>>>>>>> upstream/master
     char name[1];
 } PkgName;
 
 typedef struct PkgFiles {
+<<<<<<< HEAD
     PkgName *names;		/* Package names being initialized. Must be first field*/
     Tcl_HashTable table;	/* Table which contains files for each package */
 } PkgFiles;
 
 
+=======
+    PkgName *names;		/* Package names being initialized. Must be
+				 * first field. */
+    Tcl_HashTable table;	/* Table which contains files for each
+				 * package. */
+} PkgFiles;
+
+>>>>>>> upstream/master
 /*
  * For each package that is known in any way to an interpreter, there is one
  * record of the following type. These records are stored in the
@@ -63,17 +81,25 @@ typedef struct PkgFiles {
  */
 
 typedef struct {
+<<<<<<< HEAD
     char *version;		/* Version that has been supplied in this
 				 * interpreter via "package provide"
 				 * (malloc'ed). NULL means the package doesn't
 				 * exist in this interpreter yet. */
+=======
+    Tcl_Obj *version;
+>>>>>>> upstream/master
     PkgAvail *availPtr;		/* First in list of all available versions of
 				 * this package. */
     const void *clientData;	/* Client data. */
 } Package;
 
 typedef struct Require {
+<<<<<<< HEAD
     void * clientDataPtr;
+=======
+    void *clientDataPtr;
+>>>>>>> upstream/master
     const char *name;
     Package *pkgPtr;
     char *versionToProvide;
@@ -124,7 +150,11 @@ static int		TclNRPackageObjCmdCleanup(ClientData data[], Tcl_Interp *interp, int
     do { \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unsigned local__len = (unsigned) (strlen(s) + 1); \
+=======
+	size_t local__len = strlen(s) + 1; \
+>>>>>>> upstream/master
 =======
 	size_t local__len = strlen(s) + 1; \
 >>>>>>> upstream/master
@@ -181,12 +211,13 @@ Tcl_PkgProvideEx(
 
     pkgPtr = FindPackage(interp, name);
     if (pkgPtr->version == NULL) {
-	DupString(pkgPtr->version, version);
+	pkgPtr->version = Tcl_NewStringObj(version, -1);
+	Tcl_IncrRefCount(pkgPtr->version);
 	pkgPtr->clientData = clientData;
 	return TCL_OK;
     }
 
-    if (CheckVersionAndConvert(interp, pkgPtr->version, &pvi,
+    if (CheckVersionAndConvert(interp, Tcl_GetString(pkgPtr->version), &pvi,
 	    NULL) != TCL_OK) {
 	return TCL_ERROR;
     } else if (CheckVersionAndConvert(interp, version, &vi, NULL) != TCL_OK) {
@@ -206,7 +237,11 @@ Tcl_PkgProvideEx(
     }
     Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 	    "conflicting versions provided for package \"%s\": %s, then %s",
+<<<<<<< HEAD
 	    name, pkgPtr->version, version));
+=======
+	    name, Tcl_GetString(pkgPtr->version), version));
+>>>>>>> upstream/master
     Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "VERSIONCONFLICT", NULL);
     return TCL_ERROR;
 }
@@ -240,6 +275,7 @@ Tcl_PkgProvideEx(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #undef Tcl_PkgRequire
 const char *
 Tcl_PkgRequire(
@@ -260,6 +296,12 @@ Tcl_PkgRequireEx(
 =======
 static void PkgFilesCleanupProc(ClientData clientData,
     			    Tcl_Interp *interp)
+=======
+static void
+PkgFilesCleanupProc(
+    ClientData clientData,
+    Tcl_Interp *interp)
+>>>>>>> upstream/master
 {
     PkgFiles *pkgFiles = (PkgFiles *) clientData;
     Tcl_HashSearch search;
@@ -267,6 +309,7 @@ static void PkgFilesCleanupProc(ClientData clientData,
 
     while (pkgFiles->names) {
 	PkgName *name = pkgFiles->names;
+<<<<<<< HEAD
 	pkgFiles->names = name->nextPtr;
 	ckfree(name);
     }
@@ -290,12 +333,19 @@ static void PkgFilesCleanupProc(ClientData clientData,
 
     while (pkgFiles->names) {
 	PkgName *name = pkgFiles->names;
+=======
+
+>>>>>>> upstream/master
 	pkgFiles->names = name->nextPtr;
 	Tcl_Free(name);
     }
     entry = Tcl_FirstHashEntry(&pkgFiles->table, &search);
     while (entry) {
 	Tcl_Obj *obj = (Tcl_Obj *)Tcl_GetHashValue(entry);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/master
 	Tcl_DecrRefCount(obj);
 	entry = Tcl_NextHashEntry(&search);
     }
@@ -304,11 +354,24 @@ static void PkgFilesCleanupProc(ClientData clientData,
     return;
 }
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 void *TclInitPkgFiles(Tcl_Interp *interp)
 {
     /* If assocdata "tclPkgFiles" doesn't exist yet, create it */
     PkgFiles *pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+=======
+void *
+TclInitPkgFiles(
+    Tcl_Interp *interp)
+{
+    /*
+     * If assocdata "tclPkgFiles" doesn't exist yet, create it.
+     */
+
+    PkgFiles *pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+
+>>>>>>> upstream/master
     if (!pkgFiles) {
 	pkgFiles = Tcl_Alloc(sizeof(PkgFiles));
 	pkgFiles->names = NULL;
@@ -318,6 +381,7 @@ void *TclInitPkgFiles(Tcl_Interp *interp)
     return pkgFiles;
 }
 
+<<<<<<< HEAD
 void TclPkgFileSeen(Tcl_Interp *interp, const char *fileName)
 {
     PkgFiles *pkgFiles = (PkgFiles *) Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
@@ -329,6 +393,24 @@ void TclPkgFileSeen(Tcl_Interp *interp, const char *fileName)
 	Tcl_Obj *list;
 
 	if (new) {
+=======
+void
+TclPkgFileSeen(
+    Tcl_Interp *interp,
+    const char *fileName)
+{
+    PkgFiles *pkgFiles = (PkgFiles *)
+	    Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+
+    if (pkgFiles && pkgFiles->names) {
+	const char *name = pkgFiles->names->name;
+	Tcl_HashTable *table = &pkgFiles->table;
+	int isNew;
+	Tcl_HashEntry *entry = Tcl_CreateHashEntry(table, name, &isNew);
+	Tcl_Obj *list;
+
+	if (isNew) {
+>>>>>>> upstream/master
 	    list = Tcl_NewObj();
 	    Tcl_SetHashValue(entry, list);
 	    Tcl_IncrRefCount(list);
@@ -412,12 +494,21 @@ Tcl_PkgRequireEx(
 	 *
 	 * Second, how does this work? If we reach this point, then the global
 	 * variable tclEmptyStringRep has the value NULL. Compare that with
+<<<<<<< HEAD
 	 * the definition of tclEmptyStringRep near the top of this file.
 	 * It clearly should not have the value NULL; it
 	 * should point to the char tclEmptyString. If we see it having the
 	 * value NULL, then somehow we are seeing a Tcl library that isn't
 	 * completely initialized, and that's an indicator for the error
 	 * condition described above. (Further explanation is welcome.)
+=======
+	 * the definition of tclEmptyStringRep near the top of this file.  It
+	 * clearly should not have the value NULL; it should point to the char
+	 * tclEmptyString. If we see it having the value NULL, then somehow we
+	 * are seeing a Tcl library that isn't completely initialized, and
+	 * that's an indicator for the error condition described above.
+	 * (Further explanation is welcome.)
+>>>>>>> upstream/master
 	 *
 	 * Third, so what do we do about it? This situation indicates the
 	 * package we just loaded wasn't properly compiled to be stub-enabled,
@@ -447,7 +538,11 @@ Tcl_PkgRequireEx(
 
     if (version == NULL) {
 	if (Tcl_PkgRequireProc(interp, name, 0, NULL, clientDataPtr) == TCL_OK) {
+<<<<<<< HEAD
 	    result = Tcl_GetStringResult(interp);
+=======
+	    result = Tcl_GetString(Tcl_GetObjResult(interp));
+>>>>>>> upstream/master
 	    Tcl_ResetResult(interp);
 	}
     } else {
@@ -461,7 +556,11 @@ Tcl_PkgRequireEx(
 	}
 	Tcl_IncrRefCount(ov);
 	if (Tcl_PkgRequireProc(interp, name, 1, &ov, clientDataPtr) == TCL_OK) {
+<<<<<<< HEAD
 	    result = Tcl_GetStringResult(interp);
+=======
+	    result = Tcl_GetString(Tcl_GetObjResult(interp));
+>>>>>>> upstream/master
 	    Tcl_ResetResult(interp);
 	}
 	TclDecrRefCount(ov);
@@ -481,23 +580,44 @@ Tcl_PkgRequireProc(
     void *clientDataPtr)
 {
     RequireProcArgs args;
+<<<<<<< HEAD
     args.name = name;
     args.clientDataPtr = clientDataPtr;
     return Tcl_NRCallObjProc(interp, TclNRPkgRequireProc, (void *)&args, reqc, reqv);
 }
 
+=======
+
+    args.name = name;
+    args.clientDataPtr = clientDataPtr;
+    return Tcl_NRCallObjProc(interp,
+	    TclNRPkgRequireProc, (void *) &args, reqc, reqv);
+}
+
+>>>>>>> upstream/master
 static int
 TclNRPkgRequireProc(
     ClientData clientData,
     Tcl_Interp *interp,
     int reqc,
+<<<<<<< HEAD
     Tcl_Obj *const reqv[]) {
     RequireProcArgs *args = clientData;
     Tcl_NRAddCallback(interp, PkgRequireCore, (void *)args->name, INT2PTR(reqc), (void *)reqv, args->clientDataPtr);
+=======
+    Tcl_Obj *const reqv[])
+{
+    RequireProcArgs *args = clientData;
+
+    Tcl_NRAddCallback(interp,
+	    PkgRequireCore, (void *) args->name, INT2PTR(reqc), (void *) reqv,
+	    args->clientDataPtr);
+>>>>>>> upstream/master
     return TCL_OK;
 }
 
 static int
+<<<<<<< HEAD
 PkgRequireCore(ClientData data[], Tcl_Interp *interp, int result)
 {
     const char *name = data[0];
@@ -523,12 +643,51 @@ PkgRequireCore(ClientData data[], Tcl_Interp *interp, int result)
 
 static int
 PkgRequireCoreStep1(ClientData data[], Tcl_Interp *interp, int result) {
+=======
+PkgRequireCore(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    const char *name = data[0];
+    int reqc = PTR2INT(data[1]);
+    Tcl_Obj *const *reqv = data[2];
+    int code = CheckAllRequirements(interp, reqc, reqv);
+    Require *reqPtr;
+
+    if (code != TCL_OK) {
+	return code;
+    }
+    reqPtr = Tcl_Alloc(sizeof(Require));
+    Tcl_NRAddCallback(interp, PkgRequireCoreCleanup, reqPtr, NULL, NULL, NULL);
+    reqPtr->clientDataPtr = data[3];
+    reqPtr->name = name;
+    reqPtr->pkgPtr = FindPackage(interp, name);
+    if (reqPtr->pkgPtr->version == NULL) {
+	Tcl_NRAddCallback(interp,
+		SelectPackage, reqPtr, INT2PTR(reqc), (void *) reqv,
+		PkgRequireCoreStep1);
+    } else {
+	Tcl_NRAddCallback(interp,
+		PkgRequireCoreFinal, reqPtr, INT2PTR(reqc), (void *) reqv,NULL);
+    }
+    return TCL_OK;
+}
+
+static int
+PkgRequireCoreStep1(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+>>>>>>> upstream/master
     Tcl_DString command;
     char *script;
     Require *reqPtr = data[0];
     int reqc = PTR2INT(data[1]);
     Tcl_Obj **const reqv = data[2];
     const char *name = reqPtr->name /* Name of desired package. */;
+<<<<<<< HEAD
     if (reqPtr->pkgPtr->version == NULL) {
 	    /*
 	     * The package is not in the database. If there is a "package unknown"
@@ -625,10 +784,57 @@ PkgRequireCoreFinal(ClientData data[], Tcl_Interp *interp, int result) {
 	*ptr = reqPtr->pkgPtr->clientData;
     }
     Tcl_SetObjResult(interp, Tcl_NewStringObj(reqPtr->pkgPtr->version, -1));
+=======
+
+    /*
+     * If we've got the package in the DB already, go on to actually loading
+     * it.
+     */
+
+    if (reqPtr->pkgPtr->version != NULL) {
+	Tcl_NRAddCallback(interp,
+		PkgRequireCoreFinal, reqPtr, INT2PTR(reqc), (void *)reqv, NULL);
+	return TCL_OK;
+    }
+
+    /*
+     * The package is not in the database. If there is a "package unknown"
+     * command, invoke it.
+     */
+
+    script = ((Interp *) interp)->packageUnknown;
+    if (script == NULL) {
+	/*
+	 * No package unknown script. Move on to finalizing.
+	 */
+
+	Tcl_NRAddCallback(interp,
+		PkgRequireCoreFinal, reqPtr, INT2PTR(reqc), (void *)reqv, NULL);
+	return TCL_OK;
+    }
+
+    /*
+     * Invoke the "package unknown" script synchronously.
+     */
+
+    Tcl_DStringInit(&command);
+    Tcl_DStringAppend(&command, script, -1);
+    Tcl_DStringAppendElement(&command, name);
+    AddRequirementsToDString(&command, reqc, reqv);
+
+    Tcl_NRAddCallback(interp,
+	    PkgRequireCoreStep2, reqPtr, INT2PTR(reqc), (void *) reqv, NULL);
+    Tcl_NREvalObj(interp,
+	    Tcl_NewStringObj(Tcl_DStringValue(&command),
+		    Tcl_DStringLength(&command)),
+	    TCL_EVAL_GLOBAL);
+    Tcl_DStringFree(&command);
+>>>>>>> upstream/master
     return TCL_OK;
 }
 
 static int
+<<<<<<< HEAD
 PkgRequireCoreCleanup(ClientData data[], Tcl_Interp *interp, int result) {
     Tcl_Free(data[0]);
     return result;
@@ -660,10 +866,65 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 		name, (char *) pkgPtr->clientData, name));
 	AddRequirementsToResult(interp, reqc, reqv);
 	Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "CIRCULARITY", NULL);
+=======
+PkgRequireCoreStep2(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Require *reqPtr = data[0];
+    int reqc = PTR2INT(data[1]);
+    Tcl_Obj **const reqv = data[2];
+    const char *name = reqPtr->name; /* Name of desired package. */
+
+    if ((result != TCL_OK) && (result != TCL_ERROR)) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"bad return code: %d", result));
+	Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "BADRESULT", NULL);
+	result = TCL_ERROR;
+    }
+    if (result == TCL_ERROR) {
+	Tcl_AddErrorInfo(interp,
+		"\n    (\"package unknown\" script)");
+	return result;
+    }
+    Tcl_ResetResult(interp);
+
+    /*
+     * pkgPtr may now be invalid, so refresh it.
+     */
+
+    reqPtr->pkgPtr = FindPackage(interp, name);
+    Tcl_NRAddCallback(interp,
+	    SelectPackage, reqPtr, INT2PTR(reqc), (void *) reqv,
+	    PkgRequireCoreFinal);
+    return TCL_OK;
+}
+
+static int
+PkgRequireCoreFinal(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Require *reqPtr = data[0];
+    int reqc = PTR2INT(data[1]), satisfies;
+    Tcl_Obj **const reqv = data[2];
+    char *pkgVersionI;
+    void *clientDataPtr = reqPtr->clientDataPtr;
+    const char *name = reqPtr->name; /* Name of desired package. */
+
+    if (reqPtr->pkgPtr->version == NULL) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"can't find package %s", name));
+	Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "UNFOUND", NULL);
+	AddRequirementsToResult(interp, reqc, reqv);
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
 
     /*
+<<<<<<< HEAD
      * The package isn't yet present. Search the list of available
      * versions and invoke the script for the best available version. We
      * are actually locating the best, and the best stable version. One of
@@ -700,8 +961,98 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 
 	if (bestPtr != NULL) {
 	    int res = CompareVersions(availVersion, bestVersion, NULL);
+=======
+     * Ensure that the provided version meets the current requirements.
+     */
 
+    if (reqc != 0) {
+	CheckVersionAndConvert(interp, Tcl_GetString(reqPtr->pkgPtr->version),
+		&pkgVersionI, NULL);
+	satisfies = SomeRequirementSatisfied(pkgVersionI, reqc, reqv);
+
+	Tcl_Free(pkgVersionI);
+
+	if (!satisfies) {
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "version conflict for package \"%s\": have %s, need",
+		    name, Tcl_GetString(reqPtr->pkgPtr->version)));
+	    Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "VERSIONCONFLICT",
+		    NULL);
+	    AddRequirementsToResult(interp, reqc, reqv);
+	    return TCL_ERROR;
+	}
+    }
+
+    if (clientDataPtr) {
+	const void **ptr = (const void **) clientDataPtr;
+
+	*ptr = reqPtr->pkgPtr->clientData;
+    }
+    Tcl_SetObjResult(interp, reqPtr->pkgPtr->version);
+    return TCL_OK;
+}
+
+static int
+PkgRequireCoreCleanup(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Tcl_Free(data[0]);
+    return result;
+}
+
+static int
+SelectPackage(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    PkgAvail *availPtr, *bestPtr, *bestStablePtr;
+    char *availVersion, *bestVersion, *bestStableVersion;
+				/* Internal rep. of versions */
+    int availStable, satisfies;
+    Require *reqPtr = data[0];
+    int reqc = PTR2INT(data[1]);
+    Tcl_Obj **const reqv = data[2];
+    const char *name = reqPtr->name;
+    Package *pkgPtr = reqPtr->pkgPtr;
+    Interp *iPtr = (Interp *) interp;
+
+    /*
+     * Check whether we're already attempting to load some version of this
+     * package (circular dependency detection).
+     */
+
+    if (pkgPtr->clientData != NULL) {
+	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		"circular package dependency:"
+		" attempt to provide %s %s requires %s",
+		name, (char *) pkgPtr->clientData, name));
+	AddRequirementsToResult(interp, reqc, reqv);
+	Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "CIRCULARITY", NULL);
+	return TCL_ERROR;
+    }
+
+    /*
+     * The package isn't yet present. Search the list of available versions
+     * and invoke the script for the best available version. We are actually
+     * locating the best, and the best stable version. One of them is then
+     * chosen based on the selection mode.
+     */
+
+    bestPtr = NULL;
+    bestStablePtr = NULL;
+    bestVersion = NULL;
+    bestStableVersion = NULL;
+>>>>>>> upstream/master
+
+    for (availPtr = pkgPtr->availPtr; availPtr != NULL;
+	    availPtr = availPtr->nextPtr) {
+	if (CheckVersionAndConvert(interp, availPtr->version,
+		&availVersion, &availStable) != TCL_OK) {
 	    /*
+<<<<<<< HEAD
 	     * Note: Used internal reps in the comparison!
 	     */
 
@@ -756,6 +1107,14 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 =======
 	    continue;
 >>>>>>> upstream/master
+=======
+	     * The provided version number has invalid syntax. This should not
+	     * happen. This should have been caught by the 'package ifneeded'
+	     * registering the package.
+	     */
+
+	    continue;
+>>>>>>> upstream/master
 	}
 
 	if (bestStablePtr != NULL) {
@@ -764,23 +1123,32 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 	/*
-	 * Now choose a version among the two best. For 'latest' we simply
-	 * take (actually keep) the best. For 'stable' we take the best
-	 * stable, if there is any, or the best if there is nothing stable.
+	 * Check satisfaction of requirements before considering the current
+	 * version further.
 	 */
 
-	if ((iPtr->packagePrefer == PKG_PREFER_STABLE)
-		&& (bestStablePtr != NULL)) {
-	    bestPtr = bestStablePtr;
+	if (reqc > 0) {
+	    satisfies = SomeRequirementSatisfied(availVersion, reqc, reqv);
+	    if (!satisfies) {
+		Tcl_Free(availVersion);
+		availVersion = NULL;
+		continue;
+	    }
 	}
 
 	if (bestPtr != NULL) {
+<<<<<<< HEAD
 =======
+>>>>>>> upstream/master
+=======
+	    int res = CompareVersions(availVersion, bestVersion, NULL);
+
 >>>>>>> upstream/master
 	    /*
 	     * Note: Used internal reps in the comparison!
 	     */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    char *versionToProvide = bestPtr->version;
 <<<<<<< HEAD
@@ -869,14 +1237,42 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 		TclDecrRefCount(codePtr);
 		code = TCL_ERROR;
 	    }
+=======
+	    if (res > 0) {
+		/*
+		 * The version of the package sought is better than the
+		 * currently selected version.
+		 */
+>>>>>>> upstream/master
 
-	    if (code == TCL_ERROR) {
-		Tcl_AppendObjToErrorInfo(interp, Tcl_ObjPrintf(
-			"\n    (\"package ifneeded %s %s\" script)",
-			name, versionToProvide));
+		Tcl_Free(bestVersion);
+		bestVersion = NULL;
+		goto newbest;
 	    }
-	    Tcl_Release(versionToProvide);
+	} else {
+	newbest:
+	    /*
+	     * We have found a version which is better than our max.
+	     */
 
+	    bestPtr = availPtr;
+	    CheckVersionAndConvert(interp, bestPtr->version, &bestVersion, NULL);
+	}
+
+	if (!availStable) {
+	    Tcl_Free(availVersion);
+	    availVersion = NULL;
+	    continue;
+	}
+
+	if (bestStablePtr != NULL) {
+	    int res = CompareVersions(availVersion, bestStableVersion, NULL);
+
+	    /*
+	     * Note: Used internal reps in the comparison!
+	     */
+
+<<<<<<< HEAD
 	    if (code != TCL_OK) {
 =======
 	    if (res > 0) {
@@ -885,12 +1281,21 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 		 * This stable version of the package sought is better
 		 * than the currently selected stable version.
 		 */
+=======
+	    if (res > 0) {
+		/*
+		 * This stable version of the package sought is better than
+		 * the currently selected stable version.
+		 */
+
+>>>>>>> upstream/master
 		Tcl_Free(bestStableVersion);
 		bestStableVersion = NULL;
 		goto newstable;
 	    }
 	} else {
 	newstable:
+<<<<<<< HEAD
 	    /* We have found a stable version which is better than our max stable. */
 	    bestStablePtr = availPtr;
 	    CheckVersionAndConvert(interp, bestStablePtr->version, &bestStableVersion, NULL);
@@ -904,6 +1309,26 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
      * Clean up memorized internal reps, if any.
      */
 
+=======
+	    /*
+	     * We have found a stable version which is better than our max
+	     * stable.
+	     */
+
+	    bestStablePtr = availPtr;
+	    CheckVersionAndConvert(interp, bestStablePtr->version,
+		    &bestStableVersion, NULL);
+	}
+
+	Tcl_Free(availVersion);
+	availVersion = NULL;
+    } /* end for */
+
+    /*
+     * Clean up memorized internal reps, if any.
+     */
+
+>>>>>>> upstream/master
     if (bestVersion != NULL) {
 	Tcl_Free(bestVersion);
 	bestVersion = NULL;
@@ -915,9 +1340,15 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
     }
 
     /*
+<<<<<<< HEAD
      * Now choose a version among the two best. For 'latest' we simply
      * take (actually keep) the best. For 'stable' we take the best
      * stable, if there is any, or the best if there is nothing stable.
+=======
+     * Now choose a version among the two best. For 'latest' we simply take
+     * (actually keep) the best. For 'stable' we take the best stable, if
+     * there is any, or the best if there is nothing stable.
+>>>>>>> upstream/master
      */
 
     if ((iPtr->packagePrefer == PKG_PREFER_STABLE)
@@ -926,11 +1357,17 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
     }
 
     if (bestPtr == NULL) {
+<<<<<<< HEAD
 	Tcl_NRAddCallback(interp, data[3], reqPtr, INT2PTR(reqc), (void *)reqv, NULL);
+=======
+	Tcl_NRAddCallback(interp,
+		data[3], reqPtr, INT2PTR(reqc), (void *)reqv, NULL);
+>>>>>>> upstream/master
     } else {
 	/*
 	 * We found an ifneeded script for the package. Be careful while
 	 * executing it: this could cause reentrancy, so (a) protect the
+<<<<<<< HEAD
 	 * script itself from deletion and (b) don't assume that bestPtr
 	 * will still exist when the script completes.
 	 */
@@ -949,6 +1386,26 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 =======
 	pkgName = Tcl_Alloc(sizeof(PkgName) + strlen(name));
 >>>>>>> upstream/master
+=======
+	 * script itself from deletion and (b) don't assume that bestPtr will
+	 * still exist when the script completes.
+	 */
+
+	char *versionToProvide = bestPtr->version;
+	PkgFiles *pkgFiles;
+	PkgName *pkgName;
+
+	Tcl_Preserve(versionToProvide);
+	pkgPtr->clientData = versionToProvide;
+
+	pkgFiles = TclInitPkgFiles(interp);
+
+	/*
+	 * Push "ifneeded" package name in "tclPkgFiles" assocdata.
+	 */
+
+	pkgName = Tcl_Alloc(sizeof(PkgName) + strlen(name));
+>>>>>>> upstream/master
 	pkgName->nextPtr = pkgFiles->names;
 	strcpy(pkgName->name, name);
 	pkgFiles->names = pkgName;
@@ -956,20 +1413,37 @@ SelectPackage(ClientData data[], Tcl_Interp *interp, int result) {
 	    TclPkgFileSeen(interp, bestPtr->pkgIndex);
 	}
 	reqPtr->versionToProvide = versionToProvide;
+<<<<<<< HEAD
 	Tcl_NRAddCallback(interp, SelectPackageFinal, reqPtr, INT2PTR(reqc), (void *)reqv, data[3]);
 	Tcl_NREvalObj(interp, Tcl_NewStringObj(bestPtr->script, -1), TCL_EVAL_GLOBAL);
+=======
+	Tcl_NRAddCallback(interp,
+		SelectPackageFinal, reqPtr, INT2PTR(reqc), (void *)reqv,
+		data[3]);
+	Tcl_NREvalObj(interp, Tcl_NewStringObj(bestPtr->script, -1),
+		TCL_EVAL_GLOBAL);
+>>>>>>> upstream/master
     }
     return TCL_OK;
 }
 
 static int
+<<<<<<< HEAD
 SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
+=======
+SelectPackageFinal(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+>>>>>>> upstream/master
     Require *reqPtr = data[0];
     int reqc = PTR2INT(data[1]);
     Tcl_Obj **const reqv = data[2];
     const char *name = reqPtr->name;
     char *versionToProvide = reqPtr->versionToProvide;
 
+<<<<<<< HEAD
     /* Pop the "ifneeded" package name from "tclPkgFiles" assocdata*/
     PkgFiles *pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
     PkgName *pkgName = pkgFiles->names;
@@ -992,6 +1466,33 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
 
 	    if (CheckVersionAndConvert(interp, reqPtr->pkgPtr->version, &pvi,
 		    NULL) != TCL_OK) {
+=======
+    /*
+     * Pop the "ifneeded" package name from "tclPkgFiles" assocdata
+     */
+
+    PkgFiles *pkgFiles = Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+    PkgName *pkgName = pkgFiles->names;
+    pkgFiles->names = pkgName->nextPtr;
+    Tcl_Free(pkgName);
+
+    reqPtr->pkgPtr = FindPackage(interp, name);
+    if (result == TCL_OK) {
+	Tcl_ResetResult(interp);
+	if (reqPtr->pkgPtr->version == NULL) {
+	    result = TCL_ERROR;
+	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+		    "attempt to provide package %s %s failed:"
+		    " no version of package %s provided",
+		    name, versionToProvide, name));
+	    Tcl_SetErrorCode(interp, "TCL", "PACKAGE", "UNPROVIDED",
+		    NULL);
+	} else {
+	    char *pvi, *vi;
+
+	    if (TCL_OK != CheckVersionAndConvert(interp,
+		    Tcl_GetString(reqPtr->pkgPtr->version), &pvi, NULL)) {
+>>>>>>> upstream/master
 		result = TCL_ERROR;
 	    } else if (CheckVersionAndConvert(interp,
 		    versionToProvide, &vi, NULL) != TCL_OK) {
@@ -1008,7 +1509,11 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
 			    "attempt to provide package %s %s failed:"
 			    " package %s %s provided instead",
 			    name, versionToProvide,
+<<<<<<< HEAD
 			    name, reqPtr->pkgPtr->version));
+=======
+			    name, Tcl_GetString(reqPtr->pkgPtr->version)));
+>>>>>>> upstream/master
 		    Tcl_SetErrorCode(interp, "TCL", "PACKAGE",
 			    "WRONGPROVIDE", NULL);
 		}
@@ -1035,6 +1540,7 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
 
     if (result != TCL_OK) {
 	/*
+<<<<<<< HEAD
 	 * Take a non-TCL_OK code from the script as an indication the
 	 * package wasn't loaded properly, so the package system
 	 * should not remember an improper load.
@@ -1047,13 +1553,31 @@ SelectPackageFinal(ClientData data[], Tcl_Interp *interp, int result) {
 
 	if (reqPtr->pkgPtr->version != NULL) {
 	    Tcl_Free(reqPtr->pkgPtr->version);
+=======
+	 * Take a non-TCL_OK code from the script as an indication the package
+	 * wasn't loaded properly, so the package system should not remember
+	 * an improper load.
+	 *
+	 * This is consistent with our returning NULL. If we're not willing to
+	 * tell our caller we got a particular version, we shouldn't store
+	 * that version for telling future callers either.
+	 */
+
+	if (reqPtr->pkgPtr->version != NULL) {
+	    Tcl_DecrRefCount(reqPtr->pkgPtr->version);
+>>>>>>> upstream/master
 	    reqPtr->pkgPtr->version = NULL;
 	}
 	reqPtr->pkgPtr->clientData = NULL;
 	return result;
     }
 
+<<<<<<< HEAD
     Tcl_NRAddCallback(interp, data[3], reqPtr, INT2PTR(reqc), (void *)reqv, NULL);
+=======
+    Tcl_NRAddCallback(interp,
+	    data[3], reqPtr, INT2PTR(reqc), (void *) reqv, NULL);
+>>>>>>> upstream/master
     return TCL_OK;
 }
 
@@ -1181,6 +1705,7 @@ TclNRPackageObjCmd(
     static const char *const pkgOptions[] = {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"forget",  "ifneeded", "names",   "prefer",   "present",
 	"provide", "require",  "unknown", "vcompare", "versions",
 	"vsatisfies", NULL
@@ -1189,6 +1714,16 @@ TclNRPackageObjCmd(
 	PKG_FORGET,  PKG_IFNEEDED, PKG_NAMES,   PKG_PREFER,   PKG_PRESENT,
 	PKG_PROVIDE, PKG_REQUIRE,  PKG_UNKNOWN, PKG_VCOMPARE, PKG_VERSIONS,
 	PKG_VSATISFIES
+=======
+	"files",  "forget",  "ifneeded", "names",   "prefer",
+	"present", "provide", "require",  "unknown", "vcompare",
+	"versions", "vsatisfies", NULL
+    };
+    enum pkgOptions {
+	PKG_FILES,  PKG_FORGET,  PKG_IFNEEDED, PKG_NAMES,   PKG_PREFER,
+	PKG_PRESENT, PKG_PROVIDE, PKG_REQUIRE,  PKG_UNKNOWN, PKG_VCOMPARE,
+	PKG_VERSIONS, PKG_VSATISFIES
+>>>>>>> upstream/master
 =======
 	"files",  "forget",  "ifneeded", "names",   "prefer",
 	"present", "provide", "require",  "unknown", "vcompare",
@@ -1234,7 +1769,10 @@ TclNRPackageObjCmd(
     switch ((enum pkgOptions) optionIndex) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     case PKG_FILES: {
 	PkgFiles *pkgFiles;
 
@@ -1244,13 +1782,20 @@ TclNRPackageObjCmd(
 	}
 	pkgFiles = (PkgFiles *) Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
 	if (pkgFiles) {
+<<<<<<< HEAD
 	    Tcl_HashEntry *entry = Tcl_FindHashEntry(&pkgFiles->table, Tcl_GetString(objv[2]));
+=======
+	    Tcl_HashEntry *entry = Tcl_FindHashEntry(&pkgFiles->table,
+		    TclGetString(objv[2]));
+
+>>>>>>> upstream/master
 	    if (entry) {
 		Tcl_SetObjResult(interp, (Tcl_Obj *)Tcl_GetHashValue(entry));
 	    }
 	}
 	break;
     }
+<<<<<<< HEAD
 >>>>>>> upstream/master
     case PKG_FORGET: {
 	const char *keyString;
@@ -1260,6 +1805,15 @@ TclNRPackageObjCmd(
 	    keyString = TclGetString(objv[i]);
 <<<<<<< HEAD
 =======
+=======
+    case PKG_FORGET: {
+	const char *keyString;
+	PkgFiles *pkgFiles = (PkgFiles *)
+		Tcl_GetAssocData(interp, "tclPkgFiles", NULL);
+
+	for (i = 2; i < objc; i++) {
+	    keyString = TclGetString(objv[i]);
+>>>>>>> upstream/master
 	    if (pkgFiles) {
 		hPtr = Tcl_FindHashEntry(&pkgFiles->table, keyString);
 		if (hPtr) {
@@ -1269,6 +1823,9 @@ TclNRPackageObjCmd(
 		}
 	    }
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    hPtr = Tcl_FindHashEntry(&iPtr->packageTable, keyString);
 	    if (hPtr == NULL) {
@@ -1277,13 +1834,14 @@ TclNRPackageObjCmd(
 	    pkgPtr = Tcl_GetHashValue(hPtr);
 	    Tcl_DeleteHashEntry(hPtr);
 	    if (pkgPtr->version != NULL) {
-		ckfree(pkgPtr->version);
+		Tcl_DecrRefCount(pkgPtr->version);
 	    }
 	    while (pkgPtr->availPtr != NULL) {
 		availPtr = pkgPtr->availPtr;
 		pkgPtr->availPtr = availPtr->nextPtr;
 		Tcl_EventuallyFree(availPtr->version, TCL_DYNAMIC);
 		Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 		if (availPtr->pkgIndex) {
@@ -1293,11 +1851,21 @@ TclNRPackageObjCmd(
 		ckfree(availPtr);
 	    }
 	    ckfree(pkgPtr);
+=======
+		if (availPtr->pkgIndex) {
+		    Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
+		    availPtr->pkgIndex = NULL;
+		}
+		Tcl_Free(availPtr);
+	    }
+	    Tcl_Free(pkgPtr);
+>>>>>>> upstream/master
 	}
 	break;
     }
     case PKG_IFNEEDED: {
-	int length, res;
+	size_t length;
+	int res;
 	char *argv3i, *avi;
 
 	if ((objc != 4) && (objc != 5)) {
@@ -1312,7 +1880,7 @@ TclNRPackageObjCmd(
 	if (objc == 4) {
 	    hPtr = Tcl_FindHashEntry(&iPtr->packageTable, argv2);
 	    if (hPtr == NULL) {
-		ckfree(argv3i);
+		Tcl_Free(argv3i);
 		return TCL_OK;
 	    }
 	    pkgPtr = Tcl_GetHashValue(hPtr);
@@ -1321,7 +1889,11 @@ TclNRPackageObjCmd(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	argv3 = Tcl_GetStringFromObj(objv[3], &length);
+=======
+	argv3 = TclGetStringFromObj(objv[3], &length);
+>>>>>>> upstream/master
 =======
 	argv3 = TclGetStringFromObj(objv[3], &length);
 >>>>>>> upstream/master
@@ -1333,16 +1905,20 @@ TclNRPackageObjCmd(
 		prevPtr = availPtr, availPtr = availPtr->nextPtr) {
 	    if (CheckVersionAndConvert(interp, availPtr->version, &avi,
 		    NULL) != TCL_OK) {
-		ckfree(argv3i);
+		Tcl_Free(argv3i);
 		return TCL_ERROR;
 	    }
 
 	    res = CompareVersions(avi, argv3i, NULL);
-	    ckfree(avi);
+	    Tcl_Free(avi);
 
-	    if (res == 0){
+	    if (res == 0) {
 		if (objc == 4) {
+<<<<<<< HEAD
 		    ckfree(argv3i);
+=======
+		    Tcl_Free(argv3i);
+>>>>>>> upstream/master
 		    Tcl_SetObjResult(interp,
 			    Tcl_NewStringObj(availPtr->script, -1));
 		    return TCL_OK;
@@ -1513,18 +2089,28 @@ TclNRPackageObjCmd(
 >>>>>>> upstream/master
 		}
 		Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
+		if (availPtr->pkgIndex) {
+		    Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
+		    availPtr->pkgIndex = NULL;
+		}
 		break;
 	    }
 <<<<<<< HEAD
 	}
-	ckfree(argv3i);
+	Tcl_Free(argv3i);
 
 	if (objc == 4) {
 	    return TCL_OK;
 	}
 	if (availPtr == NULL) {
+<<<<<<< HEAD
 	    availPtr = ckalloc(sizeof(PkgAvail));
 	    DupBlock(availPtr->version, argv3, (unsigned) length + 1);
+=======
+	    availPtr = Tcl_Alloc(sizeof(PkgAvail));
+	    availPtr->pkgIndex = NULL;
+	    DupBlock(availPtr->version, argv3, length + 1);
+>>>>>>> upstream/master
 
 	    if (prevPtr == NULL) {
 		availPtr->nextPtr = pkgPtr->availPtr;
@@ -1539,11 +2125,20 @@ TclNRPackageObjCmd(
 	    Tcl_SetObjResult(interp, resultObj);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	argv4 = Tcl_GetStringFromObj(objv[4], &length);
 =======
 	argv4 = TclGetStringFromObj(objv[4], &length);
 >>>>>>> upstream/master
 	DupBlock(availPtr->script, argv4, (unsigned) length + 1);
+=======
+	if (iPtr->scriptFile) {
+	    argv4 = TclGetStringFromObj(iPtr->scriptFile, &length);
+	    DupBlock(availPtr->pkgIndex, argv4, length + 1);
+	}
+	argv4 = TclGetStringFromObj(objv[4], &length);
+	DupBlock(availPtr->script, argv4, length + 1);
+>>>>>>> upstream/master
 	break;
 <<<<<<< HEAD
     }
@@ -1563,6 +2158,7 @@ TclNRPackageObjCmd(
 		    Tcl_ListObjAppendElement(NULL,resultObj, Tcl_NewStringObj(
 			    Tcl_GetHashKey(tablePtr, hPtr), -1));
 		}
+<<<<<<< HEAD
 	    }
 	    Tcl_SetObjResult(interp, resultObj);
 	}
@@ -1733,6 +2329,9 @@ TclNRPackageObjCmd(
 	}
 	break;
 =======
+=======
+	    }
+>>>>>>> upstream/master
 	    Tcl_SetObjResult(interp, resultObj);
 	}
 	break;
@@ -1793,8 +2392,12 @@ TclNRPackageObjCmd(
 	    if (hPtr != NULL) {
 		pkgPtr = Tcl_GetHashValue(hPtr);
 		if (pkgPtr->version != NULL) {
+<<<<<<< HEAD
 		    Tcl_SetObjResult(interp,
 			    Tcl_NewStringObj(pkgPtr->version, -1));
+=======
+		    Tcl_SetObjResult(interp, pkgPtr->version);
+>>>>>>> upstream/master
 		}
 	    }
 	    return TCL_OK;
@@ -1818,7 +2421,6 @@ TclNRPackageObjCmd(
 	argv2 = TclGetString(objv[2]);
 	if ((argv2[0] == '-') && (strcmp(argv2, "-exact") == 0)) {
 	    Tcl_Obj *ov;
-	    int res;
 
 	    if (objc != 5) {
 		goto requireSyntax;
@@ -1840,21 +2442,49 @@ TclNRPackageObjCmd(
 	    Tcl_AppendStringsToObj(ov, "-", version, NULL);
 	    version = NULL;
 	    argv3 = TclGetString(objv[3]);
+	    Tcl_IncrRefCount(objv[3]);
 
-	    Tcl_IncrRefCount(ov);
-	    res = Tcl_PkgRequireProc(interp, argv3, 1, &ov, NULL);
-	    TclDecrRefCount(ov);
-	    return res;
+	    objvListPtr = Tcl_NewListObj(0, NULL);
+	    Tcl_IncrRefCount(objvListPtr);
+	    Tcl_ListObjAppendElement(interp, objvListPtr, ov);
+	    Tcl_ListObjGetElements(interp, objvListPtr, &newobjc, &newObjvPtr);
+
+	    Tcl_NRAddCallback(interp,
+		    TclNRPackageObjCmdCleanup, objv[3], objvListPtr, NULL,NULL);
+	    Tcl_NRAddCallback(interp,
+		    PkgRequireCore, (void *) argv3, INT2PTR(newobjc),
+		    newObjvPtr, NULL);
+	    return TCL_OK;
 	} else {
+	    int i, newobjc = objc-3;
+	    Tcl_Obj *const *newobjv = objv + 3;
+
 	    if (CheckAllRequirements(interp, objc-3, objv+3) != TCL_OK) {
 		return TCL_ERROR;
 	    }
+	    objvListPtr = Tcl_NewListObj(0, NULL);
+	    Tcl_IncrRefCount(objvListPtr);
+	    Tcl_IncrRefCount(objv[2]);
+	    for (i = 0; i < newobjc; i++) {
+		/*
+		 * Tcl_Obj structures may have come from another interpreter,
+		 * so duplicate them.
+		 */
 
-	    return Tcl_PkgRequireProc(interp, argv2, objc-3, objv+3, NULL);
+		Tcl_ListObjAppendElement(interp, objvListPtr,
+			Tcl_DuplicateObj(newobjv[i]));
+	    }
+	    Tcl_ListObjGetElements(interp, objvListPtr, &newobjc, &newObjvPtr);
+	    Tcl_NRAddCallback(interp,
+		    TclNRPackageObjCmdCleanup, objv[2], objvListPtr, NULL,NULL);
+	    Tcl_NRAddCallback(interp,
+		    PkgRequireCore, (void *) argv2, INT2PTR(newobjc),
+		    newObjvPtr, NULL);
+	    return TCL_OK;
 	}
 	break;
     case PKG_UNKNOWN: {
-	int length;
+	size_t length;
 
 	if (objc == 2) {
 	    if (iPtr->packageUnknown != NULL) {
@@ -1863,13 +2493,13 @@ TclNRPackageObjCmd(
 	    }
 	} else if (objc == 3) {
 	    if (iPtr->packageUnknown != NULL) {
-		ckfree(iPtr->packageUnknown);
+		Tcl_Free(iPtr->packageUnknown);
 	    }
 	    argv2 = TclGetStringFromObj(objv[2], &length);
 	    if (argv2[0] == 0) {
 		iPtr->packageUnknown = NULL;
 	    } else {
-		DupBlock(iPtr->packageUnknown, argv2, (unsigned) length+1);
+		DupBlock(iPtr->packageUnknown, argv2, length+1);
 	    }
 	} else {
 	    Tcl_WrongNumArgs(interp, 2, objv, "?command?");
@@ -1960,6 +2590,9 @@ TclNRPackageObjCmd(
 			    Tcl_NewStringObj(availPtr->version, -1));
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	    }
 	    Tcl_SetObjResult(interp, resultObj);
 	}
@@ -1969,6 +2602,7 @@ TclNRPackageObjCmd(
 
 	if (objc < 4) {
 	    Tcl_WrongNumArgs(interp, 2, objv, "version ?requirement ...?");
+<<<<<<< HEAD
 	    return TCL_ERROR;
 	}
 
@@ -2213,6 +2847,8 @@ CheckVersionAndConvert(
 
 	if (objc < 4) {
 	    Tcl_WrongNumArgs(interp, 2, objv, "version ?requirement ...?");
+=======
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 
@@ -2220,12 +2856,12 @@ CheckVersionAndConvert(
 	if (CheckVersionAndConvert(interp, argv2, &argv2i, NULL) != TCL_OK) {
 	    return TCL_ERROR;
 	} else if (CheckAllRequirements(interp, objc-3, objv+3) != TCL_OK) {
-	    ckfree(argv2i);
+	    Tcl_Free(argv2i);
 	    return TCL_ERROR;
 	}
 
 	satisfies = SomeRequirementSatisfied(argv2i, objc-3, objv+3);
-	ckfree(argv2i);
+	Tcl_Free(argv2i);
 
 	Tcl_SetObjResult(interp, Tcl_NewBooleanObj(satisfies));
 	break;
@@ -2234,6 +2870,17 @@ CheckVersionAndConvert(
 	Tcl_Panic("Tcl_PackageObjCmd: bad option index to pkgOptions");
     }
     return TCL_OK;
+}
+
+static int
+TclNRPackageObjCmdCleanup(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    TclDecrRefCount((Tcl_Obj *) data[0]);
+    TclDecrRefCount((Tcl_Obj *) data[1]);
+    return result;
 }
 
 /*
@@ -2266,7 +2913,11 @@ FindPackage(
 
     hPtr = Tcl_CreateHashEntry(&iPtr->packageTable, name, &isNew);
     if (isNew) {
+<<<<<<< HEAD
 	pkgPtr = ckalloc(sizeof(Package));
+=======
+	pkgPtr = Tcl_Alloc(sizeof(Package));
+>>>>>>> upstream/master
 	pkgPtr->version = NULL;
 	pkgPtr->availPtr = NULL;
 	pkgPtr->clientData = NULL;
@@ -2298,7 +2949,11 @@ void
 TclFreePackageInfo(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Interp *iPtr)		/* Interpereter that is being deleted. */
+=======
+    Interp *iPtr)		/* Interpreter that is being deleted. */
+>>>>>>> upstream/master
 =======
     Interp *iPtr)		/* Interpreter that is being deleted. */
 >>>>>>> upstream/master
@@ -2315,13 +2970,14 @@ TclFreePackageInfo(
 	    hPtr != NULL; hPtr = Tcl_NextHashEntry(&search)) {
 	pkgPtr = Tcl_GetHashValue(hPtr);
 	if (pkgPtr->version != NULL) {
-	    ckfree(pkgPtr->version);
+	    Tcl_DecrRefCount(pkgPtr->version);
 	}
 	while (pkgPtr->availPtr != NULL) {
 	    availPtr = pkgPtr->availPtr;
 	    pkgPtr->availPtr = availPtr->nextPtr;
 	    Tcl_EventuallyFree(availPtr->version, TCL_DYNAMIC);
 	    Tcl_EventuallyFree(availPtr->script, TCL_DYNAMIC);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -2337,10 +2993,19 @@ TclFreePackageInfo(
 	    ckfree(availPtr);
 	}
 	ckfree(pkgPtr);
+=======
+	    if (availPtr->pkgIndex) {
+		Tcl_EventuallyFree(availPtr->pkgIndex, TCL_DYNAMIC);
+		availPtr->pkgIndex = NULL;
+	    }
+	    Tcl_Free(availPtr);
+	}
+	Tcl_Free(pkgPtr);
+>>>>>>> upstream/master
     }
     Tcl_DeleteHashTable(&iPtr->packageTable);
     if (iPtr->packageUnknown != NULL) {
-	ckfree(iPtr->packageUnknown);
+	Tcl_Free(iPtr->packageUnknown);
     }
 }
 
@@ -2380,7 +3045,7 @@ CheckVersionAndConvert(
      * 4* assuming that each char is a separator (a,b become ' -x ').
      * 4+ to have spce for an additional -2 at the end
      */
-    char *ibuf = ckalloc(4 + 4*strlen(string));
+    char *ibuf = Tcl_Alloc(4 + 4*strlen(string));
     char *ip = ibuf;
 
     /*
@@ -3208,7 +3873,12 @@ AddRequirementsToResult(
 				 * available. */
 {
     Tcl_Obj *result = Tcl_GetObjResult(interp);
+<<<<<<< HEAD
     int i, length;
+=======
+    int i;
+    size_t length;
+>>>>>>> upstream/master
 
     for (i = 0; i < reqc; i++) {
 	const char *v = TclGetStringFromObj(reqv[i], &length);
@@ -3401,9 +4071,9 @@ RequirementSatisfied(
 >>>>>>> upstream/master
     }
 
-    ckfree(min);
-    ckfree(max);
-    ckfree(buf);
+    Tcl_Free(min);
+    Tcl_Free(max);
+    Tcl_Free(buf);
     return satisfied;
 }
 
@@ -3432,8 +4102,9 @@ Tcl_PkgInitStubsCheck(
     const char * version,
     int exact)
 {
-    const char *actualVersion = Tcl_PkgPresent(interp, "Tcl", version, 0);
+    const char *actualVersion = Tcl_PkgPresentEx(interp, "Tcl", version, 0, NULL);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (exact && actualVersion) {
@@ -3496,6 +4167,8 @@ Tcl_PkgInitStubsCheck(
 
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     if ((exact&1) && actualVersion) {
 	const char *p = version;
 	int count = 0;
@@ -3506,11 +4179,11 @@ Tcl_PkgInitStubsCheck(
 	if (count == 1) {
 	    if (0 != strncmp(version, actualVersion, strlen(version))) {
 		/* Construct error message */
-		Tcl_PkgPresent(interp, "Tcl", version, 1);
+		Tcl_PkgPresentEx(interp, "Tcl", version, 1, NULL);
 		return NULL;
 	    }
 	} else {
-	    return Tcl_PkgPresent(interp, "Tcl", version, 1);
+	    return Tcl_PkgPresentEx(interp, "Tcl", version, 1, NULL);
 	}
     }
     return actualVersion;

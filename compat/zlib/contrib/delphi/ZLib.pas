@@ -154,7 +154,11 @@ procedure DecompressToUserBuf(const InBuf: Pointer; InBytes: Integer;
 const
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   zlib_version = '1.2.8';
+=======
+  zlib_version = '1.2.11';
+>>>>>>> upstream/master
 =======
   zlib_version = '1.2.11';
 >>>>>>> upstream/master

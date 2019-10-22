@@ -36,11 +36,16 @@ proc runtests {} {
 testConstraint testencoding [llength [info commands testencoding]]
 testConstraint testbytestring [llength [info commands testbytestring]]
 testConstraint teststringbytes [llength [info commands teststringbytes]]
+<<<<<<< HEAD
 testConstraint tip389 [expr {[string length \U010000] == 2}]
 testConstraint exec [llength [info commands exec]]
 <<<<<<< HEAD
 testConstraint testgetdefenc [llength [info commands testgetdefenc]]
 =======
+testConstraint testgetencpath [llength [info commands testgetencpath]]
+>>>>>>> upstream/master
+=======
+testConstraint exec [llength [info commands exec]]
 testConstraint testgetencpath [llength [info commands testgetencpath]]
 >>>>>>> upstream/master
 
@@ -84,6 +89,7 @@ test encoding-2.2 {Tcl_FreeEncoding: refcount != 0} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x [encoding convertto shiftjis \u4e4e]	;# old one found   
 =======
     set x [encoding convertto shiftjis \u4e4e]	;# old one found
@@ -100,6 +106,10 @@ test encoding-2.2 {Tcl_FreeEncoding: refcount != 0} -setup {
 >>>>>>> upstream/master
     encoding system identity
 =======
+    encoding system iso8859-1
+>>>>>>> upstream/master
+=======
+    set x [encoding convertto shiftjis \u4e4e]	;# old one found
     encoding system iso8859-1
 >>>>>>> upstream/master
     llength shiftjis		;# Shimmer away any cache of Tcl_Encoding
@@ -213,7 +223,11 @@ test encoding-8.1 {Tcl_ExternalToUtf} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation binary -encoding shiftjis    
+=======
+    fconfigure $f -translation binary -encoding shiftjis
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation binary -encoding shiftjis
 >>>>>>> upstream/master
@@ -312,7 +326,11 @@ test encoding-11.6 {LoadEncodingFile: invalid file} -constraints {testencoding} 
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     fconfigure $f -translation binary 
+=======
+    fconfigure $f -translation binary
+>>>>>>> upstream/master
 =======
     fconfigure $f -translation binary
 >>>>>>> upstream/master
@@ -379,6 +397,7 @@ test encoding-15.3 {UtfToUtfProc null character input} teststringbytes {
     set z
 } c080
 
+<<<<<<< HEAD
 test encoding-16.1 {UnicodeToUtfProc} -constraints tip389 -body {
     set val [encoding convertfrom unicode NN]
     list $val [format %x [scan $val %c]]
@@ -391,6 +410,31 @@ test encoding-16.2 {UnicodeToUtfProc} -constraints tip389 -body {
 test encoding-17.1 {UtfToUnicodeProc} -constraints tip389 -body {
     encoding convertto unicode "\U460dc"
 } -result "\xd8\xd8\xdc\xdc"
+=======
+test encoding-16.1 {Utf16ToUtfProc} -body {
+    set val [encoding convertfrom utf-16 NN]
+    list $val [format %x [scan $val %c]]
+} -result "\u4e4e 4e4e"
+test encoding-16.2 {Utf16ToUtfProc} -body {
+    set val [encoding convertfrom utf-16 "\xd8\xd8\xdc\xdc"]
+    list $val [format %x [scan $val %c]]
+} -result "\U460dc 460dc"
+test encoding-16.3 {Ucs2ToUtfProc} -body {
+    set val [encoding convertfrom ucs-2 NN]
+    list $val [format %x [scan $val %c]]
+} -result "\u4e4e 4e4e"
+test encoding-16.4 {Ucs2ToUtfProc} -body {
+    set val [encoding convertfrom ucs-2 "\xd8\xd8\xdc\xdc"]
+    list $val [format %x [scan $val %c]]
+} -result "\U460dc 460dc"
+
+test encoding-17.1 {UtfToUtf16Proc} -body {
+    encoding convertto utf-16 "\U460dc"
+} -result "\xd8\xd8\xdc\xdc"
+test encoding-17.2 {UtfToUcs2Proc} -body {
+    encoding convertfrom utf-16 [encoding convertto ucs-2 "\U460dc"]
+} -result "\ufffd"
+>>>>>>> upstream/master
 
 test encoding-18.1 {TableToUtfProc} {
 } {}
@@ -652,6 +696,7 @@ foreach from {cp932 shiftjis euc-jp iso2022-jp} {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 test encoding-26.0 {Tcl_GetDefaultEncodingDir} -constraints {
     testgetdefenc
 } -setup {
@@ -661,6 +706,17 @@ test encoding-26.0 {Tcl_GetDefaultEncodingDir} -constraints {
     testgetdefenc
 } -cleanup {
     testsetdefenc $origDir
+=======
+test encoding-26.0 {Tcl_GetEncodingSearchPath} -constraints {
+    testgetencpath
+} -setup {
+    set origPath [testgetencpath]
+    testsetencpath slappy
+} -body {
+    testgetencpath
+} -cleanup {
+    testsetencpath $origPath
+>>>>>>> upstream/master
 =======
 test encoding-26.0 {Tcl_GetEncodingSearchPath} -constraints {
     testgetencpath

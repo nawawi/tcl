@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset fa DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u06cc\u2214"\
         "\u062f\u2214"\
         "\u0633\u2214"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u062c\u2214"\
         "\u0634\u2214"]
 =======
+=======
+>>>>>>> upstream/master
         "ی∔"\
         "د∔"\
         "س∔"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "پ∔"\
         "ج∔"\
         "ش∔"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset fa DAYS_OF_WEEK_FULL [list \
         "یی‌شنبه"\
@@ -42,6 +48,7 @@ namespace eval ::tcl::clock {
         "دسا"\
         ""]
     ::msgcat::mcset fa MONTHS_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
         "\u0698\u0627\u0646\u0648\u06cc\u0647"\
         "\u0641\u0648\u0631\u0648\u06cc\u0647"\
@@ -88,6 +95,8 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset fa MONTHS_FULL [list \
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "ژانویه"\
         "فورویه"\
         "مارس"\
@@ -101,6 +110,9 @@ namespace eval ::tcl::clock {
         "نوامبر"\
         "دسامبر"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

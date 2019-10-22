@@ -5,7 +5,11 @@ project(zlib C)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 set(VERSION "1.2.8")
+=======
+set(VERSION "1.2.11")
+>>>>>>> upstream/master
 =======
 set(VERSION "1.2.11")
 >>>>>>> upstream/master

@@ -89,8 +89,8 @@ static const Tcl_ChannelType tclRTransformType = {
 
 typedef struct {
     unsigned char *buf;		/* Reference to the buffer area. */
-    int allocated;		/* Allocated size of the buffer area. */
-    int used;			/* Number of bytes in the buffer,
+    size_t allocated;		/* Allocated size of the buffer area. */
+    size_t used;			/* Number of bytes in the buffer,
 				 * <= allocated. */
 } ResultBuffer;
 
@@ -270,7 +270,7 @@ struct ForwardParamTransform {
     ForwardParamBase base;	/* "Supertype". MUST COME FIRST. */
     char *buf;			/* I: Bytes to transform,
 				 * O: Bytes in transform result */
-    int size;			/* I: #bytes to transform,
+    size_t size;		/* I: #bytes to transform,
 				 * O: #bytes in the transform result */
 };
 struct ForwardParamLimit {
@@ -331,7 +331,11 @@ struct ForwardingResult {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -628,7 +632,11 @@ TclChanPushObjCmd(
 	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		    "chan handler \"%s initialize\" returned %s",
 		    TclGetString(cmdObj),
+<<<<<<< HEAD
 		    Tcl_GetString(Tcl_GetObjResult(interp))));
+=======
+		    Tcl_GetStringResult(interp)));
+>>>>>>> upstream/master
 	    Tcl_DecrRefCount(resObj);
 	    goto error;
 	}
@@ -956,7 +964,11 @@ ReflectClose(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -990,7 +1002,11 @@ ReflectClose(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    } 
+=======
+	    }
+>>>>>>> upstream/master
 =======
 	    }
 >>>>>>> upstream/master
@@ -1062,7 +1078,7 @@ ReflectClose(
 
     if (!rtPtr->dead) {
 	rtmPtr = GetReflectedTransformMap(rtPtr->interp);
-	hPtr = Tcl_FindHashEntry(&rtmPtr->map, Tcl_GetString(rtPtr->handle));
+	hPtr = Tcl_FindHashEntry(&rtmPtr->map, TclGetString(rtPtr->handle));
 	if (hPtr) {
 	    Tcl_DeleteHashEntry(hPtr);
 	}
@@ -1162,6 +1178,13 @@ ReflectInput(
 	    goto stop;
 	}
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+	if (rtPtr->eofPending) {
+	    goto stop;
+	}
+
 >>>>>>> upstream/master
 
 	/*
@@ -1239,6 +1262,7 @@ ReflectInput(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 =======
 
@@ -1247,6 +1271,8 @@ ReflectInput(
 
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 =======
@@ -1782,7 +1808,7 @@ static Tcl_Obj *
 DecodeEventMask(
     int mask)
 {
-    register const char *eventStr;
+    const char *eventStr;
     Tcl_Obj *evObj;
 
     switch (mask & RANDW) {
@@ -2117,6 +2143,7 @@ InvokeTclMethod(
 	     */
 	    if (result != TCL_ERROR) {
 		Tcl_Obj *cmd = Tcl_NewListObj(cmdc, rtPtr->argv);
+<<<<<<< HEAD
 		int cmdLen;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2129,6 +2156,10 @@ InvokeTclMethod(
 		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
 >>>>>>> upstream/master
 =======
+		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
+>>>>>>> upstream/master
+=======
+		size_t cmdLen;
 		const char *cmdString = TclGetStringFromObj(cmd, &cmdLen);
 >>>>>>> upstream/master
 
@@ -2678,14 +2709,18 @@ ForwardProc(
 
 	if (InvokeTclMethod(rtPtr, "read", bufObj, NULL, &resObj) != TCL_OK) {
 	    ForwardSetObjError(paramPtr, resObj);
-	    paramPtr->transform.size = -1;
+	    paramPtr->transform.size = TCL_AUTO_LENGTH;
 	} else {
 	    /*
 	     * Process a regular return. Contains the transformation result.
 	     * Sent it back to the request originator.
 	     */
 
+<<<<<<< HEAD
 	    size_t bytec;		/* Number of returned bytes */
+=======
+	    size_t bytec = 0;	/* Number of returned bytes */
+>>>>>>> upstream/master
 	    unsigned char *bytev;
 				/* Array of returned bytes */
 
@@ -2695,7 +2730,11 @@ ForwardProc(
 
 	    if (bytec > 0) {
 		paramPtr->transform.buf = Tcl_Alloc(bytec);
+<<<<<<< HEAD
 		memcpy(paramPtr->transform.buf, bytev, (size_t)bytec);
+=======
+		memcpy(paramPtr->transform.buf, bytev, bytec);
+>>>>>>> upstream/master
 	    } else {
 		paramPtr->transform.buf = NULL;
 	    }
@@ -2712,14 +2751,18 @@ ForwardProc(
 
 	if (InvokeTclMethod(rtPtr, "write", bufObj, NULL, &resObj) != TCL_OK) {
 	    ForwardSetObjError(paramPtr, resObj);
-	    paramPtr->transform.size = -1;
+	    paramPtr->transform.size = TCL_AUTO_LENGTH;
 	} else {
 	    /*
 	     * Process a regular return. Contains the transformation result.
 	     * Sent it back to the request originator.
 	     */
 
+<<<<<<< HEAD
 	    size_t bytec;		/* Number of returned bytes */
+=======
+	    size_t bytec = 0;	/* Number of returned bytes */
+>>>>>>> upstream/master
 	    unsigned char *bytev;
 				/* Array of returned bytes */
 
@@ -2729,7 +2772,11 @@ ForwardProc(
 
 	    if (bytec > 0) {
 		paramPtr->transform.buf = Tcl_Alloc(bytec);
+<<<<<<< HEAD
 		memcpy(paramPtr->transform.buf, bytev, (size_t)bytec);
+=======
+		memcpy(paramPtr->transform.buf, bytev, bytec);
+>>>>>>> upstream/master
 	    } else {
 		paramPtr->transform.buf = NULL;
 	    }
@@ -2742,14 +2789,18 @@ ForwardProc(
     case ForwardedDrain:
 	if (InvokeTclMethod(rtPtr, "drain", NULL, NULL, &resObj) != TCL_OK) {
 	    ForwardSetObjError(paramPtr, resObj);
-	    paramPtr->transform.size = -1;
+	    paramPtr->transform.size = TCL_AUTO_LENGTH;
 	} else {
 	    /*
 	     * Process a regular return. Contains the transformation result.
 	     * Sent it back to the request originator.
 	     */
 
+<<<<<<< HEAD
 	    size_t bytec;		/* Number of returned bytes */
+=======
+	    size_t bytec = 0;	/* Number of returned bytes */
+>>>>>>> upstream/master
 	    unsigned char *bytev; /* Array of returned bytes */
 
 	    bytev = TclGetByteArrayFromObj(resObj, &bytec);
@@ -2758,7 +2809,11 @@ ForwardProc(
 
 	    if (bytec > 0) {
 		paramPtr->transform.buf = Tcl_Alloc(bytec);
+<<<<<<< HEAD
 		memcpy(paramPtr->transform.buf, bytev, (size_t)bytec);
+=======
+		memcpy(paramPtr->transform.buf, bytev, bytec);
+>>>>>>> upstream/master
 	    } else {
 		paramPtr->transform.buf = NULL;
 	    }
@@ -2768,14 +2823,18 @@ ForwardProc(
     case ForwardedFlush:
 	if (InvokeTclMethod(rtPtr, "flush", NULL, NULL, &resObj) != TCL_OK) {
 	    ForwardSetObjError(paramPtr, resObj);
-	    paramPtr->transform.size = -1;
+	    paramPtr->transform.size = TCL_AUTO_LENGTH;
 	} else {
 	    /*
 	     * Process a regular return. Contains the transformation result.
 	     * Sent it back to the request originator.
 	     */
 
+<<<<<<< HEAD
 	    size_t bytec;		/* Number of returned bytes */
+=======
+	    size_t bytec = 0;	/* Number of returned bytes */
+>>>>>>> upstream/master
 	    unsigned char *bytev;
 				/* Array of returned bytes */
 
@@ -2785,7 +2844,11 @@ ForwardProc(
 
 	    if (bytec > 0) {
 		paramPtr->transform.buf = Tcl_Alloc(bytec);
+<<<<<<< HEAD
 		memcpy(paramPtr->transform.buf, bytev, (size_t)bytec);
+=======
+		memcpy(paramPtr->transform.buf, bytev, bytec);
+>>>>>>> upstream/master
 	    } else {
 		paramPtr->transform.buf = NULL;
 	    }
@@ -2893,6 +2956,7 @@ ForwardSetObjError(
     ForwardParam *paramPtr,
     Tcl_Obj *obj)
 {
+<<<<<<< HEAD
     int len;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2911,6 +2975,14 @@ ForwardSetObjError(
     len++;
     ForwardSetDynamicError(paramPtr, Tcl_Alloc(len));
     memcpy(paramPtr->base.msgStr, msgStr, (unsigned) len);
+=======
+    size_t len;
+    const char *msgStr = TclGetStringFromObj(obj, &len);
+
+    len++;
+    ForwardSetDynamicError(paramPtr, Tcl_Alloc(len));
+    memcpy(paramPtr->base.msgStr, msgStr, len);
+>>>>>>> upstream/master
 }
 #endif /* TCL_THREADS */
 
@@ -3137,7 +3209,7 @@ ResultCopy(
 	 */
 
 	copied = 0;
-    } else if (rPtr->used == toRead) {
+    } else if (rPtr->used == (size_t)toRead) {
 	/*
 	 * We have just enough. Copy everything to the caller.
 	 */
@@ -3145,7 +3217,7 @@ ResultCopy(
 	memcpy(buf, rPtr->buf, toRead);
 	rPtr->used = 0;
 	copied = toRead;
-    } else if (rPtr->used > toRead) {
+    } else if (rPtr->used > (size_t)toRead) {
 	/*
 	 * The internal buffer contains more than requested. Copy the
 	 * requested subset to the caller, and shift the remaining bytes down.
@@ -3180,7 +3252,11 @@ TransformRead(
     Tcl_Obj *bufObj)
 {
     Tcl_Obj *resObj;
+<<<<<<< HEAD
     size_t bytec;			/* Number of returned bytes */
+=======
+    size_t bytec = 0;		/* Number of returned bytes */
+>>>>>>> upstream/master
     unsigned char *bytev;	/* Array of returned bytes */
 
     /*
@@ -3235,7 +3311,11 @@ TransformWrite(
 {
     Tcl_Obj *bufObj;
     Tcl_Obj *resObj;
+<<<<<<< HEAD
     size_t bytec;			/* Number of returned bytes */
+=======
+    size_t bytec = 0;		/* Number of returned bytes */
+>>>>>>> upstream/master
     unsigned char *bytev;	/* Array of returned bytes */
     int res;
 
@@ -3302,7 +3382,11 @@ TransformDrain(
     int *errorCodePtr)
 {
     Tcl_Obj *resObj;
+<<<<<<< HEAD
     size_t bytec;			/* Number of returned bytes */
+=======
+    size_t bytec = 0;		/* Number of returned bytes */
+>>>>>>> upstream/master
     unsigned char *bytev;	/* Array of returned bytes */
 
     /*
@@ -3351,7 +3435,11 @@ TransformFlush(
     int op)
 {
     Tcl_Obj *resObj;
+<<<<<<< HEAD
     size_t bytec;			/* Number of returned bytes */
+=======
+    size_t bytec = 0;		/* Number of returned bytes */
+>>>>>>> upstream/master
     unsigned char *bytev;	/* Array of returned bytes */
     int res;
 

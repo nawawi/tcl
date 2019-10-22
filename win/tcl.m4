@@ -153,6 +153,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 	AC_CACHE_VAL(ac_cv_c_tkconfig,[
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -171,6 +174,7 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 		    AC_MSG_ERROR([${with_tkconfig} directory doesn't contain tkConfig.sh])
 		fi
 	    fi
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -260,6 +264,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 =======
 
 >>>>>>> upstream/master
+=======
+
+>>>>>>> upstream/master
 	    # then check for a private Tk library
 	    if test x"${ac_cv_c_tkconfig}" = x ; then
 		for i in \
@@ -283,6 +290,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 	    fi
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -307,6 +317,9 @@ AC_DEFUN([SC_PATH_TKCONFIG], [
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -369,6 +382,7 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 =======
@@ -405,6 +419,8 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     fi
 
     #
@@ -426,6 +442,7 @@ AC_DEFUN([SC_LOAD_TCLCONFIG], [
     # eval is required to do the TCL_DBGX substitution
     #
 
+    eval "TCL_ZIP_FILE=\"${TCL_ZIP_FILE}\""
     eval "TCL_LIB_FILE=\"${TCL_LIB_FILE}\""
     eval "TCL_LIB_FLAG=\"${TCL_LIB_FLAG}\""
     eval "TCL_LIB_SPEC=\"${TCL_LIB_SPEC}\""
@@ -528,6 +545,10 @@ AC_DEFUN([SC_ENABLE_SHARED], [
 	AC_DEFINE(STATIC_BUILD, 1, [Is this a static build?])
     fi
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    AC_SUBST(SHARED_BUILD)
+>>>>>>> upstream/master
 =======
     AC_SUBST(SHARED_BUILD)
 >>>>>>> upstream/master
@@ -788,6 +809,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 =======
@@ -837,6 +859,27 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 >>>>>>> upstream/master
 =======
+	fi
+>>>>>>> upstream/master
+=======
+	fi
+
+	hold_cflags=$CFLAGS; CFLAGS="$CFLAGS -mwindows -municode -Dmain=xxmain"
+	AC_CACHE_CHECK(for working -municode linker flag,
+	    ac_cv_municode,
+	AC_TRY_LINK([
+	#include <windows.h>
+	int APIENTRY wWinMain(HINSTANCE a, HINSTANCE b, LPWSTR c, int d) {return 0;}
+	],
+	[],
+	    ac_cv_municode=yes,
+	    ac_cv_municode=no)
+	)
+	CFLAGS=$hold_cflags
+	if test "$ac_cv_municode" = "yes" ; then
+	    extra_ldflags="$extra_ldflags -municode"
+	else
+	    extra_cflags="$extra_cflags -DTCL_BROKEN_MAINARGS"
 	fi
 >>>>>>> upstream/master
     fi
@@ -903,6 +946,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall -Wdeclaration-after-statement"
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
@@ -915,6 +959,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
+=======
+	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement -Wpointer-arith"
 >>>>>>> upstream/master
 	LDFLAGS_DEBUG=
 	LDFLAGS_OPTIMIZE=
@@ -988,6 +1035,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    esac
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	fi
@@ -1018,6 +1068,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	    esac
 	    if test ! -d "${PATH64}" ; then
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1135,6 +1186,11 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    fi
 =======
 >>>>>>> upstream/master
+=======
+		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
+	    fi
+	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
+>>>>>>> upstream/master
 	fi
 	MAKE_DLL="\${SHLIB_LD} \$(LDFLAGS) -out:\[$]@"
 	# DLLSUFFIX is separate because it is the building block for
@@ -1143,6 +1199,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	LIBSUFFIX="\${DBGX}.lib"
 	LIBFLAGSUFFIX="\${DBGX}"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -1172,6 +1229,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
 	fi
 
+=======
+>>>>>>> upstream/master
 	LIBS="netapi32.lib kernel32.lib user32.lib advapi32.lib userenv.lib ws2_32.lib"
 
 	case "x`echo \${VisualStudioVersion}`" in
@@ -1182,6 +1241,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		    ;;
 	esac
 
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	if test "$do64bit" != "no" ; then
@@ -1214,6 +1276,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LINKBIN="link"
 	fi
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	if test "$doWince" != "no" ; then
 	    # Set defaults for common evc4/PPC2003 setup
@@ -1311,6 +1374,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	else
 	    LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
 	fi
+=======
+	LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
+>>>>>>> upstream/master
 =======
 	LIBS_GUI="gdi32.lib comdlg32.lib imm32.lib comctl32.lib shell32.lib uuid.lib"
 >>>>>>> upstream/master
@@ -1552,8 +1618,106 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	fi
     fi
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    if test "${GCC}" = "yes" ; then
+	AC_CACHE_CHECK(for SEH support in compiler,
+	    tcl_cv_seh,
+	AC_TRY_RUN([
+	    #define WIN32_LEAN_AND_MEAN
+	    #include <windows.h>
+	    #undef WIN32_LEAN_AND_MEAN
+
+	    int main(int argc, char** argv) {
+		int a, b = 0;
+		__try {
+		    a = 666 / b;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER) {
+		    return 0;
+		}
+		return 1;
+	    }
+	],
+	    tcl_cv_seh=yes,
+	    tcl_cv_seh=no,
+	    tcl_cv_seh=no)
+	)
+	if test "$tcl_cv_seh" = "no" ; then
+	    AC_DEFINE(HAVE_NO_SEH, 1,
+		    [Defined when mingw does not support SEH])
+	fi
+
+	#
+	# Check to see if the excpt.h include file provided contains the
+	# definition for EXCEPTION_DISPOSITION; if not, which is the case
+	# with Cygwin's version as of 2002-04-10, define it to be int,
+	# sufficient for getting the current code to work.
+	#
+	AC_CACHE_CHECK(for EXCEPTION_DISPOSITION support in include files,
+	    tcl_cv_eh_disposition,
+	    AC_TRY_COMPILE([
+#	    define WIN32_LEAN_AND_MEAN
+#	    include <windows.h>
+#	    undef WIN32_LEAN_AND_MEAN
+	    ],[
+		EXCEPTION_DISPOSITION x;
+	    ],
+		tcl_cv_eh_disposition=yes,
+		tcl_cv_eh_disposition=no)
+	)
+	if test "$tcl_cv_eh_disposition" = "no" ; then
+	AC_DEFINE(EXCEPTION_DISPOSITION, int,
+		[Defined when cygwin/mingw does not support EXCEPTION DISPOSITION])
+	fi
+
+	# Check to see if winnt.h defines CHAR, SHORT, and LONG
+	# even if VOID has already been #defined. The win32api
+	# used by mingw and cygwin is known to do this.
+
+	AC_CACHE_CHECK(for winnt.h that ignores VOID define,
+	    tcl_cv_winnt_ignore_void,
+	    AC_TRY_COMPILE([
+		#define VOID void
+		#define WIN32_LEAN_AND_MEAN
+		#include <windows.h>
+		#undef WIN32_LEAN_AND_MEAN
+	    ], [
+		CHAR c;
+		SHORT s;
+		LONG l;
+	    ],
+        tcl_cv_winnt_ignore_void=yes,
+        tcl_cv_winnt_ignore_void=no)
+	)
+	if test "$tcl_cv_winnt_ignore_void" = "yes" ; then
+	    AC_DEFINE(HAVE_WINNT_IGNORE_VOID, 1,
+		    [Defined when cygwin/mingw ignores VOID define in winnt.h])
+	fi
+
+	# See if the compiler supports casting to a union type.
+	# This is used to stop gcc from printing a compiler
+	# warning when initializing a union member.
+
+	AC_CACHE_CHECK(for cast to union support,
+	    tcl_cv_cast_to_union,
+	    AC_TRY_COMPILE([],
+	    [
+		  union foo { int i; double d; };
+		  union foo f = (union foo) (int) 0;
+	    ],
+	    tcl_cv_cast_to_union=yes,
+	    tcl_cv_cast_to_union=no)
+	)
+	if test "$tcl_cv_cast_to_union" = "yes"; then
+	    AC_DEFINE(HAVE_CAST_TO_UNION, 1,
+		    [Defined when compiler supports casting to union type.])
+	fi
+    fi
+
 >>>>>>> upstream/master
     # DL_LIBS is empty, but then we match the Unix version
     AC_SUBST(DL_LIBS)
@@ -1580,6 +1744,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 #------------------------------------------------------------------------
 
 AC_DEFUN([SC_WITH_TCL], [
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1625,6 +1790,15 @@ AC_DEFUN([SC_WITH_TCL], [
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 8.7 binaries from DIR],
 >>>>>>> upstream/master
 =======
+    AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 9.0 binaries from DIR],
+>>>>>>> upstream/master
+=======
+    if test -d ../../tcl9.0$1/win;  then
+	TCL_BIN_DEFAULT=../../tcl9.0$1/win
+    else
+	TCL_BIN_DEFAULT=../../tcl9.0/win
+    fi
+
     AC_ARG_WITH(tcl, [  --with-tcl=DIR          use Tcl 9.0 binaries from DIR],
 >>>>>>> upstream/master
 	    TCL_BIN_DIR=$withval, TCL_BIN_DIR=`cd $TCL_BIN_DEFAULT; pwd`)
@@ -1897,7 +2071,11 @@ AC_DEFUN([SC_ZIPFS_SUPPORT], [
         ZIP_PROG="$ac_cv_path_zip"
         AC_MSG_RESULT([$ZIP_PROG])
         ZIP_PROG_OPTIONS="-rq"
+<<<<<<< HEAD
         ZIP_PROG_VFSSEARCH="."
+=======
+        ZIP_PROG_VFSSEARCH="*"
+>>>>>>> upstream/master
         AC_MSG_RESULT([Found INFO Zip in environment])
         # Use standard arguments for zip
     else
@@ -1905,7 +2083,11 @@ AC_DEFUN([SC_ZIPFS_SUPPORT], [
         # We can use the locally distributed minizip instead
         ZIP_PROG="./minizip${EXEEXT_FOR_BUILD}"
         ZIP_PROG_OPTIONS="-o -r"
+<<<<<<< HEAD
         ZIP_PROG_VFSSEARCH="."
+=======
+        ZIP_PROG_VFSSEARCH="*"
+>>>>>>> upstream/master
         ZIP_INSTALL_OBJS="minizip${EXEEXT_FOR_BUILD}"
         AC_MSG_RESULT([No zip found on PATH building minizip])
     fi

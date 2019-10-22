@@ -4,6 +4,7 @@ set TZData(:Asia/Choibalsan) {
     {-9223372036854775808 27480 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2032933080 25200 0 ULAT}
     {252435600 28800 0 ULAT}
     {417974400 36000 0 CHOST}
@@ -224,6 +225,8 @@ set TZData(:Asia/Choibalsan) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-2032933080 25200 0 +07}
     {252435600 28800 0 +08}
     {417974400 36000 0 +09}
@@ -276,6 +279,9 @@ set TZData(:Asia/Choibalsan) {
     {1458928800 32400 1 +08}
     {1474642800 28800 0 +08}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

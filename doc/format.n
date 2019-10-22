@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -158,7 +162,11 @@ truncated to a 16-bit range before converting.  This option is rarely useful.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If it is \fBl\fR it specifies that the integer value is 
+=======
+If it is \fBl\fR it specifies that the integer value is
+>>>>>>> upstream/master
 =======
 If it is \fBl\fR it specifies that the integer value is
 >>>>>>> upstream/master
@@ -219,8 +227,13 @@ No conversion; just insert string.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Convert number to signed decimal string of 
 the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by 
+=======
+Convert number to signed decimal string of
+the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by
+>>>>>>> upstream/master
 =======
 Convert number to signed decimal string of
 the form \fIxx.yyy\fR, where the number of \fIy\fR's is determined by
@@ -245,8 +258,13 @@ If the precision is 0 then no decimal point is output.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Convert number to scientific notation in the 
 form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined 
+=======
+Convert number to scientific notation in the
+form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined
+>>>>>>> upstream/master
 =======
 Convert number to scientific notation in the
 form \fIx.yyy\fBe\(+-\fIzz\fR, where the number of \fIy\fR's is determined
@@ -273,8 +291,13 @@ printed instead of \fBe\fR.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If the exponent is less than \-4 or greater than or equal to the 
 precision, then convert number as for \fB%e\fR or 
+=======
+If the exponent is less than \-4 or greater than or equal to the
+precision, then convert number as for \fB%e\fR or
+>>>>>>> upstream/master
 =======
 If the exponent is less than \-4 or greater than or equal to the
 precision, then convert number as for \fB%e\fR or

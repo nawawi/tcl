@@ -1,7 +1,11 @@
 /* compress.c -- compress a memory buffer
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2005 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2005, 2014, 2016 Jean-loup Gailly, Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2005, 2014, 2016 Jean-loup Gailly, Mark Adler
 >>>>>>> upstream/master
@@ -38,6 +42,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     int err;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     stream.next_in = (z_const Bytef *)source;
     stream.avail_in = (uInt)sourceLen;
@@ -62,6 +67,13 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     left = *destLen;
     *destLen = 0;
 >>>>>>> upstream/master
+=======
+    const uInt max = (uInt)-1;
+    uLong left;
+
+    left = *destLen;
+    *destLen = 0;
+>>>>>>> upstream/master
 
     stream.zalloc = (alloc_func)0;
     stream.zfree = (free_func)0;
@@ -70,6 +82,7 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     err = deflateInit(&stream, level);
     if (err != Z_OK) return err;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     err = deflate(&stream, Z_FINISH);
@@ -94,6 +107,13 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     stream.avail_in = 0;
 
 >>>>>>> upstream/master
+=======
+    stream.next_out = dest;
+    stream.avail_out = 0;
+    stream.next_in = (z_const Bytef *)source;
+    stream.avail_in = 0;
+
+>>>>>>> upstream/master
     do {
         if (stream.avail_out == 0) {
             stream.avail_out = left > (uLong)max ? max : (uInt)left;
@@ -110,6 +130,9 @@ int ZEXPORT compress2 (dest, destLen, source, sourceLen, level)
     deflateEnd(&stream);
     return err == Z_STREAM_END ? Z_OK : err;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

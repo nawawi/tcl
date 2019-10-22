@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset bg DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u041d\u0434"\
         "\u041f\u043d"\
         "\u0412\u0442"\
@@ -37,6 +38,16 @@ namespace eval ::tcl::clock {
         "Сб"]
     ::msgcat::mcset bg DAYS_OF_WEEK_FULL [list \
 >>>>>>> upstream/master
+=======
+        "Нд"\
+        "Пн"\
+        "Вт"\
+        "Ср"\
+        "Чт"\
+        "Пт"\
+        "Сб"]
+    ::msgcat::mcset bg DAYS_OF_WEEK_FULL [list \
+>>>>>>> upstream/master
         "Неделя"\
         "Понеделник"\
         "Вторник"\
@@ -45,6 +56,9 @@ namespace eval ::tcl::clock {
         "Петък"\
         "Събота"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -65,6 +79,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset bg MONTHS_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u042f\u043d\u0443\u0430\u0440\u0438"\
         "\u0424\u0435\u0432\u0440\u0443\u0430\u0440\u0438"\
         "\u041c\u0430\u0440\u0442"\
@@ -80,6 +95,23 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset bg BCE "\u043f\u0440.\u043d.\u0435."
     ::msgcat::mcset bg CE "\u043d.\u0435."
+=======
+        "Януари"\
+        "Февруари"\
+        "Март"\
+        "Април"\
+        "Май"\
+        "Юни"\
+        "Юли"\
+        "Август"\
+        "Септември"\
+        "Октомври"\
+        "Ноември"\
+        "Декември"\
+        ""]
+    ::msgcat::mcset bg BCE "пр.н.е."
+    ::msgcat::mcset bg CE "н.е."
+>>>>>>> upstream/master
 =======
         "Януари"\
         "Февруари"\

@@ -127,10 +127,13 @@ test load-4.1 {reloading package into same interpreter} [list $dll $loaded] {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test load-4.2 {reloading package into same interpreter} [list $dll $loaded] {
     list [catch {load [file join $testDir pkga$ext] pkgb} msg] $msg
 } [list 1 "file \"[file join $testDir pkga$ext]\" is already loaded for package \"Pkga\""]
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -142,6 +145,9 @@ test load-4.2 {reloading package into same interpreter} -setup {
 } -result "file \"[file join $testDir pkga$ext]\" is already loaded for package \"Pkga\""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -192,6 +198,7 @@ test load-7.3 {Tcl_StaticPackage procedure} [list teststaticpkg] {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test load-7.4 {Tcl_StaticPackage procedure, redundant calls} \
     [list teststaticpkg $dll $loaded] {
 	teststaticpkg Double 0 1
@@ -201,6 +208,8 @@ test load-7.4 {Tcl_StaticPackage procedure, redundant calls} \
 
 test load-8.1 {TclGetLoadedPackages procedure} [list teststaticpkg $dll $loaded] {
 =======
+=======
+>>>>>>> upstream/master
 catch {load [file join $testDir pkga$ext] pkga}
 catch {load [file join $testDir pkgb$ext] pkgb}
 catch {load [file join $testDir pkge$ext] pkge}
@@ -212,6 +221,9 @@ test load-7.4 {Tcl_StaticPackage procedure, redundant calls} -setup {
 } -constraints [list teststaticpkg $dll $loaded] -body {
     teststaticpkg Double 0 1
     teststaticpkg Double 0 1
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     info loaded
 } -result [list {{} Double} {{} More} {{} Another} {{} Test} {*}$currentRealPackages {*}$alreadyTotalLoaded]
@@ -241,6 +253,7 @@ test load-8.3b {TclGetLoadedPackages procedure} [list teststaticpkg_8.x $dll $lo
 } [lsort -index 1 [list {{} Test} [list [file join $testDir pkgb$ext] Pkgb]]]
 test load-8.4 {TclGetLoadedPackages procedure} [list teststaticpkg_8.x $dll $loaded] {
     load [file join $testDir pkgb$ext] pkgb
+<<<<<<< HEAD
 <<<<<<< HEAD
     list [info loaded {}] [lsort [info commands pkgb_*]]
 } [list [concat [list [list [file join $testDir pkgb$ext] Pkgb] {{} Double} {{} More} {{} Another} {{} Test} [list [file join $testDir pkga$ext] Pkga]] $alreadyLoaded] {pkgb_demo pkgb_sub pkgb_unsafe}]
@@ -320,6 +333,10 @@ test load-8.3b {TclGetLoadedPackages procedure} [list teststaticpkg_8.x $dll $lo
 } [lsort -index 1 [list {{} Test} [list [file join $testDir pkgb$ext] Pkgb]]]
 test load-8.4 {TclGetLoadedPackages procedure} [list teststaticpkg_8.x $dll $loaded] {
     load [file join $testDir pkgb$ext] pkgb
+    list [lsort -index 1 [info loaded {}]] [lsort [info commands pkgb_*]]
+} [list [lsort -index 1 [concat [list [list [file join $testDir pkgb$ext] Pkgb] {{} Double} {{} More} {{} Another} {{} Test} [list [file join $testDir pkga$ext] Pkga]] $alreadyLoaded]] {pkgb_demo pkgb_sub pkgb_unsafe}]
+>>>>>>> upstream/master
+=======
     list [lsort -index 1 [info loaded {}]] [lsort [info commands pkgb_*]]
 } [list [lsort -index 1 [concat [list [list [file join $testDir pkgb$ext] Pkgb] {{} Double} {{} More} {{} Another} {{} Test} [list [file join $testDir pkga$ext] Pkga]] $alreadyLoaded]] {pkgb_demo pkgb_sub pkgb_unsafe}]
 >>>>>>> upstream/master

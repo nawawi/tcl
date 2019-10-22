@@ -116,6 +116,10 @@ proc ::tcl::clock::Initialize {} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
+>>>>>>> upstream/master
 =======
     ::msgcat::mcpackageconfig set changecmd ChangeCurrentLocale
 >>>>>>> upstream/master
@@ -2380,15 +2384,21 @@ proc ::tcl::clock::EnterLocale { locale } {
 
 	    mcpackagelocale set [mclocale]
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	    # Make a new locale string for the system locale, and get the
 	    # Control Panel information
 
 =======
+=======
+>>>>>>> upstream/master
 
 	    # Make a new locale string for the system locale, and get the
 	    # Control Panel information
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    set locale [mclocale]_windows
 	    if { ! [mcpackagelocale present $locale] } {
@@ -4535,6 +4545,7 @@ proc ::tcl::clock::AddMonths { months clockval timezone changeover } {
 
     return [dict get $date seconds]
 
+<<<<<<< HEAD
 }
 
 #----------------------------------------------------------------------
@@ -4593,6 +4604,8 @@ proc ::tcl::clock::AddWeekDays { days clockval timezone changeover } {
     }
 
     AddDays $toAdd $clockval $timezone $changeover
+=======
+>>>>>>> upstream/master
 }
 
 #----------------------------------------------------------------------
@@ -4660,7 +4673,10 @@ proc ::tcl::clock::AddDays { days clockval timezone changeover } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -4694,10 +4710,17 @@ proc ::tcl::clock::ChangeCurrentLocale {args} {
     foreach p [info procs [namespace current]::scanproc'*'current] {
         rename $p {}
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
     foreach p [info procs [namespace current]::formatproc'*'current] {
         rename $p {}
     }
+=======
+    }
+    foreach p [info procs [namespace current]::formatproc'*'current] {
+        rename $p {}
+    }
+>>>>>>> upstream/master
 =======
     }
     foreach p [info procs [namespace current]::formatproc'*'current] {

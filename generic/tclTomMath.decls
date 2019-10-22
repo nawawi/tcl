@@ -6,7 +6,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	generate the 'tclTomMathDecls.h' and 'tclTomMathStub.c' files.
+=======
+#	generate the 'tclTomMathDecls.h' and 'tclStubInit.c' files.
+>>>>>>> upstream/master
 =======
 #	generate the 'tclTomMathDecls.h' and 'tclStubInit.c' files.
 >>>>>>> upstream/master
@@ -190,13 +194,10 @@ declare 48 {
 declare 49 {
     void TclBN_mp_zero(mp_int *a)
 }
-
-# internal routines to libtommath - should not be called but must be
-# exported to accommodate the "tommath" extension
-
-declare 50 {
-    void TclBN_reverse(unsigned char *s, int len)
+declare 61 {
+    int TclBN_mp_init_set_int(mp_int *a, unsigned long i)
 }
+<<<<<<< HEAD
 declare 51 {
     int TclBN_fast_s_mp_mul_digs(const mp_int *a, const mp_int *b, mp_int *c, int digs)
 }
@@ -272,6 +273,71 @@ declare 71 {
 declare 72 {
     unsigned long TclBN_mp_get_int(const mp_int *a)
 }
+=======
+declare 62 {
+    int TclBN_mp_set_int(mp_int *a, unsigned long i)
+}
+declare 63 {
+    int TclBN_mp_cnt_lsb(const mp_int *a)
+}
+
+# Formerly internal API to allow initialisation of bignums without knowing the
+# typedefs of how a bignum works internally.
+# Removed in 9.0
+#declare 64 {
+#    void TclBNInitBignumFromLong(mp_int *bignum, long initVal)
+#}
+# Removed in 9.0
+#declare 65 {
+#    void TclBNInitBignumFromWideInt(mp_int *bignum, Tcl_WideInt initVal)
+#}
+# Removed in 9.0
+#declare 66 {
+#    void TclBNInitBignumFromWideUInt(mp_int *bignum, Tcl_WideUInt initVal)
+#}
+
+# Added in libtommath 1.0
+declare 67 {
+    int TclBN_mp_expt_d_ex(const mp_int *a, mp_digit b, mp_int *c, int fast)
+}
+# Added in libtommath 1.0.1
+declare 68 {
+    int TclBN_mp_set_long_long(mp_int *a, Tcl_WideUInt i)
+}
+declare 69 {
+    Tcl_WideUInt TclBN_mp_get_long_long(const mp_int *a)
+}
+declare 70 {
+    int TclBN_mp_set_long(mp_int *a, unsigned long i)
+}
+declare 71 {
+    unsigned long TclBN_mp_get_long(const mp_int *a)
+}
+declare 72 {
+    unsigned long TclBN_mp_get_int(const mp_int *a)
+}
+
+# Added in libtommath 1.1.0
+# No longer in use: replaced by mp_and()
+#declare 73 {
+#    int TclBN_mp_tc_and(const mp_int *a, const mp_int *b, mp_int *c)
+#}
+# No longer in use: replaced by mp_or()
+#declare 74 {
+#    int TclBN_mp_tc_or(const mp_int *a, const mp_int *b, mp_int *c)
+#}
+# No longer in use: replaced by mp_xor()
+#declare 75 {
+#    int TclBN_mp_tc_xor(const mp_int *a, const mp_int *b, mp_int *c)
+#}
+declare 76 {
+    int TclBN_mp_signed_rsh(const mp_int *a, int b, mp_int *c)
+}
+declare 77 {
+    int TclBN_mp_get_bit(const mp_int *a, int b)
+}
+
+>>>>>>> upstream/master
 
 # Local Variables:
 # mode: tcl

@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -253,7 +257,11 @@ immediate end-of-file; information redirected to standard output or standard
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 error will be discarded.  
+=======
+error will be discarded.
+>>>>>>> upstream/master
 =======
 error will be discarded.
 >>>>>>> upstream/master
@@ -280,7 +288,11 @@ path separator, it may or may not be recognized as a path name, depending on
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the program.  
+=======
+the program.
+>>>>>>> upstream/master
 =======
 the program.
 >>>>>>> upstream/master
@@ -335,8 +347,14 @@ When attempting to execute an application, \fBexec\fR first searches for
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the name as it was specified.  Then, in order, \fB.com\fR, \fB.exe\fR, and
 \fB.bat\fR are appended to the end of the specified name and it searches
+=======
+the name as it was specified.  Then, in order,
+\fB.com\fR, \fB.exe\fR, \fB.bat\fR and \fB.cmd\fR
+are appended to the end of the specified name and it searches
+>>>>>>> upstream/master
 =======
 the name as it was specified.  Then, in order,
 \fB.com\fR, \fB.exe\fR, \fB.bat\fR and \fB.cmd\fR

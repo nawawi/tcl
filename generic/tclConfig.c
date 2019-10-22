@@ -202,7 +202,8 @@ QueryConfigObjCmd(
     QCCD *cdPtr = clientData;
     Tcl_Obj *pkgName = cdPtr->pkg;
     Tcl_Obj *pDB, *pkgDict, *val, *listPtr;
-    int n, index;
+    size_t n = 0;
+    int index, m;
     static const char *const subcmdStrings[] = {
 	"get", "list", NULL
     };
@@ -261,7 +262,11 @@ QueryConfigObjCmd(
 	 * Value is stored as-is in a byte array, see Bug [9b2e636361],
 	 * so we have to decode it first.
 	 */
+<<<<<<< HEAD
 	value = (const char *) Tcl_GetByteArrayFromObj(val, &n);
+=======
+	value = (const char *) TclGetByteArrayFromObj(val, &n);
+>>>>>>> upstream/master
 	value = Tcl_ExternalToUtfDString(venc, value, n, &conv);
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(value,
 		Tcl_DStringLength(&conv)));
@@ -274,8 +279,8 @@ QueryConfigObjCmd(
 	    return TCL_ERROR;
 	}
 
-	Tcl_DictObjSize(interp, pkgDict, &n);
-	listPtr = Tcl_NewListObj(n, NULL);
+	Tcl_DictObjSize(interp, pkgDict, &m);
+	listPtr = Tcl_NewListObj(m, NULL);
 
 	if (!listPtr) {
 	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
@@ -284,7 +289,11 @@ QueryConfigObjCmd(
 	    return TCL_ERROR;
 	}
 
+<<<<<<< HEAD
 	if (n) {
+=======
+	if (m) {
+>>>>>>> upstream/master
 	    Tcl_DictSearch s;
 	    Tcl_Obj *key;
 	    int done;

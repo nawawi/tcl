@@ -39,7 +39,11 @@ typedef struct BgError {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ErrAssocData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -132,7 +136,7 @@ static void		FinalizeThread(int quick);
 /*
  *----------------------------------------------------------------------
  *
- * Tcl_BackgroundError --
+ * Tcl_BackgroundException --
  *
  *	This function is invoked to handle errors that occur in Tcl commands
  *	that are invoked in "background" (e.g. from event or timer bindings).
@@ -146,14 +150,6 @@ static void		FinalizeThread(int quick);
  *
  *----------------------------------------------------------------------
  */
-
-void
-Tcl_BackgroundError(
-    Tcl_Interp *interp)		/* Interpreter in which an error has
-				 * occurred. */
-{
-    Tcl_BackgroundException(interp, TCL_ERROR);
-}
 
 void
 Tcl_BackgroundException(
@@ -1006,6 +1002,7 @@ Tcl_Exit(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     TCL_NORETURN1 Tcl_ExitProc *currentAppExitPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1013,11 +1010,15 @@ Tcl_Exit(
 <<<<<<< HEAD
 =======
 >>>>>>> upstream/master
+=======
+    TCL_NORETURN1 Tcl_ExitProc *currentAppExitPtr;
+>>>>>>> upstream/master
 
     Tcl_MutexLock(&exitMutex);
     currentAppExitPtr = appExitPtr;
     Tcl_MutexUnlock(&exitMutex);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -1046,19 +1047,33 @@ Tcl_Exit(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+    /*
+     * Warning: this function SHOULD NOT return, as there is code that depends
+     * on Tcl_Exit never returning. In fact, we will Tcl_Panic if anyone
+     * returns, so critical is this dependcy.
+     *
+     * If subsystems are not (yet) initialized, proper Tcl-finalization is
+     * impossible, so fallback to system exit, see bug-[f8a33ce3db5d8cc2].
+     */
+
+>>>>>>> upstream/master
     if (currentAppExitPtr) {
-	/*
-	 * Warning: this code SHOULD NOT return, as there is code that depends
-	 * on Tcl_Exit never returning. In fact, we will Tcl_Panic if anyone
-	 * returns, so critical is this dependcy.
-	 */
 
 	currentAppExitPtr(INT2PTR(status));
+<<<<<<< HEAD
 	Tcl_Panic("AppExitProc returned unexpectedly");
     } else {
 
 	if (TclFullFinalizationRequested()) {
 
+=======
+
+    } else if (subsystemsInitialized) {
+
+	if (TclFullFinalizationRequested()) {
+
+>>>>>>> upstream/master
 	    /*
 	     * Thorough finalization for Valgrind et al.
 	     */
@@ -1088,15 +1103,21 @@ Tcl_Exit(
 
 	    FinalizeThread(/* quick */ 1);
 	}
+<<<<<<< HEAD
 	TclpExit(status);
 	Tcl_Panic("OS exit failed!");
+=======
+>>>>>>> upstream/master
     }
+
+    TclpExit(status);
+    Tcl_Panic("OS exit failed!");
 }
 
 /*
  *-------------------------------------------------------------------------
  *
- * TclInitSubsystems --
+ * Tcl_InitSubsystems --
  *
  *	Initialize various subsytems in Tcl. This should be called the first
  *	time an interp is created, or before any of the subsystems are used.
@@ -1119,10 +1140,10 @@ Tcl_Exit(
  */
 
 void
-TclInitSubsystems(void)
+Tcl_InitSubsystems(void)
 {
     if (inExit != 0) {
-	Tcl_Panic("TclInitSubsystems called while exiting");
+	Tcl_Panic("Tcl_InitSubsystems called while exiting");
     }
 
     if (subsystemsInitialized == 0) {
@@ -1162,6 +1183,9 @@ TclInitSubsystems(void)
 #if TCL_THREADS && defined(USE_THREAD_ALLOC)
 	    TclInitThreadAlloc();	/* Setup thread allocator caches */
 >>>>>>> upstream/master
+#endif
+#if TCL_THREADS && defined(USE_THREAD_ALLOC)
+	    TclInitThreadAlloc();	/* Setup thread allocator caches */
 #endif
 #if TCL_THREADS && defined(USE_THREAD_ALLOC)
 	    TclInitThreadAlloc();	/* Setup thread allocator caches */
@@ -1549,7 +1573,11 @@ Tcl_VwaitObjCmd(
 	Tcl_WrongNumArgs(interp, 1, objv, "name");
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
     nameString = Tcl_GetString(objv[1]);
+=======
+    nameString = TclGetString(objv[1]);
+>>>>>>> upstream/master
     if (Tcl_TraceVar2(interp, nameString, NULL,
 	    TCL_GLOBAL_ONLY|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 	    VwaitVarProc, &done) != TCL_OK) {
@@ -1613,6 +1641,11 @@ VwaitVarProc(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
+	    VwaitVarProc, clientData);
+>>>>>>> upstream/master
 =======
     Tcl_UntraceVar(interp, name1, TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
 	    VwaitVarProc, clientData);
@@ -1762,7 +1795,11 @@ Tcl_CreateThread(
 {
 #if TCL_THREADS
 <<<<<<< HEAD
+<<<<<<< HEAD
     ThreadClientData *cdPtr = ckalloc(sizeof(ThreadClientData));
+=======
+    ThreadClientData *cdPtr = Tcl_Alloc(sizeof(ThreadClientData));
+>>>>>>> upstream/master
 =======
     ThreadClientData *cdPtr = Tcl_Alloc(sizeof(ThreadClientData));
 >>>>>>> upstream/master

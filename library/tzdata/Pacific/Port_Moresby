@@ -5,7 +5,11 @@ set TZData(:Pacific/Port_Moresby) {
     {-2840176120 35312 0 PMMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2366790512 36000 0 PGT}
+=======
+    {-2366790512 36000 0 +10}
+>>>>>>> upstream/master
 =======
     {-2366790512 36000 0 +10}
 >>>>>>> upstream/master

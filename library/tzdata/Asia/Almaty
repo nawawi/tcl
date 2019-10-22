@@ -6,6 +6,7 @@ set TZData(:Asia/Almaty) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441170468 18000 0 ALMT}
     {-1247547600 21600 0 ALMT}
     {354909600 25200 1 ALMST}
@@ -58,6 +59,8 @@ set TZData(:Asia/Almaty) {
     {1099166400 21600 0 ALMT}
     {1110823200 21600 0 ALMT}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -119,6 +122,9 @@ set TZData(:Asia/Almaty) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

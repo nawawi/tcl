@@ -2,6 +2,7 @@
 
 set TZData(:Asia/Macau) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-9223372036854775808 27260 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -55,6 +56,8 @@ set TZData(:Asia/Macau) {
     {-1830412800 28800 0 CST}
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     {-9223372036854775808 27250 0 LMT}
     {-2056692850 28800 0 CST}
     {-884509200 32400 0 +09}
@@ -93,6 +96,9 @@ set TZData(:Asia/Macau) {
     {-320909400 28800 0 CST}
     {-308809800 32400 1 CDT}
     {-288855000 28800 0 CST}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     {-277360200 32400 1 CDT}
     {-257405400 28800 0 CST}
@@ -127,6 +133,7 @@ set TZData(:Asia/Macau) {
     {198617400 32400 1 CDT}
     {214338600 28800 0 CST}
 <<<<<<< HEAD
+<<<<<<< HEAD
     {230067000 32400 1 CDT}
     {245788200 28800 0 CST}
     {261504000 32400 1 CDT}
@@ -138,6 +145,10 @@ set TZData(:Asia/Macau) {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {295385400 32400 1 CDT}
+    {309292200 28800 0 CST}
 >>>>>>> upstream/master
 =======
     {295385400 32400 1 CDT}

@@ -73,6 +73,10 @@ int fake_getnameinfo(const struct sockaddr *sa, size_t salen, char *host,
 	struct sockaddr_in *sin = (struct sockaddr_in *)sa;
 	struct hostent *hp;
 	char tmpserv[16];
+<<<<<<< HEAD
+=======
+	(void)salen;
+>>>>>>> upstream/master
 
 	if (sa->sa_family != AF_UNSPEC && sa->sa_family != AF_INET)
 		return (EAI_FAMILY);
@@ -153,7 +157,11 @@ addrinfo *malloc_ai(int port, u_long addr, const struct addrinfo *hints)
 {
 	struct addrinfo *ai;
 
+<<<<<<< HEAD
 	ai = malloc(sizeof(*ai) + sizeof(struct sockaddr_in));
+=======
+	ai = (struct addrinfo *)malloc(sizeof(*ai) + sizeof(struct sockaddr_in));
+>>>>>>> upstream/master
 	if (ai == NULL)
 		return (NULL);
 

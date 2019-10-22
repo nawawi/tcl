@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ar DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u062d"\
         "\u0646"\
         "\u062b"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u062c"\
         "\u0633"]
 =======
+=======
+>>>>>>> upstream/master
         "ح"\
         "ن"\
         "ث"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "خ"\
         "ج"\
         "س"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset ar DAYS_OF_WEEK_FULL [list \
         "الأحد"\
@@ -55,6 +61,7 @@ namespace eval ::tcl::clock {
         "نوفمبر"\
         "ديسمبر"\
         ""]
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset ar BCE "\u0642.\u0645"
     ::msgcat::mcset ar CE "\u0645"
@@ -106,11 +113,16 @@ namespace eval ::tcl::clock {
         ""]
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     ::msgcat::mcset ar BCE "ق.م"
     ::msgcat::mcset ar CE "م"
     ::msgcat::mcset ar AM "ص"
     ::msgcat::mcset ar PM "م"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

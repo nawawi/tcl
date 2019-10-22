@@ -92,7 +92,11 @@ static const char *const literals[] = {
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ClockClientData {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -214,11 +218,15 @@ struct ClockCommand {
 static const struct ClockCommand clockCommands[] = {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     { "clicks",			ClockClicksObjCmd },
     { "getenv",			ClockGetenvObjCmd },
     { "microseconds",		ClockMicrosecondsObjCmd },
     { "milliseconds",		ClockMillisecondsObjCmd },
     { "seconds",		ClockSecondsObjCmd },
+=======
+    { "getenv",			ClockGetenvObjCmd },
+>>>>>>> upstream/master
 =======
     { "getenv",			ClockGetenvObjCmd },
 >>>>>>> upstream/master
@@ -279,6 +287,7 @@ TclClockInit(
 	{NULL,           NULL,                    NULL,                      NULL, NULL,       0}
     };
 
+<<<<<<< HEAD
     /*
      * Safe interps get [::clock] as alias to a master, so do not need their
      * own copies of the support routines.
@@ -288,6 +297,8 @@ TclClockInit(
 	return;
     }
 
+=======
+>>>>>>> upstream/master
     /*
      * Safe interps get [::clock] as alias to a master, so do not need their
      * own copies of the support routines.
@@ -301,9 +312,15 @@ TclClockInit(
      * Create the client data, which is a refcounted literal pool.
      */
 
+<<<<<<< HEAD
     data = ckalloc(sizeof(ClockClientData));
     data->refCount = 0;
     data->literals = ckalloc(LIT__END * sizeof(Tcl_Obj*));
+=======
+    data = Tcl_Alloc(sizeof(ClockClientData));
+    data->refCount = 0;
+    data->literals = Tcl_Alloc(LIT__END * sizeof(Tcl_Obj*));
+>>>>>>> upstream/master
     for (i = 0; i < LIT__END; ++i) {
 	data->literals[i] = Tcl_NewStringObj(literals[i], -1);
 	Tcl_IncrRefCount(data->literals[i]);
@@ -804,6 +821,7 @@ ClockGetjuliandayfromerayearmonthdayObjCmd(
 	return TCL_ERROR;
     }
     dict = objv[1];
+<<<<<<< HEAD
     if (FetchEraField(interp, dict, literals[LIT_ERA], &era) != TCL_OK
 	    || FetchIntField(interp, dict, literals[LIT_YEAR], &fields.year)
 		!= TCL_OK
@@ -813,6 +831,48 @@ ClockGetjuliandayfromerayearmonthdayObjCmd(
 		&fields.dayOfMonth) != TCL_OK
 	    || TclGetIntFromObj(interp, objv[2], &changeover) != TCL_OK) {
 =======
+=======
+    if (Tcl_DictObjGet(interp, dict, literals[LIT_LOCALSECONDS],
+	    &secondsObj)!= TCL_OK) {
+	return TCL_ERROR;
+    }
+    if (secondsObj == NULL) {
+	Tcl_SetObjResult(interp, Tcl_NewStringObj("key \"localseconds\" not "
+		"found in dictionary", -1));
+	return TCL_ERROR;
+    }
+    if ((TclGetWideIntFromObj(interp, secondsObj,
+	    &fields.localSeconds) != TCL_OK)
+	|| (TclGetIntFromObj(interp, objv[3], &changeover) != TCL_OK)
+	|| ConvertLocalToUTC(interp, &fields, objv[2], changeover)) {
+	return TCL_ERROR;
+    }
+
+    /*
+     * Copy-on-write; set the 'seconds' field in the dictionary and place the
+     * modified dictionary in the interpreter result.
+     */
+
+    if (Tcl_IsShared(dict)) {
+	dict = Tcl_DuplicateObj(dict);
+	created = 1;
+	Tcl_IncrRefCount(dict);
+    }
+    status = Tcl_DictObjPut(interp, dict, literals[LIT_SECONDS],
+	    Tcl_NewWideIntObj(fields.seconds));
+    if (status == TCL_OK) {
+	Tcl_SetObjResult(interp, dict);
+    }
+    if (created) {
+	Tcl_DecrRefCount(dict);
+    }
+    return status;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+>>>>>>> upstream/master
  * ClockGetdatefieldsObjCmd --
  *
  *	Tcl command that determines the values that [clock format] will use in
@@ -871,7 +931,11 @@ ClockGetdatefieldsObjCmd(
      * that it isn't.
      */
 
+<<<<<<< HEAD
     if (Tcl_FetchIntRep(objv[1], &tclBignumType)) {
+=======
+    if (TclHasIntRep(objv[1], &tclBignumType)) {
+>>>>>>> upstream/master
 	Tcl_SetObjResult(interp, literals[LIT_INTEGER_VALUE_TOO_LARGE]);
 >>>>>>> upstream/master
 	return TCL_ERROR;
@@ -962,27 +1026,27 @@ ClockGetjuliandayfromerayearweekdayObjCmd(
     Tcl_DictObjPut(NULL, dict, literals[LIT_TZNAME], fields.tzName);
     Tcl_DecrRefCount(fields.tzName);
     Tcl_DictObjPut(NULL, dict, literals[LIT_TZOFFSET],
-	    Tcl_NewIntObj(fields.tzOffset));
+	    Tcl_NewWideIntObj(fields.tzOffset));
     Tcl_DictObjPut(NULL, dict, literals[LIT_JULIANDAY],
-	    Tcl_NewIntObj(fields.julianDay));
+	    Tcl_NewWideIntObj(fields.julianDay));
     Tcl_DictObjPut(NULL, dict, literals[LIT_GREGORIAN],
-	    Tcl_NewIntObj(fields.gregorian));
+	    Tcl_NewWideIntObj(fields.gregorian));
     Tcl_DictObjPut(NULL, dict, literals[LIT_ERA],
 	    literals[fields.era ? LIT_BCE : LIT_CE]);
     Tcl_DictObjPut(NULL, dict, literals[LIT_YEAR],
-	    Tcl_NewIntObj(fields.year));
+	    Tcl_NewWideIntObj(fields.year));
     Tcl_DictObjPut(NULL, dict, literals[LIT_DAYOFYEAR],
-	    Tcl_NewIntObj(fields.dayOfYear));
+	    Tcl_NewWideIntObj(fields.dayOfYear));
     Tcl_DictObjPut(NULL, dict, literals[LIT_MONTH],
-	    Tcl_NewIntObj(fields.month));
+	    Tcl_NewWideIntObj(fields.month));
     Tcl_DictObjPut(NULL, dict, literals[LIT_DAYOFMONTH],
-	    Tcl_NewIntObj(fields.dayOfMonth));
+	    Tcl_NewWideIntObj(fields.dayOfMonth));
     Tcl_DictObjPut(NULL, dict, literals[LIT_ISO8601YEAR],
-	    Tcl_NewIntObj(fields.iso8601Year));
+	    Tcl_NewWideIntObj(fields.iso8601Year));
     Tcl_DictObjPut(NULL, dict, literals[LIT_ISO8601WEEK],
-	    Tcl_NewIntObj(fields.iso8601Week));
+	    Tcl_NewWideIntObj(fields.iso8601Week));
     Tcl_DictObjPut(NULL, dict, literals[LIT_DAYOFWEEK],
-	    Tcl_NewIntObj(fields.dayOfWeek));
+	    Tcl_NewWideIntObj(fields.dayOfWeek));
     Tcl_SetObjResult(interp, dict);
 
     return TCL_OK;
@@ -1122,7 +1186,7 @@ ClockGetjuliandayfromerayearmonthdayObjCmd(
 	copied = 1;
     }
     status = Tcl_DictObjPut(interp, dict, literals[LIT_JULIANDAY],
-	    Tcl_NewIntObj(fields.julianDay));
+	    Tcl_NewWideIntObj(fields.julianDay));
     if (status == TCL_OK) {
 	Tcl_SetObjResult(interp, dict);
     }
@@ -1326,7 +1390,7 @@ ConvertLocalToUTCUsingTable(
 	copied = 1;
     }
     status = Tcl_DictObjPut(interp, dict, literals[LIT_JULIANDAY],
-	    Tcl_NewIntObj(fields.julianDay));
+	    Tcl_NewWideIntObj(fields.julianDay));
     if (status == TCL_OK) {
 	Tcl_SetObjResult(interp, dict);
     }
@@ -2134,6 +2198,7 @@ GetJulianDayFromEraYearMonthDay(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ym1o4 = ym1 / 4;
 =======
 =======
@@ -2142,12 +2207,17 @@ GetJulianDayFromEraYearMonthDay(
 >>>>>>> upstream/master
 #if 0 /* BUG http://core.tcl.tk/tcl/tktview?name=da340d4f32 */
     ym1o4 = ym1 / 4;
+=======
+#if 0 /* BUG http://core.tcl.tk/tcl/tktview?name=da340d4f32 */
+    ym1o4 = ym1 / 4;
+>>>>>>> upstream/master
 #else
     /*
      * Have to make sure quotient is truncated towards 0 when negative.
      * See above bug for details. The casts are necessary.
      */
     if (ym1 >= 0)
+<<<<<<< HEAD
 <<<<<<< HEAD
         ym1o4 = ym1 / 4;
     else {
@@ -2159,11 +2229,16 @@ GetJulianDayFromEraYearMonthDay(
 =======
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 	ym1o4 = ym1 / 4;
     else {
 	ym1o4 = - (int) (((unsigned int) -ym1) / 4);
     }
 #endif
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     if (ym1 % 4 < 0) {
 	ym1o4--;
@@ -2291,6 +2366,7 @@ ClockGetenvObjCmd(
 {
     const char *varName;
     const char *varValue;
+    (void)clientData;
 
     if (objc != 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "name");
@@ -2333,7 +2409,11 @@ ThreadSafeLocalTime(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct tm *tmPtr = Tcl_GetThreadData(&tmKey, (int) sizeof(struct tm));
+=======
+    struct tm *tmPtr = Tcl_GetThreadData(&tmKey, sizeof(struct tm));
+>>>>>>> upstream/master
 =======
     struct tm *tmPtr = Tcl_GetThreadData(&tmKey, sizeof(struct tm));
 >>>>>>> upstream/master
@@ -2391,6 +2471,7 @@ ClockClicksObjCmd(
     int index = CLICKS_NATIVE;
     Tcl_Time now;
     Tcl_WideInt clicks = 0;
+    (void)clientData;
 
     switch (objc) {
     case 1:
@@ -2419,8 +2500,7 @@ ClockClicksObjCmd(
 #endif
 	break;
     case CLICKS_MICROS:
-	Tcl_GetTime(&now);
-	clicks = ((Tcl_WideInt) now.sec * 1000000) + now.usec;
+	clicks = TclpGetMicroseconds();
 	break;
     }
 
@@ -2454,6 +2534,7 @@ ClockMillisecondsObjCmd(
     Tcl_Obj *const *objv)	/* Parameter values */
 {
     Tcl_Time now;
+    (void)clientData;
 
     if (objc != 1) {
 	Tcl_WrongNumArgs(interp, 1, objv, NULL);
@@ -2490,15 +2571,12 @@ ClockMicrosecondsObjCmd(
     int objc,			/* Parameter count */
     Tcl_Obj *const *objv)	/* Parameter values */
 {
-    Tcl_Time now;
-
+    (void)clientData;
     if (objc != 1) {
 	Tcl_WrongNumArgs(interp, 1, objv, NULL);
 	return TCL_ERROR;
     }
-    Tcl_GetTime(&now);
-    Tcl_SetObjResult(interp, Tcl_NewWideIntObj(
-	    ((Tcl_WideInt) now.sec * 1000000) + now.usec));
+    Tcl_SetObjResult(interp, Tcl_NewWideIntObj(TclpGetMicroseconds()));
     return TCL_OK;
 }
 
@@ -2569,7 +2647,11 @@ ClockParseformatargsObjCmd(
 	if (Tcl_GetIndexFromObj(interp, objv[i], options, "option", 0,
 		&optionIndex) != TCL_OK) {
 	    Tcl_SetErrorCode(interp, "CLOCK", "badOption",
+<<<<<<< HEAD
 		    Tcl_GetString(objv[i]), NULL);
+=======
+		    TclGetString(objv[i]), NULL);
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 	switch (optionIndex) {
@@ -2646,6 +2728,7 @@ ClockSecondsObjCmd(
     Tcl_Obj *const *objv)	/* Parameter values */
 {
     Tcl_Time now;
+    (void)clientData;
 
     if (objc != 1) {
 	Tcl_WrongNumArgs(interp, 1, objv, NULL);
@@ -2680,7 +2763,11 @@ TzsetIfNecessary(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static char *tzWas = NULL;	/* Previous value of TZ, protected by
+=======
+    static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
+>>>>>>> upstream/master
 =======
     static char* tzWas = INT2PTR(-1);	/* Previous value of TZ, protected by
 >>>>>>> upstream/master
@@ -2698,6 +2785,7 @@ TzsetIfNecessary(void)
 
     Tcl_MutexLock(&clockMutex);
     tzIsNow = getenv("TZ");
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2732,11 +2820,19 @@ TzsetIfNecessary(void)
 =======
 	    Tcl_Free(tzWas);
 >>>>>>> upstream/master
+=======
+    if (tzIsNow != NULL && (tzWas == NULL || tzWas == INT2PTR(-1)
+	    || strcmp(tzIsNow, tzWas) != 0)) {
+	tzset();
+	if (tzWas != NULL && tzWas != INT2PTR(-1)) {
+	    Tcl_Free(tzWas);
+>>>>>>> upstream/master
 	}
 	tzWas = Tcl_Alloc(strlen(tzIsNow) + 1);
 	strcpy(tzWas, tzIsNow);
     } else if (tzIsNow == NULL && tzWas != NULL) {
 	tzset();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2754,6 +2850,9 @@ TzsetIfNecessary(void)
 >>>>>>> upstream/master
 =======
 	if (tzWas != INT2PTR(-1)) ckfree(tzWas);
+>>>>>>> upstream/master
+=======
+	if (tzWas != INT2PTR(-1)) Tcl_Free(tzWas);
 >>>>>>> upstream/master
 =======
 	if (tzWas != INT2PTR(-1)) Tcl_Free(tzWas);

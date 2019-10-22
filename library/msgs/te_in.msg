@@ -2,8 +2,13 @@
 namespace eval ::tcl::clock {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset te_IN AM "\u0c2a\u0c42\u0c30\u0c4d\u0c35\u0c3e\u0c39\u0c4d\u0c28"
     ::msgcat::mcset te_IN PM "\u0c05\u0c2a\u0c30\u0c3e\u0c39\u0c4d\u0c28"
+=======
+    ::msgcat::mcset te_IN AM "పూర్వాహ్న"
+    ::msgcat::mcset te_IN PM "అపరాహ్న"
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset te_IN AM "పూర్వాహ్న"
     ::msgcat::mcset te_IN PM "అపరాహ్న"

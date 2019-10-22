@@ -15,6 +15,7 @@
 
 #if TCL_THREADS
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -200,6 +201,145 @@ PCondWait(
 }
 
 static void
+=======
+
+/*
+ * TIP #509. Ensures that Tcl's mutexes are reentrant.
+ *
+ *----------------------------------------------------------------------
+ *
+ * PMutexInit --
+ *
+ *	Sets up the memory pointed to by its argument so that it contains the
+ *	implementation of a recursive lock. Caller supplies the space.
+ *
+ *----------------------------------------------------------------------
+ *
+ * PMutexDestroy --
+ *
+ *	Tears down the implementation of a recursive lock (but does not
+ *	deallocate the space holding the lock).
+ *
+ *----------------------------------------------------------------------
+ *
+ * PMutexLock --
+ *
+ *	Locks a recursive lock. (Similar to pthread_mutex_lock)
+ *
+ *----------------------------------------------------------------------
+ *
+ * PMutexUnlock --
+ *
+ *	Unlocks a recursive lock. (Similar to pthread_mutex_unlock)
+ *
+ *----------------------------------------------------------------------
+ *
+ * PCondWait --
+ *
+ *	Waits on a condition variable linked a recursive lock. (Similar to
+ *	pthread_cond_wait)
+ *
+ *----------------------------------------------------------------------
+ *
+ * PCondTimedWait --
+ *
+ *	Waits for a limited amount of time on a condition variable linked to a
+ *	recursive lock. (Similar to pthread_cond_timedwait)
+ *
+ *----------------------------------------------------------------------
+ */
+
+#ifndef HAVE_DECL_PTHREAD_MUTEX_RECURSIVE
+#define HAVE_DECL_PTHREAD_MUTEX_RECURSIVE 0
+#endif
+
+#if HAVE_DECL_PTHREAD_MUTEX_RECURSIVE
+/*
+ * Pthread has native reentrant (AKA recursive) mutexes. Use them for
+ * Tcl_Mutex.
+ */
+
+typedef pthread_mutex_t PMutex;
+
+static void
+PMutexInit(
+    PMutex *pmutexPtr)
+{
+    pthread_mutexattr_t attr;
+
+    pthread_mutexattr_init(&attr);
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(pmutexPtr, &attr);
+}
+
+#define PMutexDestroy	pthread_mutex_destroy
+#define PMutexLock	pthread_mutex_lock
+#define PMutexUnlock	pthread_mutex_unlock
+#define PCondWait	pthread_cond_wait
+#define PCondTimedWait	pthread_cond_timedwait
+
+#else /* !HAVE_PTHREAD_MUTEX_RECURSIVE */
+
+/*
+ * No native support for reentrant mutexes. Emulate them with regular mutexes
+ * and thread-local counters.
+ */
+
+typedef struct PMutex {
+    pthread_mutex_t mutex;
+    pthread_t thread;
+    int counter;
+} PMutex;
+
+static void
+PMutexInit(
+    PMutex *pmutexPtr)
+{
+    pthread_mutex_init(&pmutexPtr->mutex, NULL);
+    pmutexPtr->thread = 0;
+    pmutexPtr->counter = 0;
+}
+
+static void
+PMutexDestroy(
+    PMutex *pmutexPtr)
+{
+    pthread_mutex_destroy(&pmutexPtr->mutex);
+}
+
+static void
+PMutexLock(
+    PMutex *pmutexPtr)
+{
+    if (pmutexPtr->thread != pthread_self() || pmutexPtr->counter == 0) {
+	pthread_mutex_lock(&pmutexPtr->mutex);
+	pmutexPtr->thread = pthread_self();
+	pmutexPtr->counter = 0;
+    }
+    pmutexPtr->counter++;
+}
+
+static void
+PMutexUnlock(
+    PMutex *pmutexPtr)
+{
+    pmutexPtr->counter--;
+    if (pmutexPtr->counter == 0) {
+	pmutexPtr->thread = 0;
+	pthread_mutex_unlock(&pmutexPtr->mutex);
+    }
+}
+
+static void
+PCondWait(
+    pthread_cond_t *pcondPtr,
+    PMutex *pmutexPtr)
+{
+    pthread_cond_wait(pcondPtr, &pmutexPtr->mutex);
+}
+
+static void
+>>>>>>> upstream/master
 PCondTimedWait(
     pthread_cond_t *pcondPtr,
     PMutex *pmutexPtr,
@@ -232,6 +372,7 @@ static pthread_mutex_t initLock = PTHREAD_MUTEX_INITIALIZER;
 
 static PMutex allocLock;
 static pthread_once_t allocLockInitOnce = PTHREAD_ONCE_INIT;
+<<<<<<< HEAD
 
 static void
 allocLockInit(void)
@@ -250,13 +391,15 @@ static PMutex *allocLockPtr = &allocLock;
  */
 
 static pthread_mutex_t mutexLock = PTHREAD_MUTEX_INITIALIZER;
+=======
+>>>>>>> upstream/master
 
-/*
- * These are for the critical sections inside this file.
- */
-
-#define MASTER_LOCK	pthread_mutex_lock(&masterLock)
-#define MASTER_UNLOCK	pthread_mutex_unlock(&masterLock)
+static void
+allocLockInit(void)
+{
+    PMutexInit(&allocLock);
+}
+static PMutex *allocLockPtr = &allocLock;
 
 =======
 >>>>>>> upstream/master
@@ -473,7 +616,11 @@ TclpInitLock(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
 =======
  * TclFinalizeLock
 >>>>>>> upstream/master
@@ -510,6 +657,7 @@ void
 TclFinalizeLock(void)
 {
 #if TCL_THREADS
+<<<<<<< HEAD
     /*
      * You do not need to destroy mutexes that were created with the
      * PTHREAD_MUTEX_INITIALIZER macro. These mutexes do not need any
@@ -528,6 +676,8 @@ void
 TclFinalizeLock(void)
 {
 #if TCL_THREADS
+=======
+>>>>>>> upstream/master
     /*
      * You do not need to destroy mutexes that were created with the
      * PTHREAD_MUTEX_INITIALIZER macro. These mutexes do not need any
@@ -650,7 +800,13 @@ Tcl_GetAllocMutex(void)
 {
 #if TCL_THREADS
 <<<<<<< HEAD
+<<<<<<< HEAD
     pthread_mutex_t **allocLockPtrPtr = &allocLockPtr;
+=======
+    PMutex **allocLockPtrPtr = &allocLockPtr;
+
+    pthread_once(&allocLockInitOnce, allocLockInit);
+>>>>>>> upstream/master
 =======
     PMutex **allocLockPtrPtr = &allocLockPtr;
 
@@ -695,8 +851,11 @@ Tcl_MutexLock(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 retry:
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -718,6 +877,7 @@ retry:
 	    TclRememberMutex(mutexPtr);
 	}
 	pthread_mutex_unlock(&masterLock);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -756,6 +916,11 @@ retry:
     }
 <<<<<<< HEAD
 =======
+    pmutexPtr = *((PMutex **) mutexPtr);
+    PMutexLock(pmutexPtr);
+>>>>>>> upstream/master
+=======
+    }
     pmutexPtr = *((PMutex **) mutexPtr);
     PMutexLock(pmutexPtr);
 >>>>>>> upstream/master
@@ -971,10 +1136,14 @@ TclpFinalizeCondition(
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
 <<<<<<< HEAD
 /*
+<<<<<<< HEAD
  *----------------------------------------------------------------------
  *
  * TclpReaddir, TclpInetNtoa --
@@ -1059,16 +1228,24 @@ TclpInetNtoa(
 
 >>>>>>> upstream/master
 /*
+=======
+>>>>>>> upstream/master
  * Additions by AOL for specialized thread memory allocator.
  */
 
 #ifdef USE_THREAD_ALLOC
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static volatile int initialized = 0;
 static pthread_key_t key;
 
 typedef struct allocMutex {
+=======
+static pthread_key_t key;
+
+typedef struct {
+>>>>>>> upstream/master
 =======
 static pthread_key_t key;
 
@@ -1089,6 +1266,7 @@ TclpNewAllocMutex(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct allocMutex *lockPtr;
 =======
     allocMutex *lockPtr;
@@ -1096,12 +1274,18 @@ TclpNewAllocMutex(void)
     register pthread_mutex_t *plockPtr;
 
     lockPtr = malloc(sizeof(allocMutex));
+=======
+    AllocMutex *lockPtr;
+    PMutex *plockPtr;
+
+    lockPtr = malloc(sizeof(AllocMutex));
+>>>>>>> upstream/master
     if (lockPtr == NULL) {
 	Tcl_Panic("could not allocate lock");
     }
     plockPtr = &lockPtr->plock;
     lockPtr->tlock = (Tcl_Mutex) plockPtr;
-    pthread_mutex_init(&lockPtr->plock, NULL);
+    PMutexInit(&lockPtr->plock);
     return &lockPtr->tlock;
 }
 
@@ -1110,14 +1294,16 @@ void
 TclpFreeAllocMutex(
     Tcl_Mutex *mutex)		/* The alloc mutex to free. */
 {
-    allocMutex* lockPtr = (allocMutex*) mutex;
+    AllocMutex *lockPtr = (AllocMutex *) mutex;
+
     if (!lockPtr) {
 	return;
     }
-    pthread_mutex_destroy(&lockPtr->plock);
+    PMutexDestroy(&lockPtr->plock);
     free(lockPtr);
 =======
 
+<<<<<<< HEAD
 #undef TclpInetNtoa
 char *
 TclpInetNtoa(
@@ -1173,6 +1359,34 @@ TclpInetNtoa(
     lockPtr = malloc(sizeof(AllocMutex));
     if (lockPtr == NULL) {
 	Tcl_Panic("could not allocate lock");
+=======
+void
+TclpInitAllocCache(void)
+{
+    pthread_key_create(&key, NULL);
+}
+
+void
+TclpFreeAllocCache(
+    void *ptr)
+{
+    if (ptr != NULL) {
+	/*
+	 * Called by TclFinalizeThreadAllocThread() during the thread
+	 * finalization initiated from Tcl_FinalizeThread()
+	 */
+
+	TclFreeAllocCache(ptr);
+	pthread_setspecific(key, NULL);
+
+    } else {
+	/*
+	 * Called by TclFinalizeThreadAlloc() during the process
+	 * finalization initiated from Tcl_Finalize()
+	 */
+
+	pthread_key_delete(key);
+>>>>>>> upstream/master
     }
     plockPtr = &lockPtr->plock;
     lockPtr->tlock = (Tcl_Mutex) plockPtr;
@@ -1184,6 +1398,7 @@ void
 TclpFreeAllocMutex(
     Tcl_Mutex *mutex)		/* The alloc mutex to free. */
 {
+<<<<<<< HEAD
     AllocMutex *lockPtr = (AllocMutex *) mutex;
 
     if (!lockPtr) {
@@ -1191,6 +1406,9 @@ TclpFreeAllocMutex(
     }
     PMutexDestroy(&lockPtr->plock);
     free(lockPtr);
+=======
+    return pthread_getspecific(key);
+>>>>>>> upstream/master
 }
 
 void
@@ -1203,6 +1421,7 @@ TclpInitAllocCache(void)
 #ifdef USE_THREAD_ALLOC
 static pthread_key_t key;
 
+<<<<<<< HEAD
 typedef struct allocMutex {
     Tcl_Mutex tlock;
     pthread_mutex_t plock;
@@ -1626,6 +1845,11 @@ TclpFreeAllocMutex(
     if (!lockPtr) {
 	return;
 =======
+=======
+    ptkeyPtr = TclpSysAlloc(sizeof(pthread_key_t));
+    if (NULL == ptkeyPtr) {
+	Tcl_Panic("unable to allocate thread key!");
+>>>>>>> upstream/master
     }
 
     if (pthread_key_create(ptkeyPtr, NULL)) {

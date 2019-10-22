@@ -248,7 +248,7 @@ TclOO_Class_CreateNs(
 {
     Object *oPtr = (Object *) Tcl_ObjectContextObject(context);
     const char *objName, *nsName;
-    int len;
+    size_t len;
 
     /*
      * Sanity check; should not be possible to invoke this method on a
@@ -426,7 +426,7 @@ TclOO_Object_Eval(
 {
     CallContext *contextPtr = (CallContext *) context;
     Tcl_Object object = Tcl_ObjectContextObject(context);
-    register const int skip = Tcl_ObjectContextSkippedArgs(context);
+    const int skip = Tcl_ObjectContextSkippedArgs(context);
     CallFrame *framePtr, **framePtrPtr = &framePtr;
     Tcl_Obj *scriptPtr;
     CmdFrame *invoker;
@@ -605,7 +605,11 @@ TclOO_Object_Unknown(
 	Tcl_AppendToObj(errorMsg, " or ", -1);
     }
     Tcl_AppendToObj(errorMsg, methodNames[i], -1);
+<<<<<<< HEAD
     Tcl_Free(methodNames);
+=======
+    Tcl_Free((void *)methodNames);
+>>>>>>> upstream/master
     Tcl_SetObjResult(interp, errorMsg);
     Tcl_SetErrorCode(interp, "TCL", "LOOKUP", "METHOD",
 	    TclGetString(objv[skip]), NULL);
@@ -744,7 +748,11 @@ TclOO_Object_VarName(
 	return TCL_ERROR;
     }
     argPtr = objv[objc-1];
+<<<<<<< HEAD
     arg = Tcl_GetString(argPtr);
+=======
+    arg = TclGetString(argPtr);
+>>>>>>> upstream/master
 
     /*
      * Convert the variable name to fully-qualified form if it wasn't already.
@@ -781,8 +789,13 @@ TclOO_Object_VarName(
 
 	    if (mPtr->declaringObjectPtr == oPtr) {
 		FOREACH_STRUCT(pvPtr, oPtr->privateVariables) {
+<<<<<<< HEAD
 		    if (!strcmp(Tcl_GetString(pvPtr->variableObj),
 			    Tcl_GetString(argPtr))) {
+=======
+		    if (!strcmp(TclGetString(pvPtr->variableObj),
+			    TclGetString(argPtr))) {
+>>>>>>> upstream/master
 			argPtr = pvPtr->fullNameObj;
 			break;
 		    }
@@ -803,8 +816,13 @@ TclOO_Object_VarName(
 		}
 		if (isInstance) {
 		    FOREACH_STRUCT(pvPtr, clsPtr->privateVariables) {
+<<<<<<< HEAD
 			if (!strcmp(Tcl_GetString(pvPtr->variableObj),
 				Tcl_GetString(argPtr))) {
+=======
+			if (!strcmp(TclGetString(pvPtr->variableObj),
+				TclGetString(argPtr))) {
+>>>>>>> upstream/master
 			    argPtr = pvPtr->fullNameObj;
 			    break;
 			}
@@ -1122,7 +1140,11 @@ TclOOSelfObjCmd(
 	    Tcl_SetErrorCode(interp, "TCL", "OO", "UNMATCHED_CONTEXT", NULL);
 	    return TCL_ERROR;
 	} else {
+<<<<<<< HEAD
 	    register struct MInvoke *miPtr = &CurrentlyInvoked(contextPtr);
+=======
+	    struct MInvoke *miPtr = &CurrentlyInvoked(contextPtr);
+>>>>>>> upstream/master
 	    Object *oPtr;
 	    const char *type;
 

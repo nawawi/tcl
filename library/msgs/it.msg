@@ -12,6 +12,7 @@ namespace eval ::tcl::clock {
         "domenica"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "luned\u00ec"\
         "marted\u00ec"\
         "mercoled\u00ec"\
@@ -20,12 +21,17 @@ namespace eval ::tcl::clock {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "lunedì"\
         "martedì"\
         "mercoledì"\
         "giovedì"\
         "venerdì"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

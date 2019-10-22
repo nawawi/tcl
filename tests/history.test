@@ -14,6 +14,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   
 =======
 
@@ -25,6 +26,11 @@
 if {[lsearch [namespace children] ::tcltest] == -1} {
     package require tcltest
 =======
+if {"::tcltest" ni [namespace children]} {
+    package require tcltest 2
+>>>>>>> upstream/master
+=======
+
 if {"::tcltest" ni [namespace children]} {
     package require tcltest 2
 >>>>>>> upstream/master
@@ -261,6 +267,10 @@ if {[testConstraint history]} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    history clear
+>>>>>>> upstream/master
 =======
     history clear
 >>>>>>> upstream/master
@@ -341,7 +351,10 @@ test history-10.2 {references kept by history} -constraints history -setup {
 return
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -350,6 +363,9 @@ return
 # End:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

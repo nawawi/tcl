@@ -131,7 +131,11 @@ Tcl_LoadObjCmd(
     const char *p, *fullFileName, *packageName;
     Tcl_LoadHandle loadHandle;
     Tcl_UniChar ch = 0;
+<<<<<<< HEAD
     unsigned len;
+=======
+    size_t len;
+>>>>>>> upstream/master
     int index, flags = 0;
     Tcl_Obj *const *savedobjv = objv;
     static const char *const options[] = {
@@ -165,7 +169,7 @@ Tcl_LoadObjCmd(
     if (Tcl_FSConvertToPathType(interp, objv[1]) != TCL_OK) {
 	return TCL_ERROR;
     }
-    fullFileName = Tcl_GetString(objv[1]);
+    fullFileName = TclGetString(objv[1]);
 
     Tcl_DStringInit(&pkgName);
     Tcl_DStringInit(&initName);
@@ -176,7 +180,7 @@ Tcl_LoadObjCmd(
 
     packageName = NULL;
     if (objc >= 3) {
-	packageName = Tcl_GetString(objv[2]);
+	packageName = TclGetString(objv[2]);
 	if (packageName[0] == '\0') {
 	    packageName = NULL;
 	}
@@ -196,7 +200,7 @@ Tcl_LoadObjCmd(
 
     target = interp;
     if (objc == 4) {
-	const char *slaveIntName = Tcl_GetString(objv[3]);
+	const char *slaveIntName = TclGetString(objv[3]);
 
 	target = Tcl_GetSlave(interp, slaveIntName);
 	if (target == NULL) {
@@ -324,7 +328,7 @@ Tcl_LoadObjCmd(
 
 		splitPtr = Tcl_FSSplitPath(objv[1], &pElements);
 		Tcl_ListObjIndex(NULL, splitPtr, pElements -1, &pkgGuessPtr);
-		pkgGuess = Tcl_GetString(pkgGuessPtr);
+		pkgGuess = TclGetString(pkgGuessPtr);
 		if ((pkgGuess[0] == 'l') && (pkgGuess[1] == 'i')
 			&& (pkgGuess[2] == 'b')) {
 		    pkgGuess += 3;
@@ -405,7 +409,11 @@ Tcl_LoadObjCmd(
 	len = strlen(fullFileName) + 1;
 	pkgPtr->fileName	   = Tcl_Alloc(len);
 	memcpy(pkgPtr->fileName, fullFileName, len);
+<<<<<<< HEAD
 	len = (unsigned) Tcl_DStringLength(&pkgName) + 1;
+=======
+	len = Tcl_DStringLength(&pkgName) + 1;
+>>>>>>> upstream/master
 	pkgPtr->packageName	   = Tcl_Alloc(len);
 	memcpy(pkgPtr->packageName, Tcl_DStringValue(&pkgName), len);
 	pkgPtr->loadHandle	   = loadHandle;
@@ -564,7 +572,7 @@ Tcl_UnloadObjCmd(
     for (i = 1; i < objc; i++) {
 	if (Tcl_GetIndexFromObj(interp, objv[i], options, "option", 0,
 		&index) != TCL_OK) {
-	    fullFileName = Tcl_GetString(objv[i]);
+	    fullFileName = TclGetString(objv[i]);
 	    if (fullFileName[0] == '-') {
 		/*
 		 * It looks like the command contains an option so signal an
@@ -604,13 +612,13 @@ Tcl_UnloadObjCmd(
 	return TCL_ERROR;
     }
 
-    fullFileName = Tcl_GetString(objv[i]);
+    fullFileName = TclGetString(objv[i]);
     Tcl_DStringInit(&pkgName);
     Tcl_DStringInit(&tmp);
 
     packageName = NULL;
     if (objc - i >= 2) {
-	packageName = Tcl_GetString(objv[i+1]);
+	packageName = TclGetString(objv[i+1]);
 	if (packageName[0] == '\0') {
 	    packageName = NULL;
 	}
@@ -630,7 +638,7 @@ Tcl_UnloadObjCmd(
 
     target = interp;
     if (objc - i == 3) {
-	const char *slaveIntName = Tcl_GetString(objv[i + 2]);
+	const char *slaveIntName = TclGetString(objv[i + 2]);
 
 	target = Tcl_GetSlave(interp, slaveIntName);
 	if (target == NULL) {
@@ -934,10 +942,17 @@ Tcl_UnloadObjCmd(
 		}
 		Tcl_SetAssocData(target, "tclLoad", LoadCleanupProc,
 			ipFirstPtr);
+<<<<<<< HEAD
 		ckfree(defaultPtr->fileName);
 		ckfree(defaultPtr->packageName);
 		ckfree(defaultPtr);
 		ckfree(ipPtr);
+=======
+		Tcl_Free(defaultPtr->fileName);
+		Tcl_Free(defaultPtr->packageName);
+		Tcl_Free(defaultPtr);
+		Tcl_Free(ipPtr);
+>>>>>>> upstream/master
 		Tcl_MutexUnlock(&packageMutex);
 	    } else {
 		code = TCL_ERROR;
@@ -958,6 +973,7 @@ Tcl_UnloadObjCmd(
     safeRefCount = pkgPtr->safeInterpRefCount;
     Tcl_MutexUnlock(&packageMutex);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     code = TCL_OK;
     if (pkgPtr->safeInterpRefCount <= 0 && pkgPtr->interpRefCount <= 0
@@ -1036,6 +1052,8 @@ Tcl_UnloadObjCmd(
 #endif
     }
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1141,7 +1159,11 @@ Tcl_StaticPackage(
 	/*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Package isn't loade in the current interp yet. Mark it as now being
+=======
+	 * Package isn't loaded in the current interp yet. Mark it as now being
+>>>>>>> upstream/master
 =======
 	 * Package isn't loaded in the current interp yet. Mark it as now being
 >>>>>>> upstream/master
@@ -1199,6 +1221,9 @@ TclGetLoadedPackagesEx(
 				 * or error message. */
     const char *targetName,	/* Name of target interpreter or NULL. If
 				 * NULL, return info about all interps;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 				 * otherwise, just return info about this
 				 * interpreter. */
@@ -1206,6 +1231,7 @@ TclGetLoadedPackagesEx(
 				 * for all packages.
 				 */
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     return TclGetLoadedPackagesEx(interp, targetName, NULL);
@@ -1224,6 +1250,8 @@ TclGetLoadedPackagesEx(
 				 */
 {
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     Tcl_Interp *target;
     LoadedPackage *pkgPtr;
     InterpPackage *ipPtr;
@@ -1232,10 +1260,13 @@ TclGetLoadedPackagesEx(
     if (targetName == NULL) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/*
 	 * Return information about all of the available packages.
 	 */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1256,11 +1287,14 @@ TclGetLoadedPackagesEx(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*
      * Return information about only the packages that are loaded in a given
      * interpreter.
      */
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1272,7 +1306,10 @@ TclGetLoadedPackagesEx(
     ipPtr = Tcl_GetAssocData(target, "tclLoad", NULL);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -1303,6 +1340,9 @@ TclGetLoadedPackagesEx(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -5,6 +5,7 @@ set TZData(:Pacific/Bougainville) {
     {-2840178136 35312 0 PMMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2366790512 36000 0 PGT}
     {-868010400 32400 0 JST}
     {-768906000 36000 0 PGT}
@@ -12,11 +13,16 @@ set TZData(:Pacific/Bougainville) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-2366790512 36000 0 +10}
     {-868010400 32400 0 +09}
     {-768906000 36000 0 +10}
     {1419696000 39600 0 +11}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -305,7 +305,11 @@ test assemble-7.2 {add} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body { 
+=======
+    -body {
+>>>>>>> upstream/master
 =======
     -body {
 >>>>>>> upstream/master
@@ -326,7 +330,11 @@ test assemble-7.2 {add} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	} 
+=======
+	}
+>>>>>>> upstream/master
 =======
 	}
 >>>>>>> upstream/master
@@ -385,7 +393,11 @@ test assemble-7.6 {div} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	assemble {push 999999; push 7; div} 
+=======
+	assemble {push 999999; push 7; div}
+>>>>>>> upstream/master
 =======
 	assemble {push 999999; push 7; div}
 >>>>>>> upstream/master
@@ -412,7 +424,11 @@ test assemble-7.7 {dup} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 }	
+=======
+}
+>>>>>>> upstream/master
 =======
 }
 >>>>>>> upstream/master
@@ -694,7 +710,11 @@ test assemble-7.25 {lshift} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -750,7 +770,11 @@ test assemble-7.31 {rshift} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -1290,7 +1314,11 @@ test assemble-10.7 {expr - noncompilable} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1415,7 +1443,11 @@ test assemble-11.10 {variable} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1870,9 +1902,15 @@ test assemble-17.9 {jump - resolve a label multiple times} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
 		label zero
 		pop		
+=======
+
+		label zero
+		pop
+>>>>>>> upstream/master
 =======
 
 		label zero
@@ -1903,7 +1941,11 @@ test assemble-17.9 {jump - resolve a label multiple times} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1928,7 +1970,11 @@ test assemble-17.9 {jump - resolve a label multiple times} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1963,7 +2009,11 @@ test assemble-17.9 {jump - resolve a label multiple times} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -1988,7 +2038,11 @@ test assemble-17.9 {jump - resolve a label multiple times} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -2102,7 +2156,11 @@ test assemble-17.15 {multiple passes of code resizing} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     }	
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -2311,7 +2369,11 @@ test assemble-20.6 {lsetFlat} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -3313,6 +3375,7 @@ test assemble-40.1 {unbalanced stack} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    dup 
 		    mult 
 		    push 4
@@ -3320,6 +3383,8 @@ test assemble-40.1 {unbalanced stack} {
 		    mult 
 		    pop 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -3335,6 +3400,9 @@ test assemble-40.1 {unbalanced stack} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -3444,7 +3512,11 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3470,7 +3542,11 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3492,6 +3568,7 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
 		push 2;         # max n 2
 		div;            # max n/2 -> max n
@@ -3504,6 +3581,8 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 		push 2;         # max n 2
 		div;            # max n/2 -> max n
@@ -3512,6 +3591,9 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -3528,7 +3610,11 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3550,7 +3636,11 @@ test assemble-50.1 {Ulam's 3n+1 problem, TAL implementation} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3596,7 +3686,11 @@ test assemble-51.3 {memory leak testing} memory {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3622,7 +3716,11 @@ test assemble-51.3 {memory leak testing} memory {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3644,6 +3742,7 @@ test assemble-51.3 {memory leak testing} memory {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
 		push 2;         # max n 2
 		div;            # max n/2 -> max n
@@ -3656,6 +3755,8 @@ test assemble-51.3 {memory leak testing} memory {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
 		push 2;         # max n 2
 		div;            # max n/2 -> max n
@@ -3664,6 +3765,9 @@ test assemble-51.3 {memory leak testing} memory {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -3680,7 +3784,11 @@ test assemble-51.3 {memory leak testing} memory {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3702,7 +3810,11 @@ test assemble-51.3 {memory leak testing} memory {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master

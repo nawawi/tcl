@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -50,6 +54,7 @@ one or two fields.  If there is only a single field in the specifier
 then it is the name of the argument; if there are two fields, then
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the first is the argument name and the second is its default value. 
 Arguments with default values that are followed by non-defaulted
 arguments become required arguments.  In 8.6 this will be considered an 
@@ -79,6 +84,13 @@ arguments become required arguments; enough actual arguments must be
 supplied to allow all arguments up to and including the last required
 formal argument.
 >>>>>>> upstream/master
+=======
+the first is the argument name and the second is its default value.
+Arguments with default values that are followed by non-defaulted
+arguments become required arguments; enough actual arguments must be
+supplied to allow all arguments up to and including the last required
+formal argument.
+>>>>>>> upstream/master
 .PP
 When \fIname\fR is invoked a local variable
 will be created for each of the formal arguments to the procedure; its
@@ -89,6 +101,7 @@ Arguments with default values need not be
 specified in a procedure invocation.  However, there must be enough
 actual arguments for all the
 formal arguments that do not have defaults, and there must not be any extra
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -141,6 +154,18 @@ variable numbers of arguments.  If the last formal argument has the name
 .QW \fBargs\fR ,
 then a call to the procedure may contain more actual arguments
 >>>>>>> upstream/master
+=======
+actual arguments.
+Arguments with default values that are followed by non-defaulted
+arguments become de-facto required arguments, though this may change
+in a future version of Tcl; portable code should ensure that all
+optional arguments come after all required arguments.
+.PP
+There is one special case to permit procedures with
+variable numbers of arguments.  If the last formal argument has the name
+.QW \fBargs\fR ,
+then a call to the procedure may contain more actual arguments
+>>>>>>> upstream/master
 than the procedure has formal arguments.  In this case, all of the actual arguments
 starting at the one that would be assigned to \fBargs\fR are combined into
 a list (as if the \fBlist\fR command had been used); this combined value
@@ -154,7 +179,11 @@ created for each of the procedure's arguments.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Other variables can only be accessed by invoking one of the \fBglobal\fR, 
+=======
+Other variables can only be accessed by invoking one of the \fBglobal\fR,
+>>>>>>> upstream/master
 =======
 Other variables can only be accessed by invoking one of the \fBglobal\fR,
 >>>>>>> upstream/master
@@ -187,7 +216,10 @@ body, then the procedure-as-a-whole will return that same error.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -208,6 +240,9 @@ to the caller as an explicit result.
 .PP
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

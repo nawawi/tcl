@@ -4,6 +4,7 @@ set TZData(:America/Fortaleza) {
     {-9223372036854775808 -9240 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767216360 -10800 0 BRT}
     {-1206957600 -7200 1 BRST}
     {-1191362400 -10800 0 BRT}
@@ -50,6 +51,8 @@ set TZData(:America/Fortaleza) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767216360 -10800 0 -03}
     {-1206957600 -7200 1 -03}
     {-1191362400 -10800 0 -03}
@@ -94,6 +97,9 @@ set TZData(:America/Fortaleza) {
     {1013911200 -10800 0 -03}
     {1033437600 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -6,7 +6,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -53,7 +57,11 @@ command mode.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Returns a report containing the total allocations and frees since 
+=======
+Returns a report containing the total allocations and frees since
+>>>>>>> upstream/master
 =======
 Returns a report containing the total allocations and frees since
 >>>>>>> upstream/master
@@ -101,6 +109,7 @@ is printed along with other information about the packet.  The
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 to \fBckalloc\fR to be \fIstring\fR.  
 =======
 to \fBckalloc\fR to be \fIstring\fR.
@@ -113,6 +122,9 @@ to \fBckalloc\fR to be \fIstring\fR.
 >>>>>>> upstream/master
 =======
 to \fBckalloc\fR to be \fIstring\fR.
+>>>>>>> upstream/master
+=======
+to \fBTcl_Alloc\fR to be \fIstring\fR.
 >>>>>>> upstream/master
 =======
 to \fBTcl_Alloc\fR to be \fIstring\fR.
@@ -147,7 +159,11 @@ produced), if you can identify a number of allocations that occur before
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the problem sets in.  The current number of memory allocations that have 
+=======
+the problem sets in.  The current number of memory allocations that have
+>>>>>>> upstream/master
 =======
 the problem sets in.  The current number of memory allocations that have
 >>>>>>> upstream/master

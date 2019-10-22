@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -78,7 +82,11 @@ must be taken when using \fBread\fR on blocking serial ports:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBread \fIchannelId numChars\fR 
+=======
+\fBread \fIchannelId numChars\fR
+>>>>>>> upstream/master
 =======
 \fBread \fIchannelId numChars\fR
 >>>>>>> upstream/master
@@ -99,7 +107,11 @@ from the serial port.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBread \fIchannelId\fR 
+=======
+\fBread \fIchannelId\fR
+>>>>>>> upstream/master
 =======
 \fBread \fIchannelId\fR
 >>>>>>> upstream/master

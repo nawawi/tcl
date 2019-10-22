@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (c) 2013 Donal K. Fellows.
+=======
+ * Copyright (c) 2013-2016 Donal K. Fellows.
+>>>>>>> upstream/master
 =======
  * Copyright (c) 2013-2016 Donal K. Fellows.
 >>>>>>> upstream/master
@@ -37,10 +41,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static Tcl_Obj *	DisassembleByteCodeAsDicts(Tcl_Obj *objPtr);
 static int		FormatInstruction(ByteCode *codePtr,
 			    const unsigned char *pc, Tcl_Obj *bufferObj);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -55,12 +62,17 @@ static int		FormatInstruction(ByteCode *codePtr,
 			    const unsigned char *pc, Tcl_Obj *bufferObj);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		GetLocationInformation(Tcl_Interp *interp,
 			    Proc *procPtr, Tcl_Obj **fileObjPtr,
 			    int *linePtr);
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+static void		GetLocationInformation(Proc *procPtr,
+			    Tcl_Obj **fileObjPtr, int *linePtr);
 >>>>>>> upstream/master
 =======
 static void		GetLocationInformation(Proc *procPtr,
@@ -97,7 +109,11 @@ static const Tcl_ObjType instNameType = {
 #define InstNameGetIntRep(objPtr, inst)				\
     do {							\
 	const Tcl_ObjIntRep *irPtr;				\
+<<<<<<< HEAD
 	irPtr = Tcl_FetchIntRep((objPtr), &instNameType);	\
+=======
+	irPtr = TclFetchIntRep((objPtr), &instNameType);	\
+>>>>>>> upstream/master
 	assert(irPtr != NULL);					\
 	(inst) = (size_t)irPtr->wideValue;			\
     } while (0)
@@ -107,7 +123,10 @@ static const Tcl_ObjType instNameType = {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -135,8 +154,11 @@ static void
 GetLocationInformation(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Interp *interp,		/* Where to look up the location
 				 * information. */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -154,6 +176,7 @@ GetLocationInformation(
 				 * either with the line number or with -1 if
 				 * the information is not available. */
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
@@ -180,6 +203,8 @@ GetLocationInformation(
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     CmdFrame *cfPtr = TclGetCmdFrameForProcedure(procPtr);
 
     *fileObjPtr = NULL;
@@ -199,6 +224,9 @@ GetLocationInformation(
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -226,11 +254,14 @@ TclPrintByteCodeObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Interp *interp,		/* Used only for Tcl_GetStringFromObj. */
     Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
 {
     Tcl_Obj *bufPtr = TclDisassembleByteCodeObj(objPtr);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -244,6 +275,9 @@ TclPrintByteCodeObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -310,6 +344,7 @@ TclPrintObject(
     FILE *outFile,		/* The file to print the source to. */
     Tcl_Obj *objPtr,		/* Points to the Tcl object whose string
 				 * representation should be printed. */
+<<<<<<< HEAD
     int maxChars)		/* Maximum number of chars to print. */
 {
     char *bytes;
@@ -326,6 +361,14 @@ TclPrintObject(
     bytes = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
 =======
+    bytes = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
+=======
+    size_t maxChars)		/* Maximum number of chars to print. */
+{
+    char *bytes;
+    size_t length;
+
     bytes = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
     TclPrintSource(outFile, bytes, TclMin(length, maxChars));
@@ -353,7 +396,11 @@ void
 TclPrintSource(
     FILE *outFile,		/* The file to print the source to. */
     const char *stringPtr,	/* The string to print. */
+<<<<<<< HEAD
     int maxChars)		/* Maximum number of chars to print. */
+=======
+    size_t maxChars)		/* Maximum number of chars to print. */
+>>>>>>> upstream/master
 {
     Tcl_Obj *bufferObj;
 
@@ -371,7 +418,11 @@ TclPrintSource(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TclDisassembleByteCodeObj --
+=======
+ * DisassembleByteCodeObj --
+>>>>>>> upstream/master
 =======
  * DisassembleByteCodeObj --
 >>>>>>> upstream/master
@@ -396,8 +447,14 @@ TclPrintSource(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Tcl_Obj *
 TclDisassembleByteCodeObj(
+=======
+static Tcl_Obj *
+DisassembleByteCodeObj(
+    Tcl_Interp *interp,
+>>>>>>> upstream/master
 =======
 static Tcl_Obj *
 DisassembleByteCodeObj(
@@ -428,6 +485,7 @@ DisassembleByteCodeObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int codeOffset, codeLen, srcOffset, srcLen, numCmds, delta, i;
     Interp *iPtr = (Interp *) *codePtr->interpHandle;
     Tcl_Obj *bufferObj;
@@ -445,6 +503,11 @@ DisassembleByteCodeObj(
 =======
     int codeOffset, codeLen, srcOffset, srcLen, numCmds, delta, i, line;
     Interp *iPtr = (Interp *) *codePtr->interpHandle;
+    Tcl_Obj *bufferObj, *fileObj;
+>>>>>>> upstream/master
+=======
+    int codeOffset, codeLen, srcOffset, srcLen, numCmds, delta, i, line;
+    Interp *iPtr;
     Tcl_Obj *bufferObj, *fileObj;
 >>>>>>> upstream/master
 =======
@@ -470,6 +533,7 @@ DisassembleByteCodeObj(
      * Print header lines describing the ByteCode.
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     sprintf(ptrBuf1, "%p", codePtr);
@@ -535,6 +599,19 @@ DisassembleByteCodeObj(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+    Tcl_AppendPrintfToObj(bufferObj,
+	    "ByteCode %p, refCt %" TCL_Z_MODIFIER "u, epoch %" TCL_Z_MODIFIER "u, interp %p (epoch %" TCL_Z_MODIFIER "u)\n",
+	    codePtr, codePtr->refCount, codePtr->compileEpoch, iPtr, iPtr->compileEpoch);
+    Tcl_AppendToObj(bufferObj, "  Source ", -1);
+    PrintSourceToObj(bufferObj, codePtr->source,
+	    TclMin(codePtr->numSrcBytes, 55));
+    GetLocationInformation(codePtr->procPtr, &fileObj, &line);
+    if (line > -1 && fileObj != NULL) {
+	Tcl_AppendPrintfToObj(bufferObj, "\n  File \"%s\" Line %d",
+		TclGetString(fileObj), line);
+    }
+>>>>>>> upstream/master
     Tcl_AppendPrintfToObj(bufferObj,
 	    "\n  Cmds %d, src %d, inst %d, litObjs %u, aux %d, stkDepth %u, code/src %.2f\n",
 	    numCmds, codePtr->numSrcBytes, codePtr->numCodeBytes,
@@ -570,6 +647,7 @@ DisassembleByteCodeObj(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	sprintf(ptrBuf1, "%p", procPtr);
 	Tcl_AppendPrintfToObj(bufferObj,
 		"  Proc 0x%s, refCt %d, args %d, compiled locals %d\n",
@@ -591,6 +669,11 @@ DisassembleByteCodeObj(
 		procPtr, (Tcl_WideUInt)procPtr->refCount, procPtr->numArgs,
 >>>>>>> upstream/master
 =======
+		"  Proc %p, refCt %" TCL_Z_MODIFIER "u, args %d, compiled locals %d\n",
+		procPtr, procPtr->refCount, procPtr->numArgs,
+>>>>>>> upstream/master
+=======
+	Tcl_AppendPrintfToObj(bufferObj,
 		"  Proc %p, refCt %" TCL_Z_MODIFIER "u, args %d, compiled locals %d\n",
 		procPtr, procPtr->refCount, procPtr->numArgs,
 >>>>>>> upstream/master
@@ -648,7 +731,11 @@ DisassembleByteCodeObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		Tcl_Panic("TclDisassembleByteCodeObj: bad ExceptionRange type %d",
+=======
+		Tcl_Panic("DisassembleByteCodeObj: bad ExceptionRange type %d",
+>>>>>>> upstream/master
 =======
 		Tcl_Panic("DisassembleByteCodeObj: bad ExceptionRange type %d",
 >>>>>>> upstream/master
@@ -692,7 +779,11 @@ DisassembleByteCodeObj(
     srcLengthNext = codePtr->srcLengthStart;
     codeOffset = srcOffset = 0;
     for (i = 0;  i < numCmds;  i++) {
+<<<<<<< HEAD
 	if ((unsigned) *codeDeltaNext == (unsigned) 0xFF) {
+=======
+	if (*codeDeltaNext == 0xFF) {
+>>>>>>> upstream/master
 	    codeDeltaNext++;
 	    delta = TclGetInt4AtPtr(codeDeltaNext);
 	    codeDeltaNext += 4;
@@ -702,7 +793,11 @@ DisassembleByteCodeObj(
 	}
 	codeOffset += delta;
 
+<<<<<<< HEAD
 	if ((unsigned) *codeLengthNext == (unsigned) 0xFF) {
+=======
+	if (*codeLengthNext == 0xFF) {
+>>>>>>> upstream/master
 	    codeLengthNext++;
 	    codeLen = TclGetInt4AtPtr(codeLengthNext);
 	    codeLengthNext += 4;
@@ -711,7 +806,11 @@ DisassembleByteCodeObj(
 	    codeLengthNext++;
 	}
 
+<<<<<<< HEAD
 	if ((unsigned) *srcDeltaNext == (unsigned) 0xFF) {
+=======
+	if (*srcDeltaNext == 0xFF) {
+>>>>>>> upstream/master
 	    srcDeltaNext++;
 	    delta = TclGetInt4AtPtr(srcDeltaNext);
 	    srcDeltaNext += 4;
@@ -721,7 +820,11 @@ DisassembleByteCodeObj(
 	}
 	srcOffset += delta;
 
+<<<<<<< HEAD
 	if ((unsigned) *srcLengthNext == (unsigned) 0xFF) {
+=======
+	if (*srcLengthNext == 0xFF) {
+>>>>>>> upstream/master
 	    srcLengthNext++;
 	    srcLen = TclGetInt4AtPtr(srcLengthNext);
 	    srcLengthNext += 4;
@@ -751,7 +854,11 @@ DisassembleByteCodeObj(
     codeOffset = srcOffset = 0;
     pc = codeStart;
     for (i = 0;  i < numCmds;  i++) {
+<<<<<<< HEAD
 	if ((unsigned) *codeDeltaNext == (unsigned) 0xFF) {
+=======
+	if (*codeDeltaNext == 0xFF) {
+>>>>>>> upstream/master
 	    codeDeltaNext++;
 	    delta = TclGetInt4AtPtr(codeDeltaNext);
 	    codeDeltaNext += 4;
@@ -761,7 +868,11 @@ DisassembleByteCodeObj(
 	}
 	codeOffset += delta;
 
+<<<<<<< HEAD
 	if ((unsigned) *srcDeltaNext == (unsigned) 0xFF) {
+=======
+	if (*srcDeltaNext == 0xFF) {
+>>>>>>> upstream/master
 	    srcDeltaNext++;
 	    delta = TclGetInt4AtPtr(srcDeltaNext);
 	    srcDeltaNext += 4;
@@ -771,7 +882,11 @@ DisassembleByteCodeObj(
 	}
 	srcOffset += delta;
 
+<<<<<<< HEAD
 	if ((unsigned) *srcLengthNext == (unsigned) 0xFF) {
+=======
+	if (*srcLengthNext == 0xFF) {
+>>>>>>> upstream/master
 	    srcLengthNext++;
 	    srcLen = TclGetInt4AtPtr(srcLengthNext);
 	    srcLengthNext += 4;
@@ -825,7 +940,11 @@ FormatInstruction(
 {
     Proc *procPtr = codePtr->procPtr;
     unsigned char opCode = *pc;
+<<<<<<< HEAD
     register const InstructionDesc *instDesc = &tclInstructionTable[opCode];
+=======
+    const InstructionDesc *instDesc = &tclInstructionTable[opCode];
+>>>>>>> upstream/master
     unsigned char *codeStart = codePtr->codeStart;
     unsigned pcOffset = pc - codeStart;
     int opnd = 0, i, j, numBytes = 1;
@@ -851,7 +970,11 @@ FormatInstruction(
 	    break;
 	case OPERAND_UINT1:
 	    opnd = TclGetUInt1AtPtr(pc+numBytes); numBytes++;
+<<<<<<< HEAD
 	    Tcl_AppendPrintfToObj(bufferObj, "%u ", (unsigned) opnd);
+=======
+	    Tcl_AppendPrintfToObj(bufferObj, "%u ", opnd);
+>>>>>>> upstream/master
 	    break;
 	case OPERAND_UINT4:
 	    opnd = TclGetUInt4AtPtr(pc+numBytes); numBytes += 4;
@@ -859,7 +982,11 @@ FormatInstruction(
 		sprintf(suffixBuffer+strlen(suffixBuffer),
 			", %u cmds start here", opnd);
 	    }
+<<<<<<< HEAD
 	    Tcl_AppendPrintfToObj(bufferObj, "%u ", (unsigned) opnd);
+=======
+	    Tcl_AppendPrintfToObj(bufferObj, "%u ", opnd);
+>>>>>>> upstream/master
 	    break;
 	case OPERAND_OFFSET1:
 	    opnd = TclGetInt1AtPtr(pc+numBytes); numBytes++;
@@ -878,16 +1005,28 @@ FormatInstruction(
 	case OPERAND_LIT1:
 	    opnd = TclGetUInt1AtPtr(pc+numBytes); numBytes++;
 	    suffixObj = codePtr->objArrayPtr[opnd];
+<<<<<<< HEAD
 	    Tcl_AppendPrintfToObj(bufferObj, "%u ", (unsigned) opnd);
+=======
+	    Tcl_AppendPrintfToObj(bufferObj, "%u ", opnd);
+>>>>>>> upstream/master
 	    break;
 	case OPERAND_LIT4:
 	    opnd = TclGetUInt4AtPtr(pc+numBytes); numBytes += 4;
 	    suffixObj = codePtr->objArrayPtr[opnd];
+<<<<<<< HEAD
 	    Tcl_AppendPrintfToObj(bufferObj, "%u ", (unsigned) opnd);
 	    break;
 	case OPERAND_AUX4:
 	    opnd = TclGetUInt4AtPtr(pc+numBytes); numBytes += 4;
 	    Tcl_AppendPrintfToObj(bufferObj, "%u ", (unsigned) opnd);
+=======
+	    Tcl_AppendPrintfToObj(bufferObj, "%u ", opnd);
+	    break;
+	case OPERAND_AUX4:
+	    opnd = TclGetUInt4AtPtr(pc+numBytes); numBytes += 4;
+	    Tcl_AppendPrintfToObj(bufferObj, "%u ", opnd);
+>>>>>>> upstream/master
 	    auxPtr = &codePtr->auxDataArrayPtr[opnd];
 	    break;
 	case OPERAND_IDX4:
@@ -911,19 +1050,31 @@ FormatInstruction(
 	    if (localPtr != NULL) {
 		if (opnd >= localCt) {
 		    Tcl_Panic("FormatInstruction: bad local var index %u (%u locals)",
+<<<<<<< HEAD
 			    (unsigned) opnd, localCt);
+=======
+			    opnd, localCt);
+>>>>>>> upstream/master
 		}
 		for (j = 0;  j < opnd;  j++) {
 		    localPtr = localPtr->nextPtr;
 		}
 		if (TclIsVarTemporary(localPtr)) {
+<<<<<<< HEAD
 		    sprintf(suffixBuffer, "temp var %u", (unsigned) opnd);
+=======
+		    sprintf(suffixBuffer, "temp var %u", opnd);
+>>>>>>> upstream/master
 		} else {
 		    sprintf(suffixBuffer, "var ");
 		    suffixSrc = localPtr->name;
 		}
 	    }
+<<<<<<< HEAD
 	    Tcl_AppendPrintfToObj(bufferObj, "%%v%u ", (unsigned) opnd);
+=======
+	    Tcl_AppendPrintfToObj(bufferObj, "%%v%u ", opnd);
+>>>>>>> upstream/master
 	    break;
 	case OPERAND_SCLS1:
 	    opnd = TclGetUInt1AtPtr(pc+numBytes); numBytes++;
@@ -937,6 +1088,7 @@ FormatInstruction(
     }
     if (suffixObj) {
 	const char *bytes;
+<<<<<<< HEAD
 	int length;
 
 	Tcl_AppendToObj(bufferObj, "\t# ", -1);
@@ -951,6 +1103,12 @@ FormatInstruction(
 	bytes = TclGetStringFromObj(codePtr->objArrayPtr[opnd], &length);
 >>>>>>> upstream/master
 =======
+	bytes = TclGetStringFromObj(codePtr->objArrayPtr[opnd], &length);
+>>>>>>> upstream/master
+=======
+	size_t length;
+
+	Tcl_AppendToObj(bufferObj, "\t# ", -1);
 	bytes = TclGetStringFromObj(codePtr->objArrayPtr[opnd], &length);
 >>>>>>> upstream/master
 	PrintSourceToObj(bufferObj, bytes, TclMin(length, 40));
@@ -1125,6 +1283,7 @@ UpdateStringOfInstName(
     Tcl_Obj *objPtr)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     size_t len, inst = (size_t)objPtr->internalRep.wideValue;
     char *s, buf[TCL_INTEGER_SPACE + 5];
 
@@ -1132,6 +1291,8 @@ UpdateStringOfInstName(
         sprintf(buf, "inst_%" TCL_Z_MODIFIER "d", inst);
         s = buf;
 =======
+=======
+>>>>>>> upstream/master
     size_t inst;	/* NOTE: We know this is really an unsigned char */
     char *dst;
 
@@ -1142,6 +1303,9 @@ UpdateStringOfInstName(
 	TclOOM(dst, TCL_INTEGER_SPACE + 5);
         sprintf(dst, "inst_%" TCL_Z_MODIFIER "u", inst);
 	(void) Tcl_InitStringRep(objPtr, NULL, strlen(dst));
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     } else {
 	const char *s = tclInstructionTable[inst].name;
@@ -1150,11 +1314,14 @@ UpdateStringOfInstName(
 	TclOOM(dst, len);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     len = strlen(s);
     /* assert (len < UINT_MAX) */
     objPtr->bytes = ckalloc(len + 1);
     memcpy(objPtr->bytes, s, len + 1);
     objPtr->length = len;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 }
@@ -1175,8 +1342,13 @@ PrintSourceToObj(
     const char *stringPtr,	/* The string to print. */
     int maxChars)		/* Maximum number of chars to print. */
 {
+<<<<<<< HEAD
     register const char *p;
     register int i = 0, len;
+=======
+    const char *p;
+    int i = 0, len;
+>>>>>>> upstream/master
     Tcl_UniChar ch = 0;
 
     if (stringPtr == NULL) {
@@ -1248,6 +1420,7 @@ PrintSourceToObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_AppendToObj(appendObj, "\"", -1);
     if (*p != '\0') {
 	Tcl_AppendToObj(appendObj, "...", -1);
@@ -1263,6 +1436,8 @@ PrintSourceToObj(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     if (*p != '\0') {
 	Tcl_AppendToObj(appendObj, "...", -1);
     }
@@ -1272,6 +1447,9 @@ PrintSourceToObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1305,6 +1483,11 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_Interp *interp,		/* Used for looking up the CmdFrame for the
+				 * procedure, if one exists. */
+>>>>>>> upstream/master
 =======
     Tcl_Interp *interp,		/* Used for looking up the CmdFrame for the
 				 * procedure, if one exists. */
@@ -1329,11 +1512,14 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Obj *aux, *exn, *commands;
     unsigned char *pc, *opnd, *codeOffPtr, *codeLenPtr, *srcOffPtr, *srcLenPtr;
     int codeOffset, codeLength, sourceOffset, sourceLength;
     int i, val;
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1347,6 +1533,9 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1623,7 +1812,10 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1636,12 +1828,18 @@ DisassembleByteCodeAsDicts(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     GetLocationInformation(interp, codePtr->procPtr, &file, &line);
 
     /*
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    GetLocationInformation(codePtr->procPtr, &file, &line);
+
+    /*
 >>>>>>> upstream/master
 =======
     GetLocationInformation(codePtr->procPtr, &file, &line);
@@ -1679,7 +1877,10 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1698,6 +1899,9 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1732,10 +1936,13 @@ Tcl_DisassembleObjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"lambda", "method", "objmethod", "proc", "script", NULL
     };
     enum Types {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1747,6 +1954,9 @@ Tcl_DisassembleObjCmd(
 	DISAS_CLASS_CONSTRUCTOR, DISAS_CLASS_DESTRUCTOR,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1764,6 +1974,7 @@ Tcl_DisassembleObjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     Method *methodPtr;
 >>>>>>> upstream/master
@@ -1774,6 +1985,10 @@ Tcl_DisassembleObjCmd(
     Method *methodPtr;
 >>>>>>> upstream/master
 =======
+    Method *methodPtr;
+>>>>>>> upstream/master
+=======
+    ByteCode *codePtr;
     Method *methodPtr;
 >>>>>>> upstream/master
 
@@ -1856,7 +2071,11 @@ Tcl_DisassembleObjCmd(
 	    return TCL_ERROR;
 	}
 
+<<<<<<< HEAD
 	if ((NULL == Tcl_FetchIntRep(objv[2], &tclByteCodeType)) && (TCL_OK
+=======
+	if (!TclHasIntRep(objv[2], &tclByteCodeType) && (TCL_OK
+>>>>>>> upstream/master
 		!= TclSetByteCodeFromAny(interp, objv[2], NULL, NULL))) {
 	    return TCL_ERROR;
 	}
@@ -1866,7 +2085,10 @@ Tcl_DisassembleObjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1915,7 +2137,11 @@ Tcl_DisassembleObjCmd(
 	 * Compile if necessary.
 	 */
 
+<<<<<<< HEAD
 	if (procPtr->bodyPtr->typePtr != &tclByteCodeType) {
+=======
+	if (!TclHasIntRep(procPtr->bodyPtr, &tclByteCodeType)) {
+>>>>>>> upstream/master
 	    Command cmd;
 
 	    /*
@@ -1980,7 +2206,11 @@ Tcl_DisassembleObjCmd(
 	 * Compile if necessary.
 	 */
 
+<<<<<<< HEAD
 	if (procPtr->bodyPtr->typePtr != &tclByteCodeType) {
+=======
+	if (!TclHasIntRep(procPtr->bodyPtr, &tclByteCodeType)) {
+>>>>>>> upstream/master
 	    Command cmd;
 
 	    /*
@@ -2003,6 +2233,9 @@ Tcl_DisassembleObjCmd(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2072,7 +2305,11 @@ Tcl_DisassembleObjCmd(
 		    "METHODTYPE", NULL);
 	    return TCL_ERROR;
 	}
+<<<<<<< HEAD
 	if (NULL == Tcl_FetchIntRep(procPtr->bodyPtr, &tclByteCodeType)) {
+=======
+	if (!TclHasIntRep(procPtr->bodyPtr, &tclByteCodeType)) {
+>>>>>>> upstream/master
 	    Command cmd;
 
 	    /*
@@ -2110,6 +2347,7 @@ Tcl_DisassembleObjCmd(
 	return TCL_ERROR;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (PTR2INT(clientData)) {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2128,6 +2366,9 @@ Tcl_DisassembleObjCmd(
 =======
     if (clientData) {
 >>>>>>> upstream/master
+=======
+    if (clientData) {
+>>>>>>> upstream/master
 	Tcl_SetObjResult(interp,
 		DisassembleByteCodeAsDicts(interp, codeObjPtr));
     } else {
@@ -2136,6 +2377,9 @@ Tcl_DisassembleObjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

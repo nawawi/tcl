@@ -5,6 +5,7 @@ set TZData(:Asia/Krasnoyarsk) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1577513486 21600 0 KRAT}
     {-1247551200 25200 0 KRAMMTT}
     {354906000 28800 1 KRAST}
@@ -86,6 +87,8 @@ set TZData(:Asia/Krasnoyarsk) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1577513486 21600 0 +06}
     {-1247551200 25200 0 +08}
     {354906000 28800 1 +08}
@@ -154,6 +157,9 @@ set TZData(:Asia/Krasnoyarsk) {
     {1414260000 25200 0 +07}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

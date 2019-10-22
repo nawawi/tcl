@@ -17,6 +17,7 @@ tcl::process \- Subprocess management
 .PP
 This command provides a way to manage subprocesses created by the \fBopen\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 and \fBexec\fR commands. The legal \fIoptions\fR (which may be abbreviated) are:
 .TP
 \fB::tcl::process list\fR
@@ -52,6 +53,8 @@ this command calls \fBTcl_WaitPid\fR with the \fBWNOHANG\fR flag set for
 non-blocking behavior, unless the \fB\-wait\fR switch is set (see below).
 .RS
 =======
+=======
+>>>>>>> upstream/master
 and \fBexec\fR commands, as identified by the process identifiers (PIDs) of
 those subprocesses. The legal \fIoptions\fR (which may be abbreviated) are:
 .TP
@@ -106,6 +109,9 @@ Note that \fBmsg\fR and \fBerrorCode\fR are only present for abnormally
 terminated processes (i.e. those where the \fIcode\fR is nonzero). Under the
 hood this command calls \fBTcl_WaitPid\fR with the \fBWNOHANG\fR flag set for
 non-blocking behavior, unless the \fB\-wait\fR switch is set (see below).
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .PP
 Additionally, \fB::tcl::process status\fR accepts the following switches:
@@ -114,15 +120,21 @@ Additionally, \fB::tcl::process status\fR accepts the following switches:
 .
 By default the command returns immediately (the underlying \fBTcl_WaitPid\fR is
 <<<<<<< HEAD
+<<<<<<< HEAD
 called with the \fBWNOHANG\fR flag set) unless this switch is set. If \fBpids\fR
 is specified as a list of PIDs then the command waits until the status of the
 matching subprocesses are available. If \fBpids\fR is not specified then it
 waits for all known subprocesses.
 =======
+=======
+>>>>>>> upstream/master
 called with the \fBWNOHANG\fR flag set) unless this switch is set. If \fIpids\fR
 is specified as a list of PIDs then the command waits until the status of the
 matching subprocesses are available. If \fIpids\fR was not specified, this
 command will wait for all known subprocesses.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .TP
 \fB\-\|\-\fR
@@ -130,6 +142,7 @@ command will wait for all known subprocesses.
 Marks the end of switches.  The argument following this one will
 be treated as the first \fIarg\fR even if it starts with a \fB\-\fR.
 .RE
+<<<<<<< HEAD
 <<<<<<< HEAD
 .TP
 \fB::tcl::process purge ?\fIpids\fR?
@@ -151,11 +164,16 @@ explicitly. By default autopurge is active.
 .SH "EXAMPLES"
 .PP
 =======
+=======
+>>>>>>> upstream/master
 .SH "EXAMPLES"
 .PP
 These show the use of \fB::tcl::process\fR. Some of the results from
 \fB::tcl::process status\fR are split over multiple lines for readability.
 .PP
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .CS
 \fB::tcl::process autopurge\fR
@@ -175,14 +193,20 @@ set pid2 [pid $chan]
 
 \fB::tcl::process status\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
      \fI\(-> 123 0 456 {1 "child killed: write on pipe with no readers" {CHILDKILLED 456 SIGPIPE "write on pipe with no readers"}} 789 {1 "child suspended: background tty read" {CHILDSUSP 789 SIGTTIN "background tty read"}} 1011 {}\fR
 =======
+=======
+>>>>>>> upstream/master
      \fI\(-> 123 0
        456 {1 "child killed: write on pipe with no readers" {
          CHILDKILLED 456 SIGPIPE "write on pipe with no readers"}}
        789 {1 "child suspended: background tty read" {
          CHILDSUSP 789 SIGTTIN "background tty read"}}
        1011 {}\fR
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 \fB::tcl::process status\fR 123
@@ -193,11 +217,14 @@ set pid2 [pid $chan]
 
 \fB::tcl::process status\fR -wait
 <<<<<<< HEAD
+<<<<<<< HEAD
      \fI\(-> 123 0 456 {1 "child killed: write on pipe with no readers" {CHILDKILLED 456 SIGPIPE "write on pipe with no readers"}} 789 {1 "child suspended: background tty read" {CHILDSUSP 789 SIGTTIN "background tty read"}} 1011 {1 "child process exited abnormally" {CHILDSTATUS 1011 -1}}\fR
 
 \fB::tcl::process status\fR 1011
      \fI\(-> 1011 {1 "child process exited abnormally" {CHILDSTATUS 1011 -1}}\fR
 =======
+=======
+>>>>>>> upstream/master
      \fI\(-> 123 0
        456 {1 "child killed: write on pipe with no readers" {
          CHILDKILLED 456 SIGPIPE "write on pipe with no readers"}}
@@ -209,6 +236,9 @@ set pid2 [pid $chan]
 \fB::tcl::process status\fR 1011
      \fI\(-> 1011 {1 "child process exited abnormally" {
          CHILDSTATUS 1011 -1}}\fR
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 \fB::tcl::process purge\fR
@@ -219,7 +249,12 @@ exec command1 1 2 3 &
 .CE
 .SH "SEE ALSO"
 <<<<<<< HEAD
+<<<<<<< HEAD
 exec(n), open(n), Tcl_DetachPids(3), Tcl_WaitPid(3), Tcl_ReapDetachedProcs(3)
+=======
+exec(n), open(n), pid(n),
+Tcl_DetachPids(3), Tcl_WaitPid(3), Tcl_ReapDetachedProcs(3)
+>>>>>>> upstream/master
 =======
 exec(n), open(n), pid(n),
 Tcl_DetachPids(3), Tcl_WaitPid(3), Tcl_ReapDetachedProcs(3)

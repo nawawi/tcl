@@ -4,6 +4,7 @@ set TZData(:America/Belem) {
     {-9223372036854775808 -11636 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767213964 -10800 0 BRT}
     {-1206957600 -7200 1 BRST}
     {-1191362400 -10800 0 BRT}
@@ -37,6 +38,8 @@ set TZData(:America/Belem) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767213964 -10800 0 -03}
     {-1206957600 -7200 1 -03}
     {-1191362400 -10800 0 -03}
@@ -68,6 +71,9 @@ set TZData(:America/Belem) {
     {571197600 -10800 0 -03}
     {590032800 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

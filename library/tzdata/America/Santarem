@@ -4,6 +4,7 @@ set TZData(:America/Santarem) {
     {-9223372036854775808 -13128 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767212472 -14400 0 AMT}
     {-1206954000 -10800 1 AMST}
     {-1191358800 -14400 0 AMT}
@@ -38,6 +39,8 @@ set TZData(:America/Santarem) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767212472 -14400 0 -04}
     {-1206954000 -10800 1 -04}
     {-1191358800 -14400 0 -04}
@@ -70,6 +73,9 @@ set TZData(:America/Santarem) {
     {590036400 -14400 0 -04}
     {1214280000 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

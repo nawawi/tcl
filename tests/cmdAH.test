@@ -59,8 +59,6 @@ test cmdAH-0.2 {Tcl_BreakObjCmd, success} {
     list [catch {break} msg] $msg
 } {3 {}}
 
-# Tcl_CaseObjCmd is tested in case.test
-
 test cmdAH-1.1 {Tcl_CatchObjCmd, errors} -returnCodes error -body {
     catch
 } -result {wrong # args: should be "catch script ?resultVarName? ?optionVarName?"}
@@ -144,10 +142,13 @@ test cmdAH-2.6.2 {cd} -constraints {unix nonPortable} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test cmdAH-2.6.3 {Tcl_CdObjCmd, bug #3118489} -returnCodes error -body {
     cd .\0
 } -result "couldn't change working directory to \".\0\": no such file or directory"
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -161,6 +162,9 @@ test cmdAH-2.6.3 {Tcl_CdObjCmd, bug #3118489} -setup {
 } -match glob -result "couldn't change working directory to \".\0\": *"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -187,10 +191,17 @@ test cmdAH-4.1 {Tcl_EncodingObjCmd} -returnCodes error -body {
     encoding
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {wrong # args: should be "encoding option ?arg ...?"}
 test cmdAH-4.2 {Tcl_EncodingObjCmd} -returnCodes error -body {
     encoding foo
 } -result {bad option "foo": must be convertfrom, convertto, dirs, names, or system}
+=======
+} -result {wrong # args: should be "encoding subcommand ?arg ...?"}
+test cmdAH-4.2 {Tcl_EncodingObjCmd} -returnCodes error -body {
+    encoding foo
+} -result {unknown or ambiguous subcommand "foo": must be convertfrom, convertto, dirs, names, or system}
+>>>>>>> upstream/master
 =======
 } -result {wrong # args: should be "encoding subcommand ?arg ...?"}
 test cmdAH-4.2 {Tcl_EncodingObjCmd} -returnCodes error -body {
@@ -267,7 +278,11 @@ test cmdAH-5.1 {Tcl_FileObjCmd} -returnCodes error -body {
 } -result {wrong # args: should be "file subcommand ?arg ...?"}
 test cmdAH-5.2 {Tcl_FileObjCmd} -returnCodes error -body {
     file x
+<<<<<<< HEAD
 } -result {unknown or ambiguous subcommand "x": must be atime, attributes, channels, copy, delete, dirname, executable, exists, extension, isdirectory, isfile, join, link, lstat, mkdir, mtime, nativename, normalize, owned, pathtype, readable, readlink, rename, rootname, separator, size, split, stat, system, tail, tempfile, type, volumes, or writable}
+=======
+} -result {unknown or ambiguous subcommand "x": must be atime, attributes, channels, copy, delete, dirname, executable, exists, extension, isdirectory, isfile, join, link, lstat, mkdir, mtime, nativename, normalize, owned, pathtype, readable, readlink, rename, rootname, separator, size, split, stat, system, tail, tempdir, tempfile, type, volumes, or writable}
+>>>>>>> upstream/master
 test cmdAH-5.3 {Tcl_FileObjCmd} -returnCodes error -body {
     file exists
 } -result {wrong # args: should be "file exists name"}
@@ -920,6 +935,7 @@ test cmdAH-18.3 {Tcl_FileObjCmd: executable} {unix testchmod} {
     file exe $gorpfile
 } 1
 test cmdAH-18.5 {Tcl_FileObjCmd: executable} -constraints {win} -body {
+<<<<<<< HEAD
     # On pc, must be a .exe, .com, etc.
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -963,12 +979,28 @@ test cmdAH-18.5.1 {Tcl_FileObjCmd: executable} -constraints {win} -body {
     set x
 } -cleanup {
 >>>>>>> upstream/master
+=======
+    # On windows, must be a .exe, .com, etc.
+    set x {}
+    set gorpexes {}
+    foreach ext {exe com cmd bat} {
+        lappend x [file exe nosuchfile.$ext]
+        set gorpexe [makeFile foo gorp.$ext]
+        lappend gorpexes $gorpexe
+        lappend x [file exe $gorpexe] [file exe [string toupper $gorpexe]]
+    }
+    set x
+} -cleanup {
+>>>>>>> upstream/master
     foreach gorpexe $gorpexes {
         removeFile $gorpexe
     }
 } -result {0 1 1 0 1 1 0 1 1 0 1 1}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1112,6 +1144,7 @@ test cmdAH-20.6 {Tcl_FileObjCmd: atime touch} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 test cmdAH-20.7 {
     Tcl_FileObjCmd: atime (built-in Windows names)
@@ -1158,6 +1191,8 @@ test cmdAH-21.2 {Tcl_FileObjCmd: isdirectory} {file isdirectory $gorpfile} 0
 test cmdAH-21.3 {Tcl_FileObjCmd: isdirectory} {file isdirectory $dirfile} 1
 
 =======
+=======
+>>>>>>> upstream/master
 test cmdAH-20.7 {
     Tcl_FileObjCmd: atime (built-in Windows names)
 } -constraints {win} -body {
@@ -1403,7 +1438,10 @@ test cmdAH-24.13 {Tcl_FileObjCmd: directory mtime} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1418,6 +1456,7 @@ test cmdAH-24.14.1 {
 } -constraints {win} -body {
     file mtime [file join [temporaryDirectory] CON.txt]
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result "could not get modification time for file \"[file join [temporaryDirectory] CON.txt]\"" -returnCodes error
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1429,13 +1468,52 @@ test cmdAH-24.14.1 {
 =======
 } -match regexp -result {could not (?:get modification time|read)} -returnCodes error
 >>>>>>> upstream/master
+=======
+} -match regexp -result {could not (?:get modification time|read)} -returnCodes error
+
+# 3155760000 is 64-bit unix time, Wed Jan 01 00:00:00 GMT 2070:
+test cmdAH-24.20.1 {Tcl_FileObjCmd: atime 64-bit time_t, bug [4718b41c56]} -setup {
+    set filename [makeFile "" foo.text]
+} -body {
+    list [file atime $filename 3155760000] [file atime $filename]
+} -cleanup {
+    removeFile $filename
+} -result {3155760000 3155760000}
+test cmdAH-24.20.2 {Tcl_FileObjCmd: mtime 64-bit time_t, bug [4718b41c56]} -setup {
+    set filename [makeFile "" foo.text]
+} -body {
+    list [file mtime $filename 3155760000] [file mtime $filename]
+} -cleanup {
+    file delete -force $filename
+} -result {3155760000 3155760000}
+>>>>>>> upstream/master
 
 # owned
 test cmdAH-25.1 {Tcl_FileObjCmd: owned} -returnCodes error -body {
     file owned a b
 } -result {wrong # args: should be "file owned name"}
-test cmdAH-25.2 {Tcl_FileObjCmd: owned} -constraints win -body {
-    file owned $gorpfile
+test cmdAH-25.2 {Tcl_FileObjCmd: owned} -constraints win -setup {
+    set fn $gorpfile
+    # prefer temp file to check owner (try to avoid bug [7de2d722bd]):
+    if {
+	[info exists ::env(TEMP)] && [file isdirectory $::env(TEMP)] &&
+        [file dirname $fn] ne [file normalize $::env(TEMP)]
+    } {
+	set fn [file join $::env(TEMP)/test-owner-from-tcl.txt]
+	set fn [makeFile "data" test-owner-from-tcl.txt $::env(TEMP)]
+    }
+    # be sure we have really owned this file before trying to check that
+    # (avoid dependency on admin with UAC and the setting "System objects:
+    # Default owner for objects created by members of the Administrators group"):
+    catch {
+	exec takeown /F [file nativename $fn]
+    }
+} -body {
+    file owned $fn
+} -cleanup {
+    if {$fn ne $gorpfile} {
+	removeFile $fn
+    }
 } -result 1
 test cmdAH-25.2.1 {Tcl_FileObjCmd: owned} -constraints unix -setup {
     # Avoid problems with AFS
@@ -1449,7 +1527,15 @@ test cmdAH-25.3 {Tcl_FileObjCmd: owned} {unix notRoot} {
     file owned /
 } 0
 test cmdAH-25.3.1 {Tcl_FileObjCmd: owned} -constraints win -body {
+<<<<<<< HEAD
     file owned $env(windir)
+=======
+    if {[info exists env(SystemRoot)]} {
+	file owned $env(SystemRoot)
+    } else {
+	file owned $env(windir)
+    }
+>>>>>>> upstream/master
 } -result 0
 test cmdAH-25.4 {Tcl_FileObjCmd: owned} -body {
     file owned nosuchfile
@@ -1487,7 +1573,10 @@ test cmdAH-27.3 {Tcl_FileObjCmd: size} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1509,6 +1598,9 @@ test cmdAH-27.4.1 {
 } -result 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1608,7 +1700,10 @@ test cmdAH-28.12 {Tcl_FileObjCmd: stat} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1632,6 +1727,9 @@ test cmdAH-28.13.1 {Tcl_FileObjCmd: stat (built-in Windows names)} -constraints 
 } -result {0 0 -1 0 0 8630 0 0 0 characterSpecial 0}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1644,8 +1742,13 @@ test cmdAH-29.1 {Tcl_FileObjCmd: type} -returnCodes error -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     file size a b
 } -result {wrong # args: should be "file size name"}
+=======
+    file type a b
+} -result {wrong # args: should be "file type name"}
+>>>>>>> upstream/master
 =======
     file type a b
 } -result {wrong # args: should be "file type name"}
@@ -1695,7 +1798,10 @@ test cmdAH-29.5 {Tcl_FileObjCmd: type} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1717,6 +1823,9 @@ test cmdAH-29.6.1 {
 } -result "characterSpecial"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1726,7 +1835,11 @@ test cmdAH-29.6.1 {
 # Error conditions
 test cmdAH-30.1 {Tcl_FileObjCmd: error conditions} -returnCodes error -body {
     file gorp x
+<<<<<<< HEAD
 } -result {unknown or ambiguous subcommand "gorp": must be atime, attributes, channels, copy, delete, dirname, executable, exists, extension, isdirectory, isfile, join, link, lstat, mkdir, mtime, nativename, normalize, owned, pathtype, readable, readlink, rename, rootname, separator, size, split, stat, system, tail, tempfile, type, volumes, or writable}
+=======
+} -result {unknown or ambiguous subcommand "gorp": must be atime, attributes, channels, copy, delete, dirname, executable, exists, extension, isdirectory, isfile, join, link, lstat, mkdir, mtime, nativename, normalize, owned, pathtype, readable, readlink, rename, rootname, separator, size, split, stat, system, tail, tempdir, tempfile, type, volumes, or writable}
+>>>>>>> upstream/master
 test cmdAH-30.2 {Tcl_FileObjCmd: error conditions} -returnCodes error -body {
     file ex x
 } -match glob -result {unknown or ambiguous subcommand "ex": must be *}
@@ -1858,6 +1971,62 @@ test cmdAH-32.6 {file tempfile - templates} -body {
 } -constraints {unix nonPortable} -cleanup {
     catch {file delete $name}
 } -result ok
+
+test cmdAH-33.1 {file tempdir} -body {
+    file tempdir a b
+} -returnCodes error -result {wrong # args: should be "file tempdir ?template?"}
+test cmdAH-33.2 {file tempdir} -body {
+    set d [file tempdir]
+    list [file tail $d] [file exists $d] [file type $d] \
+	[glob -nocomplain -directory $d *]
+} -match glob -result {tcl_* 1 directory {}} -cleanup {
+    catch {file delete $d}
+}
+test cmdAH-33.3 {file tempdir} -body {
+    set d [file tempdir gorp]
+    list [file tail $d] [file exists $d] [file type $d] \
+	[glob -nocomplain -directory $d *]
+} -match glob -result {gorp_* 1 directory {}} -cleanup {
+    catch {file delete $d}
+}
+test cmdAH-33.4 {file tempdir} -setup {
+    set base [file join [temporaryDirectory] gorp]
+    file mkdir $base
+} -body {
+    set pre [glob -nocomplain -directory $base *]
+    set d [file normalize [file tempdir $base/]]
+    list [string map [list $base GORP:] $d] [file exists $d] [file type $d] \
+	$pre [glob -nocomplain -directory $d *]
+} -match glob -result {GORP:/tcl_* 1 directory {} {}} -cleanup {
+    catch {file delete -force $base}
+}
+test cmdAH-33.5 {file tempdir} -setup {
+    set base [file join [temporaryDirectory] gorp]
+    file mkdir $base
+} -body {
+    set pre [glob -nocomplain -directory $base *]
+    set d [file normalize [file tempdir $base/gorp]]
+    list [string map [list $base GORP:] $d] [file exists $d] [file type $d] \
+	$pre [glob -nocomplain -directory $d *]
+} -match glob -result {GORP:/gorp_* 1 directory {} {}} -cleanup {
+    catch {file delete -force $base}
+}
+test cmdAH-33.6 {file tempdir: missing parent dir} -setup {
+    set base [file join [temporaryDirectory] gorp]
+    file mkdir $base
+} -returnCodes error -body {
+    file tempdir $base/quux/
+} -cleanup {
+    catch {file delete -force $base}
+} -result {can't create temporary directory: no such file or directory}
+test cmdAH-33.7 {file tempdir: missing parent dir} -setup {
+    set base [file join [temporaryDirectory] gorp]
+    file mkdir $base
+} -returnCodes error -body {
+    file tempdir $base/quux/foobar
+} -cleanup {
+    catch {file delete -force $base}
+} -result {can't create temporary directory: no such file or directory}
 
 # This shouldn't work, but just in case a test above failed...
 catch {close $newFileId}

@@ -3,7 +3,11 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 AC_INIT([minizip], [1.2.8], [bugzilla.redhat.com])
+=======
+AC_INIT([minizip], [1.2.11], [bugzilla.redhat.com])
+>>>>>>> upstream/master
 =======
 AC_INIT([minizip], [1.2.11], [bugzilla.redhat.com])
 >>>>>>> upstream/master

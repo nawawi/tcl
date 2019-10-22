@@ -31,10 +31,14 @@ static CRITICAL_SECTION masterLock;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int init = 0;
 #define MASTER_LOCK TclpMasterLock()
 #define MASTER_UNLOCK TclpMasterUnlock()
 
+=======
+static int initialized = 0;
+>>>>>>> upstream/master
 =======
 static int initialized = 0;
 >>>>>>> upstream/master
@@ -127,7 +131,11 @@ static Tcl_ThreadDataKey dataKey;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct WinCondition {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -152,12 +160,18 @@ typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int once;
 =======
 >>>>>>> upstream/master
 static DWORD tlsKey;
 
 typedef struct allocMutex {
+=======
+static DWORD tlsKey;
+
+typedef struct {
+>>>>>>> upstream/master
 =======
 static DWORD tlsKey;
 
@@ -186,7 +200,11 @@ typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct WinThread {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -204,7 +222,10 @@ typedef struct {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -249,6 +270,9 @@ TclWinThreadStart(
     );
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -261,6 +285,7 @@ TclWinThreadStart(
 }
 
 /*
+<<<<<<< HEAD
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
@@ -315,6 +340,8 @@ TclWinThreadStart(
 }
 
 /*
+=======
+>>>>>>> upstream/master
  *----------------------------------------------------------------------
  *
 <<<<<<< HEAD
@@ -532,7 +559,11 @@ TclpInitLock(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 =======
 	initialized = 1;
 >>>>>>> upstream/master
@@ -610,7 +641,11 @@ TclpMasterLock(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	init = 1;
+=======
+	initialized = 1;
+>>>>>>> upstream/master
 =======
 	initialized = 1;
 >>>>>>> upstream/master
@@ -693,7 +728,11 @@ Tcl_GetAllocMutex(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * TclpFinalizeLock
+=======
+ * TclFinalizeLock
+>>>>>>> upstream/master
 =======
  * TclFinalizeLock
 >>>>>>> upstream/master
@@ -727,7 +766,11 @@ TclFinalizeLock(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     MASTER_LOCK;
+=======
+    TclpMasterLock();
+>>>>>>> upstream/master
 =======
     TclpMasterLock();
 >>>>>>> upstream/master
@@ -751,7 +794,11 @@ TclFinalizeLock(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     init = 0;
+=======
+    initialized = 0;
+>>>>>>> upstream/master
 =======
     initialized = 0;
 >>>>>>> upstream/master
@@ -931,7 +978,7 @@ Tcl_ConditionWait(
 	 */
 
 	if (tsdPtr->flags == WIN_THREAD_UNINIT) {
-	    tsdPtr->condEvent = CreateEvent(NULL, TRUE /* manual reset */,
+	    tsdPtr->condEvent = CreateEventW(NULL, TRUE /* manual reset */,
 		    FALSE /* non signaled */, NULL);
 	    tsdPtr->nextPtr = NULL;
 	    tsdPtr->prevPtr = NULL;
@@ -1190,9 +1237,15 @@ TclpNewAllocMutex(void)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct allocMutex *lockPtr;
 
     lockPtr = malloc(sizeof(struct allocMutex));
+=======
+    allocMutex *lockPtr;
+
+    lockPtr = malloc(sizeof(allocMutex));
+>>>>>>> upstream/master
 =======
     allocMutex *lockPtr;
 
@@ -1229,6 +1282,7 @@ TclpFreeAllocMutex(
     free(lockPtr);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1302,10 +1356,29 @@ TclpInitAllocCache(void)
 =======
 >>>>>>> upstream/master
 =======
+=======
+void
+TclpInitAllocCache(void)
+{
+    /*
+     * We need to make sure that TclpFreeAllocCache is called on each
+     * thread that calls this, but only on threads that call this.
+     */
+
+    tlsKey = TlsAlloc();
+    if (tlsKey == TLS_OUT_OF_INDEXES) {
+	Tcl_Panic("could not allocate thread local storage");
+    }
+}
+
+>>>>>>> upstream/master
 void *
 TclpGetAllocCache(void)
 {
     void *result;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     result = TlsGetValue(tlsKey);
     if ((result == NULL) && (GetLastError() != NO_ERROR)) {
@@ -1348,7 +1421,11 @@ TclpFreeAllocCache(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } else if (once) {
+=======
+    } else {
+>>>>>>> upstream/master
 =======
     } else {
 >>>>>>> upstream/master
@@ -1374,9 +1451,13 @@ TclpFreeAllocCache(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	once = 0; /* reset for next time. */
     }
 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master

@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset uk DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u043d\u0434"\
         "\u043f\u043d"\
         "\u0432\u0442"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u043f\u0442"\
         "\u0441\u0431"]
 =======
+=======
+>>>>>>> upstream/master
         "нд"\
         "пн"\
         "вт"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "чт"\
         "пт"\
         "сб"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset uk DAYS_OF_WEEK_FULL [list \
         "неділя"\
@@ -42,6 +48,7 @@ namespace eval ::tcl::clock {
         "груд"\
         ""]
     ::msgcat::mcset uk MONTHS_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
         "\u0441\u0456\u0447\u043d\u044f"\
         "\u043b\u044e\u0442\u043e\u0433\u043e"\
@@ -89,6 +96,23 @@ namespace eval ::tcl::clock {
         "груд"\
         ""]
     ::msgcat::mcset uk MONTHS_FULL [list \
+        "січня"\
+        "лютого"\
+        "березня"\
+        "квітня"\
+        "травня"\
+        "червня"\
+        "липня"\
+        "серпня"\
+        "вересня"\
+        "жовтня"\
+        "листопада"\
+        "грудня"\
+        ""]
+    ::msgcat::mcset uk BCE "до н.е."
+    ::msgcat::mcset uk CE "після н.е."
+>>>>>>> upstream/master
+=======
         "січня"\
         "лютого"\
         "березня"\

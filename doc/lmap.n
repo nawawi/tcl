@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -71,7 +75,11 @@ set list2 {1 2 3 4}
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 set zipped [\fBlmap\fR a $list1 b $list2 {list $a $b}] 
+=======
+set zipped [\fBlmap\fR a $list1 b $list2 {list $a $b}]
+>>>>>>> upstream/master
 =======
 set zipped [\fBlmap\fR a $list1 b $list2 {list $a $b}]
 >>>>>>> upstream/master

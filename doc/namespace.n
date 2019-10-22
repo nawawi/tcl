@@ -307,7 +307,11 @@ cannot be found in the current namespace, the namespace's path nor in
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 the global namespace. 
+=======
+the global namespace.
+>>>>>>> upstream/master
 =======
 the global namespace.
 >>>>>>> upstream/master

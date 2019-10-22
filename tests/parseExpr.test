@@ -772,6 +772,7 @@ test parseExpr-21.9 {error messages} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     expr {"} 
 } -returnCodes error -result {missing "
 in expression """}
@@ -793,6 +794,13 @@ test parseExpr-21.10 {error messages} -body {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    expr {"}
+} -returnCodes error -result {missing "
+in expression """}
+test parseExpr-21.10 {error messages} -body {
+    expr \{
 >>>>>>> upstream/master
 =======
     expr {"}
@@ -1074,9 +1082,14 @@ test parseExpr-22.13 {Bug 3401704} -constraints testexprparser -body {
 test parseExpr-22.14 {Bug 3401704} -constraints testexprparser -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     catch {testexprparser 08 -1} m o
     dict get $o -errorcode
 } -result {TCL PARSE EXPR BADNUMBER OCTAL}
+=======
+    testexprparser 07 -1
+} -result {- {} 0 subexpr 07 1 text 07 0 {}}
+>>>>>>> upstream/master
 =======
     testexprparser 07 -1
 } -result {- {} 0 subexpr 07 1 text 07 0 {}}

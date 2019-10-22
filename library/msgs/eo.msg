@@ -7,7 +7,11 @@ namespace eval ::tcl::clock {
         "me"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0135a"\
+=======
+        "ĵa"\
+>>>>>>> upstream/master
 =======
         "ĵa"\
 >>>>>>> upstream/master
@@ -19,6 +23,7 @@ namespace eval ::tcl::clock {
         "mardo"\
         "merkredo"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0135a\u016ddo"\
 =======
         "ĵa"\
@@ -29,6 +34,9 @@ namespace eval ::tcl::clock {
         "lundo"\
         "mardo"\
         "merkredo"\
+        "ĵaŭdo"\
+>>>>>>> upstream/master
+=======
         "ĵaŭdo"\
 >>>>>>> upstream/master
 =======
@@ -46,7 +54,11 @@ namespace eval ::tcl::clock {
         "jul"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "a\u016dg"\
+=======
+        "aŭg"\
+>>>>>>> upstream/master
 =======
         "aŭg"\
 >>>>>>> upstream/master
@@ -68,7 +80,11 @@ namespace eval ::tcl::clock {
         "julio"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "a\u016dgusto"\
+=======
+        "aŭgusto"\
+>>>>>>> upstream/master
 =======
         "aŭgusto"\
 >>>>>>> upstream/master

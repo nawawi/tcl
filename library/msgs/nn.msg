@@ -4,7 +4,11 @@ namespace eval ::tcl::clock {
         "su"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e5"\
+=======
+        "må"\
+>>>>>>> upstream/master
 =======
         "må"\
 >>>>>>> upstream/master
@@ -20,7 +24,11 @@ namespace eval ::tcl::clock {
         "sundag"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e5ndag"\
+=======
+        "måndag"\
+>>>>>>> upstream/master
 =======
         "måndag"\
 >>>>>>> upstream/master

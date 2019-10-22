@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset el DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u039a\u03c5\u03c1"\
         "\u0394\u03b5\u03c5"\
         "\u03a4\u03c1\u03b9"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u03a0\u03b1\u03c1"\
         "\u03a3\u03b1\u03b2"]
 =======
+=======
+>>>>>>> upstream/master
         "Κυρ"\
         "Δευ"\
         "Τρι"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "Πεμ"\
         "Παρ"\
         "Σαβ"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset el DAYS_OF_WEEK_FULL [list \
         "Κυριακή"\
@@ -55,6 +61,7 @@ namespace eval ::tcl::clock {
         "Νοέμβριος"\
         "Δεκέμβριος"\
         ""]
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset el AM "\u03c0\u03bc"
     ::msgcat::mcset el PM "\u03bc\u03bc"
@@ -102,6 +109,10 @@ namespace eval ::tcl::clock {
         "Νοέμβριος"\
         "Δεκέμβριος"\
         ""]
+    ::msgcat::mcset el AM "πμ"
+    ::msgcat::mcset el PM "μμ"
+>>>>>>> upstream/master
+=======
     ::msgcat::mcset el AM "πμ"
     ::msgcat::mcset el PM "μμ"
 >>>>>>> upstream/master

@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset zh_HK DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u65e5"\
         "\u4e00"\
         "\u4e8c"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u4e94"\
         "\u516d"]
 =======
+=======
+>>>>>>> upstream/master
         "日"\
         "一"\
         "二"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "四"\
         "五"\
         "六"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset zh_HK MONTHS_ABBREV [list \
         "1月"\
@@ -35,6 +41,7 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset zh_HK DATE_FORMAT "%Y年%m月%e日"
     ::msgcat::mcset zh_HK TIME_FORMAT_12 "%P%I:%M:%S"
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset zh_HK DATE_TIME_FORMAT "%Y\u5e74%m\u6708%e\u65e5 %P%I:%M:%S %z"
 =======
@@ -61,6 +68,9 @@ namespace eval ::tcl::clock {
         ""]
     ::msgcat::mcset zh_HK DATE_FORMAT "%Y年%m月%e日"
     ::msgcat::mcset zh_HK TIME_FORMAT_12 "%P%I:%M:%S"
+    ::msgcat::mcset zh_HK DATE_TIME_FORMAT "%Y年%m月%e日 %P%I:%M:%S %z"
+>>>>>>> upstream/master
+=======
     ::msgcat::mcset zh_HK DATE_TIME_FORMAT "%Y年%m月%e日 %P%I:%M:%S %z"
 >>>>>>> upstream/master
 =======

@@ -4,6 +4,7 @@ set TZData(:Asia/Ulaanbaatar) {
     {-9223372036854775808 25652 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2032931252 25200 0 ULAT}
     {252435600 28800 0 ULAT}
     {417974400 32400 1 ULAST}
@@ -223,6 +224,8 @@ set TZData(:Asia/Ulaanbaatar) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-2032931252 25200 0 +07}
     {252435600 28800 0 +08}
     {417974400 32400 1 +08}
@@ -274,6 +277,9 @@ set TZData(:Asia/Ulaanbaatar) {
     {1458928800 32400 1 +08}
     {1474642800 28800 0 +08}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

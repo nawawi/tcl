@@ -13,7 +13,11 @@ CC=gcc
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #CFLAGS=-MMD -g -DDEBUG
+=======
+#CFLAGS=-MMD -g -DZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #CFLAGS=-MMD -g -DZLIB_DEBUG
 >>>>>>> upstream/master

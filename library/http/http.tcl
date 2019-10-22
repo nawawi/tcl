@@ -15,6 +15,7 @@ package require Tcl 8.6-
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package provide http 2.8.10
 =======
 package provide http 2.8.11
@@ -24,6 +25,9 @@ package provide http 2.8.12
 >>>>>>> upstream/master
 =======
 package provide http 2.8.13
+>>>>>>> upstream/master
+=======
+package provide http 2.9.0
 >>>>>>> upstream/master
 =======
 package provide http 2.9.0
@@ -45,6 +49,7 @@ namespace eval http {
 	    -repost 0
 	    -urlencoding utf-8
 	    -zip 1
+<<<<<<< HEAD
 	}
 <<<<<<< HEAD
 	# We need a useragent string of this style or various servers will refuse to
@@ -80,6 +85,25 @@ namespace eval http {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	}
+	# We need a useragent string of this style or various servers will
+	# refuse to send us compressed content even when we ask for it. This
+	# follows the de-facto layout of user-agent strings in current browsers.
+	# Safe interpreters do not have ::tcl_platform(os) or
+	# ::tcl_platform(osVersion).
+	if {[interp issafe]} {
+	    set http(-useragent) "Mozilla/5.0\
+		(Windows; U;\
+		Windows NT 10.0)\
+		http/[package provide http] Tcl/[package provide Tcl]"
+	} else {
+	    set http(-useragent) "Mozilla/5.0\
+		([string totitle $::tcl_platform(platform)]; U;\
+		$::tcl_platform(os) $::tcl_platform(osVersion))\
+		http/[package provide http] Tcl/[package provide Tcl]"
+	}
 >>>>>>> upstream/master
     }
 
@@ -302,21 +326,28 @@ proc http::Finish {token {errormsg ""} {skipCB 0}} {
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if {
 	($state(status) eq "timeout") || ($state(status) eq "error") ||
 	([info exists state(connection)] && ($state(connection) eq "close"))
 =======
     if { ($state(status) eq "timeout")
 =======
+=======
+>>>>>>> upstream/master
     if {[info commands ${token}EventCoroutine] ne {}} {
 	rename ${token}EventCoroutine {}
     }
     if {  ($state(status) eq "timeout")
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
        || ($state(status) eq "error")
        || ($state(status) eq "eof")
        || ([info exists state(-keepalive)] && !$state(-keepalive))
        || ([info exists state(connection)] && ($state(connection) eq "close"))
+<<<<<<< HEAD
 >>>>>>> upstream/master
     } {
 	set closeQueue 1
@@ -327,6 +358,17 @@ proc http::Finish {token {errormsg ""} {skipCB 0}} {
 	  ([info exists state(-keepalive)] && $state(-keepalive))
        && ([info exists state(connection)] && ($state(connection) ne "close"))
     } {
+=======
+    } {
+	set closeQueue 1
+	set connId $state(socketinfo)
+	set sock $state(sock)
+	CloseSocket $state(sock) $token
+    } elseif {
+	  ([info exists state(-keepalive)] && $state(-keepalive))
+       && ([info exists state(connection)] && ($state(connection) ne "close"))
+    } {
+>>>>>>> upstream/master
 	KeepSocket $token
     }
     if {[info exists state(after)]} {
@@ -342,6 +384,9 @@ proc http::Finish {token {errormsg ""} {skipCB 0}} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 	}
     }
 
@@ -529,6 +574,7 @@ proc http::KeepSocket {token} {
 	} elseif {(!$state(-pipeline))} {
 	    set socketWrState($connId) Wready
 	    # Rready and Wready and idle: nothing to do.
+<<<<<<< HEAD
 	}
 
     } else {
@@ -618,6 +664,39 @@ proc http::CloseSocket {s {token {}}} {
 =======
 	}
 >>>>>>> upstream/master
+=======
+	}
+
+    } else {
+	CloseSocket $state(sock) $token
+	# There is no socketMapping($state(socketinfo)), so it does not matter
+	# that CloseQueuedQueries is not called.
+    }
+}
+
+# http::CheckEof -
+#
+#	Read from a socket and close it if eof.
+#	The command is bound to "fileevent readable" on an idle socket, and
+#	"eof" is the only event that should trigger the binding, occurring when
+#	the server times out and half-closes the socket.
+#
+#	A read is necessary so that [eof] gives a meaningful result.
+#	Any bytes sent are junk (or a bug).
+
+proc http::CheckEof {sock} {
+    set junk [read $sock]
+    set n [string length $junk]
+    if {$n} {
+	Log "WARNING: $n bytes received but no HTTP request sent"
+    }
+
+    if {[catch {eof $sock} res] || $res} {
+	# The server has half-closed the socket.
+	# If a new write has started, its transaction will fail and
+	# will then be error-handled.
+	CloseSocket $sock
+>>>>>>> upstream/master
     }
 }
 
@@ -626,30 +705,47 @@ proc http::CloseSocket {s {token {}}} {
 #	Close a socket and remove it from the persistent sockets table.  If
 #	possible an http token is included here but when we are called from a
 #	fileevent on remote closure we need to find the correct entry - hence
-#	the second section.
+#	the "else" block of the first "if" command.
 
-proc ::http::CloseSocket {s {token {}}} {
-    variable socketmap
+proc http::CloseSocket {s {token {}}} {
+    variable socketMapping
+    variable socketRdState
+    variable socketWrState
+    variable socketRdQueue
+    variable socketWrQueue
+    variable socketClosing
+    variable socketPlayCmd
+
+    set tk [namespace tail $token]
+
     catch {fileevent $s readable {}}
-    set conn_id {}
+    set connId {}
     if {$token ne ""} {
-        variable $token
-        upvar 0 $token state
-        if {[info exists state(socketinfo)]} {
-	    set conn_id $state(socketinfo)
-        }
+	variable $token
+	upvar 0 $token state
+	if {[info exists state(socketinfo)]} {
+	    set connId $state(socketinfo)
+	}
     } else {
-        set map [array get socketmap]
-        set ndx [lsearch -exact $map $s]
-        if {$ndx != -1} {
+	set map [array get socketMapping]
+	set ndx [lsearch -exact $map $s]
+	if {$ndx != -1} {
 	    incr ndx -1
-	    set conn_id [lindex $map $ndx]
-        }
+	    set connId [lindex $map $ndx]
+	}
     }
-    if {$conn_id eq {} || ![info exists socketmap($conn_id)]} {
-        Log "Closing socket $s (no connection info)"
-        if {[catch {close $s} err]} {
-	    Log "Error: $err"
+    if {    ($connId ne {})
+	 && [info exists socketMapping($connId)]
+	 && ($socketMapping($connId) eq $s)
+    } {
+	Log "Closing connection $connId (sock $socketMapping($connId))"
+	if {[catch {close $socketMapping($connId)} err]} {
+	    Log "Error closing connection: $err"
+	}
+	if {$token eq {}} {
+	    # Cases with a non-empty token are handled by Finish, so the tokens
+	    # are finished in connection order.
+	    http::CloseQueuedQueries $connId
 	}
 <<<<<<< HEAD
 >>>>>>> upstream/master
@@ -1043,6 +1139,7 @@ proc http::geturl {url args} {
 <<<<<<< HEAD
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
@@ -1066,6 +1163,8 @@ proc http::geturl {url args} {
     # If a timeout is specified we set up the after event and arrange for an
     # asynchronous socket connection.
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1095,23 +1194,134 @@ proc http::geturl {url args} {
     # c11a51c482]
     set state(accept-types) $http(-accept)
 
-    # See if we are supposed to use a previously opened channel.
-    if {$state(-keepalive)} {
-	variable socketmap
-	if {[info exists socketmap($state(socketinfo))]} {
-	    if {[catch {fconfigure $socketmap($state(socketinfo))}]} {
-		Log "WARNING: socket for $state(socketinfo) was closed"
-		unset socketmap($state(socketinfo))
-	    } else {
-		set sock $socketmap($state(socketinfo))
-		Log "reusing socket $sock for $state(socketinfo)"
-		catch {fileevent $sock writable {}}
-		catch {fileevent $sock readable {}}
-	    }
+<<<<<<< HEAD
+=======
+    if {$isQuery || $isQueryChannel} {
+	# It's a POST.
+	# A client wishing to send a non-idempotent request SHOULD wait to send
+	# that request until it has received the response status for the
+	# previous request.
+	if {$http(-postfresh)} {
+	    # Override -keepalive for a POST.  Use a new connection, and thus
+	    # avoid the small risk of a race against server timeout.
+	    set state(-keepalive) 0
+	} else {
+	    # Allow -keepalive but do not -pipeline - wait for the previous
+	    # transaction to finish.
+	    # There is a small risk of a race against server timeout.
+	    set state(-pipeline) 0
 	}
-	# don't automatically close this connection socket
-	set state(connection) {}
+    } else {
+	# It's a GET or HEAD.
+	set state(-pipeline) $http(-pipeline)
     }
+
+>>>>>>> upstream/master
+    # See if we are supposed to use a previously opened channel.
+    # - In principle, ANY call to http::geturl could use a previously opened
+    #   channel if it is available - the "Connection: keep-alive" header is a
+    #   request to leave the channel open AFTER completion of this call.
+    # - In fact, we try to use an existing channel only if -keepalive 1 -- this
+    #   means that at most one channel is left open for each value of
+    #   $state(socketinfo). This property simplifies the mapping of open
+    #   channels.
+    set reusing 0
+    set alreadyQueued 0
+    if {$state(-keepalive)} {
+	variable socketMapping
+	variable socketRdState
+	variable socketWrState
+	variable socketRdQueue
+	variable socketWrQueue
+	variable socketClosing
+	variable socketPlayCmd
+
+	if {[info exists socketMapping($state(socketinfo))]} {
+	    # - If the connection is idle, it has a "fileevent readable" binding
+	    #   to http::CheckEof, in case the server times out and half-closes
+	    #   the socket (http::CheckEof closes the other half).
+	    # - We leave this binding in place until just before the last
+	    #   puts+flush in http::Connected (GET/HEAD) or http::Write (POST),
+	    #   after which the HTTP response might be generated.
+
+	    if {    [info exists socketClosing($state(socketinfo))]
+		       && $socketClosing($state(socketinfo))
+	    } {
+		# socketClosing(*) is set because the server has sent a
+		# "Connection: close" header.
+		# Do not use the persistent socket again.
+		# Since we have only one persistent socket per server, and the
+		# old socket is not yet dead, add the request to the write queue
+		# of the dying socket, which will be replayed by ReplayIfClose.
+		# Also add it to socketWrQueue(*) which is used only if an error
+		# causes a call to Finish.
+		set reusing 1
+		set sock $socketMapping($state(socketinfo))
+		Log "reusing socket $sock for $state(socketinfo) - token $token"
+
+		set alreadyQueued 1
+		lassign $socketPlayCmd($state(socketinfo)) com0 com1 com2 com3
+		lappend com3 $token
+		set socketPlayCmd($state(socketinfo)) [list $com0 $com1 $com2 $com3]
+		lappend socketWrQueue($state(socketinfo)) $token
+	    } elseif {[catch {fconfigure $socketMapping($state(socketinfo))}]} {
+		# FIXME Is it still possible for this code to be executed? If
+		#       so, this could be another place to call TestForReplay,
+		#       rather than discarding the queued transactions.
+		Log "WARNING: socket for $state(socketinfo) was closed\
+			- token $token"
+		Log "WARNING - if testing, pay special attention to this\
+			case (GH) which is seldom executed - token $token"
+
+		# This will call CancelReadPipeline, CancelWritePipeline, and
+		# cancel any queued requests, responses.
+		Unset $state(socketinfo)
+	    } else {
+		# Use the persistent socket.
+		# The socket may not be ready to write: an earlier request might
+		# still be still writing (in the pipelined case) or
+		# writing/reading (in the nonpipeline case). This possibility
+		# is handled by socketWrQueue later in this command.
+		set reusing 1
+		set sock $socketMapping($state(socketinfo))
+		Log "reusing socket $sock for $state(socketinfo) - token $token"
+
+	    }
+	    # Do not automatically close the connection socket.
+	    set state(connection) {}
+	}
+    }
+
+    if {$reusing} {
+	# Define state(tmpState) and state(tmpOpenCmd) for use
+	# by http::ReplayIfDead if the persistent connection has died.
+	set state(tmpState) [array get state]
+
+	# Pass -myaddr directly to the socket command
+	if {[info exists state(-myaddr)]} {
+	    lappend sockopts -myaddr $state(-myaddr)
+	}
+
+	set state(tmpOpenCmd) [list {*}$defcmd {*}$sockopts {*}$targetAddr]
+    }
+
+    set state(reusing) $reusing
+    # Excluding ReplayIfDead and the decision whether to call it, there are four
+    # places outside http::geturl where state(reusing) is used:
+    # - Connected   - if reusing and not pipelined, start the state(-timeout)
+    #                 timeout (when writing).
+    # - DoneRequest - if reusing and pipelined, send the next pipelined write
+    # - Event       - if reusing and pipelined, start the state(-timeout)
+    #                 timeout (when reading).
+    # - Event       - if (not reusing) and pipelined, send the next pipelined
+    #                 write
+
+    # See comments above re the start of this timeout in other cases.
+    if {(!$state(reusing)) && ($state(-timeout) > 0)} {
+	set state(after) [after $state(-timeout) \
+		[list http::reset $token timeout]]
+    }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -1269,20 +1479,29 @@ proc http::geturl {url args} {
 =======
 
 >>>>>>> upstream/master
+=======
+
+>>>>>>> upstream/master
     if {![info exists sock]} {
 	# Pass -myaddr directly to the socket command
 	if {[info exists state(-myaddr)]} {
 	    lappend sockopts -myaddr $state(-myaddr)
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
         if {[catch {eval $defcmd $sockopts $targetAddr} sock errdict]} {
 	    # something went wrong while trying to establish the connection.
 =======
+=======
+>>>>>>> upstream/master
 	set pre [clock milliseconds]
 	##Log pre socket opened, - token $token
 	##Log [concat $defcmd $sockopts $targetAddr] - token $token
 	if {[catch {eval $defcmd $sockopts $targetAddr} sock errdict]} {
 	    # Something went wrong while trying to establish the connection.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    # Clean up after events and such, but DON'T call the command
 	    # callback (if available) because we're going to throw an
@@ -1294,8 +1513,11 @@ proc http::geturl {url args} {
 	    dict unset errdict -level
 	    return -options $errdict $sock
 <<<<<<< HEAD
+<<<<<<< HEAD
         }
 =======
+=======
+>>>>>>> upstream/master
 	} else {
 	    # Initialisation of a new socket.
 	    ##Log post socket opened, - token $token
@@ -1308,6 +1530,9 @@ proc http::geturl {url args} {
 			     -buffersize $state(-blocksize)
 	    ##Log socket opened, DONE fconfigure - token $token
 	}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     }
     # Command [socket] is called with -async, but takes 5s to 5.1s to return,
@@ -1467,6 +1692,7 @@ proc http::geturl {url args} {
     ##Log Leaving http::geturl - token $token
     return $token
 }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1538,6 +1764,33 @@ proc http::Connected {token proto phost srvurl} {
     variable socketClosing
     variable socketPlayCmd
 
+=======
+
+# http::Connected --
+#
+#	Callback used when the connection to the HTTP server is actually
+#	established.
+#
+# Arguments:
+#	token	State token.
+#	proto	What protocol (http, https, etc.) was used to connect.
+#	phost	Are we using keep-alive? Non-empty if yes.
+#	srvurl	Service-local URL that we're requesting
+# Results:
+#	None.
+
+proc http::Connected {token proto phost srvurl} {
+    variable http
+    variable urlTypes
+    variable socketMapping
+    variable socketRdState
+    variable socketWrState
+    variable socketRdQueue
+    variable socketWrQueue
+    variable socketClosing
+    variable socketPlayCmd
+
+>>>>>>> upstream/master
     variable $token
     upvar 0 $token state
     set tk [namespace tail $token]
@@ -1604,6 +1857,7 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     set accept_types_seen 0
 >>>>>>> upstream/master
@@ -1612,11 +1866,19 @@ proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
 =======
     set accept_types_seen 0
+>>>>>>> upstream/master
+=======
+    set accept_types_seen 0
+
+    Log ^B$tk begin sending request - token $token
+
 >>>>>>> upstream/master
     if {[catch {
+	set state(method) $how
 	puts $sock "$how $srvurl HTTP/$state(-protocol)"
 	if {[dict exists $state(-headers) Host]} {
 	    # Allow Host spoofing. [Bug 928154]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1658,6 +1920,11 @@ proc http::Connected {token proto phost srvurl} {
 	    regexp {^[^:]+} $hostHdr state(host)
 	    puts $sock "Host: $hostHdr"
 >>>>>>> upstream/master
+=======
+	    set hostHdr [dict get $state(-headers) Host]
+	    regexp {^[^:]+} $hostHdr state(host)
+	    puts $sock "Host: $hostHdr"
+>>>>>>> upstream/master
 	} elseif {$port == $defport} {
 	    # Don't add port in this case, to handle broken servers. [Bug
 	    # #504508]
@@ -1673,7 +1940,10 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	unset hdrs
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1706,7 +1976,13 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	foreach {key value} $state(-headers) {
+=======
+	dict for {key value} $state(-headers) {
+	    set value [string map [list \n "" \r ""] $value]
+	    set key [string map {" " -} [string trim $key]]
+>>>>>>> upstream/master
 =======
 	dict for {key value} $state(-headers) {
 	    set value [string map [list \n "" \r ""] $value]
@@ -1749,6 +2025,7 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if {[string equal -nocase $key "content-type"]} {
 		set content_type_seen 1
 	    }
@@ -1771,6 +2048,8 @@ proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	    if {[string equal -nocase $key "accept"]} {
 		set accept_types_seen 1
 	    }
@@ -1781,6 +2060,9 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1804,7 +2086,10 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1826,6 +2111,7 @@ proc http::Connected {token proto phost srvurl} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1839,10 +2125,15 @@ proc http::Connected {token proto phost srvurl} {
 >>>>>>> upstream/master
         if {!$accept_encoding_seen && ![info exists state(-handler)]} {
 =======
+=======
+>>>>>>> upstream/master
 	if {    (!$accept_encoding_seen)
 	     && (![info exists state(-handler)])
 	     && $http(-zip)
 	} {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    puts $sock "Accept-Encoding: gzip,deflate,compress"
 	}
@@ -1925,6 +2216,7 @@ proc http::Connected {token proto phost srvurl} {
 	    flush $sock
 	    Log ^C$tk end sending request - token $token
 	    # End of writing (GET/HEAD methods).  The request has been sent.
+<<<<<<< HEAD
 
 	    DoneRequest $token
 	}
@@ -2010,6 +2302,74 @@ proc http::registerError {sock args} {
     set registeredErrors($sock) {*}$args
 }
 
+=======
+
+	    DoneRequest $token
+	}
+
+    } err]} {
+	# The socket probably was never connected, OR the connection dropped
+	# later, OR https handshake error, which may be discovered as late as
+	# the "flush" command above...
+	Log "WARNING - if testing, pay special attention to this\
+		case (GI) which is seldom executed - token $token"
+	if {[info exists state(reusing)] && $state(reusing)} {
+	    # The socket was closed at the server end, and closed at
+	    # this end by http::CheckEof.
+    	    if {[TestForReplay $token write $err a]} {
+		return
+	    } else {
+		Finish $token {failed to re-use socket}
+	    }
+
+	    # else:
+	    # This is NOT a persistent socket that has been closed since its
+	    # last use.
+	    # If any other requests are in flight or pipelined/queued, they will
+	    # be discarded.
+	} elseif {$state(status) eq ""} {
+	    # ...https handshake errors come here.
+	    set msg [registerError $sock]
+	    registerError $sock {}
+	    if {$msg eq {}} {
+		set msg {failed to use socket}
+	    }
+	    Finish $token $msg
+	} elseif {$state(status) ne "error"} {
+	    Finish $token $err
+	}
+    }
+}
+
+# http::registerError
+#
+#	Called (for example when processing TclTLS activity) to register
+#	an error for a connection on a specific socket.  This helps
+#	http::Connected to deliver meaningful error messages, e.g. when a TLS
+#	certificate fails verification.
+#
+#	Usage: http::registerError socket ?newValue?
+#
+#	"set" semantics, except that a "get" (a call without a new value) for a
+#	non-existent socket returns {}, not an error.
+
+proc http::registerError {sock args} {
+    variable registeredErrors
+
+    if {    ([llength $args] == 0)
+	 && (![info exists registeredErrors($sock)])
+    } {
+	return
+    } elseif {    ([llength $args] == 1)
+	       && ([lindex $args 0] eq {})
+    } {
+	unset -nocomplain registeredErrors($sock)
+	return
+    }
+    set registeredErrors($sock) {*}$args
+}
+
+>>>>>>> upstream/master
 # http::DoneRequest --
 #
 #	Command called when a request has been sent.  It will arrange the
@@ -2027,6 +2387,649 @@ proc http::DoneRequest {token} {
     variable socketWrQueue
     variable socketClosing
     variable socketPlayCmd
+<<<<<<< HEAD
+
+    variable $token
+    upvar 0 $token state
+    set tk [namespace tail $token]
+    set sock $state(sock)
+
+    # If pipelined, connect the next HTTP request to the socket.
+    if {$state(reusing) && $state(-pipeline)} {
+	# Enable next token (if any) to write.
+	# The value "Wready" is set only here, and
+	# in http::Event after reading the response-headers of a
+	# non-reusing transaction.
+	# Previous value is $token. It cannot be pending.
+	set socketWrState($state(socketinfo)) Wready
+
+	# Now ready to write the next pipelined request (if any).
+	http::NextPipelinedWrite $token
+    } else {
+	# If pipelined, this is the first transaction on this socket.  We wait
+	# for the response headers to discover whether the connection is
+	# persistent.  (If this is not done and the connection is not
+	# persistent, we SHOULD retry and then MUST NOT pipeline before knowing
+	# that we have a persistent connection
+	# (rfc2616 8.1.2.2)).
+    }
+
+    # Connect to receive the response, unless the socket is pipelined
+    # and another response is being sent.
+    # This code block is separate from the code below because there are
+    # cases where socketRdState already has the value $token.
+    if {    $state(-keepalive)
+	 && $state(-pipeline)
+	 && [info exists socketRdState($state(socketinfo))]
+	 && ($socketRdState($state(socketinfo)) eq "Rready")
+    } {
+	#Log pipelined, GRANT read access to $token in Connected
+	set socketRdState($state(socketinfo)) $token
+    }
+
+    if {    $state(-keepalive)
+	 && $state(-pipeline)
+	 && [info exists socketRdState($state(socketinfo))]
+	 && ($socketRdState($state(socketinfo)) ne $token)
+    } {
+	# Do not read from the socket until it is ready.
+	##Log "HTTP response for token $token is queued for pipelined use"
+	# If $socketClosing(*), then the caller will be a pipelined write and
+	# execution will come here.
+	# This token has already been recorded as "in flight" for writing.
+	# When the socket is closed, the read queue will be cleared in
+	# CloseQueuedQueries and so the "lappend" here has no effect.
+	lappend socketRdQueue($state(socketinfo)) $token
+    } else {
+	# In the pipelined case, connection for reading depends on the
+	# value of socketRdState.
+	# In the nonpipeline case, connection for reading always occurs.
+	ReceiveResponse $token
+    }
+}
+
+# http::ReceiveResponse
+#
+#	Connects token to its socket for reading.
+
+proc http::ReceiveResponse {token} {
+    variable $token
+    upvar 0 $token state
+    set tk [namespace tail $token]
+    set sock $state(sock)
+
+    #Log ---- $state(socketinfo) >> conn to $token for HTTP response
+    lassign [fconfigure $sock -translation] trRead trWrite
+    fconfigure $sock -translation [list auto $trWrite] \
+		     -buffersize $state(-blocksize)
+    Log ^D$tk begin receiving response - token $token
+
+    coroutine ${token}EventCoroutine http::Event $sock $token
+    fileevent $sock readable ${token}EventCoroutine
+}
+
+# http::NextPipelinedWrite
+#
+# - Connecting a socket to a token for writing is done by this command and by
+#   command KeepSocket.
+# - If another request has a pipelined write scheduled for $token's socket,
+#   and if the socket is ready to accept it, connect the write and update
+#   the queue accordingly.
+# - This command is called from http::DoneRequest and http::Event,
+#   IF $state(-pipeline) AND (the current transfer has reached the point at
+#   which the socket is ready for the next request to be written).
+# - This command is called when a token has write access and is pipelined and
+#   keep-alive, and sets socketWrState to Wready.
+# - The command need not consider the case where socketWrState is set to a token
+#   that does not yet have write access.  Such a token is waiting for Rready,
+#   and the assignment of the connection to the token will be done elsewhere (in
+#   http::KeepSocket).
+# - This command cannot be called after socketWrState has been set to a
+#   "pending" token value (that is then overwritten by the caller), because that
+#   value is set by this command when it is called by an earlier token when it
+#   relinquishes its write access, and the pending token is always the next in
+#   line to write.
+
+proc http::NextPipelinedWrite {token} {
+    variable http
+    variable socketRdState
+    variable socketWrState
+    variable socketWrQueue
+    variable socketClosing
+    variable $token
+    upvar 0 $token state
+    set connId $state(socketinfo)
+
+    if {    [info exists socketClosing($connId)]
+	 && $socketClosing($connId)
+    } {
+	# socketClosing(*) is set because the server has sent a
+	# "Connection: close" header.
+	# Behave as if the queues are empty - so do nothing.
+    } elseif {    $state(-pipeline)
+	 && [info exists socketWrState($connId)]
+	 && ($socketWrState($connId) eq "Wready")
+
+	 && [info exists socketWrQueue($connId)]
+	 && [llength $socketWrQueue($connId)]
+	 && ([set token2 [lindex $socketWrQueue($connId) 0]
+	      set ${token2}(-pipeline)
+	     ]
+	    )
+    } {
+	# - The usual case for a pipelined connection, ready for a new request.
+	#Log pipelined, GRANT write access to $token2 in NextPipelinedWrite
+	set conn [set ${token2}(tmpConnArgs)]
+	set socketWrState($connId) $token2
+	set socketWrQueue($connId) [lrange $socketWrQueue($connId) 1 end]
+	# Connect does its own fconfigure.
+	fileevent $state(sock) writable [list http::Connect $token2 {*}$conn]
+	#Log ---- $connId << conn to $token2 for HTTP request (b)
+
+	# In the tests below, the next request will be nonpipeline.
+    } elseif {    $state(-pipeline)
+	       && [info exists socketWrState($connId)]
+	       && ($socketWrState($connId) eq "Wready")
+
+	       && [info exists socketWrQueue($connId)]
+	       && [llength $socketWrQueue($connId)]
+	       && (![ set token3 [lindex $socketWrQueue($connId) 0]
+		      set ${token3}(-pipeline)
+		    ]
+		  )
+
+	       && [info exists socketRdState($connId)]
+	       && ($socketRdState($connId) eq "Rready")
+    } {
+	# The case in which the next request will be non-pipelined, and the read
+	# and write queues is ready: which is the condition for a non-pipelined
+	# write.
+	variable $token3
+	upvar 0 $token3 state3
+	set conn [set ${token3}(tmpConnArgs)]
+	#Log nonpipeline, GRANT r/w access to $token3 in NextPipelinedWrite
+	set socketRdState($connId) $token3
+	set socketWrState($connId) $token3
+	set socketWrQueue($connId) [lrange $socketWrQueue($connId) 1 end]
+	# Connect does its own fconfigure.
+	fileevent $state(sock) writable [list http::Connect $token3 {*}$conn]
+	#Log ---- $state(sock) << conn to $token3 for HTTP request (c)
+
+    } elseif {    $state(-pipeline)
+	 && [info exists socketWrState($connId)]
+	 && ($socketWrState($connId) eq "Wready")
+
+	 && [info exists socketWrQueue($connId)]
+	 && [llength $socketWrQueue($connId)]
+	 && (![set token2 [lindex $socketWrQueue($connId) 0]
+	      set ${token2}(-pipeline)
+	     ]
+	    )
+    } {
+	# - The case in which the next request will be non-pipelined, but the
+	#   read queue is NOT ready.
+	# - A read is queued or in progress, but not a write.  Cannot start the
+	#   nonpipeline transaction, but must set socketWrState to prevent a new
+	#   pipelined request (in http::geturl) jumping the queue.
+	# - Because socketWrState($connId) is not set to Wready, the assignment
+	#   of the connection to $token2 will be done elsewhere - by command
+	#   http::KeepSocket when $socketRdState($connId) is set to "Rready".
+
+	#Log re-use nonpipeline, GRANT delayed write access to $token in NextP..
+	set socketWrState($connId) peNding
+    }
+}
+
+# http::CancelReadPipeline
+#
+#	Cancel pipelined responses on a closing "Keep-Alive" socket.
+#
+#	- Called by a variable trace on "unset socketRdState($connId)".
+#	- The variable relates to a Keep-Alive socket, which has been closed.
+#	- Cancels all pipelined responses. The requests have been sent,
+#	  the responses have not yet been received.
+#	- This is a hard cancel that ends each transaction with error status,
+#	  and closes the connection. Do not use it if you want to replay failed
+#	  transactions.
+#	- N.B. Always delete ::http::socketRdState($connId) before deleting
+#	  ::http::socketRdQueue($connId), or this command will do nothing.
+#
+# Arguments
+#	As for a trace command on a variable.
+
+proc http::CancelReadPipeline {name1 connId op} {
+    variable socketRdQueue
+    ##Log CancelReadPipeline $name1 $connId $op
+    if {[info exists socketRdQueue($connId)]} {
+	set msg {the connection was closed by CancelReadPipeline}
+	foreach token $socketRdQueue($connId) {
+	    set tk [namespace tail $token]
+	    Log ^X$tk end of response "($msg)" - token $token
+	    set ${token}(status) eof
+	    Finish $token ;#$msg
+	}
+	set socketRdQueue($connId) {}
+    }
+}
+
+# http::CancelWritePipeline
+#
+#	Cancel queued events on a closing "Keep-Alive" socket.
+#
+#	- Called by a variable trace on "unset socketWrState($connId)".
+#	- The variable relates to a Keep-Alive socket, which has been closed.
+#	- In pipelined or nonpipeline case: cancels all queued requests.  The
+#	  requests have not yet been sent, the responses are not due.
+#	- This is a hard cancel that ends each transaction with error status,
+#	  and closes the connection. Do not use it if you want to replay failed
+#	  transactions.
+#	- N.B. Always delete ::http::socketWrState($connId) before deleting
+#	  ::http::socketWrQueue($connId), or this command will do nothing.
+#
+# Arguments
+#	As for a trace command on a variable.
+
+proc http::CancelWritePipeline {name1 connId op} {
+    variable socketWrQueue
+
+    ##Log CancelWritePipeline $name1 $connId $op
+    if {[info exists socketWrQueue($connId)]} {
+	set msg {the connection was closed by CancelWritePipeline}
+	foreach token $socketWrQueue($connId) {
+	    set tk [namespace tail $token]
+	    Log ^X$tk end of response "($msg)" - token $token
+	    set ${token}(status) eof
+	    Finish $token ;#$msg
+	}
+	set socketWrQueue($connId) {}
+    }
+}
+
+# http::ReplayIfDead --
+#
+# - A query on a re-used persistent socket failed at the earliest opportunity,
+#   because the socket had been closed by the server.  Keep the token, tidy up,
+#   and try to connect on a fresh socket.
+# - The connection is monitored for eof by the command http::CheckEof.  Thus
+#   http::ReplayIfDead is needed only when a server event (half-closing an
+#   apparently idle connection), and a client event (sending a request) occur at
+#   almost the same time, and neither client nor server detects the other's
+#   action before performing its own (an "asynchronous close event").
+# - To simplify testing of http::ReplayIfDead, set TEST_EOF 1 in
+#   http::KeepSocket, and then http::ReplayIfDead will be called if http::geturl
+#   is called at any time after the server timeout.
+#
+# Arguments:
+#	token	Connection token.
+#
+# Side Effects:
+#	Use the same token, but try to open a new socket.
+
+proc http::ReplayIfDead {tokenArg doing} {
+    variable socketMapping
+    variable socketRdState
+    variable socketWrState
+    variable socketRdQueue
+    variable socketWrQueue
+    variable socketClosing
+    variable socketPlayCmd
+
+    variable $tokenArg
+    upvar 0 $tokenArg stateArg
+
+    Log running http::ReplayIfDead for $tokenArg $doing
+
+    # 1. Merge the tokens for transactions in flight, the read (response) queue,
+    #    and the write (request) queue.
+
+    set InFlightR {}
+    set InFlightW {}
+
+    # Obtain the tokens for transactions in flight.
+    if {$stateArg(-pipeline)} {
+	# Two transactions may be in flight.  The "read" transaction was first.
+	# It is unlikely that the server would close the socket if a response
+	# was pending; however, an earlier request (as well as the present
+	# request) may have been sent and ignored if the socket was half-closed
+	# by the server.
+
+	if {    [info exists socketRdState($stateArg(socketinfo))]
+	     && ($socketRdState($stateArg(socketinfo)) ne "Rready")
+	} {
+	    lappend InFlightR $socketRdState($stateArg(socketinfo))
+	} elseif {($doing eq "read")} {
+	    lappend InFlightR $tokenArg
+	}
+
+	if {    [info exists socketWrState($stateArg(socketinfo))]
+	     && $socketWrState($stateArg(socketinfo)) ni {Wready peNding}
+	} {
+	    lappend InFlightW $socketWrState($stateArg(socketinfo))
+	} elseif {($doing eq "write")} {
+	    lappend InFlightW $tokenArg
+	}
+
+	# Report any inconsistency of $tokenArg with socket*state.
+	if {    ($doing eq "read")
+	     && [info exists socketRdState($stateArg(socketinfo))]
+	     && ($tokenArg ne $socketRdState($stateArg(socketinfo)))
+	} {
+	    Log WARNING - ReplayIfDead pipelined tokenArg $tokenArg $doing \
+		    ne socketRdState($stateArg(socketinfo)) \
+		      $socketRdState($stateArg(socketinfo))
+
+	} elseif {
+		($doing eq "write")
+	     && [info exists socketWrState($stateArg(socketinfo))]
+	     && ($tokenArg ne $socketWrState($stateArg(socketinfo)))
+	} {
+	    Log WARNING - ReplayIfDead pipelined tokenArg $tokenArg $doing \
+		    ne socketWrState($stateArg(socketinfo)) \
+		      $socketWrState($stateArg(socketinfo))
+	}
+    } else {
+	# One transaction should be in flight.
+	# socketRdState, socketWrQueue are used.
+	# socketRdQueue should be empty.
+
+	# Report any inconsistency of $tokenArg with socket*state.
+	if {$tokenArg ne $socketRdState($stateArg(socketinfo))} {
+	    Log WARNING - ReplayIfDead nonpipeline tokenArg $tokenArg $doing \
+		    ne socketRdState($stateArg(socketinfo)) \
+		      $socketRdState($stateArg(socketinfo))
+	}
+
+	# Report the inconsistency that socketRdQueue is non-empty.
+	if {    [info exists socketRdQueue($stateArg(socketinfo))]
+	     && ($socketRdQueue($stateArg(socketinfo)) ne {})
+	} {
+	    Log WARNING - ReplayIfDead nonpipeline tokenArg $tokenArg $doing \
+		    has read queue socketRdQueue($stateArg(socketinfo)) \
+		    $socketRdQueue($stateArg(socketinfo)) ne {}
+	}
+
+	lappend InFlightW $socketRdState($stateArg(socketinfo))
+	set socketRdQueue($stateArg(socketinfo)) {}
+    }
+
+    set newQueue {}
+    lappend newQueue {*}$InFlightR
+    lappend newQueue {*}$socketRdQueue($stateArg(socketinfo))
+    lappend newQueue {*}$InFlightW
+    lappend newQueue {*}$socketWrQueue($stateArg(socketinfo))
+
+
+    # 2. Tidy up tokenArg.  This is a cut-down form of Finish/CloseSocket.
+    #    Do not change state(status).
+    #    No need to after cancel stateArg(after) - either this is done in
+    #    ReplayCore/ReInit, or Finish is called.
+
+    catch {close $stateArg(sock)}
+
+    # 2a. Tidy the tokens in the queues - this is done in ReplayCore/ReInit.
+    # - Transactions, if any, that are awaiting responses cannot be completed.
+    #   They are listed for re-sending in newQueue.
+    # - All tokens are preserved for re-use by ReplayCore, and their variables
+    #   will be re-initialised by calls to ReInit.
+    # - The relevant element of socketMapping, socketRdState, socketWrState,
+    #   socketRdQueue, socketWrQueue, socketClosing, socketPlayCmd will be set
+    #   to new values in ReplayCore.
+
+    ReplayCore $newQueue
+}
+
+# http::ReplayIfClose --
+#
+#	A request on a socket that was previously "Connection: keep-alive" has
+#	received a "Connection: close" response header.  The server supplies
+#	that response correctly, but any later requests already queued on this
+#	connection will be lost when the socket closes.
+#
+#	This command takes arguments that represent the socketWrState,
+#	socketRdQueue and socketWrQueue for this connection.  The socketRdState
+#	is not needed because the server responds in full to the request that
+#	received the "Connection: close" response header.
+#
+#	Existing request tokens $token (::http::$n) are preserved.  The caller
+#	will be unaware that the request was processed this way.
+
+proc http::ReplayIfClose {Wstate Rqueue Wqueue} {
+    Log running http::ReplayIfClose for $Wstate $Rqueue $Wqueue
+
+    if {$Wstate in $Rqueue || $Wstate in $Wqueue} {
+	Log WARNING duplicate token in http::ReplayIfClose - token $Wstate
+	set Wstate Wready
+    }
+
+    # 1. Create newQueue
+    set InFlightW {}
+    if {$Wstate ni {Wready peNding}} {
+	lappend InFlightW $Wstate
+    }
+
+    set newQueue {}
+    lappend newQueue {*}$Rqueue
+    lappend newQueue {*}$InFlightW
+    lappend newQueue {*}$Wqueue
+
+    # 2. Cleanup - none needed, done by the caller.
+
+    ReplayCore $newQueue
+}
+
+# http::ReInit --
+#
+#	Command to restore a token's state to a condition that
+#	makes it ready to replay a request.
+#
+#	Command http::geturl stores extra state in state(tmp*) so
+#	we don't need to do the argument processing again.
+#
+#	The caller must:
+#	- Set state(reusing) and state(sock) to their new values after calling
+#	  this command.
+#	- Unset state(tmpState), state(tmpOpenCmd) if future calls to ReplayCore
+#	  or ReInit are inappropriate for this token. Typically only one retry
+#	  is allowed.
+#	The caller may also unset state(tmpConnArgs) if this value (and the
+#	token) will be used immediately.  The value is needed by tokens that
+#	will be stored in a queue.
+#
+# Arguments:
+#	token	Connection token.
+#
+# Return Value: (boolean) true iff the re-initialisation was successful.
+
+proc http::ReInit {token} {
+    variable $token
+    upvar 0 $token state
+
+    if {!(
+	      [info exists state(tmpState)]
+	   && [info exists state(tmpOpenCmd)]
+	   && [info exists state(tmpConnArgs)]
+	 )
+    } {
+	Log FAILED in http::ReInit via ReplayCore - NO tmp vars for $token
+	return 0
+    }
+
+    if {[info exists state(after)]} {
+	after cancel $state(after)
+	unset state(after)
+    }
+
+    # Don't alter state(status) - this would trigger http::wait if it is in use.
+    set tmpState    $state(tmpState)
+    set tmpOpenCmd  $state(tmpOpenCmd)
+    set tmpConnArgs $state(tmpConnArgs)
+    foreach name [array names state] {
+	if {$name ne "status"} {
+	    unset state($name)
+	}
+    }
+
+    # Don't alter state(status).
+    # Restore state(tmp*) - the caller may decide to unset them.
+    # Restore state(tmpConnArgs) which is needed for connection.
+    # state(tmpState), state(tmpOpenCmd) are needed only for retries.
+
+    dict unset tmpState status
+    array set state $tmpState
+    set state(tmpState)    $tmpState
+    set state(tmpOpenCmd)  $tmpOpenCmd
+    set state(tmpConnArgs) $tmpConnArgs
+
+    return 1
+}
+
+# http::ReplayCore --
+#
+#	Command to replay a list of requests, using existing connection tokens.
+#
+#	Abstracted from http::geturl which stores extra state in state(tmp*) so
+#	we don't need to do the argument processing again.
+#
+# Arguments:
+#	newQueue	List of connection tokens.
+#
+# Side Effects:
+#	Use existing tokens, but try to open a new socket.
+
+proc http::ReplayCore {newQueue} {
+    variable socketMapping
+    variable socketRdState
+    variable socketWrState
+    variable socketRdQueue
+    variable socketWrQueue
+    variable socketClosing
+    variable socketPlayCmd
+
+    if {[llength $newQueue] == 0} {
+	# Nothing to do.
+	return
+    }
+
+    ##Log running ReplayCore for {*}$newQueue
+    set newToken [lindex $newQueue 0]
+    set newQueue [lrange $newQueue 1 end]
+
+    # 3. Use newToken, and restore its values of state(*).  Do not restore
+    #    elements tmp* - we try again only once.
+
+    set token $newToken
+    variable $token
+    upvar 0 $token state
+
+    if {![ReInit $token]} {
+	Log FAILED in http::ReplayCore - NO tmp vars
+	Finish $token {cannot send this request again}
+	return
+    }
+
+    set tmpState    $state(tmpState)
+    set tmpOpenCmd  $state(tmpOpenCmd)
+    set tmpConnArgs $state(tmpConnArgs)
+    unset state(tmpState)
+    unset state(tmpOpenCmd)
+    unset state(tmpConnArgs)
+
+    set state(reusing) 0
+
+    if {$state(-timeout) > 0} {
+	set resetCmd [list http::reset $token timeout]
+	set state(after) [after $state(-timeout) $resetCmd]
+    }
+
+    set pre [clock milliseconds]
+    ##Log pre socket opened, - token $token
+    ##Log $tmpOpenCmd - token $token
+    # 4. Open a socket.
+    if {[catch {eval $tmpOpenCmd} sock]} {
+	# Something went wrong while trying to establish the connection.
+	Log FAILED - $sock
+	set state(sock) NONE
+	Finish $token $sock
+	return
+    }
+    ##Log post socket opened, - token $token
+    set delay [expr {[clock milliseconds] - $pre}]
+    if {$delay > 3000} {
+	Log socket delay $delay - token $token
+    }
+    # Command [socket] is called with -async, but takes 5s to 5.1s to return,
+    # with probability of order 1 in 10,000.  This may be a bizarre scheduling
+    # issue with my (KJN's) system (Fedora Linux).
+    # This does not cause a problem (unless the request times out when this
+    # command returns).
+
+    # 5. Configure the persistent socket data.
+    if {$state(-keepalive)} {
+	set socketMapping($state(socketinfo)) $sock
+
+	if {![info exists socketRdState($state(socketinfo))]} {
+	    set socketRdState($state(socketinfo)) {}
+	    set varName ::http::socketRdState($state(socketinfo))
+	    trace add variable $varName unset ::http::CancelReadPipeline
+	}
+
+	if {![info exists socketWrState($state(socketinfo))]} {
+	    set socketWrState($state(socketinfo)) {}
+	    set varName ::http::socketWrState($state(socketinfo))
+	    trace add variable $varName unset ::http::CancelWritePipeline
+	}
+
+	if {$state(-pipeline)} {
+	    #Log new, init for pipelined, GRANT write acc to $token ReplayCore
+	    set socketRdState($state(socketinfo)) $token
+	    set socketWrState($state(socketinfo)) $token
+	} else {
+	    #Log new, init for nonpipeline, GRANT r/w acc to $token ReplayCore
+	    set socketRdState($state(socketinfo)) $token
+	    set socketWrState($state(socketinfo)) $token
+	}
+
+	set socketRdQueue($state(socketinfo)) {}
+	set socketWrQueue($state(socketinfo)) $newQueue
+	set socketClosing($state(socketinfo)) 0
+	set socketPlayCmd($state(socketinfo)) {ReplayIfClose Wready {} {}}
+    }
+
+    ##Log pre newQueue ReInit, - token $token
+    # 6. Configure sockets in the queue.
+    foreach tok $newQueue {
+	if {[ReInit $tok]} {
+	    set ${tok}(reusing) 1
+	    set ${tok}(sock) $sock
+	} else {
+	    set ${tok}(reusing) 1
+	    set ${tok}(sock) NONE
+	    Finish $token {cannot send this request again}
+	}
+    }
+
+    # 7. Configure the socket for newToken to send a request.
+    set state(sock) $sock
+    Log "Using $sock for $state(socketinfo) - token $token" \
+	[expr {$state(-keepalive)?"keepalive":""}]
+
+    # Initialisation of a new socket.
+    ##Log socket opened, now fconfigure - token $token
+    fconfigure $sock -translation {auto crlf} -buffersize $state(-blocksize)
+    ##Log socket opened, DONE fconfigure - token $token
+
+    # Connect does its own fconfigure.
+    fileevent $sock writable [list http::Connect $token {*}$tmpConnArgs]
+    #Log ---- $sock << conn to $token for HTTP request (e)
+}
+
+# Data access functions:
+# Data - the URL data
+# Status - the transaction status: ok, reset, eof, timeout, error
+# Code - the HTTP transaction code, e.g., 200
+# Size - the size of the URL data
+=======
+>>>>>>> upstream/master
 
     variable $token
     upvar 0 $token state
@@ -3967,37 +4970,39 @@ proc http::ContentEncoding {token} {
     return $r
 }
 
+proc http::ReceiveChunked {chan command} {
+    set data ""
+    set size -1
+    yield
+    while {1} {
+	chan configure $chan -translation {crlf binary}
+	while {[gets $chan line] < 1} { yield }
+	chan configure $chan -translation {binary binary}
+	if {[scan $line %x size] != 1} {
+	    return -code error "invalid size: \"$line\""
+	}
+	set chunk ""
+	while {$size && ![chan eof $chan]} {
+	    set part [chan read $chan $size]
+	    incr size -[string length $part]
+	    append chunk $part
+	}
+	if {[catch {
+	    uplevel #0 [linsert $command end $chunk]
+	}]} {
+	    http::Log "Error in callback: $::errorInfo"
+	}
+	if {[string length $chunk] == 0} {
+	    # channel might have been closed in the callback
+	    catch {chan event $chan readable {}}
+	    return
+	}
+    }
+}
+
 proc http::make-transformation-chunked {chan command} {
-    set lambda {{chan command} {
-        set data ""
-        set size -1
-        yield
-        while {1} {
-            chan configure $chan -translation {crlf binary}
-            while {[gets $chan line] < 1} { yield }
-            chan configure $chan -translation {binary binary}
-            if {[scan $line %x size] != 1} { return -code error "invalid size: \"$line\"" }
-            set chunk ""
-            while {$size && ![chan eof $chan]} {
-                set part [chan read $chan $size]
-                incr size -[string length $part]
-                append chunk $part
-            }
-            if {[catch {
-		uplevel #0 [linsert $command end $chunk]
-	    }]} {
-		http::Log "Error in callback: $::errorInfo"
-	    }
-            if {[string length $chunk] == 0} {
-		# channel might have been closed in the callback
-                catch {chan event $chan readable {}}
-                return
-            }
-        }
-    }}
-    coroutine dechunk$chan ::apply $lambda $chan $command
-    chan event $chan readable [namespace origin dechunk$chan]
-    return
+    coroutine [namespace current]::dechunk$chan ::http::ReceiveChunked $chan $command
+    chan event $chan readable [namespace current]::dechunk$chan
 }
 
 =======

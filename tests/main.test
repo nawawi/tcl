@@ -723,7 +723,11 @@ namespace eval ::tcl::test::main {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Tcl_Main: interactive mode: delete interp 
+=======
+	Tcl_Main: interactive mode: delete interp
+>>>>>>> upstream/master
 =======
 	Tcl_Main: interactive mode: delete interp
 >>>>>>> upstream/master

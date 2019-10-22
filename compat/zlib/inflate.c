@@ -1,7 +1,11 @@
 /* inflate.c -- zlib decompression
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2012 Mark Adler
+=======
+ * Copyright (C) 1995-2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2016 Mark Adler
 >>>>>>> upstream/master
@@ -102,6 +106,10 @@
 /* function prototypes */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+local int inflateStateCheck OF((z_streamp strm));
+>>>>>>> upstream/master
 =======
 local int inflateStateCheck OF((z_streamp strm));
 >>>>>>> upstream/master
@@ -119,7 +127,10 @@ local unsigned syncsearch OF((unsigned FAR *have, const unsigned char FAR *buf,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 local int inflateStateCheck(strm)
@@ -137,6 +148,9 @@ z_streamp strm;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -147,7 +161,11 @@ z_streamp strm;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -180,7 +198,11 @@ z_streamp strm;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -204,7 +226,11 @@ int windowBits;
     /* get the state */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -221,7 +247,11 @@ int windowBits;
     else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         wrap = (windowBits >> 4) + 1;
+=======
+        wrap = (windowBits >> 4) + 5;
+>>>>>>> upstream/master
 =======
         wrap = (windowBits >> 4) + 5;
 >>>>>>> upstream/master
@@ -283,7 +313,13 @@ int stream_size;
     strm->state = (struct internal_state FAR *)state;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     state->window = Z_NULL;
+=======
+    state->strm = strm;
+    state->window = Z_NULL;
+    state->mode = HEAD;     /* to pass state test in inflateReset2() */
+>>>>>>> upstream/master
 =======
     state->strm = strm;
     state->window = Z_NULL;
@@ -319,7 +355,11 @@ int value;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -332,6 +372,7 @@ int value;
         state->bits = 0;
         return Z_OK;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     if (bits > 16 || state->bits + bits > 32) return Z_STREAM_ERROR;
@@ -348,6 +389,12 @@ int value;
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    if (bits > 16 || state->bits + (uInt)bits > 32) return Z_STREAM_ERROR;
+    value &= (1L << bits) - 1;
+    state->hold += (unsigned)value << state->bits;
+    state->bits += (uInt)bits;
 >>>>>>> upstream/master
     return Z_OK;
 }
@@ -731,7 +778,11 @@ int flush;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL || strm->next_out == Z_NULL ||
+=======
+    if (inflateStateCheck(strm) || strm->next_out == Z_NULL ||
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm) || strm->next_out == Z_NULL ||
 >>>>>>> upstream/master
@@ -759,6 +810,11 @@ int flush;
             if ((state->wrap & 2) && hold == 0x8b1f) {  /* gzip header */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                if (state->wbits == 0)
+                    state->wbits = 15;
+>>>>>>> upstream/master
 =======
                 if (state->wbits == 0)
                     state->wbits = 15;
@@ -796,7 +852,11 @@ int flush;
                 state->wbits = len;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             else if (len > state->wbits) {
+=======
+            if (len > 15 || len > state->wbits) {
+>>>>>>> upstream/master
 =======
             if (len > 15 || len > state->wbits) {
 >>>>>>> upstream/master
@@ -831,7 +891,12 @@ int flush;
                 state->head->text = (int)((hold >> 8) & 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (state->flags & 0x0200) CRC2(state->check, hold);
+=======
+            if ((state->flags & 0x0200) && (state->wrap & 4))
+                CRC2(state->check, hold);
+>>>>>>> upstream/master
 =======
             if ((state->flags & 0x0200) && (state->wrap & 4))
                 CRC2(state->check, hold);
@@ -848,7 +913,12 @@ int flush;
                 state->head->time = hold;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (state->flags & 0x0200) CRC4(state->check, hold);
+=======
+            if ((state->flags & 0x0200) && (state->wrap & 4))
+                CRC4(state->check, hold);
+>>>>>>> upstream/master
 =======
             if ((state->flags & 0x0200) && (state->wrap & 4))
                 CRC4(state->check, hold);
@@ -867,7 +937,12 @@ int flush;
             }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (state->flags & 0x0200) CRC2(state->check, hold);
+=======
+            if ((state->flags & 0x0200) && (state->wrap & 4))
+                CRC2(state->check, hold);
+>>>>>>> upstream/master
 =======
             if ((state->flags & 0x0200) && (state->wrap & 4))
                 CRC2(state->check, hold);
@@ -886,7 +961,12 @@ int flush;
                     state->head->extra_len = (unsigned)hold;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (state->flags & 0x0200) CRC2(state->check, hold);
+=======
+                if ((state->flags & 0x0200) && (state->wrap & 4))
+                    CRC2(state->check, hold);
+>>>>>>> upstream/master
 =======
                 if ((state->flags & 0x0200) && (state->wrap & 4))
                     CRC2(state->check, hold);
@@ -914,7 +994,11 @@ int flush;
                     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     if (state->flags & 0x0200)
+=======
+                    if ((state->flags & 0x0200) && (state->wrap & 4))
+>>>>>>> upstream/master
 =======
                     if ((state->flags & 0x0200) && (state->wrap & 4))
 >>>>>>> upstream/master
@@ -941,9 +1025,15 @@ int flush;
                             state->length < state->head->name_max)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         state->head->name[state->length++] = len;
                 } while (len && copy < have);
                 if (state->flags & 0x0200)
+=======
+                        state->head->name[state->length++] = (Bytef)len;
+                } while (len && copy < have);
+                if ((state->flags & 0x0200) && (state->wrap & 4))
+>>>>>>> upstream/master
 =======
                         state->head->name[state->length++] = (Bytef)len;
                 } while (len && copy < have);
@@ -974,9 +1064,15 @@ int flush;
                             state->length < state->head->comm_max)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         state->head->comment[state->length++] = len;
                 } while (len && copy < have);
                 if (state->flags & 0x0200)
+=======
+                        state->head->comment[state->length++] = (Bytef)len;
+                } while (len && copy < have);
+                if ((state->flags & 0x0200) && (state->wrap & 4))
+>>>>>>> upstream/master
 =======
                         state->head->comment[state->length++] = (Bytef)len;
                 } while (len && copy < have);
@@ -1000,7 +1096,11 @@ int flush;
                 NEEDBITS(16);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (hold != (state->check & 0xffff)) {
+=======
+                if ((state->wrap & 4) && hold != (state->check & 0xffff)) {
+>>>>>>> upstream/master
 =======
                 if ((state->wrap & 4) && hold != (state->check & 0xffff)) {
 >>>>>>> upstream/master
@@ -1389,11 +1489,19 @@ int flush;
                 state->total += out;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (out)
                     strm->adler = state->check =
                         UPDATE(state->check, put - out, out);
                 out = left;
                 if ((
+=======
+                if ((state->wrap & 4) && out)
+                    strm->adler = state->check =
+                        UPDATE(state->check, put - out, out);
+                out = left;
+                if ((state->wrap & 4) && (
+>>>>>>> upstream/master
 =======
                 if ((state->wrap & 4) && out)
                     strm->adler = state->check =
@@ -1468,10 +1576,17 @@ int flush;
     state->total += out;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (state->wrap && out)
         strm->adler = state->check =
             UPDATE(state->check, strm->next_out - out, out);
     strm->data_type = state->bits + (state->last ? 64 : 0) +
+=======
+    if ((state->wrap & 4) && out)
+        strm->adler = state->check =
+            UPDATE(state->check, strm->next_out - out, out);
+    strm->data_type = (int)state->bits + (state->last ? 64 : 0) +
+>>>>>>> upstream/master
 =======
     if ((state->wrap & 4) && out)
         strm->adler = state->check =
@@ -1497,7 +1612,11 @@ z_streamp strm;
     struct inflate_state FAR *state;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL || strm->zfree == (free_func)0)
+=======
+    if (inflateStateCheck(strm))
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm))
 >>>>>>> upstream/master
@@ -1523,7 +1642,11 @@ uInt *dictLength;
     /* check state */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -1556,7 +1679,11 @@ uInt dictLength;
     /* check state */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -1596,7 +1723,11 @@ gz_headerp head;
     /* check state */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -1657,7 +1788,11 @@ z_streamp strm;
     /* check parameters */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -1712,7 +1847,11 @@ z_streamp strm;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
 >>>>>>> upstream/master
@@ -1735,8 +1874,12 @@ z_streamp source;
     /* check input */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (dest == Z_NULL || source == Z_NULL || source->state == Z_NULL ||
         source->zalloc == (alloc_func)0 || source->zfree == (free_func)0)
+=======
+    if (inflateStateCheck(source) || dest == Z_NULL)
+>>>>>>> upstream/master
 =======
     if (inflateStateCheck(source) || dest == Z_NULL)
 >>>>>>> upstream/master
@@ -1765,6 +1908,10 @@ z_streamp source;
     zmemcpy((voidpf)copy, (voidpf)state, sizeof(struct inflate_state));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    copy->strm = dest;
+>>>>>>> upstream/master
 =======
     copy->strm = dest;
 >>>>>>> upstream/master
@@ -1794,12 +1941,17 @@ int subvert;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
+=======
+    if (inflateStateCheck(strm)) return Z_STREAM_ERROR;
+>>>>>>> upstream/master
     state = (struct inflate_state FAR *)strm->state;
-    state->sane = !subvert;
 #ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
+    state->sane = !subvert;
     return Z_OK;
 #else
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -1814,6 +1966,9 @@ int subvert;
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+    (void)subvert;
+>>>>>>> upstream/master
     state->sane = 1;
     return Z_DATA_ERROR;
 #endif
@@ -1821,7 +1976,10 @@ int subvert;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 int ZEXPORT inflateValidate(strm, check)
@@ -1840,6 +1998,9 @@ int check;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1850,12 +2011,18 @@ z_streamp strm;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (strm == Z_NULL || strm->state == Z_NULL) return -1L << 16;
+=======
+    if (inflateStateCheck(strm))
+        return -(1L << 16);
+>>>>>>> upstream/master
     state = (struct inflate_state FAR *)strm->state;
-    return ((long)(state->back) << 16) +
+    return (long)(((unsigned long)((long)state->back)) << 16) +
         (state->mode == COPY ? state->length :
             (state->mode == MATCH ? state->was - state->length : 0));
 }
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -1866,6 +2033,8 @@ z_streamp strm;
         (state->mode == COPY ? state->length :
             (state->mode == MATCH ? state->was - state->length : 0));
 }
+=======
+>>>>>>> upstream/master
 
 unsigned long ZEXPORT inflateCodesUsed(strm)
 z_streamp strm;
@@ -1876,6 +2045,9 @@ z_streamp strm;
     return (unsigned long)(state->next - state->codes);
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

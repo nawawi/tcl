@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 set TZData(:America/Cayman) {
     {-9223372036854775808 -19532 0 LMT}
@@ -193,6 +194,12 @@ set TZData(:America/Cayman) $TZData(:America/Panama)
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+if {![info exists TZData(America/Panama)]} {
+    LoadTimeZoneFile America/Panama
+}
+set TZData(:America/Cayman) $TZData(:America/Panama)
 >>>>>>> upstream/master
 =======
 if {![info exists TZData(America/Panama)]} {

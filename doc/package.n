@@ -7,7 +7,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -30,6 +34,10 @@ package \- Facilities for package loading and version control
 .nf
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+\fBpackage files\fR \fIpackage\fR
+>>>>>>> upstream/master
 =======
 \fBpackage files\fR \fIpackage\fR
 >>>>>>> upstream/master
@@ -69,7 +77,10 @@ The following forms are permitted:
 .TP
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 \fBpackage files\fR \fIpackage\fR
@@ -80,6 +91,9 @@ initialization. The list order corresponds with the order in which the
 files were sourced.
 .TP
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -327,8 +341,13 @@ When an interpreter is created, its initial selection mode value is set to
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR
 is set.  If that environment variable is defined (with any value) then
+=======
+unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR is set
+(to any value) or the Tcl package itself is unstable. Otherwise
+>>>>>>> upstream/master
 =======
 unless the environment variable \fBTCL_PKG_PREFER_LATEST\fR is set
 (to any value) or the Tcl package itself is unstable. Otherwise

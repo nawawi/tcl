@@ -295,6 +295,7 @@ and
 .QW \fB.]\fR .)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 For example, if \fBo\fR and \fB\*(qo\fR are the members of an
 equivalence class, then
 .QW \fB[[=o=]]\fR ,
@@ -313,6 +314,14 @@ and
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+For example, if \fBo\fR and \fB\[^o]\fR are the members of an
+equivalence class, then
+.QW \fB[[=o=]]\fR ,
+.QW \fB[[=\[^o]=]]\fR ,
+and
+.QW \fB[o\[^o]]\fR \&
 >>>>>>> upstream/master
 are all synonymous. An equivalence class may not be an endpoint of a range.
 .RS
@@ -704,6 +713,7 @@ subexpressions.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Note that the quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
 force longest and shortest preference, respectively, on a
 subexpression or a whole RE.
@@ -711,6 +721,11 @@ subexpression or a whole RE.
 The quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
 force longest and shortest preference, respectively, on a
 subexpression or a whole RE.
+=======
+The quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
+force longest and shortest preference, respectively, on a
+subexpression or a whole RE.
+>>>>>>> upstream/master
 =======
 The quantifiers \fB{1,1}\fR and \fB{1,1}?\fR can be used to
 force longest and shortest preference, respectively, on a
@@ -765,6 +780,9 @@ non-greedy quantifier.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -5,6 +5,7 @@ set TZData(:Asia/Baghdad) {
     {-2524532260 10656 0 BMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1641005856 10800 0 AST}
     {389048400 14400 0 ADT}
     {402264000 10800 0 AST}
@@ -123,6 +124,9 @@ set TZData(:Asia/Baghdad) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+    {-1641005856 10800 0 +03}
+>>>>>>> upstream/master
     {389048400 14400 0 +03}
     {402264000 10800 0 +03}
     {417906000 14400 1 +03}
@@ -176,6 +180,9 @@ set TZData(:Asia/Baghdad) {
     {1175385600 14400 1 +03}
     {1191196800 10800 0 +03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

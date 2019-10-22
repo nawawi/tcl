@@ -40,7 +40,11 @@ iostream/   by Kevin Ruland <kevin@rodin.wustl.edu>
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 iostream2/  by Tyge L�vset <Tyge.Lovset@cmr.no>
+=======
+iostream2/  by Tyge Løvset <Tyge.Lovset@cmr.no>
+>>>>>>> upstream/master
 =======
 iostream2/  by Tyge Løvset <Tyge.Lovset@cmr.no>
 >>>>>>> upstream/master
@@ -68,7 +72,11 @@ minizip/    by Gilles Vollant <info@winimage.com>
         Includes Zip64 support by Mathias Svensson <mathias@result42.com>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         See http://www.winimage.com/zLibDll/unzip.html
+=======
+        See http://www.winimage.com/zLibDll/minizip.html
+>>>>>>> upstream/master
 =======
         See http://www.winimage.com/zLibDll/minizip.html
 >>>>>>> upstream/master

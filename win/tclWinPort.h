@@ -14,6 +14,7 @@
 #ifndef _TCLWINPORT
 #define _TCLWINPORT
 
+<<<<<<< HEAD
 #if !defined(_WIN64) && defined(BUILD_tcl)
 /* See [Bug 3354324]: file mtime sets wrong time */
 #   define _USE_32BIT_TIME_T
@@ -91,12 +92,16 @@ typedef DWORD_PTR * PDWORD_PTR;
 #endif
 
 =======
+=======
+#if !defined(_WIN64)
+#   define __MINGW_USE_VC2005_COMPAT
+>>>>>>> upstream/master
 #endif
 
 /*
  * We must specify the lower version we intend to support.
  *
- * WINVER = 0x0500 means Windows 2000 and above
+ * WINVER = 0x0501 means Windows XP and above
  */
 
 #ifndef WINVER
@@ -116,6 +121,9 @@ typedef DWORD DWORD_PTR;
 typedef DWORD_PTR * PDWORD_PTR;
 #endif
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 /*
  * Ask for the winsock function typedefs, also.
@@ -126,6 +134,7 @@ typedef DWORD_PTR * PDWORD_PTR;
 #ifdef HAVE_WSPIAPI_H
 #   include <wspiapi.h>
 #endif
+<<<<<<< HEAD
 
 #ifdef CHECK_UNICODE_CALLS
 #   define _UNICODE
@@ -135,6 +144,8 @@ typedef DWORD_PTR * PDWORD_PTR;
 #   define _TCHAR_DEFINED
     typedef float *TCHAR;
 #endif /* CHECK_UNICODE_CALLS */
+=======
+>>>>>>> upstream/master
 
 /*
 <<<<<<< HEAD
@@ -455,6 +466,7 @@ typedef DWORD_PTR * PDWORD_PTR;
  */
 #ifndef S_IFBLK
 #   define S_IFBLK (S_IFDIR | S_IFCHR)
+<<<<<<< HEAD
 >>>>>>> upstream/master
 #endif
 
@@ -485,6 +497,10 @@ typedef DWORD_PTR * PDWORD_PTR;
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+#endif
+
 >>>>>>> upstream/master
 #ifndef S_ISREG
 #   ifdef S_IFREG
@@ -592,10 +608,19 @@ typedef DWORD_PTR * PDWORD_PTR;
  * including the *printf family and others. Tell it to shut up.
  * (_MSC_VER is 1200 for VC6, 1300 or 1310 for vc7.net, 1400 for 8.0)
  */
+<<<<<<< HEAD
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #   pragma warning(disable:4244)
 #   pragma warning(disable:4267)
 #   pragma warning(disable:4996)
+=======
+#if defined(_MSC_VER)
+#   pragma warning(disable:4244)
+#   if _MSC_VER >= 1400
+#	pragma warning(disable:4267)
+#	pragma warning(disable:4996)
+#   endif
+>>>>>>> upstream/master
 #endif
 
 /*

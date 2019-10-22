@@ -9,6 +9,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
 =======
 '\"
@@ -25,6 +26,10 @@
 >>>>>>> upstream/master
 .TH "http" n 2.7 http "Tcl Bundled Packages"
 =======
+.TH "http" n 2.9 http "Tcl Bundled Packages"
+>>>>>>> upstream/master
+=======
+'\"
 .TH "http" n 2.9 http "Tcl Bundled Packages"
 >>>>>>> upstream/master
 .so man.macros
@@ -126,7 +131,11 @@ The Accept header of the request.  The default is */*, which means that
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 all types of documents are accepted.  Otherwise you can supply a 
+=======
+all types of documents are accepted.  Otherwise you can supply a
+>>>>>>> upstream/master
 =======
 all types of documents are accepted.  Otherwise you can supply a
 >>>>>>> upstream/master
@@ -233,7 +242,11 @@ of \fBhttp::geturl\fR. The default is 1.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR? 
+=======
+\fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
+>>>>>>> upstream/master
 =======
 \fB::http::geturl\fR \fIurl\fR ?\fIoptions\fR?
 >>>>>>> upstream/master
@@ -369,7 +382,7 @@ multiple interfaces are available.
 .TP
 \fB\-keepalive\fR \fIboolean\fR
 .
-If true, attempt to keep the connection open for servicing
+If boolean \fBtrue\fR, attempt to keep the connection open for servicing
 multiple requests.  Default is 0.
 .TP
 \fB\-method\fR \fItype\fR
@@ -428,7 +441,11 @@ The block size used when posting query data to the URL.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 At most 
+=======
+At most
+>>>>>>> upstream/master
 =======
 At most
 >>>>>>> upstream/master

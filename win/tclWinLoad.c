@@ -64,7 +64,11 @@ TclpDlopen(
     int flags)
 {
     HINSTANCE hInstance = NULL;
+<<<<<<< HEAD
     const TCHAR *nativeName;
+=======
+    const WCHAR *nativeName;
+>>>>>>> upstream/master
     Tcl_LoadHandle handlePtr;
     DWORD firstError;
 
@@ -76,7 +80,11 @@ TclpDlopen(
 
     nativeName = Tcl_FSGetNativePath(pathPtr);
     if (nativeName != NULL) {
+<<<<<<< HEAD
 	hInstance = LoadLibraryEx(nativeName, NULL,
+=======
+	hInstance = LoadLibraryExW(nativeName, NULL,
+>>>>>>> upstream/master
 		LOAD_WITH_ALTERED_SEARCH_PATH);
     }
     if (hInstance == NULL) {
@@ -95,8 +103,14 @@ TclpDlopen(
         firstError = (nativeName == NULL) ?
 		ERROR_MOD_NOT_FOUND : GetLastError();
 
+<<<<<<< HEAD
 	nativeName = Tcl_WinUtfToTChar(Tcl_GetString(pathPtr), -1, &ds);
 	hInstance = LoadLibraryEx(nativeName, NULL,
+=======
+	Tcl_DStringInit(&ds);
+	nativeName = Tcl_UtfToWCharDString(TclGetString(pathPtr), -1, &ds);
+	hInstance = LoadLibraryExW(nativeName, NULL,
+>>>>>>> upstream/master
 		LOAD_WITH_ALTERED_SEARCH_PATH);
 	Tcl_DStringFree(&ds);
     }
@@ -117,7 +131,11 @@ TclpDlopen(
             lastError = firstError;
 
 	errMsg = Tcl_ObjPrintf("couldn't load library \"%s\": ",
+<<<<<<< HEAD
 		Tcl_GetString(pathPtr));
+=======
+		TclGetString(pathPtr));
+>>>>>>> upstream/master
 
 	/*
 	 * Check for possible DLL errors. This doesn't work quite right,

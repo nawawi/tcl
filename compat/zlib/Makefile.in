@@ -1,7 +1,11 @@
 # Makefile for zlib
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Copyright (C) 1995-2013 Jean-loup Gailly, Mark Adler
+=======
+# Copyright (C) 1995-2017 Jean-loup Gailly, Mark Adler
+>>>>>>> upstream/master
 =======
 # Copyright (C) 1995-2017 Jean-loup Gailly, Mark Adler
 >>>>>>> upstream/master
@@ -30,7 +34,11 @@ CFLAGS=-O
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #CFLAGS=-g -DDEBUG
+=======
+#CFLAGS=-g -DZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #CFLAGS=-g -DZLIB_DEBUG
 >>>>>>> upstream/master
@@ -50,7 +58,11 @@ STATICLIB=libz.a
 SHAREDLIB=libz.so
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 SHAREDLIBV=libz.so.1.2.8
+=======
+SHAREDLIBV=libz.so.1.2.11
+>>>>>>> upstream/master
 =======
 SHAREDLIBV=libz.so.1.2.11
 >>>>>>> upstream/master
@@ -79,6 +91,12 @@ man3dir = ${mandir}/man3
 pkgconfigdir = ${libdir}/pkgconfig
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+SRCDIR=
+ZINC=
+ZINCOUT=-I.
+>>>>>>> upstream/master
 =======
 SRCDIR=
 ZINC=
@@ -127,6 +145,9 @@ teststatic: static
 	fi; \
 	rm -f $$TMPST
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 testshared: shared
 	@LD_LIBRARY_PATH=`pwd`:$(LD_LIBRARY_PATH) ; export LD_LIBRARY_PATH; \
@@ -140,6 +161,7 @@ testshared: shared
 	  echo '		*** zlib shared test FAILED ***'; false; \
 	fi; \
 	rm -f $$TMPSH
+<<<<<<< HEAD
 
 =======
 
@@ -155,6 +177,8 @@ testshared: shared
 	  echo '		*** zlib shared test FAILED ***'; false; \
 	fi; \
 	rm -f $$TMPSH
+=======
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 test64: all64
@@ -168,8 +192,13 @@ test64: all64
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 infcover.o: test/infcover.c zlib.h zconf.h
 	$(CC) $(CFLAGS) -I. -c -o $@ test/infcover.c
+=======
+infcover.o: $(SRCDIR)test/infcover.c $(SRCDIR)zlib.h zconf.h
+	$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/infcover.c
+>>>>>>> upstream/master
 =======
 infcover.o: $(SRCDIR)test/infcover.c $(SRCDIR)zlib.h zconf.h
 	$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/infcover.c
@@ -205,6 +234,7 @@ match.lo: match.S
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 example.o: test/example.c zlib.h zconf.h
 	$(CC) $(CFLAGS) -I. -c -o $@ test/example.c
 
@@ -216,11 +246,70 @@ example64.o: test/example.c zlib.h zconf.h
 
 minigzip64.o: test/minigzip.c zlib.h zconf.h
 	$(CC) $(CFLAGS) -I. -D_FILE_OFFSET_BITS=64 -c -o $@ test/minigzip.c
+=======
+example.o: $(SRCDIR)test/example.c $(SRCDIR)zlib.h zconf.h
+	$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/example.c
 
-.SUFFIXES: .lo
+minigzip.o: $(SRCDIR)test/minigzip.c $(SRCDIR)zlib.h zconf.h
+	$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/minigzip.c
 
-.c.lo:
+example64.o: $(SRCDIR)test/example.c $(SRCDIR)zlib.h zconf.h
+	$(CC) $(CFLAGS) $(ZINCOUT) -D_FILE_OFFSET_BITS=64 -c -o $@ $(SRCDIR)test/example.c
+
+minigzip64.o: $(SRCDIR)test/minigzip.c $(SRCDIR)zlib.h zconf.h
+	$(CC) $(CFLAGS) $(ZINCOUT) -D_FILE_OFFSET_BITS=64 -c -o $@ $(SRCDIR)test/minigzip.c
+
+
+adler32.o: $(SRCDIR)adler32.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)adler32.c
+
+crc32.o: $(SRCDIR)crc32.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)crc32.c
+
+deflate.o: $(SRCDIR)deflate.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)deflate.c
+
+infback.o: $(SRCDIR)infback.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)infback.c
+
+inffast.o: $(SRCDIR)inffast.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)inffast.c
+>>>>>>> upstream/master
+
+inflate.o: $(SRCDIR)inflate.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)inflate.c
+
+inftrees.o: $(SRCDIR)inftrees.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)inftrees.c
+
+trees.o: $(SRCDIR)trees.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)trees.c
+
+zutil.o: $(SRCDIR)zutil.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)zutil.c
+
+compress.o: $(SRCDIR)compress.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)compress.c
+
+uncompr.o: $(SRCDIR)uncompr.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)uncompr.c
+
+gzclose.o: $(SRCDIR)gzclose.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)gzclose.c
+
+gzlib.o: $(SRCDIR)gzlib.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)gzlib.c
+
+gzread.o: $(SRCDIR)gzread.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)gzread.c
+
+gzwrite.o: $(SRCDIR)gzwrite.c
+	$(CC) $(CFLAGS) $(ZINC) -c -o $@ $(SRCDIR)gzwrite.c
+
+
+adler32.lo: $(SRCDIR)adler32.c
 	-@mkdir objs 2>/dev/null || test -d objs
+<<<<<<< HEAD
 	$(CC) $(SFLAGS) -DPIC -c -o objs/$*.o $<
 	-@mv objs/$*.o $@
 =======
@@ -365,6 +454,82 @@ gzwrite.lo: $(SRCDIR)gzwrite.c
 =======
 >>>>>>> upstream/master
 
+=======
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/adler32.o $(SRCDIR)adler32.c
+	-@mv objs/adler32.o $@
+
+crc32.lo: $(SRCDIR)crc32.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/crc32.o $(SRCDIR)crc32.c
+	-@mv objs/crc32.o $@
+
+deflate.lo: $(SRCDIR)deflate.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/deflate.o $(SRCDIR)deflate.c
+	-@mv objs/deflate.o $@
+
+infback.lo: $(SRCDIR)infback.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/infback.o $(SRCDIR)infback.c
+	-@mv objs/infback.o $@
+
+inffast.lo: $(SRCDIR)inffast.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/inffast.o $(SRCDIR)inffast.c
+	-@mv objs/inffast.o $@
+
+inflate.lo: $(SRCDIR)inflate.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/inflate.o $(SRCDIR)inflate.c
+	-@mv objs/inflate.o $@
+
+inftrees.lo: $(SRCDIR)inftrees.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/inftrees.o $(SRCDIR)inftrees.c
+	-@mv objs/inftrees.o $@
+
+trees.lo: $(SRCDIR)trees.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/trees.o $(SRCDIR)trees.c
+	-@mv objs/trees.o $@
+
+zutil.lo: $(SRCDIR)zutil.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/zutil.o $(SRCDIR)zutil.c
+	-@mv objs/zutil.o $@
+
+compress.lo: $(SRCDIR)compress.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/compress.o $(SRCDIR)compress.c
+	-@mv objs/compress.o $@
+
+uncompr.lo: $(SRCDIR)uncompr.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/uncompr.o $(SRCDIR)uncompr.c
+	-@mv objs/uncompr.o $@
+
+gzclose.lo: $(SRCDIR)gzclose.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/gzclose.o $(SRCDIR)gzclose.c
+	-@mv objs/gzclose.o $@
+
+gzlib.lo: $(SRCDIR)gzlib.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/gzlib.o $(SRCDIR)gzlib.c
+	-@mv objs/gzlib.o $@
+
+gzread.lo: $(SRCDIR)gzread.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/gzread.o $(SRCDIR)gzread.c
+	-@mv objs/gzread.o $@
+
+gzwrite.lo: $(SRCDIR)gzwrite.c
+	-@mkdir objs 2>/dev/null || test -d objs
+	$(CC) $(SFLAGS) $(ZINC) -DPIC -c -o objs/gzwrite.o $(SRCDIR)gzwrite.c
+	-@mv objs/gzwrite.o $@
+
+
+>>>>>>> upstream/master
 placebo $(SHAREDLIBV): $(PIC_OBJS) libz.a
 	$(LDSHARED) $(SFLAGS) -o $@ $(PIC_OBJS) $(LDSHAREDLIBC) $(LDFLAGS)
 	rm -f $(SHAREDLIB) $(SHAREDLIBM)
@@ -405,6 +570,10 @@ install-libs: $(LIBS)
 	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	rm -f $(DESTDIR)$(libdir)/$(STATICLIB)
+>>>>>>> upstream/master
 =======
 	rm -f $(DESTDIR)$(libdir)/$(STATICLIB)
 >>>>>>> upstream/master
@@ -417,6 +586,10 @@ install-libs: $(LIBS)
 	-@if test -n "$(SHAREDLIBV)"; then \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	  rm -f $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
+>>>>>>> upstream/master
 =======
 	  rm -f $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
 >>>>>>> upstream/master
@@ -434,6 +607,7 @@ install-libs: $(LIBS)
 	fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	cp zlib.3 $(DESTDIR)$(man3dir)
 	chmod 644 $(DESTDIR)$(man3dir)/zlib.3
 =======
@@ -447,6 +621,12 @@ install-libs: $(LIBS)
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+	rm -f $(DESTDIR)$(man3dir)/zlib.3
+	cp $(SRCDIR)zlib.3 $(DESTDIR)$(man3dir)
+	chmod 644 $(DESTDIR)$(man3dir)/zlib.3
+	rm -f $(DESTDIR)$(pkgconfigdir)/zlib.pc
+>>>>>>> upstream/master
 	cp zlib.pc $(DESTDIR)$(pkgconfigdir)
 	chmod 644 $(DESTDIR)$(pkgconfigdir)/zlib.pc
 # The ranlib in install is needed on NeXTSTEP which checks file times
@@ -456,7 +636,12 @@ install: install-libs
 	-@if [ ! -d $(DESTDIR)$(includedir)   ]; then mkdir -p $(DESTDIR)$(includedir); fi
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	cp zlib.h zconf.h $(DESTDIR)$(includedir)
+=======
+	rm -f $(DESTDIR)$(includedir)/zlib.h $(DESTDIR)$(includedir)/zconf.h
+	cp $(SRCDIR)zlib.h zconf.h $(DESTDIR)$(includedir)
+>>>>>>> upstream/master
 =======
 	rm -f $(DESTDIR)$(includedir)/zlib.h $(DESTDIR)$(includedir)/zconf.h
 	cp $(SRCDIR)zlib.h zconf.h $(DESTDIR)$(includedir)
@@ -478,6 +663,7 @@ uninstall:
 
 docs: zlib.3.pdf
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 zlib.3.pdf: zlib.3
@@ -511,6 +697,20 @@ zconf: $(SRCDIR)zconf.h.in
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+zlib.3.pdf: $(SRCDIR)zlib.3
+	groff -mandoc -f H -T ps $(SRCDIR)zlib.3 | ps2pdf - $@
+
+zconf.h.cmakein: $(SRCDIR)zconf.h.in
+	-@ TEMPFILE=zconfh_$$; \
+	echo "/#define ZCONF_H/ a\\\\\n#cmakedefine Z_PREFIX\\\\\n#cmakedefine Z_HAVE_UNISTD_H\n" >> $$TEMPFILE &&\
+	sed -f $$TEMPFILE $(SRCDIR)zconf.h.in > $@ &&\
+	touch -r $(SRCDIR)zconf.h.in $@ &&\
+	rm $$TEMPFILE
+
+zconf: $(SRCDIR)zconf.h.in
+	cp -p $(SRCDIR)zconf.h.in zconf.h
+>>>>>>> upstream/master
 
 mostlyclean: clean
 clean:
@@ -528,6 +728,7 @@ maintainer-clean: distclean
 distclean: clean zconf zconf.h.cmakein docs
 	rm -f Makefile zlib.pc configure.log
 	-@rm -f .DS_Store
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	-@printf 'all:\n\t-@echo "Please use ./configure first.  Thank you."\n' > Makefile
@@ -580,6 +781,16 @@ tags:
 
 tags:
 >>>>>>> upstream/master
+=======
+	@if [ -f Makefile.in ]; then \
+	printf 'all:\n\t-@echo "Please use ./configure first.  Thank you."\n' > Makefile ; \
+	printf '\ndistclean:\n\tmake -f Makefile.in distclean\n' >> Makefile ; \
+	touch -r $(SRCDIR)Makefile.in Makefile ; fi
+	@if [ ! -f zconf.h.in ]; then rm -f zconf.h zconf.h.cmakein ; fi
+	@if [ ! -f zlib.3 ]; then rm -f zlib.3.pdf ; fi
+
+tags:
+>>>>>>> upstream/master
 	etags $(SRCDIR)*.[ch]
 
 adler32.o zutil.o: $(SRCDIR)zutil.h $(SRCDIR)zlib.h zconf.h
@@ -602,6 +813,9 @@ inffast.lo: $(SRCDIR)zutil.h $(SRCDIR)zlib.h zconf.h $(SRCDIR)inftrees.h $(SRCDI
 inftrees.lo: $(SRCDIR)zutil.h $(SRCDIR)zlib.h zconf.h $(SRCDIR)inftrees.h
 trees.lo: $(SRCDIR)deflate.h $(SRCDIR)zutil.h $(SRCDIR)zlib.h zconf.h $(SRCDIR)trees.h
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

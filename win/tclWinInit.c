@@ -17,7 +17,7 @@
 #include <lmcons.h>
 
 /*
- * GetUserName() is found in advapi32.dll
+ * GetUserNameW() is found in advapi32.dll
  */
 #ifdef _MSC_VER
 #   pragma comment(lib, "advapi32.lib")
@@ -81,10 +81,14 @@ typedef struct {
  * Windows version dependend functions
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 static TclWinProcs _tclWinProcs = {
     NULL
 };
 TclWinProcs *tclWinProcs = &_tclWinProcs;
+=======
+TclWinProcs tclWinProcs;
+>>>>>>> upstream/master
 =======
 TclWinProcs tclWinProcs;
 >>>>>>> upstream/master
@@ -120,7 +124,11 @@ static void		AppendEnvironment(Tcl_Obj *listPtr, const char *lib);
  *
  * TclpInitPlatform --
  *
+<<<<<<< HEAD
  *	Initialize all the platform-dependant things like signals,
+=======
+ *	Initialize all the platform-dependent things like signals,
+>>>>>>> upstream/master
  *	floating-point error handling and sockets.
  *
  *	Called at process initialization time.
@@ -141,8 +149,12 @@ TclpInitPlatform(void)
     WORD wVersionRequested = MAKEWORD(2, 2);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     HINSTANCE hInstance;
+>>>>>>> upstream/master
+=======
+    HMODULE handle;
 >>>>>>> upstream/master
 =======
     HMODULE handle;
@@ -163,12 +175,13 @@ TclpInitPlatform(void)
      * invoked.
      */
 
-    TclWinInit(GetModuleHandle(NULL));
+    TclWinInit(GetModuleHandleW(NULL));
 #endif
 
     /*
      * Fill available functions depending on windows version
      */
+<<<<<<< HEAD
 <<<<<<< HEAD
     hInstance = LoadLibraryW(L"kernel32");
     if (hInstance != NULL) {
@@ -178,6 +191,12 @@ TclpInitPlatform(void)
     }
 =======
     handle = GetModuleHandle(TEXT("KERNEL32"));
+    tclWinProcs.cancelSynchronousIo =
+	    (BOOL (WINAPI *)(HANDLE)) GetProcAddress(handle,
+	    "CancelSynchronousIo");
+>>>>>>> upstream/master
+=======
+    handle = GetModuleHandleW(L"KERNEL32");
     tclWinProcs.cancelSynchronousIo =
 	    (BOOL (WINAPI *)(HANDLE)) GetProcAddress(handle,
 	    "CancelSynchronousIo");
@@ -211,6 +230,7 @@ TclpInitLibraryPath(
     Tcl_Obj *pathPtr;
     char installLib[LIBRARY_SIZE];
     const char *bytes;
+    size_t length;
 
     pathPtr = Tcl_NewObj();
 
@@ -250,6 +270,7 @@ TclpInitLibraryPath(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     bytes = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     bytes = TclGetStringFromObj(pathPtr, lengthPtr);
@@ -271,6 +292,12 @@ TclpInitLibraryPath(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    bytes = TclGetStringFromObj(pathPtr, &length);
+    *lengthPtr = length++;
+    *valuePtr = Tcl_Alloc(length);
+    memcpy(*valuePtr, bytes, length);
 >>>>>>> upstream/master
     Tcl_DecrRefCount(pathPtr);
 }
@@ -314,7 +341,7 @@ AppendEnvironment(
 
     for (shortlib = (char *) &lib[strlen(lib)-1]; shortlib>lib ; shortlib--) {
 	if (*shortlib == '/') {
-	    if ((unsigned)(shortlib - lib) == strlen(lib) - 1) {
+	    if ((size_t)(shortlib - lib) == strlen(lib) - 1) {
 		Tcl_Panic("last character in lib cannot be '/'");
 	    }
 	    shortlib++;
@@ -341,7 +368,7 @@ AppendEnvironment(
 	Tcl_SplitPath(buf, &pathc, &pathv);
 
 	/*
-	 * The lstrcmpi() will work even if pathv[pathc-1] is random UTF-8
+	 * The lstrcmpiA() will work even if pathv[pathc-1] is random UTF-8
 	 * chars because I know shortlib is ascii.
 	 */
 
@@ -361,7 +388,11 @@ AppendEnvironment(
 	    objPtr = Tcl_NewStringObj(buf, -1);
 	}
 	Tcl_ListObjAppendElement(NULL, pathPtr, objPtr);
+<<<<<<< HEAD
 	Tcl_Free(pathv);
+=======
+	Tcl_Free((void *)pathv);
+>>>>>>> upstream/master
     }
 }
 
@@ -513,6 +544,7 @@ TclpGetUserName(
     Tcl_DStringInit(bufferPtr);
 
     if (TclGetEnv("USERNAME", bufferPtr) == NULL) {
+<<<<<<< HEAD
 	TCHAR szUserName[UNLEN+1];
 	DWORD cchUserNameLen = UNLEN;
 
@@ -522,6 +554,17 @@ TclpGetUserName(
 	cchUserNameLen--;
 	cchUserNameLen *= sizeof(TCHAR);
 	Tcl_WinTCharToUtf(szUserName, cchUserNameLen, bufferPtr);
+=======
+	WCHAR szUserName[UNLEN+1];
+	DWORD cchUserNameLen = UNLEN;
+
+	if (!GetUserNameW(szUserName, &cchUserNameLen)) {
+	    return NULL;
+	}
+	cchUserNameLen--;
+	Tcl_DStringInit(bufferPtr);
+	Tcl_WCharToUtfDString(szUserName, cchUserNameLen, bufferPtr);
+>>>>>>> upstream/master
     }
     return Tcl_DStringValue(bufferPtr);
 }
@@ -562,9 +605,13 @@ TclpSetVariables(
 
     if (!osInfoInitialized) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	HANDLE handle = LoadLibraryW(L"NTDLL");
 =======
 	HMODULE handle = GetModuleHandle(TEXT("NTDLL"));
+>>>>>>> upstream/master
+=======
+	HMODULE handle = GetModuleHandleW(L"NTDLL");
 >>>>>>> upstream/master
 	int(__stdcall *getversion)(void *) =
 		(int(__stdcall *)(void *)) GetProcAddress(handle, "RtlGetVersion");
@@ -573,9 +620,12 @@ TclpSetVariables(
 	    GetVersionExW(&osInfo);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (handle) {
 		FreeLibrary(handle);
 	}
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	osInfoInitialized = 1;
@@ -597,7 +647,7 @@ TclpSetVariables(
 		TCL_GLOBAL_ONLY);
     }
 
-#ifdef _DEBUG
+#ifndef NDEBUG
     /*
      * The existence of the "debug" element of the tcl_platform array
      * indicates that this particular Tcl shell has been compiled with debug
@@ -683,7 +733,11 @@ TclpFindVariable(
 				 * searches). */
 {
     size_t i, length, result = TCL_IO_FAILURE;
+<<<<<<< HEAD
     register const char *env, *p1, *p2;
+=======
+    const char *env, *p1, *p2;
+>>>>>>> upstream/master
     char *envUpper, *nameUpper;
     Tcl_DString envString;
 

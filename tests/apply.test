@@ -232,7 +232,11 @@ test apply-8.4 {default values} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     apply [list {{x 1} {y 2}} $applyBody] 
+=======
+    apply [list {{x 1} {y 2}} $applyBody]
+>>>>>>> upstream/master
 =======
     apply [list {{x 1} {y 2}} $applyBody]
 >>>>>>> upstream/master

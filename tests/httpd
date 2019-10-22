@@ -229,9 +229,12 @@ proc httpdRespond { sock } {
 >>>>>>> upstream/master
 
     # Catch errors from premature client closes
+<<<<<<< HEAD
 >>>>>>> upstream/master
 
     # Catch errors from premature client closes
+=======
+>>>>>>> upstream/master
 
     catch {
 	if {$data(proto) == "HEAD"} {

@@ -1,7 +1,11 @@
 /* crc32.c -- compute the CRC-32 of a data stream
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2006, 2010, 2011, 2012 Mark Adler
+=======
+ * Copyright (C) 1995-2006, 2010, 2011, 2012, 2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2006, 2010, 2011, 2012, 2016 Mark Adler
 >>>>>>> upstream/master
@@ -40,8 +44,11 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define local static
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -54,9 +61,15 @@
    local unsigned long crc32_little OF((unsigned long,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                         const unsigned char FAR *, unsigned));
    local unsigned long crc32_big OF((unsigned long,
                         const unsigned char FAR *, unsigned));
+=======
+                        const unsigned char FAR *, z_size_t));
+   local unsigned long crc32_big OF((unsigned long,
+                        const unsigned char FAR *, z_size_t));
+>>>>>>> upstream/master
 =======
                         const unsigned char FAR *, z_size_t));
    local unsigned long crc32_big OF((unsigned long,
@@ -229,10 +242,17 @@ const z_crc_t FAR * ZEXPORT get_crc_table()
 /* ========================================================================= */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unsigned long ZEXPORT crc32(crc, buf, len)
     unsigned long crc;
     const unsigned char FAR *buf;
     uInt len;
+=======
+unsigned long ZEXPORT crc32_z(crc, buf, len)
+    unsigned long crc;
+    const unsigned char FAR *buf;
+    z_size_t len;
+>>>>>>> upstream/master
 =======
 unsigned long ZEXPORT crc32_z(crc, buf, len)
     unsigned long crc;
@@ -277,6 +297,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef BYFOUR
 
 =======
@@ -291,6 +312,19 @@ unsigned long ZEXPORT crc32(crc, buf, len)
 
 #ifdef BYFOUR
 
+=======
+/* ========================================================================= */
+unsigned long ZEXPORT crc32(crc, buf, len)
+    unsigned long crc;
+    const unsigned char FAR *buf;
+    uInt len;
+{
+    return crc32_z(crc, buf, len);
+}
+
+#ifdef BYFOUR
+
+>>>>>>> upstream/master
 =======
 /* ========================================================================= */
 unsigned long ZEXPORT crc32(crc, buf, len)
@@ -317,6 +351,9 @@ unsigned long ZEXPORT crc32(crc, buf, len)
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -332,7 +369,11 @@ local unsigned long crc32_little(crc, buf, len)
     const unsigned char FAR *buf;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     unsigned len;
+=======
+    z_size_t len;
+>>>>>>> upstream/master
 =======
     z_size_t len;
 >>>>>>> upstream/master
@@ -371,7 +412,11 @@ local unsigned long crc32_little(crc, buf, len)
 /* ========================================================================= */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define DOBIG4 c ^= *++buf4; \
+=======
+#define DOBIG4 c ^= *buf4++; \
+>>>>>>> upstream/master
 =======
 #define DOBIG4 c ^= *buf4++; \
 >>>>>>> upstream/master
@@ -388,7 +433,11 @@ local unsigned long crc32_big(crc, buf, len)
     const unsigned char FAR *buf;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     unsigned len;
+=======
+    z_size_t len;
+>>>>>>> upstream/master
 =======
     z_size_t len;
 >>>>>>> upstream/master
@@ -409,7 +458,10 @@ local unsigned long crc32_big(crc, buf, len)
     buf4 = (const z_crc_t FAR *)(const void FAR *)buf;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     buf4--;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -424,7 +476,10 @@ local unsigned long crc32_big(crc, buf, len)
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     buf4++;
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -44,7 +48,11 @@ of the procedure.  If a \fIresult\fR argument is provided, its value
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 becomes the result of the procedure passed back to the caller.  
+=======
+becomes the result of the procedure passed back to the caller.
+>>>>>>> upstream/master
 =======
 becomes the result of the procedure passed back to the caller.
 >>>>>>> upstream/master
@@ -150,7 +158,11 @@ the \fB\-code error\fR option is provided, Tcl will set the value
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 of the \fB\-errorcode\fR entry in the return options dictionary 
+=======
+of the \fB\-errorcode\fR entry in the return options dictionary
+>>>>>>> upstream/master
 =======
 of the \fB\-errorcode\fR entry in the return options dictionary
 >>>>>>> upstream/master
@@ -176,7 +188,11 @@ about the context in which the error occurred.  The stack trace will
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 also be stored in the global variable \fBerrorInfo\fR.  
+=======
+also be stored in the global variable \fBerrorInfo\fR.
+>>>>>>> upstream/master
 =======
 also be stored in the global variable \fBerrorInfo\fR.
 >>>>>>> upstream/master
@@ -266,7 +282,11 @@ of the procedure.  Procedure invocation provides special treatment
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 when evaluation of the procedure body returns the return code 
+=======
+when evaluation of the procedure body returns the return code
+>>>>>>> upstream/master
 =======
 when evaluation of the procedure body returns the return code
 >>>>>>> upstream/master
@@ -315,7 +335,11 @@ proc printOneLine {} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     \fBreturn\fR		
+=======
+    \fBreturn\fR
+>>>>>>> upstream/master
 =======
     \fBreturn\fR
 >>>>>>> upstream/master

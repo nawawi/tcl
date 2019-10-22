@@ -178,7 +178,11 @@ test safe-6.3 {test safe interpreters knowledge of the world} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {byteOrder pathSeparator platform pointerSize wordSize}
+=======
+} {byteOrder engine pathSeparator platform pointerSize wordSize}
+>>>>>>> upstream/master
 =======
 } {byteOrder engine pathSeparator platform pointerSize wordSize}
 >>>>>>> upstream/master
@@ -230,8 +234,13 @@ test safe-7.3 {check that safe subinterpreters work} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test safe-8.1 {safe source control on file} -setup {
     set i "a"
+=======
+set i "a"
+test safe-8.1 {safe source control on file} -setup {
+>>>>>>> upstream/master
 =======
 set i "a"
 test safe-8.1 {safe source control on file} -setup {
@@ -255,7 +264,10 @@ test safe-8.2 {safe source control on file} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -273,7 +285,10 @@ test safe-8.3 {safe source control on file} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -297,7 +312,10 @@ test safe-8.4 {safe source control on file} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -321,7 +339,10 @@ test safe-8.5 {safe source control on file} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -349,7 +370,10 @@ test safe-8.6 {safe source control on file} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -375,7 +399,10 @@ test safe-8.7 {safe source control on file} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -401,6 +428,7 @@ test safe-8.7 {safe source control on file} -setup {
 } -result [list 1 {no such file or directory} [list "ERROR for slave a : [file join [info library] xxxxxxxxxxx.tcl]:no such file or directory"]]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test safe-8.8 {safe source forbids -rsrc} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -422,11 +450,16 @@ test safe-8.8 {safe source forbids -rsrc} -setup {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 test safe-8.8 {safe source forbids -rsrc} emptyTest {
     # Disabled this test.  It was only useful for long unsupported
     # Mac OS 9 systems. [Bug 860a9f1945]
 } {}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -456,7 +489,22 @@ test safe-8.10 {safe source and return} -setup {
     catch {safe::interpDelete $i}
     removeFile $returnScript
 } -result ok
+test safe-8.10 {safe source and return} -setup {
+    set returnScript [makeFile {return -level 2 "ok"} return.tcl]
+    catch {safe::interpDelete $i}
+} -body {
+    safe::interpCreate $i
+    set token [safe::interpAddToAccessPath $i [file dirname $returnScript]]
+    $i eval [list apply {filename {
+	source $filename
+	error boom
+    }} $token/[file tail $returnScript]]
+} -cleanup {
+    catch {safe::interpDelete $i}
+    removeFile $returnScript
+} -result ok
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 test safe-9.1 {safe interps' deleteHook} -setup {
@@ -491,6 +539,10 @@ test safe-8.10 {safe source and return} -setup {
 set i "a"
 test safe-9.1 {safe interps' deleteHook} -setup {
 >>>>>>> upstream/master
+=======
+set i "a"
+test safe-9.1 {safe interps' deleteHook} -setup {
+>>>>>>> upstream/master
     catch {safe::interpDelete $i}
     set res {}
 } -body {
@@ -508,7 +560,10 @@ test safe-9.2 {safe interps' error in deleteHook} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set i "a"
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -622,6 +677,9 @@ test safe-10.4.1 {testing nested statics loading / -nestedloadok} -constraints T
 test safe-10.4.1 {testing nested statics loading / -nestedloadok} -constraints TcltestPackage -body {
     set i [safe::interpCreate -nestedloadok]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -700,7 +758,11 @@ test safe-11.7.1 {testing safe encoding} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes ok -cleanup {
+=======
+} -returnCodes ok -match glob -cleanup {
+>>>>>>> upstream/master
 =======
 } -returnCodes ok -match glob -cleanup {
 >>>>>>> upstream/master
@@ -720,6 +782,7 @@ test safe-11.7.1 {testing safe encoding} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 "::interp invokehidden interp1 encoding convertfrom"
 =======
 "::interp invokehidden interp* encoding convertfrom"
@@ -731,6 +794,8 @@ test safe-11.7.1 {testing safe encoding} -setup {
 "::interp invokehidden interp* encoding convertfrom"
 >>>>>>> upstream/master
     invoked from within
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 "encoding convertfrom"
@@ -751,7 +816,11 @@ test safe-11.8.1 {testing safe encoding} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes ok -cleanup {
+=======
+} -returnCodes ok -match glob -cleanup {
+>>>>>>> upstream/master
 =======
 } -returnCodes ok -match glob -cleanup {
 >>>>>>> upstream/master
@@ -767,6 +836,7 @@ test safe-11.8.1 {testing safe encoding} -setup {
     while executing
 "encoding convertto"
     invoked from within
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -983,6 +1053,11 @@ test safe-14.1 {Check that module path is the same as in the master interpreter 
 } -result [::tcl::tm::path list]
 
 =======
+=======
+"encoding convertto"
+    invoked from within
+"interp eval $i encoding convertto"}
+>>>>>>> upstream/master
 
 test safe-12.1 {glob is restricted [Bug 2906841]} -setup {
     set i [safe::interpCreate]
@@ -1085,6 +1160,7 @@ test safe-13.4 {another valid glob call [Bug 2964715]} -setup {
     } else {
         return "no match: $result"
     }
+<<<<<<< HEAD
 } -cleanup {
     safe::interpDelete $i
     removeDirectory $testdir
@@ -1237,6 +1313,159 @@ test safe-16.2 {Bug 3529949: defang ~user in paths} -setup {
 	    "file join \[file dirname ~$user\] \[file tail ~$user\]"]
 } -cleanup {
     safe::interpDelete $i
+=======
+} -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {glob match}
+test safe-13.5 {as 13.4 but test glob failure when -directory is outside access path [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+    buildEnvironment deleteme.tm
+} -body {
+    ::safe::interpAddToAccessPath $i $testdir2
+    $i eval \
+	glob -directory $testdir [file join deletemetoo *.tm]
+} -returnCodes error -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {permission denied}
+test safe-13.6 {as 13.4 but test silent failure when result is outside access_path [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+    buildEnvironment deleteme.tm
+} -body {
+    ::safe::interpAddToAccessPath $i $testdir
+    $i eval \
+	glob -nocomplain -directory $testdir [file join deletemetoo *.tm]
+} -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {}
+test safe-13.7 {mimic the glob call by tclPkgUnknown which gives a deliberate error in a safe interpreter [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+    buildEnvironment pkgIndex.tcl
+} -body {
+    set safeTD [::safe::interpAddToAccessPath $i $testdir]
+    ::safe::interpAddToAccessPath $i $testdir2
+    string map [list $safeTD EXPECTED] [$i eval [list \
+	glob -directory $safeTD -join * pkgIndex.tcl]]
+} -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {{EXPECTED/deletemetoo/pkgIndex.tcl}}
+# Note the extra {} around the result above; that's *expected* because of the
+# format of virtual path roots.
+test safe-13.8 {mimic the glob call by tclPkgUnknown without the deliberate error that is specific to pkgIndex.tcl [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+    buildEnvironment notIndex.tcl
+} -body {
+    set safeTD [::safe::interpAddToAccessPath $i $testdir]
+    ::safe::interpAddToAccessPath $i $testdir2
+    $i eval [list glob -directory $safeTD -join -nocomplain * notIndex.tcl]
+} -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {}
+test safe-13.9 {as 13.8 but test glob failure when -directory is outside access path [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+    buildEnvironment notIndex.tcl
+} -body {
+    ::safe::interpAddToAccessPath $i $testdir2
+    set result [$i eval \
+	    glob -directory $testdir -join -nocomplain * notIndex.tcl]
+    if {$result eq [list $testfile]} {
+        return {glob match}
+    } else {
+        return "no match: $result"
+    }
+} -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {no match: }
+test safe-13.10 {as 13.8 but test silent failure when result is outside access_path [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+    buildEnvironment notIndex.tcl
+} -body {
+    ::safe::interpAddToAccessPath $i $testdir
+    $i eval glob -directory $testdir -join -nocomplain * notIndex.tcl
+} -cleanup {
+    safe::interpDelete $i
+    removeDirectory $testdir
+} -result {}
+rename buildEnvironment {}
+
+#### Test for the module path
+test safe-14.1 {Check that module path is the same as in the master interpreter [Bug 2964715]} -setup {
+    set i [safe::interpCreate]
+} -body {
+    set tm {}
+    foreach token [$i eval ::tcl::tm::path list] {
+        lappend tm [dict get [set ::safe::S${i}(access_path,map)] $token]
+    }
+    return $tm
+} -cleanup {
+    safe::interpDelete $i
+} -result [::tcl::tm::path list]
+
+test safe-15.1 {safe file ensemble does not surprise code} -setup {
+    set i [interp create -safe]
+} -body {
+    set result [expr {"file" in [interp hidden $i]}]
+    lappend result [interp eval $i {tcl::file::split a/b/c}]
+    lappend result [catch {interp eval $i {tcl::file::isdirectory .}}]
+    lappend result [interp invokehidden $i file split a/b/c]
+    lappend result [catch {interp eval $i {file split a/b/c}} msg] $msg
+    lappend result [catch {interp invokehidden $i file isdirectory .}]
+    interp expose $i file
+    lappend result [catch {interp eval $i {file split a/b/c}} msg] $msg
+    lappend result [catch {interp eval $i {file isdirectory .}} msg] $msg
+} -cleanup {
+    unset -nocomplain msg
+    interp delete $i
+} -result {1 {a b c} 1 {a b c} 1 {invalid command name "file"} 1 0 {a b c} 1 {not allowed to invoke subcommand isdirectory of file}}
+test safe-15.2 {safe file ensemble does not surprise code} -setup {
+    set i [interp create -safe]
+} -body {
+    set result [expr {"file" in [interp hidden $i]}]
+    lappend result [interp eval $i {tcl::file::split a/b/c}]
+    lappend result [catch {interp eval $i {tcl::file::isdirectory .}}]
+    lappend result [interp invokehidden $i file split a/b/c]
+    lappend result [catch {interp eval $i {file split a/b/c}} msg] $msg
+    lappend result [catch {interp invokehidden $i file isdirectory .}]
+    interp expose $i file
+    lappend result [catch {interp eval $i {file split a/b/c}} msg] $msg
+    lappend result [catch {interp eval $i {file isdirectory .}} msg o] [dict get $o -errorinfo]
+} -cleanup {
+    unset -nocomplain msg o
+    interp delete $i
+} -result {1 {a b c} 1 {a b c} 1 {invalid command name "file"} 1 0 {a b c} 1 {not allowed to invoke subcommand isdirectory of file
+    while executing
+"file isdirectory ."
+    invoked from within
+"interp eval $i {file isdirectory .}"}}
+
+### ~ should have no special meaning in paths in safe interpreters
+test safe-16.1 {Bug 3529949: defang ~ in paths} -setup {
+    set savedHOME $env(HOME)
+    set env(HOME) /foo/bar
+    set i [safe::interpCreate]
+} -body {
+    $i eval {
+	set d [format %c 126]
+	list [file join [file dirname $d] [file tail $d]]
+    }
+} -cleanup {
+    safe::interpDelete $i
+    set env(HOME) $savedHOME
+} -result {./~}
+test safe-16.2 {Bug 3529949: defang ~user in paths} -setup {
+    set i [safe::interpCreate]
+    set user $tcl_platform(user)
+} -body {
+    string map [list $user USER] [$i eval \
+	    "file join \[file dirname ~$user\] \[file tail ~$user\]"]
+} -cleanup {
+    safe::interpDelete $i
+>>>>>>> upstream/master
 } -result {./~USER}
 test safe-16.3 {Bug 3529949: defang ~ in globs} -setup {
     set syntheticHOME [makeDirectory foo]

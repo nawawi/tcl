@@ -55,9 +55,15 @@ TclTomMathInitializeStubs(
     }
     if (stubsPtr == NULL) {
 	errMsg = "missing stub table pointer";
+<<<<<<< HEAD
     } else if(stubsPtr->tclBN_epoch() != epoch) {
 	errMsg = "epoch number mismatch";
     } else if(stubsPtr->tclBN_revision() != revision) {
+=======
+    } else if (stubsPtr->tclBN_epoch() != epoch) {
+	errMsg = "epoch number mismatch";
+    } else if (stubsPtr->tclBN_revision() != revision) {
+>>>>>>> upstream/master
 	errMsg = "requires a later revision";
     } else {
 	tclTomMathStubsPtr = stubsPtr;

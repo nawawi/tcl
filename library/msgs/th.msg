@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset th DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0e2d\u0e32."\
         "\u0e08."\
         "\u0e2d."\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u0e28."\
         "\u0e2a."]
 =======
+=======
+>>>>>>> upstream/master
         "อา."\
         "จ."\
         "อ."\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "พฤ."\
         "ศ."\
         "ส."]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset th DAYS_OF_WEEK_FULL [list \
         "วันอาทิตย์"\
@@ -55,6 +61,7 @@ namespace eval ::tcl::clock {
         "พฤศจิกายน"\
         "ธันวาคม"\
         ""]
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset th BCE "\u0e25\u0e17\u0e35\u0e48"
     ::msgcat::mcset th CE "\u0e04.\u0e28."
@@ -106,11 +113,16 @@ namespace eval ::tcl::clock {
         ""]
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     ::msgcat::mcset th BCE "ลที่"
     ::msgcat::mcset th CE "ค.ศ."
     ::msgcat::mcset th AM "ก่อนเที่ยง"
     ::msgcat::mcset th PM "หลังเที่ยง"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

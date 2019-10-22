@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ; zlib data compression library
 EXPORTS
 ; basic functions
@@ -87,6 +88,8 @@ EXPORTS
     deflateResetKeep
     gzopen_w
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 ; zlib data compression library
@@ -184,6 +187,9 @@ EXPORTS
     deflateResetKeep
     gzopen_w
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

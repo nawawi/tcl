@@ -4,7 +4,11 @@ set TZData(:Europe/Zaporozhye) {
     {-9223372036854775808 8440 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2840149240 8400 0 CUT}
+=======
+    {-2840149240 8400 0 +0220}
+>>>>>>> upstream/master
 =======
     {-2840149240 8400 0 +0220}
 >>>>>>> upstream/master

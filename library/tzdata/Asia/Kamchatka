@@ -5,6 +5,7 @@ set TZData(:Asia/Kamchatka) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1487759676 39600 0 PETT}
     {-1247569200 43200 0 PETMMTT}
     {354888000 46800 1 PETST}
@@ -86,6 +87,8 @@ set TZData(:Asia/Kamchatka) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1487759676 39600 0 +11}
     {-1247569200 43200 0 +13}
     {354888000 46800 1 +13}
@@ -154,6 +157,9 @@ set TZData(:Asia/Kamchatka) {
     {1301151600 43200 0 +12}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -2,7 +2,11 @@ ZLIB DATA COMPRESSION LIBRARY
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 zlib 1.2.8 is a general purpose data compression library.  All the code is
+=======
+zlib 1.2.11 is a general purpose data compression library.  All the code is
+>>>>>>> upstream/master
 =======
 zlib 1.2.11 is a general purpose data compression library.  All the code is
 >>>>>>> upstream/master
@@ -32,7 +36,11 @@ Manifest:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The package zlib-1.2.8-win32-x86.zip will contain the following files:
+=======
+The package zlib-1.2.11-win32-x86.zip will contain the following files:
+>>>>>>> upstream/master
 =======
 The package zlib-1.2.11-win32-x86.zip will contain the following files:
 >>>>>>> upstream/master
@@ -90,7 +98,11 @@ Copyright notice:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   (C) 1995-2012 Jean-loup Gailly and Mark Adler
+=======
+  (C) 1995-2017 Jean-loup Gailly and Mark Adler
+>>>>>>> upstream/master
 =======
   (C) 1995-2017 Jean-loup Gailly and Mark Adler
 >>>>>>> upstream/master

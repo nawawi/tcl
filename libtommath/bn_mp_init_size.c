@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* init an mp_init for a given size */
@@ -22,7 +26,11 @@ int mp_init_size(mp_int *a, int size)
    size += (MP_PREC * 2) - (size % MP_PREC);
 
    /* alloc mem */
+<<<<<<< HEAD
    a->dp = OPT_CAST(mp_digit) XMALLOC(sizeof(mp_digit) * (size_t)size);
+=======
+   a->dp = (mp_digit *) XMALLOC((size_t)size * sizeof(mp_digit));
+>>>>>>> upstream/master
    if (a->dp == NULL) {
       return MP_MEM;
    }

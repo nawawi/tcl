@@ -6,7 +6,11 @@ namespace eval ::tcl::clock {
         "Sal"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u00c7ar"\
+=======
+        "Çar"\
+>>>>>>> upstream/master
 =======
         "Çar"\
 >>>>>>> upstream/master
@@ -21,9 +25,15 @@ namespace eval ::tcl::clock {
         "Pazartesi"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Sal\u0131"\
         "\u00c7ar\u015famba"\
         "Per\u015fembe"\
+=======
+        "Salı"\
+        "Çarşamba"\
+        "Perşembe"\
+>>>>>>> upstream/master
 =======
         "Salı"\
         "Çarşamba"\
@@ -40,7 +50,11 @@ namespace eval ::tcl::clock {
         "Oca"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u015eub"\
+=======
+        "Şub"\
+>>>>>>> upstream/master
 =======
         "Şub"\
 >>>>>>> upstream/master
@@ -54,7 +68,11 @@ namespace eval ::tcl::clock {
         "Tem"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "A\u011fu"\
+=======
+        "Ağu"\
+>>>>>>> upstream/master
 =======
         "Ağu"\
 >>>>>>> upstream/master
@@ -70,7 +88,11 @@ namespace eval ::tcl::clock {
         "Ocak"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u015eubat"\
+=======
+        "Şubat"\
+>>>>>>> upstream/master
 =======
         "Şubat"\
 >>>>>>> upstream/master
@@ -82,6 +104,7 @@ namespace eval ::tcl::clock {
         "Ağustos"\
         "Eylül"\
         "Ekim"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "Kas\u0131m"\
         "Aral\u0131k"\
@@ -95,6 +118,10 @@ namespace eval ::tcl::clock {
         "Ağustos"\
         "Eylül"\
         "Ekim"\
+        "Kasım"\
+        "Aralık"\
+>>>>>>> upstream/master
+=======
         "Kasım"\
         "Aralık"\
 >>>>>>> upstream/master

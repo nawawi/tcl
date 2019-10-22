@@ -12,6 +12,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -40,6 +43,7 @@ test stack-2.1 {maxNestingDepth reached on infinite recursion} -body {
 <<<<<<< HEAD
     }
 } -result {too many nested evaluations (infinite loop?)}
+<<<<<<< HEAD
 <<<<<<< HEAD
     
 =======
@@ -92,6 +96,9 @@ test stack-2.1 {maxNestingDepth reached on infinite recursion} -body {
 
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+
 >>>>>>> upstream/master
 =======
 

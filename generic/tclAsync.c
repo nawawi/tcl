@@ -118,7 +118,11 @@ Tcl_AsyncCreate(
     AsyncHandler *asyncPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
+<<<<<<< HEAD
     asyncPtr = Tcl_Alloc(sizeof(AsyncHandler));
+=======
+    asyncPtr = (AsyncHandler*)Tcl_Alloc(sizeof(AsyncHandler));
+>>>>>>> upstream/master
     asyncPtr->ready = 0;
     asyncPtr->nextPtr = NULL;
     asyncPtr->proc = proc;

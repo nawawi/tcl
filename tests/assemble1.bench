@@ -24,7 +24,11 @@ proc ulam2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -50,7 +54,11 @@ proc ulam2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -72,12 +80,15 @@ proc ulam2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	push 2;         # max n 2
 	div;            # max n/2 -> max n
 	jump start;     # max n
 	
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -92,6 +103,9 @@ proc ulam2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -108,7 +122,11 @@ proc ulam2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -130,7 +148,11 @@ proc ulam2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -154,7 +176,11 @@ proc test1 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ulam1 $i  
+=======
+	ulam1 $i
+>>>>>>> upstream/master
 =======
 	ulam1 $i
 >>>>>>> upstream/master
@@ -175,7 +201,11 @@ proc test2 {n} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ulam2 $i  
+=======
+	ulam2 $i
+>>>>>>> upstream/master
 =======
 	ulam2 $i
 >>>>>>> upstream/master
@@ -201,7 +231,11 @@ for {set j 0} {$j < 10} {incr j} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -224,7 +258,10 @@ for {set j 0} {$j < 10} {incr j} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

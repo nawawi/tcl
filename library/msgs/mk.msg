@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset mk DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u043d\u0435\u0434."\
         "\u043f\u043e\u043d."\
         "\u0432\u0442."\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u043f\u0435\u0442."\
         "\u0441\u0430\u0431."]
 =======
+=======
+>>>>>>> upstream/master
         "нед."\
         "пон."\
         "вт."\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "чет."\
         "пет."\
         "саб."]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset mk DAYS_OF_WEEK_FULL [list \
         "недела"\
@@ -55,6 +61,7 @@ namespace eval ::tcl::clock {
         "ноември"\
         "декември"\
         ""]
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset mk BCE "\u043f\u0440.\u043d.\u0435."
     ::msgcat::mcset mk CE "\u0430\u0435."
@@ -102,6 +109,10 @@ namespace eval ::tcl::clock {
         "ноември"\
         "декември"\
         ""]
+    ::msgcat::mcset mk BCE "пр.н.е."
+    ::msgcat::mcset mk CE "ае."
+>>>>>>> upstream/master
+=======
     ::msgcat::mcset mk BCE "пр.н.е."
     ::msgcat::mcset mk CE "ае."
 >>>>>>> upstream/master

@@ -490,7 +490,11 @@ proc tclPkgUnknown {name args} {
 		    try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			source $file
+=======
+			::tcl::Pkg::source $file
+>>>>>>> upstream/master
 =======
 			::tcl::Pkg::source $file
 >>>>>>> upstream/master
@@ -520,7 +524,11 @@ proc tclPkgUnknown {name args} {
 		try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    source $file
+=======
+		    ::tcl::Pkg::source $file
+>>>>>>> upstream/master
 =======
 		    ::tcl::Pkg::source $file
 >>>>>>> upstream/master
@@ -616,7 +624,11 @@ proc tcl::MacOSXPkgUnknown {original name args} {
 		try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    source $file
+=======
+		    ::tcl::Pkg::source $file
+>>>>>>> upstream/master
 =======
 		    ::tcl::Pkg::source $file
 >>>>>>> upstream/master

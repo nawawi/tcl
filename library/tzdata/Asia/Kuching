@@ -4,6 +4,7 @@ set TZData(:Asia/Kuching) {
     {-9223372036854775808 26480 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1383463280 27000 0 BORT}
     {-1167636600 28800 0 BORT}
     {-1082448000 30000 1 BORTST}
@@ -26,6 +27,8 @@ set TZData(:Asia/Kuching) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1383463280 27000 0 +0730}
     {-1167636600 28800 0 +08}
     {-1082448000 30000 1 +08}
@@ -45,6 +48,9 @@ set TZData(:Asia/Kuching) {
     {-879667200 32400 0 +09}
     {-767005200 28800 0 +08}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

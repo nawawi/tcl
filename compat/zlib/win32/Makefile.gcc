@@ -41,7 +41,11 @@ SHARED_MODE=0
 #LOC = -DASMV
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #LOC = -DDEBUG -g
+=======
+#LOC = -DZLIB_DEBUG -g
+>>>>>>> upstream/master
 =======
 #LOC = -DZLIB_DEBUG -g
 >>>>>>> upstream/master

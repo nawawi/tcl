@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -170,7 +174,11 @@ Specifies a character index offset into the string to start
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 matching the regular expression at.  
+=======
+matching the regular expression at.
+>>>>>>> upstream/master
 =======
 matching the regular expression at.
 >>>>>>> upstream/master
@@ -291,6 +299,55 @@ set decoded [\fBregsub\fR -all -command $RE $string {apply {{- p h} {
 }}}]
 >>>>>>> upstream/master
 .CE
+<<<<<<< HEAD
+=======
+.PP
+.VS 8.7
+The above operation can be done using \fBregsub \-command\fR instead, which is
+often faster. (A full pre-computed \fBstring map\fR would be faster still, but
+the cost of computing the map for a transformation as complex as this can be
+quite large.)
+.PP
+.CS
+# This RE is just a character class for everything "bad"
+set RE {[][{};#\e\e\e$\es\eu0080-\euffff]}
+
+# This encodes what the RE described above matches
+proc encodeChar {ch} {
+    # newline is handled specially since backslash-newline is a
+    # special sequence.
+    if {$ch eq "\en"} {
+        return "\e\eu000a"
+    }
+    # No point in writing this as a one-liner
+    scan $ch %c charNumber
+    format "\e\eu%04x" $charNumber
+}
+
+set quoted [\fBregsub\fR -all -command $RE $string encodeChar]
+.CE
+.PP
+Decoding a URL-encoded string using \fBregsub \-command\fR, a lambda term and
+the \fBapply\fR command.
+.PP
+.CS
+# Match one of the sequences in a URL-encoded string that needs
+# fixing, converting + to space and %XX to the right character
+# (e.g., %7e becomes ~)
+set RE {(\e+)|%([0-9A-Fa-f]{2})}
+
+# Note that -command uses a command prefix, not a command name
+set decoded [\fBregsub\fR -all -command $RE $string {apply {{- p h} {
+    # + is a special case; handle directly
+    if {$p eq "+"} {
+        return " "
+    }
+    # convert hex to a char
+    scan $h %x charNumber
+    format %c $charNumber
+}}}]
+.CE
+>>>>>>> upstream/master
 .VE 8.7
 .SH "SEE ALSO"
 regexp(n), re_syntax(n), subst(n), string(n)

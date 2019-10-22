@@ -1,7 +1,11 @@
 /* uncompr.c -- decompress a memory buffer
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2003, 2010 Jean-loup Gailly.
+=======
+ * Copyright (C) 1995-2003, 2010, 2014, 2016 Jean-loup Gailly, Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2003, 2010, 2014, 2016 Jean-loup Gailly, Mark Adler
 >>>>>>> upstream/master
@@ -19,6 +23,7 @@
 /* ===========================================================================
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      Decompresses the source buffer into the destination buffer.  sourceLen is
    the byte length of the source buffer. Upon entry, destLen is the total
    size of the destination buffer, which must be large enough to hold the
@@ -31,6 +36,8 @@
    enough memory, Z_BUF_ERROR if there was not enough room in the output
    buffer, or Z_DATA_ERROR if the input data was corrupted.
 =======
+=======
+>>>>>>> upstream/master
      Decompresses the source buffer into the destination buffer.  *sourceLen is
    the byte length of the source buffer. Upon entry, *destLen is the total size
    of the destination buffer, which must be large enough to hold the entire
@@ -45,6 +52,9 @@
    memory, Z_BUF_ERROR if there was not enough room in the output buffer, or
    Z_DATA_ERROR if the input data was corrupted, including if the input data is
    an incomplete zlib stream.
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 */
 int ZEXPORT uncompress2 (dest, destLen, source, sourceLen)
@@ -59,6 +69,7 @@ int ZEXPORT uncompress2 (dest, destLen, source, sourceLen)
     uLong len, left;
     Byte buf[1];    /* for detection of incomplete stream when *destLen == 0 */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     stream.next_in = (z_const Bytef *)source;
     stream.avail_in = (uInt)sourceLen;
@@ -113,6 +124,8 @@ int ZEXPORT uncompress2 (dest, destLen, source, sourceLen)
     uLong len, left;
     Byte buf[1];    /* for detection of incomplete stream when *destLen == 0 */
 
+=======
+>>>>>>> upstream/master
     len = *sourceLen;
     if (*destLen) {
         left = *destLen;
@@ -128,14 +141,18 @@ int ZEXPORT uncompress2 (dest, destLen, source, sourceLen)
     stream.zalloc = (alloc_func)0;
     stream.zfree = (free_func)0;
     stream.opaque = (voidpf)0;
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
     stream.opaque = (voidpf)0;
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     err = inflateInit(&stream);
     if (err != Z_OK) return err;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     err = inflate(&stream, Z_FINISH);
@@ -182,6 +199,23 @@ int ZEXPORT uncompress2 (dest, destLen, source, sourceLen)
     } while (err == Z_OK);
 
 >>>>>>> upstream/master
+=======
+    stream.next_out = dest;
+    stream.avail_out = 0;
+
+    do {
+        if (stream.avail_out == 0) {
+            stream.avail_out = left > (uLong)max ? max : (uInt)left;
+            left -= stream.avail_out;
+        }
+        if (stream.avail_in == 0) {
+            stream.avail_in = len > (uLong)max ? max : (uInt)len;
+            len -= stream.avail_in;
+        }
+        err = inflate(&stream, Z_NO_FLUSH);
+    } while (err == Z_OK);
+
+>>>>>>> upstream/master
     *sourceLen -= len + stream.avail_in;
     if (dest != buf)
         *destLen = stream.total_out;
@@ -203,6 +237,9 @@ int ZEXPORT uncompress (dest, destLen, source, sourceLen)
 {
     return uncompress2(dest, destLen, source, &sourceLen);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

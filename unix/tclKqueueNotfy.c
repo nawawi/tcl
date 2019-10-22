@@ -14,8 +14,11 @@
  */
 
 #include "tclInt.h"
+<<<<<<< HEAD
 #if defined(NOTIFIER_KQUEUE) && TCL_THREADS
 
+=======
+>>>>>>> upstream/master
 #ifndef HAVE_COREFOUNDATION	/* Darwin/Mac OS X CoreFoundation notifier is
 				 * in tclMacOSXNotify.c */
 #if defined(NOTIFIER_KQUEUE) && TCL_THREADS

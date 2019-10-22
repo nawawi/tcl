@@ -5,6 +5,7 @@ set TZData(:Europe/Volgograd) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1577761060 10800 0 TSAT}
     {-1411873200 10800 0 STAT}
     {-1247540400 14400 0 STAT}
@@ -100,6 +101,8 @@ set TZData(:Europe/Volgograd) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1577761060 10800 0 +03}
     {-1247540400 14400 0 +04}
     {-256881600 14400 0 +05}
@@ -169,10 +172,14 @@ set TZData(:Europe/Volgograd) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {1540681200 14400 0 +04}
 >>>>>>> upstream/master
 =======
     {1540681200 14400 0 +04}

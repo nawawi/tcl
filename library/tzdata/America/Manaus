@@ -4,6 +4,7 @@ set TZData(:America/Manaus) {
     {-9223372036854775808 -14404 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767211196 -14400 0 AMT}
     {-1206954000 -10800 1 AMST}
     {-1191358800 -14400 0 AMT}
@@ -41,6 +42,8 @@ set TZData(:America/Manaus) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767211196 -14400 0 -04}
     {-1206954000 -10800 1 -04}
     {-1191358800 -14400 0 -04}
@@ -76,6 +79,9 @@ set TZData(:America/Manaus) {
     {761713200 -14400 0 -04}
     {780202800 -14400 0 -04}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

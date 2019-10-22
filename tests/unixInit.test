@@ -20,6 +20,9 @@ set env(LANG) C
 
 # Some tests require the testgetencpath command
 testConstraint testgetencpath [llength [info commands testgetencpath]]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test unixInit-1.1 {TclpInitPlatform: ignore SIGPIPE} {unix stdio} {

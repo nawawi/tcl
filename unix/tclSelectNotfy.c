@@ -12,8 +12,11 @@
  */
 
 #include "tclInt.h"
+<<<<<<< HEAD
 #if (!defined(NOTIFIER_EPOLL) && !defined(NOTIFIER_KQUEUE)) || !TCL_THREADS
 
+=======
+>>>>>>> upstream/master
 #ifndef HAVE_COREFOUNDATION	/* Darwin/Mac OS X CoreFoundation notifier is
 				 * in tclMacOSXNotify.c */
 #if (!defined(NOTIFIER_EPOLL) && !defined(NOTIFIER_KQUEUE)) || !TCL_THREADS
@@ -233,7 +236,11 @@ typedef struct {
     void *hbrBackground;
     void *lpszMenuName;
     const void *lpszClassName;
+<<<<<<< HEAD
 } WNDCLASS;
+=======
+} WNDCLASSW;
+>>>>>>> upstream/master
 
 extern void __stdcall	CloseHandle(void *);
 extern void *__stdcall	CreateEventW(void *, unsigned char, unsigned char,
@@ -251,7 +258,11 @@ extern unsigned char __stdcall	PeekMessageW(MSG *, void *, int, int, int);
 extern unsigned char __stdcall	PostMessageW(void *, unsigned int, void *,
 				    void *);
 extern void __stdcall	PostQuitMessage(int);
+<<<<<<< HEAD
 extern void *__stdcall	RegisterClassW(const WNDCLASS *);
+=======
+extern void *__stdcall	RegisterClassW(const WNDCLASSW *);
+>>>>>>> upstream/master
 extern unsigned char __stdcall	ResetEvent(void *);
 extern unsigned char __stdcall	TranslateMessage(const MSG *);
 
@@ -299,7 +310,11 @@ Tcl_InitNotifier(void)
 	 */
 	if (tsdPtr->waitCVinitialized == 0) {
 #ifdef __CYGWIN__
+<<<<<<< HEAD
 	    WNDCLASS class;
+=======
+	    WNDCLASSW class;
+>>>>>>> upstream/master
 
 	    class.style = 0;
 	    class.cbClsExtra = 0;
@@ -895,8 +910,11 @@ Tcl_WaitForEvent(
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_THREADS
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 /*

@@ -1,7 +1,11 @@
 /* trees.c -- output deflated data using Huffman coding
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2012 Jean-loup Gailly
+=======
+ * Copyright (C) 1995-2017 Jean-loup Gailly
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2017 Jean-loup Gailly
 >>>>>>> upstream/master
@@ -46,7 +50,11 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -140,7 +148,11 @@ struct static_tree_desc_s {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 local static_tree_desc  static_l_desc =
+=======
+local const static_tree_desc  static_l_desc =
+>>>>>>> upstream/master
 =======
 local const static_tree_desc  static_l_desc =
 >>>>>>> upstream/master
@@ -150,6 +162,7 @@ local const static_tree_desc  static_d_desc =
 {static_dtree, extra_dbits, 0,          D_CODES, MAX_BITS};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 local static_tree_desc  static_bl_desc =
 =======
 local const static_tree_desc  static_l_desc =
@@ -158,6 +171,9 @@ local const static_tree_desc  static_l_desc =
 local const static_tree_desc  static_d_desc =
 {static_dtree, extra_dbits, 0,          D_CODES, MAX_BITS};
 
+local const static_tree_desc  static_bl_desc =
+>>>>>>> upstream/master
+=======
 local const static_tree_desc  static_bl_desc =
 >>>>>>> upstream/master
 =======
@@ -188,8 +204,11 @@ local void bi_windup      OF((deflate_state *s));
 local void bi_flush       OF((deflate_state *s));
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 local void copy_block     OF((deflate_state *s, charf *buf, unsigned len,
                               int header));
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -201,11 +220,19 @@ local void gen_trees_header OF((void));
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef DEBUG
 #  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
    /* Send a code of the given tree. c and tree must not have side effects */
 
 #else /* DEBUG */
+=======
+#ifndef ZLIB_DEBUG
+#  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
+   /* Send a code of the given tree. c and tree must not have side effects */
+
+#else /* !ZLIB_DEBUG */
+>>>>>>> upstream/master
 =======
 #ifndef ZLIB_DEBUG
 #  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
@@ -240,7 +267,11 @@ local void gen_trees_header OF((void));
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -274,7 +305,11 @@ local void send_bits(s, value, length)
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else /* !DEBUG */
+=======
+#else /* !ZLIB_DEBUG */
+>>>>>>> upstream/master
 =======
 #else /* !ZLIB_DEBUG */
 >>>>>>> upstream/master
@@ -287,7 +322,11 @@ local void send_bits(s, value, length)
   if (s->bi_valid > (int)Buf_size - len) {\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int val = value;\
+=======
+    int val = (int)value;\
+>>>>>>> upstream/master
 =======
     int val = (int)value;\
 >>>>>>> upstream/master
@@ -305,7 +344,11 @@ local void send_bits(s, value, length)
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif /* DEBUG */
+=======
+#endif /* ZLIB_DEBUG */
+>>>>>>> upstream/master
 =======
 #endif /* ZLIB_DEBUG */
 >>>>>>> upstream/master
@@ -407,7 +450,11 @@ local void tr_static_init()
 #ifdef GEN_TREES_H
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #  ifndef DEBUG
+=======
+#  ifndef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #  ifndef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -492,7 +539,11 @@ void ZLIB_INTERNAL _tr_init(s)
     s->bi_valid = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -628,12 +679,21 @@ local void gen_bitlen(s, desc)
         f = tree[n].Freq;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         s->opt_len += (ulg)f * (bits + xbits);
         if (stree) s->static_len += (ulg)f * (stree[n].Len + xbits);
     }
     if (overflow == 0) return;
 
     Trace((stderr,"\nbit length overflow\n"));
+=======
+        s->opt_len += (ulg)f * (unsigned)(bits + xbits);
+        if (stree) s->static_len += (ulg)f * (unsigned)(stree[n].Len + xbits);
+    }
+    if (overflow == 0) return;
+
+    Tracev((stderr,"\nbit length overflow\n"));
+>>>>>>> upstream/master
 =======
         s->opt_len += (ulg)f * (unsigned)(bits + xbits);
         if (stree) s->static_len += (ulg)f * (unsigned)(stree[n].Len + xbits);
@@ -678,9 +738,14 @@ local void gen_bitlen(s, desc)
             if ((unsigned) tree[m].Len != (unsigned) bits) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
                 s->opt_len += ((long)bits - (long)tree[m].Len)
                               *(long)tree[m].Freq;
+=======
+                Tracev((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
+                s->opt_len += ((ulg)bits - tree[m].Len) * tree[m].Freq;
+>>>>>>> upstream/master
 =======
                 Tracev((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
                 s->opt_len += ((ulg)bits - tree[m].Len) * tree[m].Freq;
@@ -712,7 +777,11 @@ local void gen_codes (tree, max_code, bl_count)
     ush next_code[MAX_BITS+1]; /* next code value for each bit length */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ush code = 0;              /* running code value */
+=======
+    unsigned code = 0;         /* running code value */
+>>>>>>> upstream/master
 =======
     unsigned code = 0;         /* running code value */
 >>>>>>> upstream/master
@@ -728,7 +797,12 @@ local void gen_codes (tree, max_code, bl_count)
     for (bits = 1; bits <= MAX_BITS; bits++) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         next_code[bits] = code = (code + bl_count[bits-1]) << 1;
+=======
+        code = (code + bl_count[bits-1]) << 1;
+        next_code[bits] = (ush)code;
+>>>>>>> upstream/master
 =======
         code = (code + bl_count[bits-1]) << 1;
         next_code[bits] = (ush)code;
@@ -751,7 +825,11 @@ local void gen_codes (tree, max_code, bl_count)
         /* Now reverse the bits */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         tree[n].Code = bi_reverse(next_code[len]++, len);
+=======
+        tree[n].Code = (ush)bi_reverse(next_code[len]++, len);
+>>>>>>> upstream/master
 =======
         tree[n].Code = (ush)bi_reverse(next_code[len]++, len);
 >>>>>>> upstream/master
@@ -981,7 +1059,11 @@ local int build_bl_tree(s)
     /* Update opt_len to include the bit length tree and counts */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     s->opt_len += 3*(max_blindex+1) + 5+5+4;
+=======
+    s->opt_len += 3*((ulg)max_blindex+1) + 5+5+4;
+>>>>>>> upstream/master
 =======
     s->opt_len += 3*((ulg)max_blindex+1) + 5+5+4;
 >>>>>>> upstream/master
@@ -1037,20 +1119,27 @@ void ZLIB_INTERNAL _tr_stored_block(s, buf, stored_len, last)
     send_bits(s, (STORED_BLOCK<<1)+last, 3);    /* send block type */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
 =======
+=======
+>>>>>>> upstream/master
     bi_windup(s);        /* align on byte boundary */
     put_short(s, (ush)stored_len);
     put_short(s, (ush)~stored_len);
     zmemcpy(s->pending_buf + s->pending, (Bytef *)buf, stored_len);
     s->pending += stored_len;
 #ifdef ZLIB_DEBUG
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     s->compressed_len = (s->compressed_len + 3 + 7) & (ulg)~7L;
     s->compressed_len += (stored_len + 4) << 3;
     s->bits_sent += 2*16;
     s->bits_sent += stored_len<<3;
 #endif
+<<<<<<< HEAD
 <<<<<<< HEAD
     copy_block(s, buf, (unsigned)stored_len, 1); /* with header */
 =======
@@ -1065,6 +1154,8 @@ void ZLIB_INTERNAL _tr_stored_block(s, buf, stored_len, last)
     s->bits_sent += 2*16;
     s->bits_sent += stored_len<<3;
 #endif
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1090,7 +1181,11 @@ void ZLIB_INTERNAL _tr_align(s)
     send_code(s, END_BLOCK, static_ltree);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -1106,7 +1201,11 @@ void ZLIB_INTERNAL _tr_align(s)
  * Determine the best encoding for the current block: dynamic trees, static
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * trees or store, and output the encoded block to the zip file.
+=======
+ * trees or store, and write out the encoded block.
+>>>>>>> upstream/master
 =======
  * trees or store, and write out the encoded block.
 >>>>>>> upstream/master
@@ -1186,7 +1285,11 @@ void ZLIB_INTERNAL _tr_flush_block(s, buf, stored_len, last)
                        (const ct_data *)static_dtree);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -1203,7 +1306,11 @@ void ZLIB_INTERNAL _tr_flush_block(s, buf, stored_len, last)
                        (const ct_data *)s->dyn_dtree);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -1223,7 +1330,11 @@ void ZLIB_INTERNAL _tr_flush_block(s, buf, stored_len, last)
         bi_windup(s);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -1326,7 +1437,11 @@ local void compress_block(s, ltree, dtree)
             if (extra != 0) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 dist -= base_dist[code];
+=======
+                dist -= (unsigned)base_dist[code];
+>>>>>>> upstream/master
 =======
                 dist -= (unsigned)base_dist[code];
 >>>>>>> upstream/master
@@ -1437,6 +1552,7 @@ local void bi_windup(s)
     s->bi_valid = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
     s->bits_sent = (s->bits_sent+7) & ~7;
 #endif
@@ -1468,6 +1584,12 @@ local void copy_block(s, buf, len, header)
         put_byte(s, *buf++);
     }
 }
+=======
+#ifdef ZLIB_DEBUG
+    s->bits_sent = (s->bits_sent+7) & ~7;
+#endif
+}
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
     s->bits_sent = (s->bits_sent+7) & ~7;

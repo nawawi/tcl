@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # 
+=======
+#
+>>>>>>> upstream/master
 =======
 #
 >>>>>>> upstream/master
@@ -36,6 +40,9 @@ catch [list package require -exact Tcltest [info patchlevel]]
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 namespace eval ::tcl::test::iogt {
     namespace import ::tcltest::*
@@ -710,9 +717,15 @@ test iogt-4.0 {fileevent readable, after transform} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	fileevent $sock readable [namespace code [list Get $sock]]
 
+=======
+
+	fileevent $sock readable [namespace code [list Get $sock]]
+
+>>>>>>> upstream/master
 =======
 
 	fileevent $sock readable [namespace code [list Get $sock]]

@@ -14,9 +14,12 @@
 
 #include "tclInt.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(NOTIFIER_EPOLL) && TCL_THREADS
 
 #define _GNU_SOURCE		/* For pipe2(2) */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #ifndef HAVE_COREFOUNDATION	/* Darwin/Mac OS X CoreFoundation notifier is
@@ -30,7 +33,10 @@
 #include <sys/eventfd.h>
 #endif /* HAVE_EVENTFD */
 #include <sys/queue.h>
+<<<<<<< HEAD
 #include <unistd.h>
+=======
+>>>>>>> upstream/master
 
 /*
  * This structure is used to keep track of the notifier info for a registered
@@ -94,7 +100,11 @@ typedef struct {
 LIST_HEAD(PlatformReadyFileHandlerList, FileHandler);
 typedef struct ThreadSpecificData {
 <<<<<<< HEAD
+<<<<<<< HEAD
     FileHandler *triggerFilePtr; 
+=======
+    FileHandler *triggerFilePtr;
+>>>>>>> upstream/master
 =======
     FileHandler *triggerFilePtr;
 >>>>>>> upstream/master
@@ -330,8 +340,13 @@ PlatformEventsFinalize(
     }
 #endif /* HAVE_EVENTFD */
 <<<<<<< HEAD
+<<<<<<< HEAD
     ckfree(tsdPtr->triggerFilePtr->pedPtr);
     ckfree(tsdPtr->triggerFilePtr);
+=======
+    Tcl_Free(tsdPtr->triggerFilePtr->pedPtr);
+    Tcl_Free(tsdPtr->triggerFilePtr);
+>>>>>>> upstream/master
 =======
     Tcl_Free(tsdPtr->triggerFilePtr->pedPtr);
     Tcl_Free(tsdPtr->triggerFilePtr);
@@ -399,7 +414,11 @@ PlatformEventsInit(void)
     }
     filePtr->fd = tsdPtr->triggerPipe[0];
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif
+=======
+#endif /* HAVE_EVENTFD */
+>>>>>>> upstream/master
 =======
 #endif /* HAVE_EVENTFD */
 >>>>>>> upstream/master

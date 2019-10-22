@@ -232,10 +232,13 @@ struct arc {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define	freechain	outchain
     struct arc *inchain;	/* link in *to's ins chain */
     struct arc *colorchain;	/* link in color's arc chain */
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -438,7 +441,7 @@ struct guts {
 #ifndef AllocVars
 #define AllocVars(vPtr) \
     struct vars var; \
-    register struct vars *vPtr = &var
+    struct vars *vPtr = &var
 #endif
 #ifndef FreeVars
 #define FreeVars(vPtr) ((void) 0)

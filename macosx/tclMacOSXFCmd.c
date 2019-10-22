@@ -109,7 +109,11 @@ typedef	struct finderinfo {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct fileinfobuf {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -204,7 +208,7 @@ TclMacOSXGetFileAttribute(
 		OSSwapBigToHostInt32(finder->type));
 	break;
     case MACOSX_HIDDEN_ATTRIBUTE:
-	*attributePtrPtr = Tcl_NewBooleanObj(
+	*attributePtrPtr = Tcl_NewWideIntObj(
 		(finder->fdFlags & kFinfoIsInvisible) != 0);
 	break;
     case MACOSX_RSRCLENGTH_ATTRIBUTE:
@@ -359,7 +363,7 @@ TclMacOSXSetFileAttribute(
 	    Tcl_DStringAppend(&ds, native, -1);
 	    Tcl_DStringAppend(&ds, _PATH_RSRCFORKSPEC, -1);
 
-	    result = truncate(Tcl_DStringValue(&ds), (off_t)0);
+	    result = truncate(Tcl_DStringValue(&ds), 0);
 	    if (result != 0) {
 		/*
 		 * truncate() on a valid resource fork path may fail with a
@@ -589,10 +593,14 @@ GetOSTypeFromObj(
 {
     int result = TCL_OK;
 
+<<<<<<< HEAD
     if (objPtr->typePtr != &tclOSTypeType) {
+=======
+    if (!TclHasIntRep(objPtr, &tclOSTypeType)) {
+>>>>>>> upstream/master
 	result = SetOSTypeFromAny(interp, objPtr);
     }
-    *osTypePtr = (OSType) objPtr->internalRep.longValue;
+    *osTypePtr = (OSType) objPtr->internalRep.wideValue;
     return result;
 }
 
@@ -621,7 +629,11 @@ NewOSTypeObj(
 
     TclNewObj(objPtr);
     TclInvalidateStringRep(objPtr);
+<<<<<<< HEAD
     objPtr->internalRep.longValue = (long) osType;
+=======
+    objPtr->internalRep.wideValue = (Tcl_WideInt) osType;
+>>>>>>> upstream/master
     objPtr->typePtr = &tclOSTypeType;
     return objPtr;
 }
@@ -651,12 +663,17 @@ SetOSTypeFromAny(
     int result = TCL_OK;
     Tcl_DString ds;
     Tcl_Encoding encoding = Tcl_GetEncoding(NULL, "macRoman");
+    size_t length;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     string = Tcl_GetStringFromObj(objPtr, &length);
+=======
+    string = TclGetStringFromObj(objPtr, &length);
+>>>>>>> upstream/master
 =======
     string = TclGetStringFromObj(objPtr, &length);
 >>>>>>> upstream/master
@@ -691,7 +708,7 @@ SetOSTypeFromAny(
 		 (OSType) bytes[2] <<  8 |
 		 (OSType) bytes[3];
 	TclFreeIntRep(objPtr);
-	objPtr->internalRep.longValue = (long) osType;
+	objPtr->internalRep.wideValue = (Tcl_WideInt) osType;
 	objPtr->typePtr = &tclOSTypeType;
     }
     Tcl_DStringFree(&ds);
@@ -720,12 +737,16 @@ SetOSTypeFromAny(
 
 static void
 UpdateStringOfOSType(
-    register Tcl_Obj *objPtr)	/* OSType object whose string rep to
+    Tcl_Obj *objPtr)	/* OSType object whose string rep to
 				 * update. */
 {
     const int size = TCL_UTF_MAX * 4;
     char *dst = Tcl_InitStringRep(objPtr, NULL, size);
+<<<<<<< HEAD
     OSType osType = (OSType) objPtr->internalRep.longValue;
+=======
+    OSType osType = (OSType) objPtr->internalRep.wideValue;
+>>>>>>> upstream/master
     int written = 0;
     Tcl_Encoding encoding;
     char src[5];

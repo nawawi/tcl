@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -68,7 +72,11 @@ string is returned.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 The interpretation of each simple \fIindex\fR value is the same as 
+=======
+The interpretation of each simple \fIindex\fR value is the same as
+>>>>>>> upstream/master
 =======
 The interpretation of each simple \fIindex\fR value is the same as
 >>>>>>> upstream/master
@@ -151,7 +159,11 @@ set idx 3
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), linsert(n), llength(n), lsearch(n), 
+=======
+list(n), lappend(n), linsert(n), llength(n), lsearch(n),
+>>>>>>> upstream/master
 =======
 list(n), lappend(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master

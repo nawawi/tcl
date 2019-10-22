@@ -458,7 +458,11 @@ package provide cookiejar \
 	log info "constructed domain info with %d entries" $n
     }
 
+<<<<<<< HEAD
     # This forces the rebuild of the domain data, loading it from 
+=======
+    # This forces the rebuild of the domain data, loading it from
+>>>>>>> upstream/master
     method forceLoadDomainData {} {
 	db transaction {
 	    db eval {

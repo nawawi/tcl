@@ -24,6 +24,7 @@ if {[info commands package] == ""} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require -exact Tcl 8.6.4
 =======
 package require -exact Tcl 8.7a0
@@ -36,6 +37,9 @@ package require -exact Tcl 8.7a0
 >>>>>>> upstream/master
 =======
 package require -exact Tcl 8.7a0
+>>>>>>> upstream/master
+=======
+package require -exact Tcl 9.0a0
 >>>>>>> upstream/master
 =======
 package require -exact Tcl 9.0a0
@@ -104,6 +108,7 @@ namespace eval tcl {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 namespace eval tcl::Pkg {}
 
@@ -148,6 +153,10 @@ if {(![interp issafe]) && ($tcl_platform(platform) eq "windows")} {
 	InitWinEnv
     }
 }
+=======
+namespace eval tcl::Pkg {}
+
+>>>>>>> upstream/master
 
 # Setup the unknown package handler
 
@@ -171,6 +180,7 @@ if {[interp issafe]} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc clock args {
 	namespace eval ::tcl::clock [list namespace ensemble create -command \
 		[uplevel 1 [list namespace origin [lindex [info level 0] 0]]] \
@@ -178,6 +188,9 @@ if {[interp issafe]} {
 		    add clicks format microseconds milliseconds scan seconds
 		}]
 
+=======
+    proc ::tcl::initClock {} {
+>>>>>>> upstream/master
 =======
     proc ::tcl::initClock {} {
 >>>>>>> upstream/master
@@ -196,8 +209,14 @@ if {[interp issafe]} {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	return [uplevel 1 [info level 0]]
     }
+=======
+	rename ::tcl::initClock {}
+    }
+    ::tcl::initClock
+>>>>>>> upstream/master
 =======
 	rename ::tcl::initClock {}
     }
@@ -310,6 +329,7 @@ proc unknown args {
 		    append cinfo ...
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		append cinfo "\"\n    (\"uplevel\" body line 1)"
 		append cinfo "\n    invoked from within"
 		append cinfo "\n\"uplevel 1 \$args\""
@@ -318,6 +338,11 @@ proc unknown args {
 		# and trim the extra contribution from the matching case
 		#
 		set expect "$msg\n    while executing\n\"$cinfo"
+=======
+		set tail "\n    (\"uplevel\" body line 1)\n    invoked\
+			from within\n\"uplevel 1 \$args\""
+		set expect "$msg\n    while executing\n\"$cinfo\"$tail"
+>>>>>>> upstream/master
 =======
 		set tail "\n    (\"uplevel\" body line 1)\n    invoked\
 			from within\n\"uplevel 1 \$args\""
@@ -336,6 +361,7 @@ proc unknown args {
 		# Stack trace is nested, trim off just the contribution
 		# from the extra "eval" of $args due to the "catch" above.
 		#
+<<<<<<< HEAD
 <<<<<<< HEAD
 		set expect "\n    invoked from within\n\"$cinfo"
 		set exlen [string length $expect]
@@ -358,6 +384,13 @@ proc unknown args {
 		    # Very likely cannot happen
 		    return -options $opts $msg
 		}
+=======
+		set last [string last $tail $errInfo]
+		if {$last + [string length $tail] != [string length $errInfo]} {
+		    # Very likely cannot happen
+		    return -options $opts $msg
+		}
+>>>>>>> upstream/master
 		set errInfo [string range $errInfo 0 $last-1]
 		set tail "\"$cinfo\""
 		set last [string last $tail $errInfo]
@@ -379,6 +412,9 @@ proc unknown args {
 			    -errorinfo [string range $errInfo 0 $last-1] $msg
 		}
 		return -options $opts $msg
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 	    } else {
 		dict incr opts -level
@@ -709,6 +745,7 @@ proc auto_execok name {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set shellBuiltins [list cls copy date del dir echo erase md mkdir \
 	    mklink rd ren rename rmdir start time type ver vol]
 =======
@@ -723,6 +760,10 @@ proc auto_execok name {
                            time type ver vol]
 >>>>>>> upstream/master
 =======
+	    md mkdir mklink move rd ren rename rmdir start time type ver vol]
+>>>>>>> upstream/master
+=======
+    set shellBuiltins [list assoc cls copy date del dir echo erase ftype \
 	    md mkdir mklink move rd ren rename rmdir start time type ver vol]
 >>>>>>> upstream/master
     if {[info exists env(PATHEXT)]} {
@@ -754,7 +795,9 @@ proc auto_execok name {
     }
 
     set path "[file dirname [info nameof]];.;"
-    if {[info exists env(WINDIR)]} {
+    if {[info exists env(SystemRoot)]} {
+	set windir $env(SystemRoot)
+    } elseif {[info exists env(WINDIR)]} {
 	set windir $env(WINDIR)
     }
     if {[info exists windir]} {

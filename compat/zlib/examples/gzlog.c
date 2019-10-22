@@ -2,7 +2,11 @@
  * gzlog.c
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 2004, 2008, 2012 Mark Adler, all rights reserved
+=======
+ * Copyright (C) 2004, 2008, 2012, 2016 Mark Adler, all rights reserved
+>>>>>>> upstream/master
 =======
  * Copyright (C) 2004, 2008, 2012, 2016 Mark Adler, all rights reserved
 >>>>>>> upstream/master
@@ -253,7 +257,11 @@ typedef unsigned long ulong;
 /* Macro for debugging to deterministically force recovery operations */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef GZLOG_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef GZLOG_DEBUG
 >>>>>>> upstream/master

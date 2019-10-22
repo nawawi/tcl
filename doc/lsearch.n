@@ -10,7 +10,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -131,7 +135,11 @@ Causes comparisons to be handled in a case-insensitive manner.  Has no
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or 
+=======
+effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
+>>>>>>> upstream/master
 =======
 effect if combined with the \fB\-dictionary\fR, \fB\-integer\fR, or
 >>>>>>> upstream/master
@@ -265,7 +273,11 @@ The same thing for a flattened list:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n), 
+=======
+foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
+>>>>>>> upstream/master
 =======
 foreach(n), list(n), lappend(n), lindex(n), linsert(n), llength(n),
 >>>>>>> upstream/master

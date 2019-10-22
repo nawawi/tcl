@@ -184,7 +184,11 @@ test autoMkindex-3.1 {slaveHook} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result 1 
+=======
+} -result 1
+>>>>>>> upstream/master
 =======
 } -result 1
 >>>>>>> upstream/master

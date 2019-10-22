@@ -4,9 +4,15 @@ namespace eval ::tcl::clock {
         "sun."\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "m\u00e1n."\
         "\u00feri."\
         "mi\u00f0."\
+=======
+        "mán."\
+        "þri."\
+        "mið."\
+>>>>>>> upstream/master
 =======
         "mán."\
         "þri."\
@@ -21,6 +27,7 @@ namespace eval ::tcl::clock {
         "þriðjudagur"\
         "miðvikudagur"\
         "fimmtudagur"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "f\u00f6studagur"\
 =======
@@ -41,6 +48,9 @@ namespace eval ::tcl::clock {
 =======
         "föstudagur"\
 >>>>>>> upstream/master
+=======
+        "föstudagur"\
+>>>>>>> upstream/master
         "laugardagur"]
     ::msgcat::mcset is MONTHS_ABBREV [list \
         "jan."\
@@ -49,15 +59,21 @@ namespace eval ::tcl::clock {
         "apr."\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "ma\u00ed"\
         "j\u00fan."\
         "j\u00fal."\
         "\u00e1g\u00fa."\
 =======
+=======
+>>>>>>> upstream/master
         "maí"\
         "jún."\
         "júl."\
         "ágú."\
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
         "sep."\
         "okt."\
@@ -74,6 +90,7 @@ namespace eval ::tcl::clock {
         "júlí"\
         "ágúst"\
         "september"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         "okt\u00f3ber"\
         "n\u00f3vember"\
@@ -97,6 +114,10 @@ namespace eval ::tcl::clock {
         "júlí"\
         "ágúst"\
         "september"\
+        "október"\
+        "nóvember"\
+>>>>>>> upstream/master
+=======
         "október"\
         "nóvember"\
 >>>>>>> upstream/master

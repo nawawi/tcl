@@ -7,6 +7,7 @@ set TZData(:Australia/Lord_Howe) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {352216800 37800 0 LHST}
     {372785400 41400 1 LHDT}
     {384273000 37800 0 LHST}
@@ -494,6 +495,8 @@ set TZData(:Australia/Lord_Howe) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {352216800 37800 0 +1030}
     {372785400 41400 1 +1030}
     {384273000 37800 0 +1030}
@@ -734,6 +737,9 @@ set TZData(:Australia/Lord_Howe) {
     {4078998000 37800 0 +1030}
     {4094724600 39600 1 +1030}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

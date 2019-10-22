@@ -438,7 +438,11 @@ private
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    --  I stopped binding the inflateBack routines, becouse realize that
+=======
+   --  I stopped binding the inflateBack routines, because realize that
+>>>>>>> upstream/master
 =======
    --  I stopped binding the inflateBack routines, because realize that
 >>>>>>> upstream/master

@@ -4,6 +4,7 @@ set TZData(:Pacific/Chatham) {
     {-9223372036854775808 44028 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-3192437628 44100 0 CHAST}
     {-757426500 45900 0 CHAST}
     {152632800 49500 1 CHADT}
@@ -522,6 +523,9 @@ set TZData(:Pacific/Chatham) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+    {-3192437628 44100 0 +1215}
+>>>>>>> upstream/master
     {-757426500 45900 0 +1245}
     {152632800 49500 1 +1245}
     {162309600 45900 0 +1245}
@@ -775,6 +779,9 @@ set TZData(:Pacific/Chatham) {
     {4078994400 45900 0 +1245}
     {4094114400 49500 1 +1245}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

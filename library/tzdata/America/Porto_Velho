@@ -4,6 +4,7 @@ set TZData(:America/Porto_Velho) {
     {-9223372036854775808 -15336 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767210264 -14400 0 AMT}
     {-1206954000 -10800 1 AMST}
     {-1191358800 -14400 0 AMT}
@@ -37,6 +38,8 @@ set TZData(:America/Porto_Velho) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767210264 -14400 0 -04}
     {-1206954000 -10800 1 -04}
     {-1191358800 -14400 0 -04}
@@ -68,6 +71,9 @@ set TZData(:America/Porto_Velho) {
     {571201200 -14400 0 -04}
     {590036400 -14400 0 -04}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -614,6 +614,7 @@ test event-11.8 {Bug 16828b3744} -setup {
     oo::class create A {
 	variable continue
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -622,6 +623,24 @@ test event-11.8 {Bug 16828b3744} -setup {
 >>>>>>> upstream/master
 	method start {} {
            after idle [self] destroy
+=======
+
+	method start {} {
+           after idle [self] destroy
+
+           set continue 0
+           vwait [namespace current]::continue
+	}
+	destructor {
+           set continue 1
+	}
+    }
+} -body {
+    [A new] start
+} -cleanup {
+    A destroy
+} -result {}
+>>>>>>> upstream/master
 
            set continue 0
            vwait [namespace current]::continue

@@ -4,6 +4,7 @@ set TZData(:America/Araguaina) {
     {-9223372036854775808 -11568 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767214032 -10800 0 BRT}
     {-1206957600 -7200 1 BRST}
     {-1191362400 -10800 0 BRT}
@@ -62,6 +63,8 @@ set TZData(:America/Araguaina) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767214032 -10800 0 -03}
     {-1206957600 -7200 1 -03}
     {-1191362400 -10800 0 -03}
@@ -118,6 +121,9 @@ set TZData(:America/Araguaina) {
     {1361066400 -10800 0 -03}
     {1378000800 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -76,7 +76,11 @@ the constraints mechanism to skip those tests.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 4. Incompatibilities of package tcltest 2.1 with 
+=======
+4. Incompatibilities of package tcltest 2.1 with
+>>>>>>> upstream/master
 =======
 4. Incompatibilities of package tcltest 2.1 with
 >>>>>>> upstream/master
@@ -97,7 +101,11 @@ the constraints mechanism to skip those tests.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    old machinery correspond to the [configure -verbose], 
+=======
+   old machinery correspond to the [configure -verbose],
+>>>>>>> upstream/master
 =======
    old machinery correspond to the [configure -verbose],
 >>>>>>> upstream/master

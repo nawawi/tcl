@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -69,6 +73,7 @@ in the same way as the \fIproc\fR argument to \fBTcl_CreateObjCommand\fR(3)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Implementation of a command that will be called whenever \fIcmdName\fR 
 =======
 Implementation of a command that will be called whenever \fIcmdName\fR
@@ -89,6 +94,10 @@ Called instead of \fIproc\fR when a trampoline is already in use.
 >>>>>>> upstream/master
 .AP ClientData clientData in
 =======
+.AP void *clientData in
+>>>>>>> upstream/master
+=======
+Called instead of \fIproc\fR when a trampoline is already in use.
 .AP void *clientData in
 >>>>>>> upstream/master
 Arbitrary one-word value passed to \fIproc\fR, \fInreProc\fR, \fIdeleteProc\fR
@@ -121,6 +130,7 @@ A function to push.
 to the function designated by \fIpostProcPtr\fR when it is invoked.
 .BE
 .SH DESCRIPTION
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -264,6 +274,9 @@ by \fIinterp\fR returns.  The \fIpostProcPtr\fR argument is a pointer
 to the callback function, which must have arguments and return value
 consistent with the \fBTcl_NRPostProc\fR data type:
 =======
+=======
+.PP
+>>>>>>> upstream/master
 These functions provide an interface to the function stack that an interpreter
 iterates through to evaluate commands.  The routine behind a command is
 implemented by an initial function and any additional functions that the
@@ -309,6 +322,9 @@ a message as the interpreter's result.
 .PP
 \fBTcl_NRAddCallback\fR pushes \fIpostProcPtr\fR.  The signature for
 \fBTcl_NRPostProc\fR is:
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .PP
 .CS
@@ -370,7 +386,11 @@ int
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return \fBTcl_NRCallObjProc\fR(interp, \fITheCmdNRObjProc\fR, 
+=======
+    return \fBTcl_NRCallObjProc\fR(interp, \fITheCmdNRObjProc\fR,
+>>>>>>> upstream/master
 =======
     return \fBTcl_NRCallObjProc\fR(interp, \fITheCmdNRObjProc\fR,
 >>>>>>> upstream/master

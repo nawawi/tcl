@@ -95,7 +95,11 @@ test subst-5.5 {command substitutions} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [catch {subst {[set a 1}} msg] $a $msg 
+=======
+    list [catch {subst {[set a 1}} msg] $a $msg
+>>>>>>> upstream/master
 =======
     list [catch {subst {[set a 1}} msg] $a $msg
 >>>>>>> upstream/master
@@ -106,6 +110,7 @@ test subst-5.6 {command substitutions} {
 } {1 0 {missing close-bracket}}
 test subst-5.7 {command substitutions} {
     set a 0
+<<<<<<< HEAD
 <<<<<<< HEAD
     list [catch {subst {0[set a 1; set a 2}} msg] $a $msg 
 =======
@@ -132,6 +137,9 @@ test subst-5.7 {command substitutions} {
 =======
     list [catch {subst {0[set a 1; set a 2}} msg] $a $msg
 >>>>>>> upstream/master
+=======
+    list [catch {subst {0[set a 1; set a 2}} msg] $a $msg
+>>>>>>> upstream/master
 } {1 1 {missing close-bracket}}
 
 # repeat the tests above simulating cmd line input
@@ -141,7 +149,11 @@ test subst-5.8 {command substitutions} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [catch {exec [info nameofexecutable] << $script} msg] $msg 
+=======
+    list [catch {exec [info nameofexecutable] << $script} msg] $msg
+>>>>>>> upstream/master
 =======
     list [catch {exec [info nameofexecutable] << $script} msg] $msg
 >>>>>>> upstream/master
@@ -153,6 +165,7 @@ test subst-5.9 {command substitutions} {
 test subst-5.10 {command substitutions} {
     set script {[subst {0[set a 1; set a 2}]}
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [catch {exec [info nameofexecutable] << $script} msg] $msg 
 =======
 =======
@@ -174,6 +187,9 @@ test subst-5.10 {command substitutions} {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    list [catch {exec [info nameofexecutable] << $script} msg] $msg
 >>>>>>> upstream/master
 =======
     list [catch {exec [info nameofexecutable] << $script} msg] $msg
@@ -234,7 +250,11 @@ test subst-8.7 {return in a subst, parse error} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     subst {foo [return {x} ; set a {}"" ; stuff] bar} 
+=======
+    subst {foo [return {x} ; set a {}"" ; stuff] bar}
+>>>>>>> upstream/master
 =======
     subst {foo [return {x} ; set a {}"" ; stuff] bar}
 >>>>>>> upstream/master
@@ -354,6 +374,9 @@ test subst-12.7 {nasty case with compilation} {
     list [eval [list subst {[set x 1;continue;incr x][set y $x]}]] $x $y
 } {1 1 1}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 test subst-13.1 {Bug 3081065} -setup {
     set script [makeFile {
@@ -382,6 +405,7 @@ test subst-13.2 {Test for segfault} -body {
     subst {[}
 } -returnCodes error -result * -match glob
 
+<<<<<<< HEAD
 =======
 
 test subst-13.1 {Bug 3081065} -setup {
@@ -411,6 +435,8 @@ test subst-13.2 {Test for segfault} -body {
     subst {[}
 } -returnCodes error -result * -match glob
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup

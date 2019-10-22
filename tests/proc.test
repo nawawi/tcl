@@ -103,7 +103,11 @@ test proc-1.7 {Tcl_ProcObjCmd, check that formal parameter names are not array e
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc p {a(1) a(2)} { 
+=======
+    proc p {a(1) a(2)} {
+>>>>>>> upstream/master
 =======
     proc p {a(1) a(2)} {
 >>>>>>> upstream/master
@@ -127,7 +131,11 @@ test proc-1.8 {Tcl_ProcObjCmd, check that formal parameter names are simple name
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     proc p {b:a b::a} { 
+=======
+    proc p {b:a b::a} {
+>>>>>>> upstream/master
 =======
     proc p {b:a b::a} {
 >>>>>>> upstream/master
@@ -353,6 +361,9 @@ test proc-4.8 {TclCreateProc, procbody obj, no leak on multiple iterations} -set
     rename getbytes {}
     unset -nocomplain end i tmp leakedBytes
 } -result 0
+test proc-4.9 {[39fed4dae5] Valid Tcl_PkgPresent return} procbodytest {
+    procbodytest::check
+} 1
 
 test proc-5.1 {Bytecompiling noop; test for correct argument substitution} -body {
     proc p args {} ; # this will be bytecompiled into t
@@ -373,7 +384,11 @@ test proc-5.1 {Bytecompiling noop; test for correct argument substitution} -body
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {aba}    
+=======
+} -result {aba}
+>>>>>>> upstream/master
 =======
 } -result {aba}
 >>>>>>> upstream/master

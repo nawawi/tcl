@@ -31,8 +31,10 @@ TCL_DECLARE_MUTEX(consoleMutex)
  * Bit masks used in the flags field of the ConsoleInfo structure below.
  */
 
-#define CONSOLE_PENDING	(1<<0)	/* Message is pending in the queue. */
-#define CONSOLE_ASYNC	(1<<1)	/* Channel is non-blocking. */
+#define CONSOLE_PENDING	 (1<<0)	/* Message is pending in the queue. */
+#define CONSOLE_ASYNC	 (1<<1)	/* Channel is non-blocking. */
+#define CONSOLE_READ_OPS (1<<4)	/* Channel supports read-related ops. */
+#define CONSOLE_RESET    (1<<5)	/* Console mode needs to be reset. */
 
 /*
  * Bit masks used in the sharedFlags field of the ConsoleInfo structure below.
@@ -52,7 +54,11 @@ TCL_DECLARE_MUTEX(consoleMutex)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ConsoleThreadInfo {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -68,11 +74,15 @@ typedef struct {
 				 * waiting for its normal work to happen. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     HANDLE startEvent;		/* Auto-reset event used by the main thread to
 				 * signal when the thread should attempt to do
 				 * its normal work. */
     HANDLE stopEvent;		/* Auto-reset event used by the main thread to
 				 * signal when the thread should exit. */
+=======
+    TclPipeThreadInfo *TI;	/* Thread info structure of writer and reader. */
+>>>>>>> upstream/master
 =======
     TclPipeThreadInfo *TI;	/* Thread info structure of writer and reader. */
 >>>>>>> upstream/master
@@ -104,6 +114,7 @@ typedef struct ConsoleInfo {
 				 * asynchronous writes to the console; the
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				 * waiting starts when a start event is sent,
 				 * and a reset event is sent back to the main
 				 * thread when the write is done. A stop event
@@ -117,6 +128,8 @@ typedef struct ConsoleInfo {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 				 * waiting starts when a control event is sent,
 				 * and a reset event is sent back to the main
 				 * thread when the write is done. */
@@ -126,6 +139,9 @@ typedef struct ConsoleInfo {
 				 * and a reset event is sent back to the main
 				 * thread when input is available. */
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -145,6 +161,10 @@ typedef struct ConsoleInfo {
 				 * readable object. */
     int bytesRead;		/* Number of bytes in the buffer. */
     int offset;			/* Number of bytes read out of the buffer. */
+<<<<<<< HEAD
+=======
+    DWORD initMode;		/* Initial console mode. */
+>>>>>>> upstream/master
     char buffer[CONSOLE_BUFFER_SIZE];
 				/* Data consumed by reader thread. */
 } ConsoleInfo;
@@ -168,7 +188,11 @@ static Tcl_ThreadDataKey dataKey;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct ConsoleEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -199,12 +223,18 @@ static int		ConsoleEventProc(Tcl_Event *evPtr, int flags);
 static void		ConsoleExitHandler(ClientData clientData);
 static int		ConsoleGetHandleProc(ClientData instanceData,
 			    int direction, ClientData *handlePtr);
+static int		ConsoleGetOptionProc(ClientData instanceData,
+			    Tcl_Interp *interp, const char *optionName,
+			    Tcl_DString *dsPtr);
 static void		ConsoleInit(void);
 static int		ConsoleInputProc(ClientData instanceData, char *buf,
 			    int toRead, int *errorCode);
 static int		ConsoleOutputProc(ClientData instanceData,
 			    const char *buf, int toWrite, int *errorCode);
 static DWORD WINAPI	ConsoleReaderThread(LPVOID arg);
+static int		ConsoleSetOptionProc(ClientData instanceData,
+			    Tcl_Interp *interp, const char *optionName,
+			    const char *value);
 static void		ConsoleSetupProc(ClientData clientData, int flags);
 static void		ConsoleWatchProc(ClientData instanceData, int mask);
 static DWORD WINAPI	ConsoleWriterThread(LPVOID arg);
@@ -219,10 +249,13 @@ static BOOL		WriteConsoleBytes(HANDLE hConsole,
 			    LPDWORD nbyteswritten);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void		StartChannelThread(ConsoleInfo *infoPtr,
 			    ConsoleThreadInfo *threadInfoPtr,
 			    LPTHREAD_START_ROUTINE threadProc);
 static void		StopChannelThread(ConsoleThreadInfo *threadInfoPtr);
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -240,8 +273,8 @@ static const Tcl_ChannelType consoleChannelType = {
     ConsoleInputProc,		/* Input proc. */
     ConsoleOutputProc,		/* Output proc. */
     NULL,			/* Seek proc. */
-    NULL,			/* Set option proc. */
-    NULL,			/* Get option proc. */
+    ConsoleSetOptionProc,	/* Set option proc. */
+    ConsoleGetOptionProc,	/* Get option proc. */
     ConsoleWatchProc,		/* Set up notifier to watch the channel. */
     ConsoleGetHandleProc,	/* Get an OS handle from channel. */
     NULL,			/* close2proc. */
@@ -258,8 +291,13 @@ static const Tcl_ChannelType consoleChannelType = {
  *
  * ReadConsoleBytes, WriteConsoleBytes --
  *
+<<<<<<< HEAD
  *	Wrapper for ReadConsole{A,W}, that takes and returns number of bytes
  *	instead of number of TCHARS.
+=======
+ *	Wrapper for ReadConsoleW, that takes and returns number of bytes
+ *	instead of number of WCHARS.
+>>>>>>> upstream/master
  *
  *----------------------------------------------------------------------
  */
@@ -273,7 +311,10 @@ ReadConsoleBytes(
 {
     DWORD ntchars;
     BOOL result;
+<<<<<<< HEAD
     int tcharsize = sizeof(TCHAR);
+=======
+>>>>>>> upstream/master
 
     /*
      * If user types a Ctrl-Break or Ctrl-C, ReadConsole will return
@@ -286,11 +327,19 @@ ReadConsoleBytes(
      * will run and take whatever action it deems appropriate.
      */
     do {
+<<<<<<< HEAD
         result = ReadConsole(hConsole, lpBuffer, nbytes / tcharsize, &ntchars,
                              NULL);
     } while (result && ntchars == 0 && GetLastError() == ERROR_OPERATION_ABORTED);
     if (nbytesread != NULL) {
 	*nbytesread = ntchars * tcharsize;
+=======
+        result = ReadConsoleW(hConsole, lpBuffer, nbytes / sizeof(WCHAR), &ntchars,
+                             NULL);
+    } while (result && ntchars == 0 && GetLastError() == ERROR_OPERATION_ABORTED);
+    if (nbytesread != NULL) {
+	*nbytesread = ntchars * sizeof(WCHAR);
+>>>>>>> upstream/master
     }
     return result;
 }
@@ -304,12 +353,20 @@ WriteConsoleBytes(
 {
     DWORD ntchars;
     BOOL result;
+<<<<<<< HEAD
     int tcharsize = sizeof(TCHAR);
 
     result = WriteConsole(hConsole, lpBuffer, nbytes / tcharsize, &ntchars,
 	    NULL);
     if (nbyteswritten != NULL) {
 	*nbyteswritten = ntchars * tcharsize;
+=======
+
+    result = WriteConsoleW(hConsole, lpBuffer, nbytes / sizeof(WCHAR), &ntchars,
+	    NULL);
+    if (nbyteswritten != NULL) {
+	*nbyteswritten = ntchars * sizeof(WCHAR);
+>>>>>>> upstream/master
     }
     return result;
 }
@@ -683,8 +740,11 @@ ConsoleCloseProc(
     if (consolePtr->reader.thread) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	StopChannelThread(&consolePtr->reader);
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	TclPipeThreadStop(&consolePtr->reader.TI, consolePtr->reader.thread);
@@ -692,6 +752,9 @@ ConsoleCloseProc(
 	CloseHandle(consolePtr->reader.readyEvent);
 	consolePtr->reader.thread = NULL;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -713,6 +776,7 @@ ConsoleCloseProc(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    WaitForSingleObject(consolePtr->writer.readyEvent, INFINITE);
 	}
 
@@ -723,10 +787,16 @@ ConsoleCloseProc(
 	    WaitForSingleObject(consolePtr->writer.readyEvent, 5000);
 	}
 
+=======
+	    WaitForSingleObject(consolePtr->writer.readyEvent, 5000);
+	}
+
+>>>>>>> upstream/master
 	TclPipeThreadStop(&consolePtr->writer.TI, consolePtr->writer.thread);
 	CloseHandle(consolePtr->writer.thread);
 	CloseHandle(consolePtr->writer.readyEvent);
 	consolePtr->writer.thread = NULL;
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -734,6 +804,22 @@ ConsoleCloseProc(
     }
     consolePtr->validMask &= ~TCL_WRITABLE;
 
+=======
+    }
+    consolePtr->validMask &= ~TCL_WRITABLE;
+
+    /*
+     * If the user has been tinkering with the mode, reset it now. We ignore
+     * any errors from this; we're quite possibly about to close or exit
+     * anyway.
+     */
+
+    if ((consolePtr->flags & CONSOLE_READ_OPS) &&
+	    (consolePtr->flags & CONSOLE_RESET)) {
+	SetConsoleMode(consolePtr->handle, consolePtr->initMode);
+    }
+
+>>>>>>> upstream/master
     /*
      * Don't close the Win32 handle if the handle is a standard channel during
      * the thread exit process. Otherwise, one thread may kill the stdio of
@@ -756,7 +842,7 @@ ConsoleCloseProc(
      * Remove the file from the list of watched files.
      */
 
-    for (nextPtrPtr = &(tsdPtr->firstConsolePtr), infoPtr = *nextPtrPtr;
+    for (nextPtrPtr = &tsdPtr->firstConsolePtr, infoPtr = *nextPtrPtr;
 	    infoPtr != NULL;
 	    nextPtrPtr = &infoPtr->nextPtr, infoPtr = *nextPtrPtr) {
 	if (infoPtr == (ConsoleInfo *) consolePtr) {
@@ -894,6 +980,7 @@ ConsoleOutputProc(
     ConsoleInfo *infoPtr = instanceData;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ConsoleThreadInfo *threadInfo = &infoPtr->reader;
     DWORD bytesWritten, timeout;
 
@@ -911,12 +998,21 @@ ConsoleOutputProc(
 
     *errorCode = 0;
 >>>>>>> upstream/master
+=======
+    ConsoleThreadInfo *threadInfo = &infoPtr->writer;
+    DWORD bytesWritten, timeout;
+
+    *errorCode = 0;
+>>>>>>> upstream/master
 
     /* avoid blocking if pipe-thread exited */
     timeout = (infoPtr->flags & CONSOLE_ASYNC) || !TclPipeThreadIsAlive(&threadInfo->TI)
 	|| TclInExit() || TclInThreadExit() ? 0 : INFINITE;
     if (WaitForSingleObject(threadInfo->readyEvent, timeout) == WAIT_TIMEOUT) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -961,7 +1057,11 @@ ConsoleOutputProc(
 	ResetEvent(threadInfo->readyEvent);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	SetEvent(threadInfo->startEvent);
+=======
+	TclPipeThreadSignal(&threadInfo->TI);
+>>>>>>> upstream/master
 =======
 	TclPipeThreadSignal(&threadInfo->TI);
 >>>>>>> upstream/master
@@ -1206,10 +1306,13 @@ WaitForRead(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	timeout = blocking ? INFINITE : 0;
 	if (WaitForSingleObject(threadInfo->readyEvent,
 		timeout) == WAIT_TIMEOUT) {
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 	/* avoid blocking if pipe-thread exited */
@@ -1217,6 +1320,9 @@ WaitForRead(
 		|| TclInExit() || TclInThreadExit()) ? 0 : INFINITE;
 	if (WaitForSingleObject(threadInfo->readyEvent, timeout) == WAIT_TIMEOUT) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1242,7 +1348,7 @@ WaitForRead(
 	    return 1;
 	}
 
-	if (PeekConsoleInput(handle, &input, 1, &count) == FALSE) {
+	if (PeekConsoleInputW(handle, &input, 1, &count) == FALSE) {
 	    /*
 	     * Check to see if the peek failed because of EOF.
 	     */
@@ -1281,7 +1387,11 @@ WaitForRead(
 	ResetEvent(threadInfo->readyEvent);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	SetEvent(threadInfo->startEvent);
+=======
+	TclPipeThreadSignal(&threadInfo->TI);
+>>>>>>> upstream/master
 =======
 	TclPipeThreadSignal(&threadInfo->TI);
 >>>>>>> upstream/master
@@ -1316,6 +1426,7 @@ ConsoleReaderThread(
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ConsoleInfo *infoPtr = arg;
     HANDLE *handle = infoPtr->handle;
     ConsoleThreadInfo *threadInfo = &infoPtr->reader;
@@ -1344,11 +1455,20 @@ ConsoleReaderThread(
     int done = 0;
 
 >>>>>>> upstream/master
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    ConsoleInfo *infoPtr = NULL; /* access info only after success init/wait */
+    HANDLE *handle = NULL;
+    ConsoleThreadInfo *threadInfo = NULL;
+    int done = 0;
+
+>>>>>>> upstream/master
     while (!done) {
 	/*
 	 * Wait for the main thread to signal before attempting to read.
 	 */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	waitResult = WaitForMultipleObjects(2, wEvents, FALSE, INFINITE);
@@ -1372,6 +1492,12 @@ ConsoleReaderThread(
 	    break;
 	}
 >>>>>>> upstream/master
+=======
+	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
+	    /* exit */
+	    break;
+	}
+>>>>>>> upstream/master
 	if (!infoPtr) {
 	    infoPtr = (ConsoleInfo *)pipeTI->clientData;
 	    handle = infoPtr->handle;
@@ -1379,6 +1505,9 @@ ConsoleReaderThread(
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1431,6 +1560,12 @@ ConsoleReaderThread(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    /* Worker exit, so inform the main thread or free TI-structure (if owned) */
+    TclPipeThreadExit(&pipeTI);
+
+>>>>>>> upstream/master
 =======
     /* Worker exit, so inform the main thread or free TI-structure (if owned) */
     TclPipeThreadExit(&pipeTI);
@@ -1469,6 +1604,7 @@ ConsoleWriterThread(
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ConsoleInfo *infoPtr = arg;
     HANDLE *handle = infoPtr->handle;
     ConsoleThreadInfo *threadInfo = &infoPtr->writer;
@@ -1501,10 +1637,21 @@ ConsoleWriterThread(
     int done = 0;
 >>>>>>> upstream/master
 
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    ConsoleInfo *infoPtr = NULL; /* access info only after success init/wait */
+    HANDLE *handle = NULL;
+    ConsoleThreadInfo *threadInfo = NULL;
+    DWORD count, toWrite;
+    char *buf;
+    int done = 0;
+
+>>>>>>> upstream/master
     while (!done) {
 	/*
 	 * Wait for the main thread to signal before attempting to write.
 	 */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -1529,12 +1676,21 @@ ConsoleWriterThread(
 	    break;
 	}
 >>>>>>> upstream/master
+=======
+	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
+	    /* exit */
+	    break;
+	}
+>>>>>>> upstream/master
 	if (!infoPtr) {
 	    infoPtr = (ConsoleInfo *)pipeTI->clientData;
 	    handle = infoPtr->handle;
 	    threadInfo = &infoPtr->writer;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1587,6 +1743,9 @@ ConsoleWriterThread(
     /* Worker exit, so inform the main thread or free TI-structure (if owned) */
     TclPipeThreadExit(&pipeTI);
 >>>>>>> upstream/master
+
+    /* Worker exit, so inform the main thread or free TI-structure (if owned) */
+    TclPipeThreadExit(&pipeTI);
 
     /* Worker exit, so inform the main thread or free TI-structure (if owned) */
     TclPipeThreadExit(&pipeTI);
@@ -1657,7 +1816,9 @@ TclWinOpenConsoleChannel(
 	 * we only want to catch when complete lines are ready for reading.
 	 */
 
-	GetConsoleMode(infoPtr->handle, &modes);
+	infoPtr->flags |= CONSOLE_READ_OPS;
+	GetConsoleMode(infoPtr->handle, &infoPtr->initMode);
+	modes = infoPtr->initMode;
 	modes &= ~(ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
 	modes |= ENABLE_LINE_INPUT;
 	SetConsoleMode(infoPtr->handle, modes);
@@ -1666,6 +1827,7 @@ TclWinOpenConsoleChannel(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (permissions & TCL_WRITABLE) {
 	StartChannelThread(infoPtr, &infoPtr->writer, ConsoleWriterThread);
 =======
@@ -1673,6 +1835,9 @@ TclWinOpenConsoleChannel(
 =======
 >>>>>>> upstream/master
 	infoPtr->reader.readyEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
+=======
+	infoPtr->reader.readyEvent = CreateEventW(NULL, TRUE, TRUE, NULL);
+>>>>>>> upstream/master
 	infoPtr->reader.thread = CreateThread(NULL, 256, ConsoleReaderThread,
 		TclPipeThreadCreateTI(&infoPtr->reader.TI, infoPtr,
 			infoPtr->reader.readyEvent), 0, NULL);
@@ -1681,12 +1846,19 @@ TclWinOpenConsoleChannel(
 
     if (permissions & TCL_WRITABLE) {
 
+<<<<<<< HEAD
 	infoPtr->writer.readyEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
+=======
+	infoPtr->writer.readyEvent = CreateEventW(NULL, TRUE, TRUE, NULL);
+>>>>>>> upstream/master
 	infoPtr->writer.thread = CreateThread(NULL, 256, ConsoleWriterThread,
 		TclPipeThreadCreateTI(&infoPtr->writer.TI, infoPtr,
 			infoPtr->writer.readyEvent), 0, NULL);
 	SetThreadPriority(infoPtr->writer.thread, THREAD_PRIORITY_HIGHEST);
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1751,6 +1923,213 @@ ConsoleThreadActionProc(
 	infoPtr->threadId = NULL;
     }
     Tcl_MutexUnlock(&consoleMutex);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * ConsoleSetOptionProc --
+ *
+ *	Sets an option on a channel.
+ *
+ * Results:
+ *	A standard Tcl result. Also sets the interp's result on error if
+ *	interp is not NULL.
+ *
+ * Side effects:
+ *	May modify an option on a console. Sets Error message if needed (by
+ *	calling Tcl_BadChannelOption).
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+ConsoleSetOptionProc(
+    ClientData instanceData,	/* File state. */
+    Tcl_Interp *interp,		/* For error reporting - can be NULL. */
+    const char *optionName,	/* Which option to set? */
+    const char *value)		/* New value for option. */
+{
+    ConsoleInfo *infoPtr = instanceData;
+    int len = strlen(optionName);
+    int vlen = strlen(value);
+
+    /*
+     * Option -inputmode normal|password|raw
+     */
+
+    if ((infoPtr->flags & CONSOLE_READ_OPS) && (len > 1) &&
+	    (strncmp(optionName, "-inputmode", len) == 0)) {
+	DWORD mode;
+
+	if (GetConsoleMode(infoPtr->handle, &mode) == 0) {
+	    TclWinConvertError(GetLastError());
+	    if (interp != NULL) {
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"couldn't read console mode: %s",
+			Tcl_PosixError(interp)));
+	    }
+	    return TCL_ERROR;
+	}
+	if (Tcl_UtfNcasecmp(value, "NORMAL", vlen) == 0) {
+	    mode |= ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT;
+	} else if (Tcl_UtfNcasecmp(value, "PASSWORD", vlen) == 0) {
+	    mode |= ENABLE_LINE_INPUT;
+	    mode &= ~ENABLE_ECHO_INPUT;
+	} else if (Tcl_UtfNcasecmp(value, "RAW", vlen) == 0) {
+	    mode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+	} else if (Tcl_UtfNcasecmp(value, "RESET", vlen) == 0) {
+	    /*
+	     * Reset to the initial mode, whatever that is.
+	     */
+
+	    mode = infoPtr->initMode;
+	} else {
+	    if (interp) {
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"bad mode \"%s\" for -inputmode: must be"
+			" normal, password, raw, or reset", value));
+		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "FCONFIGURE",
+			"VALUE", NULL);
+	    }
+	    return TCL_ERROR;
+	}
+	if (SetConsoleMode(infoPtr->handle, mode) == 0) {
+	    TclWinConvertError(GetLastError());
+	    if (interp != NULL) {
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"couldn't set console mode: %s",
+			Tcl_PosixError(interp)));
+	    }
+	    return TCL_ERROR;
+	}
+
+	/*
+	 * If we've changed the mode from default, schedule a reset later.
+	 */
+
+	if (mode == infoPtr->initMode) {
+	    infoPtr->flags &= ~CONSOLE_RESET;
+	} else {
+	    infoPtr->flags |= CONSOLE_RESET;
+	}
+	return TCL_OK;
+    }
+
+    if (infoPtr->flags & CONSOLE_READ_OPS) {
+	return Tcl_BadChannelOption(interp, optionName, "inputmode");
+    } else {
+	return Tcl_BadChannelOption(interp, optionName, "");
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * ConsoleGetOptionProc --
+ *
+ *	Gets a mode associated with an IO channel. If the optionName arg is
+ *	non-NULL, retrieves the value of that option. If the optionName arg is
+ *	NULL, retrieves a list of alternating option names and values for the
+ *	given channel.
+ *
+ * Results:
+ *	A standard Tcl result. Also sets the supplied DString to the string
+ *	value of the option(s) returned.  Sets error message if needed
+ *	(by calling Tcl_BadChannelOption).
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+ConsoleGetOptionProc(
+    ClientData instanceData,	/* File state. */
+    Tcl_Interp *interp,		/* For error reporting - can be NULL. */
+    const char *optionName,	/* Option to get. */
+    Tcl_DString *dsPtr)		/* Where to store value(s). */
+{
+    ConsoleInfo *infoPtr = instanceData;
+    int valid = 0;		/* Flag if valid option parsed. */
+    unsigned int len;
+    char buf[TCL_INTEGER_SPACE];
+
+    if (optionName == NULL) {
+	len = 0;
+    } else {
+	len = strlen(optionName);
+    }
+
+    /*
+     * Get option -inputmode
+     *
+     * This is a great simplification of the underlying reality, but actually
+     * represents what almost all scripts really want to know.
+     */
+
+    if (infoPtr->flags & CONSOLE_READ_OPS) {
+	if (len == 0) {
+	    Tcl_DStringAppendElement(dsPtr, "-inputmode");
+	}
+	if (len==0 || (len>1 && strncmp(optionName, "-inputmode", len)==0)) {
+	    DWORD mode;
+
+	    valid = 1;
+	    if (GetConsoleMode(infoPtr->handle, &mode) == 0) {
+		TclWinConvertError(GetLastError());
+		if (interp != NULL) {
+		    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			    "couldn't read console mode: %s",
+			    Tcl_PosixError(interp)));
+		}
+		return TCL_ERROR;
+	    }
+	    if (mode & ENABLE_LINE_INPUT) {
+		if (mode & ENABLE_ECHO_INPUT) {
+		    Tcl_DStringAppendElement(dsPtr, "normal");
+		} else {
+		    Tcl_DStringAppendElement(dsPtr, "password");
+		}
+	    } else {
+		Tcl_DStringAppendElement(dsPtr, "raw");
+	    }
+	}
+    }
+
+    /*
+     * Get option -winsize
+     * Option is readonly and returned by [fconfigure chan -winsize] but not
+     * returned by [fconfigure chan] without explicit option name.
+     */
+
+    if ((len > 1) && (strncmp(optionName, "-winsize", len) == 0)) {
+	CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+
+	valid = 1;
+	if (!GetConsoleScreenBufferInfo(infoPtr->handle, &consoleInfo)) {
+	    TclWinConvertError(GetLastError());
+	    if (interp != NULL) {
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"couldn't read console size: %s",
+			Tcl_PosixError(interp)));
+	    }
+	    return TCL_ERROR;
+	}
+	sprintf(buf, "%d",
+		consoleInfo.srWindow.Right - consoleInfo.srWindow.Left + 1);
+	Tcl_DStringAppendElement(dsPtr, buf);
+	sprintf(buf, "%d",
+		consoleInfo.srWindow.Bottom - consoleInfo.srWindow.Top + 1);
+	Tcl_DStringAppendElement(dsPtr, buf);
+    }
+
+    if (valid) {
+	return TCL_OK;
+    }
+    if (infoPtr->flags & CONSOLE_READ_OPS) {
+	return Tcl_BadChannelOption(interp, optionName, "inputmode winsize");
+    } else {
+	return Tcl_BadChannelOption(interp, optionName, "");
+    }
 }
 
 /*

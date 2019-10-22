@@ -12,6 +12,7 @@
 #include "tclInt.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(_WIN32) && defined(UNICODE)
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -24,12 +25,18 @@ typedef struct ThreadSpecificData {
 =======
 #if defined(_WIN32)
 >>>>>>> upstream/master
+=======
+#if defined(_WIN32)
+>>>>>>> upstream/master
 /*
  * On Windows, we need to do proper Unicode->UTF-8 conversion.
  */
 
 typedef struct {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -39,6 +46,7 @@ typedef struct {
 static Tcl_ThreadDataKey dataKey;
 
 #undef gai_strerror
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 static const char *gai_strerror(int code) {
@@ -59,12 +67,15 @@ static const char *gai_strerror(int code) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 static const char *
 gai_strerror(
     int code)
 {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -75,6 +86,15 @@ gai_strerror(
 	tsdPtr->initialized = 1;
     }
     Tcl_WinTCharToUtf(gai_strerrorW(code), -1, &tsdPtr->errorMsg);
+=======
+    if (tsdPtr->initialized) {
+	Tcl_DStringSetLength(&tsdPtr->errorMsg, 0);
+    } else {
+	Tcl_DStringInit(&tsdPtr->errorMsg);
+	tsdPtr->initialized = 1;
+    }
+    Tcl_WCharToUtfDString(gai_strerrorW(code), -1, &tsdPtr->errorMsg);
+>>>>>>> upstream/master
     return Tcl_DStringValue(&tsdPtr->errorMsg);
 }
 #endif
@@ -173,7 +193,11 @@ TclSockMinimumBuffers(
     getsockopt((SOCKET)(size_t) sock, SOL_SOCKET, SO_RCVBUF,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		(char *) &current, &len);
+=======
+	    (char *) &current, &len);
+>>>>>>> upstream/master
 =======
 	    (char *) &current, &len);
 >>>>>>> upstream/master
@@ -228,7 +252,11 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int result, i;
+=======
+    int result;
+>>>>>>> upstream/master
 =======
     int result;
 >>>>>>> upstream/master
@@ -262,6 +290,7 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
@@ -276,11 +305,14 @@ TclCreateSocketAddress(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 
     (void) memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
 
     /*
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -313,6 +345,8 @@ TclCreateSocketAddress(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
      * Magic variable to enforce a certain address family; to be superseded
      * by a TIP that adds explicit switches to [socket].
      */
@@ -328,6 +362,9 @@ TclCreateSocketAddress(
 	}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -344,7 +381,11 @@ TclCreateSocketAddress(
      * localhost. See [Bugs 3385024, 3382419, 3382431]. As the advantage of
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * using AI_ADDRCONFIG in situations where it works, is probably low,
+=======
+     * using AI_ADDRCONFIG is probably low even in situations where it works,
+>>>>>>> upstream/master
 =======
      * using AI_ADDRCONFIG is probably low even in situations where it works,
 >>>>>>> upstream/master
@@ -369,7 +410,11 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -440,6 +485,7 @@ TclCreateSocketAddress(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     i = 0;
     for (p = *addrlist; p != NULL; p = p->ai_next) {
 	i++;
@@ -457,13 +503,18 @@ TclCreateSocketAddress(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     return 1;
 }
 
 /*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
  *----------------------------------------------------------------------
@@ -499,6 +550,9 @@ Tcl_OpenTcpServer(
 
 /*
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

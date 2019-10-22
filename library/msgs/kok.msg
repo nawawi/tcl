@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset kok DAYS_OF_WEEK_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0906\u0926\u093f\u0924\u094d\u092f\u0935\u093e\u0930"\
         "\u0938\u094b\u092e\u0935\u093e\u0930"\
         "\u092e\u0902\u0917\u0933\u093e\u0930"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u0936\u0941\u0915\u094d\u0930\u0935\u093e\u0930"\
         "\u0936\u0928\u093f\u0935\u093e\u0930"]
 =======
+=======
+>>>>>>> upstream/master
         "आदित्यवार"\
         "सोमवार"\
         "मंगळार"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "गुरुवार"\
         "शुक्रवार"\
         "शनिवार"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset kok MONTHS_ABBREV [list \
         "जानेवारी"\
@@ -33,6 +39,7 @@ namespace eval ::tcl::clock {
         "नोव्हेंबर"\
         "डिसेंबर"]
     ::msgcat::mcset kok MONTHS_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
         "\u091c\u093e\u0928\u0947\u0935\u093e\u0930\u0940"\
         "\u092b\u0947\u092c\u094d\u0930\u0941\u0935\u093e\u0930\u0940"\
@@ -72,6 +79,8 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset kok MONTHS_FULL [list \
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "जानेवारी"\
         "फेब्रुवारी"\
         "मार्च"\
@@ -87,6 +96,9 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset kok AM "क्रिस्तपूर्व"
     ::msgcat::mcset kok PM "क्रिस्तशखा"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -253,9 +253,15 @@ void *
 TclpAlloc(
     size_t numBytes)	/* Number of bytes to allocate. */
 {
+<<<<<<< HEAD
     register union overhead *overPtr;
     register size_t bucket;
     register unsigned amount;
+=======
+    union overhead *overPtr;
+    size_t bucket;
+    size_t amount;
+>>>>>>> upstream/master
     struct block *bigBlockPtr = NULL;
 
     if (!allocInit) {
@@ -274,8 +280,13 @@ TclpAlloc(
 
     if (numBytes >= MAXMALLOC - OVERHEAD) {
 	if (numBytes <= UINT_MAX - OVERHEAD -sizeof(struct block)) {
+<<<<<<< HEAD
 	    bigBlockPtr = TclpSysAlloc((unsigned)
 		    (sizeof(struct block) + OVERHEAD + numBytes));
+=======
+	    bigBlockPtr = TclpSysAlloc(
+		    sizeof(struct block) + OVERHEAD + numBytes);
+>>>>>>> upstream/master
 	}
 	if (bigBlockPtr == NULL) {
 	    Tcl_MutexUnlock(allocMutexPtr);
@@ -387,8 +398,13 @@ static void
 MoreCore(
     size_t bucket)	/* What bucket to allocate to. */
 {
+<<<<<<< HEAD
     register union overhead *overPtr;
     register size_t size;	/* size of desired block */
+=======
+    union overhead *overPtr;
+    size_t size;	/* size of desired block */
+>>>>>>> upstream/master
     size_t amount;		/* amount to allocate */
     size_t numBlocks;		/* how many blocks we get */
     struct block *blockPtr;
@@ -447,8 +463,13 @@ void
 TclpFree(
     void *oldPtr)		/* Pointer to memory to free. */
 {
+<<<<<<< HEAD
     register size_t size;
     register union overhead *overPtr;
+=======
+    size_t size;
+    union overhead *overPtr;
+>>>>>>> upstream/master
     struct block *bigBlockPtr;
 
     if (oldPtr == NULL) {
@@ -603,7 +624,7 @@ TclpRealloc(
 	if (maxSize < numBytes) {
 	    numBytes = maxSize;
 	}
-	memcpy(newPtr, oldPtr, (size_t) numBytes);
+	memcpy(newPtr, oldPtr, numBytes);
 	TclpFree(oldPtr);
 	return newPtr;
     }
@@ -644,8 +665,13 @@ void
 mstats(
     char *s)			/* Where to write info. */
 {
+<<<<<<< HEAD
     register unsigned int i, j;
     register union overhead *overPtr;
+=======
+    unsigned int i, j;
+    union overhead *overPtr;
+>>>>>>> upstream/master
     size_t totalFree = 0, totalUsed = 0;
 
     Tcl_MutexLock(allocMutexPtr);

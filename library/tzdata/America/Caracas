@@ -5,6 +5,7 @@ set TZData(:America/Caracas) {
     {-2524505536 -16060 0 CMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1826739140 -16200 0 VET}
     {-157750200 -14400 0 VET}
     {1197183600 -16200 0 VET}
@@ -19,11 +20,16 @@ set TZData(:America/Caracas) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1826739140 -16200 0 -0430}
     {-157750200 -14400 0 -04}
     {1197183600 -16200 0 -0430}
     {1462086000 -14400 0 -04}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

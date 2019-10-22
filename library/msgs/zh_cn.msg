@@ -4,7 +4,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset zh_CN TIME_FORMAT "%k:%M:%S"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset zh_CN TIME_FORMAT_12 "%P%I\u65f6%M\u5206%S\u79d2"
+=======
+    ::msgcat::mcset zh_CN TIME_FORMAT_12 "%P%I时%M分%S秒"
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset zh_CN TIME_FORMAT_12 "%P%I时%M分%S秒"
 >>>>>>> upstream/master

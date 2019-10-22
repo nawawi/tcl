@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -62,6 +66,7 @@ value stored in \fIresultVarName\fR is the value returned from \fIscript\fR.
 .PP
 If the \fIoptionsVarName\fR argument is given, then the variable it
 names is set to a dictionary of return options returned by evaluation
+<<<<<<< HEAD
 <<<<<<< HEAD
 of \fIscript\fR.  Tcl specifies two entries that are always 
 =======
@@ -122,6 +127,8 @@ names is set to a dictionary of return options returned by evaluation
 .PP
 If the \fIoptionsVarName\fR argument is given, then the variable it
 names is set to a dictionary of return options returned by evaluation
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 of \fIscript\fR.  Tcl specifies two entries that are always
 defined in the dictionary: \fB\-code\fR and \fB\-level\fR.  When
@@ -205,7 +212,11 @@ documentation for the \fBreturn\fR command.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .SH "SEE ALSO" 
+=======
+.SH "SEE ALSO"
+>>>>>>> upstream/master
 =======
 .SH "SEE ALSO"
 >>>>>>> upstream/master

@@ -261,7 +261,11 @@ ValidateFormat(
     Tcl_UniChar ch = 0;
     int objIndex, xpgSize, nspace = numVars;
     int *nassign = TclStackAlloc(interp, nspace * sizeof(int));
+<<<<<<< HEAD
     char buf[TCL_UTF_MAX+1];
+=======
+    char buf[TCL_UTF_MAX + 1] = "";
+>>>>>>> upstream/master
     Tcl_Obj *errorMsg;		/* Place to build an error messages. Note that
 				 * these are messy operations because we do
 				 * not want to use the formatting engine;
@@ -363,8 +367,10 @@ ValidateFormat(
 		format += TclUtfToUniChar(format, &ch);
 		break;
 	    }
+	    /* FALLTHRU */
 	case 'L':
 	    flags |= SCAN_LONGER;
+	    /* FALLTHRU */
 	case 'h':
 	    format += TclUtfToUniChar(format, &ch);
 	}
@@ -386,9 +392,7 @@ ValidateFormat(
 		Tcl_SetErrorCode(interp, "TCL", "FORMAT", "BADWIDTH", NULL);
 		goto error;
 	    }
-	    /*
-	     * Fall through!
-	     */
+	    /* FALLTHRU */
 	case 'n':
 	case 's':
 	    if (flags & (SCAN_LONGER|SCAN_BIG)) {
@@ -589,7 +593,11 @@ Tcl_ScanObjCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     format = Tcl_GetString(objv[2]);
+=======
+    format = TclGetString(objv[2]);
+>>>>>>> upstream/master
     numVars = objc-3;
 
     /*
@@ -611,7 +619,11 @@ Tcl_ScanObjCmd(
 	}
     }
 
+<<<<<<< HEAD
     string = Tcl_GetString(objv[1]);
+=======
+    string = TclGetString(objv[1]);
+>>>>>>> upstream/master
     baseString = string;
 
     /*
@@ -703,11 +715,10 @@ Tcl_ScanObjCmd(
 		format += TclUtfToUniChar(format, &ch);
 		break;
 	    }
+	    /* FALLTHRU */
 	case 'L':
 	    flags |= SCAN_LONGER;
-	    /*
-	     * Fall through so we skip to the next character.
-	     */
+	    /* FALLTHRU */
 	case 'h':
 	    format += TclUtfToUniChar(format, &ch);
 	}
@@ -719,7 +730,7 @@ Tcl_ScanObjCmd(
 	switch (ch) {
 	case 'n':
 	    if (!(flags & SCAN_SUPPRESS)) {
-		objPtr = Tcl_NewIntObj(string - baseString);
+		objPtr = Tcl_NewWideIntObj(string - baseString);
 		Tcl_IncrRefCount(objPtr);
 		CLANG_ASSERT(objs);
 		objs[objIndex++] = objPtr;
@@ -881,15 +892,25 @@ Tcl_ScanObjCmd(
 
 	    offset = TclUtfToUniChar(string, &sch);
 	    i = (int)sch;
+<<<<<<< HEAD
 #if TCL_UTF_MAX == 4
 	    if (!offset) {
 		offset = TclUtfToUniChar(string, &sch);
+=======
+#if TCL_UTF_MAX <= 4
+	    if ((sch >= 0xD800) && (offset < 3)) {
+		offset += TclUtfToUniChar(string+offset, &sch);
+>>>>>>> upstream/master
 		i = (((i<<10) & 0x0FFC00) + 0x10000) + (sch & 0x3FF);
 	    }
 #endif
 	    string += offset;
 	    if (!(flags & SCAN_SUPPRESS)) {
+<<<<<<< HEAD
 		objPtr = Tcl_NewIntObj(i);
+=======
+		objPtr = Tcl_NewWideIntObj(i);
+>>>>>>> upstream/master
 		Tcl_IncrRefCount(objPtr);
 		CLANG_ASSERT(objs);
 		objs[objIndex++] = objPtr;
@@ -900,7 +921,7 @@ Tcl_ScanObjCmd(
 	    /*
 	     * Scan an unsigned or signed integer.
 	     */
-	    objPtr = Tcl_NewLongObj(0);
+	    objPtr = Tcl_NewWideIntObj(0);
 	    Tcl_IncrRefCount(objPtr);
 	    if (width == 0) {
 		width = ~0;
@@ -927,9 +948,15 @@ Tcl_ScanObjCmd(
 	    if (flags & SCAN_LONGER) {
 		if (Tcl_GetWideIntFromObj(NULL, objPtr, &wideValue) != TCL_OK) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    wideValue = LLONG_MAX;
 		    if (TclGetString(objPtr)[0] == '-') {
 			wideValue = LLONG_MIN;
+=======
+		    wideValue = WIDE_MAX;
+		    if (TclGetString(objPtr)[0] == '-') {
+			wideValue = WIDE_MIN;
+>>>>>>> upstream/master
 =======
 		    wideValue = WIDE_MAX;
 		    if (TclGetString(objPtr)[0] == '-') {
@@ -949,7 +976,11 @@ Tcl_ScanObjCmd(
 		    int code = Tcl_GetBignumFromObj(interp, objPtr, &big);
 
 		    if (code == TCL_OK) {
+<<<<<<< HEAD
 			if (mp_isneg(&big)) {
+=======
+			if (big.sign != MP_ZPOS) {
+>>>>>>> upstream/master
 			    code = TCL_ERROR;
 			}
 			mp_clear(&big);
@@ -958,7 +989,11 @@ Tcl_ScanObjCmd(
 		    if (code == TCL_ERROR) {
 			if (objs != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			    ckfree(objs);
+=======
+			    Tcl_Free(objs);
+>>>>>>> upstream/master
 =======
 			    Tcl_Free(objs);
 >>>>>>> upstream/master
@@ -1020,7 +1055,11 @@ Tcl_ScanObjCmd(
 		if (Tcl_GetDoubleFromObj(NULL, objPtr, &dvalue) != TCL_OK) {
 #ifdef ACCEPT_NAN
 		    const Tcl_ObjIntRep *irPtr
+<<<<<<< HEAD
 			    = Tcl_FetchIntRep(objPtr, &tclDoubleType);
+=======
+			    = TclFetchIntRep(objPtr, &tclDoubleType);
+>>>>>>> upstream/master
 		    if (irPtr) {
 			dvalue = irPtr->doubleValue;
 		    } else
@@ -1091,7 +1130,7 @@ Tcl_ScanObjCmd(
     if (code == TCL_OK) {
 	if (underflow && (nconversions == 0)) {
 	    if (numVars) {
-		objPtr = Tcl_NewIntObj(-1);
+		objPtr = Tcl_NewWideIntObj(-1);
 	    } else {
 		if (objPtr) {
 		    Tcl_SetListObj(objPtr, 0, NULL);
@@ -1100,7 +1139,7 @@ Tcl_ScanObjCmd(
 		}
 	    }
 	} else if (numVars) {
-	    objPtr = Tcl_NewIntObj(result);
+	    objPtr = Tcl_NewWideIntObj(result);
 	}
 	Tcl_SetObjResult(interp, objPtr);
     }

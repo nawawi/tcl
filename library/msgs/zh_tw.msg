@@ -2,8 +2,13 @@
 namespace eval ::tcl::clock {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset zh_TW BCE "\u6c11\u570b\u524d"
     ::msgcat::mcset zh_TW CE "\u6c11\u570b"
+=======
+    ::msgcat::mcset zh_TW BCE "民國前"
+    ::msgcat::mcset zh_TW CE "民國"
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset zh_TW BCE "民國前"
     ::msgcat::mcset zh_TW CE "民國"

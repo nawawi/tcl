@@ -18,6 +18,11 @@ package require tcltest 2
 namespace import -force ::tcltest::*
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+loadTestedCommands
+catch [list package require -exact Tcltest [info patchlevel]]
+>>>>>>> upstream/master
 =======
 loadTestedCommands
 catch [list package require -exact Tcltest [info patchlevel]]
@@ -695,6 +700,7 @@ test exec-19.1 {exec >> uses O_APPEND} -constraints {exec unix notValgrind} -set
 } -cleanup {
     removeFile $tmpfile
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result 14
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -703,6 +709,9 @@ test exec-19.1 {exec >> uses O_APPEND} -constraints {exec unix notValgrind} -set
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+} -result 26
 >>>>>>> upstream/master
 =======
 } -result 26
@@ -723,9 +732,12 @@ test exec-20.1 {exec .CMD file} -constraints {win} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ar_SY DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0627\u0644\u0623\u062d\u062f"\
         "\u0627\u0644\u0627\u062b\u0646\u064a\u0646"\
         "\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u0627\u0644\u062c\u0645\u0639\u0629"\
         "\u0627\u0644\u0633\u0628\u062a"]
 =======
+=======
+>>>>>>> upstream/master
         "الأحد"\
         "الاثنين"\
         "الثلاثاء"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "الخميس"\
         "الجمعة"\
         "السبت"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset ar_SY MONTHS_ABBREV [list \
         "كانون الثاني"\
@@ -34,6 +40,7 @@ namespace eval ::tcl::clock {
         "كانون الأول"\
         ""]
     ::msgcat::mcset ar_SY MONTHS_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
         "\u0643\u0627\u0646\u0648\u0646 \u0627\u0644\u062b\u0627\u0646\u064a"\
         "\u0634\u0628\u0627\u0637"\
@@ -72,6 +79,8 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset ar_SY MONTHS_FULL [list \
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "كانون الثاني"\
         "شباط"\
         "آذار"\
@@ -85,6 +94,9 @@ namespace eval ::tcl::clock {
         "تشرين الثاني"\
         "كانون الأول"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

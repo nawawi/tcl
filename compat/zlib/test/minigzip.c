@@ -1,4 +1,5 @@
 /* minigzip.c -- simulate gzip using the zlib compression library
+<<<<<<< HEAD:compat/zlib/test/minigzip.c
 <<<<<<< HEAD
 <<<<<<< HEAD
  * Copyright (C) 1995-2006, 2010, 2011 Jean-loup Gailly.
@@ -8,6 +9,9 @@
 =======
  * Copyright (C) 1995-2006, 2010, 2011, 2016 Jean-loup Gailly
 >>>>>>> upstream/master
+=======
+ * Copyright (C) 1995-2006, 2010, 2011, 2016 Jean-loup Gailly
+>>>>>>> upstream/master:compat/zlib/test/minigzip.c
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -48,6 +52,7 @@
 #  define SET_BINARY_MODE(file)
 #endif
 
+<<<<<<< HEAD:compat/zlib/test/minigzip.c
 <<<<<<< HEAD
 <<<<<<< HEAD
 #ifdef _MSC_VER
@@ -57,6 +62,9 @@
 =======
 #if defined(_MSC_VER) && _MSC_VER < 1900
 >>>>>>> upstream/master
+=======
+#if defined(_MSC_VER) && _MSC_VER < 1900
+>>>>>>> upstream/master:compat/zlib/test/minigzip.c
 #  define snprintf _snprintf
 #endif
 
@@ -172,6 +180,7 @@ void *myalloc(q, n, m)
     void *q;
     unsigned n, m;
 {
+<<<<<<< HEAD:compat/zlib/test/minigzip.c
 <<<<<<< HEAD
 <<<<<<< HEAD
     q = Z_NULL;
@@ -181,12 +190,16 @@ void *myalloc(q, n, m)
 =======
     (void)q;
 >>>>>>> upstream/master
+=======
+    (void)q;
+>>>>>>> upstream/master:compat/zlib/test/minigzip.c
     return calloc(n, m);
 }
 
 void myfree(q, p)
     void *q, *p;
 {
+<<<<<<< HEAD:compat/zlib/test/minigzip.c
 <<<<<<< HEAD
 <<<<<<< HEAD
     q = Z_NULL;
@@ -196,6 +209,9 @@ void myfree(q, p)
 =======
     (void)q;
 >>>>>>> upstream/master
+=======
+    (void)q;
+>>>>>>> upstream/master:compat/zlib/test/minigzip.c
     free(p);
 }
 
@@ -365,6 +381,7 @@ const char *gzerror(gz, err)
 
 #endif
 
+<<<<<<< HEAD:compat/zlib/test/minigzip.c
 <<<<<<< HEAD
 <<<<<<< HEAD
 char *prog;
@@ -374,6 +391,9 @@ static char *prog;
 =======
 static char *prog;
 >>>>>>> upstream/master
+=======
+static char *prog;
+>>>>>>> upstream/master:compat/zlib/test/minigzip.c
 
 void error            OF((const char *msg));
 void gz_compress      OF((FILE   *in, gzFile out));
@@ -540,6 +560,7 @@ void file_uncompress(file)
     char *infile, *outfile;
     FILE  *out;
     gzFile in;
+<<<<<<< HEAD:compat/zlib/test/minigzip.c
 <<<<<<< HEAD
 <<<<<<< HEAD
     size_t len = strlen(file);
@@ -549,6 +570,9 @@ void file_uncompress(file)
 =======
     unsigned len = strlen(file);
 >>>>>>> upstream/master
+=======
+    unsigned len = strlen(file);
+>>>>>>> upstream/master:compat/zlib/test/minigzip.c
 
     if (len + strlen(GZ_SUFFIX) >= sizeof(buf)) {
         fprintf(stderr, "%s: filename too long\n", prog);

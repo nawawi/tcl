@@ -31,6 +31,13 @@
  * See the file "license.terms" for information on usage and redistribution of
  * this file, and for a DISCLAIMER OF ALL WARRANTIES.
  */
+<<<<<<< HEAD
+=======
+
+#ifndef _TCLSTRINGREP
+#define _TCLSTRINGREP
+
+>>>>>>> upstream/master
 
 /*
  * The following structure is the internal rep for a String object. It keeps
@@ -46,6 +53,7 @@
  * tcl.h, but do not do that unless you are sure what you're doing!
  */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -70,6 +78,11 @@ typedef struct {
 >>>>>>> upstream/master
 				 * this value has not been calculated. Any other
 >>>>>>> upstream/master
+=======
+typedef struct {
+    size_t numChars;		/* The number of chars in the string. -1 means
+				 * this value has not been calculated. Any other
+>>>>>>> upstream/master
 				 * means that there is a valid Unicode rep, or
 				 * that the number of UTF bytes == the number
 				 * of chars. */
@@ -85,6 +98,7 @@ typedef struct {
 				 * field above. */
 } String;
 
+<<<<<<< HEAD
 #define STRING_MAXCHARS \
     ((UINT_MAX - sizeof(String))/sizeof(Tcl_UniChar))
 #define STRING_SIZE(numChars) \
@@ -96,6 +110,10 @@ typedef struct {
 		      STRING_MAXCHARS);					\
 	}								\
     } while (0)
+=======
+#define STRING_SIZE(numChars) \
+    (sizeof(String) + ((numChars) * sizeof(Tcl_UniChar)))
+>>>>>>> upstream/master
 #define stringAttemptAlloc(numChars) \
     (String *) Tcl_AttemptAlloc(STRING_SIZE(numChars))
 #define stringAlloc(numChars) \
@@ -110,6 +128,10 @@ typedef struct {
     ((objPtr)->internalRep.twoPtrValue.ptr2 = NULL),			\
     ((objPtr)->internalRep.twoPtrValue.ptr1 = (void *) (stringPtr))
 
+<<<<<<< HEAD
+=======
+#endif /*  _TCLSTRINGREP */
+>>>>>>> upstream/master
 /*
  * Local Variables:
  * mode: c

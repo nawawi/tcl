@@ -39,7 +39,11 @@ static int		CompareArrayKeys(void *keyPtr, Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+static TCL_HASH_TYPE	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE	HashArrayKey(Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -60,7 +64,11 @@ static int		CompareStringKeys(void *keyPtr, Tcl_HashEntry *hPtr);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
+=======
+static TCL_HASH_TYPE	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE	HashStringKey(Tcl_HashTable *tablePtr, void *keyPtr);
 >>>>>>> upstream/master
@@ -130,7 +138,7 @@ const Tcl_HashKeyType tclStringHashKeyType = {
 
 void
 Tcl_InitHashTable(
-    register Tcl_HashTable *tablePtr,
+    Tcl_HashTable *tablePtr,
 				/* Pointer to table record, which is supplied
 				 * by the caller. */
     int keyType)		/* Type of keys to use in table:
@@ -168,7 +176,7 @@ Tcl_InitHashTable(
 
 void
 Tcl_InitCustomHashTable(
-    register Tcl_HashTable *tablePtr,
+    Tcl_HashTable *tablePtr,
 				/* Pointer to table record, which is supplied
 				 * by the caller. */
     int keyType,		/* Type of keys to use in table:
@@ -262,6 +270,7 @@ FindHashEntry(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Tcl_HashEntry *
 Tcl_CreateHashEntry(
     Tcl_HashTable *tablePtr,	/* Table in which to lookup entry. */
@@ -277,6 +286,8 @@ Tcl_CreateHashEntry(
     return (*((tablePtr)->createProc))(tablePtr, key, newPtr);
 }
 
+=======
+>>>>>>> upstream/master
 static Tcl_HashEntry *
 CreateHashEntry(
     Tcl_HashTable *tablePtr,	/* Table in which to lookup entry. */
@@ -326,7 +337,7 @@ CreateHashEntry(
 				 * was created. */
 >>>>>>> upstream/master
 {
-    register Tcl_HashEntry *hPtr;
+    Tcl_HashEntry *hPtr;
     const Tcl_HashKeyType *typePtr;
     size_t hash, index;
 
@@ -367,6 +378,7 @@ CreateHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
 	    if (hash != PTR2UINT(hPtr->hash)) {
 		continue;
@@ -396,6 +408,15 @@ CreateHashEntry(
 	    }
 >>>>>>> upstream/master
 	    if (((void *) key == hPtr) || compareKeysProc((void *) key, hPtr)) {
+=======
+	    if (hash != hPtr->hash) {
+		continue;
+	    }
+	    /* if keys pointers or values are equal */
+	    if ((key == hPtr->key.oneWordValue)
+		|| compareKeysProc((void *) key, hPtr)
+	    ) {
+>>>>>>> upstream/master
 		if (newPtr) {
 		    *newPtr = 0;
 		}
@@ -405,6 +426,7 @@ CreateHashEntry(
     } else {
 	for (hPtr = tablePtr->buckets[index]; hPtr != NULL;
 		hPtr = hPtr->nextPtr) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -420,6 +442,9 @@ CreateHashEntry(
 =======
 >>>>>>> upstream/master
 	    if (hash != PTR2UINT(hPtr->hash)) {
+=======
+	    if (hash != hPtr->hash) {
+>>>>>>> upstream/master
 =======
 	    if (hash != hPtr->hash) {
 >>>>>>> upstream/master
@@ -457,6 +482,7 @@ CreateHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
     hPtr->hash = UINT2PTR(hash);
 =======
@@ -486,6 +512,11 @@ CreateHashEntry(
 >>>>>>> upstream/master
 =======
     hPtr->hash = UINT2PTR(hash);
+    hPtr->nextPtr = tablePtr->buckets[index];
+    tablePtr->buckets[index] = hPtr;
+>>>>>>> upstream/master
+=======
+    hPtr->hash = hash;
     hPtr->nextPtr = tablePtr->buckets[index];
     tablePtr->buckets[index] = hPtr;
 >>>>>>> upstream/master
@@ -524,7 +555,7 @@ void
 Tcl_DeleteHashEntry(
     Tcl_HashEntry *entryPtr)
 {
-    register Tcl_HashEntry *prevPtr;
+    Tcl_HashEntry *prevPtr;
     const Tcl_HashKeyType *typePtr;
     Tcl_HashTable *tablePtr;
     Tcl_HashEntry **bucketPtr;
@@ -547,7 +578,10 @@ Tcl_DeleteHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -568,9 +602,12 @@ Tcl_DeleteHashEntry(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else
     bucketPtr = entryPtr->bucketPtr;
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -621,9 +658,9 @@ Tcl_DeleteHashEntry(
 
 void
 Tcl_DeleteHashTable(
-    register Tcl_HashTable *tablePtr)	/* Table to delete. */
+    Tcl_HashTable *tablePtr)	/* Table to delete. */
 {
-    register Tcl_HashEntry *hPtr, *nextPtr;
+    Tcl_HashEntry *hPtr, *nextPtr;
     const Tcl_HashKeyType *typePtr;
     size_t i;
 
@@ -729,7 +766,7 @@ Tcl_FirstHashEntry(
 
 Tcl_HashEntry *
 Tcl_NextHashEntry(
-    register Tcl_HashSearch *searchPtr)
+    Tcl_HashSearch *searchPtr)
 				/* Place to store information about progress
 				 * through the table. Must have been
 				 * initialized by calling
@@ -776,7 +813,7 @@ Tcl_HashStats(
 #define NUM_COUNTERS 10
     size_t count[NUM_COUNTERS], overflow, i, j;
     double average, tmp;
-    register Tcl_HashEntry *hPtr;
+    Tcl_HashEntry *hPtr;
     char *result, *p;
 
     /*
@@ -846,7 +883,7 @@ AllocArrayEntry(
     void *keyPtr)			/* Key to store in the hash table entry. */
 {
     int *array = (int *) keyPtr;
-    register int *iPtr1, *iPtr2;
+    int *iPtr1, *iPtr2;
     Tcl_HashEntry *hPtr;
     int count;
     size_t size;
@@ -927,7 +964,11 @@ CompareArrayKeys(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned int
+=======
+static TCL_HASH_TYPE
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE
 >>>>>>> upstream/master
@@ -941,8 +982,13 @@ HashArrayKey(
     Tcl_HashTable *tablePtr,	/* Hash table. */
     void *keyPtr)				/* Key from which to compute hash value. */
 {
+<<<<<<< HEAD
     register const int *array = (const int *) keyPtr;
     register TCL_HASH_TYPE result;
+=======
+    const int *array = (const int *) keyPtr;
+    TCL_HASH_TYPE result;
+>>>>>>> upstream/master
     int count;
 
     for (result = 0, count = tablePtr->keyType; count > 0;
@@ -981,7 +1027,12 @@ AllocStringEntry(
     if (size < sizeof(hPtr->key)) {
 	allocsize = sizeof(hPtr->key);
     }
+<<<<<<< HEAD
     hPtr = Tcl_Alloc(TclOffset(Tcl_HashEntry, key) + allocsize);
+=======
+    hPtr = Tcl_Alloc(offsetof(Tcl_HashEntry, key) + allocsize);
+    memset(hPtr, 0, sizeof(Tcl_HashEntry) + allocsize - sizeof(hPtr->key));
+>>>>>>> upstream/master
     memcpy(hPtr->key.string, string, size);
     Tcl_SetHashValue(hPtr, NULL);
     return hPtr;
@@ -1032,7 +1083,11 @@ CompareStringKeys(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static unsigned
+=======
+static TCL_HASH_TYPE
+>>>>>>> upstream/master
 =======
 static TCL_HASH_TYPE
 >>>>>>> upstream/master
@@ -1046,9 +1101,15 @@ HashStringKey(
     Tcl_HashTable *tablePtr,	/* Hash table. */
     void *keyPtr)			/* Key from which to compute hash value. */
 {
+<<<<<<< HEAD
     register const char *string = keyPtr;
     register TCL_HASH_TYPE result;
     register char c;
+=======
+    const char *string = keyPtr;
+    TCL_HASH_TYPE result;
+    char c;
+>>>>>>> upstream/master
 
     /*
      * I tried a zillion different hash functions and asked many other people
@@ -1215,12 +1276,17 @@ BogusCreate(
 
 static void
 RebuildTable(
-    register Tcl_HashTable *tablePtr)	/* Table to enlarge. */
+    Tcl_HashTable *tablePtr)	/* Table to enlarge. */
 {
     size_t count, index, oldSize = tablePtr->numBuckets;
     Tcl_HashEntry **oldBuckets = tablePtr->buckets;
+<<<<<<< HEAD
     register Tcl_HashEntry **oldChainPtr, **newChainPtr;
     register Tcl_HashEntry *hPtr;
+=======
+    Tcl_HashEntry **oldChainPtr, **newChainPtr;
+    Tcl_HashEntry *hPtr;
+>>>>>>> upstream/master
     const Tcl_HashKeyType *typePtr;
 
     /* Avoid outgrowing capability of the memory allocators */
@@ -1274,7 +1340,10 @@ RebuildTable(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if TCL_HASH_KEY_STORE_HASH
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1291,6 +1360,7 @@ RebuildTable(
 	    }
 	    hPtr->nextPtr = tablePtr->buckets[index];
 	    tablePtr->buckets[index] = hPtr;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1315,6 +1385,8 @@ RebuildTable(
 	    hPtr->nextPtr = *hPtr->bucketPtr;
 	    *hPtr->bucketPtr = hPtr;
 #endif
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

@@ -5,6 +5,7 @@ set TZData(:Atlantic/Stanley) {
     {-2524507716 -13884 0 SMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1824235716 -14400 0 FKT}
     {-1018209600 -10800 1 FKST}
     {-1003093200 -14400 0 FKT}
@@ -77,6 +78,8 @@ set TZData(:Atlantic/Stanley) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1824235716 -14400 0 -04}
     {-1018209600 -10800 1 -04}
     {-1003093200 -14400 0 -04}
@@ -147,6 +150,9 @@ set TZData(:Atlantic/Stanley) {
     {1271566800 -14400 0 -04}
     {1283662800 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

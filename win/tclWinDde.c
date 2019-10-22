@@ -19,6 +19,7 @@
 #include <ddeml.h>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #ifndef UNICODE
 #   undef CP_WINUNICODE
@@ -59,11 +60,18 @@
 =======
 >>>>>>> upstream/master
 =======
+=======
+#include <tchar.h>
+
+>>>>>>> upstream/master
 #if !defined(NDEBUG)
     /* test POKE server Implemented for debug mode only */
 #   undef CBF_FAIL_POKES
 #   define CBF_FAIL_POKES 0
 #endif
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*
@@ -75,7 +83,11 @@ typedef struct RegisteredInterp {
     struct RegisteredInterp *nextPtr;
 				/* The next interp this application knows
 				 * about. */
+<<<<<<< HEAD
     TCHAR *name;			/* Interpreter's name (malloc-ed). */
+=======
+    WCHAR *name;		/* Interpreter's name (malloc-ed). */
+>>>>>>> upstream/master
     Tcl_Obj *handlerPtr;	/* The server handler command */
     Tcl_Interp *interp;		/* The interpreter attached to this name. */
 } RegisteredInterp;
@@ -96,6 +108,7 @@ typedef struct Conversation {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct DdeEnumServices {
 =======
 struct DdeEnumServices {
@@ -105,6 +118,9 @@ struct DdeEnumServices {
 >>>>>>> upstream/master
 =======
 struct DdeEnumServices {
+>>>>>>> upstream/master
+=======
+typedef struct {
 >>>>>>> upstream/master
 =======
 typedef struct {
@@ -120,6 +136,7 @@ typedef struct {
 <<<<<<< HEAD
 } DdeEnumServices;
 
+<<<<<<< HEAD
 typedef struct ThreadSpecificData {
 =======
 };
@@ -137,6 +154,9 @@ typedef struct {
 } DdeEnumServices;
 >>>>>>> upstream/master
 
+typedef struct {
+>>>>>>> upstream/master
+=======
 typedef struct {
 >>>>>>> upstream/master
     Conversation *currentConversations;
@@ -160,8 +180,13 @@ static int ddeIsServer = 0;
 
 #define TCL_DDE_VERSION		"1.4.1"
 #define TCL_DDE_PACKAGE_NAME	"dde"
+<<<<<<< HEAD
 #define TCL_DDE_SERVICE_NAME	TEXT("TclEval")
 #define TCL_DDE_EXECUTE_RESULT	TEXT("$TCLEVAL$EXECUTE$RESULT")
+=======
+#define TCL_DDE_SERVICE_NAME	L"TclEval"
+#define TCL_DDE_EXECUTE_RESULT	L"$TCLEVAL$EXECUTE$RESULT"
+>>>>>>> upstream/master
 
 #define DDE_FLAG_ASYNC 1
 #define DDE_FLAG_BINARY 2
@@ -178,24 +203,33 @@ static LRESULT CALLBACK	DdeClientWindowProc(HWND hwnd, UINT uMsg,
 static int		DdeCreateClient(DdeEnumServices *es);
 static BOOL CALLBACK	DdeEnumWindowsCallback(HWND hwndTarget,
 			    LPARAM lParam);
-static void		DdeExitProc(ClientData clientData);
+static void		DdeExitProc(void *clientData);
 static int		DdeGetServicesList(Tcl_Interp *interp,
+<<<<<<< HEAD
 			    const TCHAR *serviceName, const TCHAR *topicName);
+=======
+			    const WCHAR *serviceName, const WCHAR *topicName);
+>>>>>>> upstream/master
 static HDDEDATA CALLBACK DdeServerProc(UINT uType, UINT uFmt, HCONV hConv,
 			    HSZ ddeTopic, HSZ ddeItem, HDDEDATA hData,
 			    DWORD dwData1, DWORD dwData2);
 static LRESULT		DdeServicesOnAck(HWND hwnd, WPARAM wParam,
 			    LPARAM lParam);
-static void		DeleteProc(ClientData clientData);
+static void		DeleteProc(void *clientData);
 static Tcl_Obj *	ExecuteRemoteObject(RegisteredInterp *riPtr,
 			    Tcl_Obj *ddeObjectPtr);
 static int		MakeDdeConnection(Tcl_Interp *interp,
+<<<<<<< HEAD
 			    const TCHAR *name, HCONV *ddeConvPtr);
+=======
+			    const WCHAR *name, HCONV *ddeConvPtr);
+>>>>>>> upstream/master
 static void		SetDdeError(Tcl_Interp *interp);
-static int		DdeObjCmd(ClientData clientData,
+static int		DdeObjCmd(void *clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const objv[]);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -217,6 +251,18 @@ DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
 >>>>>>> upstream/master
 =======
 =======
+=======
+#if (TCL_MAJOR_VERSION < 9) && (TCL_MINOR_VERSION < 7)
+# if TCL_UTF_MAX > 3
+#   define Tcl_WCharToUtfDString(a,b,c) Tcl_WinTCharToUtf(a,(b)*sizeof(WCHAR),c)
+#   define Tcl_UtfToWCharDString(a,b,c) Tcl_WinUtfToTChar(a,b,c)
+# else
+#   define Tcl_WCharToUtfDString Tcl_UniCharToUtfDString
+#   define Tcl_UtfToWCharDString Tcl_UtfToUniCharDString
+# endif
+#endif
+
+>>>>>>> upstream/master
 static unsigned char *
 getByteArrayFromObj(
 	Tcl_Obj *objPtr,
@@ -236,9 +282,20 @@ getByteArrayFromObj(
     return result;
 }
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 DLLEXPORT int		Dde_Init(Tcl_Interp *interp);
 DLLEXPORT int		Dde_SafeInit(Tcl_Interp *interp);
+>>>>>>> upstream/master
+=======
+#ifdef __cplusplus
+extern "C" {
+#endif
+DLLEXPORT int		Dde_Init(Tcl_Interp *interp);
+DLLEXPORT int		Dde_SafeInit(Tcl_Interp *interp);
+#ifdef __cplusplus
+}
+#endif
 >>>>>>> upstream/master
 
 /*
@@ -261,13 +318,17 @@ int
 Dde_Init(
     Tcl_Interp *interp)
 {
+<<<<<<< HEAD
     if (!Tcl_InitStubs(interp, "8.1", 0)) {
+=======
+    if (!Tcl_InitStubs(interp, "8.5-", 0)) {
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
 
     Tcl_CreateObjCommand(interp, "dde", DdeObjCmd, NULL, NULL);
     Tcl_CreateExitHandler(DdeExitProc, NULL);
-    return Tcl_PkgProvide(interp, TCL_DDE_PACKAGE_NAME, TCL_DDE_VERSION);
+    return Tcl_PkgProvideEx(interp, TCL_DDE_PACKAGE_NAME, TCL_DDE_VERSION, NULL);
 }
 
 /*
@@ -337,7 +398,11 @@ Initialize(void)
     if (ddeInstance == 0) {
 	Tcl_MutexLock(&ddeMutex);
 	if (ddeInstance == 0) {
+<<<<<<< HEAD
 	    if (DdeInitialize(&ddeInstance, (PFNCALLBACK) DdeServerProc,
+=======
+	    if (DdeInitializeW(&ddeInstance, (PFNCALLBACK) DdeServerProc,
+>>>>>>> upstream/master
 		    CBF_SKIP_REGISTRATIONS | CBF_SKIP_UNREGISTRATIONS
 		    | CBF_FAIL_POKES, 0) != DMLERR_NO_ERROR) {
 		ddeInstance = 0;
@@ -350,7 +415,11 @@ Initialize(void)
 	if ((ddeServiceGlobal == 0) && (nameFound != 0)) {
 	    ddeIsServer = 1;
 	    Tcl_CreateExitHandler(DdeExitProc, NULL);
+<<<<<<< HEAD
 	    ddeServiceGlobal = DdeCreateStringHandle(ddeInstance,
+=======
+	    ddeServiceGlobal = DdeCreateStringHandleW(ddeInstance,
+>>>>>>> upstream/master
 		    TCL_DDE_SERVICE_NAME, CP_WINUNICODE);
 	    DdeNameService(ddeInstance, ddeServiceGlobal, 0L, DNS_REGISTER);
 	} else {
@@ -385,10 +454,17 @@ Initialize(void)
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 static const TCHAR *
 DdeSetServerName(
     Tcl_Interp *interp,
     const TCHAR *name, /* The name that will be used to refer to the
+=======
+static const WCHAR *
+DdeSetServerName(
+    Tcl_Interp *interp,
+    const WCHAR *name, /* The name that will be used to refer to the
+>>>>>>> upstream/master
 				 * interpreter in later "send" commands. Must
 				 * be globally unique. */
     int flags,		/* DDE_FLAG_FORCE or 0 */
@@ -398,7 +474,11 @@ DdeSetServerName(
     int suffix, offset;
     RegisteredInterp *riPtr, *prevPtr;
     Tcl_DString dString;
+<<<<<<< HEAD
     const TCHAR *actualName;
+=======
+    const WCHAR *actualName;
+>>>>>>> upstream/master
     Tcl_Obj *srvListPtr = NULL, **srvPtrPtr = NULL;
     int n, srvCount = 0, lastSuffix, r = TCL_OK;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
@@ -436,7 +516,11 @@ DdeSetServerName(
 	 * current interp, but it doesn't have a name.
 	 */
 
+<<<<<<< HEAD
 	return TEXT("");
+=======
+	return L"";
+>>>>>>> upstream/master
     }
 
     /*
@@ -457,8 +541,13 @@ DdeSetServerName(
 		    &srvPtrPtr);
 	}
 	if (r != TCL_OK) {
+<<<<<<< HEAD
 	    Tcl_WinUtfToTChar(Tcl_GetStringResult(interp), -1, &dString);
 	    OutputDebugString((TCHAR *) Tcl_DStringValue(&dString));
+=======
+	    Tcl_DStringInit(&dString);
+	    OutputDebugStringW(Tcl_UtfToWCharDString(Tcl_GetString(Tcl_GetObjResult(interp)), -1, &dString));
+>>>>>>> upstream/master
 	    Tcl_DStringFree(&dString);
 	    return NULL;
 	}
@@ -476,6 +565,7 @@ DdeSetServerName(
 	    lastSuffix = suffix;
 	    if (suffix > 1) {
 		if (suffix == 2) {
+<<<<<<< HEAD
 		    Tcl_DStringAppend(&dString, (char *)name, _tcslen(name) * sizeof(TCHAR));
 		    Tcl_DStringAppend(&dString, (char *)TEXT(" #"), 2 * sizeof(TCHAR));
 		    offset = Tcl_DStringLength(&dString);
@@ -484,6 +574,16 @@ DdeSetServerName(
 		}
 		_sntprintf((TCHAR *) (Tcl_DStringValue(&dString) + offset),
 			TCL_INTEGER_SPACE, TEXT("%d"), suffix);
+=======
+		    Tcl_DStringAppend(&dString, (char *)name, wcslen(name) * sizeof(WCHAR));
+		    Tcl_DStringAppend(&dString, (char *)L" #", 2 * sizeof(WCHAR));
+		    offset = Tcl_DStringLength(&dString);
+		    Tcl_DStringSetLength(&dString, offset + sizeof(WCHAR) * TCL_INTEGER_SPACE);
+		    actualName = (WCHAR *) Tcl_DStringValue(&dString);
+		}
+		_snwprintf((WCHAR *) (Tcl_DStringValue(&dString) + offset),
+			TCL_INTEGER_SPACE, L"%d", suffix);
+>>>>>>> upstream/master
 	    }
 
 	    /*
@@ -498,6 +598,7 @@ DdeSetServerName(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
 =======
 		Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
@@ -509,6 +610,11 @@ DdeSetServerName(
 		Tcl_WinUtfToTChar(Tcl_GetString(namePtr), -1, &ds);
 >>>>>>> upstream/master
 		if (_tcscmp(actualName, (TCHAR *)Tcl_DStringValue(&ds)) == 0) {
+=======
+		Tcl_DStringInit(&ds);
+		Tcl_UtfToWCharDString(Tcl_GetString(namePtr), -1, &ds);
+		if (wcscmp(actualName, (WCHAR *)Tcl_DStringValue(&ds)) == 0) {
+>>>>>>> upstream/master
 		    suffix++;
 		    Tcl_DStringFree(&ds);
 		    break;
@@ -524,14 +630,22 @@ DdeSetServerName(
 
     riPtr = (RegisteredInterp *) Tcl_Alloc(sizeof(RegisteredInterp));
     riPtr->interp = interp;
+<<<<<<< HEAD
     riPtr->name = (TCHAR *) Tcl_Alloc((_tcslen(actualName) + 1) * sizeof(TCHAR));
+=======
+    riPtr->name = (WCHAR *) Tcl_Alloc((wcslen(actualName) + 1) * sizeof(WCHAR));
+>>>>>>> upstream/master
     riPtr->nextPtr = tsdPtr->interpListPtr;
     riPtr->handlerPtr = handlerPtr;
     if (riPtr->handlerPtr != NULL) {
 	Tcl_IncrRefCount(riPtr->handlerPtr);
     }
     tsdPtr->interpListPtr = riPtr;
+<<<<<<< HEAD
     _tcscpy(riPtr->name, actualName);
+=======
+    wcscpy(riPtr->name, actualName);
+>>>>>>> upstream/master
 
     if (Tcl_IsSafe(interp)) {
 	Tcl_ExposeCommand(interp, "dde", "dde");
@@ -603,8 +717,7 @@ DdeGetRegistrationPtr(
 
 static void
 DeleteProc(
-    ClientData clientData)	/* The interp we are deleting passed as
-				 * ClientData. */
+    void *clientData)	/* The interp we are deleting. */
 {
     RegisteredInterp *riPtr = (RegisteredInterp *) clientData;
     RegisteredInterp *searchPtr, *prevPtr;
@@ -741,18 +854,24 @@ DdeServerProc(
     HSZ ddeTopic, HSZ ddeItem,	/* String handles. Transaction-type
 				 * dependent. */
     HDDEDATA hData,		/* DDE data. Transaction-type dependent. */
-    DWORD dwData1, DWORD dwData2)
+    DWORD unused1, DWORD unused2)
 				/* Transaction-dependent data. */
 {
     Tcl_DString dString;
     size_t len;
     DWORD dlen;
+<<<<<<< HEAD
     TCHAR *utilString;
+=======
+    WCHAR *utilString;
+>>>>>>> upstream/master
     Tcl_Obj *ddeObjectPtr;
     HDDEDATA ddeReturn = NULL;
     RegisteredInterp *riPtr;
     Conversation *convPtr, *prevConvPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    (void)unused1;
+    (void)unused2;
 
     switch(uType) {
     case XTYP_CONNECT:
@@ -761,16 +880,28 @@ DdeServerProc(
 	 * sure we have a valid topic.
 	 */
 
+<<<<<<< HEAD
 	len = DdeQueryString(ddeInstance, ddeTopic, NULL, 0, CP_WINUNICODE);
 	Tcl_DStringInit(&dString);
 	Tcl_DStringSetLength(&dString, (len + 1) * sizeof(TCHAR) - 1);
 	utilString = (TCHAR *) Tcl_DStringValue(&dString);
 	DdeQueryString(ddeInstance, ddeTopic, utilString, (DWORD) len + 1,
+=======
+	len = DdeQueryStringW(ddeInstance, ddeTopic, NULL, 0, CP_WINUNICODE);
+	Tcl_DStringInit(&dString);
+	Tcl_DStringSetLength(&dString, (len + 1) * sizeof(WCHAR) - 1);
+	utilString = (WCHAR *) Tcl_DStringValue(&dString);
+	DdeQueryStringW(ddeInstance, ddeTopic, utilString, (DWORD) len + 1,
+>>>>>>> upstream/master
 		CP_WINUNICODE);
 
 	for (riPtr = tsdPtr->interpListPtr; riPtr != NULL;
 		riPtr = riPtr->nextPtr) {
+<<<<<<< HEAD
 	    if (_tcsicmp(utilString, riPtr->name) == 0) {
+=======
+	    if (_wcsicmp(utilString, riPtr->name) == 0) {
+>>>>>>> upstream/master
 		Tcl_DStringFree(&dString);
 		return (HDDEDATA) TRUE;
 	    }
@@ -860,6 +991,7 @@ DdeServerProc(
 	 * result to return in an XTYP_REQUEST.
 	 */
 
+<<<<<<< HEAD
 	len = DdeQueryString(ddeInstance, ddeTopic, NULL, 0, CP_WINUNICODE);
 	Tcl_DStringInit(&dString);
 	Tcl_DStringSetLength(&dString,  (len + 1) * sizeof(TCHAR) - 1);
@@ -869,6 +1001,17 @@ DdeServerProc(
 	for (riPtr = tsdPtr->interpListPtr; riPtr != NULL;
 		riPtr = riPtr->nextPtr) {
 	    if (_tcsicmp(riPtr->name, utilString) == 0) {
+=======
+	len = DdeQueryStringW(ddeInstance, ddeTopic, NULL, 0, CP_WINUNICODE);
+	Tcl_DStringInit(&dString);
+	Tcl_DStringSetLength(&dString,  (len + 1) * sizeof(WCHAR) - 1);
+	utilString = (WCHAR *) Tcl_DStringValue(&dString);
+	DdeQueryStringW(ddeInstance, ddeTopic, utilString, (DWORD) len + 1,
+		CP_WINUNICODE);
+	for (riPtr = tsdPtr->interpListPtr; riPtr != NULL;
+		riPtr = riPtr->nextPtr) {
+	    if (_wcsicmp(riPtr->name, utilString) == 0) {
+>>>>>>> upstream/master
 		convPtr = (Conversation *) Tcl_Alloc(sizeof(Conversation));
 		convPtr->nextPtr = tsdPtr->currentConversations;
 		convPtr->returnPackagePtr = NULL;
@@ -912,6 +1055,9 @@ DdeServerProc(
 	 * execute.
 	 */
 
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -931,6 +1077,7 @@ DdeServerProc(
 	    Tcl_DString dsBuf;
 	    char *returnString;
 
+<<<<<<< HEAD
 	    len = DdeQueryString(ddeInstance, ddeItem, NULL, 0, CP_WINUNICODE);
 	    Tcl_DStringInit(&dString);
 	    Tcl_DStringInit(&dsBuf);
@@ -968,13 +1115,30 @@ DdeServerProc(
 			    Tcl_GetUnicodeFromObj(convPtr->returnPackagePtr, &len);
 		    len = sizeof(TCHAR) * len + 1;
 =======
+=======
+	    len = DdeQueryStringW(ddeInstance, ddeItem, NULL, 0, CP_WINUNICODE);
+	    Tcl_DStringInit(&dString);
+	    Tcl_DStringInit(&dsBuf);
+	    Tcl_DStringSetLength(&dString, (len + 1) * sizeof(WCHAR) - 1);
+	    utilString = (WCHAR *) Tcl_DStringValue(&dString);
+	    DdeQueryStringW(ddeInstance, ddeItem, utilString, (DWORD) len + 1,
+		    CP_WINUNICODE);
+	    if (_wcsicmp(utilString, TCL_DDE_EXECUTE_RESULT) == 0) {
+>>>>>>> upstream/master
 		returnString =
 			Tcl_GetString(convPtr->returnPackagePtr);
 		len = convPtr->returnPackagePtr->length;
 		if (uFmt != CF_TEXT) {
+<<<<<<< HEAD
 		    Tcl_WinUtfToTChar(returnString, len, &dsBuf);
 		    returnString = Tcl_DStringValue(&dsBuf);
 		    len = Tcl_DStringLength(&dsBuf) + sizeof(TCHAR) - 1;
+>>>>>>> upstream/master
+=======
+		    Tcl_DStringInit(&dsBuf);
+		    Tcl_UtfToWCharDString(returnString, len, &dsBuf);
+		    returnString = Tcl_DStringValue(&dsBuf);
+		    len = Tcl_DStringLength(&dsBuf) + sizeof(WCHAR) - 1;
 >>>>>>> upstream/master
 		}
 		ddeReturn = DdeCreateDataHandle(ddeInstance, (BYTE *)returnString,
@@ -983,6 +1147,7 @@ DdeServerProc(
 		if (Tcl_IsSafe(convPtr->riPtr->interp)) {
 		    ddeReturn = NULL;
 		} else {
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -993,6 +1158,13 @@ DdeServerProc(
 		    Tcl_Obj *variableObjPtr;
 
 		    Tcl_WinTCharToUtf(utilString, -1, &ds);
+=======
+		    Tcl_DString ds;
+		    Tcl_Obj *variableObjPtr;
+
+		    Tcl_DStringInit(&ds);
+		    Tcl_WCharToUtfDString(utilString, wcslen(utilString), &ds);
+>>>>>>> upstream/master
 		    variableObjPtr = Tcl_GetVar2Ex(
 			    convPtr->riPtr->interp, Tcl_DStringValue(&ds), NULL,
 			    TCL_GLOBAL_ONLY);
@@ -1000,9 +1172,16 @@ DdeServerProc(
 			returnString = Tcl_GetString(variableObjPtr);
 			len = variableObjPtr->length;
 			if (uFmt != CF_TEXT) {
+<<<<<<< HEAD
 			    Tcl_WinUtfToTChar(returnString, len, &dsBuf);
 			    returnString = Tcl_DStringValue(&dsBuf);
 			    len = Tcl_DStringLength(&dsBuf) + sizeof(TCHAR) - 1;
+=======
+			    Tcl_DStringInit(&dsBuf);
+			    Tcl_UtfToWCharDString(returnString, len, &dsBuf);
+			    returnString = Tcl_DStringValue(&dsBuf);
+			    len = Tcl_DStringLength(&dsBuf) + sizeof(WCHAR) - 1;
+>>>>>>> upstream/master
 			}
 			ddeReturn = DdeCreateDataHandle(ddeInstance,
 				(BYTE *)returnString, (DWORD) len+1, 0, ddeItem,
@@ -1014,6 +1193,7 @@ DdeServerProc(
 		}
 	    }
 	    Tcl_DStringFree(&dsBuf);
+<<<<<<< HEAD
 	    Tcl_DStringFree(&dString);
 	}
 	return ddeReturn;
@@ -1103,11 +1283,68 @@ DdeServerProc(
 
 	    Tcl_DStringFree(&ds2);
 	    Tcl_DStringFree(&ds);
+=======
+>>>>>>> upstream/master
 	    Tcl_DStringFree(&dString);
 		ddeReturn = (HDDEDATA) DDE_FACK;
 	}
 	return ddeReturn;
 
+<<<<<<< HEAD
+=======
+#if !CBF_FAIL_POKES
+    case XTYP_POKE:
+	/*
+	 * This is a poke for a Tcl variable, only implemented in
+	 * debug/UNICODE mode.
+	 */
+	ddeReturn = DDE_FNOTPROCESSED;
+
+	if ((uFmt != CF_TEXT) && (uFmt != CF_UNICODETEXT)) {
+	    return ddeReturn;
+	}
+
+	for (convPtr = tsdPtr->currentConversations; (convPtr != NULL)
+		&& (convPtr->hConv != hConv); convPtr = convPtr->nextPtr) {
+	    /*
+	     * Empty loop body.
+	     */
+	}
+
+	if (convPtr && !Tcl_IsSafe(convPtr->riPtr->interp)) {
+	    Tcl_DString ds, ds2;
+	    Tcl_Obj *variableObjPtr;
+	    DWORD len2;
+
+	    Tcl_DStringInit(&dString);
+	    Tcl_DStringInit(&ds2);
+	    len = DdeQueryStringW(ddeInstance, ddeItem, NULL, 0, CP_WINUNICODE);
+	    Tcl_DStringSetLength(&dString, (len + 1) * sizeof(WCHAR) - 1);
+	    utilString = (WCHAR *) Tcl_DStringValue(&dString);
+	    DdeQueryStringW(ddeInstance, ddeItem, utilString, (DWORD) len + 1,
+		    CP_WINUNICODE);
+	    Tcl_DStringInit(&ds);
+	    Tcl_WCharToUtfDString(utilString, wcslen(utilString), &ds);
+	    utilString = (WCHAR *) DdeAccessData(hData, &len2);
+	    len = len2;
+	    if (uFmt != CF_TEXT) {
+		Tcl_DStringInit(&ds2);
+		Tcl_WCharToUtfDString(utilString, wcslen(utilString), &ds2);
+		utilString = (WCHAR *) Tcl_DStringValue(&ds2);
+	    }
+	    variableObjPtr = Tcl_NewStringObj((char *)utilString, -1);
+
+	    Tcl_SetVar2Ex(convPtr->riPtr->interp, Tcl_DStringValue(&ds), NULL,
+		    variableObjPtr, TCL_GLOBAL_ONLY);
+
+	    Tcl_DStringFree(&ds2);
+	    Tcl_DStringFree(&ds);
+	    Tcl_DStringFree(&dString);
+		ddeReturn = (HDDEDATA) DDE_FACK;
+	}
+	return ddeReturn;
+
+>>>>>>> upstream/master
 #endif
     case XTYP_EXECUTE: {
 	/*
@@ -1129,7 +1366,11 @@ DdeServerProc(
 	    return (HDDEDATA) DDE_FNOTPROCESSED;
 	}
 
+<<<<<<< HEAD
 	utilString = (TCHAR *) DdeAccessData(hData, &dlen);
+=======
+	utilString = (WCHAR *) DdeAccessData(hData, &dlen);
+>>>>>>> upstream/master
 	string = (char *) utilString;
 	if (!dlen) {
 	    /* Empty binary array. */
@@ -1144,7 +1385,12 @@ DdeServerProc(
 	    /* unicode */
 	    Tcl_DString dsBuf;
 
+<<<<<<< HEAD
 	    Tcl_WinTCharToUtf(utilString, dlen - sizeof(TCHAR), &dsBuf);
+=======
+	    Tcl_DStringInit(&dsBuf);
+	    Tcl_WCharToUtfDString(utilString, (dlen>>1) - 1, &dsBuf);
+>>>>>>> upstream/master
 	    ddeObjectPtr = Tcl_NewStringObj(Tcl_DStringValue(&dsBuf),
 		    Tcl_DStringLength(&dsBuf));
 	    Tcl_DStringFree(&dsBuf);
@@ -1199,9 +1445,15 @@ DdeServerProc(
 	len = dlen;
 	for (i = 0, riPtr = tsdPtr->interpListPtr; i < numItems;
 		i++, riPtr = riPtr->nextPtr) {
+<<<<<<< HEAD
 	    returnPtr[i].hszSvc = DdeCreateStringHandle(ddeInstance,
 		    TCL_DDE_SERVICE_NAME, CP_WINUNICODE);
 	    returnPtr[i].hszTopic = DdeCreateStringHandle(ddeInstance,
+=======
+	    returnPtr[i].hszSvc = DdeCreateStringHandleW(ddeInstance,
+		    TCL_DDE_SERVICE_NAME, CP_WINUNICODE);
+	    returnPtr[i].hszTopic = DdeCreateStringHandleW(ddeInstance,
+>>>>>>> upstream/master
 		    riPtr->name, CP_WINUNICODE);
 	}
 	returnPtr[i].hszSvc = NULL;
@@ -1233,8 +1485,9 @@ DdeServerProc(
 
 static void
 DdeExitProc(
-    ClientData clientData)	    /* Not used in this handler. */
+    void *dummy)		/* Not used. */
 {
+    (void)dummy;
     DdeNameService(ddeInstance, NULL, 0, DNS_UNREGISTER);
     DdeUninitialize(ddeInstance);
     ddeInstance = 0;
@@ -1260,14 +1513,23 @@ DdeExitProc(
 static int
 MakeDdeConnection(
     Tcl_Interp *interp,		/* Used to report errors. */
+<<<<<<< HEAD
     const TCHAR *name,		/* The connection to use. */
+=======
+    const WCHAR *name,		/* The connection to use. */
+>>>>>>> upstream/master
     HCONV *ddeConvPtr)
 {
     HSZ ddeTopic, ddeService;
     HCONV ddeConv;
 
+<<<<<<< HEAD
     ddeService = DdeCreateStringHandle(ddeInstance, TCL_DDE_SERVICE_NAME, CP_WINUNICODE);
     ddeTopic = DdeCreateStringHandle(ddeInstance, name, CP_WINUNICODE);
+=======
+    ddeService = DdeCreateStringHandleW(ddeInstance, TCL_DDE_SERVICE_NAME, CP_WINUNICODE);
+    ddeTopic = DdeCreateStringHandleW(ddeInstance, name, CP_WINUNICODE);
+>>>>>>> upstream/master
 
     ddeConv = DdeConnect(ddeInstance, ddeService, ddeTopic, NULL);
     DdeFreeStringHandle(ddeInstance, ddeService);
@@ -1277,7 +1539,12 @@ MakeDdeConnection(
 	if (interp != NULL) {
 	    Tcl_DString dString;
 
+<<<<<<< HEAD
 	    Tcl_WinTCharToUtf(name, -1, &dString);
+=======
+	    Tcl_DStringInit(&dString);
+	    Tcl_WCharToUtfDString(name, wcslen(name), &dString);
+>>>>>>> upstream/master
 	    Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 		    "no registered server named \"%s\"", Tcl_DStringValue(&dString)));
 	    Tcl_DStringFree(&dString);
@@ -1315,9 +1582,15 @@ static int
 DdeCreateClient(
     DdeEnumServices *es)
 {
+<<<<<<< HEAD
     WNDCLASSEX wc;
     static const TCHAR *szDdeClientClassName = TEXT("TclEval client class");
     static const TCHAR *szDdeClientWindowName = TEXT("TclEval client window");
+=======
+    WNDCLASSEXW wc;
+    static const WCHAR *szDdeClientClassName = L"TclEval client class";
+    static const WCHAR *szDdeClientWindowName = L"TclEval client window";
+>>>>>>> upstream/master
 
     memset(&wc, 0, sizeof(wc));
     wc.cbSize = sizeof(wc);
@@ -1331,8 +1604,8 @@ DdeCreateClient(
 <<<<<<< HEAD
 <<<<<<< HEAD
 
-    RegisterClassEx(&wc);
-    es->hwnd = CreateWindowEx(0, szDdeClientClassName, szDdeClientWindowName,
+    RegisterClassExW(&wc);
+    es->hwnd = CreateWindowExW(0, szDdeClientClassName, szDdeClientWindowName,
 	    WS_POPUP, 0, 0, 0, 0, NULL, NULL, NULL, (LPVOID)es);
     return TCL_OK;
 }
@@ -1347,10 +1620,11 @@ DdeClientWindowProc(
     switch (uMsg) {
     case WM_CREATE: {
 	LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
-	struct DdeEnumServices *es =
-		(struct DdeEnumServices *) lpcs->lpCreateParams;
+	DdeEnumServices *es =
+		(DdeEnumServices *) lpcs->lpCreateParams;
 
 #ifdef _WIN64
+<<<<<<< HEAD
 	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) es);
 #else
 	SetWindowLong(hwnd, GWL_USERDATA, (LONG) es);
@@ -1389,11 +1663,17 @@ DdeClientWindowProc(
 	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) es);
 #else
 	SetWindowLong(hwnd, GWL_USERDATA, (LONG) es);
+=======
+	SetWindowLongPtrW(hwnd, GWLP_USERDATA, (LONG_PTR) es);
+#else
+	SetWindowLongW(hwnd, GWL_USERDATA, (LONG) es);
+>>>>>>> upstream/master
 #endif
 	return (LRESULT) 0L;
     }
     case WM_DDE_ACK:
 	return DdeServicesOnAck(hwnd, wParam, lParam);
+<<<<<<< HEAD
     default:
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
@@ -1623,6 +1903,10 @@ DdeClientWindowProc(
 	return DdeServicesOnAck(hwnd, wParam, lParam);
     default:
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+=======
+    default:
+	return DefWindowProcW(hwnd, uMsg, wParam, lParam);
+>>>>>>> upstream/master
     }
 }
 
@@ -1636,27 +1920,43 @@ DdeServicesOnAck(
     HWND hwndRemote = (HWND)wParam;
     ATOM service = (ATOM)LOWORD(lParam);
     ATOM topic = (ATOM)HIWORD(lParam);
+<<<<<<< HEAD
     struct DdeEnumServices *es;
     TCHAR sz[255];
+=======
+    DdeEnumServices *es;
+    WCHAR sz[255];
+>>>>>>> upstream/master
     Tcl_DString dString;
 
 #ifdef _WIN64
-    es = (struct DdeEnumServices *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+    es = (DdeEnumServices *) GetWindowLongPtrW(hwnd, GWLP_USERDATA);
 #else
-    es = (struct DdeEnumServices *) GetWindowLong(hwnd, GWL_USERDATA);
+    es = (DdeEnumServices *) GetWindowLongW(hwnd, GWL_USERDATA);
 #endif
 
-    if ((es->service == (ATOM)0 || es->service == service)
-	    && (es->topic == (ATOM)0 || es->topic == topic)) {
+    if (((es->service == (ATOM)0) || (es->service == service))
+	    && ((es->topic == (ATOM)0) || (es->topic == topic))) {
 	Tcl_Obj *matchPtr = Tcl_NewListObj(0, NULL);
 	Tcl_Obj *resultPtr = Tcl_GetObjResult(es->interp);
 
+<<<<<<< HEAD
 	GlobalGetAtomName(service, sz, 255);
 	Tcl_WinTCharToUtf(sz, -1, &dString);
 	Tcl_ListObjAppendElement(NULL, matchPtr, Tcl_NewStringObj(Tcl_DStringValue(&dString), -1));
 	Tcl_DStringFree(&dString);
 	GlobalGetAtomName(topic, sz, 255);
 	Tcl_WinTCharToUtf(sz, -1, &dString);
+=======
+	GlobalGetAtomNameW(service, sz, 255);
+	Tcl_DStringInit(&dString);
+	Tcl_WCharToUtfDString(sz, wcslen(sz), &dString);
+	Tcl_ListObjAppendElement(NULL, matchPtr, Tcl_NewStringObj(Tcl_DStringValue(&dString), -1));
+	Tcl_DStringFree(&dString);
+	GlobalGetAtomNameW(topic, sz, 255);
+	Tcl_DStringInit(&dString);
+	Tcl_WCharToUtfDString(sz, wcslen(sz), &dString);
+>>>>>>> upstream/master
 	Tcl_ListObjAppendElement(NULL, matchPtr, Tcl_NewStringObj(Tcl_DStringValue(&dString), -1));
 	Tcl_DStringFree(&dString);
 
@@ -1684,7 +1984,7 @@ DdeServicesOnAck(
      * Tell the server we are no longer interested.
      */
 
-    PostMessage(hwndRemote, WM_DDE_TERMINATE, (WPARAM)hwnd, 0L);
+    PostMessageW(hwndRemote, WM_DDE_TERMINATE, (WPARAM)hwnd, 0L);
     return 0L;
 }
 
@@ -1694,9 +1994,13 @@ DdeEnumWindowsCallback(
     LPARAM lParam)
 {
     DWORD_PTR dwResult = 0;
+<<<<<<< HEAD
     struct DdeEnumServices *es = (struct DdeEnumServices *) lParam;
+=======
+    DdeEnumServices *es = (DdeEnumServices *) lParam;
+>>>>>>> upstream/master
 
-    SendMessageTimeout(hwndTarget, WM_DDE_INITIATE, (WPARAM)es->hwnd,
+    SendMessageTimeoutW(hwndTarget, WM_DDE_INITIATE, (WPARAM)es->hwnd,
 	    MAKELONG(es->service, es->topic), SMTO_ABORTIFHUNG, 1000,
 	    &dwResult);
     return TRUE;
@@ -1705,16 +2009,21 @@ DdeEnumWindowsCallback(
 static int
 DdeGetServicesList(
     Tcl_Interp *interp,
+<<<<<<< HEAD
     const TCHAR *serviceName,
     const TCHAR *topicName)
+=======
+    const WCHAR *serviceName,
+    const WCHAR *topicName)
+>>>>>>> upstream/master
 {
-    struct DdeEnumServices es;
+    DdeEnumServices es;
 
     es.interp = interp;
     es.result = TCL_OK;
     es.service = (serviceName == NULL)
-	    ? (ATOM)0 : GlobalAddAtom(serviceName);
-    es.topic = (topicName == NULL) ? (ATOM)0 : GlobalAddAtom(topicName);
+	    ? (ATOM)0 : GlobalAddAtomW(serviceName);
+    es.topic = (topicName == NULL) ? (ATOM)0 : GlobalAddAtomW(topicName);
 
     Tcl_ResetResult(interp); /* our list is to be appended to result. */
     DdeCreateClient(&es);
@@ -1802,7 +2111,7 @@ SetDdeError(
 >>>>>>> upstream/master
 static int
 DdeObjCmd(
-    ClientData clientData,	/* Used only for deletion */
+    void *dummy,	/* Not used. */
     Tcl_Interp *interp,		/* The interp we are sending from */
     int objc,			/* Number of arguments */
     Tcl_Obj *const *objv)	/* The arguments */
@@ -1833,15 +2142,26 @@ DdeObjCmd(
 	"-binary", NULL
     };
 
+<<<<<<< HEAD
     int index, i, length, argIndex;
+=======
+    int index, i, argIndex;
+    size_t length;
+>>>>>>> upstream/master
     int flags = 0, result = TCL_OK, firstArg = 0;
     HSZ ddeService = NULL, ddeTopic = NULL, ddeItem = NULL, ddeCookie = NULL;
     HDDEDATA ddeData = NULL, ddeItemData = NULL, ddeReturn;
     HCONV hConv = NULL;
+<<<<<<< HEAD
     const TCHAR *serviceName = NULL, *topicName = NULL;
+=======
+    const WCHAR *serviceName = NULL, *topicName = NULL;
+>>>>>>> upstream/master
     const char *string;
     DWORD ddeResult;
     Tcl_Obj *objPtr, *handlerPtr = NULL;
+    Tcl_DString serviceBuf, topicBuf, itemBuf;
+    (void)dummy;
 
     /*
      * Initialize DDE server/client
@@ -1857,6 +2177,12 @@ DdeObjCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
+=======
+    Tcl_DStringInit(&serviceBuf);
+    Tcl_DStringInit(&topicBuf);
+    Tcl_DStringInit(&itemBuf);
+>>>>>>> upstream/master
 =======
     Tcl_DStringInit(&serviceBuf);
     Tcl_DStringInit(&topicBuf);
@@ -1999,9 +2325,16 @@ DdeObjCmd(
 	const char *src = Tcl_GetString(objv[firstArg]);
 
 	length = objv[firstArg]->length;
+<<<<<<< HEAD
 	Tcl_WinUtfToTChar(src, length, &serviceBuf);
 	serviceName = (TCHAR *) Tcl_DStringValue(&serviceBuf);
 	length = Tcl_DStringLength(&serviceBuf) / sizeof(TCHAR);
+=======
+	Tcl_DStringInit(&serviceBuf);
+	Tcl_UtfToWCharDString(src, length, &serviceBuf);
+	serviceName = (WCHAR *) Tcl_DStringValue(&serviceBuf);
+	length = Tcl_DStringLength(&serviceBuf) / sizeof(WCHAR);
+>>>>>>> upstream/master
     } else {
 	length = 0;
     }
@@ -2009,7 +2342,11 @@ DdeObjCmd(
     if (length == 0) {
 	serviceName = NULL;
     } else if ((index != DDE_SERVERNAME) && (index != DDE_EVAL)) {
+<<<<<<< HEAD
 	ddeService = DdeCreateStringHandle(ddeInstance, (void *) serviceName,
+=======
+	ddeService = DdeCreateStringHandleW(ddeInstance, serviceName,
+>>>>>>> upstream/master
 		CP_WINUNICODE);
     }
 
@@ -2017,12 +2354,22 @@ DdeObjCmd(
 	const char *src = Tcl_GetString(objv[firstArg + 1]);
 
 	length = objv[firstArg + 1]->length;
+<<<<<<< HEAD
 	topicName = Tcl_WinUtfToTChar(src, length, &topicBuf);
 	length = Tcl_DStringLength(&topicBuf) / sizeof(TCHAR);
 	if (length == 0) {
 	    topicName = NULL;
 	} else {
 	    ddeTopic = DdeCreateStringHandle(ddeInstance, (void *) topicName,
+=======
+	Tcl_DStringInit(&topicBuf);
+	topicName = Tcl_UtfToWCharDString(src, length, &topicBuf);
+	length = Tcl_DStringLength(&topicBuf) / sizeof(WCHAR);
+	if (length == 0) {
+	    topicName = NULL;
+	} else {
+	    ddeTopic = DdeCreateStringHandleW(ddeInstance, topicName,
+>>>>>>> upstream/master
 		    CP_WINUNICODE);
 	}
     }
@@ -2034,7 +2381,12 @@ DdeObjCmd(
 	if (serviceName != NULL) {
 	    Tcl_DString dsBuf;
 
+<<<<<<< HEAD
 	    Tcl_WinTCharToUtf(serviceName, -1, &dsBuf);
+=======
+	    Tcl_DStringInit(&dsBuf);
+	    Tcl_WCharToUtfDString(serviceName, wcslen(serviceName), &dsBuf);
+>>>>>>> upstream/master
 	    Tcl_SetObjResult(interp, Tcl_NewStringObj(Tcl_DStringValue(&dsBuf),
 		    Tcl_DStringLength(&dsBuf)));
 	    Tcl_DStringFree(&dsBuf);
@@ -2045,9 +2397,15 @@ DdeObjCmd(
 
     case DDE_EXECUTE: {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	int dataLength;
 	const Tcl_UniChar *dataString;
 <<<<<<< HEAD
+=======
+	size_t dataLength;
+	const void *dataString;
+	Tcl_DString dsBuf;
+>>>>>>> upstream/master
 =======
 	size_t dataLength;
 	const void *dataString;
@@ -2063,6 +2421,7 @@ DdeObjCmd(
 
 	    src = Tcl_GetString(objv[firstArg + 2]);
 	    dataLength = objv[firstArg + 2]->length;
+<<<<<<< HEAD
 	    dataString = (const TCHAR *)
 		    Tcl_WinUtfToTChar(src, dataLength, &dsBuf);
 	    dataLength = Tcl_DStringLength(&dsBuf) + sizeof(TCHAR);
@@ -2083,6 +2442,15 @@ DdeObjCmd(
 >>>>>>> upstream/master
 	if (dataLength <= 0) {
 =======
+	if (dataLength + 1 < 2) {
+>>>>>>> upstream/master
+=======
+	    Tcl_DStringInit(&dsBuf);
+	    dataString =
+		    Tcl_UtfToWCharDString(src, dataLength, &dsBuf);
+	    dataLength = Tcl_DStringLength(&dsBuf) + sizeof(WCHAR);
+	}
+
 	if (dataLength + 1 < 2) {
 >>>>>>> upstream/master
 	    Tcl_SetObjResult(interp,
@@ -2127,13 +2495,23 @@ DdeObjCmd(
 	break;
     }
     case DDE_REQUEST: {
+<<<<<<< HEAD
 	const TCHAR *itemString;
+=======
+	const WCHAR *itemString;
+>>>>>>> upstream/master
 	const char *src;
 
 	src = Tcl_GetString(objv[firstArg + 2]);
 	length = objv[firstArg + 2]->length;
+<<<<<<< HEAD
 	itemString = Tcl_WinUtfToTChar(src, length, &itemBuf);
 	length = Tcl_DStringLength(&itemBuf) / sizeof(TCHAR);
+=======
+	Tcl_DStringInit(&itemBuf);
+	itemString = Tcl_UtfToWCharDString(src, length, &itemBuf);
+	length = Tcl_DStringLength(&itemBuf) / sizeof(WCHAR);
+>>>>>>> upstream/master
 
 	if (length == 0) {
 	    Tcl_SetObjResult(interp,
@@ -2151,7 +2529,11 @@ DdeObjCmd(
 	    result = TCL_ERROR;
 	} else {
 	    Tcl_Obj *returnObjPtr;
+<<<<<<< HEAD
 	    ddeItem = DdeCreateStringHandle(ddeInstance, (void *) itemString,
+=======
+	    ddeItem = DdeCreateStringHandleW(ddeInstance, itemString,
+>>>>>>> upstream/master
 		    CP_WINUNICODE);
 	    if (ddeItem != NULL) {
 		ddeData = DdeClientTransaction(NULL, 0, hConv, ddeItem,
@@ -2161,7 +2543,11 @@ DdeObjCmd(
 		    result = TCL_ERROR;
 		} else {
 		    DWORD tmp;
+<<<<<<< HEAD
 		    TCHAR *dataString = (TCHAR *) DdeAccessData(ddeData, &tmp);
+=======
+		    WCHAR *dataString = (WCHAR *) DdeAccessData(ddeData, &tmp);
+>>>>>>> upstream/master
 
 		    if (flags & DDE_FLAG_BINARY) {
 			returnObjPtr =
@@ -2169,11 +2555,20 @@ DdeObjCmd(
 		    } else {
 			Tcl_DString dsBuf;
 
+<<<<<<< HEAD
 			if ((tmp >= sizeof(TCHAR))
 				&& !dataString[tmp / sizeof(TCHAR) - 1]) {
 			    tmp -= sizeof(TCHAR);
 			}
 			Tcl_WinTCharToUtf(dataString, tmp, &dsBuf);
+=======
+			if ((tmp >= sizeof(WCHAR))
+				&& !dataString[tmp / sizeof(WCHAR) - 1]) {
+			    tmp -= sizeof(WCHAR);
+			}
+			Tcl_DStringInit(&dsBuf);
+			Tcl_WCharToUtfDString(dataString, tmp>>1, &dsBuf);
+>>>>>>> upstream/master
 			returnObjPtr =
 			    Tcl_NewStringObj(Tcl_DStringValue(&dsBuf),
 				    Tcl_DStringLength(&dsBuf));
@@ -2192,14 +2587,24 @@ DdeObjCmd(
     }
     case DDE_POKE: {
 	Tcl_DString dsBuf;
+<<<<<<< HEAD
 	const TCHAR *itemString;
+=======
+	const WCHAR *itemString;
+>>>>>>> upstream/master
 	BYTE *dataString;
 	const char *src;
 
 	src = Tcl_GetString(objv[firstArg + 2]);
 	length = objv[firstArg + 2]->length;
+<<<<<<< HEAD
 	itemString = Tcl_WinUtfToTChar(src, length, &itemBuf);
 	length = Tcl_DStringLength(&itemBuf) / sizeof(TCHAR);
+=======
+	Tcl_DStringInit(&itemBuf);
+	itemString = Tcl_UtfToWCharDString(src, length, &itemBuf);
+	length = Tcl_DStringLength(&itemBuf) / sizeof(WCHAR);
+>>>>>>> upstream/master
 	if (length == 0) {
 	    Tcl_SetObjResult(interp,
 		    Tcl_NewStringObj("cannot have a null item", -1));
@@ -2215,9 +2620,16 @@ DdeObjCmd(
 	    const char *data =
 		    Tcl_GetString(objv[firstArg + 3]);
 	    length = objv[firstArg + 3]->length;
+<<<<<<< HEAD
 	    dataString = (BYTE *)
 		    Tcl_WinUtfToTChar(data, length, &dsBuf);
 	    length = Tcl_DStringLength(&dsBuf) + sizeof(TCHAR);
+=======
+	    Tcl_DStringInit(&dsBuf);
+	    dataString = (BYTE *)
+		    Tcl_UtfToWCharDString(data, length, &dsBuf);
+	    length = Tcl_DStringLength(&dsBuf) + sizeof(WCHAR);
+>>>>>>> upstream/master
 	}
 
 	hConv = DdeConnect(ddeInstance, ddeService, ddeTopic, NULL);
@@ -2228,7 +2640,11 @@ DdeObjCmd(
 	    SetDdeError(interp);
 	    result = TCL_ERROR;
 	} else {
+<<<<<<< HEAD
 	    ddeItem = DdeCreateStringHandle(ddeInstance, (void *) itemString,
+=======
+	    ddeItem = DdeCreateStringHandleW(ddeInstance, itemString,
+>>>>>>> upstream/master
 		    CP_WINUNICODE);
 	    if (ddeItem != NULL) {
 		ddeData = DdeClientTransaction(dataString, (DWORD) length,
@@ -2310,7 +2726,11 @@ DdeObjCmd(
 >>>>>>> upstream/master
 	for (riPtr = tsdPtr->interpListPtr; riPtr != NULL;
 		riPtr = riPtr->nextPtr) {
+<<<<<<< HEAD
 	    if (_tcsicmp(serviceName, riPtr->name) == 0) {
+=======
+	    if (_wcsicmp(serviceName, riPtr->name) == 0) {
+>>>>>>> upstream/master
 		break;
 	    }
 	}
@@ -2416,14 +2836,22 @@ DdeObjCmd(
 	    objPtr = Tcl_ConcatObj(objc, objv);
 	    string = Tcl_GetString(objPtr);
 	    length = objPtr->length;
+<<<<<<< HEAD
 	    Tcl_WinUtfToTChar(string, length, &dsBuf);
 	    string = Tcl_DStringValue(&dsBuf);
 	    length = Tcl_DStringLength(&dsBuf) + sizeof(TCHAR);
+=======
+	    Tcl_DStringInit(&dsBuf);
+	    Tcl_UtfToWCharDString(string, length, &dsBuf);
+	    string = Tcl_DStringValue(&dsBuf);
+	    length = Tcl_DStringLength(&dsBuf) + sizeof(WCHAR);
+>>>>>>> upstream/master
 	    ddeItemData = DdeCreateDataHandle(ddeInstance, (BYTE *) string,
 		    (DWORD) length, 0, 0, CF_UNICODETEXT, 0);
 	    Tcl_DStringFree(&dsBuf);
 
 	    if (flags & DDE_FLAG_ASYNC) {
+<<<<<<< HEAD
 		ddeData = DdeClientTransaction((LPBYTE) ddeItemData,
 			0xFFFFFFFF, hConv, 0,
 			CF_UNICODETEXT, XTYP_EXECUTE, TIMEOUT_ASYNC, &ddeResult);
@@ -2548,6 +2976,8 @@ DdeObjCmd(
 		    (BYTE *) string, (DWORD) 2*length+2, 0, 0, CF_UNICODETEXT, 0);
 
 	    if (flags & DDE_FLAG_ASYNC) {
+=======
+>>>>>>> upstream/master
 		ddeData = DdeClientTransaction((LPBYTE) ddeItemData,
 			0xFFFFFFFF, hConv, 0,
 			CF_UNICODETEXT, XTYP_EXECUTE, TIMEOUT_ASYNC, &ddeResult);
@@ -2557,7 +2987,11 @@ DdeObjCmd(
 			0xFFFFFFFF, hConv, 0,
 			CF_UNICODETEXT, XTYP_EXECUTE, 30000, NULL);
 		if (ddeData != 0) {
+<<<<<<< HEAD
 		    ddeCookie = DdeCreateStringHandle(ddeInstance,
+=======
+		    ddeCookie = DdeCreateStringHandleW(ddeInstance,
+>>>>>>> upstream/master
 			    TCL_DDE_EXECUTE_RESULT, CP_WINUNICODE);
 		    ddeData = DdeClientTransaction(NULL, 0, hConv, ddeCookie,
 			    CF_UNICODETEXT, XTYP_REQUEST, 30000, NULL);
@@ -2574,7 +3008,11 @@ DdeObjCmd(
 
 	    if (!(flags & DDE_FLAG_ASYNC)) {
 		Tcl_Obj *resultPtr;
+<<<<<<< HEAD
 		Tcl_UniChar *ddeDataString;
+=======
+		WCHAR *ddeDataString;
+>>>>>>> upstream/master
 
 		/*
 		 * The return handle has a two or four element list in it. The
@@ -2585,13 +3023,26 @@ DdeObjCmd(
 		 * variable "errorInfo".
 		 */
 
-		resultPtr = Tcl_NewObj();
 		length = DdeGetData(ddeData, NULL, 0, 0);
+<<<<<<< HEAD
 		ddeDataString = ckalloc(length);
 		DdeGetData(ddeData, (BYTE *) ddeDataString, (DWORD) length, 0);
 		length = (length >> 1) - 1;
 		resultPtr = Tcl_NewUnicodeObj(ddeDataString, length);
 		ckfree(ddeDataString);
+=======
+		ddeDataString = (WCHAR *) Tcl_Alloc(length);
+		DdeGetData(ddeData, (BYTE *) ddeDataString, (DWORD) length, 0);
+		if (length > sizeof(WCHAR)) {
+		    length -= sizeof(WCHAR);
+		}
+		Tcl_DStringInit(&dsBuf);
+		Tcl_WCharToUtfDString(ddeDataString, length>>1, &dsBuf);
+		resultPtr = Tcl_NewStringObj(Tcl_DStringValue(&dsBuf),
+			Tcl_DStringLength(&dsBuf));
+		Tcl_DStringFree(&dsBuf);
+		Tcl_Free((char *) ddeDataString);
+>>>>>>> upstream/master
 
 		if (Tcl_ListObjIndex(NULL, resultPtr, 0, &objPtr) != TCL_OK) {
 		    Tcl_DecrRefCount(resultPtr);
@@ -2616,9 +3067,13 @@ DdeObjCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    length = -1;
 		    string = Tcl_GetStringFromObj(objPtr, &length);
 		    Tcl_AddObjErrorInfo(interp, string, length);
+=======
+		    Tcl_AppendObjToErrorInfo(interp, objPtr);
+>>>>>>> upstream/master
 =======
 		    Tcl_AppendObjToErrorInfo(interp, objPtr);
 >>>>>>> upstream/master

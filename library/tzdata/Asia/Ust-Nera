@@ -5,6 +5,7 @@ set TZData(:Asia/Ust-Nera) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1579426374 28800 0 YAKT}
     {354898800 43200 0 MAGST}
     {370699200 39600 0 MAGT}
@@ -86,6 +87,8 @@ set TZData(:Asia/Ust-Nera) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1579426374 28800 0 +08}
     {354898800 43200 0 +12}
     {370699200 39600 0 +11}
@@ -154,6 +157,9 @@ set TZData(:Asia/Ust-Nera) {
     {1414249200 36000 0 +10}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

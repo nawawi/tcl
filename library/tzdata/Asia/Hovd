@@ -4,6 +4,7 @@ set TZData(:Asia/Hovd) {
     {-9223372036854775808 21996 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2032927596 21600 0 HOVT}
     {252439200 25200 0 HOVT}
     {417978000 28800 1 HOVST}
@@ -223,6 +224,8 @@ set TZData(:Asia/Hovd) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-2032927596 21600 0 +06}
     {252439200 25200 0 +07}
     {417978000 28800 1 +07}
@@ -274,6 +277,9 @@ set TZData(:Asia/Hovd) {
     {1458932400 28800 1 +07}
     {1474646400 25200 0 +07}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -50,8 +50,11 @@ set TZData(:America/Port-au-Prince) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {1457852400 -14400 1 EDT}
     {1478412000 -18000 0 EST}
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -224,6 +227,9 @@ set TZData(:America/Port-au-Prince) {
     {4097196000 -18000 0 EST}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======

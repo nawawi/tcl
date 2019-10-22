@@ -3,7 +3,11 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset nb DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "s\u00f8"\
+=======
+        "sø"\
+>>>>>>> upstream/master
 =======
         "sø"\
 >>>>>>> upstream/master
@@ -17,9 +21,15 @@ namespace eval ::tcl::clock {
         "fr"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "l\u00f8"]
     ::msgcat::mcset nb DAYS_OF_WEEK_FULL [list \
         "s\u00f8ndag"\
+=======
+        "lø"]
+    ::msgcat::mcset nb DAYS_OF_WEEK_FULL [list \
+        "søndag"\
+>>>>>>> upstream/master
 =======
         "lø"]
     ::msgcat::mcset nb DAYS_OF_WEEK_FULL [list \
@@ -37,7 +47,11 @@ namespace eval ::tcl::clock {
         "fredag"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "l\u00f8rdag"]
+=======
+        "lørdag"]
+>>>>>>> upstream/master
 =======
         "lørdag"]
 >>>>>>> upstream/master

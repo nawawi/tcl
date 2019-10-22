@@ -9,6 +9,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 set auto_index(auto_reset) [list source [file join $dir auto.tcl]]
 set auto_index(tcl_findLibrary) [list source [file join $dir auto.tcl]]
 set auto_index(auto_mkindex) [list source [file join $dir auto.tcl]]
@@ -78,6 +79,8 @@ set auto_index(::tcl::tm::path) [list source [file join $dir tm.tcl]]
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 set auto_index(auto_reset) [list ::tcl::Pkg::source [file join $dir auto.tcl]]
 set auto_index(tcl_findLibrary) [list ::tcl::Pkg::source [file join $dir auto.tcl]]
 set auto_index(auto_mkindex) [list ::tcl::Pkg::source [file join $dir auto.tcl]]
@@ -145,6 +148,9 @@ set auto_index(::tcl::tm::UnknownHandler) [list ::tcl::Pkg::source [file join $d
 set auto_index(::tcl::tm::roots) [list ::tcl::Pkg::source [file join $dir tm.tcl]]
 set auto_index(::tcl::tm::path) [list ::tcl::Pkg::source [file join $dir tm.tcl]]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -5,6 +5,7 @@ set TZData(:Europe/Samara) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1593825620 10800 0 SAMT}
     {-1247540400 14400 0 SAMT}
     {-1102305600 14400 0 KUYMMTT}
@@ -91,6 +92,8 @@ set TZData(:Europe/Samara) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1593820800 10800 0 +03}
     {-1247540400 14400 0 +04}
     {-1102305600 14400 0 +05}
@@ -161,6 +164,9 @@ set TZData(:Europe/Samara) {
     {1301180400 14400 0 +04}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

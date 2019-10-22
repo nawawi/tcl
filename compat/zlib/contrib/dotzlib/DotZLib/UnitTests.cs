@@ -158,7 +158,11 @@ namespace DotZLibTests
             Info info = new Info();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             Assert.AreEqual("1.2.8", Info.Version);
+=======
+            Assert.AreEqual("1.2.11", Info.Version);
+>>>>>>> upstream/master
 =======
             Assert.AreEqual("1.2.11", Info.Version);
 >>>>>>> upstream/master

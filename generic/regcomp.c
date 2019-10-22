@@ -39,7 +39,7 @@
 /* automatically gathered by fwd; do not hand-edit */
 /* === regcomp.c === */
 int compile(regex_t *, const chr *, size_t, int);
-static void moresubs(struct vars *, int);
+static void moresubs(struct vars *, size_t);
 static int freev(struct vars *, int);
 static void makesearch(struct vars *, struct nfa *);
 static struct subre *parse(struct vars *, int, int, struct state *, struct state *);
@@ -59,7 +59,6 @@ static void wordchrs(struct vars *);
 static struct subre *subre(struct vars *, int, int, struct state *, struct state *);
 static void freesubre(struct vars *, struct subre *);
 static void freesrnode(struct vars *, struct subre *);
-static void optst(struct vars *, struct subre *);
 static int numst(struct subre *, int);
 static void markst(struct subre *);
 static void cleanst(struct vars *);
@@ -206,11 +205,11 @@ struct vars {
     int cflags;			/* copy of compile flags */
     int lasttype;		/* type of previous token */
     int nexttype;		/* type of next token */
-    chr nextvalue;		/* value (if any) of next token */
+    int nextvalue;		/* value (if any) of next token */
     int lexcon;			/* lexical context type (see lex.c) */
     int nsubexp;		/* subexpression count */
     struct subre **subs;	/* subRE pointer vector */
-    size_t nsubs;		/* length of vector */
+    int nsubs;			/* length of vector */
     struct subre *sub10[10];	/* initial vector, enough for most */
     struct nfa *nfa;		/* the NFA */
     struct colormap *cm;	/* character color map */
@@ -287,8 +286,7 @@ compile(
 {
     AllocVars(v);
     struct guts *g;
-    int i;
-    size_t j;
+    int i, j;
     FILE *debug = (flags&REG_PROGRESS) ? stdout : NULL;
 #define	CNOERR()	{ if (ISERR()) return freev(v, v->err); }
 
@@ -339,7 +337,6 @@ compile(
     v->spaceused = 0;
     re->re_magic = REMAGIC;
     re->re_info = 0;		/* bits get set during parse */
-    re->re_csize = sizeof(chr);
     re->re_guts = NULL;
     re->re_fns = (void*)(&functions);
 
@@ -395,7 +392,6 @@ compile(
 	dumpnfa(v->nfa, debug);
 	dumpst(v->tree, debug, 1);
     }
-    optst(v, v->tree);
     v->ntree = numst(v->tree, 1);
     markst(v->tree);
     cleanst(v);
@@ -469,18 +465,18 @@ compile(
 
 /*
  - moresubs - enlarge subRE vector
- ^ static void moresubs(struct vars *, int);
+ ^ static void moresubs(struct vars *, size_t);
  */
 static void
 moresubs(
     struct vars *v,
-    int wanted)			/* want enough room for this one */
+    size_t wanted)			/* want enough room for this one */
 {
     struct subre **p;
-    size_t n;
+    int n;
 
-    assert(wanted > 0 && (size_t)wanted >= v->nsubs);
-    n = (size_t)wanted * 3 / 2 + 1;
+    assert(wanted > 0 && wanted >= v->nsubs);
+    n = wanted * 3 / 2 + 1;
     if (v->subs == v->sub10) {
 	p = (struct subre **) MALLOC(n * sizeof(struct subre *));
 	if (p != NULL) {
@@ -499,7 +495,7 @@ moresubs(
 	*p = NULL;
     }
     assert(v->nsubs == n);
-    assert((size_t)wanted < v->nsubs);
+    assert(wanted < v->nsubs);
 }
 
 /*
@@ -513,7 +509,7 @@ freev(
     struct vars *v,
     int err)
 {
-    register int ret;
+    int ret;
 
     if (v->re != NULL) {
 	rfree(v->re);
@@ -923,7 +919,7 @@ parseqatom(
 	 */
 
 	NOTE(REG_UPBOTCH);
-	/* fallthrough into case PLAIN */
+	/* FALLTHRU */
     case PLAIN:
 	onechr(v, v->nextvalue, lp, rp);
 	okcolors(v->nfa, v->cm);
@@ -954,10 +950,10 @@ parseqatom(
 	if (cap) {
 	    v->nsubexp++;
 	    subno = v->nsubexp;
-	    if ((size_t)subno >= v->nsubs) {
+	    if (subno >= v->nsubs) {
 		moresubs(v, subno);
 	    }
-	    assert((size_t)subno < v->nsubs);
+	    assert(subno < v->nsubs);
 	} else {
 	    atomtype = PLAIN;	/* something that's not '(' */
 	}
@@ -1125,6 +1121,7 @@ parseqatom(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> upstream/master
 =======
@@ -1156,6 +1153,13 @@ parseqatom(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+     *
+     * [lp] ---> [s] ---prefix---> [begin] ---atom---> [end] ---rest---> [rp]
+     *
+     * where prefix is some repetitions of atom.  In the general case we need
+     *
 >>>>>>> upstream/master
      * [lp] ---> [s] ---iterator---> [s2] ---rest---> [rp]
      *
@@ -1844,6 +1848,7 @@ freesrnode(
 }
 
 /*
+<<<<<<< HEAD
  - optst - optimize a subRE subtree
  ^ static void optst(struct vars *, struct subre *);
  */
@@ -1863,6 +1868,8 @@ optst(
 }
 
 /*
+=======
+>>>>>>> upstream/master
  - numst - number tree nodes (assigning "id" indexes)
  ^ static int numst(struct subre *, int);
  */
@@ -2118,8 +2125,13 @@ dump(
     }
 
     fprintf(f, "\n\n\n========= DUMP ==========\n");
+<<<<<<< HEAD
     fprintf(f, "nsub %d, info 0%lo, csize %d, ntree %d\n",
 	    (int) re->re_nsub, re->re_info, re->re_csize, g->ntree);
+=======
+    fprintf(f, "nsub %" TCL_Z_MODIFIER "d, info 0%lo, ntree %d\n",
+	    re->re_nsub, re->re_info, g->ntree);
+>>>>>>> upstream/master
 
     dumpcolors(&g->cmap, f);
     if (!NULLCNFA(g->search)) {
@@ -2133,6 +2145,9 @@ dump(
     }
     fprintf(f, "\n");
     dumpst(g->tree, f, 0);
+#else
+    (void)re;
+    (void)f;
 #endif
 }
 

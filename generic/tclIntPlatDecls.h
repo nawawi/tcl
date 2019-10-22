@@ -109,7 +109,11 @@ EXTERN int		TclUnixWaitForFile(int fd, int mask, int timeout);
 /* Slot 7 is reserved */
 /* 8 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXTERN int		TclpGetPid(Tcl_Pid pid);
+=======
+EXTERN size_t		TclpGetPid(Tcl_Pid pid);
+>>>>>>> upstream/master
 =======
 EXTERN size_t		TclpGetPid(Tcl_Pid pid);
 >>>>>>> upstream/master
@@ -279,7 +283,11 @@ typedef struct TclIntPlatStubs {
     void (*reserved6)(void);
     void (*reserved7)(void);
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*tclpGetPid) (Tcl_Pid pid); /* 8 */
+=======
+    size_t (*tclpGetPid) (Tcl_Pid pid); /* 8 */
+>>>>>>> upstream/master
 =======
     size_t (*tclpGetPid) (Tcl_Pid pid); /* 8 */
 >>>>>>> upstream/master

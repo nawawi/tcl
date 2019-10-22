@@ -95,6 +95,17 @@
 #endif /* _MSC_VER */
 
 /*
+ * Meridian: am, pm, or 24-hour style.
+ */
+
+typedef enum _MERIDIAN {
+    MERam, MERpm, MER24
+} MERIDIAN;
+
+
+
+
+/*
  * yyparse will accept a 'struct DateInfo' as its parameter; that's where the
  * parsed fields will be returned.
  */
@@ -112,7 +123,7 @@ typedef struct DateInfo {
     time_t dateHour;
     time_t dateMinutes;
     time_t dateSeconds;
-    int dateMeridian;
+    MERIDIAN dateMeridian;
     int dateHaveTime;
 
     time_t dateTimezone;
@@ -199,6 +210,7 @@ typedef enum _DSTMODE {
     DSTon, DSToff, DSTmaybe
 } DSTMODE;
 
+<<<<<<< HEAD
 /*
  * Meridian: am, pm, or 24-hour style.
  */
@@ -210,6 +222,8 @@ typedef enum _MERIDIAN {
 
 
 
+=======
+>>>>>>> upstream/master
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
 #   define YY_NULLPTR nullptr
@@ -421,10 +435,17 @@ typedef short yytype_int16;
 #ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
 # define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
 # define YY_IGNORE_MAYBE_UNINITIALIZED_END
+<<<<<<< HEAD
+=======
+#endif
+#ifndef YY_INITIAL_VALUE
+# define YY_INITIAL_VALUE(Value) /* Nothing. */
+>>>>>>> upstream/master
 #endif
 #ifndef YY_INITIAL_VALUE
 # define YY_INITIAL_VALUE(Value) /* Nothing. */
 #endif
+
 
 
 #if ! defined yyoverflow || YYERROR_VERBOSE
@@ -854,9 +875,15 @@ do {                                            \
 
 #ifndef YY_LOCATION_PRINT
 # if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+<<<<<<< HEAD
 
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
+=======
+
+/* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
+
+>>>>>>> upstream/master
 YY_ATTRIBUTE_UNUSED
 static unsigned
 yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
@@ -1322,12 +1349,21 @@ YYLTYPE yylloc = yyloc_default;
     YYLTYPE yylsa[YYINITDEPTH];
     YYLTYPE *yyls;
     YYLTYPE *yylsp;
+<<<<<<< HEAD
 
     /* The locations where the error started and ended.  */
     YYLTYPE yyerror_range[3];
 
     YYSIZE_T yystacksize;
 
+=======
+
+    /* The locations where the error started and ended.  */
+    YYLTYPE yyerror_range[3];
+
+    YYSIZE_T yystacksize;
+
+>>>>>>> upstream/master
   int yyn;
   int yyresult;
   /* Lookahead token as an internal (translated) token number.  */
@@ -2549,9 +2585,9 @@ LookupWord(
     YYSTYPE* yylvalPtr,
     char *buff)
 {
-    register char *p;
-    register char *q;
-    register const TABLE *tp;
+    char *p;
+    char *q;
+    const TABLE *tp;
     int i, abbrev;
 
     /*
@@ -2674,8 +2710,8 @@ TclDatelex(
     YYLTYPE* location,
     DateInfo *info)
 {
-    register char c;
-    register char *p;
+    char c;
+    char *p;
     char buff[20];
     int Count;
 
@@ -2761,7 +2797,7 @@ TclClockOldscanObjCmd(
 	return TCL_ERROR;
     }
 
-    yyInput = Tcl_GetString( objv[1] );
+    yyInput = TclGetString(objv[1]);
     dateInfo.dateStart = yyInput;
 
     yyHaveDate = 0;

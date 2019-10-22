@@ -6,8 +6,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	This file is used to generate the tclDecls.h, tclPlatDecls.h,
 #	tclStub.c, and tclPlatStub.c files.
+=======
+#	This file is used to generate the tclDecls.h, tclPlatDecls.h
+#	and tclStubInit.c files.
+>>>>>>> upstream/master
 =======
 #	This file is used to generate the tclDecls.h, tclPlatDecls.h
 #	and tclStubInit.c files.
@@ -314,9 +319,16 @@ declare 74 {
 declare 75 {
     int Tcl_AsyncReady(void)
 }
+<<<<<<< HEAD
 declare 76 {
     void Tcl_BackgroundError(Tcl_Interp *interp)
 }
+=======
+# Removed in 9.0
+#declare 76 {deprecated {No longer in use, changed to macro}} {
+#    void Tcl_BackgroundError(Tcl_Interp *interp)
+#}
+>>>>>>> upstream/master
 # Removed in 9.0:
 #declare 77 {deprecated {Use Tcl_UtfBackslash}} {
 #    char Tcl_Backslash(const char *src, int *readPtr)
@@ -658,9 +670,16 @@ declare 172 {
 declare 173 {
     Tcl_Channel Tcl_GetStdChannel(int type)
 }
+<<<<<<< HEAD
 declare 174 {
     const char *Tcl_GetStringResult(Tcl_Interp *interp)
 }
+=======
+# Removed in 9.0, replaced by macro.
+#declare 174 {
+#    const char *Tcl_GetStringResult(Tcl_Interp *interp)
+#}
+>>>>>>> upstream/master
 # Removed in 9.0, replaced by macro.
 #declare 175 {deprecated {No longer in use, changed to macro}} {
 #    const char *Tcl_GetVar(Tcl_Interp *interp, const char *varName,
@@ -706,7 +725,7 @@ declare 186 {
 	    Tcl_DString *resultPtr)
 }
 declare 187 {
-    int Tcl_LinkVar(Tcl_Interp *interp, const char *varName, char *addr,
+    int Tcl_LinkVar(Tcl_Interp *interp, const char *varName, void *addr,
 	    int type)
 }
 
@@ -908,9 +927,16 @@ declare 243 {
 #    void Tcl_StaticPackage(Tcl_Interp *interp, const char *pkgName,
 #	    Tcl_PackageInitProc *initProc, Tcl_PackageInitProc *safeInitProc)
 #}
+<<<<<<< HEAD
 declare 245 {
     int Tcl_StringMatch(const char *str, const char *pattern)
 }
+=======
+# Removed in 9.0 (stub entry only)
+#declare 245 {
+#    int Tcl_StringMatch(const char *str, const char *pattern)
+#}
+>>>>>>> upstream/master
 # Removed in 9.0:
 #declare 246 {
 #    int Tcl_TellOld(Tcl_Channel chan)
@@ -1118,7 +1144,11 @@ declare 293 {
 declare 294 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void Tcl_ExitThread(int status)
+=======
+    TCL_NORETURN void Tcl_ExitThread(int status)
+>>>>>>> upstream/master
 =======
     TCL_NORETURN void Tcl_ExitThread(int status)
 >>>>>>> upstream/master
@@ -1267,7 +1297,7 @@ declare 335 {
     int Tcl_UtfToTitle(char *src)
 }
 declare 336 {
-    int Tcl_UtfToUniChar(const char *src, Tcl_UniChar *chPtr)
+    int Tcl_UtfToChar16(const char *src, unsigned short *chPtr)
 }
 declare 337 {
     int Tcl_UtfToUpper(char *src)
@@ -1324,11 +1354,19 @@ declare 353 {
 	    size_t numChars)
 }
 declare 354 {
+<<<<<<< HEAD
     char *Tcl_UniCharToUtfDString(const Tcl_UniChar *uniStr,
 	    size_t uniLength, Tcl_DString *dsPtr)
 }
 declare 355 {
     Tcl_UniChar *Tcl_UtfToUniCharDString(const char *src,
+=======
+    char *Tcl_Char16ToUtfDString(const unsigned short *uniStr,
+	    size_t uniLength, Tcl_DString *dsPtr)
+}
+declare 355 {
+    unsigned short *Tcl_UtfToChar16DString(const char *src,
+>>>>>>> upstream/master
 	    size_t length, Tcl_DString *dsPtr)
 }
 declare 356 {
@@ -1899,7 +1937,7 @@ declare 505 {
 # dkf, API by Brent Welch?
 declare 506 {
     Tcl_Namespace *Tcl_CreateNamespace(Tcl_Interp *interp, const char *name,
-	    ClientData clientData, Tcl_NamespaceDeleteProc *deleteProc)
+	    void *clientData, Tcl_NamespaceDeleteProc *deleteProc)
 }
 declare 507 {
     void Tcl_DeleteNamespace(Tcl_Namespace *nsPtr)
@@ -1948,20 +1986,27 @@ declare 518 {
 	    const char *encodingName)
 }
 
+<<<<<<< HEAD
 # TIP#121 (exit handler) dkf for Joe Mistachkin
 declare 519 {
     Tcl_ExitProc *Tcl_SetExitProc(TCL_NORETURN1 Tcl_ExitProc *proc)
 }
+=======
+# Removed in 9.0 (stub entry only)
+#declare 519 {nostub {Don't use this function in a stub-enabled extension}} {
+#    Tcl_ExitProc *Tcl_SetExitProc(TCL_NORETURN1 Tcl_ExitProc *proc)
+#}
+>>>>>>> upstream/master
 
 # TIP#143 (resource limits) dkf
 declare 520 {
     void Tcl_LimitAddHandler(Tcl_Interp *interp, int type,
-	    Tcl_LimitHandlerProc *handlerProc, ClientData clientData,
+	    Tcl_LimitHandlerProc *handlerProc, void *clientData,
 	    Tcl_LimitHandlerDeleteProc *deleteProc)
 }
 declare 521 {
     void Tcl_LimitRemoveHandler(Tcl_Interp *interp, int type,
-	    Tcl_LimitHandlerProc *handlerProc, ClientData clientData)
+	    Tcl_LimitHandlerProc *handlerProc, void *clientData)
 }
 declare 522 {
     int Tcl_LimitReady(Tcl_Interp *interp)
@@ -2074,12 +2119,12 @@ declare 551 {
 declare 552 {
     void Tcl_SetTimeProc(Tcl_GetTimeProc *getProc,
 	    Tcl_ScaleTimeProc *scaleProc,
-	    ClientData clientData)
+	    void *clientData)
 }
 declare 553 {
     void Tcl_QueryTimeProc(Tcl_GetTimeProc **getProc,
 	    Tcl_ScaleTimeProc **scaleProc,
-	    ClientData *clientData)
+	    void **clientData)
 }
 
 # TIP#218 (driver thread actions) davygrvy/akupries ChannelType ver 4
@@ -2170,8 +2215,8 @@ declare 574 {
     void Tcl_AppendObjToErrorInfo(Tcl_Interp *interp, Tcl_Obj *objPtr)
 }
 declare 575 {
-    void Tcl_AppendLimitedToObj(Tcl_Obj *objPtr, const char *bytes, int length,
-	    int limit, const char *ellipsis)
+    void Tcl_AppendLimitedToObj(Tcl_Obj *objPtr, const char *bytes,
+	    size_t length, size_t limit, const char *ellipsis)
 }
 declare 576 {
     Tcl_Obj *Tcl_Format(Tcl_Interp *interp, const char *format, int objc,
@@ -2193,7 +2238,7 @@ declare 579 {
 # TIP #285 (script cancellation support) jmistachkin
 declare 580 {
     int Tcl_CancelEval(Tcl_Interp *interp, Tcl_Obj *resultObjPtr,
-	    ClientData clientData, int flags)
+	    void *clientData, int flags)
 }
 declare 581 {
     int Tcl_Canceled(Tcl_Interp *interp, int flags)
@@ -2209,15 +2254,15 @@ declare 582 {
 declare 583 {
     Tcl_Command Tcl_NRCreateCommand(Tcl_Interp *interp,
 	    const char *cmdName, Tcl_ObjCmdProc *proc,
-	    Tcl_ObjCmdProc *nreProc, ClientData clientData,
+	    Tcl_ObjCmdProc *nreProc, void *clientData,
 	    Tcl_CmdDeleteProc *deleteProc)
 }
 declare 584 {
     int Tcl_NREvalObj(Tcl_Interp *interp, Tcl_Obj *objPtr, int flags)
 }
 declare 585 {
-    int Tcl_NREvalObjv(Tcl_Interp *interp, int objc, Tcl_Obj *const objv[],
-	    int flags)
+    int Tcl_NREvalObjv(Tcl_Interp *interp, int objc,
+	    Tcl_Obj *const objv[], int flags)
 }
 declare 586 {
     int Tcl_NRCmdSwap(Tcl_Interp *interp, Tcl_Command cmd, int objc,
@@ -2225,14 +2270,14 @@ declare 586 {
 }
 declare 587 {
     void Tcl_NRAddCallback(Tcl_Interp *interp, Tcl_NRPostProc *postProcPtr,
-	    ClientData data0, ClientData data1, ClientData data2,
-	    ClientData data3)
+	    void *data0, void *data1, void *data2,
+	    void *data3)
 }
 # For use by NR extenders, to have a simple way to also provide a (required!)
 # classic objProc
 declare 588 {
     int Tcl_NRCallObjProc(Tcl_Interp *interp, Tcl_ObjCmdProc *objProc,
-	    ClientData clientData, int objc, Tcl_Obj *const objv[])
+	    void *clientData, int objc, Tcl_Obj *const objv[])
 }
 
 # TIP#316 (Tcl_StatBuf reader functions) dkf
@@ -2826,7 +2871,10 @@ declare 630 {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 # TIP #456
@@ -2884,11 +2932,40 @@ declare 643 {
     int Tcl_IsShared(Tcl_Obj *objPtr)
 }
 
+<<<<<<< HEAD
 # ----- BASELINE -- FOR -- 8.7.0 ----- #
 
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+# TIP#312 New Tcl_LinkArray() function
+declare 644 {
+    int Tcl_LinkArray(Tcl_Interp *interp, const char *varName, void *addr,
+	    int type, size_t size)
+}
+
+declare 645 {
+    int Tcl_GetIntForIndex(Tcl_Interp *interp, Tcl_Obj *objPtr,
+	    size_t endValue, size_t *indexPtr)
+}
+
+# TIP #548
+declare 646 {
+    int Tcl_UtfToUniChar(const char *src, int *chPtr)
+}
+declare 647 {
+    char *Tcl_UniCharToUtfDString(const int *uniStr,
+	    size_t uniLength, Tcl_DString *dsPtr)
+}
+declare 648 {
+    int *Tcl_UtfToUniCharDString(const char *src,
+	    size_t length, Tcl_DString *dsPtr)
+}
+
+# ----- BASELINE -- FOR -- 8.7.0 ----- #
+
 >>>>>>> upstream/master
 ##############################################################################
 
@@ -2904,14 +2981,23 @@ interface tclPlat
 ################################
 # Windows specific functions
 
-# Added in Tcl 8.1
+# Added in Tcl 8.1, Removed in Tcl 9.0 (converted to macro)
 
+<<<<<<< HEAD
 declare 0 win {
     TCHAR *Tcl_WinUtfToTChar(const char *str, size_t len, Tcl_DString *dsPtr)
 }
 declare 1 win {
     char *Tcl_WinTCharToUtf(const TCHAR *str, size_t len, Tcl_DString *dsPtr)
 }
+=======
+#declare 0 win {
+#    TCHAR *Tcl_WinUtfToTChar(const char *str, size_t len, Tcl_DString *dsPtr)
+#}
+#declare 1 win {
+#    char *Tcl_WinTCharToUtf(const TCHAR *str, size_t len, Tcl_DString *dsPtr)
+#}
+>>>>>>> upstream/master
 
 ################################
 # Mac OS X specific functions
@@ -2962,6 +3048,9 @@ export {
 }
 export {
     void Tcl_GetMemoryInfo(Tcl_DString *dsPtr)
+}
+export {
+    void Tcl_InitSubsystems(void)
 }
 
 # Local Variables:

@@ -16,7 +16,11 @@ CFLAGS=-O6 -Wall
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #CFLAGS=-g -DDEBUG
+=======
+#CFLAGS=-g -DZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #CFLAGS=-g -DZLIB_DEBUG
 >>>>>>> upstream/master

@@ -73,10 +73,15 @@ static int		InvokeProcedureMethod(void *clientData,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		FinalizeForwardCall(ClientData data[], Tcl_Interp *interp,
 			    int result);
 static int		FinalizePMCall(ClientData data[], Tcl_Interp *interp,
 			    int result);
+=======
+static Tcl_NRPostProc	FinalizeForwardCall;
+static Tcl_NRPostProc	FinalizePMCall;
+>>>>>>> upstream/master
 =======
 static Tcl_NRPostProc	FinalizeForwardCall;
 static Tcl_NRPostProc	FinalizePMCall;
@@ -138,7 +143,7 @@ static const Tcl_MethodType fwdMethodType = {
 #define TclVarTable(contextNs) \
     ((Tcl_HashTable *) (&((Namespace *) (contextNs))->varTable))
 #define TclVarHashGetValue(hPtr) \
-    ((Tcl_Var) ((char *)hPtr - TclOffset(VarInHash, entry)))
+    ((Tcl_Var) ((char *)hPtr - offsetof(VarInHash, entry)))
 
 /*
  * ----------------------------------------------------------------------
@@ -166,8 +171,8 @@ Tcl_NewInstanceMethod(
     void *clientData)	/* Some data associated with the particular
 				 * method to be created. */
 {
-    register Object *oPtr = (Object *) object;
-    register Method *mPtr;
+    Object *oPtr = (Object *) object;
+    Method *mPtr;
     Tcl_HashEntry *hPtr;
     int isNew;
 
@@ -238,8 +243,8 @@ Tcl_NewMethod(
     void *clientData)	/* Some data associated with the particular
 				 * method to be created. */
 {
-    register Class *clsPtr = (Class *) cls;
-    register Method *mPtr;
+    Class *clsPtr = (Class *) cls;
+    Method *mPtr;
     Tcl_HashEntry *hPtr;
     int isNew;
 
@@ -361,7 +366,7 @@ TclOONewProcInstanceMethod(
 				 * interested. */
 {
     int argsLen;
-    register ProcedureMethod *pmPtr;
+    ProcedureMethod *pmPtr;
     Tcl_Method method;
 
     if (Tcl_ListObjLength(interp, argsObj, &argsLen) != TCL_OK) {
@@ -413,7 +418,7 @@ TclOONewProcMethod(
 				 * interested. */
 {
     int argsLen;		/* -1 => delete argsObj before exit */
-    register ProcedureMethod *pmPtr;
+    ProcedureMethod *pmPtr;
     const char *procName;
     Tcl_Method method;
 
@@ -813,7 +818,7 @@ PushMethodCallFrame(
 				 * frame. */
 {
     Namespace *nsPtr = (Namespace *) contextPtr->oPtr->namespacePtr;
-    register int result;
+    int result;
     const char *namePtr;
     CallFrame **framePtrPtr = &fdPtr->framePtr;
     ByteCode *codePtr;
@@ -846,7 +851,7 @@ PushMethodCallFrame(
      */
 
     if (pmPtr->flags & USE_DECLARER_NS) {
-	register Method *mPtr =
+	Method *mPtr =
 		contextPtr->callPtr->chain[contextPtr->index].mPtr;
 
 	if (mPtr->declaringClassPtr != NULL) {
@@ -917,7 +922,7 @@ PushMethodCallFrame(
 	fdPtr->efi.fields[1].proc = pmPtr->gfivProc;
 	fdPtr->efi.fields[1].clientData = pmPtr;
     } else {
-	register Tcl_Method method =
+	Tcl_Method method =
 		Tcl_ObjectContextMethod((Tcl_ObjectContext) contextPtr);
 
 	if (Tcl_MethodDeclarerObject(method) != NULL) {
@@ -1010,7 +1015,8 @@ ProcedureMethodCompiledVarConnect(
     Tcl_Obj *variableObj;
     PrivateVariableMapping *privateVar;
     Tcl_HashEntry *hPtr;
-    int i, isNew, cacheIt, varLen, len;
+    int i, isNew, cacheIt;
+    size_t varLen, len;
     const char *match, *varName;
 
     /*
@@ -1136,8 +1142,8 @@ ProcedureMethodCompiledVarResolver(
      * which look like array accesses. Both will lead us astray.
      */
 
-    if (strstr(Tcl_GetString(variableObj), "::") != NULL ||
-	    Tcl_StringMatch(Tcl_GetString(variableObj), "*(*)")) {
+    if (strstr(TclGetString(variableObj), "::") != NULL ||
+	    Tcl_StringMatch(TclGetString(variableObj), "*(*)")) {
 	Tcl_DecrRefCount(variableObj);
 	return TCL_CONTINUE;
     }
@@ -1195,7 +1201,11 @@ RenderDeclarerName(
 
 #define LIMIT 60
 #define ELLIPSIFY(str,len) \
+<<<<<<< HEAD
 	((len) > LIMIT ? LIMIT : ((int)len)), (str), ((len) > LIMIT ? "..." : "")
+=======
+	((len) > LIMIT ? LIMIT : (int)(len)), (str), ((len) > LIMIT ? "..." : "")
+>>>>>>> upstream/master
 
 static void
 MethodErrorHandler(
@@ -1209,7 +1219,11 @@ MethodErrorHandler(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_GetStringFromObj(mPtr->namePtr, &nameLen);
+=======
+	    TclGetStringFromObj(mPtr->namePtr, &nameLen);
+>>>>>>> upstream/master
 =======
 	    TclGetStringFromObj(mPtr->namePtr, &nameLen);
 >>>>>>> upstream/master
@@ -1249,7 +1263,11 @@ ConstructorErrorHandler(
     Method *mPtr = contextPtr->callPtr->chain[contextPtr->index].mPtr;
     Object *declarerPtr;
     const char *objectName, *kindName;
+<<<<<<< HEAD
     int objectNameLen;
+=======
+    size_t objectNameLen;
+>>>>>>> upstream/master
 
     if (mPtr->declaringObjectPtr != NULL) {
 	declarerPtr = mPtr->declaringObjectPtr;
@@ -1278,7 +1296,7 @@ DestructorErrorHandler(
     Method *mPtr = contextPtr->callPtr->chain[contextPtr->index].mPtr;
     Object *declarerPtr;
     const char *objectName, *kindName;
-    int objectNameLen;
+    size_t objectNameLen;
 
     if (mPtr->declaringObjectPtr != NULL) {
 	declarerPtr = mPtr->declaringObjectPtr;
@@ -1323,7 +1341,7 @@ static void
 DeleteProcedureMethod(
     void *clientData)
 {
-    register ProcedureMethod *pmPtr = clientData;
+    ProcedureMethod *pmPtr = clientData;
 
     if (pmPtr->refCount-- <= 1) {
 	DeleteProcedureMethodRecord(pmPtr);
@@ -1340,6 +1358,7 @@ CloneProcedureMethod(
     ProcedureMethod *pm2Ptr;
     Tcl_Obj *bodyObj, *argsObj;
     CompiledLocal *localPtr;
+<<<<<<< HEAD
 
     /*
      * Copy the argument list.
@@ -1374,6 +1393,42 @@ CloneProcedureMethod(
      * record.
      */
 
+=======
+
+    /*
+     * Copy the argument list.
+     */
+
+    argsObj = Tcl_NewObj();
+    for (localPtr=pmPtr->procPtr->firstLocalPtr; localPtr!=NULL;
+	    localPtr=localPtr->nextPtr) {
+	if (TclIsVarArgument(localPtr)) {
+	    Tcl_Obj *argObj = Tcl_NewObj();
+
+	    Tcl_ListObjAppendElement(NULL, argObj,
+		    Tcl_NewStringObj(localPtr->name, -1));
+	    if (localPtr->defValuePtr != NULL) {
+		Tcl_ListObjAppendElement(NULL, argObj, localPtr->defValuePtr);
+	    }
+	    Tcl_ListObjAppendElement(NULL, argsObj, argObj);
+	}
+    }
+
+    /*
+     * Must strip the internal representation in order to ensure that any
+     * bound references to instance variables are removed. [Bug 3609693]
+     */
+
+    bodyObj = Tcl_DuplicateObj(pmPtr->procPtr->bodyPtr);
+    TclGetString(bodyObj);
+    Tcl_StoreIntRep(pmPtr->procPtr->bodyPtr, &tclByteCodeType, NULL);
+
+    /*
+     * Create the actual copy of the method record, manufacturing a new proc
+     * record.
+     */
+
+>>>>>>> upstream/master
     pm2Ptr = Tcl_Alloc(sizeof(ProcedureMethod));
     memcpy(pm2Ptr, pmPtr, sizeof(ProcedureMethod));
     pm2Ptr->refCount = 1;
@@ -1416,7 +1471,11 @@ TclOONewForwardInstanceMethod(
 				 * prefix to forward to. */
 {
     int prefixLen;
+<<<<<<< HEAD
     register ForwardMethod *fmPtr;
+=======
+    ForwardMethod *fmPtr;
+>>>>>>> upstream/master
 
     if (Tcl_ListObjLength(interp, prefixObj, &prefixLen) != TCL_OK) {
 	return NULL;
@@ -1455,7 +1514,11 @@ TclOONewForwardMethod(
 				 * prefix to forward to. */
 {
     int prefixLen;
+<<<<<<< HEAD
     register ForwardMethod *fmPtr;
+=======
+    ForwardMethod *fmPtr;
+>>>>>>> upstream/master
 
     if (Tcl_ListObjLength(interp, prefixObj, &prefixLen) != TCL_OK) {
 	return NULL;
@@ -1512,7 +1575,10 @@ InvokeForwardMethod(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1524,6 +1590,9 @@ InvokeForwardMethod(
      */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1666,6 +1735,7 @@ InitEnsembleRewrite(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
     int isRootEnsemble = (iPtr->ensembleRewrite.sourceObjs == NULL);
     Tcl_Obj **argObjs;
@@ -1688,6 +1758,11 @@ InitEnsembleRewrite(
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+    unsigned len = rewriteLength + objc - toRewrite;
+    Tcl_Obj **argObjs = TclStackAlloc(interp, sizeof(Tcl_Obj *) * len);
+
+>>>>>>> upstream/master
     memcpy(argObjs, rewriteObjs, rewriteLength * sizeof(Tcl_Obj *));
     memcpy(argObjs + rewriteLength, objv + toRewrite,
 	    sizeof(Tcl_Obj *) * (objc - toRewrite));
@@ -1701,6 +1776,7 @@ InitEnsembleRewrite(
      * (and unavoidably).
      */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1720,6 +1796,11 @@ InitEnsembleRewrite(
 	}
     }
 
+=======
+    if (TclInitRewriteEnsemble(interp, toRewrite, rewriteLength, objv)) {
+	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);
+    }
+>>>>>>> upstream/master
 =======
     if (TclInitRewriteEnsemble(interp, toRewrite, rewriteLength, objv)) {
 	TclNRAddCallback(interp, TclClearRootEnsemble, NULL, NULL, NULL, NULL);

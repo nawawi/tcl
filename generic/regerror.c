@@ -58,7 +58,6 @@ static const struct rerr {
 size_t				/* Actual space needed (including NUL) */
 regerror(
     int code,			/* Error code, or REG_ATOI or REG_ITOA */
-    const regex_t *preg,	/* Associated regex_t (unused at present) */
     char *errbuf,		/* Result buffer (unless errbuf_size==0) */
     size_t errbuf_size)		/* Available space in errbuf, can be 0 */
 {
@@ -88,7 +87,7 @@ regerror(
 	if (r->code >= 0) {
 	    msg = r->name;
 	} else {		/* Unknown; tell him the number */
-	    sprintf(convbuf, "REG_%u", (unsigned)icode);
+	    sprintf(convbuf, "REG_%u", icode);
 	    msg = convbuf;
 	}
 	break;

@@ -39,12 +39,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Release\tclsh85.exe"
 =======
 # PROP BASE Target_File "Release\tclsh87.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh87.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Release\tclsh90.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh90.exe"
@@ -60,12 +64,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Release\tclsh85t.exe"
 =======
 # PROP Target_File "Release\tclsh87t.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh87t.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Release\tclsh90t.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh90t.exe"
@@ -84,12 +92,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Debug\tclsh85g.exe"
 =======
 # PROP BASE Target_File "Debug\tclsh87g.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh87g.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Debug\tclsh90g.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh90g.exe"
@@ -105,12 +117,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Debug\tclsh85tg.exe"
 =======
 # PROP Target_File "Debug\tclsh87tg.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh87tg.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Debug\tclsh90tg.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh90tg.exe"
@@ -129,12 +145,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Debug\tclsh85sg.exe"
 =======
 # PROP BASE Target_File "Debug\tclsh87sg.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh87sg.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Debug\tclsh90sg.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Debug\tclsh90sg.exe"
@@ -150,12 +170,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Debug\tclsh85sg.exe"
 =======
 # PROP Target_File "Debug\tclsh87sg.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh87sg.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Debug\tclsh90sg.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Debug\tclsh90sg.exe"
@@ -174,12 +198,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP BASE Target_File "Release\tclsh85s.exe"
 =======
 # PROP BASE Target_File "Release\tclsh87s.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh87s.exe"
+>>>>>>> upstream/master
+=======
+# PROP BASE Target_File "Release\tclsh90s.exe"
 >>>>>>> upstream/master
 =======
 # PROP BASE Target_File "Release\tclsh90s.exe"
@@ -195,12 +223,16 @@ CFG=tcl - Win32 Debug Static
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # PROP Target_File "Release\tclsh85s.exe"
 =======
 # PROP Target_File "Release\tclsh87s.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh87s.exe"
+>>>>>>> upstream/master
+=======
+# PROP Target_File "Release\tclsh90s.exe"
 >>>>>>> upstream/master
 =======
 # PROP Target_File "Release\tclsh90s.exe"
@@ -244,10 +276,13 @@ SOURCE=..\compat\dlfcn.h
 # End Source File
 # Begin Source File
 
+<<<<<<< HEAD
 SOURCE=..\compat\fixstrtod.c
 # End Source File
 # Begin Source File
 
+=======
+>>>>>>> upstream/master
 SOURCE=..\compat\gettod.c
 # End Source File
 # Begin Source File
@@ -284,10 +319,13 @@ SOURCE=..\compat\strstr.c
 # End Source File
 # Begin Source File
 
+<<<<<<< HEAD
 SOURCE=..\compat\strtod.c
 # End Source File
 # Begin Source File
 
+=======
+>>>>>>> upstream/master
 SOURCE=..\compat\strtol.c
 # End Source File
 # Begin Source File
@@ -300,10 +338,13 @@ SOURCE=..\compat\tclErrno.h
 # End Source File
 # Begin Source File
 
+<<<<<<< HEAD
 SOURCE=..\compat\unistd.h
 # End Source File
 # Begin Source File
 
+=======
+>>>>>>> upstream/master
 SOURCE=..\compat\waitpid.c
 # End Source File
 # End Group
@@ -1524,6 +1565,7 @@ SOURCE=.\configure
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 SOURCE=.\configure.in
 =======
 SOURCE=.\configure.ac
@@ -1535,6 +1577,9 @@ SOURCE=.\configure.ac
 # Begin Source File
 
 SOURCE=.\makefile.bc
+=======
+SOURCE=.\configure.ac
+>>>>>>> upstream/master
 =======
 SOURCE=.\configure.ac
 >>>>>>> upstream/master

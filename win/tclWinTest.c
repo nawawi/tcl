@@ -136,7 +136,7 @@ TesteventloopCmd(
 	while (!done) {
 	    MSG msg;
 
-	    if (!GetMessage(&msg, NULL, 0, 0)) {
+	    if (!GetMessageW(&msg, NULL, 0, 0)) {
 		/*
 		 * The application is exiting, so repost the quit message and
 		 * start unwinding.
@@ -146,7 +146,7 @@ TesteventloopCmd(
 		break;
 	    }
 	    TranslateMessage(&msg);
-	    DispatchMessage(&msg);
+	    DispatchMessageW(&msg);
 	}
 	(void) Tcl_SetServiceMode(oldMode);
 	framePtr = oldFramePtr;
@@ -276,11 +276,11 @@ TestwinclockCmd(
 
     result = Tcl_NewObj();
     Tcl_ListObjAppendElement(interp, result,
-	    Tcl_NewIntObj((int) (t2.QuadPart / 10000000)));
+	    Tcl_NewWideIntObj(t2.QuadPart / 10000000));
     Tcl_ListObjAppendElement(interp, result,
-	    Tcl_NewIntObj((int) ((t2.QuadPart / 10) % 1000000)));
-    Tcl_ListObjAppendElement(interp, result, Tcl_NewIntObj(tclTime.sec));
-    Tcl_ListObjAppendElement(interp, result, Tcl_NewIntObj(tclTime.usec));
+	    Tcl_NewWideIntObj((t2.QuadPart / 10) % 1000000));
+    Tcl_ListObjAppendElement(interp, result, Tcl_NewWideIntObj(tclTime.sec));
+    Tcl_ListObjAppendElement(interp, result, Tcl_NewWideIntObj(tclTime.usec));
 
     Tcl_ListObjAppendElement(interp, result, Tcl_NewWideIntObj(p1.QuadPart));
     Tcl_ListObjAppendElement(interp, result, Tcl_NewWideIntObj(p2.QuadPart));
@@ -399,11 +399,19 @@ TestplatformChmod(
 {
     static const SECURITY_INFORMATION infoBits = OWNER_SECURITY_INFORMATION
 	    | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION;
+<<<<<<< HEAD
     /* don't deny DELETE mask (reset writable only, allow test-cases cleanup) */
     static const DWORD readOnlyMask = FILE_DELETE_CHILD | FILE_ADD_FILE
 	    | FILE_ADD_SUBDIRECTORY | FILE_WRITE_EA | FILE_APPEND_DATA
 	    | FILE_WRITE_DATA
 	    /* | DELETE */;
+=======
+    /* don't reset change permissions mask (WRITE_DAC, allow test-cases restore it to cleanup) */
+    static const DWORD readOnlyMask = FILE_DELETE_CHILD | FILE_ADD_FILE
+	    | FILE_ADD_SUBDIRECTORY | FILE_WRITE_EA | FILE_APPEND_DATA
+	    | FILE_WRITE_DATA
+	    | DELETE;
+>>>>>>> upstream/master
 
     /*
      * References to security functions (only available on NT and later).
@@ -572,7 +580,11 @@ TestplatformChmod(
      */
 
     if (set_readOnly == acl_readOnly_found || SetNamedSecurityInfoA(
+<<<<<<< HEAD
 	    (LPSTR) nativePath, SE_FILE_OBJECT, 
+=======
+	    (LPSTR) nativePath, SE_FILE_OBJECT,
+>>>>>>> upstream/master
 	    DACL_SECURITY_INFORMATION /*| PROTECTED_DACL_SECURITY_INFORMATION*/,
 	    NULL, NULL, newAcl, NULL) == ERROR_SUCCESS) {
 	res = 0;

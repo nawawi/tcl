@@ -20,7 +20,10 @@ unset -nocomplain foo
 
 testConstraint exec [llength [info commands exec]]
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 # Used for constraining memory leak tests
 testConstraint memory [llength [info commands memory]]
@@ -35,6 +38,9 @@ if {[testConstraint memory]} {
 	expr {$end - $tmp}
     }
 }
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test regexp-1.1 {basic regexp operation} {
@@ -471,7 +477,11 @@ test regexp-11.4 {regsub errors} {
 test regexp-11.5 {regsub errors} {
     list [catch {regsub -gorp a b c} msg] $msg
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {bad option "-gorp": must be -all, -nocase, -expanded, -line, -linestop, -lineanchor, -start, or --}}
+=======
+} {1 {bad option "-gorp": must be -all, -command, -expanded, -line, -linestop, -lineanchor, -nocase, -start, or --}}
+>>>>>>> upstream/master
 =======
 } {1 {bad option "-gorp": must be -all, -command, -expanded, -line, -linestop, -lineanchor, -nocase, -start, or --}}
 >>>>>>> upstream/master
@@ -767,11 +777,14 @@ test regexp-20.1 {regsub shared object shimmering} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set a abcdefghijklmnopqurstuvwxyz 
     set b $a 
     set c abcdefghijklmnopqurstuvwxyz0123456789 
     regsub $a $c $b d 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -785,6 +798,9 @@ test regexp-20.1 {regsub shared object shimmering} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -925,6 +941,7 @@ test regexp-22.5 {Bug 3610026} -setup {
 test regexp-22.6 {Bug 6585b21ca8} {
     expr {[regexp {(\w).*?\1} Programmer m] ? $m : "<NONE>"}
 } rogr
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -1087,6 +1104,8 @@ test regexp-24.11 {regsub -all and -line} {
 } "a<b><b>\n<b>"
 
 =======
+=======
+>>>>>>> upstream/master
 
 
 test regexp-23.1 {regexp -all and -line} {
@@ -1333,7 +1352,10 @@ test regexp-26.13 {regexp without -line option} {
     regexp -all -inline -- {a*} "b\n"
 } {{} {}}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 
 test regexp-27.1 {regsub -command} {
     regsub -command {.x.} {abcxdef} {string length}
@@ -1385,6 +1407,9 @@ test regexp-27.12 {regsub -command representation smash} {
     set s {list (.+)}
     regsub -command $s {list list} $s
 } {(.+) {list list} list}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 # cleanup

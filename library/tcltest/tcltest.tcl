@@ -22,7 +22,11 @@ namespace eval tcltest {
     # When the version number changes, be sure to update the pkgIndex.tcl file,
     # and the install directory in the Makefiles.  When the minor version
     # changes (new feature) be sure to update the man page as well.
+<<<<<<< HEAD
     variable Version 2.5.0
+=======
+    variable Version 2.5.1
+>>>>>>> upstream/master
 
     # Compatibility support for dumb variables defined in tcltest 1
     # Do not use these.  Call [package provide Tcl] and [info patchlevel]
@@ -2731,7 +2735,11 @@ proc tcltest::GetMatchingDirectories {rootdir} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     return $matchDirs
+=======
+    return [lsort $matchDirs]
+>>>>>>> upstream/master
 =======
     return [lsort $matchDirs]
 >>>>>>> upstream/master
@@ -3084,7 +3092,16 @@ proc tcltest::removeFile {name {directory ""}} {
 	    Warn "removeFile removing \"$fullName\":\n  not a file"
 	}
     }
+<<<<<<< HEAD
     return [file delete -- $fullName]
+=======
+    if {[catch {file delete -- $fullName} msg ]} {
+	DebugDo 1 {
+	    Warn "removeFile removing \"$fullName\":\n  failed: $msg"
+	}
+    }
+    return
+>>>>>>> upstream/master
 }
 
 # tcltest::makeDirectory --

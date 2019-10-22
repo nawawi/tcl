@@ -9,6 +9,7 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
  */
@@ -29,6 +30,12 @@ const unsigned char mp_s_rmap_reverse[] = {
       0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, /* pqrstuvw */
       0x3b, 0x3c, 0x3d, 0xff, 0xff, 0xff, 0xff, 0xff, /* xyz{|}~. */
 =======
+=======
+ * SPDX-License-Identifier: Unlicense
+ */
+
+/* chars used in radix conversions */
+>>>>>>> upstream/master
 const char *const mp_s_rmap = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
 const unsigned char mp_s_rmap_reverse[] = {
    0xff, 0xff, 0xff, 0x3e, 0xff, 0xff, 0xff, 0x3f, /* ()*+,-./ */
@@ -42,6 +49,9 @@ const unsigned char mp_s_rmap_reverse[] = {
    0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, /* hijklmno */
    0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, /* pqrstuvw */
    0x3b, 0x3c, 0x3d, 0xff, 0xff, 0xff, 0xff, 0xff, /* xyz{|}~. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 };
 const size_t mp_s_rmap_reverse_sz = sizeof(mp_s_rmap_reverse);

@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -31,6 +35,7 @@ dde \- Execute a Dynamic Data Exchange command
 .sp
 \fBpackage require dde 1.4\fR
 <<<<<<< HEAD
+<<<<<<< HEAD
 .sp
 \fBdde servername\fR ?\fB\-force\fR? ?\fB\-handler \fIproc\fR? ?\fB\-\|\-\fR? ?\fItopic\fR?
 .sp
@@ -58,11 +63,16 @@ dde \- Execute a Dynamic Data Exchange command
 >>>>>>> upstream/master
 =======
 =======
+=======
+>>>>>>> upstream/master
 .sp
 \fBdde servername\fR ?\fB\-force\fR? ?\fB\-handler \fIproc\fR? ?\fB\-\|\-\fR? ?\fItopic\fR?
 .sp
 .VS 8.6
 \fBdde execute\fR ?\fB\-async\fR? ?\fB\-binary\fR? \fIservice topic data\fR
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 .sp
 \fBdde poke\fR ?\fB\-binary\fR? \fIservice topic item data\fR
@@ -135,7 +145,11 @@ dde clients which don't implement the CF_UNICODE clipboard format, this
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will automatically be translated to the system encoding. You can use 
+=======
+will automatically be translated to the system encoding. You can use
+>>>>>>> upstream/master
 =======
 will automatically be translated to the system encoding. You can use
 >>>>>>> upstream/master
@@ -168,7 +182,11 @@ dde clients which don't implement the CF_UNICODE clipboard format, this
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 will automatically be translated to the system encoding. You can use 
+=======
+will automatically be translated to the system encoding. You can use
+>>>>>>> upstream/master
 =======
 will automatically be translated to the system encoding. You can use
 >>>>>>> upstream/master

@@ -101,15 +101,21 @@ test lreplace-1.26 {lreplace command} {
 test lreplace-1.27 {lreplace command} -body {
     lreplace x 1 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes 1 -result {list doesn't contain element 1}
 test lreplace-1.28 {lreplace command} -body {
     lreplace x 1 1 y
 } -returnCodes 1 -result {list doesn't contain element 1}
 =======
+=======
+>>>>>>> upstream/master
 } -result x
 test lreplace-1.28 {lreplace command} -body {
     lreplace x 1 1 y
 } -result {x y}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 test lreplace-1.29 {lreplace command} -body {
     lreplace x 1 1 [error foo]
@@ -156,7 +162,10 @@ test lreplace-4.1 {Bug ccc2c2cc98: lreplace edge case} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Note that this test will fail in 8.5
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -184,7 +193,10 @@ test lreplace-4.5 {lreplace edge case} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -234,10 +246,13 @@ test lreplace-4.12 {lreplace end index first} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -290,6 +305,9 @@ apply {{} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

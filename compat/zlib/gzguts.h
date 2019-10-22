@@ -1,7 +1,11 @@
 /* gzguts.h -- zlib internal header definitions for gz* operations
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 2004, 2005, 2010, 2011, 2012, 2013 Mark Adler
+=======
+ * Copyright (C) 2004, 2005, 2010, 2011, 2012, 2013, 2016 Mark Adler
+>>>>>>> upstream/master
 =======
  * Copyright (C) 2004, 2005, 2010, 2011, 2012, 2013, 2016 Mark Adler
 >>>>>>> upstream/master
@@ -35,7 +39,10 @@
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -43,6 +50,9 @@
 #  define _POSIX_SOURCE
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -58,7 +68,10 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #if defined(_WIN32) || defined(__CYGWIN__)
@@ -66,6 +79,9 @@
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -131,6 +147,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* unlike snprintf (which is required in C99, yet still not supported by
    Microsoft more than a decade later!), _snprintf does not guarantee null
    termination of the result -- however this is only used in gzlib.c where
@@ -139,11 +156,16 @@
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 /* unlike snprintf (which is required in C99), _snprintf does not guarantee
    null termination of the result -- however this is only used in gzlib.c where
    the result is assured to fit in the space provided */
 #if defined(_MSC_VER) && _MSC_VER < 1900
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -155,7 +177,13 @@
 #endif
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* compile with -Dlocal if your debugger can't find static symbols */
+=======
+/* since "static" is used to mean two completely different things in C, we
+   define "local" for the non-static meaning of "static", for readability
+   (compile with -Dlocal if your debugger can't find static symbols) */
+>>>>>>> upstream/master
 =======
 /* since "static" is used to mean two completely different things in C, we
    define "local" for the non-static meaning of "static", for readability
@@ -231,7 +259,11 @@ typedef struct {
     unsigned want;          /* requested buffer size, default is GZBUFSIZE */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     unsigned char *in;      /* input buffer */
+=======
+    unsigned char *in;      /* input buffer (double-sized when writing) */
+>>>>>>> upstream/master
 =======
     unsigned char *in;      /* input buffer (double-sized when writing) */
 >>>>>>> upstream/master

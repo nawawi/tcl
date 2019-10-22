@@ -139,7 +139,11 @@ test chan-16.5 {chan command: pending input subcommand} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     chan pending input stdout 
+=======
+    chan pending input stdout
+>>>>>>> upstream/master
 =======
     chan pending input stdout
 >>>>>>> upstream/master
@@ -214,7 +218,11 @@ test chan-16.9 {chan command: pending input subcommand} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     after idle chan-16.9-client 
+=======
+    after idle chan-16.9-client
+>>>>>>> upstream/master
 =======
     after idle chan-16.9-client
 >>>>>>> upstream/master

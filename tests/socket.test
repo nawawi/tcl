@@ -62,9 +62,12 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require tcltest 2
 namespace import -force ::tcltest::*
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 if {[lsearch [namespace children] ::tcltest] == -1} {
@@ -75,13 +78,80 @@ if {[lsearch [namespace children] ::tcltest] == -1} {
 ::tcltest::loadTestedCommands
 catch [list package require -exact Tcltest [info patchlevel]]
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
+=======
+
+if {[expr {[info exists ::env(TRAVIS_OSX_IMAGE)] && [string match xcode* $::env(TRAVIS_OSX_IMAGE)]}]} {
+    return
+}
+
+>>>>>>> upstream/master
 # Some tests require the Thread package or exec command
 testConstraint thread [expr {0 == [catch {package require Thread 2.7-}]}]
 testConstraint exec [llength [info commands exec]]
+testConstraint knownMsvcBug [expr {![info exists ::env(TRAVIS_OS_NAME)] || ![string match windows $::env(TRAVIS_OS_NAME)]}]
+
+# Produce a random port number in the Dynamic/Private range
+# from 49152 through 65535.
+proc randport {} {
+    # firstly try dynamic port via server-socket(0):
+    set port 0x7fffffff
+    catch {
+	set port [lindex [fconfigure [set s [socket -server {} 0]] -sockname] 2]
+	close $s
+    }
+    while {[catch {
+	close [socket -server {} $port]
+    } msg]} {
+	if {[incr i] > 1000} {return -code error "too many iterations to get free random port: $msg"}
+	# try random port:
+	set port [expr {int(rand()*16383+49152)}]
+    }
+    return $port
+}
+
+# Check if testsocket testflags is available
+testConstraint testsocket_testflags [expr {![catch {
+        set h [socket -async localhost [randport]]
+        testsocket testflags $h 0
+        close $h
+    }]}]
+
+
+# Test the latency of tcp connections over the loopback interface. Some OSes
+# (e.g. NetBSD) seem to use the Nagle algorithm and delayed ACKs, so it takes
+# up to 200ms for a packet sent to localhost to arrive. We're measuring this
+# here, so that OSes that don't have this problem can run the tests at full
+# speed.
+set server [socket -server {apply {{s a p} {set ::s1 $s}}} 0]
+set s2 [socket localhost [lindex [fconfigure $server -sockname] 2]]
+vwait s1; close $server
+fconfigure $s1 -buffering line
+fconfigure $s2 -buffering line
+set t1 [clock milliseconds]
+puts $s2 test1; gets $s1
+puts $s2 test2; gets $s1
+close $s1; close $s2
+set t2 [clock milliseconds]
+set lat1 [expr {($t2-$t1)*2}]; # doubled as a safety margin
+
+# Test the latency of failed connection attempts over the loopback
+# interface. They can take more than a second under Windowos and requres
+# additional [after]s in some tests that are not needed on systems that fail
+# immediately.
+set t1 [clock milliseconds]
+catch {socket 127.0.0.1 [randport]}
+set t2 [clock milliseconds]
+set lat2 [expr {($t2-$t1)*3}]
+
+# Use the maximum of the two latency calculations, but at least 200ms
+set latency [expr {$lat1 > $lat2 ? $lat1 : $lat2}]
+set latency [expr {$latency > 200 ? $latency : 200}]
+unset t1 t2 s1 s2 lat1 lat2 server
 
 # Produce a random port number in the Dynamic/Private range
 # from 49152 through 65535.
@@ -316,7 +386,11 @@ test socket_$af-1.2 {arg parsing for socket command} -constraints [list socket s
     socket -server foo
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-myaddr addr? port"}
+=======
+} -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
+>>>>>>> upstream/master
 =======
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
 >>>>>>> upstream/master
@@ -330,7 +404,11 @@ test socket_$af-1.4 {arg parsing for socket command} -constraints [list socket s
     socket -myaddr $localhost
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-myaddr addr? port"}
+=======
+} -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
+>>>>>>> upstream/master
 =======
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
 >>>>>>> upstream/master
@@ -347,10 +425,17 @@ test socket_$af-1.7 {arg parsing for socket command} -constraints [list socket s
     socket -myport 2522
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-myaddr addr? port"}
 test socket_$af-1.8 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
     socket -froboz
 } -returnCodes error -result {bad option "-froboz": must be -async, -myaddr, -myport, or -server}
+=======
+} -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
+test socket_$af-1.8 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
+    socket -froboz
+} -returnCodes error -result {bad option "-froboz": must be -async, -myaddr, -myport, -reuseaddr, -reuseport, or -server}
+>>>>>>> upstream/master
 =======
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
 test socket_$af-1.8 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
@@ -370,10 +455,17 @@ test socket_$af-1.10 {arg parsing for socket command} -constraints [list socket 
     socket host 2528 -junk
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-myaddr addr? port"}
 test socket_$af-1.11 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
     socket -server callback 2520 --
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-myaddr addr? port"}
+=======
+} -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
+test socket_$af-1.11 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
+    socket -server callback 2520 --
+} -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
+>>>>>>> upstream/master
 =======
 } -returnCodes error -result {wrong # args: should be "socket ?-myaddr addr? ?-myport myport? ?-async? host port" or "socket -server command ?-reuseaddr boolean? ?-reuseport boolean? ?-myaddr addr? port"}
 test socket_$af-1.11 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
@@ -397,7 +489,10 @@ test socket_$af-1.14 {arg parsing for socket command} -constraints [list socket 
 } -returnCodes error -result {cannot set -async option for server sockets}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test socket_$af-1.15 {arg parsing for socket command} -constraints [list socket supported_$af] -body {
@@ -419,6 +514,9 @@ test socket_$af-1.20 {arg parsing for socket command} -constraints [list socket 
     socket -reuseport
 } -returnCodes error -result {no argument given for -reuseport option}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -742,7 +840,11 @@ test socket_$af-2.11 {detecting new data} -constraints [list socket supported_$a
     vwait sock
     puts $s2 one
     flush $s2
+<<<<<<< HEAD
     after idle {set x 1}
+=======
+    after $latency {set x 1}; # Spurious failures in Travis CI, if we do [after idle]
+>>>>>>> upstream/master
     vwait x
     fconfigure $sock -blocking 0
     set result a:[gets $sock]
@@ -1153,7 +1255,11 @@ test socket_$af-7.4 {testing socket specific options} -constraints [list socket 
 test socket_$af-7.5 {testing socket specific options} -setup {
     set timer [after 10000 "set x timed_out"]
     set l ""
+<<<<<<< HEAD
 } -constraints [list socket supported_$af unixOrPc] -body {
+=======
+} -constraints [list socket supported_$af unixOrWin] -body {
+>>>>>>> upstream/master
     set s [socket -server accept 0]
     proc accept {s a p} {
 	global x
@@ -1905,7 +2011,10 @@ test socket_$af-13.1 {Testing use of shared socket between two threads} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	thread::wait
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -2365,7 +2474,11 @@ test socket-14.10.1 {pending [socket -async] and nonblocking [puts], server is I
 	removeFile script
     } -result {{} ok}
 test socket-14.11.0 {pending [socket -async] and nonblocking [puts], no listener, no flush} \
+<<<<<<< HEAD
     -constraints {socket} \
+=======
+    -constraints {socket knownMsvcBug} \
+>>>>>>> upstream/master
     -body {
         set sock [socket -async localhost [randport]]
         fconfigure $sock -blocking 0
@@ -2380,6 +2493,7 @@ test socket-14.11.0 {pending [socket -async] and nonblocking [puts], no listener
 test socket-14.11.1 {pending [socket -async] and nonblocking [puts], no listener, flush} \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -constraints {socket nonPortable} \
     -body {
         set sock [socket -async localhost [randport]]
@@ -2387,6 +2501,8 @@ test socket-14.11.1 {pending [socket -async] and nonblocking [puts], no listener
         puts $sock ok
         flush $sock
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     -constraints {socket testsocket_testflags} \
@@ -2401,6 +2517,9 @@ test socket-14.11.1 {pending [socket -async] and nonblocking [puts], no listener
         flush $sock
         testsocket testflags $sock 0
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2512,7 +2631,10 @@ test socket-14.18 {bug c6ed4acfd8: running async socket connect made other conne
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test socket-14.19 {tip 456 -- introduce the -reuseport option} \
@@ -2529,6 +2651,9 @@ test socket-14.19 {tip 456 -- introduce the -reuseport option} \
     } -result ok
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

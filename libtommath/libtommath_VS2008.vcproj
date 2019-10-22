@@ -2,21 +2,34 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
+<<<<<<< HEAD
 	Name="libtommath"
 	ProjectGUID="{42109FEE-B0B9-4FCD-9E56-2863BF8C55D2}"
 	RootNamespace="libtommath"
+=======
+	Name="tommath"
+	ProjectGUID="{42109FEE-B0B9-4FCD-9E56-2863BF8C55D2}"
+	RootNamespace="tommath"
+>>>>>>> upstream/master
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
 		/>
+<<<<<<< HEAD
+=======
+		<Platform
+			Name="x64"
+		/>
+>>>>>>> upstream/master
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
+<<<<<<< HEAD
 			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="4"
@@ -24,6 +37,14 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+=======
+			OutputDirectory="MSVC_$(PlatformName)_$(ConfigurationName)"
+			IntermediateDirectory="MSVC_$(PlatformName)_$(ConfigurationName)\Intermediate"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="0"
+>>>>>>> upstream/master
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -35,26 +56,31 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
+<<<<<<< HEAD
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
+				Name="VCMIDLTool"
+=======
 				Name="VCMIDLTool"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE"
 				MinimalRebuild="true"
+				ExceptionHandling="0"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/libtommath.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile="$(IntDir)\libtomcrypt.pch"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -69,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Debug\tommath.lib"
+				OutputFile="$(OutDir)\tommath.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -81,7 +107,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/libtommath.bsc"
+				OutputFile="$(OutDir)\tommath.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -91,14 +117,13 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			Name="Debug|x64"
+			OutputDirectory="MSVC_$(PlatformName)_$(ConfigurationName)"
+			IntermediateDirectory="MSVC_$(PlatformName)_$(ConfigurationName)\Intermediate"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -110,9 +135,119 @@
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+>>>>>>> upstream/master
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="."
+<<<<<<< HEAD
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				PrecompiledHeaderFile=".\Debug/libtommath.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="4"
+=======
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE"
+				MinimalRebuild="true"
+				ExceptionHandling="0"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				PrecompiledHeaderFile="$(IntDir)\libtomcrypt.pch"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
+				CompileAs="1"
+>>>>>>> upstream/master
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+<<<<<<< HEAD
+				OutputFile="Debug\tommath.lib"
+=======
+				OutputFile="$(OutDir)\tommath.lib"
+>>>>>>> upstream/master
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+<<<<<<< HEAD
+				OutputFile=".\Debug/libtommath.bsc"
+=======
+				OutputFile="$(OutDir)\tommath.bsc"
+>>>>>>> upstream/master
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+<<<<<<< HEAD
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+=======
+			OutputDirectory="MSVC_$(PlatformName)_$(ConfigurationName)"
+			IntermediateDirectory="MSVC_$(PlatformName)_$(ConfigurationName)\Intermediate"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="0"
+>>>>>>> upstream/master
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+<<<<<<< HEAD
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
+				Name="VCMIDLTool"
+=======
 				Name="VCMIDLTool"
 			/>
 			<Tool
@@ -120,14 +255,14 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="."
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/libtommath.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile="$(IntDir)\libtomcrypt.pch"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -144,7 +279,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Release\tommath.lib"
+				OutputFile="$(OutDir)\tommath.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -156,7 +291,99 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
+				OutputFile="$(OutDir)\tommath.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="MSVC_$(PlatformName)_$(ConfigurationName)"
+			IntermediateDirectory="MSVC_$(PlatformName)_$(ConfigurationName)\Intermediate"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+>>>>>>> upstream/master
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="."
+<<<<<<< HEAD
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\Release/libtommath.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+=======
+				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile="$(IntDir)\libtomcrypt.pch"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
+>>>>>>> upstream/master
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+<<<<<<< HEAD
+				OutputFile="Release\tommath.lib"
+=======
+				OutputFile="$(OutDir)\tommath.lib"
+>>>>>>> upstream/master
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+<<<<<<< HEAD
 				OutputFile=".\Release/libtommath.bsc"
+=======
+				OutputFile="$(OutDir)\tommath.bsc"
+>>>>>>> upstream/master
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -172,6 +399,7 @@
 		<File
 			RelativePath="bn_error.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -190,10 +418,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_fast_mp_invmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -212,10 +443,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_fast_mp_montgomery_reduce.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -234,10 +468,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_fast_s_mp_mul_digs.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -256,10 +493,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_fast_s_mp_mul_high_digs.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -278,10 +518,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_fast_s_mp_sqr.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -300,10 +543,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_2expt.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -322,10 +568,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_abs.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -344,10 +593,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_add.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -366,10 +618,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_add_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -388,10 +643,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_addmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -410,10 +668,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_and.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -432,10 +693,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_clamp.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -454,10 +718,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_clear.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -476,10 +743,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_clear_multi.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -498,10 +768,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_cmp.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -520,10 +793,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_cmp_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -542,10 +818,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_cmp_mag.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -564,10 +843,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_cnt_lsb.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -586,10 +868,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_complement.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_copy.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -608,10 +897,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_count_bits.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -630,10 +922,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_div.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -652,10 +947,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_div_2.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -674,10 +972,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_div_2d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -696,10 +997,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_div_3.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -718,10 +1022,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_div_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -740,10 +1047,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_dr_is_modulus.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -762,10 +1072,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_dr_reduce.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -784,10 +1097,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_dr_setup.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -806,10 +1122,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_exch.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -831,11 +1150,17 @@
 		</File>
 		<File
 			RelativePath=".\bn_mp_export.c"
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_export.c"
+>>>>>>> upstream/master
 			>
 		</File>
 		<File
 			RelativePath="bn_mp_expt_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -854,10 +1179,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_expt_d_ex.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_exptmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -876,10 +1208,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_exptmod_fast.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -898,10 +1233,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_exteuclid.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -920,10 +1258,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_fread.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -942,10 +1283,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_fwrite.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -964,10 +1308,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_gcd.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -986,10 +1333,21 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_get_bit.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_get_double.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_get_int.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1008,10 +1366,21 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_get_long.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_get_long_long.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_grow.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1033,11 +1402,17 @@
 		</File>
 		<File
 			RelativePath=".\bn_mp_import.c"
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_import.c"
+>>>>>>> upstream/master
 			>
 		</File>
 		<File
 			RelativePath="bn_mp_init.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1056,10 +1431,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_init_copy.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1078,10 +1456,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_init_multi.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1100,10 +1481,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_init_set.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1122,10 +1506,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_init_set_int.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1144,10 +1531,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_init_size.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1166,10 +1556,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_invmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1188,10 +1581,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_invmod_slow.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1210,10 +1606,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_is_square.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1232,10 +1631,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_jacobi.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1254,10 +1656,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_karatsuba_mul.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1276,10 +1681,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_karatsuba_sqr.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1298,10 +1706,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_kronecker.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_lcm.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1320,10 +1735,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_lshd.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1342,10 +1760,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1364,10 +1785,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mod_2d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1386,10 +1810,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mod_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1408,10 +1835,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_montgomery_calc_normalization.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1430,10 +1860,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_montgomery_reduce.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1452,10 +1885,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_montgomery_setup.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1474,10 +1910,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mul.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1496,10 +1935,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mul_2.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1518,10 +1960,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mul_2d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1540,10 +1985,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mul_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1562,10 +2010,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_mulmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1584,10 +2035,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_n_root.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1606,10 +2060,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_n_root_ex.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_neg.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1628,10 +2089,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_or.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1650,10 +2114,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_fermat.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1672,10 +2139,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_prime_frobenius_underwood.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_is_divisible.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1694,10 +2168,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_is_prime.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1716,10 +2193,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_miller_rabin.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1738,10 +2218,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_next_prime.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1760,10 +2243,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_rabin_miller_trials.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1782,10 +2268,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_prime_random_ex.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1804,10 +2293,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_prime_strong_lucas_selfridge.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_radix_size.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1826,10 +2322,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_radix_smap.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1848,10 +2347,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_rand.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1870,10 +2372,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_read_radix.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1892,10 +2397,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_read_signed_bin.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1914,10 +2422,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_read_unsigned_bin.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1936,10 +2447,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1958,10 +2472,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_2k.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -1980,10 +2497,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_2k_l.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2002,10 +2522,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_2k_setup.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2024,10 +2547,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_2k_setup_l.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2046,10 +2572,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_is_2k.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2068,10 +2597,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_is_2k_l.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2090,10 +2622,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_reduce_setup.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2112,10 +2647,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_rshd.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2134,10 +2672,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_set.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2156,10 +2697,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_set_double.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_set_int.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2178,10 +2726,21 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_set_long.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_set_long_long.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_shrink.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2200,10 +2759,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_signed_bin_size.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2222,10 +2784,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_sqr.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2244,10 +2809,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_sqrmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2266,10 +2834,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_sqrt.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2288,10 +2859,17 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_sqrtmod_prime.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_sub.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2310,10 +2888,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_sub_d.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2332,10 +2913,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_submod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2354,10 +2938,29 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+		</File>
+		<File
+			RelativePath="bn_mp_tc_and.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_tc_div_2d.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_tc_or.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_tc_xor.c"
+			>
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_to_signed_bin.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2376,10 +2979,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_to_signed_bin_n.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2398,10 +3004,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_to_unsigned_bin.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2420,10 +3029,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_to_unsigned_bin_n.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2442,10 +3054,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_toom_mul.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2464,10 +3079,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_toom_sqr.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2486,10 +3104,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_toradix.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2508,10 +3129,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_toradix_n.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2530,10 +3154,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_unsigned_bin_size.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2552,10 +3179,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_xor.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2574,10 +3204,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_zero.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2596,10 +3229,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_prime_tab.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2618,10 +3254,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_reverse.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2640,10 +3279,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_s_mp_add.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2662,10 +3304,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_s_mp_exptmod.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2684,10 +3329,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_s_mp_mul_digs.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2706,10 +3354,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_s_mp_mul_high_digs.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2728,10 +3379,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_s_mp_sqr.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2750,10 +3404,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_s_mp_sub.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2772,10 +3429,13 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bncore.c"
 			>
+<<<<<<< HEAD
 			<FileConfiguration
 				Name="Debug|Win32"
 				>
@@ -2794,6 +3454,8 @@
 					PreprocessorDefinitions=""
 				/>
 			</FileConfiguration>
+=======
+>>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="tommath.h"
@@ -2804,6 +3466,13 @@
 			>
 		</File>
 		<File
+<<<<<<< HEAD
+=======
+			RelativePath="tommath_private.h"
+			>
+		</File>
+		<File
+>>>>>>> upstream/master
 			RelativePath="tommath_superclass.h"
 			>
 		</File>

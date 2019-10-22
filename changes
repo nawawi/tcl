@@ -8461,6 +8461,10 @@ include ::oo::class (fellows)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        *** POTENTIAL INCOMPATIBILITY ***
+>>>>>>> upstream/master
 =======
         *** POTENTIAL INCOMPATIBILITY ***
 >>>>>>> upstream/master
@@ -8536,6 +8540,7 @@ include ::oo::class (fellows)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 2014-12-18 (bug)[af08c8] Crash in full finalize encoding teardown (porter)
 
@@ -8560,6 +8565,8 @@ include ::oo::class (fellows)
 => msgcat 1.6.0
 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -8685,6 +8692,7 @@ improvements to regexp engine from Postgres (lane,porter,fellows,seltenreich)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -8693,6 +8701,8 @@ improvements to regexp engine from Postgres (lane,porter,fellows,seltenreich)
 =======
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 
 2016-03-01 (bug)[803042] mem leak due to reference cycle (porter)
 
@@ -9013,6 +9023,7 @@ in this changeset (new minor version) rather than bug fixes:
 
 --- Released 8.7a1, September 8, 2017 --- http://core.tcl.tk/tcl/ for details
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 
@@ -9030,6 +9041,15 @@ in this changeset (new minor version) rather than bug fixes:
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+
+- Released 8.7a3, Nov 30, 2018 --- http://core.tcl-lang.org/tcl/ for details -
+>>>>>>> upstream/master
+=======
+
+2018-03-12 (TIP 490) add oo support for msgcat => msgcat 1.7.0 (oehlmann)
+
+2018-03-12 (TIP 499) custom locale preference list (oehlmann)
+=> msgcat 1.7.0
 
 - Released 8.7a3, Nov 30, 2018 --- http://core.tcl-lang.org/tcl/ for details -
 >>>>>>> upstream/master

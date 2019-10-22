@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -217,7 +221,11 @@ slave interpreter identified by \fIpath\fR.  If no arguments are
 given, option and current setting are returned.  If \fB\-frame\fR
 is given, the debug setting is set to the given boolean if provided
 and the current setting is returned.
+<<<<<<< HEAD
 This only effects the output of \fBinfo frame\fR, in that exact
+=======
+This only affects the output of \fBinfo frame\fR, in that exact
+>>>>>>> upstream/master
 frame-level information for command invocation at the bytecode level
 is only captured with this setting on.
 .RS

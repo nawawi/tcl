@@ -1,7 +1,11 @@
 /* deflate.h -- internal compression state
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Copyright (C) 1995-2012 Jean-loup Gailly
+=======
+ * Copyright (C) 1995-2016 Jean-loup Gailly
+>>>>>>> upstream/master
 =======
  * Copyright (C) 1995-2016 Jean-loup Gailly
 >>>>>>> upstream/master
@@ -61,6 +65,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define INIT_STATE    42
 #define EXTRA_STATE   69
 #define NAME_STATE    73
@@ -69,6 +74,8 @@
 #define BUSY_STATE   113
 #define FINISH_STATE 666
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 #define INIT_STATE    42    /* zlib header -> BUSY_STATE */
@@ -82,6 +89,9 @@
 #define BUSY_STATE   113    /* deflate -> FINISH_STATE */
 #define FINISH_STATE 666    /* stream complete */
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -112,7 +122,11 @@ typedef struct tree_desc_s {
     int     max_code;            /* largest code with non zero frequency */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     static_tree_desc *stat_desc; /* the corresponding static tree */
+=======
+    const static_tree_desc *stat_desc;  /* the corresponding static tree */
+>>>>>>> upstream/master
 =======
     const static_tree_desc *stat_desc;  /* the corresponding static tree */
 >>>>>>> upstream/master
@@ -137,10 +151,17 @@ typedef struct internal_state {
     Bytef *pending_out;  /* next pending byte to output to the stream */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     uInt   pending;      /* nb of bytes in the pending buffer */
     int   wrap;          /* bit 0 true for zlib, bit 1 true for gzip */
     gz_headerp  gzhead;  /* gzip header information to write */
     uInt   gzindex;      /* where in extra, name, or comment */
+=======
+    ulg   pending;       /* nb of bytes in the pending buffer */
+    int   wrap;          /* bit 0 true for zlib, bit 1 true for gzip */
+    gz_headerp  gzhead;  /* gzip header information to write */
+    ulg   gzindex;       /* where in extra, name, or comment */
+>>>>>>> upstream/master
 =======
     ulg   pending;       /* nb of bytes in the pending buffer */
     int   wrap;          /* bit 0 true for zlib, bit 1 true for gzip */
@@ -300,7 +321,11 @@ typedef struct internal_state {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef DEBUG
+=======
+#ifdef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifdef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -334,7 +359,11 @@ typedef struct internal_state {
  */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define put_byte(s, c) {s->pending_buf[s->pending++] = (c);}
+=======
+#define put_byte(s, c) {s->pending_buf[s->pending++] = (Bytef)(c);}
+>>>>>>> upstream/master
 =======
 #define put_byte(s, c) {s->pending_buf[s->pending++] = (Bytef)(c);}
 >>>>>>> upstream/master
@@ -376,7 +405,11 @@ void ZLIB_INTERNAL _tr_stored_block OF((deflate_state *s, charf *buf,
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef DEBUG
+=======
+#ifndef ZLIB_DEBUG
+>>>>>>> upstream/master
 =======
 #ifndef ZLIB_DEBUG
 >>>>>>> upstream/master
@@ -403,8 +436,13 @@ void ZLIB_INTERNAL _tr_stored_block OF((deflate_state *s, charf *buf,
 # define _tr_tally_dist(s, distance, length, flush) \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   { uch len = (length); \
     ush dist = (distance); \
+=======
+  { uch len = (uch)(length); \
+    ush dist = (ush)(distance); \
+>>>>>>> upstream/master
 =======
   { uch len = (uch)(length); \
     ush dist = (ush)(distance); \

@@ -8,6 +8,10 @@
 *.obj
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+*.pdb
+>>>>>>> upstream/master
 =======
 *.pdb
 >>>>>>> upstream/master
@@ -30,6 +34,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 unix/dltest.marker
 unix/tcl.pc
 =======
@@ -43,13 +48,27 @@ html
 =======
 html
 >>>>>>> upstream/master
+=======
+*/version.vc
+*/libtcl.vfs
+*/libtcl_*.zip
+html
+>>>>>>> upstream/master
 libtommath/bn.ilg
 libtommath/bn.ind
 libtommath/pretty.build
 libtommath/tommath.src
+<<<<<<< HEAD
 libtommath/*.pdf
 libtommath/*.pl
 libtommath/*.sh
+=======
+libtommath/*.log
+libtommath/*.pdf
+libtommath/*.pl
+libtommath/*.sh
+libtommath/doc/*
+>>>>>>> upstream/master
 libtommath/tombc/*
 libtommath/pre_gen/*
 libtommath/pics/*
@@ -61,6 +80,9 @@ libtommath/*.out
 libtommath/*.tex
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -72,6 +94,7 @@ unix/tcl.pc
 unix/tclIndex
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 unix/pkgs/*
 win/pkgs/*
@@ -79,10 +102,13 @@ win/tcl.hpj
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 unix/pkgs/*
 win/Debug*
 win/Release*
 win/pkgs/*
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -95,6 +121,11 @@ win/tcl.hpj
 =======
 win/coffbase.txt
 >>>>>>> upstream/master
+win/tcl.hpj
+win/nmhlp-out.txt
+>>>>>>> upstream/master
+=======
+win/coffbase.txt
 win/tcl.hpj
 win/nmhlp-out.txt
 >>>>>>> upstream/master

@@ -210,6 +210,11 @@ typedef struct Object {
 				/* Configurations for the variable resolver
 				 * used inside methods. */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    Tcl_Command myclassCommand;	/* Reference to this object's class dispatcher
+				 * command. */
+>>>>>>> upstream/master
 =======
     Tcl_Command myclassCommand;	/* Reference to this object's class dispatcher
 				 * command. */
@@ -225,6 +230,7 @@ typedef struct Object {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 #define CLASS_GONE	4	/* Indicates that the class of this object has
 				 * been deleted, and so the object should not
@@ -246,10 +252,15 @@ typedef struct Object {
 				 * attempt to remove itself from its class. */
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 #define CLASS_GONE	4	/* Obsolete. Indicates that the class of this
 				 * object has been deleted, and so the object
 				 * should not attempt to remove itself from its
 				 * class. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 #define ROOT_OBJECT 0x1000	/* Flag to say that this object is the root of
 				 * the class hierarchy and should be treated
@@ -273,11 +284,17 @@ typedef struct Object {
 				 * and so shouldn't be cached so
 				 * aggressively. */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 #define DONT_DELETE 0x40000	/* Inhibit deletion of this object. Used
 				 * during fundamental object type mutation to
 				 * make sure that the object actually survives
 				 * to the end of the operation. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /*
@@ -338,7 +355,10 @@ typedef struct Class {
 				/* Configurations for the variable resolver
 				 * used inside methods. */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
     Tcl_Obj *clsDefinitionNs;	/* Name of the namespace to use for
 				 * definitions commands of instances of this
 				 * class in when those instances are defined
@@ -357,6 +377,9 @@ typedef struct Class {
 				 * namespace is defined but doesn't exist; we
 				 * also check at setting time but don't check
 				 * between times. */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } Class;
 
@@ -487,6 +510,7 @@ typedef struct {
 
 MODULE_SCOPE int	TclOOInit(Tcl_Interp *interp);
 MODULE_SCOPE int	TclOODefineObjCmd(void *clientData,
+<<<<<<< HEAD
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const *objv);
 MODULE_SCOPE int	TclOOObjDefObjCmd(void *clientData,
@@ -574,6 +598,88 @@ MODULE_SCOPE int	TclOONextObjCmd(void *clientData,
 MODULE_SCOPE int	TclOONextToObjCmd(void *clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const *objv);
+=======
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOOObjDefObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineConstructorObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineDeleteMethodObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineDestructorObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineExportObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineForwardObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineMethodObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineRenameMethodObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineUnexportObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineClassObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineSelfObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineObjSelfObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOOUnknownDefinition(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOOCopyObjectCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOONextObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOONextToObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineUnexportObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineClassObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineSelfObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineObjSelfObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefinePrivateObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOOUnknownDefinition(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOOCopyObjectCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOODefineDefnNsObjCmd(ClientData clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOONextObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOONextToObjCmd(void *clientData,
+			    Tcl_Interp *interp, int objc,
+			    Tcl_Obj *const *objv);
+>>>>>>> upstream/master
 MODULE_SCOPE int	TclOOSelfObjCmd(void *clientData,
 			    Tcl_Interp *interp, int objc,
 			    Tcl_Obj *const *objv);
@@ -583,6 +689,7 @@ MODULE_SCOPE int	TclOOSelfObjCmd(void *clientData,
  */
 
 MODULE_SCOPE int	TclOO_Class_Constructor(void *clientData,
+<<<<<<< HEAD
 			    Tcl_Interp *interp, Tcl_ObjectContext context,
 			    int objc, Tcl_Obj *const *objv);
 MODULE_SCOPE int	TclOO_Class_Create(void *clientData,
@@ -606,6 +713,31 @@ MODULE_SCOPE int	TclOO_Object_LinkVar(void *clientData,
 MODULE_SCOPE int	TclOO_Object_Unknown(void *clientData,
 			    Tcl_Interp *interp, Tcl_ObjectContext context,
 			    int objc, Tcl_Obj *const *objv);
+=======
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Class_Create(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Class_CreateNs(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Class_New(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Object_Destroy(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Object_Eval(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Object_LinkVar(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+MODULE_SCOPE int	TclOO_Object_Unknown(void *clientData,
+			    Tcl_Interp *interp, Tcl_ObjectContext context,
+			    int objc, Tcl_Obj *const *objv);
+>>>>>>> upstream/master
 MODULE_SCOPE int	TclOO_Object_VarName(void *clientData,
 			    Tcl_Interp *interp, Tcl_ObjectContext context,
 			    int objc, Tcl_Obj *const *objv);
@@ -711,6 +843,7 @@ MODULE_SCOPE void	TclOOSetupVariableResolver(Tcl_Namespace *nsPtr);
 
 #define FOREACH_STRUCT(var,ary) \
     for(i=0 ; var=&((ary).list[i]), i<(ary).num; i++)
+<<<<<<< HEAD
 
 /*
  * A variation where the array is an array of structs. There's no issue with
@@ -721,6 +854,8 @@ MODULE_SCOPE void	TclOOSetupVariableResolver(Tcl_Namespace *nsPtr);
 
 #define FOREACH_STRUCT(var,ary) \
     for(i=0 ; var=&((ary).list[i]), i<(ary).num; i++)
+=======
+>>>>>>> upstream/master
 
 /*
  * Convenience macros for iterating through hash tables. FOREACH_HASH_DECLS
@@ -748,7 +883,11 @@ MODULE_SCOPE void	TclOOSetupVariableResolver(Tcl_Namespace *nsPtr);
 #undef DUPLICATE /* prevent possible conflict with definition in WINAPI nb30.h */
 #define DUPLICATE(target,source,type) \
     do { \
+<<<<<<< HEAD
 	register size_t len = sizeof(type) * ((target).num=(source).num);\
+=======
+	size_t len = sizeof(type) * ((target).num=(source).num);\
+>>>>>>> upstream/master
 	if (len != 0) { \
 	    memcpy(((target).list=(type*)Tcl_Alloc(len)), (source).list, len); \
 	} else { \

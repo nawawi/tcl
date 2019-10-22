@@ -60,7 +60,11 @@ declare 11 {
     Tcl_Method Tcl_NewInstanceMethod(Tcl_Interp *interp, Tcl_Object object,
 	    Tcl_Obj *nameObj, int flags, const Tcl_MethodType *typePtr,
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    ClientData clientData)
+=======
+	    void *clientData)
+>>>>>>> upstream/master
 =======
 	    void *clientData)
 >>>>>>> upstream/master
@@ -69,7 +73,11 @@ declare 12 {
     Tcl_Method Tcl_NewMethod(Tcl_Interp *interp, Tcl_Class cls,
 	    Tcl_Obj *nameObj, int flags, const Tcl_MethodType *typePtr,
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    ClientData clientData)
+=======
+	    void *clientData)
+>>>>>>> upstream/master
 =======
 	    void *clientData)
 >>>>>>> upstream/master

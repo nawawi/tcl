@@ -5,6 +5,7 @@ set TZData(:Asia/Baku) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441163964 10800 0 BAKT}
     {-405140400 14400 0 BAKT}
     {354916800 18000 1 BAKST}
@@ -262,6 +263,8 @@ set TZData(:Asia/Baku) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1441163964 10800 0 +03}
     {-405140400 14400 0 +04}
     {354916800 18000 1 +04}
@@ -333,6 +336,9 @@ set TZData(:Asia/Baku) {
     {1445731200 14400 0 +04}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -5,6 +5,7 @@ set TZData(:Asia/Vladivostok) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1487321251 32400 0 VLAT}
     {-1247562000 36000 0 VLAMMTT}
     {354895200 39600 1 VLAST}
@@ -86,6 +87,8 @@ set TZData(:Asia/Vladivostok) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1487321251 32400 0 +09}
     {-1247562000 36000 0 +11}
     {354895200 39600 1 +11}
@@ -154,6 +157,9 @@ set TZData(:Asia/Vladivostok) {
     {1414249200 36000 0 +10}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

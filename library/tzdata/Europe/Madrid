@@ -4,9 +4,13 @@ set TZData(:Europe/Madrid) {
     {-9223372036854775808 -884 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-2177451916 0 0 WET}
     {-1661734800 3600 1 WEST}
     {-1648429200 0 0 WET}
+=======
+    {-2177452800 0 0 WET}
+>>>>>>> upstream/master
 =======
     {-2177452800 0 0 WET}
 >>>>>>> upstream/master
@@ -45,6 +49,7 @@ set TZData(:Europe/Madrid) {
     {-639018000 3600 0 CET}
     {135122400 7200 1 CEST}
     {150246000 3600 0 CET}
+<<<<<<< HEAD
 <<<<<<< HEAD
     {167176800 7200 1 CEST}
 =======
@@ -89,6 +94,9 @@ set TZData(:Europe/Madrid) {
 =======
     {166572000 7200 1 CEST}
 >>>>>>> upstream/master
+=======
+    {166572000 7200 1 CEST}
+>>>>>>> upstream/master
     {181695600 3600 0 CET}
     {196812000 7200 1 CEST}
     {212540400 3600 0 CET}
@@ -96,8 +104,13 @@ set TZData(:Europe/Madrid) {
     {243990000 3600 0 CET}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {260402400 7200 1 CEST}
     {276044400 3600 0 CET}
+=======
+    {260326800 7200 1 CEST}
+    {276051600 3600 0 CET}
+>>>>>>> upstream/master
 =======
     {260326800 7200 1 CEST}
     {276051600 3600 0 CET}

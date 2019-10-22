@@ -5,6 +5,7 @@ set TZData(:Asia/Jakarta) {
     {-3231299232 25632 0 BMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1451719200 26400 0 JAVT}
     {-1172906400 27000 0 WIB}
     {-876641400 32400 0 JST}
@@ -14,6 +15,8 @@ set TZData(:Asia/Jakarta) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1451719200 26400 0 +0720}
     {-1172906400 27000 0 +0730}
     {-876641400 32400 0 +09}
@@ -21,6 +24,9 @@ set TZData(:Asia/Jakarta) {
     {-683883000 28800 0 +08}
     {-620812800 27000 0 +0730}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

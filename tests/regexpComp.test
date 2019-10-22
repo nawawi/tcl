@@ -26,7 +26,11 @@ proc evalInProc { script } {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	testProc 
+=======
+	testProc
+>>>>>>> upstream/master
 =======
 	testProc
 >>>>>>> upstream/master
@@ -604,7 +608,11 @@ test regexpComp-11.5 {regsub errors} {
 	list [catch {regsub -gorp a b c} msg] $msg
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {1 {bad option "-gorp": must be -all, -nocase, -expanded, -line, -linestop, -lineanchor, -start, or --}}
+=======
+} {1 {bad option "-gorp": must be -all, -command, -expanded, -line, -linestop, -lineanchor, -nocase, -start, or --}}
+>>>>>>> upstream/master
 =======
 } {1 {bad option "-gorp": must be -all, -command, -expanded, -line, -linestop, -lineanchor, -nocase, -start, or --}}
 >>>>>>> upstream/master
@@ -631,7 +639,11 @@ test regexpComp-11.8 {regsub errors, -start bad int check} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Meg.  This is probably bigger than most users want... 
+=======
+# Meg.  This is probably bigger than most users want...
+>>>>>>> upstream/master
 =======
 # Meg.  This is probably bigger than most users want...
 >>>>>>> upstream/master
@@ -834,11 +846,14 @@ test regexpComp-20.1 {regsub shared object shimmering} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	set a abcdefghijklmnopqurstuvwxyz 
 	set b $a 
 	set c abcdefghijklmnopqurstuvwxyz0123456789 
 	regsub $a $c $b d 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -852,6 +867,9 @@ test regexpComp-20.1 {regsub shared object shimmering} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

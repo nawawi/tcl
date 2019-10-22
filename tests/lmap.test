@@ -224,11 +224,14 @@ test lmap-4.15 {lmap errors} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     apply {{} { 
 	set a(0) 44
 	list [catch {lmap a {1 2 3} {}} msg o] $msg $::errorInfo 
     }} 
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -242,6 +245,9 @@ test lmap-4.15 {lmap errors} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

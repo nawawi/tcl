@@ -6,6 +6,7 @@ set TZData(:Asia/Qyzylorda) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441167712 14400 0 KIZT}
     {-1247544000 18000 0 KIZT}
     {354913200 21600 1 KIZST}
@@ -60,6 +61,8 @@ set TZData(:Asia/Qyzylorda) {
     {1099166400 21600 0 QYZT}
     {1110823200 21600 0 QYZT}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -121,11 +124,15 @@ set TZData(:Asia/Qyzylorda) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {1545328800 18000 0 +05}
 >>>>>>> upstream/master
 }

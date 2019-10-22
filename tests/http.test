@@ -63,9 +63,14 @@ if {[catch {package present Thread}] == 0 && [file exists $httpdFile]} {
     thread::send $httpthread [list source $httpdFile]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     thread::send $httpthread [list set port $port]
     thread::send $httpthread [list set bindata $bindata]
     thread::send $httpthread {httpd_init $port}
+=======
+    thread::send $httpthread [list set bindata $bindata]
+    thread::send $httpthread {httpd_init 0; set port} port
+>>>>>>> upstream/master
 =======
     thread::send $httpthread [list set bindata $bindata]
     thread::send $httpthread {httpd_init 0; set port} port
@@ -197,7 +202,7 @@ test http-3.7 {http::geturl} -body {
 <h2>GET $tail</h2>
 </body></html>"
 test http-3.8 {http::geturl} -body {
-    set token [http::geturl $url -query Name=Value&Foo=Bar -timeout 2000]
+    set token [http::geturl $url -query Name=Value&Foo=Bar -timeout 3000]
     http::data $token
 } -cleanup {
     http::cleanup $token
@@ -363,7 +368,7 @@ test http-3.24 {http::geturl parse failures} -body {
 test http-3.25 {http::meta} -setup {
     unset -nocomplain m token
 } -body {
-    set token [http::geturl $url -timeout 2000]
+    set token [http::geturl $url -timeout 3000]
     array set m [http::meta $token]
     lsort [array names m]
 } -cleanup {
@@ -373,7 +378,7 @@ test http-3.25 {http::meta} -setup {
 test http-3.26 {http::meta} -setup {
     unset -nocomplain m token
 } -body {
-    set token [http::geturl $url -headers {X-Check 1} -timeout 2000]
+    set token [http::geturl $url -headers {X-Check 1} -timeout 3000]
     array set m [http::meta $token]
     lsort [array names m]
 } -cleanup {
@@ -386,6 +391,7 @@ test http-3.27 {http::geturl: -headers override -type} -body {
     http::data $token
 } -cleanup {
     http::cleanup $token
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -413,6 +419,8 @@ Accept \*/\*
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
@@ -422,6 +430,9 @@ Accept \*/\*
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -445,6 +456,7 @@ test http-3.28 {http::geturl: -headers override -type default} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -match regexp -result {(?n)Accept \*/\*
 Host .*
 User-Agent .*
@@ -466,6 +478,8 @@ Accept \*/\*
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 } -match regexp -result {(?n)Host .*
 User-Agent .*
 Connection close
@@ -475,6 +489,9 @@ Accept \*/\*
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -518,7 +535,10 @@ test http-3.31 {http::geturl fragment without path} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -712,7 +732,7 @@ test http-4.14 {http::Event} -body {
 test http-4.15 {http::Event} -body {
     # This test may fail if you use a proxy server. That is to be
     # expected and is not a problem with Tcl.
-    set token [http::geturl //not_a_host.tcl.tk -timeout 1000 -command \#]
+    set token [http::geturl //not_a_host.tcl.tk -timeout 3000 -command \#]
     http::wait $token
     http::status $token
     # error codes vary among platforms.
@@ -721,30 +741,42 @@ test http-4.15 {http::Event} -body {
 } -returnCodes 1 -match glob -result "couldn't open socket*"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 test http-4.16 {Leak with Close vs Keepalive (bug [6ca52aec14]} -body {
 =======
+=======
+>>>>>>> upstream/master
 test http-4.16 {Leak with Close vs Keepalive (bug [6ca52aec14]} -setup {
     proc list-difference {l1 l2} {
 	lmap item $l2 {if {$item in $l1} continue; set item}
     }
 } -body {
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set before [chan names]
     set token [http::geturl $url -headers {X-Connection keep-alive}]
     http::cleanup $token
     update
 <<<<<<< HEAD
+<<<<<<< HEAD
     set after [chan names]
     expr {$before eq $after}
 } -result 1
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
     # Compute what channels have been unexpectedly leaked past cleanup
     list-difference $before [chan names]
 } -cleanup {
     rename list-difference {}
 } -result {}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 test http-5.1 {http::formatQuery} {

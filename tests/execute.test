@@ -37,6 +37,14 @@ testConstraint testobj [expr {
 testConstraint longIs32bit [expr {$tcl_platform(wordSize) == 4}]
 testConstraint testexprlongobj [llength [info commands testexprlongobj]]
 
+<<<<<<< HEAD
+=======
+
+if {[namespace which -command testbumpinterpepoch] eq ""} {
+  proc testbumpinterpepoch {} { rename ::set ::dummy; rename ::dummy ::set }
+}
+
+>>>>>>> upstream/master
 # Tests for the omnibus TclExecuteByteCode function:
 
 # INST_DONE not tested
@@ -698,7 +706,11 @@ test execute-6.12 {Tcl_ExprObj: exprcode interp validation} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     interp alias {} e slave expr 
+=======
+    interp alias {} e slave expr
+>>>>>>> upstream/master
 =======
     interp alias {} e slave expr
 >>>>>>> upstream/master
@@ -793,6 +805,9 @@ test execute-6.18 {Tcl_ExprObj: exprcode context validation} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -831,9 +846,9 @@ test execute-7.7 {Wide int handling in INST_EQ and [incr]} {
     set y [expr {$x+1}]
     expr {double($x) == double($y)}
 } 1
-test execute-7.8 {Wide int conversions can change sign} longIs32bit {
-    set x 0x80000000
-    expr {int($x) < wide($x)}
+test execute-7.8 {Wide int conversions can change sign} {
+    set x 0x8000000000000000
+    expr {wide($x) < 0}
 } 1
 test execute-7.9 {Wide int handling in INST_MOD} {
     expr {(wide(1)<<60) % ((wide(47)<<45)-1)}
@@ -913,12 +928,12 @@ test execute-7.31 {Wide int handling in abs()} {
     set y 0x123456871234568
     concat [expr {abs($x)}] [expr {abs($y)}]
 } {730503879441204585 81985533099853160}
-test execute-7.32 {Wide int handling} longIs32bit {
+test execute-7.32 {Wide int handling} {
     expr {int(1024 * 1024 * 1024 * 1024)}
-} 0
-test execute-7.33 {Wide int handling} longIs32bit {
+} 1099511627776
+test execute-7.33 {Wide int handling} {
     expr {int(0x1 * 1024 * 1024 * 1024 * 1024)}
-} 0
+} 1099511627776
 test execute-7.34 {Wide int handling} {
     expr {wide(0x1) * 1024 * 1024 * 1024 * 1024}
 } 1099511627776
@@ -959,8 +974,7 @@ test execute-8.3 {Stack restoration} -setup {
     proc f {args} "f $arglst"
     proc run {} {
 	# bump the interp's epoch
-	rename ::set ::dummy
-	rename ::dummy ::set
+	testbumpinterpepoch
 	catch f msg
 	set msg
     }
@@ -981,8 +995,7 @@ test execute-8.4 {Compile epoch bump effect on stack trace} -setup {
     }
     proc FOO {} {
 	catch {error bar} m o
-	rename ::set ::dummy
-	rename ::dummy ::set
+	testbumpinterpepoch
 	return -options $o $m
     }
 } -body {
@@ -1011,10 +1024,80 @@ test execute-8.5 {Bug 2038069} -setup {
     invoked from within
 "catch \[list error FOO\] m o"} -errorline 2}
 
+test execute-8.6 {Compile epoch bump in global level (bug [fa6bf38d07])} -setup {
+    interp create slave
+    slave eval {
+	package require tcltest
+	catch [list package require -exact Tcltest [info patchlevel]]
+	::tcltest::loadTestedCommands
+	if {[namespace which -command testbumpinterpepoch] eq ""} {
+	  proc testbumpinterpepoch {} { rename ::set ::dummy; rename ::dummy ::set }
+	}
+    }
+} -body {
+    slave eval {
+	lappend res A; testbumpinterpepoch; lappend res B; return; lappend res C;
+    }
+    slave eval {
+	set i 0; while {[incr i] < 3} {
+	    lappend res A; testbumpinterpepoch; lappend res B; return; lappend res C;
+	}
+    }
+    slave eval {
+	set i 0; while {[incr i] < 3} {
+	    lappend res A; testbumpinterpepoch; lappend res B; break; lappend res C;
+	}
+    }
+    slave eval {
+	catch {
+	    lappend res A; testbumpinterpepoch; lappend res B; error test; lappend res C;
+	}
+    }
+    slave eval {set res}
+} -cleanup {
+    interp delete slave
+} -result [lrepeat 4 A B]
+test execute-8.7 {Compile epoch bump in global level (bug [fa6bf38d07]), exception case} -setup {
+    interp create slave
+    slave eval {
+	package require tcltest
+	catch [list package require -exact Tcltest [info patchlevel]]
+	::tcltest::loadTestedCommands
+	if {[namespace which -command testbumpinterpepoch] eq ""} {
+	  proc testbumpinterpepoch {} { rename ::set ::dummy; rename ::dummy ::set }
+	}
+    }
+} -body {
+    set res {}
+    lappend res [catch {
+	slave eval {
+	   lappend res A; testbumpinterpepoch; lappend res B; return -code error test; lappend res C;
+	}
+    } e] $e
+    lappend res [catch {
+	slave eval {
+	   lappend res A; testbumpinterpepoch; lappend res B; error test; lappend res C;
+	}
+    } e] $e
+    lappend res [catch {
+	slave eval {
+	   lappend res A; testbumpinterpepoch; lappend res B; return -code return test; lappend res C;
+	}
+    } e] $e
+    lappend res [catch {
+	slave eval {
+	   lappend res A; testbumpinterpepoch; lappend res B; break; lappend res C;
+	}
+    } e] $e
+    list $res [slave eval {set res}]
+} -cleanup {
+    interp delete slave
+} -result [list {1 test 1 test 2 test 3 {}} [lrepeat 4 A B]]
+
 test execute-9.1 {Interp result resetting [Bug 1522803]} {
     set c 0
     catch {
-	catch {set foo}
+	catch {error foo}
 	expr {1/$c}
     }
     if {[string match *foo* $::errorInfo]} {
@@ -1025,6 +1108,7 @@ test execute-9.1 {Interp result resetting [Bug 1522803]} {
     set result
 } SUCCESS
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1156,16 +1240,37 @@ test execute-8.1 {Stack protection} -setup {
     # segfault
     proc whatever args {llength $args}
     trace add variable ::errorInfo {write unset} whatever
+=======
+test execute-10.1 {TclExecuteByteCode, INST_CONCAT1, bytearrays} {
+    apply {s {binary scan $s c x; list $x [scan $s$s %c%c]}} \u0130
+} {48 {304 304}}
+test execute-10.2 {Bug 2802881} -setup {
+    interp create slave
+>>>>>>> upstream/master
 } -body {
     expr {1+9/0}
 } -cleanup {
     trace remove variable ::errorInfo {write unset} whatever
     rename whatever {}
 } -returnCodes error -match glob -result *
+<<<<<<< HEAD
 test execute-8.2 {Stack restoration} -setup {
     # Avoid crashes when system stack size is limited (thread-enabled!)
     set limit [interp recursionlimit {}]
     interp recursionlimit {} 100
+=======
+test execute-10.3 {Bug 3072640} -setup {
+    proc generate {n} {
+	for {set i 0} {$i < $n} {incr i} {
+	    yield $i
+	}
+    }
+    proc t {args} {
+	incr ::foo
+    }
+    set ::foo 0
+    trace add execution ::generate enterstep ::t
+>>>>>>> upstream/master
 } -body {
     # Test for [Bug #816641], correct restoration of the stack top after the
     # stack is grown
@@ -1173,6 +1278,7 @@ test execute-8.2 {Stack restoration} -setup {
     catch f msg
     set msg
 } -cleanup {
+<<<<<<< HEAD
     interp recursionlimit {} $limit
 } -result {too many nested evaluations (infinite loop?)}
 test execute-8.3 {Stack restoration} -setup {
@@ -1509,6 +1615,8 @@ test execute-10.3 {Bug 3072640} -setup {
     trace remove execution ::generate enterstep ::t
     set ::foo
 } -cleanup {
+=======
+>>>>>>> upstream/master
     unset ::foo
     rename generate {}
     rename t {}
@@ -1518,6 +1626,9 @@ test execute-10.3 {Bug 3072640} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
     interp create slave
@@ -1534,6 +1645,7 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 } -cleanup {
     interp delete slave
 } -result ok
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -1625,6 +1737,9 @@ test execute-11.1 {Bug 3142026: GrowEvaluationStack off-by-one} -setup {
 } -result ok
 
 >>>>>>> upstream/master
+=======
+
+>>>>>>> upstream/master
 test execute-11.2 {Bug 268b23df11} -setup {
     proc zero {} {return 0}
     proc crash {} {expr {abs([zero])}}
@@ -1644,8 +1759,11 @@ test execute-11.2 {Bug 268b23df11} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -1670,6 +1788,7 @@ test execute-11.3 {Bug a0ece9d6d4} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1680,6 +1799,47 @@ test execute-11.3 {Bug a0ece9d6d4} -setup {
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+
+test execute-12.1 {failing multi-lappend to unshared} -setup {
+    unset -nocomplain x y
+} -body {
+    set x 1
+    lappend x 2 3
+    trace add variable x write {apply {args {error boo}}}
+    lappend x 4 5
+} -cleanup {
+    unset -nocomplain x y
+} -returnCodes error -result {can't set "x": boo}
+test execute-12.2 {failing multi-lappend to shared} -setup {
+    unset -nocomplain x y
+} -body {
+    set x 1
+    lappend x 2 3
+    set y $x
+    trace add variable x write {apply {args {error boo}}}
+    lappend x 4 5
+} -cleanup {
+    unset -nocomplain x y
+} -returnCodes error -result {can't set "x": boo}
+test execute-12.3 {failing multi-lappend to unshared: LVT} -body {
+    apply {{} {
+	set x 1
+	lappend x 2 3
+	trace add variable x write {apply {args {error boo}}}
+	lappend x 4 5
+    }}
+} -returnCodes error -result {can't set "x": boo}
+test execute-12.4 {failing multi-lappend to shared: LVT} -body {
+    apply {{} {
+	set x 1
+	lappend x 2 3
+	set y $x
+	trace add variable x write {apply {args {error boo}}}
+	lappend x 4 5
+    }}
+} -returnCodes error -result {can't set "x": boo}
 >>>>>>> upstream/master
 
 # cleanup

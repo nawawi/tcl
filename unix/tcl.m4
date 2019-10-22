@@ -991,6 +991,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall"
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
@@ -1003,6 +1004,9 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement"
+>>>>>>> upstream/master
+=======
+	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement -Wpointer-arith"
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement -Wpointer-arith"
@@ -1144,9 +1148,15 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    do64bit_ok=yes
 	    if test "x${SHARED_BUILD}" = "x1"; then
 <<<<<<< HEAD
+<<<<<<< HEAD
 		echo "running cd ${TCL_SRC_DIR}/win; ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args"
 		# The eval makes quoting arguments work.
 		if cd ${TCL_SRC_DIR}/win; eval ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args; cd ../unix
+=======
+		echo "running cd ../win; ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args"
+		# The eval makes quoting arguments work.
+		if cd ../win; eval ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args; cd ../unix
+>>>>>>> upstream/master
 =======
 		echo "running cd ../win; ${CONFIG_SHELL-/bin/sh} ./configure $ac_configure_args"
 		# The eval makes quoting arguments work.
@@ -1337,7 +1347,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	   ])
 
 	    # The combo of gcc + glibc has a bug related to inlining of
-	    # functions like strtod(). The -fno-builtin flag should address
+	    # functions like strtol()/strtoul(). The -fno-builtin flag should address
 	    # this problem but it does not work. The -fno-inline flag is kind
 	    # of overkill but it works. Disable inlining only when one of the
 	    # files in compat/*.c is being linked in.
@@ -1357,6 +1367,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
 <<<<<<< HEAD
 	    ;;
+<<<<<<< HEAD
 	MP-RAS-02*)
 	    SHLIB_CFLAGS="-K PIC"
 	    SHLIB_LD='${CC} -G'
@@ -1421,6 +1432,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    esac
 =======
 	    ;;
+=======
+>>>>>>> upstream/master
 	OpenBSD-*)
 	    arch=`arch -s`
 	    case "$arch" in
@@ -1443,6 +1456,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    CFLAGS_OPTIMIZE="-O2"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	    AS_IF([test "${TCL_THREADS}" = "1"], [
 		# On OpenBSD:	Compile with -pthread
@@ -1453,11 +1467,16 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	    # On OpenBSD:	Compile with -pthread
 	    #		Don't link with -lpthread
 	    LIBS=`echo $LIBS | sed s/-lpthread//`
 	    CFLAGS="$CFLAGS -pthread"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1469,6 +1488,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	NetBSD-*)
 	    # NetBSD has ELF and can use 'cc -shared' to build shared libs
 	    SHLIB_CFLAGS="-fPIC"
+<<<<<<< HEAD
 	    SHLIB_LD='${CC} -shared ${SHLIB_CFLAGS}'
 	    SHLIB_SUFFIX=".so"
 	    DL_OBJS="tclLoadDl.o"
@@ -1479,6 +1499,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	NetBSD-*)
 	    # NetBSD has ELF and can use 'cc -shared' to build shared libs
 	    SHLIB_CFLAGS="-fPIC"
+=======
+>>>>>>> upstream/master
 	    SHLIB_LD='${CC} ${SHLIB_CFLAGS} -shared'
 	    SHLIB_SUFFIX=".so"
 	    DL_OBJS="tclLoadDl.o"
@@ -1491,6 +1513,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LIBS=`echo $LIBS | sed s/-pthread//`
 	    CFLAGS="$CFLAGS -pthread"
 	    LDFLAGS="$LDFLAGS -pthread"
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    ;;
 	FreeBSD-*)
@@ -1515,6 +1538,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ])
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	    ;;
 	DragonFly-*|FreeBSD-*)
 	    # This configuration from FreeBSD Ports.
@@ -1530,6 +1555,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    AS_IF([test "${TCL_THREADS}" = "1"], [
 		# The -pthread needs to go in the LDFLAGS, not LIBS
 		LIBS=`echo $LIBS | sed s/-pthread//`
@@ -1542,11 +1568,16 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 	    # The -pthread needs to go in the LDFLAGS, not LIBS
 	    LIBS=`echo $LIBS | sed s/-pthread//`
 	    CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
 	    LDFLAGS="$LDFLAGS $PTHREAD_LIBS"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -1619,10 +1650,6 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_SUFFIX=".dylib"
 	    DL_OBJS="tclLoadDyld.o"
 	    DL_LIBS=""
-	    # Don't use -prebind when building for Mac OS X 10.4 or later only:
-	    AS_IF([test "`echo "${MACOSX_DEPLOYMENT_TARGET}" | awk -F '10\\.' '{print int([$]2)}'`" -lt 4 -a \
-		"`echo "${CPPFLAGS}" | awk -F '-mmacosx-version-min=10\\.' '{print int([$]2)}'`" -lt 4], [
-		LDFLAGS="$LDFLAGS -prebind"])
 	    LDFLAGS="$LDFLAGS -headerpad_max_install_names"
 	    AC_CACHE_CHECK([if ld accepts -search_paths_first flag],
 		    tcl_cv_ld_search_paths_first, [
@@ -1699,6 +1726,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ])
 <<<<<<< HEAD
 	    ;;
+<<<<<<< HEAD
 	NEXTSTEP-*)
 	    SHLIB_CFLAGS=""
 	    SHLIB_LD='${CC} -nostdlib -r'
@@ -1711,6 +1739,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 >>>>>>> upstream/master
 	    ;;
+=======
+>>>>>>> upstream/master
 	OS/390-*)
 	    SHLIB_LD_LIBS=""
 	    CFLAGS_OPTIMIZE=""		# Optimizer is buggy
@@ -1718,6 +1748,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 		[Should OS/390 do the right thing with sockets?])
 <<<<<<< HEAD
 	    ;;
+<<<<<<< HEAD
 	OSF1-1.0|OSF1-1.1|OSF1-1.2)
 	    # OSF/1 1.[012] from OSF, and derivatives, including Paragon OSF/1
 	    SHLIB_CFLAGS=""
@@ -1745,6 +1776,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 >>>>>>> upstream/master
 	    ;;
+=======
+>>>>>>> upstream/master
 	OSF1-V*)
 	    # Digital OSF/1
 	    SHLIB_CFLAGS=""
@@ -2029,7 +2062,11 @@ dnl # preprocessing tests use only CPPFLAGS.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)"'
+=======
+            INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)";if test -f $(LIB_FILE).a; then $(INSTALL_DATA) $(LIB_FILE).a "$(LIB_INSTALL_DIR)"; fi;'
+>>>>>>> upstream/master
 =======
             INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(BIN_INSTALL_DIR)/$(LIB_FILE)";if test -f $(LIB_FILE).a; then $(INSTALL_DATA) $(LIB_FILE).a "$(LIB_INSTALL_DIR)"; fi;'
 >>>>>>> upstream/master
@@ -2057,6 +2094,7 @@ dnl # preprocessing tests use only CPPFLAGS.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             INSTALL_LIB='$(INSTALL_LIBRARY) $(LIB_FILE) "$(LIB_INSTALL_DIR)/$(LIB_FILE)"'
 =======
 >>>>>>> upstream/master
@@ -2080,6 +2118,8 @@ dnl # preprocessing tests use only CPPFLAGS.
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         ], [
             MAKE_LIB='${STLIB_LD} [$]@ ${OBJS} ; ${RANLIB} [$]@'
         ])
@@ -2087,6 +2127,9 @@ dnl # preprocessing tests use only CPPFLAGS.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2099,6 +2142,7 @@ dnl # preprocessing tests use only CPPFLAGS.
     # Stub lib does not depend on shared/static configuration
     AS_IF([test "$RANLIB" = ""], [
         MAKE_STUB_LIB='${STLIB_LD} [$]@ ${STUB_LIB_OBJS}'
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2141,6 +2185,12 @@ dnl # preprocessing tests use only CPPFLAGS.
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    ], [
+        MAKE_STUB_LIB='${STLIB_LD} [$]@ ${STUB_LIB_OBJS} ; ${RANLIB} [$]@'
+    ])
+    INSTALL_STUB_LIB='$(INSTALL_LIBRARY) $(STUB_LIB_FILE) "$(LIB_INSTALL_DIR)/$(STUB_LIB_FILE)"'
 >>>>>>> upstream/master
 
     # Define TCL_LIBS now that we know what DL_LIBS is.
@@ -2212,8 +2262,8 @@ dnl # preprocessing tests use only CPPFLAGS.
 #
 #	Supply substitutes for missing POSIX header files.  Special
 #	notes:
-#	    - stdlib.h doesn't define strtol, strtoul, or
-#	      strtod insome versions of SunOS
+#	    - stdlib.h doesn't define strtol or strtoul in some
+#	      versions of SunOS
 #	    - some versions of string.h don't declare procedures such
 #	      as strstr
 #
@@ -2264,7 +2314,6 @@ closedir(d);
     AC_CHECK_HEADER(stdlib.h, tcl_ok=1, tcl_ok=0)
     AC_EGREP_HEADER(strtol, stdlib.h, , tcl_ok=0)
     AC_EGREP_HEADER(strtoul, stdlib.h, , tcl_ok=0)
-    AC_EGREP_HEADER(strtod, stdlib.h, , tcl_ok=0)
     if test $tcl_ok = 0; then
 	AC_DEFINE(NO_STDLIB_H, 1, [Do we have <stdlib.h>?])
     fi
@@ -2404,12 +2453,15 @@ AC_DEFUN([SC_BLOCKING_STYLE], [
 	    AC_DEFINE(USE_FIONBIO, 1, [Should we use FIONBIO?])
 	    AC_MSG_RESULT([FIONBIO])
 	    ;;
+<<<<<<< HEAD
 	SunOS-4*)
 =======
 >>>>>>> upstream/master
 	    AC_DEFINE(USE_FIONBIO, 1, [Should we use FIONBIO?])
 	    AC_MSG_RESULT([FIONBIO])
 	    ;;
+=======
+>>>>>>> upstream/master
 	*)
 	    AC_MSG_RESULT([O_NONBLOCK])
 	    ;;
@@ -2606,6 +2658,12 @@ AC_DEFUN([SC_TCL_LINK_LIBS], [
     AC_CHECK_FUNCS(pthread_attr_setstacksize pthread_atfork)
     LIBS=$ac_saved_libs
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+    # TIP #509
+    AC_CHECK_DECLS([PTHREAD_MUTEX_RECURSIVE],tcl_ok=yes,tcl_ok=no, [[#include <pthread.h>]])
+>>>>>>> upstream/master
 =======
 
     # TIP #509
@@ -3319,7 +3377,11 @@ AC_DEFUN([SC_ZIPFS_SUPPORT], [
         ZIP_PROG="$ac_cv_path_zip"
         AC_MSG_RESULT([$ZIP_PROG])
         ZIP_PROG_OPTIONS="-rq"
+<<<<<<< HEAD
         ZIP_PROG_VFSSEARCH="."
+=======
+        ZIP_PROG_VFSSEARCH="*"
+>>>>>>> upstream/master
         AC_MSG_RESULT([Found INFO Zip in environment])
         # Use standard arguments for zip
     else
@@ -3327,7 +3389,11 @@ AC_DEFUN([SC_ZIPFS_SUPPORT], [
         # We can use the locally distributed minizip instead
         ZIP_PROG="./minizip${EXEEXT_FOR_BUILD}"
         ZIP_PROG_OPTIONS="-o -r"
+<<<<<<< HEAD
         ZIP_PROG_VFSSEARCH="."
+=======
+        ZIP_PROG_VFSSEARCH="*"
+>>>>>>> upstream/master
         ZIP_INSTALL_OBJS="minizip${EXEEXT_FOR_BUILD}"
         AC_MSG_RESULT([No zip found on PATH. Building minizip])
     fi

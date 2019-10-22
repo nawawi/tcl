@@ -8,7 +8,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -54,9 +58,15 @@ generated.  On Windows, FAT file systems do not support access time.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile attributes \fIname\fR ?\fBoption\fR?
 .TP
 \fBfile attributes \fIname\fR ?\fBoption value option value...\fR?
+=======
+\fBfile attributes \fIname\fR ?\fIoption\fR?
+.TP
+\fBfile attributes \fIname\fR ?\fIoption value option value...\fR?
+>>>>>>> upstream/master
 =======
 \fBfile attributes \fIname\fR ?\fIoption\fR?
 .TP
@@ -185,7 +195,11 @@ returned.  For example,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 returns \fBc:/\fR. 
+=======
+returns \fBc:/\fR.
+>>>>>>> upstream/master
 =======
 returns \fBc:/\fR.
 >>>>>>> upstream/master
@@ -221,7 +235,13 @@ Returns \fB1\fR if file \fIname\fR is executable by the current user,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fB0\fR otherwise.
+=======
+\fB0\fR otherwise. On Windows, which does not have an executable attribute,
+the command treats all directories and any files with extensions
+\fBexe\fR, \fBcom\fR, \fBcmd\fR or \fBbat\fR as executable.
+>>>>>>> upstream/master
 =======
 \fB0\fR otherwise. On Windows, which does not have an executable attribute,
 the command treats all directories and any files with extensions
@@ -281,7 +301,11 @@ Windows.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile link ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+=======
+\fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
+>>>>>>> upstream/master
 =======
 \fBfile link\fR ?\fI\-linktype\fR? \fIlinkName\fR ?\fItarget\fR?
 >>>>>>> upstream/master
@@ -349,7 +373,11 @@ as the \fBstat\fR option.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile mkdir ?\fIdir\fR ...?
+=======
+\fBfile mkdir\fR ?\fIdir\fR ...?
+>>>>>>> upstream/master
 =======
 \fBfile mkdir\fR ?\fIdir\fR ...?
 >>>>>>> upstream/master
@@ -413,6 +441,7 @@ links, not on the things that they point to).
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fBfile owned \fIname\fR 
 =======
 \fBfile owned \fIname\fR
@@ -440,6 +469,9 @@ operate on the actual symbolic link itself (for example \fBfile delete\fR,
 \fBfile rename\fR, \fBfile copy\fR are defined to operate on symbolic
 links, not on the things that they point to).
 .TP
+\fBfile owned \fIname\fR
+>>>>>>> upstream/master
+=======
 \fBfile owned \fIname\fR
 >>>>>>> upstream/master
 =======
@@ -578,7 +610,11 @@ Returns all of the characters in the last filesystem component of
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 If \fIname\fR contains no separators then returns \fIname\fR.  So, 
+=======
+If \fIname\fR contains no separators then returns \fIname\fR.  So,
+>>>>>>> upstream/master
 =======
 If \fIname\fR contains no separators then returns \fIname\fR.  So,
 >>>>>>> upstream/master
@@ -593,6 +629,36 @@ If \fIname\fR contains no separators then returns \fIname\fR.  So,
 >>>>>>> upstream/master
 \fBfile tail a/b\fR, \fBfile tail a/b/\fR and \fBfile tail b\fR all
 return \fBb\fR.
+.TP
+\fBfile tempdir\fR ?\fItemplate\fR?
+.VS "8.7, TIP 431"
+Creates a temporary directory (guaranteed to be newly created and writable by
+the current script) and returns its name. If \fItemplate\fR is given, it
+specifies one of or both of the existing directory (on a filesystem controlled
+by the operating system) to contain the temporary directory, and the base part
+of the directory name; it is considered to have the location of the directory
+if there is a directory separator in the name, and the base part is everything
+after the last directory separator (if non-empty).  The default containing
+directory is determined by system-specific operations, and the default base
+name prefix is
+.QW \fBtcl\fR .
+.RS
+.PP
+The following output is typical and illustrative; the actual output will vary
+between platforms:
+.PP
+.CS
+% \fBfile tempdir\fR
+/var/tmp/tcl_u0kuy5
+ % \fBfile tempdir\fR /tmp/myapp
+/tmp/myapp_8o7r9L
+% \fBfile tempdir\fR /tmp/
+/tmp/tcl_1mOJHD
+% \fBfile tempdir\fR myapp
+/var/tmp/myapp_0ihS0n
+.CE
+.RE
+.VE "8.7, TIP 431"
 .TP
 \fBfile tempfile\fR ?\fInameVar\fR? ?\fItemplate\fR?
 '\" TIP #210
@@ -624,7 +690,11 @@ Returns a string giving the type of file \fIname\fR, which will be one of
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 . 
+=======
+.
+>>>>>>> upstream/master
 =======
 .
 >>>>>>> upstream/master
@@ -661,6 +731,7 @@ These commands always operate using the real user and group identifiers,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 not the effective ones. 
 =======
 not the effective ones.
@@ -677,6 +748,8 @@ may be fixed in a future release of Tcl.
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
 not the effective ones.
 .TP
 \fBWindows\fR\0\0\0\0
@@ -686,6 +759,9 @@ the process token, not the thread token which may be impersonating
 some other user.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

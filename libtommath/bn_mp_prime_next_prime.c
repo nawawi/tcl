@@ -9,8 +9,12 @@
  * Michael Fromberger but has been written from scratch with
  * additional optimizations in place.
  *
+<<<<<<< HEAD
  * The library is free for all purposes without any express
  * guarantee it works.
+=======
+ * SPDX-License-Identifier: Unlicense
+>>>>>>> upstream/master
  */
 
 /* finds the next prime after the number "a" using "t" trials
@@ -24,11 +28,14 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style)
    mp_digit res_tab[PRIME_SIZE], step, kstep;
    mp_int   b;
 
+<<<<<<< HEAD
    /* ensure t is valid */
    if ((t <= 0) || (t > PRIME_SIZE)) {
       return MP_VAL;
    }
 
+=======
+>>>>>>> upstream/master
    /* force positive */
    a->sign = MP_ZPOS;
 
@@ -141,6 +148,7 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style)
          continue;
       }
 
+<<<<<<< HEAD
       /* is this prime? */
       for (x = 0; x < t; x++) {
          mp_set(&b, ltm_prime_tab[x]);
@@ -150,8 +158,11 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style)
          if (res == MP_NO) {
             break;
          }
+=======
+      if ((err = mp_prime_is_prime(a, t, &res)) != MP_OKAY) {
+         goto LBL_ERR;
+>>>>>>> upstream/master
       }
-
       if (res == MP_YES) {
          break;
       }

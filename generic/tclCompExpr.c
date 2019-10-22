@@ -281,7 +281,15 @@ enum Marks {
 				 * parse tree. The sub-expression between
 				 * parens becomes the single argument of the
 				 * matching OPEN_PAREN unary operator. */
+<<<<<<< HEAD
 #define END		(BINARY | 28)
+=======
+#define STR_LT		(BINARY | 28)
+#define STR_GT		(BINARY | 29)
+#define STR_LEQ		(BINARY | 30)
+#define STR_GEQ		(BINARY | 31)
+#define END		(BINARY | 32)
+>>>>>>> upstream/master
 				/* This lexeme represents the end of the
 				 * string being parsed. Treating it as a
 				 * binary operator follows the same logic as
@@ -360,12 +368,18 @@ static const unsigned char prec[] = {
     PREC_EQUAL,		/* IN_LIST */
     PREC_EQUAL,		/* NOT_IN_LIST */
     PREC_CLOSE_PAREN,	/* CLOSE_PAREN */
+    PREC_COMPARE,	/* STR_LT */
+    PREC_COMPARE,	/* STR_GT */
+    PREC_COMPARE,	/* STR_LEQ */
+    PREC_COMPARE,	/* STR_GEQ */
     PREC_END,		/* END */
     /* Expansion room for more binary operators */
-    0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+<<<<<<< HEAD
     0,
+=======
+>>>>>>> upstream/master
     /* Unary operator lexemes */
     PREC_UNARY,		/* UNARY_PLUS */
     PREC_UNARY,		/* UNARY_MINUS */
@@ -415,12 +429,18 @@ static const unsigned char instruction[] = {
     INST_LIST_IN,	/* IN_LIST */
     INST_LIST_NOT_IN,	/* NOT_IN_LIST */
     0,			/* CLOSE_PAREN */
+    INST_STR_LT,	/* STR_LT */
+    INST_STR_GT,	/* STR_GT */
+    INST_STR_LE,	/* STR_LEQ */
+    INST_STR_GE,	/* STR_GEQ */
     0,			/* END */
     /* Expansion room for more binary operators */
-    0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+<<<<<<< HEAD
     0,
+=======
+>>>>>>> upstream/master
     /* Unary operator lexemes */
     INST_UPLUS,		/* UNARY_PLUS */
     INST_UMINUS,	/* UNARY_MINUS */
@@ -568,7 +588,11 @@ ParseExpr(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesAvailable = 64;	/* Initial size of the storage array. This
+=======
+    unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
+>>>>>>> upstream/master
 =======
     unsigned int nodesAvailable = 64; /* Initial size of the storage array. This
 >>>>>>> upstream/master
@@ -590,6 +614,7 @@ ParseExpr(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int nodesUsed = 0;		/* Number of OpNodes filled. */
 =======
     unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
@@ -606,6 +631,10 @@ ParseExpr(
 >>>>>>> upstream/master
     int scanned = 0;		/* Capture number of byte scanned by parsing
 =======
+    size_t scanned = 0;		/* Capture number of byte scanned by parsing
+>>>>>>> upstream/master
+=======
+    unsigned int nodesUsed = 0;	/* Number of OpNodes filled. */
     size_t scanned = 0;		/* Capture number of byte scanned by parsing
 >>>>>>> upstream/master
 				 * routines. */
@@ -702,7 +731,11 @@ ParseExpr(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    int size = nodesUsed * 2;
+=======
+	    unsigned int size = nodesUsed * 2;
+>>>>>>> upstream/master
 =======
 	    unsigned int size = nodesUsed * 2;
 >>>>>>> upstream/master
@@ -1612,7 +1645,7 @@ ConvertTreeToTokens(
 		TclGrowParseTokenArray(parsePtr, toCopy);
 		subExprTokenPtr = parsePtr->tokenPtr + parsePtr->numTokens;
 		memcpy(subExprTokenPtr, tokenPtr,
-			(size_t) toCopy * sizeof(Tcl_Token));
+			toCopy * sizeof(Tcl_Token));
 		subExprTokenPtr->type = TCL_TOKEN_SUB_EXPR;
 		parsePtr->numTokens += toCopy;
 	    } else {
@@ -1629,7 +1662,7 @@ ConvertTreeToTokens(
 		subExprTokenPtr->numComponents++;
 		subExprTokenPtr++;
 		memcpy(subExprTokenPtr, tokenPtr,
-			(size_t) toCopy * sizeof(Tcl_Token));
+			toCopy * sizeof(Tcl_Token));
 		parsePtr->numTokens += toCopy + 1;
 	    }
 
@@ -2052,6 +2085,35 @@ ParseLexeme(
 		return 2;
 	    }
 	}
+	break;
+
+    case 'l':
+	if ((numBytes > 1)
+		&& ((numBytes == 2) || start[2] & 0x80 || !isalpha(UCHAR(start[2])))) {
+	    switch (start[1]) {
+	    case 't':
+		*lexemePtr = STR_LT;
+		return 2;
+	    case 'e':
+		*lexemePtr = STR_LEQ;
+		return 2;
+	    }
+	}
+	break;
+
+    case 'g':
+	if ((numBytes > 1)
+		&& ((numBytes == 2) || start[2] & 0x80 || !isalpha(UCHAR(start[2])))) {
+	    switch (start[1]) {
+	    case 't':
+		*lexemePtr = STR_GT;
+		return 2;
+	    case 'e':
+		*lexemePtr = STR_GEQ;
+		return 2;
+	    }
+	}
+	break;
     }
 
     literal = Tcl_NewObj();
@@ -2071,6 +2133,9 @@ ParseLexeme(
 	} else {
 	    unsigned char lexeme;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 	    /*
 	     * We have a number followed directly by bareword characters
@@ -2079,7 +2144,11 @@ ParseLexeme(
 	     * Example: Inf + luence + () becomes a valid function call.
 	     * [Bug 3401704]
 	     */
+<<<<<<< HEAD
 	    if (literal->typePtr == &tclDoubleType) {
+=======
+	    if (TclHasIntRep(literal, &tclDoubleType)) {
+>>>>>>> upstream/master
 		const char *p = start;
 
 		while (p < end) {
@@ -2115,6 +2184,7 @@ ParseLexeme(
      */
 
     if (!TclIsBareword(*start) || *start == '_') {
+<<<<<<< HEAD
 	if (Tcl_UtfCharComplete(start, numBytes)) {
 	    scanned = Tcl_UtfToUniChar(start, &ch);
 =======
@@ -2177,6 +2247,22 @@ ParseLexeme(
 	Tcl_DecrRefCount(literal);
 	return scanned;
     }
+=======
+	size_t scanned;
+	if (Tcl_UtfCharComplete(start, numBytes)) {
+	    scanned = TclUtfToUniChar(start, &ch);
+	} else {
+	    char utfBytes[4];
+
+	    memcpy(utfBytes, start, numBytes);
+	    utfBytes[numBytes] = '\0';
+	    scanned = TclUtfToUniChar(utfBytes, &ch);
+	}
+	*lexemePtr = INVALID;
+	Tcl_DecrRefCount(literal);
+	return scanned;
+    }
+>>>>>>> upstream/master
     end = start;
     while (numBytes && TclIsBareword(*end)) {
 	end += 1;
@@ -2286,7 +2372,10 @@ ExecConstantExprTree(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Obj *byteCodeObj = Tcl_NewObj();
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -2308,6 +2397,7 @@ ExecConstantExprTree(
     CompileExprTree(interp, nodes, index, litObjvPtr, NULL, NULL, envPtr,
 	    0 /* optimize */);
     TclEmitOpcode(INST_DONE, envPtr);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2337,6 +2427,14 @@ ExecConstantExprTree(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    byteCodePtr = TclInitByteCode(envPtr);
+    TclFreeCompileEnv(envPtr);
+    TclStackFree(interp, envPtr);
+    TclNRExecuteByteCode(interp, byteCodePtr);
+    code = TclNRRunCallbacks(interp, TCL_OK, rootPtr);
+    TclReleaseByteCode(byteCodePtr);
 >>>>>>> upstream/master
 =======
     byteCodePtr = TclInitByteCode(envPtr);
@@ -2406,7 +2504,7 @@ CompileExprTree(
 	    case FUNCTION: {
 		Tcl_DString cmdName;
 		const char *p;
-		int length;
+		size_t length;
 
 		Tcl_DStringInit(&cmdName);
 		TclDStringAppendLiteral(&cmdName, "tcl::mathfunc::");
@@ -2565,7 +2663,11 @@ CompileExprTree(
 	    Tcl_Obj *literal = *litObjv;
 
 	    if (optimize) {
+<<<<<<< HEAD
 		int length;
+=======
+		size_t length;
+>>>>>>> upstream/master
 		const char *bytes = TclGetStringFromObj(literal, &length);
 		int index = TclRegisterLiteral(envPtr, bytes, length, 0);
 		Tcl_Obj *objPtr = TclFetchLiteral(envPtr, index);
@@ -2624,9 +2726,15 @@ CompileExprTree(
 
 		    if (TclHasStringRep(objPtr)) {
 			Tcl_Obj *tableValue;
+<<<<<<< HEAD
 			int numBytes;
 			const char *bytes
 				= Tcl_GetStringFromObj(objPtr, &numBytes);
+=======
+			size_t numBytes;
+			const char *bytes
+				= TclGetStringFromObj(objPtr, &numBytes);
+>>>>>>> upstream/master
 
 			index = TclRegisterLiteral(envPtr, bytes, numBytes, 0);
 			tableValue = TclFetchLiteral(envPtr, index);
@@ -2714,7 +2822,11 @@ TclSingleOpCmd(
  *
  * TclSortingOpCmd --
  *	Implements the commands:
+<<<<<<< HEAD
  *		<, <=, >, >=, ==, eq
+=======
+ *		<, <=, >, >=, ==, eq, lt, le, gt, ge
+>>>>>>> upstream/master
  *	in the ::tcl::mathop namespace. These commands are defined for
  *	arbitrary number of arguments by computing the AND of the base
  *	operator applied to all neighbor argument pairs.

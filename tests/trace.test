@@ -63,10 +63,13 @@ proc traceCrtElement {value name1 name2 op} {
     uplevel 1 set ${name1}($name2) $value
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 proc traceCommand {oldName newName op} {
     global info
     set info [list $oldName $newName $op]
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -82,6 +85,7 @@ test trace-0.0 {memory corruption in trace (Tcl Bug 484339)} {
     # see this one fail.
     unset -nocomplain z
 <<<<<<< HEAD
+<<<<<<< HEAD
     trace add variable z array {set z(foo) 1 ;#}
     set res "names: [array names z]"
     unset -nocomplain ::z
@@ -93,6 +97,8 @@ test trace-0.0 {memory corruption in trace (Tcl Bug 484339)} {
     # You may need Purify or Electric Fence to reliably
     # see this one fail.
     unset -nocomplain z
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     trace add variable z array {set z(foo) 1 ;#}
@@ -192,9 +198,15 @@ test trace-1.11 {read traces that modify the array structure} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {set x(foo) 1 ;#} 
     trace variable x r {unset -nocomplain x(bar) ;#} 
+=======
+    set x(bar) 0
+    trace variable x r {set x(foo) 1 ;#}
+    trace variable x r {unset -nocomplain x(bar) ;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {set x(foo) 1 ;#}
@@ -223,9 +235,15 @@ test trace-1.12 {read traces that modify the array structure} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {unset -nocomplain x(bar) ;#} 
     trace variable x r {set x(foo) 1 ;#} 
+=======
+    set x(bar) 0
+    trace variable x r {unset -nocomplain x(bar) ;#}
+    trace variable x r {set x(foo) 1 ;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {unset -nocomplain x(bar) ;#}
@@ -254,9 +272,15 @@ test trace-1.13 {read traces that modify the array structure} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {set x(foo) 1 ;#} 
     trace variable x r {unset -nocomplain x;#} 
+=======
+    set x(bar) 0
+    trace variable x r {set x(foo) 1 ;#}
+    trace variable x r {unset -nocomplain x;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {set x(foo) 1 ;#}
@@ -285,9 +309,15 @@ test trace-1.14 {read traces that modify the array structure} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x(bar) 0 
     trace variable x r {unset -nocomplain x;#} 
     trace variable x r {set x(foo) 1 ;#} 
+=======
+    set x(bar) 0
+    trace variable x r {unset -nocomplain x;#}
+    trace variable x r {set x(foo) 1 ;#}
+>>>>>>> upstream/master
 =======
     set x(bar) 0
     trace variable x r {unset -nocomplain x;#}
@@ -3766,7 +3796,11 @@ test trace-28.2 {exec traces with 'error'} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3800,7 +3834,11 @@ test trace-28.2 {exec traces with 'error'} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3838,7 +3876,11 @@ test trace-28.3 {exec traces with 'return -code error'} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3872,7 +3914,11 @@ test trace-28.3 {exec traces with 'return -code error'} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3914,7 +3960,11 @@ test trace-28.4 {exec traces in slave with 'return -code error'} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3934,7 +3984,11 @@ test trace-28.4 {exec traces in slave with 'return -code error'} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -3951,6 +4005,7 @@ test trace-28.4 {exec traces in slave with 'return -code error'} {
 
 	trace remove execution foo {enter enterstep leave leavestep} \
 	  [list traceExecute foo]
+<<<<<<< HEAD
 <<<<<<< HEAD
 	
 =======
@@ -3974,6 +4029,9 @@ test trace-28.4 {exec traces in slave with 'return -code error'} {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+
 >>>>>>> upstream/master
 =======
 
@@ -4364,7 +4422,11 @@ test trace-39 {bug #3484621: tracing Bc'ed commands} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	# internals 
+=======
+	# internals
+>>>>>>> upstream/master
 =======
 	# internals
 >>>>>>> upstream/master
@@ -4394,6 +4456,7 @@ test trace-39 {bug #3484621: tracing Bc'ed commands} -setup {
     rename dotrace {}
     rename foo {}
 } -result {3 | 0 1 1}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -4473,10 +4536,15 @@ test trace-39 {bug #3484621: tracing Bc'ed commands} -setup {
     set ::traceCalls 0
     set ::bar [list 0 1 2 3]
 =======
+=======
+>>>>>>> upstream/master
 
 test trace-39.1 {bug #3485022: tracing Bc'ed commands} -setup {
     set ::traceLog 0
     set ::traceCalls 0
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set res {}
     proc dotrace args {
@@ -4485,9 +4553,13 @@ test trace-39.1 {bug #3485022: tracing Bc'ed commands} -setup {
     proc foo {} {
 	incr ::traceCalls
 <<<<<<< HEAD
+<<<<<<< HEAD
 	# choose a BC'ed command that is 'unlikely' to interfere with tcltest's
 	# internals
 	lset ::bar 1 2
+=======
+	string equal zip zap
+>>>>>>> upstream/master
 =======
 	string equal zip zap
 >>>>>>> upstream/master
@@ -4497,23 +4569,30 @@ test trace-39.1 {bug #3485022: tracing Bc'ed commands} -setup {
     lappend res $::traceLog
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     trace add execution lset enter dotrace
     foo
     lappend res $::traceLog
 
     trace remove execution lset enter dotrace
 =======
+=======
+>>>>>>> upstream/master
     trace add execution ::tcl::string::equal enter dotrace
     foo
     lappend res $::traceLog
 
     trace remove execution tcl::string::equal enter dotrace
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     foo
     lappend res $::traceLog
 
     list $::traceCalls | {*}$res
 } -cleanup {
+<<<<<<< HEAD
 <<<<<<< HEAD
     unset ::traceLog ::traceCalls ::bar res
     rename dotrace {}
@@ -4552,10 +4631,13 @@ test trace-39.1 {bug #3485022: tracing Bc'ed commands} -setup {
 } -result {3 | 0 1 1}
 
 =======
+=======
+>>>>>>> upstream/master
     unset ::traceLog ::traceCalls res
     rename dotrace {}
     rename foo {}
 } -result {3 | 0 1 1}
+<<<<<<< HEAD
 
 >>>>>>> upstream/master
 test trace-40.1 {execution trace errors become command errors} {
@@ -4579,6 +4661,15 @@ test trace-40.1 {execution trace errors become command errors} {
 
 >>>>>>> upstream/master
 =======
+=======
+
+test trace-40.1 {execution trace errors become command errors} {
+    proc foo args {}
+    trace add execution foo enter {rename foo {}; error bar;#}
+    catch foo m
+    return -level 0 $m[unset m]
+} bar
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 # Delete procedures when done, so we don't clash with other tests

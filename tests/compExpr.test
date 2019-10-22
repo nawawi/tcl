@@ -14,7 +14,10 @@ if {"::tcltest" ni [namespace children]} {
 }
 
 ::tcltest::loadTestedCommands
+<<<<<<< HEAD
 catch [list package require -exact Tcltest [info patchlevel]]
+=======
+>>>>>>> upstream/master
 
 # Constrain memory leak tests
 testConstraint memory [llength [info commands memory]]

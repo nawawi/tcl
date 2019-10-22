@@ -144,7 +144,11 @@ for Target in $Names; do
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	chmod 444 $Dir/$First
+=======
+	chmod 644 $Dir/$First
+>>>>>>> upstream/master
 =======
 	chmod 644 $Dir/$First
 >>>>>>> upstream/master

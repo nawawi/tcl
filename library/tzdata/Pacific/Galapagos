@@ -4,9 +4,12 @@ set TZData(:Pacific/Galapagos) {
     {-9223372036854775808 -21504 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1230746496 -18000 0 ECT}
     {504939600 -21600 0 GALT}
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     {-1230746496 -18000 0 -05}
@@ -14,6 +17,9 @@ set TZData(:Pacific/Galapagos) {
     {722930400 -18000 1 -06}
     {728888400 -21600 0 -06}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

@@ -4,6 +4,7 @@ set TZData(:America/Maceio) {
     {-9223372036854775808 -8572 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767217028 -10800 0 BRT}
     {-1206957600 -7200 1 BRST}
     {-1191362400 -10800 0 BRT}
@@ -54,6 +55,8 @@ set TZData(:America/Maceio) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767217028 -10800 0 -03}
     {-1206957600 -7200 1 -03}
     {-1191362400 -10800 0 -03}
@@ -102,6 +105,9 @@ set TZData(:America/Maceio) {
     {1013911200 -10800 0 -03}
     {1033437600 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

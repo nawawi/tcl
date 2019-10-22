@@ -30,12 +30,16 @@ testConstraint testCPUID [llength [info commands testcpuid]]
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+testConstraint testlongsize [llength [info commands testlongsize]]
 >>>>>>> upstream/master
 =======
 testConstraint testlongsize [llength [info commands testlongsize]]
@@ -47,6 +51,9 @@ test platform-1.0 {tcl_platform(engine)} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -66,7 +73,11 @@ test platform-1.1 {TclpSetVariables: tcl_platform} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } {byteOrder machine os osVersion pathSeparator platform pointerSize user wordSize}
+=======
+} {byteOrder engine machine os osVersion pathSeparator platform pointerSize user wordSize}
+>>>>>>> upstream/master
 =======
 } {byteOrder engine machine os osVersion pathSeparator platform pointerSize user wordSize}
 >>>>>>> upstream/master
@@ -92,7 +103,11 @@ test platform-3.1 {CPU ID on Windows/UNIX} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {		
+=======
+    -body {
+>>>>>>> upstream/master
 =======
     -body {
 >>>>>>> upstream/master
@@ -113,7 +128,11 @@ test platform-3.1 {CPU ID on Windows/UNIX} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    [lindex $cpudata 2] 
+=======
+	    [lindex $cpudata 2]
+>>>>>>> upstream/master
 =======
 	    [lindex $cpudata 2]
 >>>>>>> upstream/master

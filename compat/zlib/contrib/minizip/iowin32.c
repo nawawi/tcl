@@ -28,8 +28,14 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #if defined(WINAPI_FAMILY_PARTITION) && (!(defined(IOWIN32_USING_WINRT_API)))
 #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
+=======
+// see Include/shared/winapifamily.h in the Windows Kit
+#if defined(WINAPI_FAMILY_PARTITION) && (!(defined(IOWIN32_USING_WINRT_API)))
+#if WINAPI_FAMILY_ONE_PARTITION(WINAPI_FAMILY, WINAPI_PARTITION_APP)
+>>>>>>> upstream/master
 =======
 // see Include/shared/winapifamily.h in the Windows Kit
 #if defined(WINAPI_FAMILY_PARTITION) && (!(defined(IOWIN32_USING_WINRT_API)))
@@ -257,7 +263,11 @@ static BOOL MySetFilePointerEx(HANDLE hFile, LARGE_INTEGER pos, LARGE_INTEGER *n
     LONG lHigh = pos.HighPart;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     DWORD dwNewPos = SetFilePointer(hFile, pos.LowPart, &lHigh, FILE_CURRENT);
+=======
+    DWORD dwNewPos = SetFilePointer(hFile, pos.LowPart, &lHigh, dwMoveMethod);
+>>>>>>> upstream/master
 =======
     DWORD dwNewPos = SetFilePointer(hFile, pos.LowPart, &lHigh, dwMoveMethod);
 >>>>>>> upstream/master
@@ -392,7 +402,11 @@ long ZCALLBACK win32_seek64_file_func (voidpf opaque, voidpf stream,ZPOS64_T off
         pos.QuadPart = offset;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (!MySetFilePointerEx(hFile, pos, NULL, FILE_CURRENT))
+=======
+        if (!MySetFilePointerEx(hFile, pos, NULL, dwMoveMethod))
+>>>>>>> upstream/master
 =======
         if (!MySetFilePointerEx(hFile, pos, NULL, dwMoveMethod))
 >>>>>>> upstream/master

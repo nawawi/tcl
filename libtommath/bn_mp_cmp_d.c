@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_CMP_D_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -15,6 +16,13 @@
 
 /* compare a digit */
 int mp_cmp_d(const mp_int *a, mp_digit b)
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+
+/* compare a digit */
+mp_ord mp_cmp_d(const mp_int *a, mp_digit b)
+>>>>>>> upstream/master
 {
    /* compare based on sign */
    if (a->sign == MP_NEG) {
@@ -36,7 +44,10 @@ int mp_cmp_d(const mp_int *a, mp_digit b)
    }
 }
 #endif
+<<<<<<< HEAD
 
 /* ref:         $Format:%D$ */
 /* git commit:  $Format:%H$ */
 /* commit time: $Format:%ai$ */
+=======
+>>>>>>> upstream/master

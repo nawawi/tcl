@@ -11,10 +11,17 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset lv DAYS_OF_WEEK_FULL [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "sv\u0113tdiena"\
         "pirmdiena"\
         "otrdiena"\
         "tre\u0161diena"\
+=======
+        "svētdiena"\
+        "pirmdiena"\
+        "otrdiena"\
+        "trešdiena"\
+>>>>>>> upstream/master
 =======
         "svētdiena"\
         "pirmdiena"\
@@ -38,8 +45,13 @@ namespace eval ::tcl::clock {
         "Maijs"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "J\u016bn"\
         "J\u016bl"\
+=======
+        "Jūn"\
+        "Jūl"\
+>>>>>>> upstream/master
 =======
         "Jūn"\
         "Jūl"\
@@ -55,6 +67,7 @@ namespace eval ::tcl::clock {
         "Dec"\
         ""]
     ::msgcat::mcset lv MONTHS_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         "janv\u0101ris"\
@@ -82,6 +95,15 @@ namespace eval ::tcl::clock {
         "jūnijs"\
         "jūlijs"\
 >>>>>>> upstream/master
+=======
+        "janvāris"\
+        "februāris"\
+        "marts"\
+        "aprīlis"\
+        "maijs"\
+        "jūnijs"\
+        "jūlijs"\
+>>>>>>> upstream/master
         "augusts"\
         "septembris"\
         "oktobris"\
@@ -90,8 +112,13 @@ namespace eval ::tcl::clock {
         ""]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset lv BCE "pm\u0113"
     ::msgcat::mcset lv CE "m\u0113"
+=======
+    ::msgcat::mcset lv BCE "pmē"
+    ::msgcat::mcset lv CE "mē"
+>>>>>>> upstream/master
 =======
     ::msgcat::mcset lv BCE "pmē"
     ::msgcat::mcset lv CE "mē"

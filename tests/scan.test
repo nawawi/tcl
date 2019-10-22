@@ -23,9 +23,15 @@ proc int_range {} {
     set MIN_INT [expr { ~ $MAX_INT }]
     return [list $MIN_INT $MAX_INT]
 }
+<<<<<<< HEAD
 
 # Big test for correct ordering of data in [expr]
 
+=======
+
+# Big test for correct ordering of data in [expr]
+
+>>>>>>> upstream/master
 proc testIEEE {} {
     variable ieeeValues
     binary scan [binary format dd -1.0 1.0] c* c
@@ -328,6 +334,7 @@ test scan-4.40.2 {Tcl_ScanObjCmd, base-16 integer scanning} -setup {
 test scan-4.40.3 {Tcl_ScanObjCmd, base-2 integer scanning} -setup {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     set x {}
 } -body {
     list [scan {1001 0b101 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000} {%b %b %llb} x y z] $x $y $z
@@ -347,6 +354,10 @@ test scan-4.42 {Tcl_ScanObjCmd, base-unknown integer scanning} -setup {
     set x {}
 } -body {
 >>>>>>> upstream/master
+=======
+    set x {}
+} -body {
+>>>>>>> upstream/master
     list [scan {1001 0b101 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000} {%b %b %llb} x y z] $x $y $z
 } -result {3 9 5 340282366920938463463374607431768211456}
 test scan-4.41 {Tcl_ScanObjCmd, base-unknown integer scanning} -setup {
@@ -358,6 +369,9 @@ test scan-4.42 {Tcl_ScanObjCmd, base-unknown integer scanning} -setup {
     set x {}
 } -body {
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -464,6 +478,9 @@ test scan-4.61 {Tcl_ScanObjCmd, set errors} -setup {
 } -result {1 {can't set "z": variable is array} abc}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 
@@ -484,6 +501,7 @@ test scan-4.64 {scanning of hex with %X} {
 } {291 2748 3960}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 test scan-4.62 {scanning of large and negative octal integers} {
@@ -502,6 +520,8 @@ test scan-4.64 {scanning of hex with %X} {
     scan "123 abc f78" %X%X%X
 } {291 2748 3960}
 
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -588,7 +608,10 @@ test scan-5.16 {Bug be003d570f} {
 } 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test scan-5.17 {bigint scanning} -setup {
@@ -608,11 +631,16 @@ test scan-5.19 {bigint scanning invalid} -setup {
 } -body {
     list [scan "207698809136909011942886895" \
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    %llu a] $a
 } -returnCodes 1 -result {unsigned bignum scans are invalid}
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+           %llu a] $a
+} -result {1 207698809136909011942886895}
 >>>>>>> upstream/master
 =======
            %llu a] $a

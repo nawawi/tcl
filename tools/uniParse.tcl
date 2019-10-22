@@ -212,7 +212,11 @@ static const unsigned short pageMap\[\] = {"
 	    puts $f $line
 	    set lastpage [expr {[lindex $line end] >> $shift}]
 	    puts stdout "lastpage: $lastpage"
+<<<<<<< HEAD
 	    puts $f "#if TCL_UTF_MAX > 3"
+=======
+	    puts $f "#if TCL_UTF_MAX > 3 || TCL_MAJOR_VERSION > 8 || TCL_MINOR_VERSION > 6"
+>>>>>>> upstream/master
 	    set line "    ,"
 	}
 	append line [lindex $pMap $i]
@@ -242,7 +246,11 @@ static const unsigned char groupMap\[\] = {"
 	set lastj [expr {[llength $page] - 1}]
 	if {$i == ($lastpage + 1)} {
 	    puts $f [string trimright $line " \t,"]
+<<<<<<< HEAD
 	    puts $f "#if TCL_UTF_MAX > 3"
+=======
+	    puts $f "#if TCL_UTF_MAX > 3 || TCL_MAJOR_VERSION > 8 || TCL_MINOR_VERSION > 6"
+>>>>>>> upstream/master
 	    set line "    ,"
 	}
 	for {set j 0} {$j <= $lastj} {incr j} {
@@ -342,7 +350,11 @@ static const int groups\[\] = {"
     puts $f $line
     puts -nonewline $f "};
 
+<<<<<<< HEAD
 #if TCL_UTF_MAX > 3
+=======
+#if TCL_UTF_MAX > 3 || TCL_MAJOR_VERSION > 8 || TCL_MINOR_VERSION > 6
+>>>>>>> upstream/master
 #   define UNICODE_OUT_OF_RANGE(ch) (((ch) & 0x1fffff) >= [format 0x%x $next])
 #else
 #   define UNICODE_OUT_OF_RANGE(ch) (((ch) & 0x1f0000) != 0)
@@ -401,7 +413,11 @@ enum {
  * Unicode character tables.
  */
 
+<<<<<<< HEAD
 #if TCL_UTF_MAX > 3
+=======
+#if TCL_UTF_MAX > 3 || TCL_MAJOR_VERSION > 8 || TCL_MINOR_VERSION > 6
+>>>>>>> upstream/master
 #   define GetUniCharInfo(ch) (groups\[groupMap\[pageMap\[((ch) & 0x1fffff) >> OFFSET_BITS\] | ((ch) & ((1 << OFFSET_BITS)-1))\]\])
 #else
 #   define GetUniCharInfo(ch) (groups\[groupMap\[pageMap\[((ch) & 0xffff) >> OFFSET_BITS\] | ((ch) & ((1 << OFFSET_BITS)-1))\]\])

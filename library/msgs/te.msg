@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset te DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u0c06\u0c26\u0c3f"\
         "\u0c38\u0c4b\u0c2e"\
         "\u0c2e\u0c02\u0c17\u0c33"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u0c36\u0c41\u0c15\u0c4d\u0c30"\
         "\u0c36\u0c28\u0c3f"]
 =======
+=======
+>>>>>>> upstream/master
         "ఆది"\
         "సోమ"\
         "మంగళ"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "గురు"\
         "శుక్ర"\
         "శని"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset te DAYS_OF_WEEK_FULL [list \
         "ఆదివారం"\
@@ -42,6 +48,7 @@ namespace eval ::tcl::clock {
         "డిసెంబర్"\
         ""]
     ::msgcat::mcset te MONTHS_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
         "\u0c1c\u0c28\u0c35\u0c30\u0c3f"\
         "\u0c2b\u0c3f\u0c2c\u0c4d\u0c30\u0c35\u0c30\u0c3f"\
@@ -74,6 +81,8 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset te MONTHS_ABBREV [list \
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "జనవరి"\
         "ఫిబ్రవరి"\
         "మార్చి"\
@@ -86,6 +95,7 @@ namespace eval ::tcl::clock {
         "అక్టోబర్"\
         "నవంబర్"\
         "డిసెంబర్"\
+<<<<<<< HEAD
 <<<<<<< HEAD
         ""]
     ::msgcat::mcset te MONTHS_FULL [list \
@@ -101,6 +111,8 @@ namespace eval ::tcl::clock {
         "అక్టోబర్"\
         "నవంబర్"\
         "డిసెంబర్"\
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

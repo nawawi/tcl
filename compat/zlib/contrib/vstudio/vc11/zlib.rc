@@ -4,8 +4,13 @@
 IDR_VERSION1	VERSIONINFO	MOVEABLE IMPURE LOADONCALL DISCARDABLE
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   FILEVERSION	 1,2,8,0
   PRODUCTVERSION 1,2,8,0
+=======
+  FILEVERSION	 1, 2, 11, 0
+  PRODUCTVERSION 1, 2, 11, 0
+>>>>>>> upstream/master
 =======
   FILEVERSION	 1, 2, 11, 0
   PRODUCTVERSION 1, 2, 11, 0
@@ -29,7 +34,11 @@ BEGIN
       VALUE "FileDescription", "zlib data compression and ZIP file I/O library\0"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       VALUE "FileVersion",	"1.2.8\0"
+=======
+      VALUE "FileVersion",	"1.2.11\0"
+>>>>>>> upstream/master
 =======
       VALUE "FileVersion",	"1.2.11\0"
 >>>>>>> upstream/master
@@ -42,7 +51,11 @@ BEGIN
       VALUE "Comments","DLL support by Alessandro Iacopetti & Gilles Vollant\0"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       VALUE "LegalCopyright", "(C) 1995-2013 Jean-loup Gailly & Mark Adler\0"
+=======
+      VALUE "LegalCopyright", "(C) 1995-2017 Jean-loup Gailly & Mark Adler\0"
+>>>>>>> upstream/master
 =======
       VALUE "LegalCopyright", "(C) 1995-2017 Jean-loup Gailly & Mark Adler\0"
 >>>>>>> upstream/master

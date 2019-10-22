@@ -5,7 +5,11 @@ namespace eval ::tcl::clock {
         "Po"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u00dat"\
+=======
+        "Út"\
+>>>>>>> upstream/master
 =======
         "Út"\
 >>>>>>> upstream/master
@@ -14,6 +18,7 @@ namespace eval ::tcl::clock {
         "Pá"\
         "So"]
     ::msgcat::mcset cs DAYS_OF_WEEK_FULL [list \
+<<<<<<< HEAD
 <<<<<<< HEAD
         "Ned\u011ble"\
         "Pond\u011bl\u00ed"\
@@ -30,6 +35,8 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset cs DAYS_OF_WEEK_FULL [list \
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
         "Neděle"\
         "Pondělí"\
         "Úterý"\
@@ -37,6 +44,9 @@ namespace eval ::tcl::clock {
         "Čtvrtek"\
         "Pátek"\
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -59,8 +69,13 @@ namespace eval ::tcl::clock {
         "leden"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u00fanor"\
         "b\u0159ezen"\
+=======
+        "únor"\
+        "březen"\
+>>>>>>> upstream/master
 =======
         "únor"\
         "březen"\
@@ -76,6 +91,7 @@ namespace eval ::tcl::clock {
         "prosinec"\
         ""]
 <<<<<<< HEAD
+<<<<<<< HEAD
     ::msgcat::mcset cs BCE "p\u0159.Kr."
 =======
         "únor"\
@@ -90,6 +106,9 @@ namespace eval ::tcl::clock {
         "listopad"\
         "prosinec"\
         ""]
+    ::msgcat::mcset cs BCE "př.Kr."
+>>>>>>> upstream/master
+=======
     ::msgcat::mcset cs BCE "př.Kr."
 >>>>>>> upstream/master
 =======

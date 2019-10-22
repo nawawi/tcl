@@ -944,7 +944,11 @@ catch {rename foo {}}
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 return 
+=======
+return
+>>>>>>> upstream/master
 =======
 return
 >>>>>>> upstream/master

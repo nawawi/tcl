@@ -39,9 +39,15 @@ testConstraint y2038 \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #	[clock format] - tests of bad and empty arguments 
 #
 # clock-2 
+=======
+#	[clock format] - tests of bad and empty arguments
+#
+# clock-2
+>>>>>>> upstream/master
 =======
 #	[clock format] - tests of bad and empty arguments
 #
@@ -223,7 +229,11 @@ namespace eval ::tcl::clock {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    lxxx lxxxi lxxxii lxxxiii lxxxiv lxxxv lxxxvi lxxxvii lxxxviii 
+=======
+	    lxxx lxxxi lxxxii lxxxiii lxxxiv lxxxv lxxxvi lxxxvii lxxxviii
+>>>>>>> upstream/master
 =======
 	    lxxx lxxxi lxxxii lxxxiii lxxxiv lxxxv lxxxvi lxxxvii lxxxviii
 >>>>>>> upstream/master
@@ -292,6 +302,11 @@ proc ::testClock::registry { cmd path key } {
 
 proc timeWithinDuration {duration start end} {
     regexp {([\d.]+)(s|ms|us)} $duration -> duration unit
+<<<<<<< HEAD
+=======
+    if {[llength $start] > 1} { set start [expr "([join $start +])/[llength $start]"] }
+    if {[llength $end] > 1} { set end [expr "([join $end +])/[llength $end]"] }
+>>>>>>> upstream/master
     set delta [expr {$end - $start}]
     expr {
 	  ($delta > 0) && ($delta <= $duration) ?
@@ -325,7 +340,11 @@ test clock-1.4 "clock format - bad flag" {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -35289,6 +35308,7 @@ test clock-30.25 {clock add seconds at DST conversion} {
 test clock-31.1 {system locale} \
     -constraints win \
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
 =======
 =======
@@ -35360,6 +35380,9 @@ test clock-31.1 {system locale} \
 =======
     -setup {
 >>>>>>> upstream/master
+=======
+    -setup {
+>>>>>>> upstream/master
 	namespace eval ::tcl::clock {
 	    namespace import -force ::testClock::registry
 	}
@@ -35386,7 +35409,11 @@ test clock-31.2 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35425,7 +35452,11 @@ test clock-31.3 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35464,7 +35495,11 @@ test clock-31.4 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35517,7 +35552,11 @@ test clock-31.5 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35570,7 +35609,11 @@ test clock-31.6 {system locale} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -setup { 
+=======
+    -setup {
+>>>>>>> upstream/master
 =======
     -setup {
 >>>>>>> upstream/master
@@ -35656,7 +35699,11 @@ test clock-32.1 {scan/format across the Gregorian change} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			 
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -35694,6 +35741,7 @@ test clock-33.4a {clock milliseconds} {
     concat {}
 } {}
 test clock-33.5 {clock clicks tests, millisecond timing test} {
+<<<<<<< HEAD
     # This test can fail on a system that is so heavily loaded that
     # the test takes >120 ms to run.
     set start [clock clicks -milli]
@@ -35757,6 +35805,24 @@ test clock-33.5a {clock tests, millisecond timing test} {
 =======
     timeWithinDuration 120ms $start $end
 >>>>>>> upstream/master
+=======
+    set start [set end {}]
+    lassign [time {
+	lappend start [clock clicks -milli]
+	after 1 {lappend end [clock clicks -milli]}
+	vwait end
+    } 5] tm
+    timeWithinDuration [expr {int($tm/1000 + 1)}]ms $start $end
+} {ok}
+test clock-33.5a {clock tests, millisecond timing test} {
+    set start [set end {}]
+    lassign [time {
+	lappend start [clock milliseconds]
+	after 1 {lappend end [clock milliseconds]}
+	vwait end
+    } 5] tm
+    timeWithinDuration [expr {int($tm/1000 + 1)}]ms $start $end
+>>>>>>> upstream/master
 } {ok}
 test clock-33.6 {clock clicks, milli with too much abbreviation} {
     list [catch { clock clicks ? } msg] $msg
@@ -35766,6 +35832,7 @@ test clock-33.7 {clock clicks, milli with too much abbreviation} {
 } {1 {ambiguous option "-": must be -milliseconds or -microseconds}}
 
 test clock-33.8 {clock clicks test, microsecond timing test} {
+<<<<<<< HEAD
     # This test can fail on a system that is so heavily loaded that
     # the test takes >120 ms to run.
     set start [clock clicks -micro]
@@ -35780,6 +35847,24 @@ test clock-33.8a {clock test, microsecond timing test} {
     after 10
     set end [clock microseconds]
     timeWithinDuration 120000us $start $end
+=======
+    set start [set end {}]
+    lassign [time {
+	lappend start [clock clicks -micro]
+	after 1 {lappend end [clock clicks -micro]}
+	vwait end
+    } 5] tm
+    timeWithinDuration [expr {int($tm + 10)}]us $start $end
+} {ok}
+test clock-33.8a {clock test, microsecond timing test} {
+    set start [set end {}]
+    lassign [time {
+	lappend start [clock microseconds]
+	after 1 {lappend end [clock microseconds]}
+	vwait end
+    } 5] tm
+    timeWithinDuration [expr {int($tm + 10)}]us $start $end
+>>>>>>> upstream/master
 } {ok}
 
 test clock-33.9 {clock clicks test, millis align with seconds} {
@@ -36083,7 +36168,11 @@ test clock-34.48 {more than one ToD} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {10:00 11:00}} 
+=======
+    -body {clock scan {10:00 11:00}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {10:00 11:00}}
 >>>>>>> upstream/master
@@ -36105,7 +36194,11 @@ test clock-34.49 {more than one date} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {1/1/2001 2/2/2002}} 
+=======
+    -body {clock scan {1/1/2001 2/2/2002}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {1/1/2001 2/2/2002}}
 >>>>>>> upstream/master
@@ -36127,7 +36220,11 @@ test clock-34.50 {more than one time zone} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {10:00 EST CST}} 
+=======
+    -body {clock scan {10:00 EST CST}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {10:00 EST CST}}
 >>>>>>> upstream/master
@@ -36149,7 +36246,11 @@ test clock-34.51 {more than one weekday} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {Monday Tuesday}} 
+=======
+    -body {clock scan {Monday Tuesday}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {Monday Tuesday}}
 >>>>>>> upstream/master
@@ -36171,7 +36272,11 @@ test clock-34.52 {more than one ordinal month} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     -body {clock scan {next January next March}} 
+=======
+    -body {clock scan {next January next March}}
+>>>>>>> upstream/master
 =======
     -body {clock scan {next January next March}}
 >>>>>>> upstream/master
@@ -36283,7 +36388,11 @@ test clock-38.2 {make sure TZ is not cached after unset} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -36371,7 +36480,11 @@ test clock-44.1 {regression test - time zone name containing hyphen } \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -36432,7 +36545,11 @@ test clock-49.1 {regression test - localtime with negative arg (Bug 1237907)} \
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	list [catch { 
+=======
+	list [catch {
+>>>>>>> upstream/master
 =======
 	list [catch {
 >>>>>>> upstream/master
@@ -36687,7 +36804,11 @@ test clock-56.1 {use of zoneinfo, version 1} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -36753,7 +36874,11 @@ test clock-56.2 {use of zoneinfo, version 2} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -36979,7 +37104,11 @@ test clock-56.3 {use of zoneinfo, version 2, Y2038 compliance} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37147,7 +37276,11 @@ test clock-56.4 {Bug 3470928} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37174,7 +37307,11 @@ test clock-58.1 {clock l10n - Japanese localisation} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    
+=======
+
+>>>>>>> upstream/master
 =======
 
 >>>>>>> upstream/master
@@ -37203,16 +37340,18 @@ test clock-58.1 {clock l10n - Japanese localisation} {*}{
     }
     -body {
 	set trouble {}
-	foreach {date jdate} [list \
-	    1872-12-31 \u897f\u66a61872\u5e7412\u670831\u65e5 \
-	    1873-01-01 \u660e\u6cbb06\u5e7401\u670801\u65e5 \
-	    1912-07-29 \u660e\u6cbb45\u5e7407\u670829\u65e5 \
-	    1912-07-30 \u5927\u6b6301\u5e7407\u670830\u65e5 \
-	    1926-12-24 \u5927\u6b6315\u5e7412\u670824\u65e5 \
-	    1926-12-25 \u662d\u548c01\u5e7412\u670825\u65e5 \
-	    1989-01-07 \u662d\u548c64\u5e7401\u670807\u65e5 \
-	    1989-01-08 \u5e73\u621001\u5e7401\u670808\u65e5 \
-	] {
+	foreach {date jdate} {
+	    1872-12-31 \u897f\u66a61872\u5e7412\u670831\u65e5
+	    1873-01-01 \u660e\u6cbb06\u5e7401\u670801\u65e5
+	    1912-07-29 \u660e\u6cbb45\u5e7407\u670829\u65e5
+	    1912-07-30 \u5927\u6b6301\u5e7407\u670830\u65e5
+	    1926-12-24 \u5927\u6b6315\u5e7412\u670824\u65e5
+	    1926-12-25 \u662d\u548c01\u5e7412\u670825\u65e5
+	    1989-01-07 \u662d\u548c64\u5e7401\u670807\u65e5
+	    1989-01-08 \u5e73\u621001\u5e7401\u670808\u65e5
+	    2019-04-30 \u5e73\u621031\u5e7404\u670830\u65e5
+	    2019-05-01 \u4ee4\u548c01\u5e7405\u670801\u65e5
+	} {
 	    set status [catch {
 		set secs [clock scan $date \
 			      -timezone +0900 \
@@ -37296,7 +37435,11 @@ test clock-60.1 {case insensitive weekday names} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"] 
+=======
+} [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"]
+>>>>>>> upstream/master
 =======
 } [clock scan "2000-W01-1" -gmt true -format "%G-W%V-%u"]
 >>>>>>> upstream/master
@@ -37332,6 +37475,7 @@ test clock-60.11 {case insensitive month names} {
 } [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"]
 test clock-60.12 {case insensitive month names} {
     clock scan "1 DECEMBER 2000" -gmt true -format "%d %b %Y"
+<<<<<<< HEAD
 <<<<<<< HEAD
 } [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"] 
 =======
@@ -37383,6 +37527,9 @@ test clock-60.12 {case insensitive month names} {
 =======
 } [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"]
 >>>>>>> upstream/master
+=======
+} [clock scan "2000-12-01" -gmt true -format "%Y-%m-%d"]
+>>>>>>> upstream/master
 
 test clock-61.1 {overflow of a wide integer on output} {*}{
     -body {
@@ -37391,7 +37538,11 @@ test clock-61.1 {overflow of a wide integer on output} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37414,7 +37565,11 @@ test clock-61.2 {overflow of a wide integer on output} {*}{
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> upstream/master
 =======
     }
 >>>>>>> upstream/master
@@ -37504,6 +37659,9 @@ test clock-67.2 {Bug d19a30db57} -body {
     tcl::clock::GetJulianDayFromEraYearMonthDay {} 2361222
 } -returnCodes error -match glob -result *
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 
 test clock-67.3 {Bug d19a30db57} -body {
     # error, not segfault
@@ -37523,6 +37681,7 @@ test clock-67.4 {Change format %x output on global locale change [Bug 4a0c163d24
 } -result {1 1}
 
 test clock-67.5 {Change scan %x output on global locale change [Bug 4a0c163d24]} -setup {
+<<<<<<< HEAD
 =======
 
 test clock-67.3 {Bug d19a30db57} -body {
@@ -37552,16 +37711,24 @@ test clock-67.4 {Change format %x output on global locale change [Bug 4a0c163d24
 } -result {1 1}
 
 test clock-67.5 {Change scan %x output on global locale change [Bug 4a0c163d24]} -setup {
+=======
+>>>>>>> upstream/master
     package require msgcat
     set current [msgcat::mclocale]
 } -body {
     msgcat::mclocale de_de
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     set res [clock scan "01.01.1970" -locale current -format %x -gmt 1]
     msgcat::mclocale en_uk
     # This will fail without the bug fix, as still de_de is active
     expr {$res == [clock scan "01/01/1970" -locale current -format %x -gmt 1]}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

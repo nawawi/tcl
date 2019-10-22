@@ -6,6 +6,7 @@ set TZData(:Asia/Irkutsk) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1575874625 25200 0 IRKT}
     {-1247554800 28800 0 IRKMMTT}
     {354902400 32400 1 IRKST}
@@ -87,6 +88,8 @@ set TZData(:Asia/Irkutsk) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1575874625 25200 0 +07}
     {-1247554800 28800 0 +09}
     {354902400 32400 1 +09}
@@ -155,6 +158,9 @@ set TZData(:Asia/Irkutsk) {
     {1414256400 28800 0 +08}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

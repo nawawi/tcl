@@ -18,6 +18,7 @@ The command \fBapply\fR applies the function \fIfunc\fR to the arguments
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 \fIarg1 arg2 ...\fR and returns the result. 
 .PP
 The function \fIfunc\fR is a two element list \fI{args body}\fR or a three
@@ -39,6 +40,13 @@ element list \fI{args body namespace}\fR (as if the
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+\fIarg1 arg2 ...\fR and returns the result.
+.PP
+The function \fIfunc\fR is a two element list \fI{args body}\fR or a three
+element list \fI{args body namespace}\fR (as if the
+\fBlist\fR command had been used).
 >>>>>>> upstream/master
 =======
 \fIarg1 arg2 ...\fR and returns the result.
@@ -128,7 +136,11 @@ proc(n), uplevel(n)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 anonymous function, argument, lambda, procedure, 
+=======
+anonymous function, argument, lambda, procedure,
+>>>>>>> upstream/master
 =======
 anonymous function, argument, lambda, procedure,
 >>>>>>> upstream/master

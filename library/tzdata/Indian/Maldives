@@ -5,7 +5,11 @@ set TZData(:Indian/Maldives) {
     {-2840158440 17640 0 MMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-315636840 18000 0 MVT}
+=======
+    {-315636840 18000 0 +05}
+>>>>>>> upstream/master
 =======
     {-315636840 18000 0 +05}
 >>>>>>> upstream/master

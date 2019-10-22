@@ -9,7 +9,11 @@ namespace eval ::tcl::clock {
         "Sex"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "S\u00e1b"]
+=======
+        "Sáb"]
+>>>>>>> upstream/master
 =======
         "Sáb"]
 >>>>>>> upstream/master
@@ -21,6 +25,7 @@ namespace eval ::tcl::clock {
         "Quinta-feira"\
         "Sexta-feira"\
 <<<<<<< HEAD
+<<<<<<< HEAD
         "S\u00e1bado"]
 =======
         "Sáb"]
@@ -31,6 +36,9 @@ namespace eval ::tcl::clock {
         "Quarta-feira"\
         "Quinta-feira"\
         "Sexta-feira"\
+        "Sábado"]
+>>>>>>> upstream/master
+=======
         "Sábado"]
 >>>>>>> upstream/master
 =======
@@ -55,7 +63,11 @@ namespace eval ::tcl::clock {
         "Fevereiro"\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Mar\u00e7o"\
+=======
+        "Março"\
+>>>>>>> upstream/master
 =======
         "Março"\
 >>>>>>> upstream/master

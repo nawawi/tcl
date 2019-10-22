@@ -4,7 +4,11 @@ set TZData(:Pacific/Guadalcanal) {
     {-9223372036854775808 38388 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1806748788 39600 0 SBT}
+=======
+    {-1806748788 39600 0 +11}
+>>>>>>> upstream/master
 =======
     {-1806748788 39600 0 +11}
 >>>>>>> upstream/master

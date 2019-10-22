@@ -29,7 +29,11 @@
    To use the index, an offset in the uncompressed data is provided, for which
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    the latest accees point at or preceding that offset is located in the index.
+=======
+   the latest access point at or preceding that offset is located in the index.
+>>>>>>> upstream/master
 =======
    the latest access point at or preceding that offset is located in the index.
 >>>>>>> upstream/master

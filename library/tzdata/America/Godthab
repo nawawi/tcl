@@ -4,6 +4,7 @@ set TZData(:America/Godthab) {
     {-9223372036854775808 -12416 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1686083584 -10800 0 WGT}
     {323845200 -7200 0 WGST}
     {338950800 -10800 0 WGT}
@@ -248,6 +249,8 @@ set TZData(:America/Godthab) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1686083584 -10800 0 -03}
     {323845200 -7200 0 -02}
     {338950800 -10800 0 -03}
@@ -490,6 +493,9 @@ set TZData(:America/Godthab) {
     {4078429200 -7200 1 -02}
     {4096573200 -10800 0 -03}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

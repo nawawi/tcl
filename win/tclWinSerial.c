@@ -44,6 +44,15 @@ TCL_DECLARE_MUTEX(serialMutex)
 #define SERIAL_ERROR	(1<<4)
 
 /*
+ * Bit masks used for noting whether to drain or discard output on close. They
+ * are disjoint from each other; at most one may be set at a time.
+ */
+
+#define SERIAL_CLOSE_DRAIN   (1<<6)	/* Drain all output on close. */
+#define SERIAL_CLOSE_DISCARD (1<<7)	/* Discard all output on close. */
+#define SERIAL_CLOSE_MASK    (3<<6)	/* Both two bits above. */
+
+/*
  * Default time to block between checking status on the serial port.
  */
 
@@ -95,6 +104,10 @@ typedef struct SerialInfo {
     OVERLAPPED osWrite;		/* OVERLAPPED structure for write operations */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    TclPipeThreadInfo *writeTI;	/* Thread info structure of writer worker. */
+>>>>>>> upstream/master
 =======
     TclPipeThreadInfo *writeTI;	/* Thread info structure of writer worker. */
 >>>>>>> upstream/master
@@ -108,12 +121,15 @@ typedef struct SerialInfo {
 				 * current buffer to be written. */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     HANDLE evStartWriter;	/* Auto-reset event used by the main thread to
 				 * signal when the writer thread should
 				 * attempt to write to the serial. */
     HANDLE evStopWriter;	/* Auto-reset event used by the main thread to
 				 * signal when the writer thread should close.
 				 */
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
@@ -153,7 +169,11 @@ static Tcl_ThreadDataKey dataKey;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef struct SerialEvent {
+=======
+typedef struct {
+>>>>>>> upstream/master
 =======
 typedef struct {
 >>>>>>> upstream/master
@@ -636,6 +656,7 @@ SerialCloseProc(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (serialPtr->validMask & TCL_WRITABLE) {
 	/*
 	 * Generally we cannot wait for a pending write operation because it
@@ -699,6 +720,14 @@ SerialCloseProc(
 	CloseHandle(serialPtr->writeThread);
 >>>>>>> upstream/master
 =======
+	CloseHandle(serialPtr->osWrite.hEvent);
+	CloseHandle(serialPtr->evWritable);
+	CloseHandle(serialPtr->writeThread);
+>>>>>>> upstream/master
+=======
+    if (serialPtr->writeThread) {
+    	TclPipeThreadStop(&serialPtr->writeTI, serialPtr->writeThread);
+
 	CloseHandle(serialPtr->osWrite.hEvent);
 	CloseHandle(serialPtr->evWritable);
 	CloseHandle(serialPtr->writeThread);
@@ -1122,7 +1151,11 @@ SerialOutputProc(
 	ResetEvent(infoPtr->evWritable);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	SetEvent(infoPtr->evStartWriter);
+=======
+	TclPipeThreadSignal(&infoPtr->writeTI);
+>>>>>>> upstream/master
 =======
 	TclPipeThreadSignal(&infoPtr->writeTI);
 >>>>>>> upstream/master
@@ -1367,8 +1400,14 @@ SerialWriterThread(
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     SerialInfo *infoPtr = (SerialInfo *)arg;
     DWORD bytesWritten, toWrite, waitResult;
+=======
+    TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
+    SerialInfo *infoPtr = NULL; /* access info only after success init/wait */
+    DWORD bytesWritten, toWrite;
+>>>>>>> upstream/master
 =======
     TclPipeThreadInfo *pipeTI = (TclPipeThreadInfo *)arg;
     SerialInfo *infoPtr = NULL; /* access info only after success init/wait */
@@ -1383,6 +1422,7 @@ SerialWriterThread(
 	 */
 	if (!TclPipeThreadWaitForSignal(&pipeTI)) {
 	    /* exit */
+<<<<<<< HEAD
 	    break;
 	}
 	infoPtr = (SerialInfo *)pipeTI->clientData;
@@ -1441,13 +1481,18 @@ SerialWriterThread(
 	    break;
 	}
 	infoPtr = (SerialInfo *)pipeTI->clientData;
+=======
+	    break;
+	}
+	infoPtr = (SerialInfo *) pipeTI->clientData;
+>>>>>>> upstream/master
 
 =======
 >>>>>>> upstream/master
 	buf = infoPtr->writeBuf;
 	toWrite = infoPtr->toWrite;
 
-	myWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	myWrite.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
 
 	/*
 	 * Loop until all of the bytes are written or an error occurs.
@@ -1508,7 +1553,29 @@ SerialWriterThread(
 	Tcl_MutexUnlock(&serialMutex);
     }
 
+<<<<<<< HEAD
     /* Worker exit, so inform the main thread or free TI-structure (if owned) */
+=======
+    /*
+     * We're about to close, so do any drain or discard required.
+     */
+
+    if (infoPtr) {
+	switch (infoPtr->flags & SERIAL_CLOSE_MASK) {
+	case SERIAL_CLOSE_DRAIN:
+	    FlushFileBuffers(infoPtr->handle);
+	    break;
+	case SERIAL_CLOSE_DISCARD:
+	    PurgeComm(infoPtr->handle, PURGE_TXABORT | PURGE_TXCLEAR);
+	    break;
+	}
+    }
+
+    /*
+     * Worker exit, so inform the main thread or free TI-structure (if owned).
+     */
+
+>>>>>>> upstream/master
     TclPipeThreadExit(&pipeTI);
 
     return 0;
@@ -1534,7 +1601,7 @@ SerialWriterThread(
 HANDLE
 TclWinSerialOpen(
     HANDLE handle,
-    const TCHAR *name,
+    const WCHAR *name,
     DWORD access)
 {
     SerialInit();
@@ -1543,7 +1610,11 @@ TclWinSerialOpen(
      * If an open channel is specified, close it
      */
 
+<<<<<<< HEAD
     if ( handle != INVALID_HANDLE_VALUE && CloseHandle(handle) == FALSE) {
+=======
+    if (handle != INVALID_HANDLE_VALUE && CloseHandle(handle) == FALSE) {
+>>>>>>> upstream/master
 	return INVALID_HANDLE_VALUE;
     }
 
@@ -1553,6 +1624,7 @@ TclWinSerialOpen(
      * finished
      */
 
+<<<<<<< HEAD
     handle = CreateFile(name, access, 0, 0, OPEN_EXISTING,
 	    FILE_FLAG_OVERLAPPED, 0);
 
@@ -1687,6 +1759,9 @@ TclWinSerialOpen(
      */
 
     handle = CreateFile(name, access, 0, 0, OPEN_EXISTING,
+=======
+    handle = CreateFileW(name, access, 0, 0, OPEN_EXISTING,
+>>>>>>> upstream/master
 	    FILE_FLAG_OVERLAPPED, 0);
 
     return handle;
@@ -1720,7 +1795,11 @@ TclWinOpenSerialChannel(
 
     SerialInit();
 
+<<<<<<< HEAD
     infoPtr = ckalloc(sizeof(SerialInfo));
+=======
+    infoPtr = Tcl_Alloc(sizeof(SerialInfo));
+>>>>>>> upstream/master
     memset(infoPtr, 0, sizeof(SerialInfo));
 
 =======
@@ -1743,7 +1822,11 @@ TclWinOpenSerialChannel(
      * are shared between multiple channels (stdin/stdout).
      */
 
+<<<<<<< HEAD
     sprintf(channelName, "file%" TCL_I_MODIFIER "x", (size_t) infoPtr);
+=======
+    sprintf(channelName, "file%" TCL_Z_MODIFIER "x", (size_t) infoPtr);
+>>>>>>> upstream/master
 
     infoPtr->channel = Tcl_CreateChannel(&serialChannelType, channelName,
 	    infoPtr, permissions);
@@ -1762,13 +1845,14 @@ TclWinOpenSerialChannel(
 
     InitializeCriticalSection(&infoPtr->csWrite);
     if (permissions & TCL_READABLE) {
-	infoPtr->osRead.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	infoPtr->osRead.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
     }
     if (permissions & TCL_WRITABLE) {
 	/*
 	 * Initially the channel is writable and the writeThread is idle.
 	 */
 
+<<<<<<< HEAD
 	infoPtr->osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 	infoPtr->evWritable = CreateEvent(NULL, TRUE, TRUE, NULL);
 <<<<<<< HEAD
@@ -1783,6 +1867,13 @@ TclWinOpenSerialChannel(
 			infoPtr->evWritable), 0, NULL);
 >>>>>>> upstream/master
 =======
+	infoPtr->writeThread = CreateThread(NULL, 256, SerialWriterThread,
+		TclPipeThreadCreateTI(&infoPtr->writeTI, infoPtr,
+			infoPtr->evWritable), 0, NULL);
+>>>>>>> upstream/master
+=======
+	infoPtr->osWrite.hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+	infoPtr->evWritable = CreateEventW(NULL, TRUE, TRUE, NULL);
 	infoPtr->writeThread = CreateThread(NULL, 256, SerialWriterThread,
 		TclPipeThreadCreateTI(&infoPtr->writeTI, infoPtr,
 			infoPtr->evWritable), 0, NULL);
@@ -1910,7 +2001,7 @@ SerialSetOptionProc(
     BOOL result, flag;
     size_t len, vlen;
     Tcl_DString ds;
-    const TCHAR *native;
+    const WCHAR *native;
     int argc;
     const char **argv;
 
@@ -1925,6 +2016,32 @@ SerialSetOptionProc(
     vlen = strlen(value);
 
     /*
+     * Option -closemode drain|discard|default
+     */
+
+    if ((len > 2) && (strncmp(optionName, "-closemode", len) == 0)) {
+	if (Tcl_UtfNcasecmp(value, "DEFAULT", vlen) == 0) {
+	    infoPtr->flags &= ~SERIAL_CLOSE_MASK;
+	} else if (Tcl_UtfNcasecmp(value, "DRAIN", vlen) == 0) {
+	    infoPtr->flags &= ~SERIAL_CLOSE_MASK;
+	    infoPtr->flags |= SERIAL_CLOSE_DRAIN;
+	} else if (Tcl_UtfNcasecmp(value, "DISCARD", vlen) == 0) {
+	    infoPtr->flags &= ~SERIAL_CLOSE_MASK;
+	    infoPtr->flags |= SERIAL_CLOSE_DISCARD;
+	} else {
+	    if (interp) {
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"bad mode \"%s\" for -closemode: must be"
+			" default, discard, or drain", value));
+		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "FCONFIGURE",
+			"VALUE", NULL);
+	    }
+	    return TCL_ERROR;
+	}
+	return TCL_OK;
+    }
+
+    /*
      * Option -mode baud,parity,databits,stopbits
      */
 
@@ -1932,8 +2049,9 @@ SerialSetOptionProc(
 	if (!GetCommState(infoPtr->handle, &dcb)) {
 	    goto getStateFailed;
 	}
-	native = Tcl_WinUtfToTChar(value, -1, &ds);
-	result = BuildCommDCB(native, &dcb);
+	Tcl_DStringInit(&ds);
+	native = Tcl_UtfToWCharDString(value, -1, &ds);
+	result = BuildCommDCBW(native, &dcb);
 	Tcl_DStringFree(&ds);
 
 	if (result == FALSE) {
@@ -2033,10 +2151,17 @@ SerialSetOptionProc(
 	    if (interp != NULL) {
 		Tcl_SetObjResult(interp, Tcl_NewStringObj(
 			"bad value for -xchar: should be a list of"
+<<<<<<< HEAD
 			" two elements with each a single character", -1));
 		Tcl_SetErrorCode(interp, "TCL", "VALUE", "XCHAR", NULL);
 	    }
 	    Tcl_Free(argv);
+=======
+			" two elements with each a single 8-bit character", -1));
+		Tcl_SetErrorCode(interp, "TCL", "VALUE", "XCHAR", NULL);
+	    }
+	    Tcl_Free((void *)argv);
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 
@@ -2057,17 +2182,21 @@ SerialSetOptionProc(
 	    int charLen;
 
 	    charLen = Tcl_UtfToUniChar(argv[0], &character);
-	    if (argv[0][charLen]) {
+	    if ((character > 0xFF) || argv[0][charLen]) {
 		goto badXchar;
 	    }
 	    dcb.XonChar = (char) character;
 	    charLen = Tcl_UtfToUniChar(argv[1], &character);
-	    if (argv[1][charLen]) {
+	    if ((character > 0xFF) || argv[1][charLen]) {
 		goto badXchar;
 	    }
 	    dcb.XoffChar = (char) character;
 	}
+<<<<<<< HEAD
 	Tcl_Free(argv);
+=======
+	Tcl_Free((void *)argv);
+>>>>>>> upstream/master
 
 	if (!SetCommState(infoPtr->handle, &dcb)) {
 	    goto setStateFailed;
@@ -2092,7 +2221,11 @@ SerialSetOptionProc(
 			"a list of signal,value pairs", value));
 		Tcl_SetErrorCode(interp, "TCL", "VALUE", "TTYCONTROL", NULL);
 	    }
+<<<<<<< HEAD
 	    Tcl_Free(argv);
+=======
+	    Tcl_Free((void *)argv);
+>>>>>>> upstream/master
 	    return TCL_ERROR;
 	}
 
@@ -2150,7 +2283,11 @@ SerialSetOptionProc(
 	    }
 	}
 
+<<<<<<< HEAD
 	Tcl_Free(argv);
+=======
+	Tcl_Free((void *)argv);
+>>>>>>> upstream/master
 	return result;
     }
 
@@ -2176,7 +2313,11 @@ SerialSetOptionProc(
 	    inSize  = atoi(argv[0]);
 	    outSize = atoi(argv[1]);
 	}
+<<<<<<< HEAD
 	Tcl_Free(argv);
+=======
+	Tcl_Free((void *)argv);
+>>>>>>> upstream/master
 
 	if ((argc < 1) || (argc > 2) || (inSize <= 0) || (outSize <= 0)) {
 	    if (interp != NULL) {
@@ -2253,7 +2394,12 @@ SerialSetOptionProc(
     }
 
     return Tcl_BadChannelOption(interp, optionName,
+<<<<<<< HEAD
 	    "mode handshake pollinterval sysbuffer timeout ttycontrol xchar");
+=======
+	    "closemode mode handshake pollinterval sysbuffer timeout "
+	    "ttycontrol xchar");
+>>>>>>> upstream/master
 
   getStateFailed:
     if (interp != NULL) {
@@ -2311,6 +2457,27 @@ SerialGetOptionProc(
 	len = 0;
     } else {
 	len = strlen(optionName);
+    }
+
+    /*
+     * Get option -closemode
+     */
+
+    if (len == 0) {
+	Tcl_DStringAppendElement(dsPtr, "-closemode");
+    }
+    if (len==0 || (len>1 && strncmp(optionName, "-closemode", len)==0)) {
+	switch (infoPtr->flags & SERIAL_CLOSE_MASK) {
+	case SERIAL_CLOSE_DRAIN:
+	    Tcl_DStringAppendElement(dsPtr, "drain");
+	    break;
+	case SERIAL_CLOSE_DISCARD:
+	    Tcl_DStringAppendElement(dsPtr, "discard");
+	    break;
+	default:
+	    Tcl_DStringAppendElement(dsPtr, "default");
+	    break;
+	}
     }
 
     /*
@@ -2456,7 +2623,7 @@ SerialGetOptionProc(
 	Tcl_DStringStartSublist(dsPtr);
     }
     if (len==0 || (len>1 && strncmp(optionName, "-xchar", len) == 0)) {
-	char buf[4];
+	char buf[TCL_UTF_MAX];
 	valid = 1;
 
 	if (!GetCommState(infoPtr->handle, &dcb)) {
@@ -2467,9 +2634,9 @@ SerialGetOptionProc(
 	    }
 	    return TCL_ERROR;
 	}
-	sprintf(buf, "%c", dcb.XonChar);
+	buf[Tcl_UniCharToUtf(UCHAR(dcb.XonChar), buf)] = '\0';
 	Tcl_DStringAppendElement(dsPtr, buf);
-	sprintf(buf, "%c", dcb.XoffChar);
+	buf[Tcl_UniCharToUtf(UCHAR(dcb.XoffChar), buf)] = '\0';
 	Tcl_DStringAppendElement(dsPtr, buf);
     }
     if (len == 0) {
@@ -2553,7 +2720,12 @@ SerialGetOptionProc(
 	return TCL_OK;
     }
     return Tcl_BadChannelOption(interp, optionName,
+<<<<<<< HEAD
 	    "mode pollinterval lasterror queue sysbuffer ttystatus xchar");
+=======
+	    "closemode mode pollinterval lasterror queue sysbuffer ttystatus "
+	    "xchar");
+>>>>>>> upstream/master
 }
 
 /*

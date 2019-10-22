@@ -4,6 +4,7 @@ set TZData(:America/Noronha) {
     {-9223372036854775808 -7780 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1767217820 -7200 0 FNT}
     {-1206961200 -3600 1 FNST}
     {-1191366000 -7200 0 FNT}
@@ -50,6 +51,8 @@ set TZData(:America/Noronha) {
 =======
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1767217820 -7200 0 -02}
     {-1206961200 -3600 1 -02}
     {-1191366000 -7200 0 -02}
@@ -94,6 +97,9 @@ set TZData(:America/Noronha) {
     {1013907600 -7200 0 -02}
     {1033434000 -7200 0 -02}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

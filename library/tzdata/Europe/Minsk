@@ -33,6 +33,7 @@ set TZData(:Europe/Minsk) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {670374000 10800 1 EEST}
     {686102400 7200 0 EET}
     {701820000 10800 1 EEST}
@@ -53,6 +54,13 @@ set TZData(:Europe/Minsk) {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {670374000 7200 0 EEMMTT}
+    {670377600 10800 1 EEST}
+    {686102400 7200 0 EET}
+    {701827200 10800 1 EEST}
+    {717552000 7200 0 EET}
 >>>>>>> upstream/master
 =======
     {670374000 7200 0 EEMMTT}

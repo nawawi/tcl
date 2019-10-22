@@ -3,9 +3,15 @@
 #
 
 #version of library
+<<<<<<< HEAD
 VERSION=1.0.1
 VERSION_PC=1.0.1
 VERSION_SO=1:1
+=======
+VERSION=1.1.0
+VERSION_PC=1.1.0
+VERSION_SO=2:0:1
+>>>>>>> upstream/master
 
 PLATFORM := $(shell uname | sed -e 's/_.*//')
 
@@ -85,6 +91,12 @@ endif
 ifeq ($(PLATFORM), Darwin)
 CFLAGS += -Wno-nullability-completeness
 endif
+<<<<<<< HEAD
+=======
+ifeq ($(PLATFORM), CYGWIN)
+LIBTOOLFLAGS += -no-undefined
+endif
+>>>>>>> upstream/master
 
 ifeq ($(PLATFORM),FreeBSD)
   _ARCH := $(shell sysctl -b hw.machine_arch)

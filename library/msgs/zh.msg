@@ -3,6 +3,7 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset zh DAYS_OF_WEEK_ABBREV [list \
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         "\u661f\u671f\u65e5"\
         "\u661f\u671f\u4e00"\
         "\u661f\u671f\u4e8c"\
@@ -11,6 +12,8 @@ namespace eval ::tcl::clock {
         "\u661f\u671f\u4e94"\
         "\u661f\u671f\u516d"]
 =======
+=======
+>>>>>>> upstream/master
         "星期日"\
         "星期一"\
         "星期二"\
@@ -18,6 +21,9 @@ namespace eval ::tcl::clock {
         "星期四"\
         "星期五"\
         "星期六"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ::msgcat::mcset zh DAYS_OF_WEEK_FULL [list \
         "星期日"\
@@ -55,6 +61,7 @@ namespace eval ::tcl::clock {
         "十一月"\
         "十二月"\
         ""]
+<<<<<<< HEAD
 <<<<<<< HEAD
     ::msgcat::mcset zh BCE "\u516c\u5143\u524d"
     ::msgcat::mcset zh CE "\u516c\u5143"
@@ -110,6 +117,8 @@ namespace eval ::tcl::clock {
         ""]
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     ::msgcat::mcset zh BCE "公元前"
     ::msgcat::mcset zh CE "公元"
     ::msgcat::mcset zh AM "上午"
@@ -119,6 +128,9 @@ namespace eval ::tcl::clock {
     ::msgcat::mcset zh LOCALE_TIME_FORMAT "%OH时%OM分%OS秒"
     ::msgcat::mcset zh LOCALE_DATE_TIME_FORMAT "%A %Y年%B%Od日%OH时%OM分%OS秒 %z"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

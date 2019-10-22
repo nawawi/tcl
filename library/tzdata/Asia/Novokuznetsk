@@ -5,6 +5,7 @@ set TZData(:Asia/Novokuznetsk) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1441259328 21600 0 KRAT}
     {-1247551200 25200 0 KRAMMTT}
     {354906000 28800 1 KRAST}
@@ -82,6 +83,8 @@ set TZData(:Asia/Novokuznetsk) {
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
     {-1441259328 21600 0 +06}
     {-1247551200 25200 0 +08}
     {354906000 28800 1 +08}
@@ -150,6 +153,9 @@ set TZData(:Asia/Novokuznetsk) {
     {1301169600 25200 0 +07}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master

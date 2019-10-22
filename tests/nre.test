@@ -33,9 +33,15 @@ if {[testConstraint testnrelevels]} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	# cmdFrame level, callFrame level, tosPtr and callback depth 
 	#
 	variable last [testnrelevels] 
+=======
+	# cmdFrame level, callFrame level, tosPtr and callback depth
+	#
+	variable last [testnrelevels]
+>>>>>>> upstream/master
 =======
 	# cmdFrame level, callFrame level, tosPtr and callback depth
 	#
@@ -92,6 +98,7 @@ if {[testConstraint testnrelevels]} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> upstream/master
@@ -104,6 +111,8 @@ test nre-0.1 {levels while unwinding} {
 =======
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 test nre-0.1 {levels while unwinding} -body {
@@ -376,7 +385,11 @@ test nre-8.1 {nre and {*}} -body {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 } -result {1 1 1} 
+=======
+} -result {1 1 1}
+>>>>>>> upstream/master
 =======
 } -result {1 1 1}
 >>>>>>> upstream/master

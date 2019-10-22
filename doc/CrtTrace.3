@@ -9,7 +9,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 '\" 
+=======
+'\"
+>>>>>>> upstream/master
 =======
 '\"
 >>>>>>> upstream/master
@@ -85,6 +89,7 @@ interpreter.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef int \fBTcl_CmdObjTraceProc\fR( 
 =======
 typedef int \fBTcl_CmdObjTraceProc\fR(
@@ -101,6 +106,10 @@ typedef int \fBTcl_CmdObjTraceProc\fR(
 >>>>>>> upstream/master
         \fBClientData\fR \fIclientData\fR,
 =======
+        \fBvoid *\fR \fIclientData\fR,
+>>>>>>> upstream/master
+=======
+typedef int \fBTcl_CmdObjTraceProc\fR(
         \fBvoid *\fR \fIclientData\fR,
 >>>>>>> upstream/master
         \fBTcl_Interp\fR* \fIinterp\fR,
@@ -183,6 +192,7 @@ When \fBTcl_DeleteTrace\fR is called, the interpreter invokes the
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 typedef void \fBTcl_CmdObjTraceDeleteProc\fR( 
 =======
 typedef void \fBTcl_CmdObjTraceDeleteProc\fR(
@@ -199,6 +209,10 @@ typedef void \fBTcl_CmdObjTraceDeleteProc\fR(
 >>>>>>> upstream/master
         \fBClientData\fR \fIclientData\fR);
 =======
+        \fBvoid *\fR \fIclientData\fR);
+>>>>>>> upstream/master
+=======
+typedef void \fBTcl_CmdObjTraceDeleteProc\fR(
         \fBvoid *\fR \fIclientData\fR);
 >>>>>>> upstream/master
 .CE

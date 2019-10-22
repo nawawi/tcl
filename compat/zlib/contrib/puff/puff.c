@@ -19,7 +19,11 @@
  * assumes that long's are at least 32 bits.  puff.c uses the short data type,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * assumed to be 16 bits, for arrays in order to to conserve memory.  The code
+=======
+ * assumed to be 16 bits, for arrays in order to conserve memory.  The code
+>>>>>>> upstream/master
 =======
  * assumed to be 16 bits, for arrays in order to conserve memory.  The code
 >>>>>>> upstream/master

@@ -202,7 +202,11 @@ typedef struct
    for end of file.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
    IN assertion: the stream s has been sucessfully opened for reading.
+=======
+   IN assertion: the stream s has been successfully opened for reading.
+>>>>>>> upstream/master
 =======
    IN assertion: the stream s has been successfully opened for reading.
 >>>>>>> upstream/master

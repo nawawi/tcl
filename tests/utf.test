@@ -21,6 +21,12 @@ testConstraint testbytestring [llength [info commands testbytestring]]
 catch {unset x}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+# Some tests require support for 4-byte UTF-8 sequences
+testConstraint tip389 [expr {[string length \U010000] == 2}]
+
+>>>>>>> upstream/master
 =======
 # Some tests require support for 4-byte UTF-8 sequences
 testConstraint tip389 [expr {[string length \U010000] == 2}]
@@ -40,6 +46,7 @@ test utf-1.4 {Tcl_UniCharToUtf: 3 byte sequences} testbytestring {
 } 1
 test utf-1.5 {Tcl_UniCharToUtf: overflowed Tcl_UniChar} testbytestring {
     expr {[format %c 0x110000] eq [testbytestring "\xef\xbf\xbd"]}
+<<<<<<< HEAD
 <<<<<<< HEAD
 } 1
 test utf-1.6 {Tcl_UniCharToUtf: negative Tcl_UniChar} testbytestring {
@@ -66,6 +73,25 @@ test utf-1.10 {Tcl_UniCharToUtf: 3 byte sequence, upper surrogate} testbytestrin
     expr {[format %c 0xd842] eq [testbytestring "\xed\xa1\x82"]}
 } 1
 test utf-1.11 {Tcl_UniCharToUtf: 3 byte sequence, lower surrogate} testbytestring {
+=======
+} 1
+test utf-1.6 {Tcl_UniCharToUtf: negative Tcl_UniChar} testbytestring {
+    expr {[format %c -1] eq [testbytestring "\xef\xbf\xbd"]}
+} 1
+test utf-1.7 {Tcl_UniCharToUtf: 4 byte sequences} -constraints testbytestring -body {
+    expr {"\U014e4e" eq [testbytestring "\xf0\x94\xb9\x8e"]}
+} -result 1
+test utf-1.8 {Tcl_UniCharToUtf: 3 byte sequence, high surrogate} testbytestring {
+    expr {"\ud842" eq [testbytestring "\xed\xa1\x82"]}
+} 1
+test utf-1.9 {Tcl_UniCharToUtf: 3 byte sequence, low surrogate} testbytestring {
+    expr {"\udc42" eq [testbytestring "\xed\xb1\x82"]}
+} 1
+test utf-1.10 {Tcl_UniCharToUtf: 3 byte sequence, high surrogate} testbytestring {
+    expr {[format %c 0xd842] eq [testbytestring "\xed\xa1\x82"]}
+} 1
+test utf-1.11 {Tcl_UniCharToUtf: 3 byte sequence, low surrogate} testbytestring {
+>>>>>>> upstream/master
     expr {[format %c 0xdc42] eq [testbytestring "\xed\xb1\x82"]}
 } 1
 
@@ -93,10 +119,14 @@ test utf-2.7 {Tcl_UtfToUniChar: lead (3-byte) followed by 2 trail} testbytestrin
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 test utf-2.8 {Tcl_UtfToUniChar: longer UTF sequences not supported} testbytestring {
     string length [testbytestring "\xF4\xA2\xA2\xA2"]
 =======
 test utf-2.8 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail} -constraints {fullutf testbytestring} -body {
+=======
+test utf-2.8 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail} -constraints {tip389 testbytestring} -body {
+>>>>>>> upstream/master
 =======
 test utf-2.8 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail} -constraints {tip389 testbytestring} -body {
 >>>>>>> upstream/master
@@ -113,6 +143,9 @@ test utf-2.10 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail, underflow} t
 } {4}
 test utf-2.11 {Tcl_UtfToUniChar: lead (4-byte) followed by 3 trail, overflow} testbytestring {
     string length [testbytestring "\xF4\x90\x80\x80"]
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 } {4}
 test utf-2.12 {Tcl_UtfToUniChar: longer UTF sequences not supported} testbytestring {
@@ -133,7 +166,11 @@ test utf-4.2 {Tcl_NumUtfChars: length 1} {testnumutfchars testbytestring} {
     testnumutfchars [testbytestring "\xC2\xA2"]
 } {1}
 test utf-4.3 {Tcl_NumUtfChars: long string} {testnumutfchars testbytestring} {
+<<<<<<< HEAD
     testnumutfchars [testbytestring "abc\xC2\xA2\xe4\xb9\x8e\uA2\u4e4e"]
+=======
+    testnumutfchars [testbytestring "abc\xC2\xA2\xE4\xB9\x8E\xA2\x4E"]
+>>>>>>> upstream/master
 } {7}
 test utf-4.4 {Tcl_NumUtfChars: #u0000} {testnumutfchars testbytestring} {
     testnumutfchars [testbytestring "\xC0\x80"]
@@ -142,6 +179,7 @@ test utf-4.5 {Tcl_NumUtfChars: zero length, calc len} testnumutfchars {
     testnumutfchars "" 0
 } {0}
 test utf-4.6 {Tcl_NumUtfChars: length 1, calc len} {testnumutfchars testbytestring} {
+<<<<<<< HEAD
 <<<<<<< HEAD
     testnumutfchars [testbytestring "\xC2\xA2"] 1
 } {1}
@@ -155,6 +193,15 @@ test utf-4.8 {Tcl_NumUtfChars: #u0000, calc len} {testnumutfchars testbytestring
 } {1}
 test utf-4.7 {Tcl_NumUtfChars: long string, calc len} {testnumutfchars testbytestring} {
     testnumutfchars [testbytestring "abc\xC2\xA2\xe4\xb9\x8e\uA2\u4e4e"] 10
+} {7}
+test utf-4.8 {Tcl_NumUtfChars: #u0000, calc len} {testnumutfchars testbytestring} {
+    testnumutfchars [testbytestring "\xC0\x80"] 2
+>>>>>>> upstream/master
+=======
+    testnumutfchars [testbytestring "\xC2\xA2"] 2
+} {1}
+test utf-4.7 {Tcl_NumUtfChars: long string, calc len} {testnumutfchars testbytestring} {
+    testnumutfchars [testbytestring "abc\xC2\xA2\xE4\xB9\x8E\xA2\x4E"] 10
 } {7}
 test utf-4.8 {Tcl_NumUtfChars: #u0000, calc len} {testnumutfchars testbytestring} {
     testnumutfchars [testbytestring "\xC0\x80"] 2
@@ -193,10 +240,17 @@ test utf-8.3 {Tcl_UniCharAtIndex: index > 0} {
 test utf-8.4 {Tcl_UniCharAtIndex: index > 0} {
     string index \u4e4e\u25a\xff\u543 2
 } "\uff"
+<<<<<<< HEAD
 test utf-8.5 {Tcl_UniCharAtIndex: upper surrogate} {
     string index \ud842 0
 } "\ud842"
 test utf-8.5 {Tcl_UniCharAtIndex: lower surrogate} {
+=======
+test utf-8.5 {Tcl_UniCharAtIndex: high surrogate} {
+    string index \ud842 0
+} "\ud842"
+test utf-8.6 {Tcl_UniCharAtIndex: low surrogate} {
+>>>>>>> upstream/master
     string index \udc42 0
 } "\udc42"
 
@@ -224,6 +278,15 @@ test utf-10.4 {Tcl_UtfBackslash: stops at first non-hex} testbytestring {
 test utf-10.5 {Tcl_UtfBackslash: stops after 4 hex chars} testbytestring {
     expr {"\u4e216" eq "[testbytestring \xe4\xb8\xa1]6"}
 } 1
+<<<<<<< HEAD
+=======
+test utf-10.6 {Tcl_UtfBackslash: stops after 5 hex chars} testbytestring {
+    expr {"\U1e2165" eq "[testbytestring \xf0\x9e\x88\x96]5"}
+} 1
+test utf-10.7 {Tcl_UtfBackslash: stops after 6 hex chars} testbytestring {
+    expr {"\U10e2165" eq "[testbytestring \xf4\x8e\x88\x96]5"}
+} 1
+>>>>>>> upstream/master
 proc bsCheck {char num} {
     global errNum
     test utf-10.$errNum {backslash substitution} {
@@ -232,7 +295,7 @@ proc bsCheck {char num} {
     } $num
     incr errNum
 }
-set errNum 6
+set errNum 8
 bsCheck \b	8
 bsCheck \e	101
 bsCheck \f	12
@@ -281,6 +344,7 @@ bsCheck \U4e21	20001
 bsCheck \U004e21	20001
 bsCheck \U00004e21	20001
 <<<<<<< HEAD
+<<<<<<< HEAD
 bsCheck \U00110000	65533
 bsCheck \Uffffffff	65533
 =======
@@ -300,6 +364,9 @@ if {[testConstraint fullutf]} {
 =======
 =======
 >>>>>>> upstream/master
+=======
+bsCheck \U0000004e21	78
+>>>>>>> upstream/master
 bsCheck \U00110000	69632
 bsCheck \U01100000	69632
 bsCheck \U11000000	69632
@@ -308,6 +375,9 @@ bsCheck \U010FFFF0	1114111
 bsCheck \U10FFFF00	1114111
 bsCheck \UFFFFFFFF	1048575
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -328,6 +398,12 @@ test utf-11.5 {Tcl_UtfToUpper Georgian (new in Unicode 11)} {
     string toupper \u10d0\u1c90
 } \u1c90\u1c90
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+test utf-11.6 {Tcl_UtfToUpper low/high surrogate)} {
+    string toupper \udc24\ud824
+} \udc24\ud824
+>>>>>>> upstream/master
 =======
 test utf-11.6 {Tcl_UtfToUpper low/high surrogate)} {
     string toupper \udc24\ud824
@@ -350,6 +426,12 @@ test utf-12.5 {Tcl_UtfToLower Georgian (new in Unicode 11)} {
     string tolower \u10d0\u1c90
 } \u10d0\u10d0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+test utf-12.6 {Tcl_UtfToUpper low/high surrogate)} {
+    string tolower \udc24\ud824
+} \udc24\ud824
+>>>>>>> upstream/master
 =======
 test utf-12.6 {Tcl_UtfToUpper low/high surrogate)} {
     string tolower \udc24\ud824
@@ -375,6 +457,12 @@ test utf-13.6 {Tcl_UtfToTitle Georgian (new in Unicode 11)} {
     string totitle \u1c90\u10d0
 } \u1c90\u10d0
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+test utf-13.7 {Tcl_UtfToTitle low/high surrogate)} {
+    string totitle \udc24\ud824
+} \udc24\ud824
+>>>>>>> upstream/master
 =======
 test utf-13.7 {Tcl_UtfToTitle low/high surrogate)} {
     string totitle \udc24\ud824
@@ -409,8 +497,13 @@ test utf-16.1 {Tcl_UniCharToLower, negative delta} {
 } aa
 test utf-16.2 {Tcl_UniCharToLower, positive delta} {
 <<<<<<< HEAD
+<<<<<<< HEAD
     string tolower \u0178\u00ff\uA78D\u01c5
 } \u00ff\u00ff\u0265\u01c6
+=======
+    string tolower \u0178\u00ff\uA78D\u01c5\U10400
+} \u00ff\u00ff\u0265\u01c6\U10428
+>>>>>>> upstream/master
 =======
     string tolower \u0178\u00ff\uA78D\u01c5\U10400
 } \u00ff\u00ff\u0265\u01c6\U10428
@@ -455,7 +548,11 @@ test utf-21.2 {unicode alnum char in regc_locale.c} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     list [regexp {^[[:alnum:]]+$} \u1040\u021f\u0220] [regexp {^\w+$} \u1040\u021f\u0220]
+=======
+    list [regexp {^[[:alnum:]]+$} \u1040\u021f\u0220] [regexp {^\w+$} \u1040\u021f\u0220_\u203f\u2040\u2054\ufe33\ufe34\ufe4d\ufe4e\ufe4f\uff3f]
+>>>>>>> upstream/master
 =======
     list [regexp {^[[:alnum:]]+$} \u1040\u021f\u0220] [regexp {^\w+$} \u1040\u021f\u0220_\u203f\u2040\u2054\ufe33\ufe34\ufe4d\ufe4e\ufe4f\uff3f]
 >>>>>>> upstream/master
@@ -553,8 +650,8 @@ test utf-25.1 {Tcl_UniCharNcasecmp} -constraints teststringobj \
     -body {
 	teststringobj set 1 a
 	teststringobj set 2 b
-	teststringobj getunicode 1
-	teststringobj getunicode 2
+	teststringobj maxchars 1
+	teststringobj maxchars 2
 	string compare -nocase [teststringobj get 1] [teststringobj get 2]
     } \
     -cleanup {
@@ -568,8 +665,8 @@ test utf-25.2 {Tcl_UniCharNcasecmp} -constraints teststringobj \
     -body {
 	teststringobj set 1 b
 	teststringobj set 2 a
-	teststringobj getunicode 1
-	teststringobj getunicode 2
+	teststringobj maxchars 1
+	teststringobj maxchars 2
 	string compare -nocase [teststringobj get 1] [teststringobj get 2]
     } \
     -cleanup {
@@ -583,8 +680,8 @@ test utf-25.3 {Tcl_UniCharNcasecmp} -constraints teststringobj \
     -body {
 	teststringobj set 1 B
 	teststringobj set 2 a
-	teststringobj getunicode 1
-	teststringobj getunicode 2
+	teststringobj maxchars 1
+	teststringobj maxchars 2
 	string compare -nocase [teststringobj get 1] [teststringobj get 2]
     } \
     -cleanup {
@@ -599,8 +696,8 @@ test utf-25.4 {Tcl_UniCharNcasecmp} -constraints teststringobj \
     -body {
 	teststringobj set 1 aBcB
 	teststringobj set 2 abca
-	teststringobj getunicode 1
-	teststringobj getunicode 2
+	teststringobj maxchars 1
+	teststringobj maxchars 2
 	string compare -nocase [teststringobj get 1] [teststringobj get 2]
     } \
     -cleanup {

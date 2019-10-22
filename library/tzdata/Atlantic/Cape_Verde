@@ -6,6 +6,7 @@ set TZData(:Atlantic/Cape_Verde) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1988144756 -7200 0 CVT}
     {-862610400 -3600 1 CVST}
     {-764118000 -7200 0 CVT}
@@ -26,5 +27,11 @@ set TZData(:Atlantic/Cape_Verde) {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    {-1830376800 -7200 0 -02}
+    {-862610400 -3600 1 -01}
+    {-764118000 -7200 0 -02}
+    {186120000 -3600 0 -01}
 >>>>>>> upstream/master
 }

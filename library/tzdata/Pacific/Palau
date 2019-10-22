@@ -1,6 +1,7 @@
 # created by tools/tclZIC.tcl - do not edit
 
 set TZData(:Pacific/Palau) {
+<<<<<<< HEAD
     {-9223372036854775808 32276 0 LMT}
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -9,6 +10,11 @@ set TZData(:Pacific/Palau) {
     {-2177485076 32400 0 +09}
 >>>>>>> upstream/master
 =======
+    {-2177485076 32400 0 +09}
+>>>>>>> upstream/master
+=======
+    {-9223372036854775808 -54124 0 LMT}
+    {-3944624276 32276 0 LMT}
     {-2177485076 32400 0 +09}
 >>>>>>> upstream/master
 }

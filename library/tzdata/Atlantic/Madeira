@@ -7,6 +7,7 @@ set TZData(:Atlantic/Madeira) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     {-1830379944 -3600 0 MADT}
     {-1689552000 0 1 MADST}
     {-1677798000 -3600 0 MADT}
@@ -114,6 +115,9 @@ set TZData(:Atlantic/Madeira) {
 =======
     {-1830380400 -3600 0 -01}
 >>>>>>> upstream/master
+=======
+    {-1830380400 -3600 0 -01}
+>>>>>>> upstream/master
     {-1689552000 0 1 +00}
     {-1677798000 -3600 0 -01}
     {-1667433600 0 1 +00}
@@ -207,6 +211,9 @@ set TZData(:Atlantic/Madeira) {
     {-149720400 0 1 +00}
     {-133995600 -3600 0 -01}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
