@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_INIT_COPY_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,24 +17,24 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* creates "a" then copies b into it */
-int mp_init_copy(mp_int *a, const mp_int *b)
+mp_err mp_init_copy(mp_int *a, const mp_int *b)
 {
-   int     res;
+   mp_err     err;
 
-   if ((res = mp_init_size(a, b->used)) != MP_OKAY) {
-      return res;
+   if ((err = mp_init_size(a, b->used)) != MP_OKAY) {
+      return err;
    }
 
-   if ((res = mp_copy(b, a)) != MP_OKAY) {
+   if ((err = mp_copy(b, a)) != MP_OKAY) {
       mp_clear(a);
    }
 
-   return res;
+   return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -995,12 +996,19 @@ int mp_fwrite(const mp_int *a, int radix, FILE *stream);
 
 #ifdef __cplusplus
 }
+=======
+#ifndef BN_TCL_H_
+#define BN_TCL_H_
+
+#ifdef MP_NO_STDINT
+#ifdef HAVE_STDINT_H
+#  include <stdint.h>
+#else
+#  include "../compat/stdint.h"
 #endif
+>>>>>>> upstream/master
+#endif
+#include "tommath.h"
+#include "tclTomMathDecls.h"
 
 #endif
-
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */
-

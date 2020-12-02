@@ -186,7 +186,7 @@ static TimeInfo timeInfo = {
     (HANDLE) NULL,
     (HANDLE) NULL,
     (HANDLE) NULL,
-#ifdef HAVE_CAST_TO_UNION
+#if defined(HAVE_CAST_TO_UNION) && !defined(__cplusplus)
     (LARGE_INTEGER) (Tcl_WideInt) 0,
     (ULARGE_INTEGER) (DWORDLONG) 0,
     (LARGE_INTEGER) (Tcl_WideInt) 0,
@@ -526,8 +526,11 @@ Tcl_GetTime(
 static void
 NativeScaleTime(
     Tcl_Time *timePtr,
-    ClientData clientData)
+    ClientData dummy)
 {
+    (void)timePtr;
+    (void)dummy;
+
     /*
      * Native scale is 1:1. Nothing is done.
      */
@@ -969,9 +972,10 @@ StopCalibration(
 static void
 NativeGetTime(
     Tcl_Time *timePtr,
-    ClientData clientData)
+    ClientData dummy)
 {
     Tcl_WideInt usecSincePosixEpoch;
+    (void)dummy;
 
     /*
      * Try to use high resolution timer.
@@ -1139,8 +1143,10 @@ void TclWinResetTimerResolution(void);
 
 static void
 StopCalibration(
-    ClientData unused)		/* Client data is unused */
+    ClientData dummy)		/* Client data is unused */
 {
+    (void)dummy;
+
     SetEvent(timeInfo.exitEvent);
 
     /*
@@ -1195,6 +1201,7 @@ CalibrationThread(
 {
     FILETIME curFileTime;
     DWORD waitResult;
+    (void)arg;
 
     /*
      * Get initial system time and performance counter.

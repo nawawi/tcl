@@ -741,14 +741,14 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
       if test "$ac_cv_cross" = "yes"; then
 	case "$do64bit" in
 	    amd64|x64|yes)
-		CC="x86_64-w64-mingw32-gcc"
+		CC="x86_64-w64-mingw32-${CC}"
 		LD="x86_64-w64-mingw32-ld"
 		AR="x86_64-w64-mingw32-ar"
 		RANLIB="x86_64-w64-mingw32-ranlib"
 		RC="x86_64-w64-mingw32-windres"
 	    ;;
 	    *)
-		CC="i686-w64-mingw32-gcc"
+		CC="i686-w64-mingw32-${CC}"
 		LD="i686-w64-mingw32-ld"
 		AR="i686-w64-mingw32-ar"
 		RANLIB="i686-w64-mingw32-ranlib"
@@ -947,6 +947,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall -Wdeclaration-after-statement"
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
@@ -963,8 +964,20 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 	CFLAGS_WARNING="-Wall -Wwrite-strings -Wsign-compare -Wdeclaration-after-statement -Wpointer-arith"
 >>>>>>> upstream/master
+=======
+	CFLAGS_WARNING="-Wall -Wextra -Wwrite-strings -Wpointer-arith"
+>>>>>>> upstream/master
 	LDFLAGS_DEBUG=
 	LDFLAGS_OPTIMIZE=
+
+	case "${CC}" in
+	    *++)
+		CFLAGS_WARNING="${CFLAGS_WARNING} -Wno-format"
+		;;
+	    *)
+		CFLAGS_WARNING="${CFLAGS_WARNING} -Wc++-compat -Wdeclaration-after-statement"
+		;;
+	esac
 
 	# Specify the CC output file names based on the target name
 	CC_OBJNAME="-o \[$]@"
@@ -1201,31 +1214,30 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 	# This is a 2-stage check to make sure we have the 64-bit SDK
 	# We have to know where the SDK is installed.
 	# This magic is based on MS Platform SDK for Win2003 SP1 - hobbs
+=======
+>>>>>>> upstream/master
 	if test "$do64bit" != "no" ; then
-	    if test "x${MSSDK}x" = "xx" ; then
-		MSSDK="C:/Progra~1/Microsoft Platform SDK"
-	    fi
-	    MSSDK=`echo "$MSSDK" | sed -e 's!\\\!/!g'`
-	    PATH64=""
 	    case "$do64bit" in
 		amd64|x64|yes)
 		    MACHINE="AMD64" ; # assume AMD64 as default 64-bit build
-		    PATH64="${MSSDK}/Bin/Win64/x86/AMD64"
 		    ;;
 		ia64)
 		    MACHINE="IA64"
-		    PATH64="${MSSDK}/Bin/Win64"
 		    ;;
 	    esac
+<<<<<<< HEAD
 	    if test ! -d "${PATH64}" ; then
 >>>>>>> upstream/master
 		AC_MSG_WARN([Could not find 64-bit $MACHINE SDK])
 	    fi
+=======
+>>>>>>> upstream/master
 	    AC_MSG_RESULT([   Using 64-bit $MACHINE mode])
 	fi
 
@@ -1247,21 +1259,12 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 >>>>>>> upstream/master
 	if test "$do64bit" != "no" ; then
-	    # The space-based-path will work for the Makefile, but will
-	    # not work if AC_TRY_COMPILE is called.  TEA has the
-	    # TEA_PATH_NOSPACE to avoid this issue.
-	    # Check if _WIN64 is already recognized, and if so we don't
-	    # need to modify CC.
-	    AC_CHECK_DECL([_WIN64], [],
-			  [CC="\"${PATH64}/cl.exe\" -I\"${MSSDK}/Include\" \
-			 -I\"${MSSDK}/Include/crt\" \
-			 -I\"${MSSDK}/Include/crt/sys\""])
-	    RC="\"${MSSDK}/bin/rc.exe\""
+	    RC="rc"
 	    CFLAGS_DEBUG="-nologo -Zi -Od ${runtime}d"
 	    # Do not use -O2 for Win64 - this has proved buggy in code gen.
 	    CFLAGS_OPTIMIZE="-nologo -O1 ${runtime}"
-	    lflags="${lflags} -nologo -MACHINE:${MACHINE} -LIBPATH:\"${MSSDK}/Lib/${MACHINE}\""
-	    LINKBIN="\"${PATH64}/link.exe\""
+	    lflags="${lflags} -nologo -MACHINE:${MACHINE}"
+	    LINKBIN="link"
 	    # Avoid 'unresolved external symbol __security_cookie' errors.
 	    # c.f. http://support.microsoft.com/?id=894573
 	    LIBS="$LIBS bufferoverflowU.lib"
@@ -1498,6 +1501,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    AC_DEFINE(HAVE_WINNT_IGNORE_VOID, 1,
 		    [Defined when cygwin/mingw ignores VOID define in winnt.h])
 	fi
+
+	AC_CHECK_HEADER(stdbool.h, [AC_DEFINE(HAVE_STDBOOL_H, 1, [Do we have <stdbool.h>?])],)
 
 	# See if the compiler supports casting to a union type.
 	# This is used to stop gcc from printing a compiler

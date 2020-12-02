@@ -141,13 +141,10 @@ static void		InitClassSystemRoots(Tcl_Interp *interp,
 			    Foundation *fPtr);
 >>>>>>> upstream/master
 static int		InitFoundation(Tcl_Interp *interp);
-static void		KillFoundation(ClientData clientData,
-			    Tcl_Interp *interp);
+static Tcl_InterpDeleteProc	KillFoundation;
 static void		MyDeleted(ClientData clientData);
 static void		ObjectNamespaceDeleted(ClientData clientData);
-static void		ObjectRenamedTrace(ClientData clientData,
-			    Tcl_Interp *interp, const char *oldName,
-			    const char *newName, int flags);
+static Tcl_CommandTraceProc	ObjectRenamedTrace;
 static inline void	RemoveClass(Class **list, int num, int idx);
 static inline void	RemoveObject(Object **list, int num, int idx);
 static inline void	SquelchCachedName(Object *oPtr);
@@ -340,7 +337,7 @@ MODULE_SCOPE const TclOOStubs tclOOStubs;
  * ROOT_CLASS respectively.
  */
 
-#define Deleted(oPtr)		((oPtr)->flags & OBJECT_DELETED)
+#define Destructing(oPtr)	((oPtr)->flags & OBJECT_DESTRUCTING)
 #define IsRootObject(ocPtr)	((ocPtr)->flags & ROOT_OBJECT)
 #define IsRootClass(ocPtr)	((ocPtr)->flags & ROOT_CLASS)
 #define IsRoot(ocPtr)		((ocPtr)->flags & (ROOT_OBJECT|ROOT_CLASS))
@@ -480,8 +477,8 @@ InitFoundation(
 {
     static Tcl_ThreadDataKey tsdKey;
     ThreadLocalData *tsdPtr =
-	    Tcl_GetThreadData(&tsdKey, sizeof(ThreadLocalData));
-    Foundation *fPtr = Tcl_Alloc(sizeof(Foundation));
+	    (ThreadLocalData *)Tcl_GetThreadData(&tsdKey, sizeof(ThreadLocalData));
+    Foundation *fPtr = (Foundation *)Tcl_Alloc(sizeof(Foundation));
     Tcl_Obj *namePtr;
     Tcl_DString buffer;
     Command *cmdPtr;
@@ -801,7 +798,7 @@ static void
 DeletedDefineNamespace(
     ClientData clientData)
 {
-    Foundation *fPtr = clientData;
+    Foundation *fPtr = (Foundation *)clientData;
 
     fPtr->defineNs = NULL;
 }
@@ -810,7 +807,7 @@ static void
 DeletedObjdefNamespace(
     ClientData clientData)
 {
-    Foundation *fPtr = clientData;
+    Foundation *fPtr = (Foundation *)clientData;
 
     fPtr->objdefNs = NULL;
 }
@@ -819,7 +816,7 @@ static void
 DeletedHelpersNamespace(
     ClientData clientData)
 {
-    Foundation *fPtr = clientData;
+    Foundation *fPtr = (Foundation *)clientData;
 
     fPtr->helpersNs = NULL;
 }
@@ -837,10 +834,9 @@ DeletedHelpersNamespace(
 
 static void
 KillFoundation(
-    ClientData clientData,	/* Pointer to the OO system foundation
-				 * structure. */
-    Tcl_Interp *interp)		/* The interpreter containing the OO system
-				 * foundation. */
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp)	/* The interpreter containing the OO system
+			 * foundation. */
 {
     Foundation *fPtr = GetFoundation(interp);
 
@@ -900,7 +896,7 @@ AllocObject(
     CommandTrace *tracePtr;
     size_t creationEpoch;
 
-    oPtr = Tcl_Alloc(sizeof(Object));
+    oPtr = (Object *)Tcl_Alloc(sizeof(Object));
     memset(oPtr, 0, sizeof(Object));
 
     /*
@@ -1018,7 +1014,7 @@ AllocObject(
 
     cmdPtr = (Command *) oPtr->command;
     cmdPtr->nreProc = PublicNRObjectCmd;
-    cmdPtr->tracePtr = tracePtr = Tcl_Alloc(sizeof(CommandTrace));
+    cmdPtr->tracePtr = tracePtr = (CommandTrace *)Tcl_Alloc(sizeof(CommandTrace));
     tracePtr->traceProc = ObjectRenamedTrace;
     tracePtr->clientData = oPtr;
     tracePtr->flags = TCL_TRACE_RENAME|TCL_TRACE_DELETE;
@@ -1085,7 +1081,7 @@ MyClassDeleted(
     Object *oPtr = clientData;
 =======
 {
-    Object *oPtr = clientData;
+    Object *oPtr = (Object *)clientData;
 
     oPtr->myCommand = NULL;
 }
@@ -1094,7 +1090,11 @@ static void
 MyClassDeleted(
     ClientData clientData)
 {
+<<<<<<< HEAD
     Object *oPtr = clientData;
+>>>>>>> upstream/master
+=======
+    Object *oPtr = (Object *)clientData;
 >>>>>>> upstream/master
     oPtr->myclassCommand = NULL;
 }
@@ -1115,12 +1115,12 @@ MyClassDeleted(
 static void
 ObjectRenamedTrace(
     ClientData clientData,	/* The object being deleted. */
-    Tcl_Interp *interp,		/* The interpreter containing the object. */
-    const char *oldName,	/* What the object was (last) called. */
-    const char *newName,	/* What it's getting renamed to. (unused) */
+    TCL_UNUSED(Tcl_Interp *),
+    TCL_UNUSED(const char *) /*oldName*/,
+    TCL_UNUSED(const char *) /*newName*/,
     int flags)			/* Why was the object deleted? */
 {
-    Object *oPtr = clientData;
+    Object *oPtr = (Object *)clientData;
 
     /*
      * If this is a rename and not a delete of the object, we just flush the
@@ -1137,7 +1137,7 @@ ObjectRenamedTrace(
      * 2950259].
      */
 
-    if (!Deleted(oPtr)) {
+    if (!Destructing(oPtr)) {
 	Tcl_DeleteNamespace(oPtr->namespacePtr);
     }
     oPtr->command = NULL;
@@ -1212,7 +1212,7 @@ TclOODeleteDescendants(
 	     * clsPtr
 	     */
 
-	    if (!Deleted(mixinSubclassPtr->thisPtr)
+	    if (!Destructing(mixinSubclassPtr->thisPtr)
 		    && !(mixinSubclassPtr->thisPtr->flags & DONT_DELETE)) {
 >>>>>>> upstream/master
 		Tcl_DeleteCommandFromToken(interp,
@@ -1248,8 +1248,12 @@ TclOODeleteDescendants(
 =======
 =======
 	    subclassPtr = clsPtr->subclasses.list[clsPtr->subclasses.num - 1];
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	    if (!Deleted(subclassPtr->thisPtr) && !IsRoot(subclassPtr)
+=======
+	    if (!Destructing(subclassPtr->thisPtr) && !IsRoot(subclassPtr)
+>>>>>>> upstream/master
 		    && !(subclassPtr->thisPtr->flags & DONT_DELETE)) {
 		Tcl_DeleteCommandFromToken(interp,
 			subclassPtr->thisPtr->command);
@@ -1291,7 +1295,7 @@ TclOODeleteDescendants(
 	     * This condition also covers the case where instancePtr == oPtr
 	     */
 
-	    if (!Deleted(instancePtr) && !IsRoot(instancePtr) &&
+	    if (!Destructing(instancePtr) && !IsRoot(instancePtr) &&
 		    !(instancePtr->flags & DONT_DELETE)) {
 		Tcl_DeleteCommandFromToken(interp, instancePtr->command);
 	    }
@@ -1672,7 +1676,7 @@ TclOOReleaseClassContents(
      * Sanity check!
      */
 
-    if (!Deleted(oPtr)) {
+    if (!Destructing(oPtr)) {
 	if (IsRootClass(oPtr)) {
 	    Tcl_Panic("deleting class structure for non-deleted %s",
 		    "::oo::class");
@@ -1817,6 +1821,7 @@ TclOOReleaseClassContents(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     FOREACH_STRUCT(privateVariable, clsPtr->privateVariables) {
 	TclDecrRefCount(privateVariable->variableObj);
 	TclDecrRefCount(privateVariable->fullNameObj);
@@ -1828,6 +1833,9 @@ TclOOReleaseClassContents(
 =======
 >>>>>>> upstream/master
     if (IsRootClass(oPtr) && !Deleted(fPtr->objectCls->thisPtr)) {
+=======
+    if (IsRootClass(oPtr) && !Destructing(fPtr->objectCls->thisPtr)) {
+>>>>>>> upstream/master
 	Tcl_DeleteCommandFromToken(interp, fPtr->objectCls->thisPtr->command);
     }
 }
@@ -1850,7 +1858,7 @@ ObjectNamespaceDeleted(
     ClientData clientData)	/* Pointer to the class whose namespace is
 				 * being deleted. */
 {
-    Object *oPtr = clientData;
+    Object *oPtr = (Object *)clientData;
     Foundation *fPtr = oPtr->fPtr;
     FOREACH_HASH_DECLS;
     Class *mixinPtr;
@@ -1860,7 +1868,7 @@ ObjectNamespaceDeleted(
     Tcl_Interp *interp = oPtr->fPtr->interp;
     int i;
 
-    if (Deleted(oPtr)) {
+    if (Destructing(oPtr)) {
 	/*
 <<<<<<< HEAD
 	 * TODO: Can ObjectNamespaceDeleted ever be called twice? If not, this
@@ -1880,7 +1888,7 @@ ObjectNamespaceDeleted(
      * records.  This is the flag that
      */
 
-    oPtr->flags |= OBJECT_DELETED;
+    oPtr->flags |= OBJECT_DESTRUCTING;
 
 <<<<<<< HEAD
     /* Let the dominoes fall */
@@ -2288,7 +2296,7 @@ ObjectNamespaceDeleted(
      * sometimes not go away automatically; we force it here. [Bug 2962664]
      */
 
-    if (IsRootObject(oPtr) && !Deleted(fPtr->classCls->thisPtr)
+    if (IsRootObject(oPtr) && !Destructing(fPtr->classCls->thisPtr)
 	    && !Tcl_InterpDeleted(interp)) {
 	Tcl_DeleteCommandFromToken(interp, fPtr->classCls->thisPtr->command);
     }
@@ -2352,6 +2360,20 @@ TclOODecrRefCount(
 /*
  * ----------------------------------------------------------------------
  *
+ * TclOOObjectDestroyed --
+ *
+ *	Returns TCL_OK if an object is entirely deleted, i.e. the destruction
+ *	sequence has completed.
+ *
+ * ----------------------------------------------------------------------
+ */
+int TclOOObjectDestroyed(Object *oPtr) {
+    return (oPtr->namespacePtr == NULL);
+}
+
+/*
+ * ----------------------------------------------------------------------
+ *
  * TclOORemoveFromInstances --
  *
  *	Utility function to remove an object from the list of instances within
@@ -2401,9 +2423,9 @@ TclOOAddToInstances(
     if (clsPtr->instances.num >= clsPtr->instances.size) {
 	clsPtr->instances.size += ALLOC_CHUNK;
 	if (clsPtr->instances.size == ALLOC_CHUNK) {
-	    clsPtr->instances.list = Tcl_Alloc(sizeof(Object *) * ALLOC_CHUNK);
+	    clsPtr->instances.list = (Object **)Tcl_Alloc(sizeof(Object *) * ALLOC_CHUNK);
 	} else {
-	    clsPtr->instances.list = Tcl_Realloc(clsPtr->instances.list,
+	    clsPtr->instances.list = (Object **)Tcl_Realloc(clsPtr->instances.list,
 		    sizeof(Object *) * clsPtr->instances.size);
 <<<<<<< HEAD
 	}
@@ -2571,15 +2593,15 @@ TclOOAddToSubclasses(
 				 * is assumed that the class is not already
 				 * present as a subclass in the superclass. */
 {
-    if (Deleted(superPtr->thisPtr)) {
+    if (Destructing(superPtr->thisPtr)) {
 	return;
     }
     if (superPtr->subclasses.num >= superPtr->subclasses.size) {
 	superPtr->subclasses.size += ALLOC_CHUNK;
 	if (superPtr->subclasses.size == ALLOC_CHUNK) {
-	    superPtr->subclasses.list = Tcl_Alloc(sizeof(Class *) * ALLOC_CHUNK);
+	    superPtr->subclasses.list = (Class **)Tcl_Alloc(sizeof(Class *) * ALLOC_CHUNK);
 	} else {
-	    superPtr->subclasses.list = Tcl_Realloc(superPtr->subclasses.list,
+	    superPtr->subclasses.list = (Class **)Tcl_Realloc(superPtr->subclasses.list,
 		    sizeof(Class *) * superPtr->subclasses.size);
 	}
     }
@@ -2677,15 +2699,15 @@ TclOOAddToMixinSubs(
 				 * is assumed that the class is not already
 				 * present as a subclass in the superclass. */
 {
-    if (Deleted(superPtr->thisPtr)) {
+    if (Destructing(superPtr->thisPtr)) {
 	return;
     }
     if (superPtr->mixinSubs.num >= superPtr->mixinSubs.size) {
 	superPtr->mixinSubs.size += ALLOC_CHUNK;
 	if (superPtr->mixinSubs.size == ALLOC_CHUNK) {
-	    superPtr->mixinSubs.list = Tcl_Alloc(sizeof(Class *) * ALLOC_CHUNK);
+	    superPtr->mixinSubs.list = (Class **)Tcl_Alloc(sizeof(Class *) * ALLOC_CHUNK);
 	} else {
-	    superPtr->mixinSubs.list = Tcl_Realloc(superPtr->mixinSubs.list,
+	    superPtr->mixinSubs.list = (Class **)Tcl_Realloc(superPtr->mixinSubs.list,
 		    sizeof(Class *) * superPtr->mixinSubs.size);
 	}
     }
@@ -2731,7 +2753,7 @@ TclOOAllocClass(
 				 * representation. */
 {
     Foundation *fPtr = GetFoundation(interp);
-    Class *clsPtr = Tcl_Alloc(sizeof(Class));
+    Class *clsPtr = (Class *)Tcl_Alloc(sizeof(Class));
 
     memset(clsPtr, 0, sizeof(Class));
     clsPtr->thisPtr = useThisObj;
@@ -2748,7 +2770,7 @@ TclOOAllocClass(
      */
 
     clsPtr->superclasses.num = 1;
-    clsPtr->superclasses.list = Tcl_Alloc(sizeof(Class *));
+    clsPtr->superclasses.list = (Class **)Tcl_Alloc(sizeof(Class *));
     clsPtr->superclasses.list[0] = fPtr->objectCls;
     AddRef(fPtr->objectCls->thisPtr);
 
@@ -3142,17 +3164,17 @@ FinalizeAlloc(
     Tcl_Interp *interp,
     int result)
 {
-    CallContext *contextPtr = data[0];
-    Object *oPtr = data[1];
-    Tcl_InterpState state = data[2];
-    Tcl_Object *objectPtr = data[3];
+    CallContext *contextPtr = (CallContext *)data[0];
+    Object *oPtr = (Object *)data[1];
+    Tcl_InterpState state = (Tcl_InterpState)data[2];
+    Tcl_Object *objectPtr = (Tcl_Object *)data[3];
 
     /*
      * Ensure an error if the object was deleted in the constructor. Don't
      * want to lose errors by accident. [Bug 2903011]
      */
 
-    if (result != TCL_ERROR && Deleted(oPtr)) {
+    if (result != TCL_ERROR && Destructing(oPtr)) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"object deleted in constructor", -1));
 	Tcl_SetErrorCode(interp, "TCL", "OO", "STILLBORN", NULL);
@@ -3167,7 +3189,7 @@ FinalizeAlloc(
 	 * command before we delete it. [Bug 9dd1bd7a74]
 	 */
 
-	if (!Deleted(oPtr)) {
+	if (!Destructing(oPtr)) {
 	    (void) TclOOObjectName(interp, oPtr);
 	    Tcl_DeleteCommandFromToken(interp, oPtr->command);
 	}
@@ -3373,9 +3395,13 @@ Tcl_CopyObjectInstance(
      */
 
     o2Ptr->flags = oPtr->flags & ~(
+<<<<<<< HEAD
 	    OBJECT_DELETED | ROOT_OBJECT | ROOT_CLASS | FILTER_HANDLING);
 <<<<<<< HEAD
 =======
+=======
+	    OBJECT_DESTRUCTING | ROOT_OBJECT | ROOT_CLASS | FILTER_HANDLING);
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
     /*
@@ -3429,11 +3455,11 @@ Tcl_CopyObjectInstance(
 	    TclOODecrRefCount(superPtr->thisPtr);
 	}
 	if (cls2Ptr->superclasses.num) {
-	    cls2Ptr->superclasses.list = Tcl_Realloc(cls2Ptr->superclasses.list,
+	    cls2Ptr->superclasses.list = (Class **)Tcl_Realloc(cls2Ptr->superclasses.list,
 		    sizeof(Class *) * clsPtr->superclasses.num);
 	} else {
 	    cls2Ptr->superclasses.list =
-		    Tcl_Alloc(sizeof(Class *) * clsPtr->superclasses.num);
+		    (Class **)Tcl_Alloc(sizeof(Class *) * clsPtr->superclasses.num);
 	}
 	memcpy(cls2Ptr->superclasses.list, clsPtr->superclasses.list,
 		sizeof(Class *) * clsPtr->superclasses.num);
@@ -3745,7 +3771,7 @@ Tcl_ClassSetMetadata(
 	if (metadata == NULL) {
 	    return;
 	}
-	clsPtr->metadataPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
+	clsPtr->metadataPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_InitHashTable(clsPtr->metadataPtr, TCL_ONE_WORD_KEYS);
     }
 
@@ -3825,7 +3851,7 @@ Tcl_ObjectSetMetadata(
 	if (metadata == NULL) {
 	    return;
 	}
-	oPtr->metadataPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
+	oPtr->metadataPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_InitHashTable(oPtr->metadataPtr, TCL_ONE_WORD_KEYS);
     }
 
@@ -3884,7 +3910,7 @@ PublicNRObjectCmd(
     int objc,
     Tcl_Obj *const *objv)
 {
-    return TclOOObjectCmdCore(clientData, interp, objc, objv, PUBLIC_METHOD,
+    return TclOOObjectCmdCore((Object *)clientData, interp, objc, objv, PUBLIC_METHOD,
 	    NULL);
 }
 
@@ -3905,7 +3931,7 @@ PrivateNRObjectCmd(
     int objc,
     Tcl_Obj *const *objv)
 {
-    return TclOOObjectCmdCore(clientData, interp, objc, objv, 0, NULL);
+    return TclOOObjectCmdCore((Object *)clientData, interp, objc, objv, 0, NULL);
 }
 
 int
@@ -3966,7 +3992,7 @@ MyClassNRObjCmd(
     int objc,
     Tcl_Obj *const *objv)
 {
-    Object *oPtr = clientData;
+    Object *oPtr = (Object *)clientData;
 
     if (objc < 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "methodName ?arg ...?");
@@ -4025,7 +4051,7 @@ TclOOObjectCmdCore(
      */
 
     if (framePtr->isProcCallFrame & FRAME_IS_METHOD) {
-	CallContext *callerContextPtr = framePtr->clientData;
+	CallContext *callerContextPtr = (CallContext *)framePtr->clientData;
 	Method *callerMethodPtr =
 		callerContextPtr->callPtr->chain[callerContextPtr->index].mPtr;
 
@@ -4134,7 +4160,7 @@ TclOOObjectCmdCore(
 static int
 FinalizeObjectCall(
     ClientData data[],
-    Tcl_Interp *interp,
+    TCL_UNUSED(Tcl_Interp *),
     int result)
 {
     /*
@@ -4142,7 +4168,7 @@ FinalizeObjectCall(
      * structure.
      */
 
-    TclOODeleteContext(data[0]);
+    TclOODeleteContext((CallContext *)data[0]);
     return result;
 }
 
@@ -4295,10 +4321,10 @@ TclNRObjectContextInvokeNext(
 static int
 FinalizeNext(
     ClientData data[],
-    Tcl_Interp *interp,
+    TCL_UNUSED(Tcl_Interp *),
     int result)
 {
-    CallContext *contextPtr = data[0];
+    CallContext *contextPtr = (CallContext *)data[0];
 
     /*
      * Restore the call chain context index as we've finished the inner invoke
@@ -4339,7 +4365,7 @@ Tcl_GetObjectFromObj(
 	    goto notAnObject;
 	}
     }
-    return cmdPtr->objClientData;
+    return (Tcl_Object)cmdPtr->objClientData;
 
   notAnObject:
     Tcl_SetObjResult(interp, Tcl_ObjPrintf(

@@ -142,9 +142,7 @@ EXTERN int		TclInExit(void);
 /* Slot 47 is reserved */
 /* Slot 48 is reserved */
 /* Slot 49 is reserved */
-/* 50 */
-EXTERN void		TclInitCompiledLocals(Tcl_Interp *interp,
-				CallFrame *framePtr, Namespace *nsPtr);
+/* Slot 50 is reserved */
 /* 51 */
 EXTERN int		TclInterpInit(Tcl_Interp *interp);
 /* Slot 52 is reserved */
@@ -606,6 +604,12 @@ EXTERN void		TclStaticPackage(Tcl_Interp *interp,
 /* 258 */
 EXTERN Tcl_Obj *	TclpCreateTemporaryDirectory(Tcl_Obj *dirObj,
 				Tcl_Obj *basenameObj);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+/* 259 */
+EXTERN void		TclAppendUnicodeToObj(Tcl_Obj *objPtr,
+				const Tcl_UniChar *unicode, size_t length);
 >>>>>>> upstream/master
 
 typedef struct TclIntStubs {
@@ -662,7 +666,7 @@ typedef struct TclIntStubs {
     void (*reserved47)(void);
     void (*reserved48)(void);
     void (*reserved49)(void);
-    void (*tclInitCompiledLocals) (Tcl_Interp *interp, CallFrame *framePtr, Namespace *nsPtr); /* 50 */
+    void (*reserved50)(void);
     int (*tclInterpInit) (Tcl_Interp *interp); /* 51 */
     void (*reserved52)(void);
     int (*tclInvokeObjectCommand) (void *clientData, Tcl_Interp *interp, int argc, const char **argv); /* 53 */
@@ -892,6 +896,10 @@ typedef struct TclIntStubs {
 =======
     void (*tclStaticPackage) (Tcl_Interp *interp, const char *pkgName, Tcl_PackageInitProc *initProc, Tcl_PackageInitProc *safeInitProc); /* 257 */
     Tcl_Obj * (*tclpCreateTemporaryDirectory) (Tcl_Obj *dirObj, Tcl_Obj *basenameObj); /* 258 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+    void (*tclAppendUnicodeToObj) (Tcl_Obj *objPtr, const Tcl_UniChar *unicode, size_t length); /* 259 */
 >>>>>>> upstream/master
 } TclIntStubs;
 
@@ -983,8 +991,7 @@ extern const TclIntStubs *tclIntStubsPtr;
 /* Slot 47 is reserved */
 /* Slot 48 is reserved */
 /* Slot 49 is reserved */
-#define TclInitCompiledLocals \
-	(tclIntStubsPtr->tclInitCompiledLocals) /* 50 */
+/* Slot 50 is reserved */
 #define TclInterpInit \
 	(tclIntStubsPtr->tclInterpInit) /* 51 */
 /* Slot 52 is reserved */
@@ -1324,6 +1331,11 @@ extern const TclIntStubs *tclIntStubsPtr;
 	(tclIntStubsPtr->tclStaticPackage) /* 257 */
 #define TclpCreateTemporaryDirectory \
 	(tclIntStubsPtr->tclpCreateTemporaryDirectory) /* 258 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+#define TclAppendUnicodeToObj \
+	(tclIntStubsPtr->tclAppendUnicodeToObj) /* 259 */
 >>>>>>> upstream/master
 
 #endif /* defined(USE_TCL_STUBS) */

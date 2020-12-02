@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_COPY_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,11 +17,17 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* copy, b = a */
-int mp_copy(const mp_int *a, mp_int *b)
+mp_err mp_copy(const mp_int *a, mp_int *b)
 {
-   int     res, n;
+   int n;
+   mp_digit *tmpa, *tmpb;
+   mp_err err;
 
    /* if dst == src do nothing */
    if (a == b) {
@@ -29,33 +36,27 @@ int mp_copy(const mp_int *a, mp_int *b)
 
    /* grow dest */
    if (b->alloc < a->used) {
-      if ((res = mp_grow(b, a->used)) != MP_OKAY) {
-         return res;
+      if ((err = mp_grow(b, a->used)) != MP_OKAY) {
+         return err;
       }
    }
 
    /* zero b and copy the parameters over */
-   {
-      mp_digit *tmpa, *tmpb;
+   /* pointer aliases */
 
-      /* pointer aliases */
+   /* source */
+   tmpa = a->dp;
 
-      /* source */
-      tmpa = a->dp;
+   /* destination */
+   tmpb = b->dp;
 
-      /* destination */
-      tmpb = b->dp;
-
-      /* copy all the digits */
-      for (n = 0; n < a->used; n++) {
-         *tmpb++ = *tmpa++;
-      }
-
-      /* clear high digits */
-      for (; n < b->used; n++) {
-         *tmpb++ = 0;
-      }
+   /* copy all the digits */
+   for (n = 0; n < a->used; n++) {
+      *tmpb++ = *tmpa++;
    }
+
+   /* clear high digits */
+   MP_ZERO_DIGITS(tmpb, b->used - n);
 
    /* copy used count and sign */
    b->used = a->used;
@@ -63,7 +64,3 @@ int mp_copy(const mp_int *a, mp_int *b)
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

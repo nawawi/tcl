@@ -178,7 +178,7 @@ static DWORD ddeInstance;	/* The application instance handle given to us
 				 * by DdeInitialize. */
 static int ddeIsServer = 0;
 
-#define TCL_DDE_VERSION		"1.4.1"
+#define TCL_DDE_VERSION		"1.4.3"
 #define TCL_DDE_PACKAGE_NAME	"dde"
 <<<<<<< HEAD
 #define TCL_DDE_SERVICE_NAME	TEXT("TclEval")
@@ -254,8 +254,8 @@ DLLEXPORT int	Dde_SafeInit(Tcl_Interp *interp);
 =======
 #if (TCL_MAJOR_VERSION < 9) && (TCL_MINOR_VERSION < 7)
 # if TCL_UTF_MAX > 3
-#   define Tcl_WCharToUtfDString(a,b,c) Tcl_WinTCharToUtf(a,(b)*sizeof(WCHAR),c)
-#   define Tcl_UtfToWCharDString(a,b,c) Tcl_WinUtfToTChar(a,b,c)
+#   define Tcl_WCharToUtfDString(a,b,c) Tcl_WinTCharToUtf((TCHAR *)(a),(b)*sizeof(WCHAR),c)
+#   define Tcl_UtfToWCharDString(a,b,c) (WCHAR *)Tcl_WinUtfToTChar(a,b,c)
 # else
 #   define Tcl_WCharToUtfDString Tcl_UniCharToUtfDString
 #   define Tcl_UtfToWCharDString Tcl_UtfToUniCharDString
@@ -319,9 +319,13 @@ Dde_Init(
     Tcl_Interp *interp)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!Tcl_InitStubs(interp, "8.1", 0)) {
 =======
     if (!Tcl_InitStubs(interp, "8.5-", 0)) {
+>>>>>>> upstream/master
+=======
+    if (!Tcl_InitStubs(interp, "8.5", 0)) {
 >>>>>>> upstream/master
 	return TCL_ERROR;
     }
@@ -399,9 +403,13 @@ Initialize(void)
 	Tcl_MutexLock(&ddeMutex);
 	if (ddeInstance == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if (DdeInitialize(&ddeInstance, (PFNCALLBACK) DdeServerProc,
 =======
 	    if (DdeInitializeW(&ddeInstance, (PFNCALLBACK) DdeServerProc,
+>>>>>>> upstream/master
+=======
+	    if (DdeInitializeW(&ddeInstance, (PFNCALLBACK)(void *)DdeServerProc,
 >>>>>>> upstream/master
 		    CBF_SKIP_REGISTRATIONS | CBF_SKIP_UNREGISTRATIONS
 		    | CBF_FAIL_POKES, 0) != DMLERR_NO_ERROR) {

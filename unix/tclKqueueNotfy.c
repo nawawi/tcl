@@ -227,7 +227,7 @@ PlatformEventsControl(
     struct stat fdStat;
 
     if (isNew) {
-        newPedPtr = Tcl_Alloc(sizeof(*newPedPtr));
+        newPedPtr = (struct PlatformEventData *)Tcl_Alloc(sizeof(struct PlatformEventData));
         newPedPtr->filePtr = filePtr;
         newPedPtr->tsdPtr = tsdPtr;
         filePtr->pedPtr = newPedPtr;
@@ -414,13 +414,13 @@ PlatformEventsInit(void)
     } else if (fcntl(tsdPtr->eventsFd, F_SETFD, FD_CLOEXEC) == -1) {
 	Tcl_Panic("fcntl: %s", strerror(errno));
     }
-    filePtr = Tcl_Alloc(sizeof(*filePtr));
+    filePtr = (FileHandler *)Tcl_Alloc(sizeof(FileHandler));
     filePtr->fd = tsdPtr->triggerPipe[0];
     filePtr->mask = TCL_READABLE;
     PlatformEventsControl(filePtr, tsdPtr, EV_ADD, 1);
     if (!tsdPtr->readyEvents) {
         tsdPtr->maxReadyEvents = 512;
-	tsdPtr->readyEvents = Tcl_Alloc(
+	tsdPtr->readyEvents = (struct kevent *)Tcl_Alloc(
 		tsdPtr->maxReadyEvents * sizeof(tsdPtr->readyEvents[0]));
     }
     LIST_INIT(&tsdPtr->firstReadyFileHandlerPtr);
@@ -585,7 +585,7 @@ Tcl_CreateFileHandler(
 	    }
 	}
 	if (filePtr == NULL) {
-	    filePtr = Tcl_Alloc(sizeof(FileHandler));
+	    filePtr = (FileHandler *)Tcl_Alloc(sizeof(FileHandler));
 	    filePtr->fd = fd;
 	    filePtr->readyMask = 0;
 	    filePtr->nextPtr = tsdPtr->firstFileHandlerPtr;
@@ -773,7 +773,7 @@ Tcl_WaitForEvent(
 	     */
 
 	    if (filePtr->readyMask == 0) {
-		FileHandlerEvent *fileEvPtr =
+		FileHandlerEvent *fileEvPtr = (FileHandlerEvent *)
 			Tcl_Alloc(sizeof(FileHandlerEvent));
 
 		fileEvPtr->header.proc = FileHandlerEventProc;
@@ -833,7 +833,7 @@ Tcl_WaitForEvent(
 	     */
 
 	    if (filePtr->readyMask == 0) {
-		FileHandlerEvent *fileEvPtr =
+		FileHandlerEvent *fileEvPtr = (FileHandlerEvent *)
 			Tcl_Alloc(sizeof(FileHandlerEvent));
 
 		fileEvPtr->header.proc = FileHandlerEventProc;

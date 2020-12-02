@@ -171,7 +171,7 @@ GetClassFromObj(
 
 static int
 InfoObjectClassCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -255,7 +255,7 @@ InfoObjectClassCmd(
 
 static int
 InfoObjectDefnCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -288,7 +288,7 @@ InfoObjectDefnCmd(
 		TclGetString(objv[2]), NULL);
 	return TCL_ERROR;
     }
-    procPtr = TclOOGetProcFromMethod(Tcl_GetHashValue(hPtr));
+    procPtr = TclOOGetProcFromMethod((Method *)Tcl_GetHashValue(hPtr));
     if (procPtr == NULL) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"definition not available for this kind of method", -1));
@@ -312,7 +312,7 @@ InfoObjectDefnCmd(
 	    Tcl_ListObjAppendElement(NULL, resultObjs[0], argObj);
 	}
     }
-    resultObjs[1] = TclOOGetMethodBody(Tcl_GetHashValue(hPtr));
+    resultObjs[1] = TclOOGetMethodBody((Method *)Tcl_GetHashValue(hPtr));
     Tcl_SetObjResult(interp, Tcl_NewListObj(2, resultObjs));
     return TCL_OK;
 }
@@ -329,7 +329,7 @@ InfoObjectDefnCmd(
 
 static int
 InfoObjectFiltersCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -368,7 +368,7 @@ InfoObjectFiltersCmd(
 
 static int
 InfoObjectForwardCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -399,7 +399,7 @@ InfoObjectForwardCmd(
 		TclGetString(objv[2]), NULL);
 	return TCL_ERROR;
     }
-    prefixObj = TclOOGetFwdFromMethod(Tcl_GetHashValue(hPtr));
+    prefixObj = TclOOGetFwdFromMethod((Method *)Tcl_GetHashValue(hPtr));
     if (prefixObj == NULL) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"prefix argument list not available for this kind of method",
@@ -425,7 +425,7 @@ InfoObjectForwardCmd(
 
 static int
 InfoObjectIsACmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -571,7 +571,7 @@ InfoObjectIsACmd(
 
 static int
 InfoObjectMethodsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -695,7 +695,7 @@ InfoObjectMethodsCmd(
 
 static int
 InfoObjectMethodTypeCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -726,7 +726,7 @@ InfoObjectMethodTypeCmd(
 		TclGetString(objv[2]), NULL);
 	return TCL_ERROR;
     }
-    mPtr = Tcl_GetHashValue(hPtr);
+    mPtr = (Method *)Tcl_GetHashValue(hPtr);
     if (mPtr->typePtr == NULL) {
 	/*
 	 * Special entry for visibility control: pretend the method doesnt
@@ -752,7 +752,7 @@ InfoObjectMethodTypeCmd(
 
 static int
 InfoObjectMixinsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -822,7 +822,7 @@ InfoObjectMixinsCmd(
 
 static int
 InfoObjectIdCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -854,7 +854,7 @@ InfoObjectIdCmd(
 
 static int
 InfoObjectNsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -887,7 +887,7 @@ InfoObjectNsCmd(
 
 static int
 InfoObjectVariablesCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -956,7 +956,7 @@ InfoObjectVariablesCmd(
 
 static int
 InfoObjectVarsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1017,7 +1017,7 @@ InfoObjectVarsCmd(
 
 static int
 InfoClassConstrCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1078,7 +1078,7 @@ InfoClassConstrCmd(
 
 static int
 InfoClassDefnCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1105,7 +1105,7 @@ InfoClassDefnCmd(
 		TclGetString(objv[2]), NULL);
 	return TCL_ERROR;
     }
-    procPtr = TclOOGetProcFromMethod(Tcl_GetHashValue(hPtr));
+    procPtr = TclOOGetProcFromMethod((Method *)Tcl_GetHashValue(hPtr));
     if (procPtr == NULL) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"definition not available for this kind of method", -1));
@@ -1129,7 +1129,7 @@ InfoClassDefnCmd(
 	    Tcl_ListObjAppendElement(NULL, resultObjs[0], argObj);
 	}
     }
-    resultObjs[1] = TclOOGetMethodBody(Tcl_GetHashValue(hPtr));
+    resultObjs[1] = TclOOGetMethodBody((Method *)Tcl_GetHashValue(hPtr));
     Tcl_SetObjResult(interp, Tcl_NewListObj(2, resultObjs));
     return TCL_OK;
 }
@@ -1146,7 +1146,7 @@ InfoClassDefnCmd(
 
 static int
 InfoClassDefnNsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1196,7 +1196,7 @@ InfoClassDefnNsCmd(
 
 static int
 InfoClassDestrCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1240,7 +1240,7 @@ InfoClassDestrCmd(
 
 static int
 InfoClassFiltersCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1278,7 +1278,7 @@ InfoClassFiltersCmd(
 
 static int
 InfoClassForwardCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1303,7 +1303,7 @@ InfoClassForwardCmd(
 		TclGetString(objv[2]), NULL);
 	return TCL_ERROR;
     }
-    prefixObj = TclOOGetFwdFromMethod(Tcl_GetHashValue(hPtr));
+    prefixObj = TclOOGetFwdFromMethod((Method *)Tcl_GetHashValue(hPtr));
     if (prefixObj == NULL) {
 	Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		"prefix argument list not available for this kind of method",
@@ -1329,7 +1329,7 @@ InfoClassForwardCmd(
 
 static int
 InfoClassInstancesCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1377,7 +1377,7 @@ InfoClassInstancesCmd(
 
 static int
 InfoClassMethodsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1497,7 +1497,7 @@ InfoClassMethodsCmd(
 
 static int
 InfoClassMethodTypeCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1524,7 +1524,7 @@ InfoClassMethodTypeCmd(
 		TclGetString(objv[2]), NULL);
 	return TCL_ERROR;
     }
-    mPtr = Tcl_GetHashValue(hPtr);
+    mPtr = (Method *)Tcl_GetHashValue(hPtr);
     if (mPtr->typePtr == NULL) {
 	/*
 	 * Special entry for visibility control: pretend the method doesnt
@@ -1549,7 +1549,7 @@ InfoClassMethodTypeCmd(
 
 static int
 InfoClassMixinsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1618,7 +1618,7 @@ InfoClassMixinsCmd(
 
 static int
 InfoClassSubsCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1673,7 +1673,7 @@ InfoClassSubsCmd(
 
 static int
 InfoClassSupersCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1712,7 +1712,7 @@ InfoClassSupersCmd(
 
 static int
 InfoClassVariablesCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1781,7 +1781,7 @@ InfoClassVariablesCmd(
 
 static int
 InfoObjectCallCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1827,7 +1827,7 @@ InfoObjectCallCmd(
 
 static int
 InfoClassCallCmd(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])

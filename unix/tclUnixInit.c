@@ -31,6 +31,12 @@
 #endif
 
 #ifdef __CYGWIN__
+#ifdef __cplusplus
+extern "C" {
+#endif
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wignored-attributes"
+#endif
 DLLIMPORT extern __stdcall unsigned char GetVersionExW(void *);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -44,6 +50,9 @@ DLLIMPORT extern __stdcall void *GetModuleHandleW(const void *);
 DLLIMPORT extern __stdcall void FreeLibrary(void *);
 DLLIMPORT extern __stdcall void *GetProcAddress(void *, const char *);
 DLLIMPORT extern __stdcall void GetSystemInfo(void *);
+#ifdef __cplusplus
+}
+#endif
 
 #define NUMPROCESSORS 11
 <<<<<<< HEAD
@@ -613,6 +622,7 @@ TclpInitLibraryPath(
     str = Tcl_GetStringFromObj(pathPtr, lengthPtr);
 =======
     str = TclGetStringFromObj(pathPtr, lengthPtr);
+<<<<<<< HEAD
 >>>>>>> upstream/master
     *valuePtr = ckalloc((*lengthPtr) + 1);
     memcpy(*valuePtr, str, (size_t)(*lengthPtr)+1);
@@ -624,6 +634,9 @@ TclpInitLibraryPath(
     str = TclGetString(pathPtr);
     *lengthPtr = pathPtr->length;
     *valuePtr = Tcl_Alloc(*lengthPtr + 1);
+=======
+    *valuePtr = (char *)Tcl_Alloc(*lengthPtr + 1);
+>>>>>>> upstream/master
     memcpy(*valuePtr, str, *lengthPtr + 1);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1398,6 +1411,10 @@ MacOSXGetLibraryPath(
     foundInFramework = Tcl_MacOSXOpenVersionedBundleResources(interp,
 	    "com.tcltk.tcllibrary", TCL_FRAMEWORK_VERSION, 0, maxPathLen,
 	    tclLibPath);
+#else
+    (void)interp;
+    (void)maxPathLen;
+    (void)tclLibPath;
 #endif
 
     return foundInFramework;

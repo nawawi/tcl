@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_ADD_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,11 +17,16 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* high level addition (handles signs) */
-int mp_add(const mp_int *a, const mp_int *b, mp_int *c)
+mp_err mp_add(const mp_int *a, const mp_int *b, mp_int *c)
 {
-   int     sa, sb, res;
+   mp_sign sa, sb;
+   mp_err err;
 
    /* get sign of both inputs */
    sa = a->sign;
@@ -31,7 +37,7 @@ int mp_add(const mp_int *a, const mp_int *b, mp_int *c)
       /* both positive or both negative */
       /* add their magnitudes, copy the sign */
       c->sign = sa;
-      res = s_mp_add(a, b, c);
+      err = s_mp_add(a, b, c);
    } else {
       /* one positive, the other negative */
       /* subtract the one with the greater magnitude from */
@@ -39,17 +45,13 @@ int mp_add(const mp_int *a, const mp_int *b, mp_int *c)
       /* the sign of the one with the greater magnitude. */
       if (mp_cmp_mag(a, b) == MP_LT) {
          c->sign = sb;
-         res = s_mp_sub(b, a, c);
+         err = s_mp_sub(b, a, c);
       } else {
          c->sign = sa;
-         res = s_mp_sub(a, b, c);
+         err = s_mp_sub(a, b, c);
       }
    }
-   return res;
+   return err;
 }
 
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

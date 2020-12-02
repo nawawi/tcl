@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_ABS_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,19 +17,23 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* b = |a|
  *
  * Simple function copies the input and fixes the sign to positive
  */
-int mp_abs(const mp_int *a, mp_int *b)
+mp_err mp_abs(const mp_int *a, mp_int *b)
 {
-   int     res;
+   mp_err     err;
 
    /* copy a to b */
    if (a != b) {
-      if ((res = mp_copy(a, b)) != MP_OKAY) {
-         return res;
+      if ((err = mp_copy(a, b)) != MP_OKAY) {
+         return err;
       }
    }
 
@@ -38,7 +43,3 @@ int mp_abs(const mp_int *a, mp_int *b)
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

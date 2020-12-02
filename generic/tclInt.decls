@@ -215,10 +215,11 @@ declare 46 {
 #    Tcl_Obj *TclIncrVar2(Tcl_Interp *interp, Tcl_Obj *part1Ptr,
 #	    Tcl_Obj *part2Ptr, long incrAmount, int part1NotParsed)
 #}
-declare 50 {
-    void TclInitCompiledLocals(Tcl_Interp *interp, CallFrame *framePtr,
-	    Namespace *nsPtr)
-}
+# Removed in 9.0:
+#declare 50 {
+#    void TclInitCompiledLocals(Tcl_Interp *interp, CallFrame *framePtr,
+#	    Namespace *nsPtr)
+#}
 declare 51 {
     int TclInterpInit(Tcl_Interp *interp)
 }
@@ -1082,6 +1083,14 @@ declare 257 {
 declare 258 {
     Tcl_Obj *TclpCreateTemporaryDirectory(Tcl_Obj *dirObj,
 	    Tcl_Obj *basenameObj)
+}
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+# TIP 542
+declare 259 {
+    void TclAppendUnicodeToObj(Tcl_Obj *objPtr,
+	    const Tcl_UniChar *unicode, size_t length)
 }
 >>>>>>> upstream/master
 

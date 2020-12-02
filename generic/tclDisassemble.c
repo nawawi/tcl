@@ -42,6 +42,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static Tcl_Obj *	DisassembleByteCodeAsDicts(Tcl_Obj *objPtr);
 static int		FormatInstruction(ByteCode *codePtr,
 			    const unsigned char *pc, Tcl_Obj *bufferObj);
@@ -58,6 +59,10 @@ static Tcl_Obj *	DisassembleByteCodeAsDicts(Tcl_Interp *interp,
 			    Tcl_Obj *objPtr);
 static Tcl_Obj *	DisassembleByteCodeObj(Tcl_Interp *interp,
 			    Tcl_Obj *objPtr);
+=======
+static Tcl_Obj *	DisassembleByteCodeAsDicts(Tcl_Obj *objPtr);
+static Tcl_Obj *	DisassembleByteCodeObj(Tcl_Obj *objPtr);
+>>>>>>> upstream/master
 static int		FormatInstruction(ByteCode *codePtr,
 			    const unsigned char *pc, Tcl_Obj *bufferObj);
 <<<<<<< HEAD
@@ -255,6 +260,7 @@ TclPrintByteCodeObj(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_Interp *interp,		/* Used only for Tcl_GetStringFromObj. */
     Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
 {
@@ -284,6 +290,12 @@ TclPrintByteCodeObj(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    TCL_UNUSED(Tcl_Interp *),	/* Stuck with this in internal stubs */
+    Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
+{
+    Tcl_Obj *bufPtr = DisassembleByteCodeObj(objPtr);
 >>>>>>> upstream/master
 
     fprintf(stdout, "\n%s", TclGetString(bufPtr));
@@ -473,7 +485,10 @@ DisassembleByteCodeObj(
 =======
 static Tcl_Obj *
 DisassembleByteCodeObj(
+<<<<<<< HEAD
     Tcl_Interp *interp,
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_Obj *objPtr)		/* The bytecode object to disassemble. */
 {
@@ -1387,7 +1402,7 @@ PrintSourceToObj(
 	    i += 2;
 	    continue;
 	default:
-#if TCL_UTF_MAX > 4
+#if TCL_UTF_MAX > 3
 	    if (ch > 0xffff) {
 		Tcl_AppendPrintfToObj(appendObj, "\\U%08x", ch);
 		i += 10;
@@ -1484,6 +1499,7 @@ DisassembleByteCodeAsDicts(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     Tcl_Interp *interp,		/* Used for looking up the CmdFrame for the
 				 * procedure, if one exists. */
@@ -1503,6 +1519,8 @@ DisassembleByteCodeAsDicts(
 =======
     Tcl_Interp *interp,		/* Used for looking up the CmdFrame for the
 				 * procedure, if one exists. */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     Tcl_Obj *objPtr)		/* The bytecode-holding value to take apart */
 {
@@ -2297,7 +2315,7 @@ Tcl_DisassembleObjCmd(
 		    TclGetString(objv[3]), NULL);
 	    return TCL_ERROR;
 	}
-	procPtr = TclOOGetProcFromMethod(Tcl_GetHashValue(hPtr));
+	procPtr = TclOOGetProcFromMethod((Method *)Tcl_GetHashValue(hPtr));
 	if (procPtr == NULL) {
 	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
 		    "body not available for this kind of method", -1));
@@ -2370,9 +2388,10 @@ Tcl_DisassembleObjCmd(
     if (clientData) {
 >>>>>>> upstream/master
 	Tcl_SetObjResult(interp,
-		DisassembleByteCodeAsDicts(interp, codeObjPtr));
+		DisassembleByteCodeAsDicts(codeObjPtr));
     } else {
 	Tcl_SetObjResult(interp,
+<<<<<<< HEAD
 		DisassembleByteCodeObj(interp, codeObjPtr));
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2386,6 +2405,9 @@ Tcl_DisassembleObjCmd(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+		DisassembleByteCodeObj(codeObjPtr));
 >>>>>>> upstream/master
     }
     return TCL_OK;

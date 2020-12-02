@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_DR_REDUCE_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,6 +17,10 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* reduce "x" in place modulo "n" using the Diminished Radix algorithm.
  *
@@ -31,9 +36,10 @@
  *
  * Input x must be in the range 0 <= x <= (n-1)**2
  */
-int mp_dr_reduce(mp_int *x, const mp_int *n, mp_digit k)
+mp_err mp_dr_reduce(mp_int *x, const mp_int *n, mp_digit k)
 {
-   int      err, i, m;
+   mp_err      err;
+   int i, m;
    mp_word  r;
    mp_digit mu, *tmpx1, *tmpx2;
 
@@ -65,16 +71,14 @@ top:
    for (i = 0; i < m; i++) {
       r         = ((mp_word)*tmpx2++ * (mp_word)k) + *tmpx1 + mu;
       *tmpx1++  = (mp_digit)(r & MP_MASK);
-      mu        = (mp_digit)(r >> ((mp_word)DIGIT_BIT));
+      mu        = (mp_digit)(r >> ((mp_word)MP_DIGIT_BIT));
    }
 
    /* set final carry */
    *tmpx1++ = mu;
 
    /* zero words above m */
-   for (i = m + 1; i < x->used; i++) {
-      *tmpx1++ = 0;
-   }
+   MP_ZERO_DIGITS(tmpx1, (x->used - m) - 1);
 
    /* clamp, sub and return */
    mp_clamp(x);
@@ -91,7 +95,3 @@ top:
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

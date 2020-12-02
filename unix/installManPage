@@ -119,6 +119,7 @@ case $ManPage in
 	exit 2 ;;
 esac
 
+Name=`basename $ManPage .$Section`
 SrcDir=`dirname $ManPage`
 <<<<<<< HEAD
 
@@ -126,11 +127,21 @@ SrcDir=`dirname $ManPage`
 ### Process Page to Create Target Pages
 ###
 
+<<<<<<< HEAD
 =======
 
 ########################################################################
 ### Process Page to Create Target Pages
 ###
+
+>>>>>>> upstream/master
+=======
+Specials="DString Thread Notifier RegExp library packagens pkgMkIndex safesock"
+for n in $Specials; do
+    if [ "$Name" = "$n" ] ; then
+	Names="$n $Names"
+    fi
+done
 
 >>>>>>> upstream/master
 First=""

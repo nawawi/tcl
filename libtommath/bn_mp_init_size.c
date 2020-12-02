@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_INIT_SIZE_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,20 +17,25 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* init an mp_init for a given size */
-int mp_init_size(mp_int *a, int size)
+mp_err mp_init_size(mp_int *a, int size)
 {
-   int x;
-
-   /* pad size so there are always extra digits */
-   size += (MP_PREC * 2) - (size % MP_PREC);
+   size = MP_MAX(MP_MIN_PREC, size);
 
    /* alloc mem */
+<<<<<<< HEAD
 <<<<<<< HEAD
    a->dp = OPT_CAST(mp_digit) XMALLOC(sizeof(mp_digit) * (size_t)size);
 =======
    a->dp = (mp_digit *) XMALLOC((size_t)size * sizeof(mp_digit));
+>>>>>>> upstream/master
+=======
+   a->dp = (mp_digit *) MP_CALLOC((size_t)size, sizeof(mp_digit));
 >>>>>>> upstream/master
    if (a->dp == NULL) {
       return MP_MEM;
@@ -40,15 +46,6 @@ int mp_init_size(mp_int *a, int size)
    a->alloc = size;
    a->sign  = MP_ZPOS;
 
-   /* zero the digits */
-   for (x = 0; x < size; x++) {
-      a->dp[x] = 0;
-   }
-
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

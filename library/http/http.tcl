@@ -16,6 +16,7 @@ package require Tcl 8.6-
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package provide http 2.8.10
 =======
 package provide http 2.8.11
@@ -31,6 +32,9 @@ package provide http 2.9.0
 >>>>>>> upstream/master
 =======
 package provide http 2.9.0
+>>>>>>> upstream/master
+=======
+package provide http 2.9.1
 >>>>>>> upstream/master
 
 namespace eval http {
@@ -4457,7 +4461,7 @@ proc http::IsBinaryContentType {type} {
     # and so on.
     if {$major eq "application"} {
 	set minor [string trimright $minor]
-	if {$minor in {"xml" "xml-external-parsed-entity" "xml-dtd"}} {
+	if {$minor in {"json" "xml" "xml-external-parsed-entity" "xml-dtd"}} {
 	    return false
 	}
     }

@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_GROW_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,18 +17,19 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* grow as required */
-int mp_grow(mp_int *a, int size)
+mp_err mp_grow(mp_int *a, int size)
 {
    int     i;
    mp_digit *tmp;
 
    /* if the alloc size is smaller alloc more ram */
    if (a->alloc < size) {
-      /* ensure there are always at least MP_PREC digits extra on top */
-      size += (MP_PREC * 2) - (size % MP_PREC);
-
       /* reallocate the array a->dp
        *
        * We store the return in a temporary variable
@@ -35,11 +37,17 @@ int mp_grow(mp_int *a, int size)
        * to overwrite the dp member of a.
        */
 <<<<<<< HEAD
+<<<<<<< HEAD
       tmp = OPT_CAST(mp_digit) XREALLOC(a->dp, sizeof(mp_digit) * (size_t)size);
 =======
       tmp = (mp_digit *) XREALLOC(a->dp,
                                   (size_t)a->alloc * sizeof (mp_digit),
                                   (size_t)size * sizeof(mp_digit));
+>>>>>>> upstream/master
+=======
+      tmp = (mp_digit *) MP_REALLOC(a->dp,
+                                    (size_t)a->alloc * sizeof(mp_digit),
+                                    (size_t)size * sizeof(mp_digit));
 >>>>>>> upstream/master
       if (tmp == NULL) {
          /* reallocation failed but "a" is still valid [can be freed] */
@@ -52,14 +60,8 @@ int mp_grow(mp_int *a, int size)
       /* zero excess digits */
       i        = a->alloc;
       a->alloc = size;
-      for (; i < a->alloc; i++) {
-         a->dp[i] = 0;
-      }
+      MP_ZERO_DIGITS(a->dp + i, a->alloc - i);
    }
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

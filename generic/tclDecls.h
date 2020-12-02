@@ -136,7 +136,8 @@ EXTERN Tcl_Obj *	Tcl_DbNewStringObj(const char *bytes, size_t length,
 				const char *file, int line);
 /* 29 */
 EXTERN Tcl_Obj *	Tcl_DuplicateObj(Tcl_Obj *objPtr);
-/* Slot 30 is reserved */
+/* 30 */
+EXTERN void		TclFreeObj(Tcl_Obj *objPtr);
 /* 31 */
 EXTERN int		Tcl_GetBoolean(Tcl_Interp *interp, const char *src,
 				int *boolPtr);
@@ -259,8 +260,7 @@ EXTERN void		Tcl_CallWhenDeleted(Tcl_Interp *interp,
 /* 80 */
 EXTERN void		Tcl_CancelIdleCall(Tcl_IdleProc *idleProc,
 				void *clientData);
-/* 81 */
-EXTERN int		Tcl_Close(Tcl_Interp *interp, Tcl_Channel chan);
+/* Slot 81 is reserved */
 /* 82 */
 EXTERN int		Tcl_CommandComplete(const char *cmd);
 /* 83 */
@@ -438,8 +438,7 @@ EXTERN Tcl_HashEntry *	Tcl_FirstHashEntry(Tcl_HashTable *tablePtr,
 				Tcl_HashSearch *searchPtr);
 /* 146 */
 EXTERN int		Tcl_Flush(Tcl_Channel chan);
-/* 147 */
-EXTERN void		Tcl_FreeResult(Tcl_Interp *interp);
+/* Slot 147 is reserved */
 /* 148 */
 EXTERN int		Tcl_GetAlias(Tcl_Interp *interp,
 				const char *slaveCmd,
@@ -968,11 +967,8 @@ EXTERN int		Tcl_UniCharIsSpace(int ch);
 EXTERN int		Tcl_UniCharIsUpper(int ch);
 /* 351 */
 EXTERN int		Tcl_UniCharIsWordChar(int ch);
-/* 352 */
-EXTERN size_t		Tcl_UniCharLen(const Tcl_UniChar *uniStr);
-/* 353 */
-EXTERN int		Tcl_UniCharNcmp(const Tcl_UniChar *ucs,
-				const Tcl_UniChar *uct, size_t numChars);
+/* Slot 352 is reserved */
+/* Slot 353 is reserved */
 /* 354 */
 <<<<<<< HEAD
 EXTERN char *		Tcl_UniCharToUtfDString(const Tcl_UniChar *uniStr,
@@ -1062,9 +1058,7 @@ EXTERN int		Tcl_GetUniChar(Tcl_Obj *objPtr, size_t index);
 /* 383 */
 EXTERN Tcl_Obj *	Tcl_GetRange(Tcl_Obj *objPtr, size_t first,
 				size_t last);
-/* 384 */
-EXTERN void		Tcl_AppendUnicodeToObj(Tcl_Obj *objPtr,
-				const Tcl_UniChar *unicode, size_t length);
+/* Slot 384 is reserved */
 /* 385 */
 EXTERN int		Tcl_RegExpMatchObj(Tcl_Interp *interp,
 				Tcl_Obj *textObj, Tcl_Obj *patternObj);
@@ -1106,9 +1100,7 @@ EXTERN Tcl_ChannelTypeVersion Tcl_ChannelVersion(
 /* 400 */
 EXTERN Tcl_DriverBlockModeProc * Tcl_ChannelBlockModeProc(
 				const Tcl_ChannelType *chanTypePtr);
-/* 401 */
-EXTERN Tcl_DriverCloseProc * Tcl_ChannelCloseProc(
-				const Tcl_ChannelType *chanTypePtr);
+/* Slot 401 is reserved */
 /* 402 */
 EXTERN Tcl_DriverClose2Proc * Tcl_ChannelClose2Proc(
 				const Tcl_ChannelType *chanTypePtr);
@@ -1118,9 +1110,7 @@ EXTERN Tcl_DriverInputProc * Tcl_ChannelInputProc(
 /* 404 */
 EXTERN Tcl_DriverOutputProc * Tcl_ChannelOutputProc(
 				const Tcl_ChannelType *chanTypePtr);
-/* 405 */
-EXTERN Tcl_DriverSeekProc * Tcl_ChannelSeekProc(
-				const Tcl_ChannelType *chanTypePtr);
+/* Slot 405 is reserved */
 /* 406 */
 EXTERN Tcl_DriverSetOptionProc * Tcl_ChannelSetOptionProc(
 				const Tcl_ChannelType *chanTypePtr);
@@ -1154,12 +1144,8 @@ EXTERN void		Tcl_SpliceChannel(Tcl_Channel channel);
 EXTERN void		Tcl_ClearChannelHandlers(Tcl_Channel channel);
 /* 418 */
 EXTERN int		Tcl_IsChannelExisting(const char *channelName);
-/* 419 */
-EXTERN int		Tcl_UniCharNcasecmp(const Tcl_UniChar *ucs,
-				const Tcl_UniChar *uct, size_t numChars);
-/* 420 */
-EXTERN int		Tcl_UniCharCaseMatch(const Tcl_UniChar *uniStr,
-				const Tcl_UniChar *uniPattern, int nocase);
+/* Slot 419 is reserved */
+/* Slot 420 is reserved */
 /* Slot 421 is reserved */
 /* Slot 422 is reserved */
 /* 423 */
@@ -1533,18 +1519,18 @@ EXTERN void		Tcl_QueryTimeProc(Tcl_GetTimeProc **getProc,
 EXTERN Tcl_DriverThreadActionProc * Tcl_ChannelThreadActionProc(
 				const Tcl_ChannelType *chanTypePtr);
 /* 555 */
-EXTERN Tcl_Obj *	Tcl_NewBignumObj(mp_int *value);
+EXTERN Tcl_Obj *	Tcl_NewBignumObj(void *value);
 /* 556 */
-EXTERN Tcl_Obj *	Tcl_DbNewBignumObj(mp_int *value, const char *file,
+EXTERN Tcl_Obj *	Tcl_DbNewBignumObj(void *value, const char *file,
 				int line);
 /* 557 */
-EXTERN void		Tcl_SetBignumObj(Tcl_Obj *obj, mp_int *value);
+EXTERN void		Tcl_SetBignumObj(Tcl_Obj *obj, void *value);
 /* 558 */
 EXTERN int		Tcl_GetBignumFromObj(Tcl_Interp *interp,
-				Tcl_Obj *obj, mp_int *value);
+				Tcl_Obj *obj, void *value);
 /* 559 */
 EXTERN int		Tcl_TakeBignumFromObj(Tcl_Interp *interp,
-				Tcl_Obj *obj, mp_int *value);
+				Tcl_Obj *obj, void *value);
 /* 560 */
 EXTERN int		Tcl_TruncateChannel(Tcl_Channel chan,
 				Tcl_WideInt length);
@@ -1563,7 +1549,7 @@ EXTERN void		Tcl_SetChannelError(Tcl_Channel chan, Tcl_Obj *msg);
 EXTERN void		Tcl_GetChannelError(Tcl_Channel chan, Tcl_Obj **msg);
 /* 566 */
 EXTERN int		Tcl_InitBignumFromDouble(Tcl_Interp *interp,
-				double initval, mp_int *toInit);
+				double initval, void *toInit);
 /* 567 */
 EXTERN Tcl_Obj *	Tcl_GetNamespaceUnknownHandler(Tcl_Interp *interp,
 				Tcl_Namespace *nsPtr);
@@ -1678,7 +1664,7 @@ EXTERN int		Tcl_GetErrorLine(Tcl_Interp *interp);
 EXTERN void		Tcl_SetErrorLine(Tcl_Interp *interp, int lineNum);
 /* 607 */
 EXTERN void		Tcl_TransferResult(Tcl_Interp *sourceInterp,
-				int result, Tcl_Interp *targetInterp);
+				int code, Tcl_Interp *targetInterp);
 /* 608 */
 EXTERN int		Tcl_InterpActive(Tcl_Interp *interp);
 /* 609 */
@@ -1894,7 +1880,7 @@ typedef struct TclStubs {
     Tcl_Obj * (*tcl_DbNewObj) (const char *file, int line); /* 27 */
     Tcl_Obj * (*tcl_DbNewStringObj) (const char *bytes, size_t length, const char *file, int line); /* 28 */
     Tcl_Obj * (*tcl_DuplicateObj) (Tcl_Obj *objPtr); /* 29 */
-    void (*reserved30)(void);
+    void (*tclFreeObj) (Tcl_Obj *objPtr); /* 30 */
     int (*tcl_GetBoolean) (Tcl_Interp *interp, const char *src, int *boolPtr); /* 31 */
     int (*tcl_GetBooleanFromObj) (Tcl_Interp *interp, Tcl_Obj *objPtr, int *boolPtr); /* 32 */
     unsigned char * (*tcl_GetByteArrayFromObj) (Tcl_Obj *objPtr, int *lengthPtr); /* 33 */
@@ -1949,7 +1935,7 @@ typedef struct TclStubs {
     int (*tcl_BadChannelOption) (Tcl_Interp *interp, const char *optionName, const char *optionList); /* 78 */
     void (*tcl_CallWhenDeleted) (Tcl_Interp *interp, Tcl_InterpDeleteProc *proc, void *clientData); /* 79 */
     void (*tcl_CancelIdleCall) (Tcl_IdleProc *idleProc, void *clientData); /* 80 */
-    int (*tcl_Close) (Tcl_Interp *interp, Tcl_Channel chan); /* 81 */
+    void (*reserved81)(void);
     int (*tcl_CommandComplete) (const char *cmd); /* 82 */
     char * (*tcl_Concat) (int argc, const char *const *argv); /* 83 */
     size_t (*tcl_ConvertElement) (const char *src, char *dst, int flags); /* 84 */
@@ -2023,7 +2009,7 @@ typedef struct TclStubs {
     void (*reserved144)(void);
     Tcl_HashEntry * (*tcl_FirstHashEntry) (Tcl_HashTable *tablePtr, Tcl_HashSearch *searchPtr); /* 145 */
     int (*tcl_Flush) (Tcl_Channel chan); /* 146 */
-    void (*tcl_FreeResult) (Tcl_Interp *interp); /* 147 */
+    void (*reserved147)(void);
     int (*tcl_GetAlias) (Tcl_Interp *interp, const char *slaveCmd, Tcl_Interp **targetInterpPtr, const char **targetCmdPtr, int *argcPtr, const char ***argvPtr); /* 148 */
     int (*tcl_GetAliasObj) (Tcl_Interp *interp, const char *slaveCmd, Tcl_Interp **targetInterpPtr, const char **targetCmdPtr, int *objcPtr, Tcl_Obj ***objv); /* 149 */
     void * (*tcl_GetAssocData) (Tcl_Interp *interp, const char *name, Tcl_InterpDeleteProc **procPtr); /* 150 */
@@ -2276,12 +2262,17 @@ typedef struct TclStubs {
     int (*tcl_UniCharIsSpace) (int ch); /* 349 */
     int (*tcl_UniCharIsUpper) (int ch); /* 350 */
     int (*tcl_UniCharIsWordChar) (int ch); /* 351 */
+<<<<<<< HEAD
     size_t (*tcl_UniCharLen) (const Tcl_UniChar *uniStr); /* 352 */
     int (*tcl_UniCharNcmp) (const Tcl_UniChar *ucs, const Tcl_UniChar *uct, size_t numChars); /* 353 */
 <<<<<<< HEAD
     char * (*tcl_UniCharToUtfDString) (const Tcl_UniChar *uniStr, size_t uniLength, Tcl_DString *dsPtr); /* 354 */
     Tcl_UniChar * (*tcl_UtfToUniCharDString) (const char *src, size_t length, Tcl_DString *dsPtr); /* 355 */
 =======
+=======
+    void (*reserved352)(void);
+    void (*reserved353)(void);
+>>>>>>> upstream/master
     char * (*tcl_Char16ToUtfDString) (const unsigned short *uniStr, size_t uniLength, Tcl_DString *dsPtr); /* 354 */
     unsigned short * (*tcl_UtfToChar16DString) (const char *src, size_t length, Tcl_DString *dsPtr); /* 355 */
 >>>>>>> upstream/master
@@ -2313,7 +2304,7 @@ typedef struct TclStubs {
     int (*tcl_GetUniChar) (Tcl_Obj *objPtr, size_t index); /* 381 */
     void (*reserved382)(void);
     Tcl_Obj * (*tcl_GetRange) (Tcl_Obj *objPtr, size_t first, size_t last); /* 383 */
-    void (*tcl_AppendUnicodeToObj) (Tcl_Obj *objPtr, const Tcl_UniChar *unicode, size_t length); /* 384 */
+    void (*reserved384)(void);
     int (*tcl_RegExpMatchObj) (Tcl_Interp *interp, Tcl_Obj *textObj, Tcl_Obj *patternObj); /* 385 */
     void (*tcl_SetNotifier) (Tcl_NotifierProcs *notifierProcPtr); /* 386 */
     Tcl_Mutex * (*tcl_GetAllocMutex) (void); /* 387 */
@@ -2330,11 +2321,11 @@ typedef struct TclStubs {
     const char * (*tcl_ChannelName) (const Tcl_ChannelType *chanTypePtr); /* 398 */
     Tcl_ChannelTypeVersion (*tcl_ChannelVersion) (const Tcl_ChannelType *chanTypePtr); /* 399 */
     Tcl_DriverBlockModeProc * (*tcl_ChannelBlockModeProc) (const Tcl_ChannelType *chanTypePtr); /* 400 */
-    Tcl_DriverCloseProc * (*tcl_ChannelCloseProc) (const Tcl_ChannelType *chanTypePtr); /* 401 */
+    void (*reserved401)(void);
     Tcl_DriverClose2Proc * (*tcl_ChannelClose2Proc) (const Tcl_ChannelType *chanTypePtr); /* 402 */
     Tcl_DriverInputProc * (*tcl_ChannelInputProc) (const Tcl_ChannelType *chanTypePtr); /* 403 */
     Tcl_DriverOutputProc * (*tcl_ChannelOutputProc) (const Tcl_ChannelType *chanTypePtr); /* 404 */
-    Tcl_DriverSeekProc * (*tcl_ChannelSeekProc) (const Tcl_ChannelType *chanTypePtr); /* 405 */
+    void (*reserved405)(void);
     Tcl_DriverSetOptionProc * (*tcl_ChannelSetOptionProc) (const Tcl_ChannelType *chanTypePtr); /* 406 */
     Tcl_DriverGetOptionProc * (*tcl_ChannelGetOptionProc) (const Tcl_ChannelType *chanTypePtr); /* 407 */
     Tcl_DriverWatchProc * (*tcl_ChannelWatchProc) (const Tcl_ChannelType *chanTypePtr); /* 408 */
@@ -2348,8 +2339,8 @@ typedef struct TclStubs {
     void (*tcl_SpliceChannel) (Tcl_Channel channel); /* 416 */
     void (*tcl_ClearChannelHandlers) (Tcl_Channel channel); /* 417 */
     int (*tcl_IsChannelExisting) (const char *channelName); /* 418 */
-    int (*tcl_UniCharNcasecmp) (const Tcl_UniChar *ucs, const Tcl_UniChar *uct, size_t numChars); /* 419 */
-    int (*tcl_UniCharCaseMatch) (const Tcl_UniChar *uniStr, const Tcl_UniChar *uniPattern, int nocase); /* 420 */
+    void (*reserved419)(void);
+    void (*reserved420)(void);
     void (*reserved421)(void);
     void (*reserved422)(void);
     void (*tcl_InitCustomHashTable) (Tcl_HashTable *tablePtr, int keyType, const Tcl_HashKeyType *typePtr); /* 423 */
@@ -2499,18 +2490,18 @@ typedef struct TclStubs {
     void (*tcl_SetTimeProc) (Tcl_GetTimeProc *getProc, Tcl_ScaleTimeProc *scaleProc, void *clientData); /* 552 */
     void (*tcl_QueryTimeProc) (Tcl_GetTimeProc **getProc, Tcl_ScaleTimeProc **scaleProc, void **clientData); /* 553 */
     Tcl_DriverThreadActionProc * (*tcl_ChannelThreadActionProc) (const Tcl_ChannelType *chanTypePtr); /* 554 */
-    Tcl_Obj * (*tcl_NewBignumObj) (mp_int *value); /* 555 */
-    Tcl_Obj * (*tcl_DbNewBignumObj) (mp_int *value, const char *file, int line); /* 556 */
-    void (*tcl_SetBignumObj) (Tcl_Obj *obj, mp_int *value); /* 557 */
-    int (*tcl_GetBignumFromObj) (Tcl_Interp *interp, Tcl_Obj *obj, mp_int *value); /* 558 */
-    int (*tcl_TakeBignumFromObj) (Tcl_Interp *interp, Tcl_Obj *obj, mp_int *value); /* 559 */
+    Tcl_Obj * (*tcl_NewBignumObj) (void *value); /* 555 */
+    Tcl_Obj * (*tcl_DbNewBignumObj) (void *value, const char *file, int line); /* 556 */
+    void (*tcl_SetBignumObj) (Tcl_Obj *obj, void *value); /* 557 */
+    int (*tcl_GetBignumFromObj) (Tcl_Interp *interp, Tcl_Obj *obj, void *value); /* 558 */
+    int (*tcl_TakeBignumFromObj) (Tcl_Interp *interp, Tcl_Obj *obj, void *value); /* 559 */
     int (*tcl_TruncateChannel) (Tcl_Channel chan, Tcl_WideInt length); /* 560 */
     Tcl_DriverTruncateProc * (*tcl_ChannelTruncateProc) (const Tcl_ChannelType *chanTypePtr); /* 561 */
     void (*tcl_SetChannelErrorInterp) (Tcl_Interp *interp, Tcl_Obj *msg); /* 562 */
     void (*tcl_GetChannelErrorInterp) (Tcl_Interp *interp, Tcl_Obj **msg); /* 563 */
     void (*tcl_SetChannelError) (Tcl_Channel chan, Tcl_Obj *msg); /* 564 */
     void (*tcl_GetChannelError) (Tcl_Channel chan, Tcl_Obj **msg); /* 565 */
-    int (*tcl_InitBignumFromDouble) (Tcl_Interp *interp, double initval, mp_int *toInit); /* 566 */
+    int (*tcl_InitBignumFromDouble) (Tcl_Interp *interp, double initval, void *toInit); /* 566 */
     Tcl_Obj * (*tcl_GetNamespaceUnknownHandler) (Tcl_Interp *interp, Tcl_Namespace *nsPtr); /* 567 */
     int (*tcl_SetNamespaceUnknownHandler) (Tcl_Interp *interp, Tcl_Namespace *nsPtr, Tcl_Obj *handlerPtr); /* 568 */
     int (*tcl_GetEncodingFromObj) (Tcl_Interp *interp, Tcl_Obj *objPtr, Tcl_Encoding *encodingPtr); /* 569 */
@@ -2551,7 +2542,7 @@ typedef struct TclStubs {
     int (*tcl_ParseArgsObjv) (Tcl_Interp *interp, const Tcl_ArgvInfo *argTable, int *objcPtr, Tcl_Obj *const *objv, Tcl_Obj ***remObjv); /* 604 */
     int (*tcl_GetErrorLine) (Tcl_Interp *interp); /* 605 */
     void (*tcl_SetErrorLine) (Tcl_Interp *interp, int lineNum); /* 606 */
-    void (*tcl_TransferResult) (Tcl_Interp *sourceInterp, int result, Tcl_Interp *targetInterp); /* 607 */
+    void (*tcl_TransferResult) (Tcl_Interp *sourceInterp, int code, Tcl_Interp *targetInterp); /* 607 */
     int (*tcl_InterpActive) (Tcl_Interp *interp); /* 608 */
     void (*tcl_BackgroundException) (Tcl_Interp *interp, int code); /* 609 */
     int (*tcl_ZlibDeflate) (Tcl_Interp *interp, int format, Tcl_Obj *data, int level, Tcl_Obj *gzipHeaderDictObj); /* 610 */
@@ -2694,7 +2685,8 @@ extern const TclStubs *tclStubsPtr;
 	(tclStubsPtr->tcl_DbNewStringObj) /* 28 */
 #define Tcl_DuplicateObj \
 	(tclStubsPtr->tcl_DuplicateObj) /* 29 */
-/* Slot 30 is reserved */
+#define TclFreeObj \
+	(tclStubsPtr->tclFreeObj) /* 30 */
 #define Tcl_GetBoolean \
 	(tclStubsPtr->tcl_GetBoolean) /* 31 */
 #define Tcl_GetBooleanFromObj \
@@ -2789,8 +2781,7 @@ extern const TclStubs *tclStubsPtr;
 	(tclStubsPtr->tcl_CallWhenDeleted) /* 79 */
 #define Tcl_CancelIdleCall \
 	(tclStubsPtr->tcl_CancelIdleCall) /* 80 */
-#define Tcl_Close \
-	(tclStubsPtr->tcl_Close) /* 81 */
+/* Slot 81 is reserved */
 #define Tcl_CommandComplete \
 	(tclStubsPtr->tcl_CommandComplete) /* 82 */
 #define Tcl_Concat \
@@ -2917,8 +2908,7 @@ extern const TclStubs *tclStubsPtr;
 	(tclStubsPtr->tcl_FirstHashEntry) /* 145 */
 #define Tcl_Flush \
 	(tclStubsPtr->tcl_Flush) /* 146 */
-#define Tcl_FreeResult \
-	(tclStubsPtr->tcl_FreeResult) /* 147 */
+/* Slot 147 is reserved */
 #define Tcl_GetAlias \
 	(tclStubsPtr->tcl_GetAlias) /* 148 */
 #define Tcl_GetAliasObj \
@@ -3312,10 +3302,8 @@ extern const TclStubs *tclStubsPtr;
 	(tclStubsPtr->tcl_UniCharIsUpper) /* 350 */
 #define Tcl_UniCharIsWordChar \
 	(tclStubsPtr->tcl_UniCharIsWordChar) /* 351 */
-#define Tcl_UniCharLen \
-	(tclStubsPtr->tcl_UniCharLen) /* 352 */
-#define Tcl_UniCharNcmp \
-	(tclStubsPtr->tcl_UniCharNcmp) /* 353 */
+/* Slot 352 is reserved */
+/* Slot 353 is reserved */
 #define Tcl_Char16ToUtfDString \
 	(tclStubsPtr->tcl_Char16ToUtfDString) /* 354 */
 #define Tcl_UtfToChar16DString \
@@ -3374,8 +3362,7 @@ extern const TclStubs *tclStubsPtr;
 /* Slot 382 is reserved */
 #define Tcl_GetRange \
 	(tclStubsPtr->tcl_GetRange) /* 383 */
-#define Tcl_AppendUnicodeToObj \
-	(tclStubsPtr->tcl_AppendUnicodeToObj) /* 384 */
+/* Slot 384 is reserved */
 #define Tcl_RegExpMatchObj \
 	(tclStubsPtr->tcl_RegExpMatchObj) /* 385 */
 #define Tcl_SetNotifier \
@@ -3408,16 +3395,14 @@ extern const TclStubs *tclStubsPtr;
 	(tclStubsPtr->tcl_ChannelVersion) /* 399 */
 #define Tcl_ChannelBlockModeProc \
 	(tclStubsPtr->tcl_ChannelBlockModeProc) /* 400 */
-#define Tcl_ChannelCloseProc \
-	(tclStubsPtr->tcl_ChannelCloseProc) /* 401 */
+/* Slot 401 is reserved */
 #define Tcl_ChannelClose2Proc \
 	(tclStubsPtr->tcl_ChannelClose2Proc) /* 402 */
 #define Tcl_ChannelInputProc \
 	(tclStubsPtr->tcl_ChannelInputProc) /* 403 */
 #define Tcl_ChannelOutputProc \
 	(tclStubsPtr->tcl_ChannelOutputProc) /* 404 */
-#define Tcl_ChannelSeekProc \
-	(tclStubsPtr->tcl_ChannelSeekProc) /* 405 */
+/* Slot 405 is reserved */
 #define Tcl_ChannelSetOptionProc \
 	(tclStubsPtr->tcl_ChannelSetOptionProc) /* 406 */
 #define Tcl_ChannelGetOptionProc \
@@ -3444,10 +3429,8 @@ extern const TclStubs *tclStubsPtr;
 	(tclStubsPtr->tcl_ClearChannelHandlers) /* 417 */
 #define Tcl_IsChannelExisting \
 	(tclStubsPtr->tcl_IsChannelExisting) /* 418 */
-#define Tcl_UniCharNcasecmp \
-	(tclStubsPtr->tcl_UniCharNcasecmp) /* 419 */
-#define Tcl_UniCharCaseMatch \
-	(tclStubsPtr->tcl_UniCharCaseMatch) /* 420 */
+/* Slot 419 is reserved */
+/* Slot 420 is reserved */
 /* Slot 421 is reserved */
 /* Slot 422 is reserved */
 #define Tcl_InitCustomHashTable \
@@ -4070,14 +4053,14 @@ extern const TclStubs *tclStubsPtr;
 	Tcl_DecrRefCount(*(statePtr))
 #define Tcl_SetResult(interp, result, freeProc) \
 	do { \
-	    char *__result = result; \
+	    const char *__result = result; \
 	    Tcl_FreeProc *__freeProc = freeProc; \
 	    Tcl_SetObjResult(interp, Tcl_NewStringObj(__result, -1)); \
 	    if (__result != NULL && __freeProc != NULL && __freeProc != TCL_VOLATILE) { \
 		if (__freeProc == TCL_DYNAMIC) { \
-		    Tcl_Free(__result); \
+		    Tcl_Free((char *)__result); \
 		} else { \
-		    (*__freeProc)(__result); \
+		    (*__freeProc)((char *)__result); \
 		} \
 	    } \
 	} while(0)
@@ -4152,7 +4135,7 @@ extern const TclStubs *tclStubsPtr;
 #define Tcl_BackgroundError(interp)	Tcl_BackgroundException((interp), TCL_ERROR)
 #define Tcl_StringMatch(str, pattern) Tcl_StringCaseMatch((str), (pattern), 0)
 
-#if TCL_UTF_MAX <= 4
+#if TCL_UTF_MAX <= 3
 #   undef Tcl_UniCharToUtfDString
 #   define Tcl_UniCharToUtfDString Tcl_Char16ToUtfDString
 #   undef Tcl_UtfToUniCharDString
@@ -4256,7 +4239,12 @@ extern const TclStubs *tclStubsPtr;
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+#define Tcl_Close(interp, chan) Tcl_CloseEx(interp, chan, 0)
+
 >>>>>>> upstream/master
 #endif /* _TCLDECLS */

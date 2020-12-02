@@ -1,4 +1,5 @@
 #include "tommath_private.h"
+<<<<<<< HEAD:libtommath/bn_mp_karatsuba_mul.c
 #ifdef BN_MP_KARATSUBA_MUL_C
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
@@ -16,11 +17,16 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+#ifdef BN_S_MP_KARATSUBA_MUL_C
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master:libtommath/bn_s_mp_karatsuba_mul.c
 
 /* c = |a| * |b| using Karatsuba Multiplication using
  * three half size multiplications
  *
- * Let B represent the radix [e.g. 2**DIGIT_BIT] and
+ * Let B represent the radix [e.g. 2**MP_DIGIT_BIT] and
  * let n represent half of the number of digits in
  * the min(a,b)
  *
@@ -46,37 +52,42 @@
  * Generally though the overhead of this method doesn't pay off
  * until a certain size (N ~ 80) is reached.
  */
-int mp_karatsuba_mul(const mp_int *a, const mp_int *b, mp_int *c)
+mp_err s_mp_karatsuba_mul(const mp_int *a, const mp_int *b, mp_int *c)
 {
    mp_int  x0, x1, y0, y1, t1, x0y0, x1y1;
-   int     B, err;
-
-   /* default the return code to an error */
-   err = MP_MEM;
+   int     B;
+   mp_err  err = MP_MEM; /* default the return code to an error */
 
    /* min # of digits */
-   B = MIN(a->used, b->used);
+   B = MP_MIN(a->used, b->used);
 
    /* now divide in two */
    B = B >> 1;
 
    /* init copy all the temps */
-   if (mp_init_size(&x0, B) != MP_OKAY)
+   if (mp_init_size(&x0, B) != MP_OKAY) {
       goto LBL_ERR;
-   if (mp_init_size(&x1, a->used - B) != MP_OKAY)
+   }
+   if (mp_init_size(&x1, a->used - B) != MP_OKAY) {
       goto X0;
-   if (mp_init_size(&y0, B) != MP_OKAY)
+   }
+   if (mp_init_size(&y0, B) != MP_OKAY) {
       goto X1;
-   if (mp_init_size(&y1, b->used - B) != MP_OKAY)
+   }
+   if (mp_init_size(&y1, b->used - B) != MP_OKAY) {
       goto Y0;
+   }
 
    /* init temps */
-   if (mp_init_size(&t1, B * 2) != MP_OKAY)
+   if (mp_init_size(&t1, B * 2) != MP_OKAY) {
       goto Y1;
-   if (mp_init_size(&x0y0, B * 2) != MP_OKAY)
+   }
+   if (mp_init_size(&x0y0, B * 2) != MP_OKAY) {
       goto T1;
-   if (mp_init_size(&x1y1, B * 2) != MP_OKAY)
+   }
+   if (mp_init_size(&x1y1, B * 2) != MP_OKAY) {
       goto X0Y0;
+   }
 
    /* now shift the digits */
    x0.used = y0.used = B;
@@ -119,35 +130,46 @@ int mp_karatsuba_mul(const mp_int *a, const mp_int *b, mp_int *c)
 
    /* now calc the products x0y0 and x1y1 */
    /* after this x0 is no longer required, free temp [x0==t2]! */
-   if (mp_mul(&x0, &y0, &x0y0) != MP_OKAY)
+   if (mp_mul(&x0, &y0, &x0y0) != MP_OKAY) {
       goto X1Y1;          /* x0y0 = x0*y0 */
-   if (mp_mul(&x1, &y1, &x1y1) != MP_OKAY)
+   }
+   if (mp_mul(&x1, &y1, &x1y1) != MP_OKAY) {
       goto X1Y1;          /* x1y1 = x1*y1 */
+   }
 
    /* now calc x1+x0 and y1+y0 */
-   if (s_mp_add(&x1, &x0, &t1) != MP_OKAY)
+   if (s_mp_add(&x1, &x0, &t1) != MP_OKAY) {
       goto X1Y1;          /* t1 = x1 - x0 */
-   if (s_mp_add(&y1, &y0, &x0) != MP_OKAY)
+   }
+   if (s_mp_add(&y1, &y0, &x0) != MP_OKAY) {
       goto X1Y1;          /* t2 = y1 - y0 */
-   if (mp_mul(&t1, &x0, &t1) != MP_OKAY)
+   }
+   if (mp_mul(&t1, &x0, &t1) != MP_OKAY) {
       goto X1Y1;          /* t1 = (x1 + x0) * (y1 + y0) */
+   }
 
    /* add x0y0 */
-   if (mp_add(&x0y0, &x1y1, &x0) != MP_OKAY)
+   if (mp_add(&x0y0, &x1y1, &x0) != MP_OKAY) {
       goto X1Y1;          /* t2 = x0y0 + x1y1 */
-   if (s_mp_sub(&t1, &x0, &t1) != MP_OKAY)
+   }
+   if (s_mp_sub(&t1, &x0, &t1) != MP_OKAY) {
       goto X1Y1;          /* t1 = (x1+x0)*(y1+y0) - (x1y1 + x0y0) */
+   }
 
    /* shift by B */
-   if (mp_lshd(&t1, B) != MP_OKAY)
+   if (mp_lshd(&t1, B) != MP_OKAY) {
       goto X1Y1;          /* t1 = (x0y0 + x1y1 - (x1-x0)*(y1-y0))<<B */
-   if (mp_lshd(&x1y1, B * 2) != MP_OKAY)
+   }
+   if (mp_lshd(&x1y1, B * 2) != MP_OKAY) {
       goto X1Y1;          /* x1y1 = x1y1 << 2*B */
+   }
 
-   if (mp_add(&x0y0, &t1, &t1) != MP_OKAY)
+   if (mp_add(&x0y0, &t1, &t1) != MP_OKAY) {
       goto X1Y1;          /* t1 = x0y0 + t1 */
-   if (mp_add(&t1, &x1y1, c) != MP_OKAY)
+   }
+   if (mp_add(&t1, &x1y1, c) != MP_OKAY) {
       goto X1Y1;          /* t1 = x0y0 + t1 + x1y1 */
+   }
 
    /* Algorithm succeeded set the return code to MP_OKAY */
    err = MP_OKAY;
@@ -170,7 +192,3 @@ LBL_ERR:
    return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

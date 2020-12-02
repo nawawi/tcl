@@ -6,7 +6,7 @@
 # compiler switches, defining common targets and macros. The Tcl makefile
 # directly includes this. Extensions include it via "rules-ext.vc".
 #
-# See TIP 477 (https://core.tcl.tk/tips/doc/trunk/tip/477.md) for
+# See TIP 477 (https://core.tcl-lang.org/tips/doc/trunk/tip/477.md) for
 # detailed documentation.
 #
 # See the file "license.terms" for information on usage and redistribution
@@ -25,9 +25,13 @@ _RULES_VC = 1
 # the major version.
 RULES_VERSION_MAJOR = 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 RULES_VERSION_MINOR = 3
 =======
 RULES_VERSION_MINOR = 4
+>>>>>>> upstream/master
+=======
+RULES_VERSION_MINOR = 6
 >>>>>>> upstream/master
 
 # The PROJECT macro must be defined by parent makefile.
@@ -779,12 +783,15 @@ LINKERFLAGS     = $(LINKERFLAGS) -ltcg
 # CONFIG_CHECK - 1 -> check current build configuration against Tcl
 #           configuration (ignored for Tcl itself)
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Further, LINKERFLAGS are modified based on above.
 
 # Default values for all the above
 >>>>>>> upstream/master
 =======
 # TCL_UTF_MAX=6 - forces a build using 32-bit Tcl_UniChar in stead of 16-bit.
+=======
+>>>>>>> upstream/master
 # Further, LINKERFLAGS are modified based on above.
 
 # Default values for all the above
@@ -846,10 +853,20 @@ TCL_USE_STATIC_PACKAGES	= 0
 !endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 !if [nmakehlp -f $(OPTS) "utfmax"]
 !message *** Force 32-bit Tcl_UniChar
 TCL_UTF_MAX = 6
+=======
+!if [nmakehlp -f $(OPTS) "nothreads"]
+!message *** Compile explicitly for non-threaded tcl
+TCL_THREADS = 0
+USE_THREAD_ALLOC= 0
+!else
+TCL_THREADS    = 1
+USE_THREAD_ALLOC= 1
+>>>>>>> upstream/master
 !endif
 
 # Yes, it's weird that the "symbols" option controls DEBUG and
@@ -888,6 +905,12 @@ PGO		= 0
 
 !if [nmakehlp -f $(OPTS) "loimpact"]
 !message *** Warning: ignoring option "loimpact" - deprecated on modern Windows.
+!endif
+
+# TBD - should get rid of this option
+!if [nmakehlp -f $(OPTS) "thrdalloc"]
+!message *** Doing thrdalloc
+USE_THREAD_ALLOC = 1
 !endif
 
 !if [nmakehlp -f $(OPTS) "tclalloc"]
@@ -1072,6 +1095,19 @@ VERSION = $(TK_VERSION)
 VERSION         = $(DOTVERSION:.=)
 
 !endif # $(DOING_TCL) ... etc.
+
+# Windows RC files have 3 version components. Ensure this irrespective
+# of how many components the package has specified. Basically, ensure
+# minimum 4 components by appending 4 0's and then pick out the first 4.
+# Also take care of the fact that DOTVERSION may have "a" or "b" instead
+# of "." separating the version components.
+DOTSEPARATED=$(DOTVERSION:a=.)
+DOTSEPARATED=$(DOTSEPARATED:b=.)
+!if [echo RCCOMMAVERSION = \> versions.vc] \
+  || [for /f "tokens=1,2,3,4,5* delims=." %a in ("$(DOTSEPARATED).0.0.0.0") do echo %a,%b,%c,%d >> versions.vc]
+!error *** Could not generate RCCOMMAVERSION ***
+!endif
+!include versions.vc
 
 ################################################################
 # 10. Construct output directory and file paths
@@ -1388,8 +1424,8 @@ tklibs = "$(TKSTUBLIB)" "$(TKIMPLIB)"
 !endif # $(DOING_TK) || $(NEED_TK)
 
 # Various output paths
-PRJIMPLIB	= $(OUT_DIR)\$(PROJECT)$(VERSION)$(SUFX:t=).lib
-PRJLIBNAME	= $(PROJECT)$(VERSION)$(SUFX:t=).$(EXT)
+PRJIMPLIB	= $(OUT_DIR)\$(PROJECT)$(VERSION)$(SUFX).lib
+PRJLIBNAME	= $(PROJECT)$(VERSION)$(SUFX).$(EXT)
 PRJLIB		= $(OUT_DIR)\$(PRJLIBNAME)
 
 PRJSTUBLIBNAME	= $(STUBPREFIX)$(VERSION).lib
@@ -1493,6 +1529,14 @@ OPTDEFINES	= $(OPTDEFINES) -DSTATIC_BUILD
 OPTDEFINES	= $(OPTDEFINES) -DTCL_NO_DEPRECATED
 =======
 OPTDEFINES	= /DTCL_CFGVAL_ENCODING=$(CFG_ENCODING) /DSTDC_HEADERS
+!if $(VCVERSION) >= 1600
+OPTDEFINES	= $(OPTDEFINES) /DHAVE_STDINT_H=1
+!else
+OPTDEFINES	= $(OPTDEFINES) /DMP_NO_STDINT=1
+!endif
+!if $(VCVERSION) >= 1800
+OPTDEFINES	= $(OPTDEFINES) /DHAVE_INTTYPES_H=1 /DHAVE_STDBOOL_H=1
+!endif
 
 !if $(TCL_MEM_DEBUG)
 OPTDEFINES	= $(OPTDEFINES) /DTCL_MEM_DEBUG
@@ -1508,6 +1552,11 @@ OPTDEFINES	= $(OPTDEFINES) /DUSE_THREAD_ALLOC=1
 !endif
 !if $(STATIC_BUILD)
 OPTDEFINES	= $(OPTDEFINES) /DSTATIC_BUILD
+!elseif $(TCL_VERSION) > 86
+OPTDEFINES	= $(OPTDEFINES) /DTCL_WITH_EXTERNAL_TOMMATH
+!if "$(MACHINE)" == "AMD64"
+OPTDEFINES	= $(OPTDEFINES) /DMP_64BIT
+!endif
 !endif
 !if $(TCL_NO_DEPRECATED)
 OPTDEFINES	= $(OPTDEFINES) /DTCL_NO_DEPRECATED
@@ -1580,9 +1629,10 @@ OPTDEFINES	= $(OPTDEFINES) /DTCL_CFG_PROFILED
 OPTDEFINES	= $(OPTDEFINES) /DTCL_CFG_DO64BIT
 !endif
 !if $(VCVERSION) < 1300
-OPTDEFINES	= $(OPTDEFINES) /DNO_STRTOI64
+OPTDEFINES	= $(OPTDEFINES) /DNO_STRTOI64=1
 !endif
 
+<<<<<<< HEAD
 !if "$(TCL_UTF_MAX)" == "6"
 OPTDEFINES	= $(OPTDEFINES) /DTCL_UTF_MAX=6
 !endif
@@ -1591,6 +1641,8 @@ OPTDEFINES	= $(OPTDEFINES) /DTCL_UTF_MAX=6
 COMPILERFLAGS  = /D_ATL_XP_TARGETING
 >>>>>>> upstream/master
 
+=======
+>>>>>>> upstream/master
 # Like the TEA system only set this non empty for non-Tk extensions
 # Note: some extensions use PACKAGE_NAME and others use PACKAGE_TCLNAME
 # so we pass both
@@ -1743,6 +1795,18 @@ lflags	= -nologo -machine:$(MACHINE) $(LINKERFLAGS) $(ldebug)
 lflags	= $(lflags) -nodefaultlib:libucrt.lib
 !endif
 
+# Old linkers (Visual C++ 6 in particular) will link for fast loading
+# on Win98. Since we do not support Win98 any more, we specify nowin98
+# as recommended for NT and later. However, this is only required by
+# IX86 on older compilers and only needed if we are not doing a static build.
+
+!if "$(MACHINE)" == "IX86" && !$(STATIC_BUILD)
+!if [nmakehlp -l -opt:nowin98 $(LINKER_TESTFLAGS)]
+# Align sections for PE size savings.
+lflags	= $(lflags) -opt:nowin98
+!endif
+!endif
+
 dlllflags = $(lflags) -dll
 conlflags = $(lflags) -subsystem:console
 guilflags = $(lflags) -subsystem:windows
@@ -1793,10 +1857,10 @@ RESCMD  = $(rc32) -fo $@ -r -i "$(GENERICDIR)" -i "$(TMP_DIR)" \
 	    -DPRJLIBNAME=\"$(PRJLIBNAME)\"
 =======
 	    /DDEBUG=$(DEBUG) -d UNCHECKED=$(UNCHECKED) \
-	    /DCOMMAVERSION=$(DOTVERSION:.=,),0 \
+	    /DCOMMAVERSION=$(RCCOMMAVERSION) \
 	    /DDOTVERSION=\"$(DOTVERSION)\" \
 	    /DVERSION=\"$(VERSION)\" \
-	    /DSUFX=\"$(SUFX:t=)\" \
+	    /DSUFX=\"$(SUFX)\" \
 	    /DPROJECT=\"$(PROJECT)\" \
 	    /DPRJLIBNAME=\"$(PRJLIBNAME)\"
 >>>>>>> upstream/master

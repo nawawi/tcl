@@ -352,9 +352,13 @@ DupMethodNameRep(
 {
     StashCallChain(dstPtr,
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_FetchIntRep(srcPtr, &methodNameType)->twoPtrValue.ptr1);
 =======
 	    TclFetchIntRep(srcPtr, &methodNameType)->twoPtrValue.ptr1);
+>>>>>>> upstream/master
+=======
+	    (CallChain *)TclFetchIntRep(srcPtr, &methodNameType)->twoPtrValue.ptr1);
 >>>>>>> upstream/master
 }
 
@@ -364,9 +368,13 @@ FreeMethodNameRep(
 {
     TclOODeleteChain(
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    Tcl_FetchIntRep(objPtr, &methodNameType)->twoPtrValue.ptr1);
 =======
 	    TclFetchIntRep(objPtr, &methodNameType)->twoPtrValue.ptr1);
+>>>>>>> upstream/master
+=======
+	    (CallChain *)TclFetchIntRep(objPtr, &methodNameType)->twoPtrValue.ptr1);
 >>>>>>> upstream/master
 }
 
@@ -393,7 +401,7 @@ TclOOInvokeContext(
     int objc,			/* The number of arguments. */
     Tcl_Obj *const objv[])	/* The arguments as actually seen. */
 {
-    CallContext *const contextPtr = clientData;
+    CallContext *const contextPtr = (CallContext *)clientData;
     Method *const mPtr = contextPtr->callPtr->chain[contextPtr->index].mPtr;
     const int isFilter =
 	    contextPtr->callPtr->chain[contextPtr->index].isFilter;
@@ -455,10 +463,10 @@ TclOOInvokeContext(
 static int
 SetFilterFlags(
     ClientData data[],
-    Tcl_Interp *interp,
+    TCL_UNUSED(Tcl_Interp *),
     int result)
 {
-    CallContext *contextPtr = data[0];
+    CallContext *contextPtr = (CallContext *)data[0];
 
     contextPtr->oPtr->flags |= FILTER_HANDLING;
     return result;
@@ -467,10 +475,10 @@ SetFilterFlags(
 static int
 ResetFilterFlags(
     ClientData data[],
-    Tcl_Interp *interp,
+    TCL_UNUSED(Tcl_Interp *),
     int result)
 {
-    CallContext *contextPtr = data[0];
+    CallContext *contextPtr = (CallContext *)data[0];
 
     contextPtr->oPtr->flags &= ~FILTER_HANDLING;
     return result;
@@ -479,10 +487,10 @@ ResetFilterFlags(
 static int
 FinalizeMethodRefs(
     ClientData data[],
-    Tcl_Interp *interp,
+    TCL_UNUSED(Tcl_Interp *),
     int result)
 {
-    CallContext *contextPtr = data[0];
+    CallContext *contextPtr = (CallContext *)data[0];
     int i;
 
     for (i = 0 ; i < contextPtr->callPtr->numChain ; i++) {
@@ -706,12 +714,16 @@ SortMethodNames(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     strings = ckalloc(sizeof(char *) * namesPtr->numEntries);
 =======
     strings = Tcl_Alloc(sizeof(char *) * namesPtr->numEntries);
 >>>>>>> upstream/master
 =======
     strings = Tcl_Alloc(sizeof(char *) * namesPtr->numEntries);
+>>>>>>> upstream/master
+=======
+    strings = (const char **)Tcl_Alloc(sizeof(char *) * namesPtr->numEntries);
 >>>>>>> upstream/master
     FOREACH_HASH(namePtr, isWanted, namesPtr) {
 	if (!WANT_PUBLIC(flags) || (PTR2INT(isWanted) & IN_LIST)) {
@@ -991,7 +1003,7 @@ AddInstancePrivateToCallContext(
     if (oPtr->methodsPtr) {
 	hPtr = Tcl_FindHashEntry(oPtr->methodsPtr, (char *) methodName);
 	if (hPtr != NULL) {
-	    mPtr = Tcl_GetHashValue(hPtr);
+	    mPtr = (Method *)Tcl_GetHashValue(hPtr);
 	    if (IS_PRIVATE(mPtr)) {
 		AddMethodToCallChain(mPtr, cbPtr, NULL, NULL, flags);
 		donePrivate = 1;
@@ -1041,7 +1053,7 @@ AddSimpleChainToCallContext(
 	hPtr = Tcl_FindHashEntry(oPtr->methodsPtr, (char *) methodNameObj);
 
 	if (hPtr != NULL) {
-	    mPtr = Tcl_GetHashValue(hPtr);
+	    mPtr = (Method *)Tcl_GetHashValue(hPtr);
 	    if (!IS_PRIVATE(mPtr)) {
 		if (WANT_PUBLIC(flags)) {
 		    if (!IS_PUBLIC(mPtr)) {
@@ -1071,7 +1083,7 @@ AddSimpleChainToCallContext(
 	if (oPtr->methodsPtr && !blockedUnexported) {
 	    hPtr = Tcl_FindHashEntry(oPtr->methodsPtr, (char*) methodNameObj);
 	    if (hPtr != NULL) {
-		mPtr = Tcl_GetHashValue(hPtr);
+		mPtr = (Method *)Tcl_GetHashValue(hPtr);
 		if (!IS_PRIVATE(mPtr)) {
 		    AddMethodToCallChain(mPtr, cbPtr, doneFilters, filterDecl,
 			    flags);
@@ -1195,6 +1207,7 @@ AddMethodToCallChain(
 	callPtr->chain =
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		ckalloc(sizeof(struct MInvoke) * (callPtr->numChain + 1));
 =======
 		Tcl_Alloc(sizeof(struct MInvoke) * (callPtr->numChain + 1));
@@ -1202,10 +1215,13 @@ AddMethodToCallChain(
 =======
 		Tcl_Alloc(sizeof(struct MInvoke) * (callPtr->numChain + 1));
 >>>>>>> upstream/master
+=======
+		(struct MInvoke *)Tcl_Alloc(sizeof(struct MInvoke) * (callPtr->numChain + 1));
+>>>>>>> upstream/master
 	memcpy(callPtr->chain, callPtr->staticChain,
 		sizeof(struct MInvoke) * callPtr->numChain);
     } else if (callPtr->numChain > CALL_CHAIN_STATIC_SIZE) {
-	callPtr->chain = Tcl_Realloc(callPtr->chain,
+	callPtr->chain = (struct MInvoke *)Tcl_Realloc(callPtr->chain,
 		sizeof(struct MInvoke) * (callPtr->numChain + 1));
     }
     callPtr->chain[i].mPtr = mPtr;
@@ -1366,8 +1382,12 @@ TclOOGetCallContext(
 	const int reuseMask = (WANT_PUBLIC(flags) ? ~0 : ~PUBLIC_METHOD);
 
 	if ((irPtr = TclFetchIntRep(cacheInThisObj, &methodNameType))) {
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	    callPtr = irPtr->twoPtrValue.ptr1;
+=======
+	    callPtr = (CallChain *)irPtr->twoPtrValue.ptr1;
+>>>>>>> upstream/master
 	    if (IsStillValid(callPtr, oPtr, flags, reuseMask)) {
 		callPtr->refCount++;
 		goto returnContext;
@@ -1392,7 +1412,7 @@ TclOOGetCallContext(
 	}
 
 	if (hPtr != NULL && Tcl_GetHashValue(hPtr) != NULL) {
-	    callPtr = Tcl_GetHashValue(hPtr);
+	    callPtr = (CallChain *)Tcl_GetHashValue(hPtr);
 	    if (IsStillValid(callPtr, oPtr, flags, reuseMask)) {
 		callPtr->refCount++;
 		goto returnContext;
@@ -1404,7 +1424,7 @@ TclOOGetCallContext(
 	doFilters = 1;
     }
 
-    callPtr = Tcl_Alloc(sizeof(CallChain));
+    callPtr = (CallChain *)Tcl_Alloc(sizeof(CallChain));
     InitCallChain(callPtr, oPtr, flags);
 
     cb.callChainPtr = callPtr;
@@ -1509,7 +1529,7 @@ TclOOGetCallContext(
 	    if (oPtr->flags & USE_CLASS_CACHE) {
 		if (oPtr->selfCls->classChainCache == NULL) {
 		    oPtr->selfCls->classChainCache =
-			    Tcl_Alloc(sizeof(Tcl_HashTable));
+			    (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 
 		    Tcl_InitObjHashTable(oPtr->selfCls->classChainCache);
 		}
@@ -1517,7 +1537,7 @@ TclOOGetCallContext(
 			(char *) methodNameObj, &i);
 	    } else {
 		if (oPtr->chainCache == NULL) {
-		    oPtr->chainCache = Tcl_Alloc(sizeof(Tcl_HashTable));
+		    oPtr->chainCache = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 
 		    Tcl_InitObjHashTable(oPtr->chainCache);
 		}
@@ -1543,7 +1563,7 @@ TclOOGetCallContext(
     }
 
   returnContext:
-    contextPtr = TclStackAlloc(oPtr->fPtr->interp, sizeof(CallContext));
+    contextPtr = (CallContext *)TclStackAlloc(oPtr->fPtr->interp, sizeof(CallContext));
     contextPtr->oPtr = oPtr;
 
     /*
@@ -1612,7 +1632,7 @@ TclOOGetStereotypeCallChain(
 	if (hPtr != NULL && Tcl_GetHashValue(hPtr) != NULL) {
 	    const int reuseMask = (WANT_PUBLIC(flags) ? ~0 : ~PUBLIC_METHOD);
 
-	    callPtr = Tcl_GetHashValue(hPtr);
+	    callPtr = (CallChain *)Tcl_GetHashValue(hPtr);
 	    if (IsStillValid(callPtr, &obj, flags, reuseMask)) {
 		callPtr->refCount++;
 		return callPtr;
@@ -1624,7 +1644,7 @@ TclOOGetStereotypeCallChain(
 	hPtr = NULL;
     }
 
-    callPtr = Tcl_Alloc(sizeof(CallChain));
+    callPtr = (CallChain *)Tcl_Alloc(sizeof(CallChain));
     memset(callPtr, 0, sizeof(CallChain));
     callPtr->flags = flags & (PUBLIC_METHOD|PRIVATE_METHOD|FILTER_HANDLING);
     callPtr->epoch = fPtr->epoch;
@@ -1679,7 +1699,7 @@ TclOOGetStereotypeCallChain(
     } else {
 	if (hPtr == NULL) {
 	    if (clsPtr->classChainCache == NULL) {
-		clsPtr->classChainCache = Tcl_Alloc(sizeof(Tcl_HashTable));
+		clsPtr->classChainCache = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 		Tcl_InitObjHashTable(clsPtr->classChainCache);
 	    }
 	    hPtr = Tcl_CreateHashEntry(clsPtr->classChainCache,
@@ -1827,13 +1847,17 @@ AddPrivatesFromClassChainToCallContext(
 
     if (classPtr == contextCls) {
 	Tcl_HashEntry *hPtr = Tcl_FindHashEntry(&classPtr->classMethods,
-		(char *) methodName);
+		methodName);
 
 	if (hPtr != NULL) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    register Method *mPtr = Tcl_GetHashValue(hPtr);
 =======
 	    Method *mPtr = Tcl_GetHashValue(hPtr);
+>>>>>>> upstream/master
+=======
+	    Method *mPtr = (Method *)Tcl_GetHashValue(hPtr);
 >>>>>>> upstream/master
 
 	    if (IS_PRIVATE(mPtr)) {
@@ -1855,6 +1879,7 @@ AddPrivatesFromClassChainToCallContext(
 		return 1;
 	    }
 	}
+	/* FALLTHRU */
     case 0:
 	return 0;
     }
@@ -1918,7 +1943,7 @@ AddSimpleClassChainToCallContext(
 	    privateDanger |= 1;
 	}
 	if (hPtr != NULL) {
-	    Method *mPtr = Tcl_GetHashValue(hPtr);
+	    Method *mPtr = (Method *)Tcl_GetHashValue(hPtr);
 
 	    if (!IS_PRIVATE(mPtr)) {
 		if (!(flags & KNOWN_STATE)) {
@@ -1946,6 +1971,7 @@ AddSimpleClassChainToCallContext(
 	    privateDanger |= AddSimpleClassChainToCallContext(superPtr,
 		    methodNameObj, cbPtr, doneFilters, flags, filterDecl);
 	}
+	/* FALLTHRU */
     case 0:
 	return privateDanger;
     }
@@ -1997,10 +2023,14 @@ TclOORenderCallChain(
      * method (or "object" if it is declared on the instance).
      */
 
+<<<<<<< HEAD
     objv = TclStackAlloc(interp, callPtr->numChain * sizeof(Tcl_Obj *));
 <<<<<<< HEAD
     for (i=0 ; i<callPtr->numChain ; i++) {
 =======
+=======
+    objv = (Tcl_Obj **)TclStackAlloc(interp, callPtr->numChain * sizeof(Tcl_Obj *));
+>>>>>>> upstream/master
     for (i = 0 ; i < callPtr->numChain ; i++) {
 >>>>>>> upstream/master
 	struct MInvoke *miPtr = &callPtr->chain[i];
@@ -2273,11 +2303,11 @@ AddDefinitionNamespaceToChain(
 	    DefineEntry *staticList = definePtr->list;
 
 	    definePtr->list =
-		    Tcl_Alloc(sizeof(DefineEntry) * definePtr->size);
+		    (DefineEntry *)Tcl_Alloc(sizeof(DefineEntry) * definePtr->size);
 	    memcpy(definePtr->list, staticList,
 		    sizeof(DefineEntry) * definePtr->num);
 	} else {
-	    definePtr->list = Tcl_Realloc(definePtr->list,
+	    definePtr->list = (DefineEntry *)Tcl_Realloc(definePtr->list,
 		    sizeof(DefineEntry) * definePtr->size);
 	}
     }

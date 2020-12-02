@@ -145,8 +145,8 @@ TclpObjRenameFile(
     Tcl_Obj *srcPathPtr,
     Tcl_Obj *destPathPtr)
 {
-    return DoRenameFile(Tcl_FSGetNativePath(srcPathPtr),
-	    Tcl_FSGetNativePath(destPathPtr));
+    return DoRenameFile((const WCHAR *)Tcl_FSGetNativePath(srcPathPtr),
+	    (const WCHAR *)Tcl_FSGetNativePath(destPathPtr));
 }
 
 static int
@@ -606,8 +606,8 @@ TclpObjCopyFile(
     Tcl_Obj *srcPathPtr,
     Tcl_Obj *destPathPtr)
 {
-    return DoCopyFile(Tcl_FSGetNativePath(srcPathPtr),
-	    Tcl_FSGetNativePath(destPathPtr));
+    return DoCopyFile((const WCHAR *)Tcl_FSGetNativePath(srcPathPtr),
+	    (const WCHAR *)Tcl_FSGetNativePath(destPathPtr));
 }
 
 static int
@@ -877,7 +877,7 @@ TclpDeleteFile(
     const void *nativePath)	/* Pathname of file to be removed (native). */
 {
     DWORD attr;
-    const WCHAR *path = nativePath;
+    const WCHAR *path = (const WCHAR *)nativePath;
 
     /*
      * The DeleteFile API acts differently under Win95/98 and NT WRT NULL and
@@ -1006,7 +1006,7 @@ int
 TclpObjCreateDirectory(
     Tcl_Obj *pathPtr)
 {
-    return DoCreateDirectory(Tcl_FSGetNativePath(pathPtr));
+    return DoCreateDirectory((const WCHAR *)Tcl_FSGetNativePath(pathPtr));
 }
 
 static int
@@ -1156,7 +1156,7 @@ TclpObjRemoveDirectory(
 	ret = DoRemoveDirectory(&native, recursive, &ds);
 	Tcl_DStringFree(&native);
     } else {
-	ret = DoRemoveJustDirectory(Tcl_FSGetNativePath(pathPtr), 0, &ds);
+	ret = DoRemoveJustDirectory((const WCHAR *)Tcl_FSGetNativePath(pathPtr), 0, &ds);
     }
 
     if (ret != TCL_OK) {
@@ -1663,6 +1663,8 @@ TraversalDelete(
     Tcl_DString *errorPtr)	/* If non-NULL, initialized DString filled
 				 * with UTF-8 name of file causing error. */
 {
+    (void)dstPtr;
+
     switch (type) {
     case DOTREE_F:
 	if (TclpDeleteFile(nativeSrc) == TCL_OK) {
@@ -1752,10 +1754,14 @@ GetWinFileAttributes(
     const WCHAR *nativeName;
     int attr;
 
+<<<<<<< HEAD
     nativeName = Tcl_FSGetNativePath(fileName);
 <<<<<<< HEAD
     result = GetFileAttributes(nativeName);
 =======
+=======
+    nativeName = (const WCHAR *)Tcl_FSGetNativePath(fileName);
+>>>>>>> upstream/master
     result = GetFileAttributesW(nativeName);
 >>>>>>> upstream/master
 
@@ -1861,6 +1867,7 @@ ConvertFileNameFormat(
     int pathc, i;
     Tcl_Obj *splitPath;
     size_t length;
+    (void)objIndex;
 
     splitPath = Tcl_FSSplitPath(fileName, &pathc);
 
@@ -2184,10 +2191,14 @@ SetWinFileAttributes(
     int yesNo, result;
     const WCHAR *nativeName;
 
+<<<<<<< HEAD
     nativeName = Tcl_FSGetNativePath(fileName);
 <<<<<<< HEAD
     fileAttributes = old = GetFileAttributes(nativeName);
 =======
+=======
+    nativeName = (const WCHAR *)Tcl_FSGetNativePath(fileName);
+>>>>>>> upstream/master
     fileAttributes = old = GetFileAttributesW(nativeName);
 >>>>>>> upstream/master
 
@@ -2243,6 +2254,8 @@ CannotSetAttribute(
     Tcl_Obj *fileName,		/* The name of the file. */
     Tcl_Obj *attributePtr)	/* The new value of the attribute. */
 {
+    (void)attributePtr;
+
     Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 	    "cannot set attribute \"%s\" for file \"%s\": attribute is readonly",
 <<<<<<< HEAD

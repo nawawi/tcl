@@ -13,7 +13,7 @@
  */
 
 #include "tclInt.h"
-#include "tommath.h"
+#include "tclTomMath.h"
 
 MODULE_SCOPE const TclTomMathStubs tclTomMathStubs;
 
@@ -126,6 +126,7 @@ TclInitBignumFromLong(
 >>>>>>> upstream/master
 
 /*
+<<<<<<< HEAD
  *----------------------------------------------------------------------
  *
  * TclInitBignumFromWideInt --
@@ -193,6 +194,8 @@ TclInitBignumFromWideUInt(
 }
 
 /*
+=======
+>>>>>>> upstream/master
  * Local Variables:
  * mode: c
  * c-basic-offset: 4

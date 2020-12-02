@@ -201,6 +201,7 @@ The indicated return value also becomes the new value of \fIx\fR.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n), 
 =======
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
@@ -218,6 +219,11 @@ list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
 list(n), lappend(n), lindex(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master
 lsort(n), lrange(n), lreplace(n),
+=======
+list(n), lappend(n), lassign(n), lindex(n), linsert(n), llength(n),
+lmap(n), lpop(n), lrange(n), lremove(n), lrepeat(n), lreplace(n),
+lreverse(n), lsearch(n), lsort(n)
+>>>>>>> upstream/master
 string(n)
 .SH KEYWORDS
 element, index, list, replace, set

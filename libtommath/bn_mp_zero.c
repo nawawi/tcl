@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_ZERO_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,23 +17,16 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* set to zero */
 void mp_zero(mp_int *a)
 {
-   int       n;
-   mp_digit *tmp;
-
    a->sign = MP_ZPOS;
    a->used = 0;
-
-   tmp = a->dp;
-   for (n = 0; n < a->alloc; n++) {
-      *tmp++ = 0;
-   }
+   MP_ZERO_DIGITS(a->dp, a->alloc);
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

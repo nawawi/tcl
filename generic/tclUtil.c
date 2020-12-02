@@ -15,7 +15,7 @@
 #include "tclInt.h"
 #include "tclParse.h"
 #include "tclStringTrim.h"
-#include "tommath.h"
+#include "tclTomMath.h"
 #include <math.h>
 
 /*
@@ -909,7 +909,7 @@ Tcl_SplitList(
 
     size = TclMaxListLength(list, -1, &end) + 1;
     length = end - list;
-    argv = Tcl_Alloc((size * sizeof(char *)) + length + 1);
+    argv = (const char **)Tcl_Alloc((size * sizeof(char *)) + length + 1);
 
     for (i = 0, p = ((char *) argv) + size*sizeof(char *);
 	    *list != 0;  i++) {
@@ -2455,22 +2455,44 @@ TrimLeft(
      * Outer loop: iterate over string to be trimmed.
      */
 
+<<<<<<< HEAD
     do {
 	int pInc = TclUtfToUniChar(p, &ch1);
 	const char *q = trim;
 	int bytesLeft = numTrim;
+=======
+    if (argc == 0) {
+	result = (char *)Tcl_Alloc(1);
+	result[0] = '\0';
+	return result;
+    }
+>>>>>>> upstream/master
 
 	/*
 	 * Inner loop: scan trim string for match to current character.
 	 */
 
+<<<<<<< HEAD
 	do {
 	    int qInc = TclUtfToUniChar(q, &ch2);
+=======
+    if (argc <= LOCAL_SIZE) {
+	flagPtr = localFlags;
+    } else {
+	flagPtr = (char *)Tcl_Alloc(argc);
+    }
+    for (i = 0; i < argc; i++) {
+	flagPtr[i] = ( i ? TCL_DONT_QUOTE_HASH : 0 );
+	bytesNeeded += TclScanElement(argv[i], -1, &flagPtr[i]);
+    }
+    bytesNeeded += argc;
+>>>>>>> upstream/master
 
 	    if (ch1 == ch2) {
 		break;
 	    }
 
+<<<<<<< HEAD
 	    q += qInc;
 	    bytesLeft -= qInc;
 	} while (bytesLeft);
@@ -2503,6 +2525,15 @@ TclTrimLeft(
     /* Empty strings -> nothing to do */
     if ((numBytes == 0) || (numTrim == 0)) {
 	return 0;
+=======
+    result = (char *)Tcl_Alloc(bytesNeeded);
+    dst = result;
+    for (i = 0; i < argc; i++) {
+	flagPtr[i] |= ( i ? TCL_DONT_QUOTE_HASH : 0 );
+	dst += TclConvertElement(argv[i], -1, dst, flagPtr[i]);
+	*dst = ' ';
+	dst++;
+>>>>>>> upstream/master
     }
 
     Tcl_DStringInit(&bytesBuf);
@@ -2990,7 +3021,7 @@ Tcl_Concat(
      * All element bytes + (argc - 1) spaces + 1 terminating NULL.
      */
 
-    result = Tcl_Alloc(bytesNeeded + argc);
+    result = (char *)Tcl_Alloc(bytesNeeded + argc);
 
     for (p = result, i = 0;  i < argc;  i++) {
 	size_t triml, trimr, elemLength;
@@ -3567,6 +3598,7 @@ TclByteArrayMatch(
 {
     const unsigned char *stringEnd, *patternEnd;
     unsigned char p;
+    (void)flags;
 
     stringEnd = string + strLen;
     patternEnd = pattern + ptnLen;
@@ -3970,7 +4002,7 @@ Tcl_DStringAppend(
     if (newSize >= dsPtr->spaceAvl) {
 	dsPtr->spaceAvl = newSize * 2;
 	if (dsPtr->string == dsPtr->staticSpace) {
-	    char *newString = Tcl_Alloc(dsPtr->spaceAvl);
+	    char *newString = (char *)Tcl_Alloc(dsPtr->spaceAvl);
 
 	    memcpy(newString, dsPtr->string, dsPtr->length);
 	    dsPtr->string = newString;
@@ -3990,7 +4022,7 @@ Tcl_DStringAppend(
 >>>>>>> upstream/master
 	    }
 
-	    dsPtr->string = Tcl_Realloc(dsPtr->string, dsPtr->spaceAvl);
+	    dsPtr->string = (char *)Tcl_Realloc(dsPtr->string, dsPtr->spaceAvl);
 
 <<<<<<< HEAD
 	    if (offset != TCL_AUTO_LENGTH) {
@@ -4176,7 +4208,7 @@ Tcl_DStringAppendElement(
     if (newSize >= dsPtr->spaceAvl) {
 	dsPtr->spaceAvl = newSize * 2;
 	if (dsPtr->string == dsPtr->staticSpace) {
-	    char *newString = Tcl_Alloc(dsPtr->spaceAvl);
+	    char *newString = (char *)Tcl_Alloc(dsPtr->spaceAvl);
 
 	    memcpy(newString, dsPtr->string, dsPtr->length);
 	    dsPtr->string = newString;
@@ -4201,7 +4233,7 @@ Tcl_DStringAppendElement(
 		offset = element - dsPtr->string;
 	    }
 
-	    dsPtr->string = Tcl_Realloc(dsPtr->string, dsPtr->spaceAvl);
+	    dsPtr->string = (char *)Tcl_Realloc(dsPtr->string, dsPtr->spaceAvl);
 
 	    if (offset >= 0) {
 		element = dsPtr->string + offset;
@@ -4288,16 +4320,21 @@ Tcl_DStringSetLength(
 	    dsPtr->spaceAvl = length + 1;
 	}
 	if (dsPtr->string == dsPtr->staticSpace) {
-	    char *newString = Tcl_Alloc(dsPtr->spaceAvl);
+	    char *newString = (char *)Tcl_Alloc(dsPtr->spaceAvl);
 
 	    memcpy(newString, dsPtr->string, dsPtr->length);
 	    dsPtr->string = newString;
 	} else {
+<<<<<<< HEAD
 	    dsPtr->string = Tcl_Realloc(dsPtr->string, dsPtr->spaceAvl);
+=======
+	    dsPtr->string = (char *)Tcl_Realloc(dsPtr->string, dsPtr->spaceAvl);
+>>>>>>> upstream/master
 	}
     }
     dsPtr->length = length;
     dsPtr->string[length] = 0;
+<<<<<<< HEAD
 }
 
 /*
@@ -4620,6 +4657,8 @@ TclDStringToObj(
 
     return result;
 <<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 }
@@ -5293,6 +5332,7 @@ TclPrecTraceProc(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 	/* ARGSUSED */
 char *
 TclPrecTraceProc(
@@ -5306,6 +5346,44 @@ TclPrecTraceProc(
     int prec;
     int *precisionPtr = Tcl_GetThreadData(&precisionKey, sizeof(int));
 =======
+=======
+void
+Tcl_PrintDouble(
+    Tcl_Interp *dummy,		/* Not used. */
+    double value,		/* Value to print as string. */
+    char *dst)			/* Where to store converted value; must have
+				 * at least TCL_DOUBLE_SPACE characters. */
+{
+    char *p, c;
+    int exponent;
+    int signum;
+    char *digits;
+    char *end;
+    (void)dummy;
+
+    /*
+     * Handle NaN.
+     */
+
+    if (TclIsNaN(value)) {
+	TclFormatNaN(value, dst);
+	return;
+    }
+
+    /*
+     * Handle infinities.
+     */
+
+    if (TclIsInfinite(value)) {
+	/*
+	 * Remember to copy the terminating NUL too.
+	 */
+
+	if (value < 0) {
+	    memcpy(dst, "-Inf", 5);
+	} else {
+	    memcpy(dst, "Inf", 4);
+>>>>>>> upstream/master
 	}
 	return;
     }
@@ -5957,6 +6035,7 @@ TclFormatInt(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (GetEndOffsetFromObj(objPtr, endValue, indexPtr) == TCL_OK) {
 	return TCL_OK;
     }
@@ -6075,24 +6154,32 @@ GetEndOffsetFromObj(
     if (n == -n || intVal == n) {	/* broken compiler optimizers. */
 	return sprintf(buffer, "%" TCL_LL_MODIFIER "d", n);
     }
+=======
+size_t
+TclFormatInt(
+    char *buffer,		/* Points to the storage into which the
+				 * formatted characters are written. */
+    Tcl_WideInt n)			/* The integer to format. */
+{
+    Tcl_WideUInt intVal;
+    size_t i = 0, numFormatted, j;
+    static const char digits[] = "0123456789";
+>>>>>>> upstream/master
 
     /*
      * Generate the characters of the result backwards in the buffer.
      */
 
-    intVal = (n < 0? -n : n);
-    i = 0;
-    buffer[0] = '\0';
+    intVal = (n < 0 ? -(Tcl_WideUInt)n : (Tcl_WideUInt)n);
     do {
-	i++;
-	buffer[i] = digits[intVal % 10];
-	intVal = intVal/10;
+	buffer[i++] = digits[intVal % 10];
+	intVal = intVal / 10;
     } while (intVal > 0);
     if (n < 0) {
-	i++;
-	buffer[i] = '-';
+	buffer[i++] = '-';
     }
-    numFormatted = i;
+    buffer[i] = '\0';
+    numFormatted = i--;
 
     /*
      * Now reverse the characters.
@@ -6163,7 +6250,7 @@ GetWideForIndex(
 
 	/* objPtr holds an integer outside the signed wide range */
 	/* Truncate to the signed wide range. */
-	*widePtr = (((mp_int *)cd)->sign != MP_ZPOS) ? WIDE_MIN : WIDE_MAX;
+	*widePtr = ((mp_isneg((mp_int *)cd)) ? WIDE_MIN : WIDE_MAX);
     return TCL_OK;
     }
 
@@ -6276,7 +6363,7 @@ GetWideForIndex(
 		} else {
 		    /* sum holds an integer outside the signed wide range */
 		    /* Truncate to the signed wide range. */
-		    if (((mp_int *)cd)->sign != MP_ZPOS) {
+		    if (mp_isneg((mp_int *)cd)) {
 			*widePtr = WIDE_MIN;
 		    } else {
 			*widePtr = WIDE_MAX;
@@ -6710,7 +6797,7 @@ GetEndOffsetFromObj(
 
 	    if (t == TCL_NUMBER_BIG) {
 		/* Truncate to the signed wide range. */
-		if (((mp_int *)cd)->sign != MP_ZPOS) {
+		if (mp_isneg((mp_int *)cd)) {
 		    offset = (bytes[3] == '-') ? WIDE_MAX : WIDE_MIN;
 		} else {
 		    offset = (bytes[3] == '-') ? WIDE_MIN : WIDE_MAX;
@@ -6990,7 +7077,7 @@ ClearHash(
 
     for (hPtr = Tcl_FirstHashEntry(tablePtr, &search); hPtr != NULL;
 	    hPtr = Tcl_NextHashEntry(&search)) {
-	Tcl_Obj *objPtr = Tcl_GetHashValue(hPtr);
+	Tcl_Obj *objPtr = (Tcl_Obj *)Tcl_GetHashValue(hPtr);
 
 	Tcl_DecrRefCount(objPtr);
 	Tcl_DeleteHashEntry(hPtr);
@@ -7020,10 +7107,10 @@ GetThreadHash(
     Tcl_ThreadDataKey *keyPtr)
 {
     Tcl_HashTable **tablePtrPtr =
-	    Tcl_GetThreadData(keyPtr, sizeof(Tcl_HashTable *));
+	    (Tcl_HashTable **)Tcl_GetThreadData(keyPtr, sizeof(Tcl_HashTable *));
 
     if (NULL == *tablePtrPtr) {
-	*tablePtrPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
+	*tablePtrPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_CreateThreadExitHandler(FreeThreadHash, *tablePtrPtr);
 	Tcl_InitHashTable(*tablePtrPtr, TCL_ONE_WORD_KEYS);
     }
@@ -7048,7 +7135,7 @@ static void
 FreeThreadHash(
     ClientData clientData)
 {
-    Tcl_HashTable *tablePtr = clientData;
+    Tcl_HashTable *tablePtr = (Tcl_HashTable *)clientData;
 
     ClearHash(tablePtr);
     Tcl_DeleteHashTable(tablePtr);
@@ -7070,7 +7157,7 @@ static void
 FreeProcessGlobalValue(
     ClientData clientData)
 {
-    ProcessGlobalValue *pgvPtr = clientData;
+    ProcessGlobalValue *pgvPtr = (ProcessGlobalValue *)clientData;
 
     pgvPtr->epoch++;
     pgvPtr->numBytes = 0;
@@ -7146,7 +7233,11 @@ TclSetProcessGlobalValue(
 =======
     bytes = TclGetString(newValue);
     pgvPtr->numBytes = newValue->length;
+<<<<<<< HEAD
     pgvPtr->value = Tcl_Alloc(pgvPtr->numBytes + 1);
+>>>>>>> upstream/master
+=======
+    pgvPtr->value = (char *)Tcl_Alloc(pgvPtr->numBytes + 1);
 >>>>>>> upstream/master
     memcpy(pgvPtr->value, bytes, pgvPtr->numBytes + 1);
     if (pgvPtr->encoding) {
@@ -7215,7 +7306,7 @@ TclGetProcessGlobalValue(
 	    Tcl_DStringLength(&native), &newValue);
 	    Tcl_DStringFree(&native);
 	    Tcl_Free(pgvPtr->value);
-	    pgvPtr->value = Tcl_Alloc(Tcl_DStringLength(&newValue) + 1);
+	    pgvPtr->value = (char *)Tcl_Alloc(Tcl_DStringLength(&newValue) + 1);
 	    memcpy(pgvPtr->value, Tcl_DStringValue(&newValue),
 		    Tcl_DStringLength(&newValue) + 1);
 	    Tcl_DStringFree(&newValue);
@@ -7269,7 +7360,7 @@ TclGetProcessGlobalValue(
 	Tcl_SetHashValue(hPtr, value);
 	Tcl_IncrRefCount(value);
     }
-    return Tcl_GetHashValue(hPtr);
+    return (Tcl_Obj *)Tcl_GetHashValue(hPtr);
 }
 
 /*

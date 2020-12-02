@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_SUBMOD_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,28 +17,28 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* d = a - b (mod c) */
-int mp_submod(const mp_int *a, const mp_int *b, const mp_int *c, mp_int *d)
+mp_err mp_submod(const mp_int *a, const mp_int *b, const mp_int *c, mp_int *d)
 {
-   int     res;
-   mp_int  t;
+   mp_err err;
+   mp_int t;
 
-
-   if ((res = mp_init(&t)) != MP_OKAY) {
-      return res;
+   if ((err = mp_init(&t)) != MP_OKAY) {
+      return err;
    }
 
-   if ((res = mp_sub(a, b, &t)) != MP_OKAY) {
-      mp_clear(&t);
-      return res;
+   if ((err = mp_sub(a, b, &t)) != MP_OKAY) {
+      goto LBL_ERR;
    }
-   res = mp_mod(&t, c, d);
+   err = mp_mod(&t, c, d);
+
+LBL_ERR:
    mp_clear(&t);
-   return res;
+   return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

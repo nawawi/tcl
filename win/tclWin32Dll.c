@@ -124,6 +124,8 @@ DllMain(
     DWORD reason,		/* Reason this function is being called. */
     LPVOID reserved)		/* Not used. */
 {
+    (void)reserved;
+
     switch (reason) {
     case DLL_PROCESS_ATTACH:
 	DisableThreadLibraryCalls(hInst);
@@ -399,8 +401,8 @@ TclWinDriveLetterForVolMountPoint(
 		}
 	    }
 	    if (!alreadyStored) {
-		dlPtr2 = Tcl_Alloc(sizeof(MountPointMap));
-		dlPtr2->volumeName = TclNativeDupInternalRep(Target);
+		dlPtr2 = (MountPointMap *)Tcl_Alloc(sizeof(MountPointMap));
+		dlPtr2->volumeName = (WCHAR *)TclNativeDupInternalRep(Target);
 		dlPtr2->driveLetter = (char) drive[0];
 		dlPtr2->nextPtr = driveLetterLookup;
 		driveLetterLookup = dlPtr2;
@@ -425,8 +427,8 @@ TclWinDriveLetterForVolMountPoint(
      * that fact and store '-1' so we don't have to look it up each time.
      */
 
-    dlPtr2 = Tcl_Alloc(sizeof(MountPointMap));
-    dlPtr2->volumeName = TclNativeDupInternalRep((ClientData) mountPoint);
+    dlPtr2 = (MountPointMap *)Tcl_Alloc(sizeof(MountPointMap));
+    dlPtr2->volumeName = (WCHAR *)TclNativeDupInternalRep((ClientData) mountPoint);
     dlPtr2->driveLetter = -1;
     dlPtr2->nextPtr = driveLetterLookup;
     driveLetterLookup = dlPtr2;

@@ -864,7 +864,7 @@ Tcl_MutexLock(
 	 */
 
 	if (*mutexPtr == NULL) {
-	    csPtr = Tcl_Alloc(sizeof(CRITICAL_SECTION));
+	    csPtr = (CRITICAL_SECTION *)Tcl_Alloc(sizeof(CRITICAL_SECTION));
 	    InitializeCriticalSection(csPtr);
 	    *mutexPtr = (Tcl_Mutex)csPtr;
 	    TclRememberMutex(mutexPtr);
@@ -1007,7 +1007,7 @@ Tcl_ConditionWait(
 	 */
 
 	if (*condPtr == NULL) {
-	    winCondPtr = Tcl_Alloc(sizeof(WinCondition));
+	    winCondPtr = (WinCondition *)Tcl_Alloc(sizeof(WinCondition));
 	    InitializeCriticalSection(&winCondPtr->condLock);
 	    winCondPtr->firstPtr = NULL;
 	    winCondPtr->lastPtr = NULL;
@@ -1259,7 +1259,11 @@ TclpNewAllocMutex(void)
 =======
     allocMutex *lockPtr;
 
+<<<<<<< HEAD
     lockPtr = malloc(sizeof(allocMutex));
+>>>>>>> upstream/master
+=======
+    lockPtr = (allocMutex *)malloc(sizeof(allocMutex));
 >>>>>>> upstream/master
     if (lockPtr == NULL) {
 	Tcl_Panic("could not allocate lock");
@@ -1479,7 +1483,7 @@ TclpThreadCreateKey(void)
 {
     DWORD *key;
 
-    key = TclpSysAlloc(sizeof *key);
+    key = (DWORD *)TclpSysAlloc(sizeof *key);
     if (key == NULL) {
 	Tcl_Panic("unable to allocate thread key!");
     }
@@ -1497,7 +1501,7 @@ void
 TclpThreadDeleteKey(
     void *keyPtr)
 {
-    DWORD *key = keyPtr;
+    DWORD *key = (DWORD *)keyPtr;
 
     if (!TlsFree(*key)) {
 	Tcl_Panic("unable to delete key");
@@ -1511,7 +1515,7 @@ TclpThreadSetMasterTSD(
     void *tsdKeyPtr,
     void *ptr)
 {
-    DWORD *key = tsdKeyPtr;
+    DWORD *key = (DWORD *)tsdKeyPtr;
 
     if (!TlsSetValue(*key, ptr)) {
 	Tcl_Panic("unable to set master TSD value");
@@ -1522,7 +1526,7 @@ void *
 TclpThreadGetMasterTSD(
     void *tsdKeyPtr)
 {
-    DWORD *key = tsdKeyPtr;
+    DWORD *key = (DWORD *)tsdKeyPtr;
 
     return TlsGetValue(*key);
 }

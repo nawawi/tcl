@@ -221,6 +221,7 @@ typedef struct Object {
 >>>>>>> upstream/master
 } Object;
 
+<<<<<<< HEAD
 #define OBJECT_DELETED	1	/* Flag to say that an object has been
 				 * destroyed. */
 #define DESTRUCTOR_CALLED 2	/* Flag to say that the destructor has been
@@ -261,6 +262,13 @@ typedef struct Object {
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+#define OBJECT_DESTRUCTING	1	/* Indicates that an object is being or has
+								 *  been destroyed  */
+#define DESTRUCTOR_CALLED 2	/* Indicates that evaluation of destructor script for the
+							   object has began */
+#define OO_UNUSED_4	4	/* No longer used.  */
 >>>>>>> upstream/master
 #define ROOT_OBJECT 0x1000	/* Flag to say that this object is the root of
 				 * the class hierarchy and should be treated
@@ -762,6 +770,7 @@ MODULE_SCOPE Object *	TclNewObjectInstanceCommon(Tcl_Interp *interp,
 			    const char *nameStr,
 			    const char *nsNameStr);
 MODULE_SCOPE int	TclOODecrRefCount(Object *oPtr);
+MODULE_SCOPE int	TclOOObjectDestroyed(Object *oPtr);
 MODULE_SCOPE int	TclOODefineSlots(Foundation *fPtr);
 MODULE_SCOPE void	TclOODeleteChain(CallChain *callPtr);
 MODULE_SCOPE void	TclOODeleteChainCache(Tcl_HashTable *tablePtr);
@@ -869,11 +878,11 @@ MODULE_SCOPE void	TclOOSetupVariableResolver(Tcl_Namespace *nsPtr);
     Tcl_HashEntry *hPtr;Tcl_HashSearch search
 #define FOREACH_HASH(key,val,tablePtr) \
     for(hPtr=Tcl_FirstHashEntry((tablePtr),&search); hPtr!=NULL ? \
-	    ((key)=(void *)Tcl_GetHashKey((tablePtr),hPtr),\
-	    (val)=Tcl_GetHashValue(hPtr),1):0; hPtr=Tcl_NextHashEntry(&search))
+	    (*(void **)&(key)=Tcl_GetHashKey((tablePtr),hPtr),\
+	    *(void **)&(val)=Tcl_GetHashValue(hPtr),1):0; hPtr=Tcl_NextHashEntry(&search))
 #define FOREACH_HASH_VALUE(val,tablePtr) \
     for(hPtr=Tcl_FirstHashEntry((tablePtr),&search); hPtr!=NULL ? \
-	    ((val)=Tcl_GetHashValue(hPtr),1):0;hPtr=Tcl_NextHashEntry(&search))
+	    (*(void **)&(val)=Tcl_GetHashValue(hPtr),1):0;hPtr=Tcl_NextHashEntry(&search))
 
 /*
  * Convenience macro for duplicating a list. Needs no external declaration,

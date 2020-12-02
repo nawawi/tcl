@@ -1,4 +1,5 @@
 #include "tommath_private.h"
+<<<<<<< HEAD:libtommath/bn_fast_s_mp_sqr.c
 #ifdef BN_FAST_S_MP_SQR_C
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
@@ -16,6 +17,11 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+#ifdef BN_S_MP_SQR_FAST_C
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master:libtommath/bn_s_mp_sqr_fast.c
 
 /* the jist of squaring...
  * you do like mult except the offset of the tmpx [one that
@@ -27,17 +33,18 @@
 After that loop you do the squares and add them in.
 */
 
-int fast_s_mp_sqr(const mp_int *a, mp_int *b)
+mp_err s_mp_sqr_fast(const mp_int *a, mp_int *b)
 {
-   int       olduse, res, pa, ix, iz;
-   mp_digit   W[MP_WARRAY], *tmpx;
+   int       olduse, pa, ix, iz;
+   mp_digit  W[MP_WARRAY], *tmpx;
    mp_word   W1;
+   mp_err    err;
 
    /* grow the destination as required */
    pa = a->used + a->used;
    if (b->alloc < pa) {
-      if ((res = mp_grow(b, pa)) != MP_OKAY) {
-         return res;
+      if ((err = mp_grow(b, pa)) != MP_OKAY) {
+         return err;
       }
    }
 
@@ -52,7 +59,7 @@ int fast_s_mp_sqr(const mp_int *a, mp_int *b)
       _W = 0;
 
       /* get offsets into the two bignums */
-      ty = MIN(a->used-1, ix);
+      ty = MP_MIN(a->used-1, ix);
       tx = ix - ty;
 
       /* setup temp aliases */
@@ -62,13 +69,13 @@ int fast_s_mp_sqr(const mp_int *a, mp_int *b)
       /* this is the number of times the loop will iterrate, essentially
          while (tx++ < a->used && ty-- >= 0) { ... }
        */
-      iy = MIN(a->used-tx, ty+1);
+      iy = MP_MIN(a->used-tx, ty+1);
 
       /* now for squaring tx can never equal ty
        * we halve the distance since they approach at a rate of 2x
        * and we have to round because odd cases need to be executed
        */
-      iy = MIN(iy, ((ty-tx)+1)>>1);
+      iy = MP_MIN(iy, ((ty-tx)+1)>>1);
 
       /* execute loop */
       for (iz = 0; iz < iy; iz++) {
@@ -84,10 +91,10 @@ int fast_s_mp_sqr(const mp_int *a, mp_int *b)
       }
 
       /* store it */
-      W[ix] = _W & MP_MASK;
+      W[ix] = (mp_digit)_W & MP_MASK;
 
       /* make next carry */
-      W1 = _W >> (mp_word)DIGIT_BIT;
+      W1 = _W >> (mp_word)MP_DIGIT_BIT;
    }
 
    /* setup dest */
@@ -102,15 +109,9 @@ int fast_s_mp_sqr(const mp_int *a, mp_int *b)
       }
 
       /* clear unused digits [that existed in the old copy of c] */
-      for (; ix < olduse; ix++) {
-         *tmpb++ = 0;
-      }
+      MP_ZERO_DIGITS(tmpb, olduse - ix);
    }
    mp_clamp(b);
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

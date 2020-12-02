@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_S_MP_EXPTMOD_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,19 +17,26 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 #ifdef MP_LOW_MEM
 #   define TAB_SIZE 32
+#   define MAX_WINSIZE 5
 #else
 #   define TAB_SIZE 256
+#   define MAX_WINSIZE 0
 #endif
 
-int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, int redmode)
+mp_err s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, int redmode)
 {
    mp_int  M[TAB_SIZE], res, mu;
    mp_digit buf;
-   int     err, bitbuf, bitcpy, bitcnt, mode, digidx, x, y, winsize;
-   int (*redux)(mp_int *x, const mp_int *m, const mp_int *mu);
+   mp_err   err;
+   int      bitbuf, bitcpy, bitcnt, mode, digidx, x, y, winsize;
+   mp_err(*redux)(mp_int *x, const mp_int *m, const mp_int *mu);
 
    /* find window size */
    x = mp_count_bits(X);
@@ -48,11 +56,7 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
       winsize = 8;
    }
 
-#ifdef MP_LOW_MEM
-   if (winsize > 5) {
-      winsize = 5;
-   }
-#endif
+   winsize = MAX_WINSIZE ? MP_MIN(MAX_WINSIZE, winsize) : winsize;
 
    /* init M array */
    /* init first cell */
@@ -72,19 +76,13 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
    }
 
    /* create mu, used for Barrett reduction */
-   if ((err = mp_init(&mu)) != MP_OKAY) {
-      goto LBL_M;
-   }
+   if ((err = mp_init(&mu)) != MP_OKAY)                           goto LBL_M;
 
    if (redmode == 0) {
-      if ((err = mp_reduce_setup(&mu, P)) != MP_OKAY) {
-         goto LBL_MU;
-      }
+      if ((err = mp_reduce_setup(&mu, P)) != MP_OKAY)             goto LBL_MU;
       redux = mp_reduce;
    } else {
-      if ((err = mp_reduce_2k_setup_l(P, &mu)) != MP_OKAY) {
-         goto LBL_MU;
-      }
+      if ((err = mp_reduce_2k_setup_l(P, &mu)) != MP_OKAY)        goto LBL_MU;
       redux = mp_reduce_2k_l;
    }
 
@@ -96,13 +94,12 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
     * The first half of the table is not
     * computed though accept for M[0] and M[1]
     */
-   if ((err = mp_mod(G, P, &M[1])) != MP_OKAY) {
-      goto LBL_MU;
-   }
+   if ((err = mp_mod(G, P, &M[1])) != MP_OKAY)                    goto LBL_MU;
 
    /* compute the value at M[1<<(winsize-1)] by squaring
     * M[1] (winsize-1) times
     */
+<<<<<<< HEAD
 <<<<<<< HEAD
    if ((err = mp_copy(&M[1], &M[1 << (winsize - 1)])) != MP_OKAY) {
 =======
@@ -110,6 +107,9 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
 >>>>>>> upstream/master
       goto LBL_MU;
    }
+=======
+   if ((err = mp_copy(&M[1], &M[(size_t)1 << (winsize - 1)])) != MP_OKAY) goto LBL_MU;
+>>>>>>> upstream/master
 
    for (x = 0; x < (winsize - 1); x++) {
       /* square it */
@@ -118,6 +118,7 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
                         &M[1 << (winsize - 1)])) != MP_OKAY) {
 =======
       if ((err = mp_sqr(&M[(size_t)1 << (winsize - 1)],
+<<<<<<< HEAD
                         &M[(size_t)1 << (winsize - 1)])) != MP_OKAY) {
 >>>>>>> upstream/master
          goto LBL_MU;
@@ -131,24 +132,24 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
 >>>>>>> upstream/master
          goto LBL_MU;
       }
+=======
+                        &M[(size_t)1 << (winsize - 1)])) != MP_OKAY) goto LBL_MU;
+
+      /* reduce modulo P */
+      if ((err = redux(&M[(size_t)1 << (winsize - 1)], P, &mu)) != MP_OKAY) goto LBL_MU;
+>>>>>>> upstream/master
    }
 
    /* create upper table, that is M[x] = M[x-1] * M[1] (mod P)
     * for x = (2**(winsize - 1) + 1) to (2**winsize - 1)
     */
    for (x = (1 << (winsize - 1)) + 1; x < (1 << winsize); x++) {
-      if ((err = mp_mul(&M[x - 1], &M[1], &M[x])) != MP_OKAY) {
-         goto LBL_MU;
-      }
-      if ((err = redux(&M[x], P, &mu)) != MP_OKAY) {
-         goto LBL_MU;
-      }
+      if ((err = mp_mul(&M[x - 1], &M[1], &M[x])) != MP_OKAY)     goto LBL_MU;
+      if ((err = redux(&M[x], P, &mu)) != MP_OKAY)                goto LBL_MU;
    }
 
    /* setup result */
-   if ((err = mp_init(&res)) != MP_OKAY) {
-      goto LBL_MU;
-   }
+   if ((err = mp_init(&res)) != MP_OKAY)                          goto LBL_MU;
    mp_set(&res, 1uL);
 
    /* set initial mode and bit cnt */
@@ -168,11 +169,11 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
          }
          /* read next digit and reset the bitcnt */
          buf    = X->dp[digidx--];
-         bitcnt = (int)DIGIT_BIT;
+         bitcnt = (int)MP_DIGIT_BIT;
       }
 
       /* grab the next msb from the exponent */
-      y     = (buf >> (mp_digit)(DIGIT_BIT - 1)) & 1;
+      y     = (buf >> (mp_digit)(MP_DIGIT_BIT - 1)) & 1uL;
       buf <<= (mp_digit)1;
 
       /* if the bit is zero and mode == 0 then we ignore it
@@ -186,12 +187,8 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
 
       /* if the bit is zero and mode == 1 then we square */
       if ((mode == 1) && (y == 0)) {
-         if ((err = mp_sqr(&res, &res)) != MP_OKAY) {
-            goto LBL_RES;
-         }
-         if ((err = redux(&res, P, &mu)) != MP_OKAY) {
-            goto LBL_RES;
-         }
+         if ((err = mp_sqr(&res, &res)) != MP_OKAY)               goto LBL_RES;
+         if ((err = redux(&res, P, &mu)) != MP_OKAY)              goto LBL_RES;
          continue;
       }
 
@@ -203,21 +200,13 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
          /* ok window is filled so square as required and multiply  */
          /* square first */
          for (x = 0; x < winsize; x++) {
-            if ((err = mp_sqr(&res, &res)) != MP_OKAY) {
-               goto LBL_RES;
-            }
-            if ((err = redux(&res, P, &mu)) != MP_OKAY) {
-               goto LBL_RES;
-            }
+            if ((err = mp_sqr(&res, &res)) != MP_OKAY)            goto LBL_RES;
+            if ((err = redux(&res, P, &mu)) != MP_OKAY)           goto LBL_RES;
          }
 
          /* then multiply */
-         if ((err = mp_mul(&res, &M[bitbuf], &res)) != MP_OKAY) {
-            goto LBL_RES;
-         }
-         if ((err = redux(&res, P, &mu)) != MP_OKAY) {
-            goto LBL_RES;
-         }
+         if ((err = mp_mul(&res, &M[bitbuf], &res)) != MP_OKAY)  goto LBL_RES;
+         if ((err = redux(&res, P, &mu)) != MP_OKAY)             goto LBL_RES;
 
          /* empty window and reset */
          bitcpy = 0;
@@ -230,22 +219,14 @@ int s_mp_exptmod(const mp_int *G, const mp_int *X, const mp_int *P, mp_int *Y, i
    if ((mode == 2) && (bitcpy > 0)) {
       /* square then multiply if the bit is set */
       for (x = 0; x < bitcpy; x++) {
-         if ((err = mp_sqr(&res, &res)) != MP_OKAY) {
-            goto LBL_RES;
-         }
-         if ((err = redux(&res, P, &mu)) != MP_OKAY) {
-            goto LBL_RES;
-         }
+         if ((err = mp_sqr(&res, &res)) != MP_OKAY)               goto LBL_RES;
+         if ((err = redux(&res, P, &mu)) != MP_OKAY)              goto LBL_RES;
 
          bitbuf <<= 1;
          if ((bitbuf & (1 << winsize)) != 0) {
             /* then multiply */
-            if ((err = mp_mul(&res, &M[1], &res)) != MP_OKAY) {
-               goto LBL_RES;
-            }
-            if ((err = redux(&res, P, &mu)) != MP_OKAY) {
-               goto LBL_RES;
-            }
+            if ((err = mp_mul(&res, &M[1], &res)) != MP_OKAY)     goto LBL_RES;
+            if ((err = redux(&res, P, &mu)) != MP_OKAY)           goto LBL_RES;
          }
       }
    }
@@ -264,7 +245,3 @@ LBL_M:
    return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

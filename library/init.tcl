@@ -25,6 +25,7 @@ if {[info commands package] == ""} {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package require -exact Tcl 8.6.4
 =======
 package require -exact Tcl 8.7a0
@@ -43,6 +44,9 @@ package require -exact Tcl 9.0a0
 >>>>>>> upstream/master
 =======
 package require -exact Tcl 9.0a0
+>>>>>>> upstream/master
+=======
+package require -exact Tcl 9.0a2
 >>>>>>> upstream/master
 
 # Compute the auto path to use in this interpreter.
@@ -88,13 +92,13 @@ namespace eval tcl {
     if {$Dir ni $::auto_path} {
 	lappend ::auto_path $Dir
     }
-    catch {
+    if {[info exists ::tcl_pkgPath]} { catch {
 	foreach Dir $::tcl_pkgPath {
 	    if {$Dir ni $::auto_path} {
 		lappend ::auto_path $Dir
 	    }
 	}
-    }
+    }}
 
     if {![interp issafe]} {
         variable Path [encoding dirs]

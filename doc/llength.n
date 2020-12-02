@@ -74,6 +74,7 @@ An empty list is not necessarily an empty string:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), lindex(n), linsert(n), lsearch(n), 
 =======
 list(n), lappend(n), lindex(n), linsert(n), lsearch(n),
@@ -91,6 +92,11 @@ list(n), lappend(n), lindex(n), linsert(n), lsearch(n),
 list(n), lappend(n), lindex(n), linsert(n), lsearch(n),
 >>>>>>> upstream/master
 lset(n), lsort(n), lrange(n), lreplace(n)
+=======
+list(n), lappend(n), lassign(n), lindex(n), linsert(n),
+lmap(n), lpop(n), lrange(n), lremove(n), lrepeat(n), lreplace(n),
+lreverse(n), lsearch(n), lset(n), lsort(n)
+>>>>>>> upstream/master
 .SH KEYWORDS
 element, list, length
 '\" Local Variables:

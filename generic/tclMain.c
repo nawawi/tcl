@@ -195,9 +195,13 @@ static void		StdinProc(ClientData clientData, int mask);
 static void		FreeMainInterp(ClientData clientData);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef TCL_ASCII_MAIN
 =======
 #if !defined(_WIN32) || defined(UNICODE)
+>>>>>>> upstream/master
+=======
+#if !defined(_WIN32) || defined(UNICODE) && !defined(TCL_ASCII_MAIN)
 >>>>>>> upstream/master
 static Tcl_ThreadDataKey dataKey;
 
@@ -473,7 +477,7 @@ Tcl_SourceRCFile(
 
 	    c = Tcl_OpenFileChannel(NULL, fullName, "r", 0);
 	    if (c != NULL) {
-		Tcl_Close(NULL, c);
+		Tcl_CloseEx(NULL, c, 0);
 		if (Tcl_EvalFile(interp, fullName) != TCL_OK) {
 		    chan = Tcl_GetStdChannel(TCL_STDERR);
 		    if (chan) {
@@ -745,12 +749,16 @@ Tcl_MainEx(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
     Tcl_LinkVar(interp, "tcl_interactive", (char *) &is.tty, TCL_LINK_BOOLEAN);
+=======
+    Tcl_LinkVar(interp, "tcl_interactive", &is.tty, TCL_LINK_BOOLEAN);
+>>>>>>> upstream/master
     is.input = Tcl_GetStdChannel(TCL_STDIN);
     while ((is.input != NULL) && !Tcl_InterpDeleted(interp)) {
 	mainLoopProc = TclGetMainLoop();
@@ -1332,15 +1340,19 @@ TclFullFinalizationRequested(void)
 static void
 StdinProc(
     ClientData clientData,	/* The state of interactive cmd line */
-    int mask)			/* Not used. */
+    TCL_UNUSED(int) /*mask*/)
 {
 <<<<<<< HEAD
     int code, length;
 =======
     int code;
     size_t length;
+<<<<<<< HEAD
 >>>>>>> upstream/master
     InteractiveState *isPtr = clientData;
+=======
+    InteractiveState *isPtr = (InteractiveState *)clientData;
+>>>>>>> upstream/master
     Tcl_Channel chan = isPtr->input;
     Tcl_Obj *commandPtr = isPtr->commandPtr;
     Tcl_Interp *interp = isPtr->interp;
@@ -1668,7 +1680,7 @@ static void
 FreeMainInterp(
     ClientData clientData)
 {
-    Tcl_Interp *interp = clientData;
+    Tcl_Interp *interp = (Tcl_Interp *)clientData;
 
     /*if (TclInExit()) return;*/
 

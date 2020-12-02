@@ -97,6 +97,10 @@ typedef DWORD_PTR * PDWORD_PTR;
 #   define __MINGW_USE_VC2005_COMPAT
 >>>>>>> upstream/master
 #endif
+#if defined(_MSC_VER) && defined(_WIN64) && !defined(STATIC_BUILD) \
+	&& !defined(MP_32BIT) && !defined(MP_64BIT)
+#   define MP_64BIT
+#endif
 
 /*
  * We must specify the lower version we intend to support.
@@ -183,7 +187,15 @@ typedef DWORD_PTR * PDWORD_PTR;
 #include <malloc.h>
 #include <process.h>
 #include <signal.h>
+#ifdef HAVE_INTTYPES_H
+#   include <inttypes.h>
+#endif
 #include <limits.h>
+#ifdef HAVE_STDINT_H
+#   include <stdint.h>
+#else
+#   include "../compat/stdint.h"
+#endif
 
 #ifndef __GNUC__
 #    define strncasecmp _strnicmp
@@ -615,6 +627,7 @@ typedef DWORD_PTR * PDWORD_PTR;
 #   pragma warning(disable:4996)
 =======
 #if defined(_MSC_VER)
+#   pragma warning(disable:4146)
 #   pragma warning(disable:4244)
 #   if _MSC_VER >= 1400
 #	pragma warning(disable:4267)

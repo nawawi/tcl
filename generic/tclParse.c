@@ -4671,6 +4671,7 @@ TclParseBackslash(
 		 * parsed command.
 		 */
 
+<<<<<<< HEAD
 		if ((nestedPtr->term < parsePtr->end)
 			&& (*(nestedPtr->term) == ']')
 			&& !(nestedPtr->incomplete)) {
@@ -4701,6 +4702,17 @@ TclParseBackslash(
 		numBytes--;
 		continue;
 	    }
+=======
+    count = 2;
+    switch (*p) {
+	/*
+	 * Note: in the conversions below, use absolute values (e.g., 0xA)
+	 * rather than symbolic values (e.g. \n) that get converted by the
+	 * compiler. It's possible that compilers on some platforms will do
+	 * the symbolic conversions differently, which could result in
+	 * non-portable Tcl scripts.
+	 */
+>>>>>>> upstream/master
 
 	    /*
 	     * Backslash substitution.
@@ -4713,19 +4725,19 @@ TclParseBackslash(
 	result = 0x8;
 	break;
     case 'f':
-	result = 0xc;
+	result = 0xC;
 	break;
     case 'n':
-	result = 0xa;
+	result = 0xA;
 	break;
     case 'r':
-	result = 0xd;
+	result = 0xD;
 	break;
     case 't':
 	result = 0x9;
 	break;
     case 'v':
-	result = 0xb;
+	result = 0xB;
 	break;
     case 'x':
 	count += TclParseHex(p+1, (numBytes > 3) ? 2 : numBytes-2, &result);
@@ -4750,6 +4762,16 @@ TclParseBackslash(
 	     * No hexdigits -> This is just "u".
 	     */
 	    result = 'u';
+	} else if (((result & 0xDC00) == 0xD800) && (count == 6)
+		    && (p[5] == '\\') && (p[6] == 'u') && (numBytes >= 10)) {
+	    /* If high surrogate is immediately followed by a low surrogate
+	     * escape, combine them into one character. */
+	    int low;
+	    int count2 = TclParseHex(p+7, 4, &low);
+	    if ((count2 == 4) && ((low & 0xDC00) == 0xDC00)) {
+		result = ((result & 0x3FF)<<10 | (low & 0x3FF)) + 0x10000;
+		count += count2 + 2;
+	    }
 	}
 	break;
     case 'U':
@@ -4795,6 +4817,9 @@ TclParseBackslash(
 =======
 	     */
 	    result = 'U';
+	} else if ((result | 0x7FF) == 0xDFFF) {
+	    /* Upper or lower surrogate, not allowed in this syntax. */
+	    result = 0xFFFD;
 	}
 	break;
     case '\n':
@@ -4864,7 +4889,7 @@ TclParseBackslash(
 	if (Tcl_UtfCharComplete(p, numBytes - 1)) {
 	    count = TclUtfToUniChar(p, &unichar) + 1;	/* +1 for '\' */
 	} else {
-	    char utfBytes[TCL_UTF_MAX];
+	    char utfBytes[4];
 
 	    memcpy(utfBytes, p, numBytes - 1);
 	    utfBytes[numBytes - 1] = '\0';
@@ -5284,7 +5309,7 @@ Tcl_ParseBraces(
 
 	    src++;
 	    numBytes--;
-	    nestedPtr = TclStackAlloc(parsePtr->interp, sizeof(Tcl_Parse));
+	    nestedPtr = (Tcl_Parse *)TclStackAlloc(parsePtr->interp, sizeof(Tcl_Parse));
 	    while (1) {
 		const char *curEnd;
 
@@ -5815,6 +5840,7 @@ Tcl_ParseVar(
 {
     Tcl_Obj *objPtr;
     int code;
+<<<<<<< HEAD
     Tcl_Parse *parsePtr = TclStackAlloc(interp, sizeof(Tcl_Parse));
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -5826,6 +5852,9 @@ Tcl_ParseVar(
 
 =======
 =======
+>>>>>>> upstream/master
+=======
+    Tcl_Parse *parsePtr = (Tcl_Parse *)TclStackAlloc(interp, sizeof(Tcl_Parse));
 >>>>>>> upstream/master
 
     if (Tcl_ParseVarName(interp, start, -1, parsePtr, 0) != TCL_OK) {
@@ -6339,6 +6368,7 @@ TclSubstParse(
 
 		Tcl_Token *tokenPtr;
 		const char *lastTerm = parsePtr->term;
+<<<<<<< HEAD
 		Tcl_Parse *nestedPtr =
 <<<<<<< HEAD
 			TclStackAlloc(interp, sizeof(Tcl_Parse));
@@ -6388,6 +6418,9 @@ TclSubstParse(
 		const char *lastTerm = parsePtr->term;
 		Tcl_Parse *nestedPtr =
 =======
+>>>>>>> upstream/master
+=======
+		Tcl_Parse *nestedPtr = (Tcl_Parse *)
 >>>>>>> upstream/master
 			TclStackAlloc(interp, sizeof(Tcl_Parse));
 
@@ -6533,9 +6566,13 @@ TclSubstTokens(
     if (isLiteral) {
 	maxNumCL = NUM_STATIC_POS;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	clPosition = ckalloc(maxNumCL * sizeof(int));
 =======
 	clPosition = Tcl_Alloc(maxNumCL * sizeof(int));
+>>>>>>> upstream/master
+=======
+	clPosition = (int *)Tcl_Alloc(maxNumCL * sizeof(int));
 >>>>>>> upstream/master
     }
 
@@ -6717,7 +6754,7 @@ TclSubstTokens(
 >>>>>>> upstream/master
 		    if (numCL >= maxNumCL) {
 			maxNumCL *= 2;
-			clPosition = Tcl_Realloc(clPosition,
+			clPosition = (int *)Tcl_Realloc(clPosition,
 				maxNumCL * sizeof(int));
 		    }
 		    clPosition[numCL] = clPos;

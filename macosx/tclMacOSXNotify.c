@@ -1009,7 +1009,7 @@ void
 Tcl_AlertNotifier(
     ClientData clientData)
 {
-    ThreadSpecificData *tsdPtr = clientData;
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)clientData;
 
     if (tclNotifierHooks.alertNotifierProc) {
 	tclNotifierHooks.alertNotifierProc(clientData);
@@ -1096,6 +1096,8 @@ TimerWakeUp(
     CFRunLoopTimerRef timer,
     void *info)
 {
+    (void)timer;
+    (void)info;
 }
 
 /*
@@ -1187,7 +1189,7 @@ Tcl_CreateFileHandler(
 	}
     }
     if (filePtr == NULL) {
-	filePtr = Tcl_Alloc(sizeof(FileHandler));
+	filePtr = (FileHandler *)Tcl_Alloc(sizeof(FileHandler));
 	filePtr->fd = fd;
 	filePtr->readyMask = 0;
 	filePtr->nextPtr = tsdPtr->firstFileHandlerPtr;
@@ -1531,7 +1533,7 @@ QueueFileEvents(
 {
     SelectMasks readyMasks;
     FileHandler *filePtr;
-    ThreadSpecificData *tsdPtr = info;
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)info;
 
     /*
      * Queue all detected file events.
@@ -1570,7 +1572,7 @@ QueueFileEvents(
 	 */
 
 	if (filePtr->readyMask == 0) {
-	    FileHandlerEvent *fileEvPtr = Tcl_Alloc(sizeof(FileHandlerEvent));
+	    FileHandlerEvent *fileEvPtr = (FileHandlerEvent *)Tcl_Alloc(sizeof(FileHandlerEvent));
 
 	    fileEvPtr->header.proc = FileHandlerEventProc;
 	    fileEvPtr->fd = filePtr->fd;
@@ -1603,7 +1605,8 @@ UpdateWaitingListAndServiceEvents(
     CFRunLoopActivity activity,
     void *info)
 {
-    ThreadSpecificData *tsdPtr = info;
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)info;
+    (void)observer;
 
     if (tsdPtr->sleeping) {
 	return;
@@ -1990,13 +1993,14 @@ static TCL_NORETURN void
 static TCL_NORETURN void
 >>>>>>> upstream/master
 NotifierThreadProc(
-    ClientData clientData)	/* Not used. */
+    ClientData dummy)	/* Not used. */
 {
     ThreadSpecificData *tsdPtr;
     fd_set readableMask, writableMask, exceptionalMask;
     int i, numFdBits = 0, polling;
     struct timeval poll = {0., 0.}, *timePtr;
     char buf[2];
+    (void)dummy;
 
     /*
      * Look for file events and report them to interested threads.

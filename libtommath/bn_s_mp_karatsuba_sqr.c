@@ -1,4 +1,5 @@
 #include "tommath_private.h"
+<<<<<<< HEAD:libtommath/bn_mp_karatsuba_sqr.c
 #ifdef BN_MP_KARATSUBA_SQR_C
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
@@ -16,6 +17,11 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+#ifdef BN_S_MP_KARATSUBA_SQR_C
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master:libtommath/bn_s_mp_karatsuba_sqr.c
 
 /* Karatsuba squaring, computes b = a*a using three
  * half size squarings
@@ -24,12 +30,11 @@
  * is essentially the same algorithm but merely
  * tuned to perform recursive squarings.
  */
-int mp_karatsuba_sqr(const mp_int *a, mp_int *b)
+mp_err s_mp_karatsuba_sqr(const mp_int *a, mp_int *b)
 {
    mp_int  x0, x1, t1, t2, x0x0, x1x1;
-   int     B, err;
-
-   err = MP_MEM;
+   int     B;
+   mp_err  err = MP_MEM;
 
    /* min # of digits */
    B = a->used;
@@ -123,7 +128,3 @@ LBL_ERR:
    return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

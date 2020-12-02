@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_PRIME_FERMAT_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,6 +17,10 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* performs one Fermat test.
  *
@@ -25,10 +30,10 @@
  *
  * Sets result to 1 if the congruence holds, or zero otherwise.
  */
-int mp_prime_fermat(const mp_int *a, const mp_int *b, int *result)
+mp_err mp_prime_fermat(const mp_int *a, const mp_int *b, mp_bool *result)
 {
    mp_int  t;
-   int     err;
+   mp_err  err;
 
    /* default to composite  */
    *result = MP_NO;
@@ -59,7 +64,3 @@ LBL_T:
    return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

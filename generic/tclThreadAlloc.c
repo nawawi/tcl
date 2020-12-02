@@ -138,8 +138,8 @@ static void	LockBucket(Cache *cachePtr, int bucket);
 static void	UnlockBucket(Cache *cachePtr, int bucket);
 static void	PutBlocks(Cache *cachePtr, int bucket, int numMove);
 static int	GetBlocks(Cache *cachePtr, int bucket);
-static Block *	Ptr2Block(char *ptr);
-static char *	Block2Ptr(Block *blockPtr, int bucket, unsigned int reqSize);
+static Block *	Ptr2Block(void *ptr);
+static void *	Block2Ptr(Block *blockPtr, int bucket, unsigned int reqSize);
 static void	MoveObjs(Cache *fromPtr, Cache *toPtr, int numMove);
 static void	PutObjs(Cache *fromPtr, int numMove);
 
@@ -166,7 +166,7 @@ static __thread Cache *tcachePtr;
 #else
 # define GETCACHE(cachePtr)			\
     do {					\
-	(cachePtr) = TclpGetAllocCache();	\
+	(cachePtr) = (Cache*)TclpGetAllocCache();	\
 	if ((cachePtr) == NULL) {		\
 	    (cachePtr) = GetCache();		\
 	}					\
@@ -243,9 +243,9 @@ GetCache(void)
      * Get this thread's cache, allocating if necessary.
      */
 
-    cachePtr = TclpGetAllocCache();
+    cachePtr = (Cache*)TclpGetAllocCache();
     if (cachePtr == NULL) {
-	cachePtr = TclpSysAlloc(sizeof(Cache));
+	cachePtr = (Cache*)TclpSysAlloc(sizeof(Cache));
 	if (cachePtr == NULL) {
 	    Tcl_Panic("alloc: could not allocate new cache");
 	}
@@ -280,7 +280,7 @@ void
 TclFreeAllocCache(
     void *arg)
 {
-    Cache *cachePtr = arg;
+    Cache *cachePtr = (Cache*)arg;
     Cache **nextPtrPtr;
     unsigned int bucket;
 
@@ -374,7 +374,7 @@ TclpAlloc(
 #endif
     if (size > MAXALLOC) {
 	bucket = NBUCKETS;
-	blockPtr = TclpSysAlloc(size);
+	blockPtr = (Block *)TclpSysAlloc(size);
 	if (blockPtr != NULL) {
 	    cachePtr->totalAssigned += reqSize;
 	}
@@ -531,7 +531,7 @@ TclpRealloc(
     } else if (size > MAXALLOC) {
 	cachePtr->totalAssigned -= blockPtr->blockReqSize;
 	cachePtr->totalAssigned += reqSize;
-	blockPtr = TclpSysRealloc(blockPtr, size);
+	blockPtr = (Block*)TclpSysRealloc(blockPtr, size);
 	if (blockPtr == NULL) {
 	    return NULL;
 	}
@@ -608,7 +608,7 @@ TclThreadAllocObj(void)
 	    Tcl_Obj *newObjsPtr;
 
 	    cachePtr->numObjects = numMove = NOBJALLOC;
-	    newObjsPtr = TclpSysAlloc(sizeof(Tcl_Obj) * numMove);
+	    newObjsPtr = (Tcl_Obj *)TclpSysAlloc(sizeof(Tcl_Obj) * numMove);
 	    if (newObjsPtr == NULL) {
 		Tcl_Panic("alloc: could not allocate %d new objects", numMove);
 	    }
@@ -627,7 +627,7 @@ TclThreadAllocObj(void)
      */
 
     objPtr = cachePtr->firstObjPtr;
-    cachePtr->firstObjPtr = objPtr->internalRep.twoPtrValue.ptr1;
+    cachePtr->firstObjPtr = (Tcl_Obj *)objPtr->internalRep.twoPtrValue.ptr1;
     cachePtr->numObjects--;
     return objPtr;
 }
@@ -766,9 +766,9 @@ MoveObjs(
      */
 
     while (--numMove) {
-	objPtr = objPtr->internalRep.twoPtrValue.ptr1;
+	objPtr = (Tcl_Obj *)objPtr->internalRep.twoPtrValue.ptr1;
     }
-    fromPtr->firstObjPtr = objPtr->internalRep.twoPtrValue.ptr1;
+    fromPtr->firstObjPtr = (Tcl_Obj *)objPtr->internalRep.twoPtrValue.ptr1;
 
     /*
      * Move all objects as a block - they are already linked to each other, we
@@ -811,7 +811,7 @@ PutObjs(
     } else {
 	do {
 	    lastPtr = firstPtr;
-	    firstPtr = firstPtr->internalRep.twoPtrValue.ptr1;
+	    firstPtr = (Tcl_Obj *)firstPtr->internalRep.twoPtrValue.ptr1;
 	} while (--keep > 0);
 	lastPtr->internalRep.twoPtrValue.ptr1 = NULL;
     }
@@ -849,7 +849,7 @@ PutObjs(
  *----------------------------------------------------------------------
  */
 
-static char *
+static void *
 Block2Ptr(
     Block *blockPtr,
     int bucket,
@@ -864,12 +864,12 @@ Block2Ptr(
 #if RCHECK
     ((unsigned char *)(ptr))[reqSize] = MAGIC;
 #endif
-    return (char *) ptr;
+    return ptr;
 }
 
 static Block *
 Ptr2Block(
-    char *ptr)
+    void *ptr)
 {
     Block *blockPtr;
 
@@ -920,6 +920,8 @@ UnlockBucket(
     Cache *cachePtr,
     int bucket)
 {
+    (void)cachePtr;
+
     Tcl_MutexUnlock(bucketInfo[bucket].lockPtr);
 }
 
@@ -1077,7 +1079,7 @@ GetBlocks(
 
 	if (blockPtr == NULL) {
 	    size = MAXALLOC;
-	    blockPtr = TclpSysAlloc(size);
+	    blockPtr = (Block*)TclpSysAlloc(size);
 	    if (blockPtr == NULL) {
 		return 0;
 	    }
@@ -1215,7 +1217,7 @@ TclFinalizeThreadAlloc(void)
 void
 TclFinalizeThreadAllocThread(void)
 {
-    Cache *cachePtr = TclpGetAllocCache();
+    Cache *cachePtr = (Cache *)TclpGetAllocCache();
     if (cachePtr != NULL) {
 	TclpFreeAllocCache(cachePtr);
     }

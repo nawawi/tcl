@@ -150,10 +150,10 @@ extern "C" {
 #define TCL_MAJOR_VERSION   9
 #define TCL_MINOR_VERSION   0
 #define TCL_RELEASE_LEVEL   TCL_ALPHA_RELEASE
-#define TCL_RELEASE_SERIAL  0
+#define TCL_RELEASE_SERIAL  2
 
 #define TCL_VERSION	    "9.0"
-#define TCL_PATCH_LEVEL	    "9.0a0"
+#define TCL_PATCH_LEVEL	    "9.0a2"
 
 #if defined(RC_INVOKED)
 >>>>>>> upstream/master
@@ -677,7 +677,7 @@ typedef void *ClientData;
  */
 
 #if !defined(TCL_WIDE_INT_TYPE)&&!defined(TCL_WIDE_INT_IS_LONG)
-#   if defined(_WIN32)
+#   if defined(_MSC_VER) || defined(_WIN32)
 #      define TCL_WIDE_INT_TYPE __int64
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1484,7 +1484,7 @@ typedef struct Tcl_DString {
 #define TCL_TRACE_WRITES	 0x20
 #define TCL_TRACE_UNSETS	 0x40
 #define TCL_TRACE_DESTROYED	 0x80
-#define TCL_INTERP_DESTROYED	 0x100
+
 #define TCL_LEAVE_ERR_MSG	 0x200
 #define TCL_TRACE_ARRAY		 0x800
 #ifndef TCL_REMOVE_OBSOLETE_TRACES
@@ -2085,16 +2085,12 @@ typedef void (Tcl_ScaleTimeProc) (Tcl_Time *timebuf, void *clientData);
  * interface.
  */
 
-#define TCL_CLOSE2PROC		((Tcl_DriverCloseProc *) 1)
+#define TCL_CLOSE2PROC		NULL
 
 /*
  * Channel version tag. This was introduced in 8.3.2/8.4.
  */
 
-#define TCL_CHANNEL_VERSION_1	((Tcl_ChannelTypeVersion) 0x1)
-#define TCL_CHANNEL_VERSION_2	((Tcl_ChannelTypeVersion) 0x2)
-#define TCL_CHANNEL_VERSION_3	((Tcl_ChannelTypeVersion) 0x3)
-#define TCL_CHANNEL_VERSION_4	((Tcl_ChannelTypeVersion) 0x4)
 #define TCL_CHANNEL_VERSION_5	((Tcl_ChannelTypeVersion) 0x5)
 
 /*
@@ -2109,16 +2105,12 @@ typedef void (Tcl_ScaleTimeProc) (Tcl_Time *timebuf, void *clientData);
  */
 
 typedef int	(Tcl_DriverBlockModeProc) (void *instanceData, int mode);
-typedef int	(Tcl_DriverCloseProc) (void *instanceData,
-			Tcl_Interp *interp);
 typedef int	(Tcl_DriverClose2Proc) (void *instanceData,
 			Tcl_Interp *interp, int flags);
 typedef int	(Tcl_DriverInputProc) (void *instanceData, char *buf,
 			int toRead, int *errorCodePtr);
 typedef int	(Tcl_DriverOutputProc) (void *instanceData,
 			const char *buf, int toWrite, int *errorCodePtr);
-typedef int	(Tcl_DriverSeekProc) (void *instanceData, long offset,
-			int mode, int *errorCodePtr);
 typedef int	(Tcl_DriverSetOptionProc) (void *instanceData,
 			Tcl_Interp *interp, const char *optionName,
 			const char *value);
@@ -2161,17 +2153,14 @@ typedef struct Tcl_ChannelType {
 				 * type. */
     Tcl_ChannelTypeVersion version;
 				/* Version of the channel type. */
-    Tcl_DriverCloseProc *closeProc;
-				/* Function to call to close the channel, or
-				 * TCL_CLOSE2PROC if the close2Proc should be
-				 * used instead. */
+    void *closeProc;
+				/* Not used any more. */
     Tcl_DriverInputProc *inputProc;
 				/* Function to call for input on channel. */
     Tcl_DriverOutputProc *outputProc;
 				/* Function to call for output on channel. */
-    Tcl_DriverSeekProc *seekProc;
-				/* Function to call to seek on the channel.
-				 * May be NULL. */
+    void *seekProc;
+				/* Not used any more. */
     Tcl_DriverSetOptionProc *setOptionProc;
 				/* Set an option on a channel. */
     Tcl_DriverGetOptionProc *getOptionProc;
@@ -2189,9 +2178,6 @@ typedef struct Tcl_ChannelType {
     Tcl_DriverBlockModeProc *blockModeProc;
 				/* Set blocking mode for the raw channel. May
 				 * be NULL. */
-    /*
-     * Only valid in TCL_CHANNEL_VERSION_2 channels or later.
-     */
     Tcl_DriverFlushProc *flushProc;
 				/* Function to call to flush a channel. May be
 				 * NULL. */
@@ -2199,14 +2185,12 @@ typedef struct Tcl_ChannelType {
 				/* Function to call to handle a channel event.
 				 * This will be passed up the stacked channel
 				 * chain. */
-    /*
-     * Only valid in TCL_CHANNEL_VERSION_3 channels or later.
-     */
     Tcl_DriverWideSeekProc *wideSeekProc;
 				/* Function to call to seek on the channel
 				 * which can handle 64-bit offsets. May be
 				 * NULL, and must be NULL if seekProc is
 				 * NULL. */
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -2229,14 +2213,19 @@ typedef struct Tcl_ChannelType {
      * Only valid in TCL_CHANNEL_VERSION_4 channels or later.
      * TIP #218, Channel Thread Actions.
      */
+=======
+>>>>>>> upstream/master
     Tcl_DriverThreadActionProc *threadActionProc;
 				/* Function to call to notify the driver of
 				 * thread specific activity for a channel. May
 				 * be NULL. */
+<<<<<<< HEAD
     /*
      * Only valid in TCL_CHANNEL_VERSION_5 channels or later.
      * TIP #208, File Truncation.
      */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
@@ -2369,7 +2358,7 @@ typedef struct Tcl_FSVersion_ *Tcl_FSVersion;
  * struct Tcl_Filesystem:
  *
  * One such structure exists for each type (kind) of filesystem. It collects
- * together in one place all the functions that are part of the specific
+ * together the functions that form the interface for a particulr the
  * filesystem. Tcl always accesses the filesystem through one of these
  * structures.
  *
@@ -2384,147 +2373,119 @@ typedef struct Tcl_Filesystem {
 				 * compatibility can be assured. */
     Tcl_FSVersion version;	/* Version of the filesystem type. */
     Tcl_FSPathInFilesystemProc *pathInFilesystemProc;
-				/* Function to check whether a path is in this
+				/* Determines whether the pathname is in this
 				 * filesystem. This is the most important
 				 * filesystem function. */
     Tcl_FSDupInternalRepProc *dupInternalRepProc;
-				/* Function to duplicate internal fs rep. May
-				 * be NULL (but then fs is less efficient). */
+				/* Duplicates the internal handle of the node.
+				 * If it is NULL, the filesystem is less
+				 * performant. */
     Tcl_FSFreeInternalRepProc *freeInternalRepProc;
-				/* Function to free internal fs rep. Must be
-				 * implemented if internal representations
-				 * need freeing, otherwise it can be NULL. */
+				/* Frees the internal handle of the node.  NULL
+				 * only if there is no need to free resources
+				 * used for the internal handle. */
     Tcl_FSInternalToNormalizedProc *internalToNormalizedProc;
-				/* Function to convert internal representation
-				 * to a normalized path. Only required if the
-				 * fs creates pure path objects with no
-				 * string/path representation. */
+				/* Converts the internal handle to a normalized
+				 * path.  NULL if the filesystem creates nodes
+				 * having no pathname. */
     Tcl_FSCreateInternalRepProc *createInternalRepProc;
-				/* Function to create a filesystem-specific
-				 * internal representation. May be NULL if
-				 * paths have no internal representation, or
-				 * if the Tcl_FSPathInFilesystemProc for this
-				 * filesystem always immediately creates an
-				 * internal representation for paths it
-				 * accepts. */
+				/* Creates an internal handle for a pathname.
+				 * May be NULL if pathnames have no internal
+				 * handle or if pathInFilesystemProc always
+				 * immediately creates an internal
+				 * representation for pathnames in the
+				 * filesystem. */
     Tcl_FSNormalizePathProc *normalizePathProc;
-				/* Function to normalize a path.  Should be
-				 * implemented for all filesystems which can
-				 * have multiple string representations for
-				 * the same path object. */
+				/* Normalizes a path.  Should be implemented if
+				 * the filesystems supports multiple paths to
+				 * the same node. */
     Tcl_FSFilesystemPathTypeProc *filesystemPathTypeProc;
-				/* Function to determine the type of a path in
-				 * this filesystem. May be NULL. */
+				/* Determines the type of a path in this
+				 * filesystem. May be NULL. */
     Tcl_FSFilesystemSeparatorProc *filesystemSeparatorProc;
-				/* Function to return the separator
-				 * character(s) for this filesystem. Must be
-				 * implemented. */
-    Tcl_FSStatProc *statProc;	/* Function to process a 'Tcl_FSStat()' call.
-				 * Must be implemented for any reasonable
-				 * filesystem. */
-    Tcl_FSAccessProc *accessProc;
-				/* Function to process a 'Tcl_FSAccess()'
-				 * call. Must be implemented for any
+				/* Produces the separator character(s) for this
+				 * filesystem. Must not be NULL. */
+    Tcl_FSStatProc *statProc;	/* Called by 'Tcl_FSStat()'.  Provided by any
 				 * reasonable filesystem. */
+    Tcl_FSAccessProc *accessProc;
+				/* Called by 'Tcl_FSAccess()'.  Implemented by
+				 * any reasonable filesystem. */
     Tcl_FSOpenFileChannelProc *openFileChannelProc;
-				/* Function to process a
-				 * 'Tcl_FSOpenFileChannel()' call. Must be
-				 * implemented for any reasonable
-				 * filesystem. */
+				/* Called by 'Tcl_FSOpenFileChannel()'.
+				 * Provided by any reasonable filesystem. */
     Tcl_FSMatchInDirectoryProc *matchInDirectoryProc;
-				/* Function to process a
-				 * 'Tcl_FSMatchInDirectory()'.  If not
-				 * implemented, then glob and recursive copy
-				 * functionality will be lacking in the
-				 * filesystem. */
-    Tcl_FSUtimeProc *utimeProc;	/* Function to process a 'Tcl_FSUtime()' call.
-				 * Required to allow setting (not reading) of
-				 * times with 'file mtime', 'file atime' and
-				 * the open-r/open-w/fcopy implementation of
-				 * 'file copy'. */
-    Tcl_FSLinkProc *linkProc;	/* Function to process a 'Tcl_FSLink()' call.
-				 * Should be implemented only if the
-				 * filesystem supports links (reading or
-				 * creating). */
+				/* Called by 'Tcl_FSMatchInDirectory()'.  NULL
+				 * if the filesystem does not support glob or
+				 * recursive copy. */
+    Tcl_FSUtimeProc *utimeProc;	/* Called by 'Tcl_FSUtime()', by 'file
+				 *  mtime' to set (not read) times, 'file
+				 *  atime', and the open-r/open-w/fcopy variant
+				 *  of 'file copy'. */
+    Tcl_FSLinkProc *linkProc;	/* Called by 'Tcl_FSLink()'. NULL if reading or
+				 *  creating links is not supported. */
     Tcl_FSListVolumesProc *listVolumesProc;
-				/* Function to list any filesystem volumes
-				 * added by this filesystem. Should be
-				 * implemented only if the filesystem adds
-				 * volumes at the head of the filesystem. */
+				/* Lists filesystem volumes added by this
+				 * filesystem. NULL if the filesystem does not
+				 * use volumes. */
     Tcl_FSFileAttrStringsProc *fileAttrStringsProc;
-				/* Function to list all attributes strings
-				 * which are valid for this filesystem. If not
-				 * implemented the filesystem will not support
-				 * the 'file attributes' command. This allows
-				 * arbitrary additional information to be
-				 * attached to files in the filesystem. */
-    Tcl_FSFileAttrsGetProc *fileAttrsGetProc;
-				/* Function to process a
-				 * 'Tcl_FSFileAttrsGet()' call, used by 'file
-				 * attributes'. */
-    Tcl_FSFileAttrsSetProc *fileAttrsSetProc;
-				/* Function to process a
-				 * 'Tcl_FSFileAttrsSet()' call, used by 'file
-				 * attributes'.  */
-    Tcl_FSCreateDirectoryProc *createDirectoryProc;
-				/* Function to process a
-				 * 'Tcl_FSCreateDirectory()' call. Should be
-				 * implemented unless the FS is read-only. */
-    Tcl_FSRemoveDirectoryProc *removeDirectoryProc;
-				/* Function to process a
-				 * 'Tcl_FSRemoveDirectory()' call. Should be
-				 * implemented unless the FS is read-only. */
-    Tcl_FSDeleteFileProc *deleteFileProc;
-				/* Function to process a 'Tcl_FSDeleteFile()'
-				 * call. Should be implemented unless the FS
-				 * is read-only. */
-    Tcl_FSCopyFileProc *copyFileProc;
-				/* Function to process a 'Tcl_FSCopyFile()'
-				 * call. If not implemented Tcl will fall back
-				 * on open-r, open-w and fcopy as a copying
-				 * mechanism, for copying actions initiated in
-				 * Tcl (not C). */
-    Tcl_FSRenameFileProc *renameFileProc;
-				/* Function to process a 'Tcl_FSRenameFile()'
-				 * call. If not implemented, Tcl will fall
-				 * back on a copy and delete mechanism, for
-				 * rename actions initiated in Tcl (not C). */
-    Tcl_FSCopyDirectoryProc *copyDirectoryProc;
-				/* Function to process a
-				 * 'Tcl_FSCopyDirectory()' call. If not
-				 * implemented, Tcl will fall back on a
-				 * recursive create-dir, file copy mechanism,
-				 * for copying actions initiated in Tcl (not
-				 * C). */
-    Tcl_FSLstatProc *lstatProc;	/* Function to process a 'Tcl_FSLstat()' call.
-				 * If not implemented, Tcl will attempt to use
-				 * the 'statProc' defined above instead. */
-    Tcl_FSLoadFileProc *loadFileProc;
-				/* Function to process a 'Tcl_FSLoadFile()'
-				 * call. If not implemented, Tcl will fall
-				 * back on a copy to native-temp followed by a
-				 * Tcl_FSLoadFile on that temporary copy. */
-    Tcl_FSGetCwdProc *getCwdProc;
-				/* Function to process a 'Tcl_FSGetCwd()'
-				 * call. Most filesystems need not implement
-				 * this. It will usually only be called once,
-				 * if 'getcwd' is called before 'chdir'. May
-				 * be NULL. */
-    Tcl_FSChdirProc *chdirProc;	/* Function to process a 'Tcl_FSChdir()' call.
-				 * If filesystems do not implement this, it
-				 * will be emulated by a series of directory
-				 * access checks. Otherwise, virtual
-				 * filesystems which do implement it need only
-				 * respond with a positive return result if
-				 * the dirName is a valid directory in their
-				 * filesystem. They need not remember the
-				 * result, since that will be automatically
-				 * remembered for use by GetCwd. Real
-				 * filesystems should carry out the correct
-				 * action (i.e. call the correct system
-				 * 'chdir' api). If not implemented, then 'cd'
-				 * and 'pwd' will fail inside the
+				/* List all valid attributes strings.  NULL if
+				 * the filesystem does not support the 'file
+				 * attributes' command.  Can be used to attach
+				 * arbitrary additional data to files in a
 				 * filesystem. */
+    Tcl_FSFileAttrsGetProc *fileAttrsGetProc;
+				/* Called by 'Tcl_FSFileAttrsGet()' and by
+				 * 'file attributes'. */
+    Tcl_FSFileAttrsSetProc *fileAttrsSetProc;
+				/* Called by 'Tcl_FSFileAttrsSet()' and by
+				 * 'file attributes'.  */
+    Tcl_FSCreateDirectoryProc *createDirectoryProc;
+				/* Called by 'Tcl_FSCreateDirectory()'.  May be
+				 * NULL if the filesystem is read-only. */
+    Tcl_FSRemoveDirectoryProc *removeDirectoryProc;
+				/* Called by 'Tcl_FSRemoveDirectory()'.  May be
+				 * NULL if the filesystem is read-only. */
+    Tcl_FSDeleteFileProc *deleteFileProc;
+				/* Called by 'Tcl_FSDeleteFile()' May be NULL
+				 * if the filesystem is is read-only. */
+    Tcl_FSCopyFileProc *copyFileProc;
+				/* Called by 'Tcl_FSCopyFile()'.  If NULL, for
+				 * a copy operation at the script level (not
+				 * C) Tcl uses open-r, open-w and fcopy. */
+    Tcl_FSRenameFileProc *renameFileProc;
+				/* Called by 'Tcl_FSRenameFile()'. If NULL, for
+				 * a rename operation at the script level (not
+				 * C) Tcl performs a copy operation followed
+				 * by a delete operation. */
+    Tcl_FSCopyDirectoryProc *copyDirectoryProc;
+				/* Called by 'Tcl_FSCopyDirectory()'. If NULL,
+				 * for a copy operation at the script level
+				 * (not C) Tcl recursively creates directories
+				 * and copies files. */
+    Tcl_FSLstatProc *lstatProc;	/* Called by 'Tcl_FSLstat()'. If NULL, Tcl
+				 * attempts to use 'statProc' instead. */
+    Tcl_FSLoadFileProc *loadFileProc;
+				/* Called by 'Tcl_FSLoadFile()'. If NULL, Tcl
+				 * performs a copy to a temporary file in the
+				 * native filesystem and then calls
+				 * Tcl_FSLoadFile() on that temporary copy. */
+    Tcl_FSGetCwdProc *getCwdProc;
+				/* Called by 'Tcl_FSGetCwd()'.  Normally NULL.
+				 * Usually only called once:  If 'getcwd' is
+				 * called before 'chdir' is ever called. */
+    Tcl_FSChdirProc *chdirProc;	/* Called by 'Tcl_FSChdir()'.  For a virtual
+				 * filesystem, chdirProc just returns zero
+				 * (success) if the pathname is a valid
+				 * directory, and some other value otherwise.
+				 * For A real filesystem, chdirProc performs
+				 * the correct action, e.g.  calls the system
+				 * 'chdir' function. If not implemented, then
+				 * 'cd' and 'pwd' fail for a pathname in this
+				 * filesystem. On success Tcl stores the
+				 * pathname for use by GetCwd.  If NULL, Tcl
+				 * performs records the pathname as the new
+				 * current directory if it passes a series of
+				 * directory access checks. */
 } Tcl_Filesystem;
 
 /*
@@ -2869,23 +2830,23 @@ typedef struct Tcl_EncodingType {
  *				reset to an initial state. If the source
  *				buffer contains the entire input stream to be
  *				converted, this flag should be set.
- * TCL_ENCODING_STOPONERROR -	If set, then the converter will return
- *				immediately upon encountering an invalid byte
- *				sequence or a source character that has no
- *				mapping in the target encoding. If clear, then
- *				the converter will skip the problem,
- *				substituting one or more "close" characters in
- *				the destination buffer and then continue to
+ * TCL_ENCODING_STOPONERROR -	If set, the converter returns immediately upon
+ *				encountering an invalid byte sequence or a
+ *				source character that has no mapping in the
+ *				target encoding. If clear, the converter
+ *				substitues the problematic character(s) with
+ *				one or more "close" characters in the
+ *				destination buffer and then continues to
  *				convert the source.
- * TCL_ENCODING_NO_TERMINATE - 	If set, Tcl_ExternalToUtf will not append a
- *				terminating NUL byte.  Knowing that it will
- *				not need space to do so, it will fill all
- *				dstLen bytes with encoded UTF-8 content, as
- *				other circumstances permit.  If clear, the
- *				default behavior is to reserve a byte in
- *				the dst space for NUL termination, and to
- *				append the NUL byte.
+ * TCL_ENCODING_NO_TERMINATE - 	If set, Tcl_ExternalToUtf does not append a
+ *				terminating NUL byte.  Since it does not need
+ *				an extra byte for a terminating NUL, it fills
+ *				all dstLen bytes with encoded UTF-8 content if
+ *				needed.  If clear, a byte is reserved in the
+ *				dst space for NUL termination, and a
+ *				terminating NUL is appended.
  * TCL_ENCODING_CHAR_LIMIT -	If set and dstCharsPtr is not NULL, then
+<<<<<<< HEAD
  *				Tcl_ExternalToUtf takes the initial value
  *				of *dstCharsPtr is taken as a limit of the
  *				maximum number of chars to produce in the
@@ -2893,6 +2854,14 @@ typedef struct Tcl_EncodingType {
  *				number of chars produced is controlled only
  *				by other limiting factors.
 =======
+>>>>>>> upstream/master
+=======
+ *				Tcl_ExternalToUtf takes the initial value of
+ *				*dstCharsPtr as a limit of the maximum number
+ *				of chars to produce in the encoded UTF-8
+ *				content.  Otherwise, the number of chars
+ *				produced is controlled only by other limiting
+ *				factors.
 >>>>>>> upstream/master
  */
 
@@ -2939,12 +2908,11 @@ typedef struct Tcl_EncodingType {
 
 /*
  * The maximum number of bytes that are necessary to represent a single
- * Unicode character in UTF-8. The valid values are 4 and 6
- * (or perhaps 1 if we want to support a non-unicode enabled core). If 4,
- * then Tcl_UniChar must be 2-bytes in size (UCS-2) (the default). If 6,
- * then Tcl_UniChar must be 4-bytes in size (UCS-4). At this time UCS-2 mode
- * is the default and recommended mode. UCS-4 is experimental and not
- * recommended. It works for the core, but most extensions expect UCS-2.
+ * Unicode character in UTF-8. The valid values are 3 and 4
+ * (or perhaps 1 if we want to support a non-unicode enabled core). If > 3,
+ * then Tcl_UniChar must be 4-bytes in size (UCS-4) (the default). If == 3,
+ * then Tcl_UniChar must be 2-bytes in size (UCS-2). Since Tcl 9.0, UCS-4
+ * mode is the default and recommended mode.
  */
 
 #ifndef TCL_UTF_MAX
@@ -2956,15 +2924,11 @@ typedef struct Tcl_EncodingType {
  * reflected in regcustom.h.
  */
 
-#if TCL_UTF_MAX > 4
+#if TCL_UTF_MAX > 3
     /*
      * int isn't 100% accurate as it should be a strict 4-byte value
-     * (perhaps wchar_t). 64-bit systems may have troubles. The size of this
-     * value must be reflected correctly in regcustom.h and
-     * in tclEncoding.c.
-     * XXX: Tcl is currently UCS-2 and planning UTF-16 for the Unicode
-     * XXX: string rep that Tcl_UniChar represents.  Changing the size
-     * XXX: of Tcl_UniChar is /not/ supported.
+     * (perhaps wchar_t). ILP64/SILP64 systems may have troubles. The
+     * size of this value must be reflected correctly in regcustom.h.
      */
 typedef int Tcl_UniChar;
 #else
@@ -3001,8 +2965,10 @@ typedef struct Tcl_Config {
 typedef void (Tcl_LimitHandlerProc) (void *clientData, Tcl_Interp *interp);
 typedef void (Tcl_LimitHandlerDeleteProc) (void *clientData);
 
+#if 0
 /*
  *----------------------------------------------------------------------------
+<<<<<<< HEAD
  * Override definitions for libtommath.
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -3011,14 +2977,23 @@ typedef void (Tcl_LimitHandlerDeleteProc) (void *clientData);
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+ * We would like to provide an anonymous structure "mp_int" here, which is
+ * compatible with libtommath's "mp_int", but without duplicating anything
+ * from <tommath.h> or including <tommath.h> here. But the libtommath project
+ * didn't honor our request. See: <https://github.com/libtom/libtommath/pull/473>
+ *
+ * That's why this part is commented out, and we are using (void *) in
+ * various API's in stead of the more correct (mp_int *).
+>>>>>>> upstream/master
  */
 
-typedef struct mp_int mp_int;
+#ifndef MP_INT_DECLARED
 #define MP_INT_DECLARED
-typedef unsigned int mp_digit;
-#define MP_DIGIT_DECLARED
-typedef unsigned TCL_WIDE_INT_TYPE mp_word;
-#define MP_WORD_DECLARED
+typedef struct mp_int mp_int;
+#endif
+
+#endif
 
 /*
  *----------------------------------------------------------------------------
@@ -3679,6 +3654,7 @@ typedef int (Tcl_NRPostProc) (ClientData data[], Tcl_Interp *interp,
  * stubs tables.
  */
 
+<<<<<<< HEAD
 =======
 
 /*
@@ -3712,6 +3688,9 @@ typedef int (Tcl_NRPostProc) (ClientData data[], Tcl_Interp *interp,
 
 >>>>>>> upstream/master
 #define TCL_STUB_MAGIC		((int) 0xFCA3BACF)
+=======
+#define TCL_STUB_MAGIC		((int) 0xFCA3BACB + (int) sizeof(void *))
+>>>>>>> upstream/master
 
 /*
  * The following function is required to be defined in all stubs aware
@@ -3789,9 +3768,10 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 /*
  *----------------------------------------------------------------------------
  * The following declarations map ckalloc and ckfree to Tcl_Alloc and
- * Tcl_Free.
+ * Tcl_Free for use in Tcl-8.x-compatible extensions.
  */
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #ifdef TCL_MEM_DEBUG
 
@@ -3811,6 +3791,22 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 #define ckrealloc Tcl_Realloc
 #define attemptckalloc Tcl_AttemptAlloc
 #define attemptckrealloc Tcl_AttemptRealloc
+>>>>>>> upstream/master
+=======
+#ifndef BUILD_tcl
+#   define ckalloc Tcl_Alloc
+#   define attemptckalloc Tcl_AttemptAlloc
+#   ifdef _MSC_VER
+	/* Silence invalid C4090 warnings */
+#	define ckfree(a) Tcl_Free((char *)(a))
+#	define ckrealloc(a,b) Tcl_Realloc((char *)(a),(b))
+#	define attemptckrealloc(a,b) Tcl_AttemptRealloc((char *)(a),(b))
+#   else
+#	define ckfree Tcl_Free
+#	define ckrealloc Tcl_Realloc
+#	define attemptckrealloc Tcl_AttemptRealloc
+#   endif
+#endif
 >>>>>>> upstream/master
 
 #ifndef TCL_MEM_DEBUG
@@ -3925,13 +3921,22 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 #   define Tcl_IsShared(objPtr) \
 	Tcl_DbIsShared(objPtr, __FILE__, __LINE__)
 <<<<<<< HEAD
+<<<<<<< HEAD
 #else
+=======
+#else
+#   undef Tcl_IncrRefCount
+>>>>>>> upstream/master
 #   define Tcl_IncrRefCount(objPtr) \
 	++(objPtr)->refCount
     /*
      * Use do/while0 idiom for optimum correctness without compiler warnings.
      * http://c2.com/cgi/wiki?TrivialDoWhileLoop
      */
+<<<<<<< HEAD
+=======
+#   undef Tcl_DecrRefCount
+>>>>>>> upstream/master
 #   define Tcl_DecrRefCount(objPtr) \
 	do { \
 	    Tcl_Obj *_objPtr = (objPtr); \
@@ -3939,9 +3944,15 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 		TclFreeObj(_objPtr); \
 	    } \
 	} while(0)
+<<<<<<< HEAD
 #   define Tcl_IsShared(objPtr) \
 	((objPtr)->refCount > 1)
 =======
+>>>>>>> upstream/master
+=======
+#   undef Tcl_IsShared
+#   define Tcl_IsShared(objPtr) \
+	((objPtr)->refCount > 1)
 >>>>>>> upstream/master
 #endif
 

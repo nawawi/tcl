@@ -279,7 +279,7 @@ Tcl_SaveInterpState(
     int status)			/* status code for current operation */
 {
     Interp *iPtr = (Interp *) interp;
-    InterpState *statePtr = Tcl_Alloc(sizeof(InterpState));
+    InterpState *statePtr = (InterpState *)Tcl_Alloc(sizeof(InterpState));
 
     statePtr->status = status;
     statePtr->flags = iPtr->flags & ERR_ALREADY_LOGGED;
@@ -824,6 +824,7 @@ Tcl_AppendElement(
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
  * Tcl_FreeResult --
  *
  *	This function frees up the memory associated with an interpreter's
@@ -886,6 +887,8 @@ Tcl_FreeResult(
 /*
  *----------------------------------------------------------------------
  *
+=======
+>>>>>>> upstream/master
  * Tcl_ResetResult --
  *
  *	This function resets both the interpreter's string and object results.
@@ -2391,8 +2394,8 @@ static Tcl_Obj **
 GetKeys(void)
 {
     static Tcl_ThreadDataKey returnKeysKey;
-    Tcl_Obj **keys = Tcl_GetThreadData(&returnKeysKey,
-	    (int) (KEY_LAST * sizeof(Tcl_Obj *)));
+    Tcl_Obj **keys = (Tcl_Obj **)Tcl_GetThreadData(&returnKeysKey,
+	    KEY_LAST * sizeof(Tcl_Obj *));
 
     if (keys[0] == NULL) {
 	/*
@@ -2443,7 +2446,7 @@ static void
 ReleaseKeys(
     ClientData clientData)
 {
-    Tcl_Obj **keys = clientData;
+    Tcl_Obj **keys = (Tcl_Obj **)clientData;
     int i;
 
     for (i = KEY_CODE; i < KEY_LAST; i++) {
@@ -2978,10 +2981,11 @@ Tcl_SetReturnOptions(
 =======
 >>>>>>> upstream/master
  *
- *	Copy the result (and error information) from one interp to another.
+ *	Transfer the result (and error information) from one interp to another.
  *	Used when one interp has caused another interp to evaluate a script
  *	and then wants to transfer the results back to itself.
  *
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
@@ -2993,11 +2997,12 @@ Tcl_SetReturnOptions(
  *	interp, but have an internal rep that is only valid while some other
  *	interp is alive.
  *
+=======
+>>>>>>> upstream/master
  * Results:
- *	The target interp's result is set to a copy of the source interp's
- *	result. The source's errorInfo field may be transferred to the
- *	target's errorInfo field, and the source's errorCode field may be
- *	transferred to the target's errorCode field.
+ *	The result of targetInterp is set to the result read from sourceInterp.
+ *	The return options dictionary of sourceInterp is transferred to
+ *	targetInterp as appropriate for the return code value code.
  *
  * Side effects:
  *	None.
@@ -3007,14 +3012,16 @@ Tcl_SetReturnOptions(
 
 void
 Tcl_TransferResult(
-    Tcl_Interp *sourceInterp,	/* Interp whose result and error information
+    Tcl_Interp *sourceInterp,	/* Interp whose result and return options
 				 * should be moved to the target interp.
 				 * After moving result, this interp's result
 				 * is reset. */
-    int result,			/* TCL_OK if just the result should be copied,
-				 * TCL_ERROR if both the result and error
-				 * information should be copied. */
-    Tcl_Interp *targetInterp)	/* Interp where result and error information
+    int code,			/* The return code value active in
+				 * sourceInterp. Controls how the return options
+				 * dictionary is retrieved from sourceInterp,
+				 * same as in Tcl_GetReturnOptions, to then be
+				 * transferred to targetInterp. */
+    Tcl_Interp *targetInterp)	/* Interp where result and return options
 				 * should be stored. If source and target are
 				 * the same, nothing is done. */
 {
@@ -3025,7 +3032,7 @@ Tcl_TransferResult(
 	return;
     }
 
-    if (result == TCL_OK && siPtr->returnOpts == NULL) {
+    if (code == TCL_OK && siPtr->returnOpts == NULL) {
 	/*
 	 * Special optimization for the common case of normal command return
 	 * code and no explicit return options.
@@ -3076,7 +3083,7 @@ Tcl_TransferResult(
 	}
     } else {
 	Tcl_SetReturnOptions(targetInterp,
-		Tcl_GetReturnOptions(sourceInterp, result));
+		Tcl_GetReturnOptions(sourceInterp, code));
 	tiPtr->flags &= ~(ERR_ALREADY_LOGGED);
     }
 >>>>>>> upstream/master

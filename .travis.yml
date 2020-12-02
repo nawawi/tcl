@@ -33,42 +33,50 @@ matrix:
 # Testing on Linux with various compilers
     - name: "Linux/GCC/Shared"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       env:
         - BUILD_DIR=unix
-    - name: "Linux/GCC/Shared: UTF_MAX=6"
-      os: linux
-      dist: xenial
-      compiler: gcc
-      env:
-        - BUILD_DIR=unix
-        - CFGOPT=CFLAGS=-DTCL_UTF_MAX=6
     - name: "Linux/GCC/Shared: UTF_MAX=3"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       env:
         - BUILD_DIR=unix
-        - CFGOPT=CFLAGS=-DTCL_UTF_MAX=3
+        - CFGOPT="CFLAGS=-DTCL_UTF_MAX=3"
+    - name: "Linux/GCC/Shared: NO_DEPRECATED"
+      os: linux
+      dist: bionic
+      compiler: gcc
+      env:
+        - BUILD_DIR=unix
+        - CFGOPT="CFLAGS=-DTCL_NO_DEPRECATED=1"
     - name: "Linux/GCC/Static"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       env:
         - CFGOPT="--disable-shared"
         - BUILD_DIR=unix
     - name: "Linux/GCC/Debug"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc
       env:
         - BUILD_DIR=unix
         - CFGOPT="--enable-symbols"
+# C++ build.
+    - name: "Linux/G++/Shared"
+      os: linux
+      dist: bionic
+      compiler: g++
+      env:
+        - BUILD_DIR=unix
+        - CFGOPT="CC=g++ CFLAGS=-Dregister=dont+use+register"
 # Older versions of GCC...
     - name: "Linux/GCC 7/Shared"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc-7
 >>>>>>> upstream/master
       addons:
@@ -89,7 +97,7 @@ matrix:
         - BUILD_DIR=unix
     - name: "Linux/GCC 6/Shared"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc-6
 >>>>>>> upstream/master
       addons:
@@ -110,7 +118,7 @@ matrix:
         - BUILD_DIR=unix
     - name: "Linux/GCC 5/Shared"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: gcc-5
 >>>>>>> upstream/master
       addons:
@@ -129,6 +137,7 @@ matrix:
             - g++-5
       env:
         - BUILD_DIR=unix
+<<<<<<< HEAD
     - name: "Linux/GCC 4.9/Shared"
       os: linux
       dist: xenial
@@ -215,50 +224,38 @@ script:
             - g++-4.9
       env:
         - BUILD_DIR=unix
+=======
+>>>>>>> upstream/master
 # Clang
     - name: "Linux/Clang/Shared"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: clang
       env:
         - BUILD_DIR=unix
-    - name: "Linux/Clang/Shared: UTF_MAX=6"
-      os: linux
-      dist: xenial
-      compiler: clang
-      env:
-        - BUILD_DIR=unix
-        - CFGOPT=CFLAGS=-DTCL_UTF_MAX=6
-    - name: "Linux/Clang/Shared: UTF_MAX=3"
-      os: linux
-      dist: xenial
-      compiler: clang
-      env:
-        - BUILD_DIR=unix
-        - CFGOPT=CFLAGS=-DTCL_UTF_MAX=3
     - name: "Linux/Clang/Static"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: clang
       env:
         - CFGOPT="--disable-shared"
         - BUILD_DIR=unix
     - name: "Linux/Clang/Debug"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: clang
       env:
         - BUILD_DIR=unix
         - CFGOPT="--enable-symbols"
 # Testing on Mac, various styles
-    - name: "macOS/Xcode 11/Shared/Unix-like"
+    - name: "macOS/Xcode 11.3/Shared/Unix-like"
       os: osx
-      osx_image: xcode11
+      osx_image: xcode11.3
       env:
         - BUILD_DIR=unix
-    - name: "macOS/Xcode 11/Shared"
+    - name: "macOS/Xcode 11.3/Shared"
       os: osx
-      osx_image: xcode11
+      osx_image: xcode11.3
       env:
         - BUILD_DIR=macosx
       install: []
@@ -266,6 +263,17 @@ script:
         - make all
         # The styles=develop avoids some weird problems on OSX
         - make test styles=develop
+      addons:
+        homebrew:
+          packages:
+            - libtommath
+    - name: "macOS/Xcode 11/Shared"
+      os: osx
+      osx_image: xcode11
+      env:
+        - BUILD_DIR=macosx
+      install: []
+      script: *mactest
     - name: "macOS/Xcode 10/Shared"
       os: osx
       osx_image: xcode10.3
@@ -273,6 +281,10 @@ script:
         - BUILD_DIR=macosx
       install: []
       script: *mactest
+      addons:
+        homebrew:
+          packages:
+            - libtommath
     - name: "macOS/Xcode 9/Shared"
       os: osx
       osx_image: xcode9
@@ -280,6 +292,10 @@ script:
         - BUILD_DIR=macosx
       install: []
       script: *mactest
+      addons:
+        homebrew:
+          packages:
+            - libtommath
     - name: "macOS/Xcode 8/Shared"
       os: osx
       osx_image: xcode8
@@ -287,20 +303,23 @@ script:
         - BUILD_DIR=macosx
       install: []
       script: *mactest
+      addons:
+        homebrew:
+          packages:
+            - libtommath
 # Test with mingw-w64 cross-compile
 # Doesn't run tests because wine is only an imperfect Windows emulation
     - name: "Linux-cross-Windows/GCC/Shared/no test"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: x86_64-w64-mingw32-gcc
-      addons: &mingw64
+      addons:
         apt:
           packages:
             - gcc-mingw-w64-base
             - binutils-mingw-w64-x86-64
             - gcc-mingw-w64-x86-64
             - gcc-mingw-w64
-            - wine
       env:
         - BUILD_DIR=win
         - CFGOPT="--host=x86_64-w64-mingw32 --enable-64bit"
@@ -309,49 +328,13 @@ script:
         # Include a high visibility marker that tests are skipped outright
         - >
           echo "`tput setaf 3`SKIPPED TEST: CROSS COMPILING`tput sgr0`"
-    - name: "Linux-cross-Windows/GCC/Shared/no test: UTF_MAX=6"
-      os: linux
-      dist: xenial
-      compiler: x86_64-w64-mingw32-gcc
-      addons: *mingw64
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=x86_64-w64-mingw32 --enable-64bit CFLAGS=-DTCL_UTF_MAX=6"
-      script: *crosstest
-    - name: "Linux-cross-Windows/GCC/Shared/no test: UTF_MAX=3"
-      os: linux
-      dist: xenial
-      compiler: x86_64-w64-mingw32-gcc
-      addons: *mingw64
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=x86_64-w64-mingw32 --enable-64bit CFLAGS=-DTCL_UTF_MAX=3"
-      script: *crosstest
-    - name: "Linux-cross-Windows/GCC/Static/no test"
-      os: linux
-      dist: xenial
-      compiler: x86_64-w64-mingw32-gcc
-      addons: *mingw64
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=x86_64-w64-mingw32 --enable-64bit --disable-shared"
-      script: *crosstest
-    - name: "Linux-cross-Windows/GCC/Debug/no test"
-      os: linux
-      dist: xenial
-      compiler: x86_64-w64-mingw32-gcc
-      addons: *mingw64
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=x86_64-w64-mingw32 --enable-64bit --enable-symbols"
-      script: *crosstest
 # Test with mingw-w64 (32 bit) cross-compile
 # Doesn't run tests because wine is only an imperfect Windows emulation
     - name: "Linux-cross-Windows-32/GCC/Shared/no test"
       os: linux
-      dist: xenial
+      dist: bionic
       compiler: i686-w64-mingw32-gcc
-      addons: &mingw32
+      addons:
         apt:
           packages:
             - gcc-mingw-w64-base
@@ -359,46 +342,9 @@ script:
             - gcc-mingw-w64-i686
             - gcc-mingw-w64
             - gcc-multilib
-            - wine
       env:
         - BUILD_DIR=win
         - CFGOPT=--host=i686-w64-mingw32
-      script: *crosstest
-    - name: "Linux-cross-Windows-32/GCC/Shared/no test: UTF_MAX=6"
-      os: linux
-      dist: xenial
-      compiler: i686-w64-mingw32-gcc
-      addons: *mingw32
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=i686-w64-mingw32 CFLAGS=-DTCL_UTF_MAX=6"
-      script: *crosstest
-    - name: "Linux-cross-Windows-32/GCC/Shared/no test: UTF_MAX=3"
-      os: linux
-      dist: xenial
-      compiler: i686-w64-mingw32-gcc
-      addons: *mingw32
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=i686-w64-mingw32 CFLAGS=-DTCL_UTF_MAX=3"
-      script: *crosstest
-    - name: "Linux-cross-Windows-32/GCC/Static/no test"
-      os: linux
-      dist: xenial
-      compiler: i686-w64-mingw32-gcc
-      addons: *mingw32
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=i686-w64-mingw32 --disable-shared"
-      script: *crosstest
-    - name: "Linux-cross-Windows-32/GCC/Debug/no test"
-      os: linux
-      dist: xenial
-      compiler: i686-w64-mingw32-gcc
-      addons: *mingw32
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--host=i686-w64-mingw32 --enable-symbols"
       script: *crosstest
 # Test on Windows with MSVC native
     - name: "Windows/MSVC/Shared"
@@ -412,17 +358,17 @@ script:
         - cd ${BUILD_DIR}
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake -f makefile.vc test'
-    - name: "Windows/MSVC/Shared: UTF_MAX=6"
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake '-f' makefile.vc test
+    - name: "Windows/MSVC/Shared: NO_DEPRECATED"
       os: windows
       compiler: cl
       env: *vcenv
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=utfmax -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=utfmax -f makefile.vc test'
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake 'OPTS=nodep' '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake 'OPTS=nodep' '-f' makefile.vc test
     - name: "Windows/MSVC/Static"
       os: windows
       compiler: cl
@@ -430,8 +376,8 @@ script:
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static -f makefile.vc test'
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake 'OPTS=static,msvcrt' '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake 'OPTS=static,msvcrt' '-f' makefile.vc test
     - name: "Windows/MSVC/Debug"
       os: windows
       compiler: cl
@@ -439,8 +385,8 @@ script:
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=symbols -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=symbols -f makefile.vc test'
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake 'OPTS=symbols' '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x64 '&&' nmake 'OPTS=symbols' '-f' makefile.vc test
 # Test on Windows with MSVC native (32-bit)
     - name: "Windows/MSVC-x86/Shared"
       os: windows
@@ -449,17 +395,17 @@ script:
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake -f makefile.vc test'
-    - name: "Windows/MSVC-x86/Shared: UTF_MAX=6"
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake '-f' makefile.vc test
+    - name: "Windows/MSVC-x86/Shared: NO_DEPRECATED"
       os: windows
       compiler: cl
       env: *vcenv
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake OPTS=utfmax -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake OPTS=utfmax -f makefile.vc test'
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake 'OPTS=nodep' '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake 'OPTS=nodep' '-f' makefile.vc test
     - name: "Windows/MSVC-x86/Static"
       os: windows
       compiler: cl
@@ -467,8 +413,8 @@ script:
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake OPTS=static -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake OPTS=static -f makefile.vc test'
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake 'OPTS=static,msvcrt' '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake 'OPTS=static,msvcrt' '-f' makefile.vc test
     - name: "Windows/MSVC-x86/Debug"
       os: windows
       compiler: cl
@@ -476,8 +422,8 @@ script:
       before_install: *vcpreinst
       install: []
       script:
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake OPTS=symbols -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x86 && nmake OPTS=symbols -f makefile.vc test'
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake 'OPTS=symbols' '-f' makefile.vc all tcltest
+        - cmd.exe //C vcvarsall.bat x86 '&&' nmake 'OPTS=symbols' '-f' makefile.vc test
 # Test on Windows with GCC native
     - name: "Windows/GCC/Shared"
       os: windows
@@ -486,15 +432,8 @@ script:
         - BUILD_DIR=win
         - CFGOPT="--enable-64bit"
       before_install: &makepreinst
-        - choco install make
+        - choco install -y make zip
         - cd ${BUILD_DIR}
-    - name: "Windows/GCC/Shared: UTF_MAX=6"
-      os: windows
-      compiler: gcc
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="--enable-64bit CFLAGS=-DTCL_UTF_MAX=6"
-      before_install: *makepreinst
     - name: "Windows/GCC/Shared: UTF_MAX=3"
       os: windows
       compiler: gcc
@@ -502,6 +441,22 @@ script:
         - BUILD_DIR=win
         - CFGOPT="--enable-64bit CFLAGS=-DTCL_UTF_MAX=3"
       before_install: *makepreinst
+    - name: "Windows/GCC/Shared: NO_DEPRECATED"
+      os: windows
+      compiler: gcc
+      env:
+        - BUILD_DIR=win
+        - CFGOPT="--enable-64bit CFLAGS=-DTCL_NO_DEPRECATED=1"
+      before_install: *makepreinst
+    - name: "Windows/G++/Shared"
+      os: windows
+      compiler: g++
+      env:
+        - BUILD_DIR=win
+        - CFGOPT="CC=g++ --enable-64bit"
+      before_install: *makepreinst
+      script:
+        - make all tcltest
     - name: "Windows/GCC/Static"
       os: windows
       compiler: gcc
@@ -523,13 +478,6 @@ script:
       env:
         - BUILD_DIR=win
       before_install: *makepreinst
-    - name: "Windows/GCC-x86/Shared: UTF_MAX=6"
-      os: windows
-      compiler: gcc
-      env:
-        - BUILD_DIR=win
-        - CFGOPT="CFLAGS=-DTCL_UTF_MAX=6"
-      before_install: *makepreinst
     - name: "Windows/GCC-x86/Shared: UTF_MAX=3"
       os: windows
       compiler: gcc
@@ -537,6 +485,22 @@ script:
         - BUILD_DIR=win
         - CFGOPT="CFLAGS=-DTCL_UTF_MAX=3"
       before_install: *makepreinst
+    - name: "Windows/GCC-x86/Shared: NO_DEPRECATED"
+      os: windows
+      compiler: gcc
+      env:
+        - BUILD_DIR=win
+        - CFGOPT="CFLAGS=-DTCL_NO_DEPRECATED=1"
+      before_install: *makepreinst
+    - name: "Windows/G++-x86/Shared"
+      os: windows
+      compiler: g++
+      env:
+        - BUILD_DIR=win
+        - CFGOPT="CC=g++"
+      before_install: *makepreinst
+      script:
+        - make all tcltest
     - name: "Windows/GCC-x86/Static"
       os: windows
       compiler: gcc

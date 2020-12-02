@@ -20,7 +20,7 @@
 #include "tclInt.h"
 #include "tclOOInt.h"
 #include "tclCompile.h"
-#include "tommath.h"
+#include "tclTomMath.h"
 #include <math.h>
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -195,7 +195,7 @@ typedef struct {
     char *result;		/* The script cancellation result or NULL for
 				 * a default result. */
     size_t length;		/* Length of the above error message. */
-    ClientData clientData;	/* Ignored */
+    ClientData clientData;		/* Not used. */
     int flags;			/* Additional flags */
 } CancelInfo;
 static Tcl_HashTable cancelTable;
@@ -635,24 +635,24 @@ typedef struct {
     const char *name;		/* Name of the function. The full name is
 				 * "::tcl::mathfunc::<name>". */
     Tcl_ObjCmdProc *objCmdProc;	/* Function that evaluates the function */
-    ClientData clientData;	/* Client data for the function */
+    double (*fn)(double x);	/* Real function pointer */
 } BuiltinFuncDef;
 static const BuiltinFuncDef BuiltinFuncTable[] = {
     { "abs",	ExprAbsFunc,	NULL			},
-    { "acos",	ExprUnaryFunc,	(ClientData) acos	},
-    { "asin",	ExprUnaryFunc,	(ClientData) asin	},
-    { "atan",	ExprUnaryFunc,	(ClientData) atan	},
-    { "atan2",	ExprBinaryFunc,	(ClientData) atan2	},
+    { "acos",	ExprUnaryFunc,	acos			},
+    { "asin",	ExprUnaryFunc,	asin			},
+    { "atan",	ExprUnaryFunc,	atan			},
+    { "atan2",	ExprBinaryFunc,	(double (*)(double))(void *)(double (*)(double, double)) atan2},
     { "bool",	ExprBoolFunc,	NULL			},
     { "ceil",	ExprCeilFunc,	NULL			},
-    { "cos",	ExprUnaryFunc,	(ClientData) cos	},
-    { "cosh",	ExprUnaryFunc,	(ClientData) cosh	},
+    { "cos",	ExprUnaryFunc,	cos				},
+    { "cosh",	ExprUnaryFunc,	cosh			},
     { "double",	ExprDoubleFunc,	NULL			},
     { "entier",	ExprIntFunc,	NULL			},
-    { "exp",	ExprUnaryFunc,	(ClientData) exp	},
+    { "exp",	ExprUnaryFunc,	exp				},
     { "floor",	ExprFloorFunc,	NULL			},
-    { "fmod",	ExprBinaryFunc,	(ClientData) fmod	},
-    { "hypot",	ExprBinaryFunc,	(ClientData) hypot	},
+    { "fmod",	ExprBinaryFunc,	(double (*)(double))(void *)(double (*)(double, double)) fmod},
+    { "hypot",	ExprBinaryFunc,	(double (*)(double))(void *)(double (*)(double, double)) hypot},
     { "int",	ExprIntFunc,	NULL			},
     { "isfinite", ExprIsFiniteFunc, NULL        	},
     { "isinf",	ExprIsInfinityFunc, NULL        	},
@@ -661,19 +661,19 @@ static const BuiltinFuncDef BuiltinFuncTable[] = {
     { "isqrt",	ExprIsqrtFunc,	NULL			},
     { "issubnormal", ExprIsSubnormalFunc, NULL,         },
     { "isunordered", ExprIsUnorderedFunc, NULL,         },
-    { "log",	ExprUnaryFunc,	(ClientData) log	},
-    { "log10",	ExprUnaryFunc,	(ClientData) log10	},
+    { "log",	ExprUnaryFunc,	log				},
+    { "log10",	ExprUnaryFunc,	log10			},
     { "max",	ExprMaxFunc,	NULL			},
     { "min",	ExprMinFunc,	NULL			},
-    { "pow",	ExprBinaryFunc,	(ClientData) pow	},
+    { "pow",	ExprBinaryFunc,	(double (*)(double))(void *)(double (*)(double, double)) pow},
     { "rand",	ExprRandFunc,	NULL			},
     { "round",	ExprRoundFunc,	NULL			},
-    { "sin",	ExprUnaryFunc,	(ClientData) sin	},
-    { "sinh",	ExprUnaryFunc,	(ClientData) sinh	},
+    { "sin",	ExprUnaryFunc,	sin				},
+    { "sinh",	ExprUnaryFunc,	sinh			},
     { "sqrt",	ExprSqrtFunc,	NULL			},
     { "srand",	ExprSrandFunc,	NULL			},
-    { "tan",	ExprUnaryFunc,	(ClientData) tan	},
-    { "tanh",	ExprUnaryFunc,	(ClientData) tanh	},
+    { "tan",	ExprUnaryFunc,	tan				},
+    { "tanh",	ExprUnaryFunc,	tanh			},
     { "wide",	ExprWideFunc,	NULL			},
     { NULL, NULL, NULL }
 };
@@ -1123,10 +1123,14 @@ static Tcl_NRPostProc NRPostInvoke;
      * object type table and other object management code.
      */
 
+<<<<<<< HEAD
     iPtr = Tcl_Alloc(sizeof(Interp));
 <<<<<<< HEAD
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+    iPtr = (Interp *)Tcl_Alloc(sizeof(Interp));
 >>>>>>> upstream/master
     interp = (Tcl_Interp *) iPtr;
 
@@ -1156,10 +1160,10 @@ static Tcl_NRPostProc NRPostInvoke;
      */
 
     iPtr->cmdFramePtr = NULL;
-    iPtr->linePBodyPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
-    iPtr->lineBCPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
-    iPtr->lineLAPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
-    iPtr->lineLABCPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
+    iPtr->linePBodyPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
+    iPtr->lineBCPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
+    iPtr->lineLAPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
+    iPtr->lineLABCPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
     Tcl_InitHashTable(iPtr->linePBodyPtr, TCL_ONE_WORD_KEYS);
     Tcl_InitHashTable(iPtr->lineBCPtr, TCL_ONE_WORD_KEYS);
     Tcl_InitHashTable(iPtr->lineLAPtr, TCL_ONE_WORD_KEYS);
@@ -1322,7 +1326,7 @@ typedef struct {
      */
 
     /* This is needed to satisfy GCC 3.3's strict aliasing rules */
-    framePtr = Tcl_Alloc(sizeof(CallFrame));
+    framePtr = (CallFrame *)Tcl_Alloc(sizeof(CallFrame));
     (void) Tcl_PushCallFrame(interp, (Tcl_CallFrame *) framePtr,
 	    (Tcl_Namespace *) iPtr->globalNsPtr, /*isProcCallFrame*/ 0);
     framePtr->objc = 0;
@@ -1430,6 +1434,7 @@ MODULE_SCOPE const TclStubs tclStubs;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define CORO_ACTIVATE_YIELD    PTR2INT(NULL)
 #define CORO_ACTIVATE_YIELDM   PTR2INT(NULL)+1
 =======
@@ -1439,6 +1444,9 @@ MODULE_SCOPE const TclStubs tclStubs;
 >>>>>>> upstream/master
 =======
     cancelInfo = Tcl_Alloc(sizeof(CancelInfo));
+>>>>>>> upstream/master
+=======
+    cancelInfo = (CancelInfo *)Tcl_Alloc(sizeof(CancelInfo));
 >>>>>>> upstream/master
     cancelInfo->interp = interp;
 >>>>>>> upstream/master
@@ -1587,7 +1595,7 @@ static const CmdInfo builtInCmds[] = {
 =======
 >>>>>>> upstream/master
 #if TCL_THREADS && defined(USE_THREAD_ALLOC)
-    iPtr->allocCache = TclpGetAllocCache();
+    iPtr->allocCache = (AllocCache *)TclpGetAllocCache();
 #else
     iPtr->allocCache = NULL;
 >>>>>>> upstream/master
@@ -1693,7 +1701,7 @@ static const CmdInfo builtInCmds[] = {
 	hPtr = Tcl_CreateHashEntry(&iPtr->globalNsPtr->cmdTable,
 		cmdInfoPtr->name, &isNew);
 	if (isNew) {
-	    cmdPtr = Tcl_Alloc(sizeof(Command));
+	    cmdPtr = (Command *)Tcl_Alloc(sizeof(Command));
 	    cmdPtr->hPtr = hPtr;
 	    cmdPtr->nsPtr = iPtr->globalNsPtr;
 	    cmdPtr->refCount = 1;
@@ -1816,7 +1824,7 @@ static const CmdInfo builtInCmds[] = {
 	    builtinFuncPtr++) {
 	strcpy(mathFuncName+MATH_FUNC_PREFIX_LEN, builtinFuncPtr->name);
 	Tcl_CreateObjCommand(interp, mathFuncName,
-		builtinFuncPtr->objCmdProc, builtinFuncPtr->clientData, NULL);
+		builtinFuncPtr->objCmdProc, (void *)builtinFuncPtr->fn, NULL);
 	Tcl_Export(interp, nsPtr, builtinFuncPtr->name, 0);
     }
 >>>>>>> upstream/master
@@ -1876,7 +1884,11 @@ static const BuiltinFuncDef BuiltinFuncTable[] = {
 #define MATH_OP_PREFIX_LEN 15 /* == strlen("::tcl::mathop::") */
     memcpy(mathFuncName, "::tcl::mathop::", MATH_OP_PREFIX_LEN);
     for (opcmdInfoPtr=mathOpCmds ; opcmdInfoPtr->name!=NULL ; opcmdInfoPtr++){
+<<<<<<< HEAD
 	TclOpCmdClientData *occdPtr = Tcl_Alloc(sizeof(TclOpCmdClientData));
+>>>>>>> upstream/master
+=======
+	TclOpCmdClientData *occdPtr = (TclOpCmdClientData *)Tcl_Alloc(sizeof(TclOpCmdClientData));
 >>>>>>> upstream/master
 
 typedef struct {
@@ -22113,7 +22125,11 @@ ProcessUnexpectedResult(
     int returnCode)		/* The unexpected result code. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     char buf[TCL_INTEGER_SPACE];
+=======
+    TclOpCmdClientData *occdPtr = (TclOpCmdClientData *)clientData;
+>>>>>>> upstream/master
 
     Tcl_ResetResult(interp);
     if (returnCode == TCL_BREAK) {
@@ -22311,6 +22327,7 @@ Tcl_ExprBoolean(
     int *ptr)			/* Where to store 0/1 result. */
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (*exprstring == '\0') {
 =======
     if (iPtr->lineLABCPtr->numEntries && !TclInExit()) {
@@ -22320,6 +22337,11 @@ Tcl_ExprBoolean(
 	 */
 =======
     register Interp *iPtr = (Interp *) interp;
+>>>>>>> upstream/master
+=======
+    Command *cmdPtr = (Command *) command;
+    Tcl_ObjCmdProc *procPtr = cmdPtr->objProc;
+    const char *name = "native";
 >>>>>>> upstream/master
 
 <<<<<<< HEAD
@@ -22442,9 +22464,28 @@ Tcl_ExprLongObj(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     switch (type) {
     case TCL_NUMBER_DOUBLE: {
 	mp_int big;
+=======
+            if (TclRenameCommand(interp, TclGetString(cmdName),
+                        "___tmp") != TCL_OK
+                    || Tcl_HideCommand(interp, "___tmp",
+                            TclGetString(hideName)) != TCL_OK) {
+                Tcl_Panic("problem making '%s %s' safe: %s",
+                        unsafePtr->ensembleNsName, unsafePtr->commandName,
+                        Tcl_GetStringResult(interp));
+            }
+            Tcl_CreateObjCommand(interp, TclGetString(cmdName),
+                    BadEnsembleSubcommand, (void *)unsafePtr, NULL);
+            TclDecrRefCount(cmdName);
+            TclDecrRefCount(hideName);
+        } else {
+            /*
+             * Hide an ensemble main command (for compatibility).
+             */
+>>>>>>> upstream/master
 
 	d = *((const double *) internalPtr);
 	Tcl_DecrRefCount(resultPtr);
@@ -22483,6 +22524,7 @@ Tcl_ExprLongObj(
      * Initialize the hidden command table if necessary.
      */
 
+<<<<<<< HEAD
     hiddenCmdTablePtr = iPtr->hiddenCmdTablePtr;
     if (hiddenCmdTablePtr == NULL) {
 	hiddenCmdTablePtr = Tcl_Alloc(sizeof(Tcl_HashTable));
@@ -22501,6 +22543,16 @@ Tcl_ExprDoubleObj(
     Tcl_Obj *resultPtr;
     int result, type;
     ClientData internalPtr;
+=======
+static int
+BadEnsembleSubcommand(
+    ClientData clientData,
+    Tcl_Interp *interp,
+    TCL_UNUSED(int) /*objc*/,
+    TCL_UNUSED(Tcl_Obj *const *) /* objv */)
+{
+    const UnsafeEnsembleInfo *infoPtr = (const UnsafeEnsembleInfo *)clientData;
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
     result = Tcl_ExprObj(interp, objPtr, &resultPtr);
@@ -22516,6 +22568,7 @@ Tcl_ExprDoubleObj(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     result = TclGetNumberFromObj(interp, resultPtr, &internalPtr, &type);
     if (result == TCL_OK) {
 	switch (type) {
@@ -22533,14 +22586,37 @@ Tcl_ExprDoubleObj(
 	}
 =======
     register Interp *iPtr = (Interp *) interp;
+=======
+void
+Tcl_CallWhenDeleted(
+    Tcl_Interp *interp,		/* Interpreter to watch. */
+    Tcl_InterpDeleteProc *proc,	/* Function to call when interpreter is about
+				 * to be deleted. */
+    ClientData clientData)	/* One-word value to pass to proc. */
+{
+    Interp *iPtr = (Interp *) interp;
+    static Tcl_ThreadDataKey assocDataCounterKey;
+    int *assocDataCounterPtr =
+	    (int *)Tcl_GetThreadData(&assocDataCounterKey, sizeof(int));
+    int isNew;
+    char buffer[32 + TCL_INTEGER_SPACE];
+    AssocData *dPtr = (AssocData *)Tcl_Alloc(sizeof(AssocData));
+    Tcl_HashEntry *hPtr;
+>>>>>>> upstream/master
 
     /*
      * Has the current script in progress for this interpreter been canceled
      * or is the stack being unwound due to the previous script cancellation?
      */
 
+<<<<<<< HEAD
     if (!TclCanceled(iPtr)) {
         return TCL_OK;
+>>>>>>> upstream/master
+=======
+    if (iPtr->assocData == NULL) {
+	iPtr->assocData = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
+	Tcl_InitHashTable(iPtr->assocData, TCL_STRING_KEYS);
 >>>>>>> upstream/master
     }
     Tcl_DecrRefCount(resultPtr);/* Discard the result object. */
@@ -22603,6 +22679,7 @@ TclObjInvokeNamespace(
     int result;
     Tcl_CallFrame *framePtr;
 
+<<<<<<< HEAD
     /*
      * Make the specified namespace the current namespace and invoke the
      * command.
@@ -22618,6 +22695,20 @@ TclObjInvokeNamespace(
                 -1));
         Tcl_SetErrorCode(interp, "TCL", "EXPOSE", "NON_GLOBAL", NULL);
 	return TCL_ERROR;
+=======
+    hTablePtr = iPtr->assocData;
+    if (hTablePtr == NULL) {
+	return;
+    }
+    for (hPtr = Tcl_FirstHashEntry(hTablePtr, &hSearch); hPtr != NULL;
+	    hPtr = Tcl_NextHashEntry(&hSearch)) {
+	dPtr = (AssocData *)Tcl_GetHashValue(hPtr);
+	if ((dPtr->proc == proc) && (dPtr->clientData == clientData)) {
+	    Tcl_Free(dPtr);
+	    Tcl_DeleteHashEntry(hPtr);
+	    return;
+	}
+>>>>>>> upstream/master
     }
 >>>>>>> upstream/master
 
@@ -22796,6 +22887,7 @@ TclNRInvoke(
     Tcl_HashEntry *hPtr = NULL;
     Command *cmdPtr;
 
+<<<<<<< HEAD
     cmdName = TclGetString(objv[0]);
     hTblPtr = iPtr->hiddenCmdTablePtr;
     if (hTblPtr != NULL) {
@@ -22807,6 +22899,17 @@ TclNRInvoke(
         Tcl_SetErrorCode(interp, "TCL", "LOOKUP", "HIDDENTOKEN", cmdName,
                 NULL);
 	return TCL_ERROR;
+=======
+    if (iPtr->assocData == NULL) {
+	iPtr->assocData = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
+	Tcl_InitHashTable(iPtr->assocData, TCL_STRING_KEYS);
+    }
+    hPtr = Tcl_CreateHashEntry(iPtr->assocData, name, &isNew);
+    if (isNew == 0) {
+	dPtr = (AssocData *)Tcl_GetHashValue(hPtr);
+    } else {
+	dPtr = (AssocData *)Tcl_Alloc(sizeof(AssocData));
+>>>>>>> upstream/master
     }
     cmdPtr = Tcl_GetHashValue(hPtr);
 
@@ -22957,6 +23060,7 @@ Tcl_ExprString(
 	TclCleanupCommandMacro(cmdPtr);
 	deleted = 1;
     }
+<<<<<<< HEAD
 
     if (!isNew) {
 <<<<<<< HEAD
@@ -23062,6 +23166,11 @@ Tcl_ExprString(
 	    oldRefPtr = oldRefPtr->nextPtr;
 >>>>>>> upstream/master
 	}
+=======
+    dPtr = (AssocData *)Tcl_GetHashValue(hPtr);
+    if (dPtr->proc != NULL) {
+	dPtr->proc(dPtr->clientData, interp);
+>>>>>>> upstream/master
     }
 
     /*
@@ -23139,12 +23248,25 @@ Tcl_CreateObjCommand(
     Namespace *nsPtr;
     const char *tail;
 
+<<<<<<< HEAD
     if (iPtr->flags & DELETED) {
 	/*
 	 * The interpreter is being deleted. Don't create any new commands;
 	 * it's not safe to muck with the interpreter anymore.
 	 */
 	return (Tcl_Command) NULL;
+=======
+    if (iPtr->assocData == NULL) {
+	return NULL;
+    }
+    hPtr = Tcl_FindHashEntry(iPtr->assocData, name);
+    if (hPtr == NULL) {
+	return NULL;
+    }
+    dPtr = (AssocData *)Tcl_GetHashValue(hPtr);
+    if (procPtr != NULL) {
+	*procPtr = dPtr->proc;
+>>>>>>> upstream/master
     }
 >>>>>>> upstream/master
 
@@ -23431,12 +23553,24 @@ Tcl_AddObjErrorInfo(
 >>>>>>> upstream/master
 
     Tcl_MutexLock(&cancelLock);
+<<<<<<< HEAD
     if (cancelTableInitialized != 1) {
 =======
 =======
 	cmdPtr->refCount++;
 	if (cmdPtr->importRefPtr) {
 	    cmdPtr->flags |= CMD_REDEF_IN_PROGRESS;
+=======
+    hPtr = Tcl_FindHashEntry(&cancelTable, (char *) iPtr);
+    if (hPtr != NULL) {
+	CancelInfo *cancelInfo = (CancelInfo *)Tcl_GetHashValue(hPtr);
+
+	if (cancelInfo != NULL) {
+	    if (cancelInfo->result != NULL) {
+		Tcl_Free(cancelInfo->result);
+	    }
+	    Tcl_Free(cancelInfo);
+>>>>>>> upstream/master
 	}
 
 	/*
@@ -23467,7 +23601,16 @@ Tcl_AddObjErrorInfo(
 	 * infinite loop).
 	 */
 
+<<<<<<< HEAD
 	Tcl_Free(Tcl_GetHashValue(hPtr));
+=======
+	hPtr = Tcl_FirstHashEntry(hTablePtr, &search);
+	for (; hPtr != NULL; hPtr = Tcl_NextHashEntry(&search)) {
+	    Tcl_DeleteCommandFromToken(interp, (Tcl_Command)Tcl_GetHashValue(hPtr));
+	}
+	Tcl_DeleteHashTable(hTablePtr);
+	Tcl_Free(hTablePtr);
+>>>>>>> upstream/master
     }
 
     if (!deleted) {
@@ -23481,7 +23624,25 @@ Tcl_AddObjErrorInfo(
 	 * commands.
 	 */
 
+<<<<<<< HEAD
 	TclInvalidateCmdLiteral(interp, cmdName, nsPtr);
+=======
+	hTablePtr = iPtr->assocData;
+	iPtr->assocData = NULL;
+	for (hPtr = Tcl_FirstHashEntry(hTablePtr, &search);
+		hPtr != NULL;
+		hPtr = Tcl_FirstHashEntry(hTablePtr, &search)) {
+	    dPtr = (AssocData *)Tcl_GetHashValue(hPtr);
+	    Tcl_DeleteHashEntry(hPtr);
+	    if (dPtr->proc != NULL) {
+		dPtr->proc(dPtr->clientData, interp);
+	    }
+	    Tcl_Free(dPtr);
+	}
+	Tcl_DeleteHashTable(hTablePtr);
+	Tcl_Free(hTablePtr);
+    }
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 	/*
@@ -23493,11 +23654,48 @@ Tcl_AddObjErrorInfo(
 	Tcl_Free(Tcl_GetHashValue(hPtr));
     }
 
+<<<<<<< HEAD
     if (!deleted) {
 >>>>>>> upstream/master
 	/*
 	 * No CancelInfo hash table (Tcl_CreateInterp has never been called?)
 	 */
+=======
+    Tcl_DecrRefCount(iPtr->objResultPtr);
+    iPtr->objResultPtr = NULL;
+    Tcl_DecrRefCount(iPtr->ecVar);
+    if (iPtr->errorCode) {
+	Tcl_DecrRefCount(iPtr->errorCode);
+	iPtr->errorCode = NULL;
+    }
+    Tcl_DecrRefCount(iPtr->eiVar);
+    if (iPtr->errorInfo) {
+	Tcl_DecrRefCount(iPtr->errorInfo);
+	iPtr->errorInfo = NULL;
+    }
+    Tcl_DecrRefCount(iPtr->errorStack);
+    iPtr->errorStack = NULL;
+    Tcl_DecrRefCount(iPtr->upLiteral);
+    Tcl_DecrRefCount(iPtr->callLiteral);
+    Tcl_DecrRefCount(iPtr->innerLiteral);
+    Tcl_DecrRefCount(iPtr->innerContext);
+    if (iPtr->returnOpts) {
+	Tcl_DecrRefCount(iPtr->returnOpts);
+    }
+    TclFreePackageInfo(iPtr);
+    while (iPtr->tracePtr != NULL) {
+	Tcl_DeleteTrace((Tcl_Interp *) iPtr, (Tcl_Trace) iPtr->tracePtr);
+    }
+    if (iPtr->execEnvPtr != NULL) {
+	TclDeleteExecEnv(iPtr->execEnvPtr);
+    }
+    if (iPtr->scriptFile) {
+	Tcl_DecrRefCount(iPtr->scriptFile);
+	iPtr->scriptFile = NULL;
+    }
+    Tcl_DecrRefCount(iPtr->emptyObjPtr);
+    iPtr->emptyObjPtr = NULL;
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
 	goto done;
@@ -23558,6 +23756,7 @@ Tcl_AddObjErrorInfo(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (length != 0) {
 	if (Tcl_IsShared(iPtr->errorInfo)) {
 	    Tcl_DecrRefCount(iPtr->errorInfo);
@@ -23570,6 +23769,13 @@ Tcl_AddObjErrorInfo(
 	    Command *refCmdPtr = oldRefPtr->importedCmdPtr;
 <<<<<<< HEAD
 =======
+=======
+    for (hPtr = Tcl_FirstHashEntry(iPtr->linePBodyPtr, &search);
+	    hPtr != NULL;
+	    hPtr = Tcl_NextHashEntry(&search)) {
+	CmdFrame *cfPtr = (CmdFrame *)Tcl_GetHashValue(hPtr);
+	Proc *procPtr = (Proc *) Tcl_GetHashKey(iPtr->linePBodyPtr, hPtr);
+>>>>>>> upstream/master
 
 >>>>>>> upstream/master
 	    dataPtr = refCmdPtr->objClientData;
@@ -23626,11 +23832,24 @@ Tcl_VarEvalVA(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Tcl_DStringInit(&buf);
     while (1) {
 	string = va_arg(argList, char *);
 	if (string == NULL) {
 	    break;
+=======
+    for (hPtr = Tcl_FirstHashEntry(iPtr->lineBCPtr, &search);
+	    hPtr != NULL;
+	    hPtr = Tcl_NextHashEntry(&search)) {
+	ExtCmdLoc *eclPtr = (ExtCmdLoc *)Tcl_GetHashValue(hPtr);
+
+	if (eclPtr->type == TCL_LOCATION_SOURCE) {
+	    Tcl_DecrRefCount(eclPtr->path);
+	}
+	for (i=0; i< eclPtr->nuloc; i++) {
+	    Tcl_Free(eclPtr->loc[i].line);
+>>>>>>> upstream/master
 	}
 	Tcl_DStringAppend(&buf, string, -1);
     }
@@ -23953,12 +24172,20 @@ Tcl_AllowExceptions(
      * way it was and report the error.
      */
 
+<<<<<<< HEAD
     result = TclPreventAliasLoop(interp, interp, (Tcl_Command) cmdPtr);
     if (result != TCL_OK) {
 	Tcl_DeleteHashEntry(cmdPtr->hPtr);
 	cmdPtr->hPtr = oldHPtr;
 	cmdPtr->nsPtr = cmdNsPtr;
 	goto done;
+=======
+    hiddenCmdTablePtr = iPtr->hiddenCmdTablePtr;
+    if (hiddenCmdTablePtr == NULL) {
+	hiddenCmdTablePtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
+	Tcl_InitHashTable(hiddenCmdTablePtr, TCL_STRING_KEYS);
+	iPtr->hiddenCmdTablePtr = hiddenCmdTablePtr;
+>>>>>>> upstream/master
     }
 
     /*
@@ -24209,6 +24436,10 @@ ExprIsqrtFunc(
 	MathFuncWrongNumArgs(interp, 2, objc, objv);
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
+=======
+    cmdPtr = (Command *)Tcl_GetHashValue(hPtr);
+>>>>>>> upstream/master
 
     /*
      * Make sure that the arg is a number.
@@ -24440,12 +24671,20 @@ EvalObjvCore(
 	     * traces again.
 	     */
 
+<<<<<<< HEAD
 	    if (cmdPtr == NULL) {
 		enterTracesDone = 1;
 		Tcl_DecrRefCount(commandPtr);
 		goto reresolve;
 	    }
 	}
+=======
+	/*
+         * An existing command conflicts. Try to delete it...
+         */
+
+	cmdPtr = (Command *)Tcl_GetHashValue(hPtr);
+>>>>>>> upstream/master
 
 	/*
 	 * Schedule leave traces.  Raise the refCount on the resolved
@@ -24591,6 +24830,7 @@ CheckDoubleResult(
 	TclExprFloatError(interp, dResult);
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
     Tcl_SetObjResult(interp, Tcl_NewDoubleObj(dResult));
     return TCL_OK;
 }
@@ -24613,6 +24853,40 @@ ExprBinaryFunc(
     Interp *iPtr = (Interp *) interp;
     Command *cmdPtr = (Command *) command;
     char *name;
+=======
+    cmdPtr = (Command *)Tcl_Alloc(sizeof(Command));
+    Tcl_SetHashValue(hPtr, cmdPtr);
+    cmdPtr->hPtr = hPtr;
+    cmdPtr->nsPtr = nsPtr;
+    cmdPtr->refCount = 1;
+    cmdPtr->cmdEpoch = 0;
+    cmdPtr->compileProc = NULL;
+    cmdPtr->objProc = TclInvokeStringCommand;
+    cmdPtr->objClientData = cmdPtr;
+    cmdPtr->proc = proc;
+    cmdPtr->clientData = clientData;
+    cmdPtr->deleteProc = deleteProc;
+    cmdPtr->deleteData = clientData;
+    cmdPtr->flags = 0;
+    cmdPtr->importRefPtr = NULL;
+    cmdPtr->tracePtr = NULL;
+    cmdPtr->nreProc = NULL;
+
+    /*
+     * Plug in any existing import references found above. Be sure to update
+     * all of these references to point to the new command.
+     */
+
+    if (oldRefPtr != NULL) {
+	cmdPtr->importRefPtr = oldRefPtr;
+	while (oldRefPtr != NULL) {
+	    Command *refCmdPtr = oldRefPtr->importedCmdPtr;
+	    dataPtr = (ImportedCmdData *)refCmdPtr->objClientData;
+	    dataPtr->realCmdPtr = cmdPtr;
+	    oldRefPtr = oldRefPtr->nextPtr;
+	}
+    }
+>>>>>>> upstream/master
 
     /*
      * Add the full name of the containing namespace, followed by the "::"
@@ -24756,9 +25030,17 @@ TclNRRunCallbacks(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifndef TCL_WIDE_INT_IS_LONG
     if (type == TCL_NUMBER_WIDE) {
 	Tcl_WideInt w = *((const Tcl_WideInt *) ptr);
+=======
+	/*
+         * An existing command conflicts. Try to delete it...
+         */
+
+	cmdPtr = (Command *)Tcl_GetHashValue(hPtr);
+>>>>>>> upstream/master
 
 	if (w >= (Tcl_WideInt)0) {
 	    goto unChanged;
@@ -24860,7 +25142,30 @@ NRCommand(
 	CallCommandTraces(iPtr,cmdPtr,NULL,NULL,TCL_TRACE_DELETE);
 >>>>>>> upstream/master
 
+<<<<<<< HEAD
     iPtr->numLevels--;
+=======
+	TclInvalidateNsCmdLookup(nsPtr);
+	TclInvalidateNsPath(nsPtr);
+    }
+    cmdPtr = (Command *)Tcl_Alloc(sizeof(Command));
+    Tcl_SetHashValue(hPtr, cmdPtr);
+    cmdPtr->hPtr = hPtr;
+    cmdPtr->nsPtr = nsPtr;
+    cmdPtr->refCount = 1;
+    cmdPtr->cmdEpoch = 0;
+    cmdPtr->compileProc = NULL;
+    cmdPtr->objProc = proc;
+    cmdPtr->objClientData = clientData;
+    cmdPtr->proc = TclInvokeObjectCommand;
+    cmdPtr->clientData = cmdPtr;
+    cmdPtr->deleteProc = deleteProc;
+    cmdPtr->deleteData = clientData;
+    cmdPtr->flags = 0;
+    cmdPtr->importRefPtr = NULL;
+    cmdPtr->tracePtr = NULL;
+    cmdPtr->nreProc = NULL;
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
      /*
@@ -24876,11 +25181,17 @@ NRCommand(
 	while (tracePtr != NULL) {
 	    CommandTrace *nextPtr = tracePtr->nextPtr;
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	    if (tracePtr->refCount-- <= 1) {
 		Tcl_Free(tracePtr);
 	    }
 	    tracePtr = nextPtr;
+=======
+	    dataPtr = (ImportedCmdData*)refCmdPtr->objClientData;
+	    dataPtr->realCmdPtr = cmdPtr;
+	    oldRefPtr = oldRefPtr->nextPtr;
+>>>>>>> upstream/master
 	}
 	cmdPtr->tracePtr = NULL;
 >>>>>>> upstream/master
@@ -24922,7 +25233,14 @@ ExprDoubleFunc(
     int objc,			/* Actual parameter count. */
     Tcl_Obj *const *objv)	/* Actual parameter vector. */
 {
+<<<<<<< HEAD
     double dResult;
+=======
+    Command *cmdPtr = (Command *)clientData;
+    int i, result;
+    const char **argv = (const char **)
+	    TclStackAlloc(interp, (objc + 1) * sizeof(char *));
+>>>>>>> upstream/master
 
     if (objc != 2) {
 	MathFuncWrongNumArgs(interp, 2, objc, objv);
@@ -24950,6 +25268,7 @@ ExprEntierFunc(
     int objc,			/* Actual parameter count. */
     Tcl_Obj *const *objv)	/* Actual parameter vector. */
 {
+<<<<<<< HEAD
     double d;
     int type;
     ClientData ptr;
@@ -24969,6 +25288,13 @@ ExprEntierFunc(
 	 * instead of Tcl_Free(). You should pass a pointer to your own method
 	 * that calls Tcl_Free().
 	 */
+>>>>>>> upstream/master
+=======
+    Command *cmdPtr = ( Command *) clientData;
+    Tcl_Obj *objPtr;
+    int i, length, result;
+    Tcl_Obj **objv = (Tcl_Obj **)
+	    TclStackAlloc(interp, (argc * sizeof(Tcl_Obj *)));
 >>>>>>> upstream/master
 
     if (objc != 2) {
@@ -25539,14 +25865,28 @@ CancelEvalProc(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 void
 TclCleanupCommand(
     Command *cmdPtr)	/* Points to the Command structure to
 				 * be freed. */
+=======
+const char *
+Tcl_GetCommandName(
+    TCL_UNUSED(Tcl_Interp *),
+    Tcl_Command command)	/* Token for command returned by a previous
+				 * call to Tcl_CreateCommand. The command must
+				 * not have been deleted. */
+>>>>>>> upstream/master
 {
     if (cmdPtr->refCount-- <= 1) {
 	Tcl_Free(cmdPtr);
     }
+<<<<<<< HEAD
+=======
+
+    return (const char *)Tcl_GetHashKey(cmdPtr->hPtr->tablePtr, cmdPtr->hPtr);
+>>>>>>> upstream/master
 }
 
 /*
@@ -25578,6 +25918,7 @@ TclInterpReady(
      * information.
      */
 
+<<<<<<< HEAD
     Tcl_ResetResult(interp);
 
     /*
@@ -25612,6 +25953,19 @@ TclInterpReady(
 
     if (((iPtr->numLevels) <= iPtr->maxNestingDepth)) {
 	return TCL_OK;
+=======
+    if (cmdPtr != NULL) {
+	if (cmdPtr->nsPtr != NULL) {
+	    Tcl_AppendToObj(objPtr, cmdPtr->nsPtr->fullName, -1);
+	    if (cmdPtr->nsPtr != iPtr->globalNsPtr) {
+		Tcl_AppendToObj(objPtr, "::", 2);
+	    }
+	}
+	if (cmdPtr->hPtr != NULL) {
+	    name = (char *)Tcl_GetHashKey(cmdPtr->hPtr->tablePtr, cmdPtr->hPtr);
+	    Tcl_AppendToObj(objPtr, name, -1);
+	}
+>>>>>>> upstream/master
     }
 
     Tcl_SetObjResult(interp, Tcl_NewStringObj(
@@ -26120,6 +26474,7 @@ Tcl_NRCallObjProc(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 Tcl_Command
 Tcl_NRCreateCommand(
     Tcl_Interp *interp,		/* Token for command interpreter (returned by
@@ -26141,6 +26496,16 @@ Tcl_NRCreateCommand(
 {
     Command *cmdPtr = (Command *)
 	    Tcl_CreateObjCommand(interp,cmdName,proc,clientData,deleteProc);
+=======
+static int
+CancelEvalProc(
+    ClientData clientData,	/* Interp to cancel the script in progress. */
+    TCL_UNUSED(Tcl_Interp *),
+    int code)			/* Current return code from command. */
+{
+    CancelInfo *cancelInfo = (CancelInfo *)clientData;
+    Interp *iPtr;
+>>>>>>> upstream/master
 
     cmdPtr->nreProc = nreProc;
     return (Tcl_Command) cmdPtr;
@@ -26665,6 +27030,10 @@ NRCommand(
 	result = Tcl_Canceled(interp, TCL_LEAVE_ERR_MSG);
 >>>>>>> upstream/master
     }
+<<<<<<< HEAD
+=======
+    cancelInfo = (CancelInfo *)Tcl_GetHashValue(hPtr);
+>>>>>>> upstream/master
 
     if (result != TCL_OK) {
         /*
@@ -26672,8 +27041,19 @@ NRCommand(
          * a now-gone namespace: cleanup and return.
          */
 
+<<<<<<< HEAD
 	Tcl_DecrRefCount(listPtr);
         return result;
+=======
+    if (resultObjPtr != NULL) {
+	result = TclGetStringFromObj(resultObjPtr, &cancelInfo->length);
+	cancelInfo->result = (char *)Tcl_Realloc(cancelInfo->result,cancelInfo->length);
+	memcpy(cancelInfo->result, result, cancelInfo->length);
+	TclDecrRefCount(resultObjPtr);	/* Discard their result object. */
+    } else {
+	cancelInfo->result = NULL;
+	cancelInfo->length = 0;
+>>>>>>> upstream/master
     }
 
     /*
@@ -26927,10 +27307,20 @@ static int
 NRCoroutineCallerCallback(
     ClientData data[],
     Tcl_Interp *interp,
-    int result)
+    TCL_UNUSED(int) /*result*/)
 {
+<<<<<<< HEAD
     CoroutineData *corPtr = data[0];
     Command *cmdPtr = corPtr->cmdPtr;
+=======
+    Command *cmdPtr = NULL, *preCmdPtr = (Command *)data[0];
+    int flags = PTR2INT(data[1]);
+    int objc = PTR2INT(data[2]);
+    Tcl_Obj **objv = (Tcl_Obj **)data[3];
+    Interp *iPtr = (Interp *) interp;
+    Namespace *lookupNsPtr = NULL;
+    int enterTracesDone = 0;
+>>>>>>> upstream/master
 
     /*
      * This is the last callback in the caller execEnv, right before switching
@@ -27140,8 +27530,15 @@ static int
 TEOV_RunLeaveTraces(
     ClientData data[],
     Tcl_Interp *interp,
-    int result)
+    TCL_UNUSED(int) /*result*/)
 {
+<<<<<<< HEAD
+=======
+    Tcl_ObjCmdProc *objProc = (Tcl_ObjCmdProc *)data[0];
+    ClientData clientData = data[1];
+    int objc = PTR2INT(data[2]);
+    Tcl_Obj **objv = (Tcl_Obj **)data[3];
+>>>>>>> upstream/master
     Interp *iPtr = (Interp *) interp;
     int traceCode = TCL_OK;
     int objc = PTR2INT(data[0]);
@@ -27410,7 +27807,18 @@ NRCoroInjectObjCmd(
     TclNREvalObjEx(interp, Tcl_NewListObj(objc-2, objv+2), 0, NULL, INT_MIN);
     iPtr->execEnvPtr = savedEEPtr;
 
+<<<<<<< HEAD
     return TCL_OK;
+=======
+static int
+TEOV_RestoreVarFrame(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    ((Interp *) interp)->varFramePtr = (CallFrame *)data[0];
+    return result;
+>>>>>>> upstream/master
 }
 
 int
@@ -27476,7 +27884,23 @@ Tcl_EvalTokens(
     size_t count)			/* Number of tokens to consider at tokenPtr.
 				 * Must be at least 1. */
 {
+<<<<<<< HEAD
     Tcl_Obj *resPtr;
+=======
+    Interp *iPtr = (Interp *) interp;
+    Tcl_Obj *listPtr;
+    const char *cmdString;
+    size_t cmdLen;
+    int objc = PTR2INT(data[0]);
+    Tcl_Obj **objv = (Tcl_Obj **)data[1];
+
+    if ((result == TCL_ERROR) && !(iPtr->flags & ERR_ALREADY_LOGGED)) {
+	/*
+	 * If there was an error, a command string will be needed for the
+	 * error log: get it out of the itemPtr. The details depend on the
+	 * type.
+	 */
+>>>>>>> upstream/master
 
     if (Tcl_EvalTokensStandard(interp, tokenPtr, count) != TCL_OK) {
 	return NULL;
@@ -27528,12 +27952,59 @@ TclNRCoroutineObjCmd(
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
+<<<<<<< HEAD
     Command *cmdPtr;
     CoroutineData *corPtr;
     const char *fullName, *procName;
     Namespace *nsPtr, *altNsPtr, *cxtNsPtr;
     Tcl_DString ds;
     Namespace *lookupNsPtr = iPtr->varFramePtr->nsPtr;
+=======
+    Command * cmdPtr;
+    Interp *iPtr = (Interp *) interp;
+    int i, newObjc, handlerObjc;
+    Tcl_Obj **newObjv, **handlerObjv;
+    CallFrame *varFramePtr = iPtr->varFramePtr;
+    Namespace *currNsPtr = NULL;/* Used to check for and invoke any registered
+				 * unknown command handler for the current
+				 * namespace (TIP 181). */
+    Namespace *savedNsPtr = NULL;
+
+    currNsPtr = varFramePtr->nsPtr;
+    if ((currNsPtr == NULL) || (currNsPtr->unknownHandlerPtr == NULL)) {
+	currNsPtr = iPtr->globalNsPtr;
+	if (currNsPtr == NULL) {
+	    Tcl_Panic("Tcl_EvalObjv: NULL global namespace pointer");
+	}
+    }
+
+    /*
+     * Check to see if the resolution namespace has lost its unknown handler.
+     * If so, reset it to "::unknown".
+     */
+
+    if (currNsPtr->unknownHandlerPtr == NULL) {
+	TclNewLiteralStringObj(currNsPtr->unknownHandlerPtr, "::unknown");
+	Tcl_IncrRefCount(currNsPtr->unknownHandlerPtr);
+    }
+
+    /*
+     * Get the list of words for the unknown handler and allocate enough space
+     * to hold both the handler prefix and all words of the command invokation
+     * itself.
+     */
+
+    Tcl_ListObjGetElements(NULL, currNsPtr->unknownHandlerPtr,
+	    &handlerObjc, &handlerObjv);
+    newObjc = objc + handlerObjc;
+    newObjv = (Tcl_Obj **)TclStackAlloc(interp, sizeof(Tcl_Obj *) * newObjc);
+
+    /*
+     * Copy command prefix from unknown handler and add on the real command's
+     * full argument list. Note that we only use memcpy() once because we have
+     * to increment the reference count of all the handler arguments anyway.
+     */
+>>>>>>> upstream/master
 
     if (objc < 3) {
 	Tcl_WrongNumArgs(interp, 1, objv, "name cmd ?arg ...?");
@@ -27563,6 +28034,7 @@ TclNRCoroutineObjCmd(
         Tcl_SetErrorCode(interp, "TCL", "VALUE", "COMMAND", fullName, NULL);
 	return TCL_ERROR;
     }
+<<<<<<< HEAD
     if ((nsPtr != iPtr->globalNsPtr)
 	    && (procName != NULL) && (procName[0] == ':')) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -27570,6 +28042,29 @@ TclNRCoroutineObjCmd(
                 " name starting with \":\"", procName));
         Tcl_SetErrorCode(interp, "TCL", "VALUE", "COMMAND", procName, NULL);
 	return TCL_ERROR;
+=======
+    TclSkipTailcall(interp);
+    TclNRAddCallback(interp, TEOV_NotFoundCallback, INT2PTR(handlerObjc),
+	    newObjv, savedNsPtr, NULL);
+    return TclNREvalObjv(interp, newObjc, newObjv, TCL_EVAL_NOERR, NULL);
+}
+
+static int
+TEOV_NotFoundCallback(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Interp *iPtr = (Interp *) interp;
+    int objc = PTR2INT(data[0]);
+    Tcl_Obj **objv = (Tcl_Obj **)data[1];
+    Namespace *savedNsPtr = (Namespace *)data[2];
+
+    int i;
+
+    if (savedNsPtr) {
+	iPtr->varFramePtr->nsPtr = savedNsPtr;
+>>>>>>> upstream/master
     }
 
     /*
@@ -27621,9 +28116,26 @@ TclNRCoroutineObjCmd(
 	}
     }
 
+<<<<<<< HEAD
     /*
      * Create the base context.
      */
+=======
+static int
+TEOV_RunLeaveTraces(
+    ClientData data[],
+    Tcl_Interp *interp,
+    int result)
+{
+    Interp *iPtr = (Interp *) interp;
+    int traceCode = TCL_OK;
+    int objc = PTR2INT(data[0]);
+    Tcl_Obj *commandPtr = (Tcl_Obj *)data[1];
+    Command *cmdPtr = (Command *)data[2];
+    Tcl_Obj **objv = (Tcl_Obj **)data[3];
+    size_t length;
+    const char *command = TclGetStringFromObj(commandPtr, &length);
+>>>>>>> upstream/master
 
     corPtr->running.framePtr = iPtr->rootFramePtr;
     corPtr->running.varFramePtr = iPtr->rootFramePtr;
@@ -27748,12 +28260,12 @@ TclEvalEx(
 				 * state has been allocated while evaluating
 				 * the script, so that it can be freed
 				 * properly if an error occurs. */
-    Tcl_Parse *parsePtr = TclStackAlloc(interp, sizeof(Tcl_Parse));
-    CmdFrame *eeFramePtr = TclStackAlloc(interp, sizeof(CmdFrame));
-    Tcl_Obj **stackObjArray =
+    Tcl_Parse *parsePtr = (Tcl_Parse *)TclStackAlloc(interp, sizeof(Tcl_Parse));
+    CmdFrame *eeFramePtr = (CmdFrame *)TclStackAlloc(interp, sizeof(CmdFrame));
+    Tcl_Obj **stackObjArray = (Tcl_Obj **)
 	    TclStackAlloc(interp, minObjs * sizeof(Tcl_Obj *));
-    int *expandStack = TclStackAlloc(interp, minObjs * sizeof(int));
-    int *linesStack = TclStackAlloc(interp, minObjs * sizeof(int));
+    int *expandStack = (int *)TclStackAlloc(interp, minObjs * sizeof(int));
+    int *linesStack = (int *)TclStackAlloc(interp, minObjs * sizeof(int));
 				/* TIP #280 Structures for tracking of command
 				 * locations. */
     int *clNext = NULL;		/* Pointer for the tracking of invisible
@@ -27889,9 +28401,9 @@ TclEvalEx(
 	     */
 
 	    if (numWords > minObjs) {
-		expand =    Tcl_Alloc(numWords * sizeof(int));
-		objvSpace = Tcl_Alloc(numWords * sizeof(Tcl_Obj *));
-		lineSpace = Tcl_Alloc(numWords * sizeof(int));
+		expand =    (int *)Tcl_Alloc(numWords * sizeof(int));
+		objvSpace = (Tcl_Obj **)Tcl_Alloc(numWords * sizeof(Tcl_Obj *));
+		lineSpace = (int *)Tcl_Alloc(numWords * sizeof(int));
 	    }
 	    expandRequested = 0;
 	    objv = objvSpace;
@@ -27977,8 +28489,8 @@ TclEvalEx(
 
 		if ((numWords > minObjs) || (objectsNeeded > minObjs)) {
 		    objv = objvSpace =
-			    Tcl_Alloc(objectsNeeded * sizeof(Tcl_Obj *));
-		    lines = lineSpace = Tcl_Alloc(objectsNeeded * sizeof(int));
+			    (Tcl_Obj **)Tcl_Alloc(objectsNeeded * sizeof(Tcl_Obj *));
+		    lines = lineSpace = (int *)Tcl_Alloc(objectsNeeded * sizeof(int));
 		}
 
 		objectsUsed = 0;
@@ -28299,7 +28811,7 @@ TclArgumentEnter(
 	     * and initialize references.
 	     */
 
-	    cfwPtr = Tcl_Alloc(sizeof(CFWord));
+	    cfwPtr = (CFWord *)Tcl_Alloc(sizeof(CFWord));
 	    cfwPtr->framePtr = cfPtr;
 	    cfwPtr->word = i;
 	    cfwPtr->refCount = 1;
@@ -28310,7 +28822,7 @@ TclArgumentEnter(
 	     * relevant. Just remember the reference to prevent early removal.
 	     */
 
-	    cfwPtr = Tcl_GetHashValue(hPtr);
+	    cfwPtr = (CFWord *)Tcl_GetHashValue(hPtr);
 	    cfwPtr->refCount++;
 	}
     }
@@ -28353,7 +28865,7 @@ TclArgumentRelease(
 	if (!hPtr) {
 	    continue;
 	}
-	cfwPtr = Tcl_GetHashValue(hPtr);
+	cfwPtr = (CFWord *)Tcl_GetHashValue(hPtr);
 
 	if (cfwPtr->refCount-- > 1) {
 	    continue;
@@ -28405,7 +28917,7 @@ TclArgumentBCEnter(
     if (!hePtr) {
 	return;
     }
-    eclPtr = Tcl_GetHashValue(hePtr);
+    eclPtr = (ExtCmdLoc *)Tcl_GetHashValue(hePtr);
     ePtr = &eclPtr->loc[cmd];
 
     /*
@@ -28438,10 +28950,10 @@ TclArgumentBCEnter(
 
     for (word = 1; word < objc; word++) {
 	if (ePtr->line[word] >= 0) {
-	    int isnew;
+	    int isNew;
 	    Tcl_HashEntry *hPtr = Tcl_CreateHashEntry(iPtr->lineLABCPtr,
-		objv[word], &isnew);
-	    CFWordBC *cfwPtr = Tcl_Alloc(sizeof(CFWordBC));
+		objv[word], &isNew);
+	    CFWordBC *cfwPtr = (CFWordBC *)Tcl_Alloc(sizeof(CFWordBC));
 
 	    cfwPtr->framePtr = cfPtr;
 	    cfwPtr->obj = objv[word];
@@ -28450,7 +28962,7 @@ TclArgumentBCEnter(
 	    cfwPtr->nextPtr = lastPtr;
 	    lastPtr = cfwPtr;
 
-	    if (isnew) {
+	    if (isNew) {
 		/*
 		 * The word is not on the stack yet, remember the current
 		 * location and initialize references.
@@ -28465,7 +28977,7 @@ TclArgumentBCEnter(
 		 * information in the new structure.
 		 */
 
-		cfwPtr->prevPtr = Tcl_GetHashValue(hPtr);
+		cfwPtr->prevPtr = (CFWordBC *)Tcl_GetHashValue(hPtr);
 	    }
 
 	    Tcl_SetHashValue(hPtr, cfwPtr);
@@ -28507,7 +29019,7 @@ TclArgumentBCRelease(
 	CFWordBC *nextPtr = cfwPtr->nextPtr;
 	Tcl_HashEntry *hPtr =
 		Tcl_FindHashEntry(iPtr->lineLABCPtr, (char *) cfwPtr->obj);
-	CFWordBC *xPtr = Tcl_GetHashValue(hPtr);
+	CFWordBC *xPtr = (CFWordBC *)Tcl_GetHashValue(hPtr);
 
 	if (xPtr != cfwPtr) {
 	    Tcl_Panic("TclArgumentBC Enter/Release Mismatch");
@@ -28573,7 +29085,7 @@ TclArgumentGet(
 
     hPtr = Tcl_FindHashEntry(iPtr->lineLAPtr, (char *) obj);
     if (hPtr) {
-	CFWord *cfwPtr = Tcl_GetHashValue(hPtr);
+	CFWord *cfwPtr = (CFWord *)Tcl_GetHashValue(hPtr);
 
 	*wordPtr = cfwPtr->word;
 	*cfPtrPtr = cfwPtr->framePtr;
@@ -28587,7 +29099,7 @@ TclArgumentGet(
 
     hPtr = Tcl_FindHashEntry(iPtr->lineLABCPtr, (char *) obj);
     if (hPtr) {
-	CFWordBC *cfwPtr = Tcl_GetHashValue(hPtr);
+	CFWordBC *cfwPtr = (CFWordBC *)Tcl_GetHashValue(hPtr);
 
 	framePtr = cfwPtr->framePtr;
 	framePtr->data.tebc.pc = (char *) (((ByteCode *)
@@ -28726,7 +29238,7 @@ TclNREvalObjEx(
 	     * should be pushed, as needed by alias and ensemble redirections.
 	     */
 
-	    eoFramePtr = TclStackAlloc(interp, sizeof(CmdFrame));
+	    eoFramePtr = (CmdFrame *)TclStackAlloc(interp, sizeof(CmdFrame));
 	    eoFramePtr->nline = 0;
 	    eoFramePtr->line = NULL;
 
@@ -28835,8 +29347,8 @@ TEOEx_ByteCodeCallback(
     int result)
 {
     Interp *iPtr = (Interp *) interp;
-    CallFrame *savedVarFramePtr = data[0];
-    Tcl_Obj *objPtr = data[1];
+    CallFrame *savedVarFramePtr = (CallFrame *)data[0];
+    Tcl_Obj *objPtr = (Tcl_Obj *)data[1];
     int allowExceptions = PTR2INT(data[2]);
 
     if (iPtr->numLevels == 0) {
@@ -28881,9 +29393,9 @@ TEOEx_ListCallback(
     int result)
 {
     Interp *iPtr = (Interp *) interp;
-    Tcl_Obj *listPtr = data[0];
-    CmdFrame *eoFramePtr = data[1];
-    Tcl_Obj *objPtr = data[2];
+    Tcl_Obj *listPtr = (Tcl_Obj *)data[0];
+    CmdFrame *eoFramePtr = (CmdFrame *)data[1];
+    Tcl_Obj *objPtr = (Tcl_Obj *)data[2];
 
     /*
      * Remove the cmdFrame
@@ -29256,7 +29768,7 @@ TclObjInvoke(
 
 int
 TclNRInvoke(
-    ClientData clientData,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -29283,7 +29795,7 @@ TclNRInvoke(
                 NULL);
 	return TCL_ERROR;
     }
-    cmdPtr = Tcl_GetHashValue(hPtr);
+    cmdPtr = (Command *)Tcl_GetHashValue(hPtr);
 
 <<<<<<< HEAD
     /* Avoid the exception-handling brain damage when numLevels == 0 . */
@@ -29312,11 +29824,12 @@ TclNRInvoke(
 
 static int
 NRPostInvoke(
-    ClientData clientData[],
+    TCL_UNUSED(ClientData *),
     Tcl_Interp *interp,
     int result)
 {
     Interp *iPtr = (Interp *)interp;
+
     iPtr->numLevels--;
     return result;
 }
@@ -29608,7 +30121,7 @@ Tcl_GetVersion(
 
 static int
 ExprCeilFunc(
-    ClientData clientData,	/* Ignored */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -29652,7 +30165,7 @@ ExprCeilFunc(
 
 static int
 ExprFloorFunc(
-    ClientData clientData,	/* Ignored */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -29696,7 +30209,7 @@ ExprFloorFunc(
 
 static int
 ExprIsqrtFunc(
-    ClientData clientData,	/* Ignored */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* The interpreter in which to execute. */
     int objc,			/* Actual parameter count. */
     Tcl_Obj *const *objv)	/* Actual parameter list. */
@@ -29750,7 +30263,7 @@ ExprIsqrtFunc(
 	if (Tcl_GetBignumFromObj(interp, objv[1], &big) != TCL_OK) {
 	    return TCL_ERROR;
 	}
-	if (big.sign != MP_ZPOS) {
+	if (mp_isneg(&big)) {
 	    mp_clear(&big);
 	    goto negarg;
 	}
@@ -29778,10 +30291,16 @@ ExprIsqrtFunc(
 	Tcl_SetObjResult(interp, Tcl_NewWideIntObj((Tcl_WideInt) sqrt(d)));
     } else {
 	mp_int root;
+	mp_err err;
 
-	mp_init(&root);
-	mp_sqrt(&big, &root);
+	err = mp_init(&root);
+	if (err == MP_OKAY) {
+	    err = mp_sqrt(&big, &root);
+	}
 	mp_clear(&big);
+	if (err != MP_OKAY) {
+	    return TCL_ERROR;
+	}
 	Tcl_SetObjResult(interp, Tcl_NewBignumObj(&root));
     }
     return TCL_OK;
@@ -29796,7 +30315,7 @@ ExprIsqrtFunc(
 
 static int
 ExprSqrtFunc(
-    ClientData clientData,	/* Ignored */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -29831,10 +30350,17 @@ ExprSqrtFunc(
     if ((d >= 0.0) && TclIsInfinite(d)
 	    && (Tcl_GetBignumFromObj(NULL, objv[1], &big) == TCL_OK)) {
 	mp_int root;
+	mp_err err;
 
-	mp_init(&root);
-	mp_sqrt(&big, &root);
+	err = mp_init(&root);
+	if (err == MP_OKAY) {
+	    err = mp_sqrt(&big, &root);
+	}
 	mp_clear(&big);
+	if (err != MP_OKAY) {
+	    mp_clear(&root);
+	    return TCL_ERROR;
+	}
 	Tcl_SetObjResult(interp, Tcl_NewDoubleObj(TclBignumToDouble(&root)));
 	mp_clear(&root);
     } else {
@@ -29973,6 +30499,7 @@ ExprBinaryFunc(
 
 static int
 ExprAbsFunc(
+<<<<<<< HEAD
     ClientData clientData,	/* Ignored. */
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
@@ -30217,6 +30744,9 @@ ExprMaxMinFunc(
 =======
 >>>>>>> upstream/master
     ClientData clientData,	/* Ignored. */
+=======
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -30255,8 +30785,28 @@ ExprMaxMinFunc(
 =======
     Tcl_WideInt wResult;
 
+<<<<<<< HEAD
     if (ExprIntFunc(NULL, interp, objc, objv) != TCL_OK) {
 	return TCL_ERROR;
+=======
+		while (numBytes) {
+		    if (*bytes == '-') {
+			Tcl_SetObjResult(interp, Tcl_NewWideIntObj(0));
+			return TCL_OK;
+		    }
+		    bytes++; numBytes--;
+		}
+	    }
+	    goto unChanged;
+	} else if (l == WIDE_MIN) {
+	    if (mp_init_i64(&big, l) != MP_OKAY) {
+		return TCL_ERROR;
+	    }
+	    goto tooLarge;
+	}
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(-l));
+	return TCL_OK;
+>>>>>>> upstream/master
     }
     TclGetWideBitsFromObj(NULL, Tcl_GetObjResult(interp), &wResult);
     Tcl_SetObjResult(interp, Tcl_NewWideIntObj(wResult));
@@ -30313,12 +30863,28 @@ ExprMinFunc(
              * Get the error message for NaN.
              */
 
+<<<<<<< HEAD
             Tcl_GetDoubleFromObj(interp, objv[i], &d);
             return TCL_ERROR;
         }
         if (TclCompareTwoNumbers(objv[i], res) == op)  {
             res = objv[i];
         }
+=======
+    if (type == TCL_NUMBER_BIG) {
+	if (mp_isneg((const mp_int *) ptr)) {
+	    Tcl_GetBignumFromObj(NULL, objv[1], &big);
+	tooLarge:
+	    if (mp_neg(&big, &big) != MP_OKAY) {
+		return TCL_ERROR;
+	    }
+	    Tcl_SetObjResult(interp, Tcl_NewBignumObj(&big));
+	} else {
+	unChanged:
+	    Tcl_SetObjResult(interp, objv[1]);
+	}
+	return TCL_OK;
+>>>>>>> upstream/master
     }
 
     Tcl_SetObjResult(interp, res);
@@ -30327,8 +30893,13 @@ ExprMinFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprMaxFunc(
     ClientData clientData,	/* Ignored. */
+=======
+ExprBoolFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -30349,8 +30920,13 @@ ExprMinFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprRandFunc(
     ClientData clientData,	/* Ignored. */
+=======
+ExprDoubleFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -30442,8 +31018,13 @@ ExprRandFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprRoundFunc(
     ClientData clientData,	/* Ignored. */
+=======
+ExprIntFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -30517,8 +31098,13 @@ ExprRoundFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprSrandFunc(
     ClientData clientData,	/* Ignored. */
+=======
+ExprWideFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count. */
@@ -30742,8 +31328,13 @@ ExprIsFiniteFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprIsInfinityFunc(
     ClientData ignored,
+=======
+ExprMaxMinFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count */
@@ -30772,13 +31363,19 @@ ExprIsInfinityFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprIsNaNFunc(
     ClientData ignored,
+=======
+ExprMaxFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count */
     Tcl_Obj *const *objv)	/* Actual parameter list */
 {
+<<<<<<< HEAD
     double d;
     ClientData ptr;
     int type, result = 1;
@@ -30804,6 +31401,25 @@ ExprIsNaNFunc(
 static int
 ExprIsNormalFunc(
     ClientData ignored,
+=======
+    return ExprMaxMinFunc(NULL, interp, objc, objv, MP_GT);
+}
+
+static int
+ExprMinFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count. */
+    Tcl_Obj *const *objv)	/* Actual parameter vector. */
+{
+    return ExprMaxMinFunc(NULL, interp, objc, objv, MP_LT);
+}
+
+static int
+ExprRandFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count */
@@ -30832,8 +31448,13 @@ ExprIsNormalFunc(
 }
 
 static int
+<<<<<<< HEAD
 ExprIsSubnormalFunc(
     ClientData ignored,
+=======
+ExprRoundFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count */
@@ -30861,6 +31482,7 @@ ExprIsSubnormalFunc(
     return TCL_OK;
 }
 
+<<<<<<< HEAD
 static int
 ExprIsUnorderedFunc(
     ClientData ignored,
@@ -30872,6 +31494,38 @@ ExprIsUnorderedFunc(
     double d;
     ClientData ptr;
     int type, result = 0;
+=======
+    if (type == TCL_NUMBER_DOUBLE) {
+	double fractPart, intPart;
+	Tcl_WideInt max = WIDE_MAX, min = WIDE_MIN;
+
+	fractPart = modf(*((const double *) ptr), &intPart);
+	if (fractPart <= -0.5) {
+	    min++;
+	} else if (fractPart >= 0.5) {
+	    max--;
+	}
+	if ((intPart >= (double)max) || (intPart <= (double)min)) {
+	    mp_int big;
+	    mp_err err = MP_OKAY;
+
+	    if (Tcl_InitBignumFromDouble(interp, intPart, &big) != TCL_OK) {
+		/* Infinity */
+		return TCL_ERROR;
+	    }
+	    if (fractPart <= -0.5) {
+		err = mp_sub_d(&big, 1, &big);
+	    } else if (fractPart >= 0.5) {
+		err = mp_add_d(&big, 1, &big);
+	    }
+	    if (err != MP_OKAY) {
+		return TCL_ERROR;
+	    }
+	    Tcl_SetObjResult(interp, Tcl_NewBignumObj(&big));
+	    return TCL_OK;
+	} else {
+	    Tcl_WideInt result = (Tcl_WideInt)intPart;
+>>>>>>> upstream/master
 
     if (objc != 3) {
 	MathFuncWrongNumArgs(interp, 3, objc, objv);
@@ -30903,17 +31557,31 @@ ExprIsUnorderedFunc(
 }
 
 static int
+<<<<<<< HEAD
 FloatClassifyObjCmd(
     ClientData ignored,
+=======
+ExprSrandFunc(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,		/* The interpreter in which to execute the
 				 * function. */
     int objc,			/* Actual parameter count */
     Tcl_Obj *const *objv)	/* Actual parameter list */
 {
+<<<<<<< HEAD
     double d;
     Tcl_Obj *objPtr;
     ClientData ptr;
     int type;
+=======
+    Interp *iPtr = (Interp *) interp;
+    Tcl_WideInt w = 0;		/* Initialized to avoid compiler warning. */
+
+    /*
+     * Convert argument and use it to reset the seed.
+     */
+>>>>>>> upstream/master
 
     if (objc != 2) {
         Tcl_WrongNumArgs(interp, 1, objv, "floatValue");
@@ -30928,6 +31596,7 @@ FloatClassifyObjCmd(
     } else if (Tcl_GetDoubleFromObj(interp, objv[1], &d) != TCL_OK) {
         return TCL_ERROR;
     }
+<<<<<<< HEAD
     switch (ClassifyDouble(d)) {
     case FP_INFINITE:
         TclNewLiteralStringObj(objPtr, "infinite");
@@ -30952,6 +31621,16 @@ FloatClassifyObjCmd(
     }
     Tcl_SetObjResult(interp, objPtr);
     return TCL_OK;
+=======
+
+    /*
+     * To avoid duplicating the random number generation code we simply clean
+     * up our state and call the real random number function. That function
+     * will always succeed.
+     */
+
+    return ExprRandFunc(NULL, interp, 1, objv);
+>>>>>>> upstream/master
 }
 
 /*
@@ -31147,10 +31826,19 @@ TclDTraceInfo(
  */
 
 static int
+<<<<<<< HEAD
 DTraceCmdReturn(
     ClientData data[],
     Tcl_Interp *interp,
     int result)
+=======
+ExprIsFiniteFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count */
+    Tcl_Obj *const *objv)	/* Actual parameter list */
+>>>>>>> upstream/master
 {
     char *cmdName = TclGetString((Tcl_Obj *) data[0]);
 
@@ -31165,7 +31853,21 @@ DTraceCmdReturn(
     return result;
 }
 
+<<<<<<< HEAD
 TCL_DTRACE_DEBUG_LOG()
+=======
+static int
+ExprIsInfinityFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count */
+    Tcl_Obj *const *objv)	/* Actual parameter list */
+{
+    double d;
+    ClientData ptr;
+    int type, result = 0;
+>>>>>>> upstream/master
 
 #endif /* USE_DTRACE */
 
@@ -31232,6 +31934,7 @@ Tcl_NRCallObjProc(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 Tcl_Command
 Tcl_NRCreateCommand(
     Tcl_Interp *interp,		/* Token for command interpreter (returned by
@@ -31246,6 +31949,12 @@ Tcl_NRCreateCommand(
     Tcl_ObjCmdProc *nreProc,	/* Object-based function to associate with
 				 * name, provides NR implementation */
     ClientData clientData,	/* Arbitrary value to pass to object
+=======
+static int
+ExprIsNaNFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+>>>>>>> upstream/master
 				 * function. */
     Tcl_CmdDeleteProc *deleteProc)
 				/* If not NULL, gives a function to call when
@@ -31259,6 +31968,7 @@ Tcl_NRCreateCommand(
     return (Tcl_Command) cmdPtr;
 }
 
+<<<<<<< HEAD
 Tcl_Command
 TclNRCreateCommandInNs(
     Tcl_Interp *interp,
@@ -31268,6 +31978,15 @@ TclNRCreateCommandInNs(
     Tcl_ObjCmdProc *nreProc,
     ClientData clientData,
     Tcl_CmdDeleteProc *deleteProc)
+=======
+static int
+ExprIsNormalFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count */
+    Tcl_Obj *const *objv)	/* Actual parameter list */
+>>>>>>> upstream/master
 {
     Command *cmdPtr = (Command *)
             TclCreateObjCommandInNs(interp, cmdName, nsPtr, proc, clientData,
@@ -31281,11 +32000,21 @@ TclNRCreateCommandInNs(
  * Stuff for the public api
  ****************************************************************************/
 
+<<<<<<< HEAD
 int
 Tcl_NREvalObj(
     Tcl_Interp *interp,
     Tcl_Obj *objPtr,
     int flags)
+=======
+static int
+ExprIsSubnormalFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count */
+    Tcl_Obj *const *objv)	/* Actual parameter list */
+>>>>>>> upstream/master
 {
     return TclNREvalObjEx(interp, objPtr, flags, NULL, INT_MIN);
 }
@@ -31305,6 +32034,7 @@ Tcl_NREvalObjv(
     return TclNREvalObjv(interp, objc, objv, flags, NULL);
 }
 
+<<<<<<< HEAD
 int
 Tcl_NRCmdSwap(
     Tcl_Interp *interp,
@@ -31312,6 +32042,15 @@ Tcl_NRCmdSwap(
     int objc,
     Tcl_Obj *const objv[],
     int flags)
+=======
+static int
+ExprIsUnorderedFunc(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count */
+    Tcl_Obj *const *objv)	/* Actual parameter list */
+>>>>>>> upstream/master
 {
     return TclNREvalObjv(interp, objc, objv, flags|TCL_EVAL_NOERR,
 	    (Command *) cmd);
@@ -31368,9 +32107,19 @@ TclSkipTailcall(
     iPtr->deferredCallbacks->data[1] = INT2PTR(1);
 }
 
+<<<<<<< HEAD
 void
 TclPushTailcallPoint(
     Tcl_Interp *interp)
+=======
+static int
+FloatClassifyObjCmd(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,		/* The interpreter in which to execute the
+				 * function. */
+    int objc,			/* Actual parameter count */
+    Tcl_Obj *const *objv)	/* Actual parameter list */
+>>>>>>> upstream/master
 {
     TclNRAddCallback(interp, NRCommand, NULL, NULL, NULL, NULL);
     ((Interp *) interp)->numLevels++;
@@ -31510,10 +32259,19 @@ TclPushTailcallPoint(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 void
 TclSetTailcall(
     Tcl_Interp *interp,
     Tcl_Obj *listPtr)
+=======
+static int
+DTraceObjCmd(
+    TCL_UNUSED(ClientData),
+    TCL_UNUSED(Tcl_Interp *),
+    int objc,			/* Number of arguments. */
+    Tcl_Obj *const objv[])	/* Argument objects. */
+>>>>>>> upstream/master
 {
     /*
      * Find the splicing spot: right before the NRCommand of the thing
@@ -31984,8 +32742,13 @@ NRCoroutineExitCallback(
  */
 
 int
+<<<<<<< HEAD
 TclNRCoroutineActivateCallback(
     ClientData data[],
+=======
+TclNRTailcallObjCmd(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,
     int result)
 {
@@ -32116,7 +32879,7 @@ TclNREvalList(
 {
 <<<<<<< HEAD
     Interp *iPtr = (Interp *) interp;
-    Tcl_Obj *listPtr = data[0], *nsObjPtr;
+    Tcl_Obj *listPtr = (Tcl_Obj *)data[0], *nsObjPtr;
     Tcl_Namespace *nsPtr;
 =======
 >>>>>>> upstream/master
@@ -32155,10 +32918,11 @@ TclNREvalList(
 int
 TclNRReleaseValues(
     ClientData data[],
-    Tcl_Interp *interp,
+    TCL_UNUSED(Tcl_Interp *),
     int result)
 {
     int i = 0;
+
     while (i < 4) {
 	if (data[i]) {
 	    Tcl_DecrRefCount((Tcl_Obj *) data[i]);
@@ -32356,9 +33120,15 @@ TclNRCoroInjectObjCmd(
     return TCL_OK;
 }
 
+<<<<<<< HEAD
 static int
 TclNRCoroProbeObjCmd(
     ClientData clientData,
+=======
+int
+TclNRYieldToObjCmd(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -32447,9 +33217,9 @@ static int
 RewindCoroutineCallback(
     ClientData data[],
     Tcl_Interp *interp,
-    int result)
+    TCL_UNUSED(int) /*result*/)
 {
-    return Tcl_RestoreInterpState(interp, data[0]);
+    return Tcl_RestoreInterpState(interp, (Tcl_InterpState)data[0]);
 }
 
 static int
@@ -32474,7 +33244,7 @@ static void
 DeleteCoroutine(
     ClientData clientData)
 {
-    CoroutineData *corPtr = clientData;
+    CoroutineData *corPtr = (CoroutineData *)clientData;
     Tcl_Interp *interp = corPtr->eePtr->interp;
     NRE_callback *rootPtr = TOP_CB(interp);
 =======
@@ -32530,12 +33300,22 @@ InjectHandler(
     Tcl_Interp *interp,
     int result)
 {
+<<<<<<< HEAD
     CoroutineData *corPtr = data[0];
     Tcl_Obj *listPtr = data[1];
     int nargs = PTR2INT(data[2]);
     ClientData isProbe = data[3];
     int objc;
     Tcl_Obj **objv;
+=======
+    CoroutineData *corPtr = (CoroutineData *)data[0];
+    Command *cmdPtr = corPtr->cmdPtr;
+
+    /*
+     * This is the last callback in the caller execEnv, right before switching
+     * to the coroutine's
+     */
+>>>>>>> upstream/master
 
     if (!isProbe) {
         /*
@@ -32599,11 +33379,16 @@ InjectHandlerPostCall(
     Tcl_Interp *interp,
     int result)
 {
+<<<<<<< HEAD
     CoroutineData *corPtr = data[0];
     Tcl_Obj *listPtr = data[1];
     int nargs = PTR2INT(data[2]);
     ClientData isProbe = data[3];
     int numLevels;
+=======
+    CoroutineData *corPtr = (CoroutineData *)data[0];
+    Command *cmdPtr = corPtr->cmdPtr;
+>>>>>>> upstream/master
 
     /*
      * Delete the command words for what we just executed.
@@ -32651,9 +33436,9 @@ int
 TclNRCoroutineActivateCallback(
     ClientData data[],
     Tcl_Interp *interp,
-    int result)
+    TCL_UNUSED(int) /*result*/)
 {
-    CoroutineData *corPtr = data[0];
+    CoroutineData *corPtr = (CoroutineData *)data[0];
     int type = PTR2INT(data[1]);
     int numLevels, unused;
     int *stackLevel = &unused;
@@ -32710,7 +33495,82 @@ TclNRCoroutineActivateCallback(
         corPtr->auxNumLevels = numLevels - corPtr->auxNumLevels;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     corPtr->stackLevel = NULL;
+=======
+        iPtr->execEnvPtr = corPtr->callerEEPtr;
+    }
+
+    return TCL_OK;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TclNREvalList --
+ *
+ *      Callback to invoke command as list, used in order to delayed
+ *	processing of canonical list command in sane environment.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+TclNREvalList(
+    ClientData data[],
+    Tcl_Interp *interp,
+    TCL_UNUSED(int) /*result*/)
+{
+    int objc;
+    Tcl_Obj **objv;
+    Tcl_Obj *listPtr = (Tcl_Obj *)data[0];
+
+    Tcl_IncrRefCount(listPtr);
+
+    TclMarkTailcall(interp);
+    TclNRAddCallback(interp, TclNRReleaseValues, listPtr, NULL, NULL,NULL);
+    TclListObjGetElements(NULL, listPtr, &objc, &objv);
+    return TclNREvalObjv(interp, objc, objv, 0, NULL);
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * CoroTypeObjCmd --
+ *
+ *      Implementation of [::tcl::unsupported::corotype] command.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+CoroTypeObjCmd(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+    Command *cmdPtr;
+    CoroutineData *corPtr;
+
+    if (objc != 2) {
+	Tcl_WrongNumArgs(interp, 1, objv, "coroName");
+	return TCL_ERROR;
+    }
+
+    /*
+     * Look up the coroutine.
+     */
+
+    cmdPtr = (Command *) Tcl_GetCommandFromObj(interp, objv[1]);
+    if ((!cmdPtr) || (cmdPtr->nreProc != TclNRInterpCoroutine)) {
+        Tcl_SetObjResult(interp, Tcl_NewStringObj(
+                "can only get coroutine type of a coroutine", -1));
+        Tcl_SetErrorCode(interp, "TCL", "LOOKUP", "COROUTINE",
+                TclGetString(objv[1]), NULL);
+        return TCL_ERROR;
+    }
+>>>>>>> upstream/master
 
     /*
      * #280.
@@ -32718,9 +33578,17 @@ TclNRCoroutineActivateCallback(
      * command arguments in bytecode.
      */
 
+<<<<<<< HEAD
     Tcl_DeleteHashTable(corPtr->lineLABCPtr);
     ckfree(corPtr->lineLABCPtr);
     corPtr->lineLABCPtr = NULL;
+=======
+    corPtr = (CoroutineData *)cmdPtr->objClientData;
+    if (!COR_IS_SUSPENDED(corPtr)) {
+        Tcl_SetObjResult(interp, Tcl_NewStringObj("active", -1));
+        return TCL_OK;
+    }
+>>>>>>> upstream/master
 
     RESTORE_CONTEXT(corPtr->caller);
     iPtr->execEnvPtr = corPtr->callerEEPtr;
@@ -32762,7 +33630,11 @@ TclNRCoroutineActivateCallback(
         corPtr->auxNumLevels = numLevels - corPtr->auxNumLevels;
         iPtr->execEnvPtr = corPtr->callerEEPtr;
     }
+<<<<<<< HEAD
     return result;
+=======
+    return (CoroutineData *)cmdPtr->objClientData;
+>>>>>>> upstream/master
 }
 
 /*
@@ -32776,8 +33648,13 @@ TclNRCoroutineActivateCallback(
  */
 
 static int
+<<<<<<< HEAD
 NRInjectObjCmd(
     ClientData clientData,
+>>>>>>> upstream/master
+=======
+TclNRCoroInjectObjCmd(
+    TCL_UNUSED(ClientData),
 >>>>>>> upstream/master
     Tcl_Interp *interp,
     int objc,
@@ -32826,6 +33703,7 @@ NRInjectObjCmd(
             return TCL_ERROR;
         }
 
+<<<<<<< HEAD
         if (type == CORO_ACTIVATE_YIELD) {
             corPtr->nargs = COROUTINE_ARGUMENTS_SINGLE_OPTIONAL;
         } else if (type == CORO_ACTIVATE_YIELDM) {
@@ -32836,6 +33714,15 @@ NRInjectObjCmd(
 
         corPtr->stackLevel = NULL;
 =======
+=======
+static int
+TclNRCoroProbeObjCmd(
+    TCL_UNUSED(ClientData),
+    Tcl_Interp *interp,
+    int objc,
+    Tcl_Obj *const objv[])
+{
+>>>>>>> upstream/master
     CoroutineData *corPtr;
     ExecEnv *savedEEPtr = iPtr->execEnvPtr;
 
@@ -32894,8 +33781,15 @@ static int
 TclNREvalList(
     ClientData data[],
     Tcl_Interp *interp,
-    int result)
+    TCL_UNUSED(int) /*result*/)
 {
+<<<<<<< HEAD
+=======
+    CoroutineData *corPtr = (CoroutineData *)data[0];
+    Tcl_Obj *listPtr = (Tcl_Obj *)data[1];
+    int nargs = PTR2INT(data[2]);
+    ClientData isProbe = data[3];
+>>>>>>> upstream/master
     int objc;
     Tcl_Obj **objv;
     Tcl_Obj *listPtr = data[0];
@@ -32926,9 +33820,23 @@ TclNREvalList(
     Tcl_Interp *interp,
     int result)
 {
+<<<<<<< HEAD
     int objc;
     Tcl_Obj **objv;
     Tcl_Obj *listPtr = data[0];
+=======
+    CoroutineData *corPtr = (CoroutineData *)data[0];
+    Tcl_Obj *listPtr = (Tcl_Obj *)data[1];
+    int nargs = PTR2INT(data[2]);
+    ClientData isProbe = data[3];
+    int numLevels;
+
+    /*
+     * Delete the command words for what we just executed.
+     */
+
+    Tcl_DecrRefCount(listPtr);
+>>>>>>> upstream/master
 
     Tcl_IncrRefCount(listPtr);
 
@@ -32950,8 +33858,13 @@ TclNREvalList(
  */
 
 static int
+<<<<<<< HEAD
 NRCoroInjectObjCmd(
     ClientData clientData,
+=======
+NRInjectObjCmd(
+    TCL_UNUSED(ClientData),
+>>>>>>> upstream/master
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -33009,7 +33922,7 @@ TclNRInterpCoroutine(
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
 {
-    CoroutineData *corPtr = clientData;
+    CoroutineData *corPtr = (CoroutineData *)clientData;
 
     if (!COR_IS_SUSPENDED(corPtr)) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -33068,7 +33981,7 @@ TclNRInterpCoroutine(
 
 int
 TclNRCoroutineObjCmd(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* Current interpreter. */
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
@@ -33109,7 +34022,7 @@ TclNRCoroutineObjCmd(
      * struct and create the corresponding command.
      */
 
-    corPtr = Tcl_Alloc(sizeof(CoroutineData));
+    corPtr = (CoroutineData *)Tcl_Alloc(sizeof(CoroutineData));
 
     cmdPtr = (Command *) TclNRCreateCommandInNs(interp, simpleName,
 	    (Tcl_Namespace *)nsPtr, /*objProc*/ NULL, TclNRInterpCoroutine,
@@ -33131,7 +34044,7 @@ TclNRCoroutineObjCmd(
 	Tcl_HashSearch hSearch;
 	Tcl_HashEntry *hePtr;
 
-	corPtr->lineLABCPtr = Tcl_Alloc(sizeof(Tcl_HashTable));
+	corPtr->lineLABCPtr = (Tcl_HashTable *)Tcl_Alloc(sizeof(Tcl_HashTable));
 	Tcl_InitHashTable(corPtr->lineLABCPtr, TCL_ONE_WORD_KEYS);
 
 	for (hePtr = Tcl_FirstHashEntry(iPtr->lineLABCPtr,&hSearch);
@@ -33207,7 +34120,7 @@ TclNRCoroutineObjCmd(
 
 int
 TclInfoCoroutineCmd(
-    ClientData dummy,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])

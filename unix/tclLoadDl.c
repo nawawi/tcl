@@ -83,7 +83,7 @@ TclpDlopen(
      * relative path.
      */
 
-    native = Tcl_FSGetNativePath(pathPtr);
+    native = (const char *)Tcl_FSGetNativePath(pathPtr);
     /*
      * Use (RTLD_NOW|RTLD_LOCAL) as default, see [Bug #3216070]
      */
@@ -135,7 +135,7 @@ TclpDlopen(
 	}
 	return TCL_ERROR;
     }
-    newHandle = Tcl_Alloc(sizeof(*newHandle));
+    newHandle = (Tcl_LoadHandle)Tcl_Alloc(sizeof(*newHandle));
     newHandle->clientData = handle;
     newHandle->findSymbolProcPtr = &FindSymbol;
     newHandle->unloadFileProcPtr = &UnloadFile;
@@ -192,6 +192,31 @@ FindSymbol(
 	proc = dlsym(handle, native);	/* INTL: Native. */
 	Tcl_DStringFree(&newName);
     }
+#ifdef __cplusplus
+    if (proc == NULL) {
+	char buf[32];
+	sprintf(buf, "%d", (int)Tcl_DStringLength(&ds));
+	Tcl_DStringInit(&newName);
+	TclDStringAppendLiteral(&newName, "__Z");
+	Tcl_DStringAppend(&newName, buf, -1);
+	Tcl_DStringAppend(&newName, Tcl_DStringValue(&ds), -1);
+	TclDStringAppendLiteral(&newName, "P10Tcl_Interp");
+	native = Tcl_DStringValue(&newName);
+	proc = dlsym(handle, native + 1);	/* INTL: Native. */
+	if (proc == NULL) {
+	    proc = dlsym(handle, native);	/* INTL: Native. */
+	}
+	if (proc == NULL) {
+	    TclDStringAppendLiteral(&newName, "i");
+	    native = Tcl_DStringValue(&newName);
+	    proc = dlsym(handle, native + 1);	/* INTL: Native. */
+	}
+	if (proc == NULL) {
+	    proc = dlsym(handle, native);	/* INTL: Native. */
+	}
+	Tcl_DStringFree(&newName);
+    }
+#endif
     Tcl_DStringFree(&ds);
     if (proc == NULL) {
 	const char *errorStr = dlerror();
@@ -214,15 +239,14 @@ FindSymbol(
  *
  * UnloadFile --
  *
- *	Unloads a dynamically loaded binary code file from memory. Code
- *	pointers in the formerly loaded file are no longer valid after calling
- *	this function.
+ *	Unloads a dynamic shared object, after which all pointers to functions
+ *	in the formerly-loaded object are no longer valid.
  *
  * Results:
  *	None.
  *
  * Side effects:
- *	Code removed from memory.
+ *	Memory for the loaded object is deallocated.
  *
  *----------------------------------------------------------------------
  */
@@ -266,6 +290,8 @@ TclGuessPackageName(
     Tcl_DString *bufPtr)	/* Initialized empty dstring. Append package
 				 * name to this if possible. */
 {
+    (void)fileName;
+    (void)bufPtr;
     return 0;
 }
 

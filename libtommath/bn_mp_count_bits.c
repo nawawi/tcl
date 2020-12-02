@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_COUNT_BITS_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,6 +17,10 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* returns the number of bits in an int */
 int mp_count_bits(const mp_int *a)
@@ -24,23 +29,19 @@ int mp_count_bits(const mp_int *a)
    mp_digit q;
 
    /* shortcut */
-   if (a->used == 0) {
+   if (MP_IS_ZERO(a)) {
       return 0;
    }
 
    /* get number of digits and add that */
-   r = (a->used - 1) * DIGIT_BIT;
+   r = (a->used - 1) * MP_DIGIT_BIT;
 
    /* take the last digit and count the bits in it */
    q = a->dp[a->used - 1];
-   while (q > (mp_digit)0) {
+   while (q > 0u) {
       ++r;
-      q >>= (mp_digit)1;
+      q >>= 1u;
    }
    return r;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

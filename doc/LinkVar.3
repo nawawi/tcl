@@ -116,7 +116,7 @@ Any value written into the Tcl variable must have a proper integer
 form acceptable to \fBTcl_GetIntFromObj\fR;  attempts to write
 non-integer values into \fIvarName\fR will be rejected with
 Tcl errors. Incomplete integer representations (like the empty
-string, '+', '-' or the hex/octal/binary prefix) are accepted
+string, '+', '-' or the hex/octal/decimal/binary prefix) are accepted
 as if they are valid too.
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -200,7 +200,7 @@ integer form acceptable to \fBTcl_GetWideIntFromObj\fR and in the
 platform's defined range for the \fBunsigned int\fR type; attempts to
 write non-integer values (or values outside the range) into
 \fIvarName\fR will be rejected with Tcl errors. Incomplete integer
-representations (like the empty string, '+', '-' or the hex/octal/binary
+representations (like the empty string, '+', '-' or the hex/octal/decimal/binary
 prefix) are accepted as if they are valid too.
 .TP
 \fBTCL_LINK_CHAR\fR
@@ -211,9 +211,13 @@ form acceptable to \fBTcl_GetIntFromObj\fR and be in the range of the
 \fBchar\fR datatype; attempts to write non-integer or out-of-range
 values into \fIvarName\fR will be rejected with Tcl errors. Incomplete
 integer representations (like the empty string, '+', '-' or the
+<<<<<<< HEAD
 hex/octal/binary prefix) are accepted as if they are valid too.
 <<<<<<< HEAD
 =======
+=======
+hex/octal/decimal/binary prefix) are accepted as if they are valid too.
+>>>>>>> upstream/master
 .RS
 .PP
 .VS "TIP 312"
@@ -237,7 +241,7 @@ integer form acceptable to \fBTcl_GetIntFromObj\fR and in the
 platform's defined range for the \fBunsigned char\fR type; attempts to
 write non-integer values (or values outside the range) into
 \fIvarName\fR will be rejected with Tcl errors. Incomplete integer
-representations (like the empty string, '+', '-' or the hex/octal/binary
+representations (like the empty string, '+', '-' or the hex/octal/decimal/binary
 prefix) are accepted as if they are valid too.
 <<<<<<< HEAD
 =======
@@ -265,7 +269,7 @@ form acceptable to \fBTcl_GetIntFromObj\fR and be in the range of the
 \fBshort\fR datatype; attempts to write non-integer or out-of-range
 values into \fIvarName\fR will be rejected with Tcl errors. Incomplete
 integer representations (like the empty string, '+', '-' or the
-hex/octal/binary prefix) are accepted as if they are valid too.
+hex/octal/decimal/binary prefix) are accepted as if they are valid too.
 .TP
 \fBTCL_LINK_USHORT\fR
 .
@@ -275,7 +279,7 @@ integer form acceptable to \fBTcl_GetIntFromObj\fR and in the
 platform's defined range for the \fBunsigned short\fR type; attempts to
 write non-integer values (or values outside the range) into
 \fIvarName\fR will be rejected with Tcl errors. Incomplete integer
-representations (like the empty string, '+', '-' or the hex/octal/binary
+representations (like the empty string, '+', '-' or the hex/octal/decimal/binary
 prefix) are accepted as if they are valid too.
 .TP
 \fBTCL_LINK_LONG\fR
@@ -286,7 +290,7 @@ form acceptable to \fBTcl_GetLongFromObj\fR; attempts to write
 non-integer or out-of-range
 values into \fIvarName\fR will be rejected with Tcl errors. Incomplete
 integer representations (like the empty string, '+', '-' or the
-hex/octal/binary prefix) are accepted as if they are valid too.
+hex/octal/decimal/binary prefix) are accepted as if they are valid too.
 .TP
 \fBTCL_LINK_ULONG\fR
 .
@@ -296,7 +300,7 @@ integer form acceptable to \fBTcl_GetWideIntFromObj\fR and in the
 platform's defined range for the \fBunsigned long\fR type; attempts to
 write non-integer values (or values outside the range) into
 \fIvarName\fR will be rejected with Tcl errors. Incomplete integer
-representations (like the empty string, '+', '-' or the hex/octal/binary
+representations (like the empty string, '+', '-' or the hex/octal/decimal/binary
 prefix) are accepted as if they are valid too.
 .TP
 \fBTCL_LINK_DOUBLE\fR
@@ -306,7 +310,7 @@ Any value written into the Tcl variable must have a proper real
 form acceptable to \fBTcl_GetDoubleFromObj\fR;  attempts to write
 non-real values into \fIvarName\fR will be rejected with
 Tcl errors. Incomplete integer or real representations (like the
-empty string, '.', '+', '-' or the hex/octal/binary prefix) are
+empty string, '.', '+', '-' or the hex/octal/decimal/binary prefix) are
 accepted as if they are valid too.
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -322,7 +326,7 @@ range acceptable for a \fBfloat\fR; attempts to
 write non-real values (or values outside the range) into
 \fIvarName\fR will be rejected with Tcl errors. Incomplete integer
 or real representations (like the empty string, '.', '+', '-' or
-the hex/octal/binary prefix) are accepted as if they are valid too.
+the hex/octal/decimal/binary prefix) are accepted as if they are valid too.
 .TP
 \fBTCL_LINK_WIDE_INT\fR
 .
@@ -333,7 +337,7 @@ Any value written into the Tcl variable must have a proper integer
 form acceptable to \fBTcl_GetWideIntFromObj\fR;  attempts to write
 non-integer values into \fIvarName\fR will be rejected with
 Tcl errors. Incomplete integer representations (like the empty
-string, '+', '-' or the hex/octal/binary prefix) are accepted
+string, '+', '-' or the hex/octal/decimal/binary prefix) are accepted
 as if they are valid too.
 <<<<<<< HEAD
 .TP
@@ -385,7 +389,7 @@ cast to unsigned);
 .\" FIXME! Use bignums instead.
 attempts to write non-integer values into \fIvarName\fR will be
 rejected with Tcl errors. Incomplete integer representations (like
-the empty string, '+', '-' or the hex/octal/binary prefix) are accepted
+the empty string, '+', '-' or the hex/octal/decimal/binary prefix) are accepted
 as if they are valid too.
 .TP
 \fBTCL_LINK_BOOLEAN\fR

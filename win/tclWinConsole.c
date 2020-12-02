@@ -218,7 +218,7 @@ static int		ConsoleBlockModeProc(ClientData instanceData,
 			    int mode);
 static void		ConsoleCheckProc(ClientData clientData, int flags);
 static int		ConsoleCloseProc(ClientData instanceData,
-			    Tcl_Interp *interp);
+			    Tcl_Interp *interp, int flags);
 static int		ConsoleEventProc(Tcl_Event *evPtr, int flags);
 static void		ConsoleExitHandler(ClientData clientData);
 static int		ConsoleGetHandleProc(ClientData instanceData,
@@ -269,7 +269,7 @@ static void		StopChannelThread(ConsoleThreadInfo *threadInfoPtr);
 static const Tcl_ChannelType consoleChannelType = {
     "console",			/* Type name. */
     TCL_CHANNEL_VERSION_5,	/* v5 channel */
-    ConsoleCloseProc,		/* Close proc. */
+    NULL,		/* Close proc. */
     ConsoleInputProc,		/* Input proc. */
     ConsoleOutputProc,		/* Output proc. */
     NULL,			/* Seek proc. */
@@ -277,7 +277,7 @@ static const Tcl_ChannelType consoleChannelType = {
     ConsoleGetOptionProc,	/* Get option proc. */
     ConsoleWatchProc,		/* Set up notifier to watch the channel. */
     ConsoleGetHandleProc,	/* Get an OS handle from channel. */
-    NULL,			/* close2proc. */
+    ConsoleCloseProc,		/* close2proc. */
     ConsoleBlockModeProc,	/* Set blocking or non-blocking mode. */
     NULL,			/* Flush proc. */
     NULL,			/* Handler proc. */
@@ -432,8 +432,10 @@ ConsoleInit(void)
 
 static void
 ConsoleExitHandler(
-    ClientData clientData)	/* Old window proc. */
+    ClientData dummy)	/* Old window proc. */
 {
+    (void)dummy;
+
     Tcl_DeleteEventSource(ConsoleSetupProc, ConsoleCheckProc, NULL);
 }
 
@@ -456,8 +458,10 @@ ConsoleExitHandler(
 
 static void
 ProcExitHandler(
-    ClientData clientData)	/* Old window proc. */
+    ClientData dummy)	/* Old window proc. */
 {
+    (void)dummy;
+
     Tcl_MutexLock(&consoleMutex);
     initialized = 0;
     Tcl_MutexUnlock(&consoleMutex);
@@ -482,13 +486,14 @@ ProcExitHandler(
 
 void
 ConsoleSetupProc(
-    ClientData data,		/* Not used. */
+    ClientData dummy,		/* Not used. */
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     ConsoleInfo *infoPtr;
     Tcl_Time blockTime = { 0, 0 };
     int block = 1;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    (void)dummy;
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
@@ -536,12 +541,13 @@ ConsoleSetupProc(
 
 static void
 ConsoleCheckProc(
-    ClientData data,		/* Not used. */
+    ClientData dummy,		/* Not used. */
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     ConsoleInfo *infoPtr;
     int needEvent;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    (void)dummy;
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
@@ -577,7 +583,7 @@ ConsoleCheckProc(
 	}
 
 	if (needEvent) {
-	    ConsoleEvent *evPtr = Tcl_Alloc(sizeof(ConsoleEvent));
+	    ConsoleEvent *evPtr = (ConsoleEvent *)Tcl_Alloc(sizeof(ConsoleEvent));
 
 	    infoPtr->flags |= CONSOLE_PENDING;
 	    evPtr->header.proc = ConsoleEventProc;
@@ -609,7 +615,7 @@ ConsoleBlockModeProc(
     int mode)			/* TCL_MODE_BLOCKING or
 				 * TCL_MODE_NONBLOCKING. */
 {
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
 
     /*
      * Consoles on Windows can not be switched between blocking and
@@ -724,12 +730,18 @@ StopChannelThread(
 static int
 ConsoleCloseProc(
     ClientData instanceData,	/* Pointer to ConsoleInfo structure. */
-    Tcl_Interp *interp)		/* For error reporting. */
+    Tcl_Interp *dummy,		/* For error reporting. */
+    int flags)
 {
-    ConsoleInfo *consolePtr = instanceData;
+    ConsoleInfo *consolePtr = (ConsoleInfo *)instanceData;
     int errorCode = 0;
     ConsoleInfo *infoPtr, **nextPtrPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    (void)dummy;
+
+    if ((flags & (TCL_CLOSE_READ | TCL_CLOSE_WRITE)) != 0) {
+	return EINVAL;
+    }
 
     /*
      * Clean up the background thread if necessary. Note that this must be
@@ -885,7 +897,7 @@ ConsoleInputProc(
 				 * buffer? */
     int *errorCode)		/* Where to store error code. */
 {
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
     DWORD count, bytesRead = 0;
     int result;
 
@@ -977,6 +989,7 @@ ConsoleOutputProc(
     int toWrite,		/* How many bytes to write? */
     int *errorCode)		/* Where to store error code. */
 {
+<<<<<<< HEAD
     ConsoleInfo *infoPtr = instanceData;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -999,6 +1012,9 @@ ConsoleOutputProc(
     *errorCode = 0;
 >>>>>>> upstream/master
 =======
+=======
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
+>>>>>>> upstream/master
     ConsoleThreadInfo *threadInfo = &infoPtr->writer;
     DWORD bytesWritten, timeout;
 
@@ -1050,7 +1066,7 @@ ConsoleOutputProc(
 		Tcl_Free(infoPtr->writeBuf);
 	    }
 	    infoPtr->writeBufLen = toWrite;
-	    infoPtr->writeBuf = Tcl_Alloc(toWrite);
+	    infoPtr->writeBuf = (char *)Tcl_Alloc(toWrite);
 	}
 	memcpy(infoPtr->writeBuf, buf, toWrite);
 	infoPtr->toWrite = toWrite;
@@ -1203,7 +1219,7 @@ ConsoleWatchProc(
 				 * TCL_EXCEPTION. */
 {
     ConsoleInfo **nextPtrPtr, *ptr;
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
     int oldMask = infoPtr->watchMask;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
@@ -1261,7 +1277,8 @@ ConsoleGetHandleProc(
     int direction,		/* TCL_READABLE or TCL_WRITABLE. */
     ClientData *handlePtr)	/* Where to store the handle. */
 {
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
+    (void)direction;
 
     *handlePtr = infoPtr->handle;
     return TCL_OK;
@@ -1295,7 +1312,7 @@ WaitForRead(
 				 * or not. */
 {
     DWORD timeout, count;
-    HANDLE *handle = infoPtr->handle;
+    HANDLE *handle = (HANDLE *)infoPtr->handle;
     ConsoleThreadInfo *threadInfo = &infoPtr->reader;
     INPUT_RECORD input;
 
@@ -1500,7 +1517,7 @@ ConsoleReaderThread(
 >>>>>>> upstream/master
 	if (!infoPtr) {
 	    infoPtr = (ConsoleInfo *)pipeTI->clientData;
-	    handle = infoPtr->handle;
+	    handle = (HANDLE *)infoPtr->handle;
 	    threadInfo = &infoPtr->reader;
 	}
 
@@ -1684,7 +1701,7 @@ ConsoleWriterThread(
 >>>>>>> upstream/master
 	if (!infoPtr) {
 	    infoPtr = (ConsoleInfo *)pipeTI->clientData;
-	    handle = infoPtr->handle;
+	    handle = (HANDLE *)infoPtr->handle;
 	    threadInfo = &infoPtr->writer;
 	}
 <<<<<<< HEAD
@@ -1787,7 +1804,7 @@ TclWinOpenConsoleChannel(
      * See if a channel with this handle already exists.
      */
 
-    infoPtr = Tcl_Alloc(sizeof(ConsoleInfo));
+    infoPtr = (ConsoleInfo *)Tcl_Alloc(sizeof(ConsoleInfo));
     memset(infoPtr, 0, sizeof(ConsoleInfo));
 
     infoPtr->validMask = permissions;
@@ -1871,7 +1888,7 @@ TclWinOpenConsoleChannel(
 
     Tcl_SetChannelOption(NULL, infoPtr->channel, "-translation", "auto");
     Tcl_SetChannelOption(NULL, infoPtr->channel, "-eofchar", "\032 {}");
-    Tcl_SetChannelOption(NULL, infoPtr->channel, "-encoding", "unicode");
+    Tcl_SetChannelOption(NULL, infoPtr->channel, "-encoding", "utf-16");
     return infoPtr->channel;
 }
 
@@ -1896,7 +1913,7 @@ ConsoleThreadActionProc(
     ClientData instanceData,
     int action)
 {
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
 
     /*
      * We do not access firstConsolePtr in the thread structures. This is not
@@ -1950,7 +1967,7 @@ ConsoleSetOptionProc(
     const char *optionName,	/* Which option to set? */
     const char *value)		/* New value for option. */
 {
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
     int len = strlen(optionName);
     int vlen = strlen(value);
 
@@ -2048,7 +2065,7 @@ ConsoleGetOptionProc(
     const char *optionName,	/* Option to get. */
     Tcl_DString *dsPtr)		/* Where to store value(s). */
 {
-    ConsoleInfo *infoPtr = instanceData;
+    ConsoleInfo *infoPtr = (ConsoleInfo *)instanceData;
     int valid = 0;		/* Flag if valid option parsed. */
     unsigned int len;
     char buf[TCL_INTEGER_SPACE];

@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_CNT_LSB_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,6 +17,10 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 static const int lnz[16] = {
    4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
@@ -28,14 +33,14 @@ int mp_cnt_lsb(const mp_int *a)
    mp_digit q, qq;
 
    /* easy out */
-   if (mp_iszero(a) == MP_YES) {
+   if (MP_IS_ZERO(a)) {
       return 0;
    }
 
    /* scan lower digits until non-zero */
    for (x = 0; (x < a->used) && (a->dp[x] == 0u); x++) {}
    q = a->dp[x];
-   x *= DIGIT_BIT;
+   x *= MP_DIGIT_BIT;
 
    /* now scan this digit until a 1 is found */
    if ((q & 1u) == 0u) {
@@ -49,7 +54,3 @@ int mp_cnt_lsb(const mp_int *a)
 }
 
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_RAND_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -15,81 +16,21 @@
 =======
  * SPDX-License-Identifier: Unlicense
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
-/* First the OS-specific special cases
- * - *BSD
- * - Windows
- */
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
-#define MP_ARC4RANDOM
-#define MP_GEN_RANDOM_MAX     0xffffffffu
-#define MP_GEN_RANDOM_SHIFT   32
+mp_err(*s_mp_rand_source)(void *out, size_t size) = s_mp_rand_platform;
 
-static int s_read_arc4random(mp_digit *p)
+void mp_rand_source(mp_err(*source)(void *out, size_t size))
 {
-   mp_digit d = 0, msk = 0;
-   do {
-      d <<= MP_GEN_RANDOM_SHIFT;
-      d |= ((mp_digit) arc4random());
-      msk <<= MP_GEN_RANDOM_SHIFT;
-      msk |= (MP_MASK & MP_GEN_RANDOM_MAX);
-   } while ((MP_MASK & msk) != MP_MASK);
-   *p = d;
-   return MP_OKAY;
-}
-#endif
-
-#if defined(_WIN32) || defined(_WIN32_WCE)
-#define MP_WIN_CSP
-
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400
-#endif
-#ifdef _WIN32_WCE
-#define UNDER_CE
-#define ARM
-#endif
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <wincrypt.h>
-
-static HCRYPTPROV hProv = 0;
-
-static void s_cleanup_win_csp(void)
-{
-   CryptReleaseContext(hProv, 0);
-   hProv = 0;
+   s_mp_rand_source = (source == NULL) ? s_mp_rand_platform : source;
 }
 
-static int s_read_win_csp(mp_digit *p)
+mp_err mp_rand(mp_int *a, int digits)
 {
-   int ret = -1;
-   if (hProv == 0) {
-      if (!CryptAcquireContext(&hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL,
-                               (CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET)) &&
-          !CryptAcquireContext(&hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL,
-                               CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET | CRYPT_NEWKEYSET)) {
-         hProv = 0;
-         return ret;
-      }
-      atexit(s_cleanup_win_csp);
-   }
-   if (CryptGenRandom(hProv, sizeof(*p), (void *)p) == TRUE) {
-      ret = MP_OKAY;
-   }
-   return ret;
-}
-#endif /* WIN32 */
-
-#if !defined(MP_WIN_CSP) && defined(__linux__) && defined(__GLIBC_PREREQ)
-#if __GLIBC_PREREQ(2, 25)
-#define MP_GETRANDOM
-#include <sys/random.h>
-#include <errno.h>
-
-static int s_read_getrandom(mp_digit *p)
-{
+<<<<<<< HEAD
    int ret;
    do {
       ret = getrandom(p, sizeof(*p), 0);
@@ -351,12 +292,18 @@ int mp_rand(mp_int *a, int digits)
 {
    int     res;
    mp_digit d;
+=======
+   int i;
+   mp_err err;
+>>>>>>> upstream/master
 
    mp_zero(a);
+
    if (digits <= 0) {
       return MP_OKAY;
    }
 
+<<<<<<< HEAD
    /* first place a random non-zero digit */
    do {
 <<<<<<< HEAD
@@ -367,16 +314,24 @@ int mp_rand(mp_int *a, int digits)
          return MP_VAL;
       }
    } while (d == 0u);
+=======
+   if ((err = mp_grow(a, digits)) != MP_OKAY) {
+      return err;
+   }
+>>>>>>> upstream/master
 
-   if ((res = mp_add_d(a, d, a)) != MP_OKAY) {
-      return res;
+   if ((err = s_mp_rand_source(a->dp, (size_t)digits * sizeof(mp_digit))) != MP_OKAY) {
+      return err;
    }
 
-   while (--digits > 0) {
-      if ((res = mp_lshd(a, 1)) != MP_OKAY) {
-         return res;
+   /* TODO: We ensure that the highest digit is nonzero. Should this be removed? */
+   while ((a->dp[digits - 1] & MP_MASK) == 0u) {
+      if ((err = s_mp_rand_source(a->dp + digits - 1, sizeof(mp_digit))) != MP_OKAY) {
+         return err;
       }
+   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       if (s_gen_random(&d) != MP_OKAY) {
 =======
@@ -387,12 +342,13 @@ int mp_rand(mp_int *a, int digits)
       if ((res = mp_add_d(a, d, a)) != MP_OKAY) {
          return res;
       }
+=======
+   a->used = digits;
+   for (i = 0; i < digits; ++i) {
+      a->dp[i] &= MP_MASK;
+>>>>>>> upstream/master
    }
 
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

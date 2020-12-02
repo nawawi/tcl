@@ -397,7 +397,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="bn_error.c"
+			RelativePath="bn_cutoffs.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -422,6 +422,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+<<<<<<< HEAD
 			RelativePath="bn_fast_mp_invmod.c"
 			>
 <<<<<<< HEAD
@@ -523,6 +524,9 @@
 		</File>
 		<File
 			RelativePath="bn_fast_s_mp_sqr.c"
+=======
+			RelativePath="bn_deprecated.c"
+>>>>>>> upstream/master
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -926,6 +930,10 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+			RelativePath="bn_mp_decr.c"
+			>
+		</File>
+		<File
 			RelativePath="bn_mp_div.c"
 			>
 <<<<<<< HEAD
@@ -1126,7 +1134,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_exch.c"
+			RelativePath="bn_mp_error_to_string.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1153,12 +1161,16 @@
 =======
 		</File>
 		<File
+<<<<<<< HEAD
 			RelativePath="bn_mp_export.c"
+>>>>>>> upstream/master
+=======
+			RelativePath="bn_mp_exch.c"
 >>>>>>> upstream/master
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_expt_d.c"
+			RelativePath="bn_mp_expt_u32.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1180,60 +1192,10 @@
 				/>
 			</FileConfiguration>
 =======
-		</File>
-		<File
-			RelativePath="bn_mp_expt_d_ex.c"
-			>
->>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_exptmod.c"
 			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_exptmod_fast.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
 >>>>>>> upstream/master
 		</File>
 		<File
@@ -1263,6 +1225,56 @@
 		</File>
 		<File
 			RelativePath="bn_mp_fread.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_from_sbin.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_from_ubin.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1336,16 +1348,28 @@
 =======
 		</File>
 		<File
-			RelativePath="bn_mp_get_bit.c"
+			RelativePath="bn_mp_get_double.c"
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_get_double.c"
+			RelativePath="bn_mp_get_i32.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_get_i64.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_get_l.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_get_ll.c"
 			>
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_get_int.c"
+			RelativePath="bn_mp_get_mag_u32.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1369,11 +1393,15 @@
 =======
 		</File>
 		<File
-			RelativePath="bn_mp_get_long.c"
+			RelativePath="bn_mp_get_mag_u64.c"
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_get_long_long.c"
+			RelativePath="bn_mp_get_mag_ul.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_get_mag_ull.c"
 			>
 >>>>>>> upstream/master
 		</File>
@@ -1405,7 +1433,11 @@
 =======
 		</File>
 		<File
+<<<<<<< HEAD
 			RelativePath="bn_mp_import.c"
+>>>>>>> upstream/master
+=======
+			RelativePath="bn_mp_incr.c"
 >>>>>>> upstream/master
 			>
 		</File>
@@ -1460,6 +1492,22 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+			RelativePath="bn_mp_init_i32.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_init_i64.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_init_l.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_init_ll.c"
+			>
+		</File>
+		<File
 			RelativePath="bn_mp_init_multi.c"
 			>
 <<<<<<< HEAD
@@ -1510,31 +1558,6 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_init_set_int.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
 			RelativePath="bn_mp_init_size.c"
 			>
 <<<<<<< HEAD
@@ -1560,7 +1583,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_invmod.c"
+			RelativePath="bn_mp_init_u32.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1585,7 +1608,61 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_invmod_slow.c"
+			RelativePath="bn_mp_init_u64.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_init_ul.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_init_ull.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_invmod.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1635,7 +1712,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_jacobi.c"
+			RelativePath="bn_mp_iseven.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1660,32 +1737,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_karatsuba_mul.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_karatsuba_sqr.c"
+			RelativePath="bn_mp_isodd.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -1737,6 +1789,10 @@
 			</FileConfiguration>
 =======
 >>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_log_u32.c"
+			>
 		</File>
 		<File
 			RelativePath="bn_mp_lshd.c"
@@ -2039,35 +2095,6 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_n_root.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
-		</File>
-		<File
-			RelativePath="bn_mp_n_root_ex.c"
-			>
->>>>>>> upstream/master
-		</File>
-		<File
 			RelativePath="bn_mp_neg.c"
 			>
 <<<<<<< HEAD
@@ -2090,10 +2117,39 @@
 				/>
 			</FileConfiguration>
 =======
->>>>>>> upstream/master
 		</File>
 		<File
 			RelativePath="bn_mp_or.c"
+			>
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_pack.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_pack_count.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -2147,6 +2203,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+<<<<<<< HEAD
 			RelativePath="bn_mp_prime_is_divisible.c"
 			>
 <<<<<<< HEAD
@@ -2172,6 +2229,8 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+=======
+>>>>>>> upstream/master
 			RelativePath="bn_mp_prime_is_prime.c"
 			>
 <<<<<<< HEAD
@@ -2272,7 +2331,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_prime_random_ex.c"
+			RelativePath="bn_mp_prime_rand.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -2401,6 +2460,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+<<<<<<< HEAD
 			RelativePath="bn_mp_read_signed_bin.c"
 			>
 <<<<<<< HEAD
@@ -2451,6 +2511,8 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+=======
+>>>>>>> upstream/master
 			RelativePath="bn_mp_reduce.c"
 			>
 <<<<<<< HEAD
@@ -2651,6 +2713,10 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+			RelativePath="bn_mp_root_u32.c"
+			>
+		</File>
+		<File
 			RelativePath="bn_mp_rshd.c"
 			>
 <<<<<<< HEAD
@@ -2674,6 +2740,10 @@
 			</FileConfiguration>
 =======
 >>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_mp_sbin_size.c"
+			>
 		</File>
 		<File
 			RelativePath="bn_mp_set.c"
@@ -2705,7 +2775,11 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_set_int.c"
+			RelativePath="bn_mp_set_i32.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_set_i64.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -2729,11 +2803,27 @@
 =======
 		</File>
 		<File
-			RelativePath="bn_mp_set_long.c"
+			RelativePath="bn_mp_set_l.c"
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_set_long_long.c"
+			RelativePath="bn_mp_set_ll.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_set_u32.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_set_u64.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_set_ul.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_mp_set_ull.c"
 			>
 >>>>>>> upstream/master
 		</File>
@@ -2763,7 +2853,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_signed_bin_size.c"
+			RelativePath="bn_mp_signed_rsh.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -2941,224 +3031,24 @@
 =======
 		</File>
 		<File
-			RelativePath="bn_mp_tc_and.c"
+			RelativePath="bn_mp_to_radix.c"
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_tc_div_2d.c"
+			RelativePath="bn_mp_to_sbin.c"
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_tc_or.c"
+			RelativePath="bn_mp_to_ubin.c"
 			>
 		</File>
 		<File
-			RelativePath="bn_mp_tc_xor.c"
+			RelativePath="bn_mp_ubin_size.c"
 			>
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_mp_to_signed_bin.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_to_signed_bin_n.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_to_unsigned_bin.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_to_unsigned_bin_n.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_toom_mul.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_toom_sqr.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_toradix.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_toradix_n.c"
-			>
-<<<<<<< HEAD
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-				/>
-			</FileConfiguration>
-=======
->>>>>>> upstream/master
-		</File>
-		<File
-			RelativePath="bn_mp_unsigned_bin_size.c"
+			RelativePath="bn_mp_unpack.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -3258,7 +3148,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_reverse.c"
+			RelativePath="bn_s_mp_add.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -3283,7 +3173,7 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bn_s_mp_add.c"
+			RelativePath="bn_s_mp_balance_mul.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -3333,7 +3223,207 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+			RelativePath="bn_s_mp_exptmod_fast.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_get_bit.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_invmod_fast.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_invmod_slow.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_karatsuba_mul.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_karatsuba_sqr.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_montgomery_reduce_fast.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
 			RelativePath="bn_s_mp_mul_digs.c"
+			>
+<<<<<<< HEAD
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+=======
+>>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_mul_digs_fast.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -3383,6 +3473,26 @@
 >>>>>>> upstream/master
 		</File>
 		<File
+			RelativePath="bn_s_mp_mul_high_digs_fast.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_s_mp_prime_is_divisible.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_s_mp_rand_jenkins.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_s_mp_rand_platform.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_s_mp_reverse.c"
+			>
+		</File>
+		<File
 			RelativePath="bn_s_mp_sqr.c"
 			>
 <<<<<<< HEAD
@@ -3406,6 +3516,10 @@
 			</FileConfiguration>
 =======
 >>>>>>> upstream/master
+		</File>
+		<File
+			RelativePath="bn_s_mp_sqr_fast.c"
+			>
 		</File>
 		<File
 			RelativePath="bn_s_mp_sub.c"
@@ -3433,7 +3547,11 @@
 >>>>>>> upstream/master
 		</File>
 		<File
-			RelativePath="bncore.c"
+			RelativePath="bn_s_mp_toom_mul.c"
+			>
+		</File>
+		<File
+			RelativePath="bn_s_mp_toom_sqr.c"
 			>
 <<<<<<< HEAD
 			<FileConfiguration
@@ -3467,7 +3585,14 @@
 		</File>
 		<File
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+			RelativePath="tommath_cutoffs.h"
+			>
+		</File>
+		<File
+>>>>>>> upstream/master
 			RelativePath="tommath_private.h"
 			>
 		</File>

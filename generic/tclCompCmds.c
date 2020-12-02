@@ -21,28 +21,16 @@
  * Prototypes for procedures defined later in this file:
  */
 
-static ClientData	DupDictUpdateInfo(ClientData clientData);
-static void		FreeDictUpdateInfo(ClientData clientData);
-static void		PrintDictUpdateInfo(ClientData clientData,
-			    Tcl_Obj *appendObj, ByteCode *codePtr,
-			    unsigned int pcOffset);
-static void		DisassembleDictUpdateInfo(ClientData clientData,
-			    Tcl_Obj *dictObj, ByteCode *codePtr,
-			    unsigned int pcOffset);
-static ClientData	DupForeachInfo(ClientData clientData);
-static void		FreeForeachInfo(ClientData clientData);
-static void		PrintForeachInfo(ClientData clientData,
-			    Tcl_Obj *appendObj, ByteCode *codePtr,
-			    unsigned int pcOffset);
-static void		DisassembleForeachInfo(ClientData clientData,
-			    Tcl_Obj *dictObj, ByteCode *codePtr,
-			    unsigned int pcOffset);
-static void		PrintNewForeachInfo(ClientData clientData,
-			    Tcl_Obj *appendObj, ByteCode *codePtr,
-			    unsigned int pcOffset);
-static void		DisassembleNewForeachInfo(ClientData clientData,
-			    Tcl_Obj *dictObj, ByteCode *codePtr,
-			    unsigned int pcOffset);
+static AuxDataDupProc	DupDictUpdateInfo;
+static AuxDataFreeProc	FreeDictUpdateInfo;
+static AuxDataPrintProc	PrintDictUpdateInfo;
+static AuxDataPrintProc	DisassembleDictUpdateInfo;
+static AuxDataDupProc	DupForeachInfo;
+static AuxDataFreeProc	FreeForeachInfo;
+static AuxDataPrintProc	PrintForeachInfo;
+static AuxDataPrintProc	DisassembleForeachInfo;
+static AuxDataPrintProc	PrintNewForeachInfo;
+static AuxDataPrintProc	DisassembleNewForeachInfo;
 static int		CompileEachloopCmd(Tcl_Interp *interp,
 			    Tcl_Parse *parsePtr, Command *cmdPtr,
 			    CompileEnv *envPtr, int collect);
@@ -341,8 +329,7 @@ TclCompileArrayExistsCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     DefineLineInformation;	/* TIP #280 */
@@ -484,9 +471,9 @@ TclCompileArraySetCmd(
     keyVar = AnonymousLocal(envPtr);
     valVar = AnonymousLocal(envPtr);
 
-    infoPtr = Tcl_Alloc(sizeof(ForeachInfo));
+    infoPtr = (ForeachInfo *)Tcl_Alloc(sizeof(ForeachInfo));
     infoPtr->numLists = 1;
-    infoPtr->varLists[0] = Tcl_Alloc(sizeof(ForeachVarList) + sizeof(int));
+    infoPtr->varLists[0] = (ForeachVarList *)Tcl_Alloc(sizeof(ForeachVarList) + sizeof(int));
     infoPtr->varLists[0]->numVars = 2;
     infoPtr->varLists[0]->varIndexes[0] = keyVar;
     infoPtr->varLists[0]->varIndexes[1] = valVar;
@@ -603,12 +590,16 @@ TclCompileArrayUnsetCmd(
  */
 
 int
+<<<<<<< HEAD
 TclCompileArrayExistsCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
+=======
+TclCompileBreakCmd(
+    TCL_UNUSED(Tcl_Interp *),
+>>>>>>> upstream/master
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
 <<<<<<< HEAD
@@ -670,8 +661,7 @@ TclCompileArraySetCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
 <<<<<<< HEAD
@@ -1007,12 +997,15 @@ TclCompileArrayUnsetCmd(
 
 int
 TclCompileClockClicksCmd(
+<<<<<<< HEAD
     Tcl_Interp* interp,		/* Tcl interpreter */
+>>>>>>> upstream/master
+=======
+    TCL_UNUSED(Tcl_Interp *),
 >>>>>>> upstream/master
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
 <<<<<<< HEAD
@@ -1077,7 +1070,7 @@ TclCompileClockClicksCmd(
 
 int
 TclCompileClockReadingCmd(
-    Tcl_Interp* interp,		/* Tcl interpreter */
+    TCL_UNUSED(Tcl_Interp *),
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
     Command *cmdPtr,		/* Points to defintion of command being
@@ -1116,8 +1109,7 @@ TclCompileConcatCmd(
     Tcl_Interp *interp,		/* Used for error reporting. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     DefineLineInformation;	/* TIP #280 */
@@ -1201,11 +1193,10 @@ TclCompileConcatCmd(
 
 int
 TclCompileContinueCmd(
-    Tcl_Interp *interp,		/* Used for error reporting. */
+    TCL_UNUSED(Tcl_Interp *),
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     ExceptionRange *rangePtr;
@@ -1335,8 +1326,7 @@ TclCompileAppendCmd(
 >>>>>>> upstream/master
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
 <<<<<<< HEAD
@@ -1708,8 +1698,7 @@ TclCompileDictGetCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     Tcl_Token *tokenPtr;
@@ -1790,8 +1779,7 @@ TclCompileDictGetWithDefaultCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     Tcl_Token *tokenPtr;
@@ -1836,8 +1824,7 @@ TclCompileDictExistsCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     Tcl_Token *tokenPtr;
@@ -2803,6 +2790,7 @@ TclCompileContinueCmd(
      */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     rangePtr = TclGetInnermostExceptionRange(envPtr, TCL_CONTINUE, &auxPtr);
     if (rangePtr && rangePtr->type == LOOP_EXCEPTION_RANGE) {
 	/*
@@ -2823,8 +2811,11 @@ TclCompileContinueCmd(
 
 =======
     duiPtr = Tcl_Alloc(sizeof(DictUpdateInfo) + sizeof(int) * (numVars - 1));
+=======
+    duiPtr = (DictUpdateInfo *)Tcl_Alloc(sizeof(DictUpdateInfo) + sizeof(int) * (numVars - 1));
+>>>>>>> upstream/master
     duiPtr->length = numVars;
-    keyTokenPtrs = TclStackAlloc(interp, sizeof(Tcl_Token *) * numVars);
+    keyTokenPtrs = (Tcl_Token **)TclStackAlloc(interp, sizeof(Tcl_Token *) * numVars);
     tokenPtr = TokenAfter(dictVarTokenPtr);
 
     for (i=0 ; i<numVars ; i++) {
@@ -3409,6 +3400,7 @@ TclCompileDictWithCmd(
 >>>>>>> upstream/master
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*
      * Except for the special "ensure array" case below, when we're not in
      * a proc, we cannot do a better compile than generic.
@@ -3462,6 +3454,18 @@ TclCompileDictWithCmd(
     dui1Ptr = clientData;
     len = sizeof(DictUpdateInfo) + sizeof(int) * (dui1Ptr->length - 1);
     dui2Ptr = Tcl_Alloc(len);
+=======
+static ClientData
+DupDictUpdateInfo(
+    ClientData clientData)
+{
+    DictUpdateInfo *dui1Ptr, *dui2Ptr;
+    size_t len;
+
+    dui1Ptr = (DictUpdateInfo *)clientData;
+    len = sizeof(DictUpdateInfo) + sizeof(int) * (dui1Ptr->length - 1);
+    dui2Ptr = (DictUpdateInfo *)Tcl_Alloc(len);
+>>>>>>> upstream/master
     memcpy(dui2Ptr, dui1Ptr, len);
     return dui2Ptr;
 }
@@ -3477,10 +3481,10 @@ static void
 PrintDictUpdateInfo(
     ClientData clientData,
     Tcl_Obj *appendObj,
-    ByteCode *codePtr,
-    unsigned int pcOffset)
+    TCL_UNUSED(ByteCode *),
+    TCL_UNUSED(unsigned int))
 {
-    DictUpdateInfo *duiPtr = clientData;
+    DictUpdateInfo *duiPtr = (DictUpdateInfo *)clientData;
     size_t i;
 >>>>>>> upstream/master
 
@@ -3599,10 +3603,10 @@ static void
 DisassembleDictUpdateInfo(
     ClientData clientData,
     Tcl_Obj *dictObj,
-    ByteCode *codePtr,
-    unsigned int pcOffset)
+    TCL_UNUSED(ByteCode *),
+    TCL_UNUSED(unsigned int))
 {
-    DictUpdateInfo *duiPtr = clientData;
+    DictUpdateInfo *duiPtr = (DictUpdateInfo *)clientData;
     size_t i;
     Tcl_Obj *variables = Tcl_NewObj();
 
@@ -3638,8 +3642,7 @@ TclCompileArrayUnsetCmd(
     Tcl_Interp *interp,		/* Used for looking up stuff. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
 <<<<<<< HEAD
@@ -3751,9 +3754,20 @@ TclCompileArrayUnsetCmd(
 int
 TclCompileBreakCmd(
     Tcl_Interp *interp,		/* Used for error reporting. */
+<<<<<<< HEAD
 =======
     /* TODO: Consider support for compiling expanded args. */
     if (parsePtr->numWords < 3) {
+=======
+    Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
+				 * created by Tcl_ParseCommand. */
+    TCL_UNUSED(Command *),
+    CompileEnv *envPtr)		/* Holds resulting instructions. */
+{
+    Tcl_Token *firstWordPtr;
+
+    if (parsePtr->numWords == 1) {
+>>>>>>> upstream/master
 	return TCL_ERROR;
     }
     tokenPtr = TokenAfter(parsePtr->tokenPtr);
@@ -3777,8 +3791,7 @@ TclCompileDictExistsCmd(
 >>>>>>> upstream/master
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
 <<<<<<< HEAD
@@ -4168,8 +4181,7 @@ CompileEachloopCmd(
     Tcl_Interp *interp,		/* Used for error reporting. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr,		/* Holds resulting instructions. */
     int collect)		/* Select collecting or accumulating mode
 				 * (TCL_EACH_*) */
@@ -4457,7 +4469,7 @@ CompileDictEachCmd(
      */
 
     numLists = (numWords - 2)/2;
-    infoPtr = Tcl_Alloc(sizeof(ForeachInfo)
+    infoPtr = (ForeachInfo *)Tcl_Alloc(sizeof(ForeachInfo)
 	    + (numLists - 1) * sizeof(ForeachVarList *));
     infoPtr->numLists = 0;	/* Count this up as we go */
 
@@ -4491,7 +4503,7 @@ CompileDictEachCmd(
 	    goto done;
 	}
 
-	varListPtr = Tcl_Alloc(sizeof(ForeachVarList)
+	varListPtr = (ForeachVarList *)Tcl_Alloc(sizeof(ForeachVarList)
 		+ (numVars - 1) * sizeof(int));
 	varListPtr->numVars = numVars;
 	infoPtr->varLists[i/2] = varListPtr;
@@ -12560,6 +12572,7 @@ DisassembleNewForeachInfo(
     ByteCode *codePtr,
     unsigned int pcOffset)
 {
+<<<<<<< HEAD
     register ForeachInfo *infoPtr = clientData;
     register ForeachVarList *varsPtr;
     int i, j;
@@ -12583,6 +12596,27 @@ DisassembleNewForeachInfo(
 	for (j=0 ; j<varsPtr->numVars ; j++) {
 	    Tcl_ListObjAppendElement(NULL, innerPtr,
 		    Tcl_NewIntObj(varsPtr->varIndexes[j]));
+=======
+    ForeachInfo *srcPtr = (ForeachInfo *)clientData;
+    ForeachInfo *dupPtr;
+    ForeachVarList *srcListPtr, *dupListPtr;
+    int numVars, i, j, numLists = srcPtr->numLists;
+
+    dupPtr = (ForeachInfo *)Tcl_Alloc(sizeof(ForeachInfo)
+	    + numLists * sizeof(ForeachVarList *));
+    dupPtr->numLists = numLists;
+    dupPtr->firstValueTemp = srcPtr->firstValueTemp;
+    dupPtr->loopCtTemp = srcPtr->loopCtTemp;
+
+    for (i = 0;  i < numLists;  i++) {
+	srcListPtr = srcPtr->varLists[i];
+	numVars = srcListPtr->numVars;
+	dupListPtr = (ForeachVarList *)Tcl_Alloc(sizeof(ForeachVarList)
+		+ numVars * sizeof(int));
+	dupListPtr->numVars = numVars;
+	for (j = 0;  j < numVars;  j++) {
+	    dupListPtr->varIndexes[j] =	srcListPtr->varIndexes[j];
+>>>>>>> upstream/master
 	}
 	Tcl_ListObjAppendElement(NULL, objPtr, innerPtr);
 <<<<<<< HEAD
@@ -12622,11 +12656,18 @@ TclCompileFormatCmd(
 				 * compiled. */
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+<<<<<<< HEAD
     DefineLineInformation;	/* TIP #280 */
     Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     Tcl_Obj **objv, *formatObj, *tmpObj;
     char *bytes, *start;
     int i, j, len;
+=======
+    ForeachInfo *infoPtr = (ForeachInfo *)clientData;
+    ForeachVarList *listPtr;
+    int numLists = infoPtr->numLists;
+    int i;
+>>>>>>> upstream/master
 
     /*
      * Don't handle any guaranteed-error cases.
@@ -12638,10 +12679,10 @@ TclCompileFormatCmd(
 PrintNewForeachInfo(
     ClientData clientData,
     Tcl_Obj *appendObj,
-    ByteCode *codePtr,
-    unsigned int pcOffset)
+    TCL_UNUSED(ByteCode *),
+    TCL_UNUSED(unsigned int))
 {
-    ForeachInfo *infoPtr = clientData;
+    ForeachInfo *infoPtr = (ForeachInfo *)clientData;
     ForeachVarList *varsPtr;
     int i, j;
 
@@ -12667,11 +12708,17 @@ PrintNewForeachInfo(
 static void
 DisassembleForeachInfo(
     ClientData clientData,
+<<<<<<< HEAD
     Tcl_Obj *dictObj,
     ByteCode *codePtr,
     unsigned int pcOffset)
+=======
+    Tcl_Obj *appendObj,
+    TCL_UNUSED(ByteCode *),
+    TCL_UNUSED(unsigned int))
+>>>>>>> upstream/master
 {
-    ForeachInfo *infoPtr = clientData;
+    ForeachInfo *infoPtr = (ForeachInfo *)clientData;
     ForeachVarList *varsPtr;
     int i, j;
     Tcl_Obj *objPtr, *innerPtr;
@@ -12712,6 +12759,7 @@ DisassembleForeachInfo(
 	}
     }
 
+<<<<<<< HEAD
     /*
      * Everything is a literal, so the result is constant too (or an error if
      * the format is broken). Do the format now.
@@ -12746,6 +12794,19 @@ DisassembleForeachInfo(
     PushLiteral(envPtr, bytes, len);
     Tcl_DecrRefCount(tmpObj);
     return TCL_OK;
+=======
+static void
+DisassembleForeachInfo(
+    ClientData clientData,
+    Tcl_Obj *dictObj,
+    TCL_UNUSED(ByteCode *),
+    TCL_UNUSED(unsigned int))
+{
+    ForeachInfo *infoPtr = (ForeachInfo *)clientData;
+    ForeachVarList *varsPtr;
+    int i, j;
+    Tcl_Obj *objPtr, *innerPtr;
+>>>>>>> upstream/master
 
   checkForStringConcatCase:
     /*
@@ -12805,10 +12866,10 @@ static void
 DisassembleNewForeachInfo(
     ClientData clientData,
     Tcl_Obj *dictObj,
-    ByteCode *codePtr,
-    unsigned int pcOffset)
+    TCL_UNUSED(ByteCode *),
+    TCL_UNUSED(unsigned int))
 {
-    ForeachInfo *infoPtr = clientData;
+    ForeachInfo *infoPtr = (ForeachInfo *)clientData;
     ForeachVarList *varsPtr;
     int i, j;
     Tcl_Obj *objPtr, *innerPtr;
@@ -12936,8 +12997,7 @@ TclCompileFormatCmd(
     Tcl_Interp *interp,		/* Used for error reporting. */
     Tcl_Parse *parsePtr,	/* Points to a parse structure for the command
 				 * created by Tcl_ParseCommand. */
-    Command *cmdPtr,		/* Points to defintion of command being
-				 * compiled. */
+    TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
     DefineLineInformation;	/* TIP #280 */
@@ -13039,7 +13099,7 @@ TclCompileFormatCmd(
 	return TCL_ERROR;
     }
 
-    objv = Tcl_Alloc((parsePtr->numWords-2) * sizeof(Tcl_Obj *));
+    objv = (Tcl_Obj **)Tcl_Alloc((parsePtr->numWords-2) * sizeof(Tcl_Obj *));
     for (i=0 ; i+2 < parsePtr->numWords ; i++) {
 	tokenPtr = TokenAfter(tokenPtr);
 	objv[i] = Tcl_NewObj();
@@ -13470,7 +13530,7 @@ TclPushVarName(
 		 * assemble the corresponding token.
 		 */
 
-		elemTokenPtr = TclStackAlloc(interp, sizeof(Tcl_Token));
+		elemTokenPtr = (Tcl_Token *)TclStackAlloc(interp, sizeof(Tcl_Token));
 		allocedTokens = 1;
 		elemTokenPtr->type = TCL_TOKEN_TEXT;
 		elemTokenPtr->start = elName;
@@ -13537,7 +13597,7 @@ TclPushVarName(
 		 * token.
 		 */
 
-		elemTokenPtr = TclStackAlloc(interp, n * sizeof(Tcl_Token));
+		elemTokenPtr = (Tcl_Token *)TclStackAlloc(interp, n * sizeof(Tcl_Token));
 		allocedTokens = 1;
 		elemTokenPtr->type = TCL_TOKEN_TEXT;
 		elemTokenPtr->start = elName;

@@ -215,6 +215,9 @@ static int		FileHandlerEventProc(Tcl_Event *evPtr, int flags);
  */
 
 #if defined(__CYGWIN__)
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef struct {
     void *hwnd;			/* Messaging window. */
     unsigned int *message;	/* Message payload. */
@@ -242,6 +245,9 @@ typedef struct {
 } WNDCLASSW;
 >>>>>>> upstream/master
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wignored-attributes"
+#endif
 extern void __stdcall	CloseHandle(void *);
 extern void *__stdcall	CreateEventW(void *, unsigned char, unsigned char,
 			    void *);
@@ -270,9 +276,12 @@ extern unsigned char __stdcall	TranslateMessage(const MSG *);
  * Threaded-cygwin specific constants and functions in this file:
  */
 
-static const WCHAR className[] = L"TclNotifier";
+static const wchar_t className[] = L"TclNotifier";
 static DWORD __stdcall	NotifierProc(void *hwnd, unsigned int message,
 			    void *wParam, void *lParam);
+#ifdef __cplusplus
+}
+#endif
 #endif /* TCL_THREADS && __CYGWIN__ */
 
 
@@ -311,6 +320,7 @@ Tcl_InitNotifier(void)
 	if (tsdPtr->waitCVinitialized == 0) {
 #ifdef __CYGWIN__
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    WNDCLASS class;
 =======
 	    WNDCLASSW class;
@@ -330,6 +340,24 @@ Tcl_InitNotifier(void)
 	    RegisterClassW(&class);
 	    tsdPtr->hwnd = CreateWindowExW(NULL, class.lpszClassName,
 		    class.lpszClassName, 0, 0, 0, 0, 0, NULL, NULL,
+=======
+	    WNDCLASSW clazz;
+
+	    clazz.style = 0;
+	    clazz.cbClsExtra = 0;
+	    clazz.cbWndExtra = 0;
+	    clazz.hInstance = TclWinGetTclInstance();
+	    clazz.hbrBackground = NULL;
+	    clazz.lpszMenuName = NULL;
+	    clazz.lpszClassName = className;
+	    clazz.lpfnWndProc = (void *)NotifierProc;
+	    clazz.hIcon = NULL;
+	    clazz.hCursor = NULL;
+
+	    RegisterClassW(&clazz);
+	    tsdPtr->hwnd = CreateWindowExW(NULL, clazz.lpszClassName,
+		    clazz.lpszClassName, 0, 0, 0, 0, 0, NULL, NULL,
+>>>>>>> upstream/master
 		    TclWinGetTclInstance(), NULL);
 	    tsdPtr->event = CreateEventW(NULL, 1 /* manual */,
 		    0 /* !signaled */, NULL);
@@ -481,7 +509,7 @@ Tcl_CreateFileHandler(
 	    }
 	}
 	if (filePtr == NULL) {
-	    filePtr = Tcl_Alloc(sizeof(FileHandler));
+	    filePtr = (FileHandler *)Tcl_Alloc(sizeof(FileHandler));
 	    filePtr->fd = fd;
 	    filePtr->readyMask = 0;
 	    filePtr->nextPtr = tsdPtr->firstFileHandlerPtr;
@@ -894,7 +922,7 @@ Tcl_WaitForEvent(
 
 	    if (filePtr->readyMask == 0) {
 		FileHandlerEvent *fileEvPtr =
-			Tcl_Alloc(sizeof(FileHandlerEvent));
+			(FileHandlerEvent *)Tcl_Alloc(sizeof(FileHandlerEvent));
 
 		fileEvPtr->header.proc = FileHandlerEventProc;
 		fileEvPtr->fd = filePtr->fd;
@@ -944,7 +972,7 @@ Tcl_WaitForEvent(
 #if TCL_THREADS
 static TCL_NORETURN void
 NotifierThreadProc(
-    ClientData clientData)	/* Not used. */
+    ClientData dummy)	/* Not used. */
 {
     ThreadSpecificData *tsdPtr;
     fd_set readableMask;
@@ -953,9 +981,10 @@ NotifierThreadProc(
     int i;
     int fds[2], receivePipe;
     long found;
-    struct timeval poll = {0., 0.}, *timePtr;
+    struct timeval poll = {0, 0}, *timePtr;
     char buf[2];
     int numFdBits = 0;
+    (void)dummy;
 
     if (pipe(fds) != 0) {
 	Tcl_Panic("NotifierThreadProc: %s", "could not create trigger pipe");

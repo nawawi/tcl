@@ -754,7 +754,7 @@ Tcl_DbCkfree(
 
     if (memp->tagPtr != NULL) {
 	if ((memp->tagPtr->refCount-- <= 1) && (curTagPtr != memp->tagPtr)) {
-	    TclpFree((char *) memp->tagPtr);
+	    TclpFree(memp->tagPtr);
 	}
     }
 
@@ -771,7 +771,7 @@ Tcl_DbCkfree(
     if (allocHead == memp) {
 	allocHead = memp->flink;
     }
-    TclpFree((char *) memp);
+    TclpFree(memp);
     Tcl_MutexUnlock(ckallocMutexPtr);
 }
 
@@ -882,7 +882,7 @@ MemoryCmd(
     ClientData clientData,
     Tcl_Interp *interp,
     int objc,			/* Number of arguments. */
-	Tcl_Obj *const objv[])		/* Obj values of arguments. */
+    Tcl_Obj *const objv[])	/* Obj values of arguments. */
 {
     const char *fileName;
     FILE *fileP;
@@ -1085,7 +1085,7 @@ MemoryCmd(
 	    return TCL_ERROR;
 	}
 	if ((curTagPtr != NULL) && (curTagPtr->refCount == 0)) {
-	    TclpFree((char *) curTagPtr);
+	    TclpFree(curTagPtr);
 	}
 <<<<<<< HEAD
 	len = strlen(argv[2]);
@@ -1203,10 +1203,10 @@ static int		CheckmemCmd(ClientData clientData,
 
 static int
 CheckmemCmd(
-    ClientData clientData,	/* Not used. */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* Interpreter for evaluation. */
     int objc,			/* Number of arguments. */
-	Tcl_Obj *const objv[])		/* Obj values of arguments. */
+    Tcl_Obj *const objv[])	/* Obj values of arguments. */
 {
 <<<<<<< HEAD
     if (argc != 2) {
@@ -1275,9 +1275,7 @@ void *
 Tcl_Alloc(
     size_t size)
 {
-    void *result;
-
-    result = TclpAlloc(size);
+    void *result = TclpAlloc(size);
 
     /*
      * Most systems will not alloc(0), instead bumping it to one so that NULL
@@ -1301,9 +1299,7 @@ Tcl_DbCkalloc(
     const char *file,
     int line)
 {
-    void *result;
-
-    result = TclpAlloc(size);
+    void *result = TclpAlloc(size);
 
     if ((result == NULL) && size) {
 	fflush(stdout);
@@ -1328,18 +1324,16 @@ void *
 Tcl_AttemptAlloc(
     size_t size)
 {
-    void *result;
-
-    result = TclpAlloc(size);
-    return result;
+    return (char *)TclpAlloc(size);
 }
 
 void *
 Tcl_AttemptDbCkalloc(
     size_t size,
-    const char *file,
-    int line)
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
+<<<<<<< HEAD
     void *result;
 <<<<<<< HEAD
 =======
@@ -1349,6 +1343,9 @@ Tcl_AttemptDbCkalloc(
 
     result = TclpAlloc(size);
     return result;
+=======
+    return (char *)TclpAlloc(size);
+>>>>>>> upstream/master
 }
 
 /*
@@ -1368,9 +1365,7 @@ Tcl_Realloc(
     void *ptr,
     size_t size)
 {
-    char *result;
-
-    result = TclpRealloc(ptr, size);
+    void *result = TclpRealloc(ptr, size);
 
     if ((result == NULL) && size) {
 	Tcl_Panic("unable to realloc %" TCL_Z_MODIFIER "u bytes", size);
@@ -1385,9 +1380,7 @@ Tcl_DbCkrealloc(
     const char *file,
     int line)
 {
-    void *result;
-
-    result = TclpRealloc(ptr, size);
+    void *result = TclpRealloc(ptr, size);
 
     if ((result == NULL) && size) {
 	fflush(stdout);
@@ -1413,19 +1406,17 @@ Tcl_AttemptRealloc(
     void *ptr,
     size_t size)
 {
-    void *result;
-
-    result = TclpRealloc(ptr, size);
-    return result;
+    return (char *)TclpRealloc(ptr, size);
 }
 
 void *
 Tcl_AttemptDbCkrealloc(
     void *ptr,
     size_t size,
-    const char *file,
-    int line)
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
+<<<<<<< HEAD
     void *result;
 <<<<<<< HEAD
 =======
@@ -1435,6 +1426,9 @@ Tcl_AttemptDbCkrealloc(
 
     result = TclpRealloc(ptr, size);
     return result;
+=======
+    return (char *)TclpRealloc(ptr, size);
+>>>>>>> upstream/master
 }
 
 /*
@@ -1460,11 +1454,9 @@ Tcl_Free(
 void
 Tcl_DbCkfree(
     void *ptr,
-    const char *file,
-    int line)
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
-    (void)file;
-    (void)line;
     TclpFree(ptr);
 }
 
@@ -1481,37 +1473,36 @@ Tcl_DbCkfree(
 	/* ARGSUSED */
 void
 Tcl_InitMemory(
-    Tcl_Interp *interp)
+    TCL_UNUSED(Tcl_Interp *) /*interp*/)
 {
-    (void)interp;
 }
 
 int
 Tcl_DumpActiveMemory(
-    const char *fileName)
+    TCL_UNUSED(const char *) /*fileName*/)
 {
-    (void)fileName;
     return TCL_OK;
 }
 
 void
 Tcl_ValidateAllMemory(
-    const char *file,
-    int line)
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
-    (void)file;
-    (void)line;
 }
 
 int
 TclDumpMemoryInfo(
-    ClientData clientData,
-    int flags)
+    TCL_UNUSED(ClientData),
+    TCL_UNUSED(int) /*flags*/)
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     (void)clientData;
     (void)flags;
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     return 1;
 }
@@ -1550,7 +1541,7 @@ TclFinalizeMemorySubsystem(void)
     Tcl_MutexLock(ckallocMutexPtr);
 
     if (curTagPtr != NULL) {
-	TclpFree((char *) curTagPtr);
+	TclpFree(curTagPtr);
 	curTagPtr = NULL;
     }
     allocHead = NULL;

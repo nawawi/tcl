@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 *.bmp
 *.gif
 *.png
 =======
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 compat/zlib/win32/zdll.lib
@@ -13,6 +16,7 @@ compat/zlib/win64/zdll.lib
 compat/zlib/win64/zlib1.dll
 compat/zlib/win64/libz.dll.a
 compat/zlib/zlib.3.pdf
+<<<<<<< HEAD
 *.bmp
 *.gif
 <<<<<<< HEAD
@@ -22,7 +26,21 @@ compat/zlib/zlib.3.pdf
 *.png
 >>>>>>> upstream/master
 =======
+=======
+compat/zlib/win32/zdll.lib
+compat/zlib/win32/zlib1.dll
+compat/zlib/win64/zdll.lib
+compat/zlib/win64/zlib1.dll
+compat/zlib/win64/libz.dll.a
+compat/zlib/zlib.3.pdf
+libtommath/win32/tommath.lib
+libtommath/win32/libtommath.dll
+libtommath/win64/tommath.lib
+libtommath/win64/libtommath.dll
+libtommath/win64/libtommath.dll.a
+>>>>>>> upstream/master
 *.a
+*.bmp
 *.dll
 *.exe
 *.gif

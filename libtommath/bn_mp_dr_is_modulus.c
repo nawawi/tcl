@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_DR_IS_MODULUS_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,15 +17,19 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* determines if a number is a valid DR modulus */
-int mp_dr_is_modulus(const mp_int *a)
+mp_bool mp_dr_is_modulus(const mp_int *a)
 {
    int ix;
 
    /* must be at least two digits */
    if (a->used < 2) {
-      return 0;
+      return MP_NO;
    }
 
    /* must be of the form b**k - a [a <= b] so all
@@ -32,14 +37,10 @@ int mp_dr_is_modulus(const mp_int *a)
     */
    for (ix = 1; ix < a->used; ix++) {
       if (a->dp[ix] != MP_MASK) {
-         return 0;
+         return MP_NO;
       }
    }
-   return 1;
+   return MP_YES;
 }
 
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

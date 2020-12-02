@@ -65,8 +65,12 @@ const Tcl_ObjType tclListType = {
 	irPtr = Tcl_FetchIntRep((objPtr), &tclListType);		\
 =======
 	irPtr = TclFetchIntRep((objPtr), &tclListType);		\
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	(listRepPtr) = irPtr ? irPtr->twoPtrValue.ptr1 : NULL;		\
+=======
+	(listRepPtr) = irPtr ? (List *)irPtr->twoPtrValue.ptr1 : NULL;		\
+>>>>>>> upstream/master
     } while (0)
 
 #define ListResetIntRep(objPtr, listRepPtr) \
@@ -132,7 +136,7 @@ NewListIntRep(
 	return NULL;
     }
 
-    listRepPtr = Tcl_AttemptAlloc(LIST_SIZE(objc));
+    listRepPtr = (List *)Tcl_AttemptAlloc(LIST_SIZE(objc));
     if (listRepPtr == NULL) {
 	if (p) {
 <<<<<<< HEAD
@@ -325,10 +329,8 @@ Tcl_Obj *
 Tcl_DbNewListObj(
     int objc,			/* Count of objects referenced by objv. */
     Tcl_Obj *const objv[],	/* An array of pointers to Tcl objects. */
-    const char *file,		/* The name of the source file calling this
-				 * function; used for debugging. */
-    int line)			/* Line number in the source file; used for
-				 * debugging. */
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
     return Tcl_NewListObj(objc, objv);
 }
@@ -776,18 +778,18 @@ Tcl_ListObjAppendElement(
 
 	attempt = 2 * numRequired;
 	if (attempt <= LIST_MAX) {
-	    newPtr = Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
+	    newPtr = (List *)Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
 	}
 	if (newPtr == NULL) {
 	    attempt = numRequired + 1 + TCL_MIN_ELEMENT_GROWTH;
 	    if (attempt > LIST_MAX) {
 		attempt = LIST_MAX;
 	    }
-	    newPtr = Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
+	    newPtr = (List *)Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
 	}
 	if (newPtr == NULL) {
 	    attempt = numRequired;
-	    newPtr = Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
+	    newPtr = (List *)Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
 	}
 	if (newPtr) {
 	    listRepPtr = newPtr;
@@ -2584,18 +2586,18 @@ TclListObjSetElement(
 	List *newPtr = NULL;
 	int attempt = 2 * numRequired;
 	if (attempt <= LIST_MAX) {
-	    newPtr = Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
+	    newPtr = (List *)Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
 	}
 	if (newPtr == NULL) {
 	    attempt = numRequired + 1 + TCL_MIN_ELEMENT_GROWTH;
 	    if (attempt > LIST_MAX) {
 		attempt = LIST_MAX;
 	    }
-	    newPtr = Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
+	    newPtr = (List *)Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
 	}
 	if (newPtr == NULL) {
 	    attempt = numRequired;
-	    newPtr = Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
+	    newPtr = (List *)Tcl_AttemptRealloc(listRepPtr, LIST_SIZE(attempt));
 	}
 	if (newPtr) {
 	    listRepPtr = newPtr;
@@ -3186,11 +3188,10 @@ TclLsetFlat(
 >>>>>>> upstream/master
 	    /* ...the index points outside the sublist. */
 	    if (interp != NULL) {
-		Tcl_SetObjResult(interp,
-			Tcl_NewStringObj("list index out of range", -1));
-		Tcl_SetErrorCode(interp, "TCL", "OPERATION",
-			valuePtr == NULL ? "LPOP" : "LSET",
-			"BADINDEX", NULL);
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"index \"%s\" out of range", Tcl_GetString(indexArray[-1])));
+		Tcl_SetErrorCode(interp, "TCL", "VALUE", "INDEX"
+			"OUTOFRANGE", NULL);
 	    }
 	    result = TCL_ERROR;
 	    break;
@@ -3275,8 +3276,13 @@ TclLsetFlat(
 =======
 
 	irPtr = TclFetchIntRep(objPtr, &tclListType);
+<<<<<<< HEAD
 	listRepPtr = irPtr->twoPtrValue.ptr1;
 	chainPtr = irPtr->twoPtrValue.ptr2;
+>>>>>>> upstream/master
+=======
+	listRepPtr = (List *)irPtr->twoPtrValue.ptr1;
+	chainPtr = (Tcl_Obj *)irPtr->twoPtrValue.ptr2;
 >>>>>>> upstream/master
 
 	irPtr = Tcl_FetchIntRep(objPtr, &tclListType);
@@ -3431,10 +3437,10 @@ TclListObjSetElement(
 	if (length == 0) {
 >>>>>>> upstream/master
 	    if (interp != NULL) {
-		Tcl_SetObjResult(interp,
-			Tcl_NewStringObj("list index out of range", -1));
-		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LSET",
-			"BADINDEX", NULL);
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"index \"%d\" out of range", index));
+		Tcl_SetErrorCode(interp, "TCL", "VALUE", "INDEX",
+			"OUTOFRANGE", NULL);
 	    }
 	    return TCL_ERROR;
 	}
@@ -3453,10 +3459,10 @@ TclListObjSetElement(
 
     if (index<0 || index>=elemCount) {
 	if (interp != NULL) {
-	    Tcl_SetObjResult(interp,
-		    Tcl_NewStringObj("list index out of range", -1));
-	    Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LSET", "BADINDEX",
-		    NULL);
+		Tcl_SetObjResult(interp, Tcl_ObjPrintf(
+			"index \"%d\" out of range", index));
+	    Tcl_SetErrorCode(interp, "TCL", "VALUE", "INDEX",
+		    "OUTOFRANGE", NULL);
 	}
 	return TCL_ERROR;
     }
@@ -3908,7 +3914,7 @@ UpdateStringOfList(
 	 * We know numElems <= LIST_MAX, so this is safe.
 	 */
 
-	flagPtr = Tcl_Alloc(numElems);
+	flagPtr = (char *)Tcl_Alloc(numElems);
     }
     elemPtrs = &listRepPtr->elements;
     for (i = 0; i < numElems; i++) {

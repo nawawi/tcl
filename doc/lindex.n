@@ -160,6 +160,7 @@ set idx 3
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 list(n), lappend(n), linsert(n), llength(n), lsearch(n), 
 =======
 list(n), lappend(n), linsert(n), llength(n), lsearch(n),
@@ -177,6 +178,11 @@ list(n), lappend(n), linsert(n), llength(n), lsearch(n),
 list(n), lappend(n), linsert(n), llength(n), lsearch(n),
 >>>>>>> upstream/master
 lset(n), lsort(n), lrange(n), lreplace(n),
+=======
+list(n), lappend(n), lassign(n), linsert(n), llength(n),
+lmap(n), lpop(n), lrange(n), lremove(n), lrepeat(n), lreplace(n),
+lreverse(n), lsearch(n), lset(n), lsort(n),
+>>>>>>> upstream/master
 string(n)
 .SH KEYWORDS
 element, index, list

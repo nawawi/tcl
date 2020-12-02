@@ -450,12 +450,12 @@ static int		FindFDInList(TcpState *statePtr, SOCKET socket);
 static DWORD WINAPI	SocketThread(LPVOID arg);
 static void		TcpThreadActionProc(ClientData instanceData,
 			    int action);
+static int		TcpCloseProc(void *, Tcl_Interp *);
 
 static Tcl_EventCheckProc	SocketCheckProc;
 static Tcl_EventProc		SocketEventProc;
 static Tcl_EventSetupProc	SocketSetupProc;
 static Tcl_DriverBlockModeProc	TcpBlockModeProc;
-static Tcl_DriverCloseProc	TcpCloseProc;
 static Tcl_DriverClose2Proc	TcpClose2Proc;
 static Tcl_DriverSetOptionProc	TcpSetOptionProc;
 static Tcl_DriverGetOptionProc	TcpGetOptionProc;
@@ -566,7 +566,7 @@ static Tcl_DriverGetHandleProc	TcpGetHandleProc;
 static const Tcl_ChannelType tcpChannelType = {
     "tcp",			/* Type name. */
     TCL_CHANNEL_VERSION_5,	/* v5 channel */
-    TcpCloseProc,		/* Close proc. */
+    NULL,		/* Close proc. */
     TcpInputProc,		/* Input proc. */
     TcpOutputProc,		/* Output proc. */
     NULL,			/* Seek proc. */
@@ -596,7 +596,7 @@ static ProcessGlobalValue hostName =
  */
 
 #define SendSelectMessage(tsdPtr, message, payload)     \
-    SendMessage((tsdPtr)->hwnd, SOCKET_SELECT,          \
+    SendMessageW((tsdPtr)->hwnd, SOCKET_SELECT,          \
                 (WPARAM) (message), (LPARAM) (payload))
 
 >>>>>>> upstream/master
@@ -708,12 +708,12 @@ InitializeHostName(
     size_t *lengthPtr,
     Tcl_Encoding *encodingPtr)
 {
-    WCHAR wbuf[MAX_COMPUTERNAME_LENGTH + 1];
-    DWORD length = MAX_COMPUTERNAME_LENGTH + 1;
+    WCHAR wbuf[256];
+    DWORD length = sizeof(wbuf)/sizeof(WCHAR);
     Tcl_DString ds;
 
     Tcl_DStringInit(&ds);
-    if (GetComputerNameW(wbuf, &length) != 0) {
+    if (GetComputerNameExW(ComputerNameDnsFullyQualified, wbuf, &length) != 0) {
 	/*
 	 * Convert string from native to UTF then change to lowercase.
 	 */
@@ -742,7 +742,7 @@ InitializeHostName(
 
     *encodingPtr = Tcl_GetEncoding(NULL, "utf-8");
     *lengthPtr = Tcl_DStringLength(&ds);
-    *valuePtr = Tcl_Alloc(*lengthPtr + 1);
+    *valuePtr = (char *)Tcl_Alloc(*lengthPtr + 1);
     memcpy(*valuePtr, Tcl_DStringValue(&ds), *lengthPtr + 1);
     Tcl_DStringFree(&ds);
 >>>>>>> upstream/master
@@ -1035,9 +1035,13 @@ InitializeHostName(
 const char *
 Tcl_GetHostName(void)
 {
+<<<<<<< HEAD
     return Tcl_GetString(TclGetProcessGlobalValue(&hostName));
 =======
     ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+=======
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+>>>>>>> upstream/master
 
     /*
      * Careful! This is a finalizer!
@@ -1049,7 +1053,7 @@ Tcl_GetHostName(void)
 
     if (tsdPtr->socketThread != NULL) {
 	if (tsdPtr->hwnd != NULL) {
-	    PostMessage(tsdPtr->hwnd, SOCKET_TERMINATE, 0, 0);
+	    PostMessageW(tsdPtr->hwnd, SOCKET_TERMINATE, 0, 0);
 
 	    /*
 	     * Wait for the thread to exit. This ensures that we are
@@ -1099,7 +1103,7 @@ TcpBlockModeProc(
 				 * TCL_MODE_BLOCKING or
 				 * TCL_MODE_NONBLOCKING. */
 {
-    TcpState *statePtr = instanceData;
+    TcpState *statePtr = (TcpState *)instanceData;
 
 <<<<<<< HEAD
     if (SocketsEnabled()) {
@@ -1303,10 +1307,10 @@ WaitForConnect(
 
     while (1) {
 	/*
-         * Get the statePtr lock.
-         */
+	 * Get the statePtr lock.
+	 */
 
-        tsdPtr = TclThreadDataKeyGet(&dataKey);
+	tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
 	WaitForSingleObject(tsdPtr->socketListLock, INFINITE);
 
 	/*
@@ -1653,10 +1657,10 @@ TcpInputProc(
 				 * buffer? */
     int *errorCodePtr)		/* Where to store error code. */
 {
-    TcpState *statePtr = instanceData;
+    TcpState *statePtr = (TcpState *)instanceData;
     int bytesRead;
     DWORD error;
-    ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
 
     *errorCodePtr = 0;
 
@@ -1796,10 +1800,10 @@ TcpOutputProc(
     int toWrite,		/* How many bytes to write? */
     int *errorCodePtr)		/* Where to store error code. */
 {
-    TcpState *statePtr = instanceData;
+    TcpState *statePtr = (TcpState *)instanceData;
     int written;
     DWORD error;
-    ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
 
     *errorCodePtr = 0;
 
@@ -1908,12 +1912,16 @@ TcpOutputProc(
 static int
 TcpCloseProc(
     ClientData instanceData,	/* The socket to close. */
-    Tcl_Interp *interp)		/* Unused. */
+    Tcl_Interp *dummy)		/* Unused. */
 {
-    TcpState *statePtr = instanceData;
+    TcpState *statePtr = (TcpState *)instanceData;
     /* TIP #218 */
     int errorCode = 0;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+    (void)dummy;
 >>>>>>> upstream/master
 
     /*
@@ -2144,27 +2152,16 @@ TcpClose2Proc(
     Tcl_Interp *interp,		/* For error reporting. */
     int flags)			/* Flags that indicate which side to close. */
 {
-    TcpState *statePtr = instanceData;
-    int errorCode = 0;
-    int sd;
+    TcpState *statePtr = (TcpState *)instanceData;
+    int readError = 0;
+    int writeError = 0;
 
     /*
      * Shutdown the OS socket handle.
      */
 
-    switch(flags) {
-    case TCL_CLOSE_READ:
-	sd = SD_RECEIVE;
-	break;
-    case TCL_CLOSE_WRITE:
-	sd = SD_SEND;
-	break;
-    default:
-	if (interp) {
-	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
-		    "socket close2proc called bidirectionally", -1));
-	}
-	return TCL_ERROR;
+    if ((flags & (TCL_CLOSE_READ|TCL_CLOSE_WRITE)) == 0) {
+	return TcpCloseProc(instanceData, interp);
     }
 
     /*
@@ -2172,12 +2169,15 @@ TcpClose2Proc(
      * TCL_WRITABLE so this should never be called for a server socket.
      */
 
-    if (shutdown(statePtr->sockets->fd, sd) == SOCKET_ERROR) {
+    if ((flags & TCL_CLOSE_READ) && (shutdown(statePtr->sockets->fd, SD_RECEIVE) == SOCKET_ERROR)) {
 	TclWinConvertError((DWORD) WSAGetLastError());
-	errorCode = Tcl_GetErrno();
+	readError = Tcl_GetErrno();
     }
-
-    return errorCode;
+    if ((flags & TCL_CLOSE_WRITE) && (shutdown(statePtr->sockets->fd, SD_SEND) == SOCKET_ERROR)) {
+	TclWinConvertError((DWORD) WSAGetLastError());
+	writeError = Tcl_GetErrno();
+    }
+    return (readError != 0) ? readError : writeError;
 }
 
 /*
@@ -2206,7 +2206,10 @@ TcpSetOptionProc(
 #ifdef TCL_FEATURE_KEEPALIVE_NAGLE
     TcpState *statePtr = instanceData;
     SOCKET sock;
+#else
+    (void)instanceData;
 #endif /*TCL_FEATURE_KEEPALIVE_NAGLE*/
+    (void)value;
 
     /*
      * Check that WinSock is initialized; do not call it if not, to prevent
@@ -2340,7 +2343,7 @@ TcpGetOptionProc(
     Tcl_DString *dsPtr)		/* Where to store the computed value;
 				 * initialized by caller. */
 {
-    TcpState *statePtr = instanceData;
+    TcpState *statePtr = (TcpState *)instanceData;
     char host[NI_MAXHOST], port[NI_MAXSERV];
     SOCKET sock;
     size_t len = 0;
@@ -2693,8 +2696,64 @@ TcpGetOptionProc(
  *
  * TcpOutputProc --
  *
+<<<<<<< HEAD
  *	This function is called by the generic IO level to write data to a
  *	socket based channel.
+=======
+ * Results:
+ *	None.
+ *
+ * Side effects:
+ *	May cause the notifier to poll if any of the specified conditions are
+ *	already true.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static void
+TcpWatchProc(
+    ClientData instanceData,	/* The socket state. */
+    int mask)			/* Events of interest; an OR-ed combination of
+				 * TCL_READABLE, TCL_WRITABLE and
+				 * TCL_EXCEPTION. */
+{
+    TcpState *statePtr = (TcpState *)instanceData;
+
+    /*
+     * Update the watch events mask. Only if the socket is not a server
+     * socket. [Bug 557878]
+     */
+
+    if (!statePtr->acceptProc) {
+	statePtr->watchEvents = 0;
+	if (GOT_BITS(mask, TCL_READABLE)) {
+	    SET_BITS(statePtr->watchEvents, FD_READ | FD_CLOSE);
+	}
+	if (GOT_BITS(mask, TCL_WRITABLE)) {
+	    SET_BITS(statePtr->watchEvents, FD_WRITE | FD_CLOSE);
+	}
+
+	/*
+	 * If there are any conditions already set, then tell the notifier to
+	 * poll rather than block.
+	 */
+
+	if (statePtr->readyEvents & statePtr->watchEvents) {
+	    Tcl_Time blockTime = { 0, 0 };
+
+	    Tcl_SetMaxBlockTime(&blockTime);
+	}
+    }
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TcpGetHandleProc --
+ *
+ *	Called from Tcl_GetChannelHandle to retrieve OS handles from inside a
+ *	TCP socket based channel.
+>>>>>>> upstream/master
  *
  * Results:
  *	The number of bytes written or -1 on failure.
@@ -2712,10 +2771,72 @@ TcpOutputProc(
     int toWrite,		/* How many bytes to write? */
     int *errorCodePtr)		/* Where to store error code. */
 {
+<<<<<<< HEAD
     TcpState *statePtr = instanceData;
     int written;
     DWORD error;
     ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+=======
+    TcpState *statePtr = (TcpState *)instanceData;
+    (void)direction;
+
+    *handlePtr = INT2PTR(statePtr->sockets->fd);
+    return TCL_OK;
+}
+
+
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * TcpConnect --
+ *
+ *	This function opens a new socket in client mode.
+ *
+ *	This might be called in 3 circumstances:
+ *	-   By a regular socket command
+ *	-   By the event handler to continue an asynchronously connect
+ *	-   By a blocking socket function (gets/puts) to terminate the
+ *	    connect synchronously
+ *
+ * Results:
+ *      TCL_OK, if the socket was successfully connected or an asynchronous
+ *      connection is in progress. If an error occurs, TCL_ERROR is returned
+ *      and an error message is left in interp.
+ *
+ * Side effects:
+ *	Opens a socket.
+ *
+ * Remarks:
+ *	A single host name may resolve to more than one IP address, e.g. for
+ *	an IPv4/IPv6 dual stack host. For handling asynchronously connecting
+ *	sockets in the background for such hosts, this function can act as a
+ *	coroutine. On the first call, it sets up the control variables for the
+ *	two nested loops over the local and remote addresses. Once the first
+ *	connection attempt is in progress, it sets up itself as a writable
+ *	event handler for that socket, and returns. When the callback occurs,
+ *	control is transferred to the "reenter" label, right after the initial
+ *	return and the loops resume as if they had never been interrupted.
+ *	For synchronously connecting sockets, the loops work the usual way.
+ *
+ *----------------------------------------------------------------------
+ */
+
+static int
+TcpConnect(
+    Tcl_Interp *interp,		/* For error reporting; can be NULL. */
+    TcpState *statePtr)
+{
+    DWORD error;
+    int async_connect = GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT);
+                                /* We are started with async connect and the
+                                 * connect notification was not yet
+                                 * received. */
+    int async_callback = GOT_BITS(statePtr->flags, TCP_ASYNC_PENDING);
+                                /* We were called by the event procedure and
+                                 * continue our loop. */
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+>>>>>>> upstream/master
 
     *errorCodePtr = 0;
 >>>>>>> upstream/master
@@ -12509,10 +12630,25 @@ SocketsEnabled(void)
 {
     int enabled;
 
+<<<<<<< HEAD
     Tcl_MutexLock(&socketMutex);
     enabled = (initialized == 1);
     Tcl_MutexUnlock(&socketMutex);
     return enabled;
+=======
+    statePtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
+	    statePtr, (TCL_READABLE | TCL_WRITABLE));
+    if (TCL_ERROR == Tcl_SetChannelOption(NULL, statePtr->channel,
+	    "-translation", "auto crlf")) {
+	Tcl_CloseEx(NULL, statePtr->channel, 0);
+	return NULL;
+    } else if (TCL_ERROR == Tcl_SetChannelOption(NULL, statePtr->channel,
+	    "-eofchar", "")) {
+	Tcl_CloseEx(NULL, statePtr->channel, 0);
+	return NULL;
+    }
+    return statePtr->channel;
+>>>>>>> upstream/master
 }
 
 
@@ -12538,7 +12674,27 @@ static void
 SocketExitHandler(
     ClientData clientData)		/* Not used. */
 {
+<<<<<<< HEAD
     Tcl_MutexLock(&socketMutex);
+=======
+    TcpState *statePtr;
+    char channelName[SOCK_CHAN_LENGTH];
+    ThreadSpecificData *tsdPtr;
+
+    if (TclpHasSockets(NULL) != TCL_OK) {
+	return NULL;
+    }
+
+    tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+
+    /*
+     * Set kernel space buffering and non-blocking.
+     */
+
+    TclSockMinimumBuffers(sock, TCP_BUFFER_SIZE);
+
+    statePtr = NewSocketInfo((SOCKET) sock);
+>>>>>>> upstream/master
 
     /*
      * Make sure the socket event handling window is cleaned-up for, at
@@ -12614,6 +12770,7 @@ SocketSetupProc(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 static void
 SocketCheckProc(
     ClientData data,		/* Not used. */
@@ -12625,6 +12782,40 @@ SocketCheckProc(
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
+=======
+  error:
+    if (addrlist != NULL) {
+	freeaddrinfo(addrlist);
+    }
+
+    if (statePtr != NULL) {
+	ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+
+	statePtr->acceptProc = acceptProc;
+	statePtr->acceptProcData = acceptProcData;
+	sprintf(channelName, SOCK_TEMPLATE, statePtr);
+	statePtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
+		statePtr, 0);
+	/*
+	 * Set up the select mask for connection request events.
+	 */
+
+	statePtr->selectEvents = FD_ACCEPT;
+
+	/*
+	 * Register for interest in events in the select mask. Note that this
+	 * automatically places the socket into non-blocking mode.
+	 */
+
+	ioctlsocket(sock, (long) FIONBIO, &flag);
+	SendSelectMessage(tsdPtr, SELECT, statePtr);
+	if (Tcl_SetChannelOption(interp, statePtr->channel, "-eofchar", "")
+	    == TCL_ERROR) {
+	    Tcl_CloseEx(NULL, statePtr->channel, 0);
+	    return NULL;
+	}
+	return statePtr->channel;
+>>>>>>> upstream/master
     }
 
     /*
@@ -12685,6 +12876,7 @@ SocketEventProc(
     int flags)			/* Flags that indicate what events to handle,
 				 * such as TCL_FILE_EVENTS. */
 {
+<<<<<<< HEAD
     TcpState *statePtr;
     SocketEvent *eventPtr = (SocketEvent *) evPtr;
     int mask = 0, events;
@@ -12697,6 +12889,14 @@ SocketEventProc(
     if (!(flags & TCL_FILE_EVENTS)) {
 	return 0;
     }
+=======
+    TcpState *newInfoPtr;
+    TcpState *statePtr = fds->statePtr;
+    int len = sizeof(addr);
+    char channelName[SOCK_CHAN_LENGTH];
+    char host[NI_MAXHOST], port[NI_MAXSERV];
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+>>>>>>> upstream/master
 
     /*
      * Find the specified socket on the socket list.
@@ -12725,6 +12925,7 @@ SocketEventProc(
 
     statePtr->flags &= ~SOCKET_PENDING;
 
+<<<<<<< HEAD
     /*
      * Continue async connect if pending and ready
      */
@@ -12749,6 +12950,20 @@ SocketEventProc(
 	    SetEvent(tsdPtr->socketListLock);
 	}
 	return 1;
+=======
+    sprintf(channelName, SOCK_TEMPLATE, newInfoPtr);
+    newInfoPtr->channel = Tcl_CreateChannel(&tcpChannelType, channelName,
+	    newInfoPtr, (TCL_READABLE | TCL_WRITABLE));
+    if (Tcl_SetChannelOption(NULL, newInfoPtr->channel, "-translation",
+	    "auto crlf") == TCL_ERROR) {
+	Tcl_CloseEx(NULL, newInfoPtr->channel, 0);
+	return;
+    }
+    if (Tcl_SetChannelOption(NULL, newInfoPtr->channel, "-eofchar", "")
+	    == TCL_ERROR) {
+	Tcl_CloseEx(NULL, newInfoPtr->channel, 0);
+	return;
+>>>>>>> upstream/master
     }
 
     /*
@@ -12813,6 +13028,7 @@ SocketEventProc(
 	return 1;
     }
 
+<<<<<<< HEAD
     SetEvent(tsdPtr->socketListLock);
 
     /*
@@ -12861,6 +13077,13 @@ SocketEventProc(
 
 	    SendMessage(tsdPtr->hwnd, SOCKET_SELECT,
 		    (WPARAM) UNSELECT, (LPARAM) statePtr);
+=======
+static void
+InitSockets(void)
+{
+    DWORD id;
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
+>>>>>>> upstream/master
 
 	    FD_ZERO(&readFds);
 	    FD_SET(statePtr->sockets->fd, &readFds);
@@ -12948,11 +13171,11 @@ SocketEventProc(
     tsdPtr->socketList = NULL;
     tsdPtr->hwnd       = NULL;
     tsdPtr->threadId   = Tcl_GetCurrentThread();
-    tsdPtr->readyEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    tsdPtr->readyEvent = CreateEventW(NULL, FALSE, FALSE, NULL);
     if (tsdPtr->readyEvent == NULL) {
 	goto initFailure;
     }
-    tsdPtr->socketListLock = CreateEvent(NULL, FALSE, TRUE, NULL);
+    tsdPtr->socketListLock = CreateEventW(NULL, FALSE, TRUE, NULL);
     if (tsdPtr->socketListLock == NULL) {
 	goto initFailure;
     }
@@ -13038,8 +13261,10 @@ SocketsEnabled(void)
     /* ARGSUSED */
 static void
 SocketExitHandler(
-    ClientData clientData)		/* Not used. */
+    ClientData dummy)		/* Not used. */
 {
+    (void)dummy;
+
     Tcl_MutexLock(&socketMutex);
 
     /*
@@ -13072,12 +13297,13 @@ SocketExitHandler(
 
 void
 SocketSetupProc(
-    ClientData data,		/* Not used. */
+    ClientData dummy,		/* Not used. */
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     TcpState *statePtr;
     Tcl_Time blockTime = { 0, 0 };
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    (void)dummy;
 
     if (!GOT_BITS(flags, TCL_FILE_EVENTS)) {
 	return;
@@ -13117,12 +13343,13 @@ SocketSetupProc(
 
 static void
 SocketCheckProc(
-    ClientData data,		/* Not used. */
+    ClientData dummy,		/* Not used. */
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     TcpState *statePtr;
     SocketEvent *evPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+    (void)dummy;
 
     if (!GOT_BITS(flags, TCL_FILE_EVENTS)) {
 	return;
@@ -13141,7 +13368,7 @@ SocketCheckProc(
 		statePtr->watchEvents | FD_CONNECT | FD_ACCEPT)
                 && !GOT_BITS(statePtr->flags, SOCKET_PENDING)) {
 	    SET_BITS(statePtr->flags, SOCKET_PENDING);
-	    evPtr = Tcl_Alloc(sizeof(SocketEvent));
+	    evPtr = (SocketEvent *)Tcl_Alloc(sizeof(SocketEvent));
 	    evPtr->header.proc = SocketEventProc;
 	    evPtr->socket = statePtr->sockets->fd;
 	    Tcl_QueueEvent((Tcl_Event *) evPtr, TCL_QUEUE_TAIL);
@@ -13416,7 +13643,7 @@ AddSocketInfoFd(
          * Add the first FD.
          */
 
-	statePtr->sockets = Tcl_Alloc(sizeof(TcpFdList));
+	statePtr->sockets = (TcpFdList *)Tcl_Alloc(sizeof(TcpFdList));
 	fds = statePtr->sockets;
     } else {
 	/*
@@ -13427,7 +13654,7 @@ AddSocketInfoFd(
 	    fds = fds->next;
 	}
 
-	fds->next = Tcl_Alloc(sizeof(TcpFdList));
+	fds->next = (TcpFdList *)Tcl_Alloc(sizeof(TcpFdList));
 	fds = fds->next;
     }
 
@@ -13720,12 +13947,19 @@ WaitForSocketEvent(
          * Exit loop if event did not occur but this is a non-blocking channel
          */
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	if (statePtr->flags & TCP_NONBLOCKING) {
 	    *errorCodePtr = EWOULDBLOCK;
 	    result = 0;
 	    break;
 	}
+=======
+static TcpState *
+NewSocketInfo(SOCKET socket)
+{
+    TcpState *statePtr = (TcpState *)Tcl_Alloc(sizeof(TcpState));
+>>>>>>> upstream/master
 
 	/*
 	 * Wait until something happens.
@@ -13770,7 +14004,7 @@ WaitForSocketEvent(
 {
     int result = 1;
     int oldMode;
-    ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
 
     /*
      * Be sure to disable event servicing so we are truly modal.
@@ -13857,7 +14091,7 @@ SocketThread(
     LPVOID arg)
 {
     MSG msg;
-    ThreadSpecificData *tsdPtr = arg;
+    ThreadSpecificData *tsdPtr = (ThreadSpecificData *)arg;
 
     /*
      * Create a dummy window receiving socket events.
@@ -13903,7 +14137,7 @@ SocketThread(
     /*
      * Process all messages on the socket window until WM_QUIT. This threads
      * exits only when instructed to do so by the call to
-     * PostMessage(SOCKET_TERMINATE) in TclpFinalizeSockets().
+     * PostMessageW(SOCKET_TERMINATE) in TclpFinalizeSockets().
      */
 
     while (GetMessageW(&msg, NULL, 0, 0) > 0) {
@@ -13970,7 +14204,7 @@ SocketProc(
 <<<<<<< HEAD
 
 #ifdef _WIN64
-	SetWindowLongPtr(hwnd, GWLP_USERDATA,
+	SetWindowLongPtrW(hwnd, GWLP_USERDATA,
 		(LONG_PTR) ((LPCREATESTRUCT)lParam)->lpCreateParams);
 #else
 	SetWindowLongW(hwnd, GWL_USERDATA,
@@ -14447,7 +14681,7 @@ TcpThreadActionProc(
     int action)
 {
     ThreadSpecificData *tsdPtr;
-    TcpState *statePtr = instanceData;
+    TcpState *statePtr = (TcpState *)instanceData;
     int notifyCmd;
 
     if (action == TCL_CHANNEL_THREAD_INSERT) {

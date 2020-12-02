@@ -188,7 +188,7 @@ TclMacOSXGetFileAttribute(
     } else {
 	alist.commonattr = ATTR_CMN_FNDRINFO;
     }
-    native = Tcl_FSGetNativePath(fileName);
+    native = (const char *)Tcl_FSGetNativePath(fileName);
     result = getattrlist(native, &alist, &finfo, sizeof(fileinfobuf), 0);
 
     if (result != 0) {
@@ -284,7 +284,7 @@ TclMacOSXSetFileAttribute(
     } else {
 	alist.commonattr = ATTR_CMN_FNDRINFO;
     }
-    native = Tcl_FSGetNativePath(fileName);
+    native = (const char *)Tcl_FSGetNativePath(fileName);
     result = getattrlist(native, &alist, &finfo, sizeof(fileinfobuf), 0);
 
     if (result != 0) {

@@ -10,7 +10,8 @@
  */
 
 #include "tclInt.h"
-#include "tommath.h"
+#include "tommath_private.h"
+#include "tclTomMath.h"
 
 #ifdef __CYGWIN__
 #   include <wchar.h>
@@ -29,21 +30,30 @@
 #undef Tcl_Alloc
 #undef Tcl_Free
 #undef Tcl_Realloc
+#undef Tcl_NewBooleanObj
 #undef Tcl_NewByteArrayObj
 #undef Tcl_NewDoubleObj
+#undef Tcl_NewIntObj
 #undef Tcl_NewListObj
 #undef Tcl_NewLongObj
 #undef Tcl_DbNewLongObj
 #undef Tcl_NewObj
 #undef Tcl_NewStringObj
 #undef Tcl_GetUnicode
+#undef Tcl_GetUnicodeFromObj
+#undef Tcl_NewUnicodeObj
+#undef Tcl_SetUnicodeObj
 #undef Tcl_DumpActiveMemory
 #undef Tcl_ValidateAllMemory
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 #undef Tcl_FindHashEntry
 #undef Tcl_CreateHashEntry
 #undef Tcl_Panic
 #undef Tcl_FindExecutable
+<<<<<<< HEAD
 #undef Tcl_SetExitProc
 #undef Tcl_SetPanicProc
 #undef TclpGetPid
@@ -333,31 +343,111 @@ static int formatInt(char *buffer, int n){
 #define TclStaticPackage Tcl_StaticPackage
 >>>>>>> upstream/master
 =======
+=======
+>>>>>>> upstream/master
 #undef Tcl_SetExitProc
 #undef Tcl_SetPanicProc
 #undef TclpGetPid
+#undef TclSockMinimumBuffers
+#undef Tcl_SetIntObj
+#undef Tcl_SetLongObj
+#undef TclpInetNtoa
+#undef TclWinGetServByName
+#undef TclWinGetSockOpt
+#undef TclWinSetSockOpt
+#undef TclWinNToHS
 #undef TclStaticPackage
 #undef Tcl_BackgroundError
-#undef Tcl_UtfToUniChar
-#undef Tcl_UtfToUniCharDString
-#undef Tcl_UniCharToUtfDString
 #define TclStaticPackage Tcl_StaticPackage
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+#undef Tcl_UniCharToUtfDString
+#undef Tcl_UtfToUniCharDString
+#undef Tcl_UtfToUniChar
 >>>>>>> upstream/master
 
-#ifdef TCL_MEM_DEBUG
-#   define Tcl_Alloc TclpAlloc
-#   define Tcl_Free TclpFree
-#   define Tcl_Realloc TclpRealloc
-#   undef Tcl_AttemptAlloc
-#   define Tcl_AttemptAlloc TclpAlloc
-#   undef Tcl_AttemptRealloc
-#   define Tcl_AttemptRealloc TclpRealloc
+#if TCL_UTF_MAX <= 3
+static void uniCodePanic() {
+    Tcl_Panic("This extension uses a deprecated function, not available now: Tcl is compiled with -DTCL_UTF_MAX==%d", TCL_UTF_MAX);
+}
+#   define Tcl_GetUnicode (int *(*)(Tcl_Obj *)) uniCodePanic
+#   define Tcl_GetUnicodeFromObj (int *(*)(Tcl_Obj *, Tcl_UniChar *)) uniCodePanic
+#   define Tcl_NewUnicodeObj (Tcl_Obj *(*)(const int *, Tcl_UniChar)) uniCodePanic
+#   define Tcl_SetUnicodeObj (void(*)(Tcl_Obj *, const Tcl_UniChar *, int)) uniCodePanic
 #endif
+
+#define TclBN_mp_add mp_add
+#define TclBN_mp_add_d mp_add_d
+#define TclBN_mp_and mp_and
+#define TclBN_mp_clamp mp_clamp
+#define TclBN_mp_clear mp_clear
+#define TclBN_mp_clear_multi mp_clear_multi
+#define TclBN_mp_cmp mp_cmp
+#define TclBN_mp_cmp_d mp_cmp_d
+#define TclBN_mp_cmp_mag mp_cmp_mag
+#define TclBN_mp_cnt_lsb mp_cnt_lsb
+#define TclBN_mp_copy mp_copy
+#define TclBN_mp_count_bits mp_count_bits
+#define TclBN_mp_div mp_div
+#define TclBN_mp_div_d mp_div_d
+#define TclBN_mp_div_2 mp_div_2
+#define TclBN_mp_div_2d mp_div_2d
+#define TclBN_mp_exch mp_exch
+#define TclBN_mp_expt_u32 mp_expt_u32
+#define TclBN_mp_get_mag_u64 mp_get_mag_u64
+#define TclBN_mp_grow mp_grow
+#define TclBN_mp_init mp_init
+#define TclBN_mp_init_copy mp_init_copy
+#define TclBN_mp_init_multi mp_init_multi
+#define TclBN_mp_init_set mp_init_set
+#define TclBN_mp_init_size mp_init_size
+#define TclBN_mp_init_i64 mp_init_i64
+#define TclBN_mp_init_u64 mp_init_u64
+#define TclBN_mp_lshd mp_lshd
+#define TclBN_mp_mod mp_mod
+#define TclBN_mp_mod_2d mp_mod_2d
+#define TclBN_mp_mul mp_mul
+#define TclBN_mp_mul_d mp_mul_d
+#define TclBN_mp_mul_2 mp_mul_2
+#define TclBN_mp_mul_2d mp_mul_2d
+#define TclBN_mp_neg mp_neg
+#define TclBN_mp_or mp_or
+#define TclBN_mp_radix_size mp_radix_size
+#define TclBN_mp_reverse mp_reverse
+#define TclBN_mp_read_radix mp_read_radix
+#define TclBN_mp_rshd mp_rshd
+#define TclBN_mp_set_i64 mp_set_i64
+#define TclBN_mp_set_u64 mp_set_u64
+#define TclBN_mp_shrink mp_shrink
+#define TclBN_mp_sqr mp_sqr
+#define TclBN_mp_sqrt mp_sqrt
+#define TclBN_mp_sub mp_sub
+#define TclBN_mp_sub_d mp_sub_d
+#define TclBN_mp_signed_rsh mp_signed_rsh
+#define TclBN_mp_to_radix mp_to_radix
+#define TclBN_mp_to_ubin mp_to_ubin
+#define TclBN_mp_ubin_size mp_ubin_size
+#define TclBN_mp_xor mp_xor
+#define TclBN_mp_zero mp_zero
+#define TclBN_s_mp_add s_mp_add
+#define TclBN_s_mp_balance_mul mp_balance_mul
+#define TclBN_mp_karatsuba_mul s_mp_karatsuba_mul
+#define TclBN_mp_karatsuba_sqr s_mp_karatsuba_sqr
+#define TclBN_s_mp_mul_digs s_mp_mul_digs
+#define TclBN_s_mp_mul_digs_fast s_mp_mul_digs_fast
+#define TclBN_s_mp_reverse s_mp_reverse
+#define TclBN_s_mp_sqr s_mp_sqr
+#define TclBN_s_mp_sqr_fast s_mp_sqr_fast
+#define TclBN_s_mp_sub s_mp_sub
+#define TclBN_mp_toom_mul s_mp_toom_mul
+#define TclBN_mp_toom_sqr s_mp_toom_sqr
 
 #ifdef _WIN32
 #   define TclUnixWaitForFile 0
 #   define TclUnixCopyFile 0
 #   define TclUnixOpenTemporaryFile 0
+#   define TclpReaddir 0
 #   define TclpIsAtty 0
 #elif defined(__CYGWIN__)
 #   define TclpIsAtty TclPlatIsAtty
@@ -368,6 +458,7 @@ doNothing(void)
 }
 #   define TclWinAddProcess (void (*) (void *, size_t)) doNothing
 #   define TclWinFlushDirtyChannels doNothing
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 #   define TclWinResetInterfaces doNothing
@@ -441,6 +532,9 @@ static Tcl_Encoding winTCharEncoding;
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
+=======
+
+>>>>>>> upstream/master
 static int
 TclpIsAtty(int fd)
 {
@@ -451,7 +545,7 @@ void *TclWinGetTclInstance()
 {
     void *hInstance = NULL;
     GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-	    (const char *)&TclpIsAtty, &hInstance);
+	    (const wchar_t *)&TclpIsAtty, &hInstance);
     return hInstance;
 }
 
@@ -637,6 +731,7 @@ static int exprIntObj(Tcl_Interp *interp, Tcl_Obj*expr, int *ptr){
 #define Tcl_ExprLongObj (int(*)(Tcl_Interp*,Tcl_Obj*,long*))exprIntObj
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int uniCharNcmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsigned int n){
    return Tcl_UniCharNcmp(ucs, uct, (unsigned long)n);
 }
@@ -657,6 +752,17 @@ static int uniCharNcasecmp(const Tcl_UniChar *ucs, const Tcl_UniChar *uct, unsig
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+static int utfNcmp(const char *s1, const char *s2, unsigned int n){
+   return Tcl_UtfNcmp(s1, s2, (unsigned long)n);
+}
+#define Tcl_UtfNcmp (int(*)(const char*,const char*,unsigned long))(void *)utfNcmp
+static int utfNcasecmp(const char *s1, const char *s2, unsigned int n){
+   return Tcl_UtfNcasecmp(s1, s2, (unsigned long)n);
+}
+#define Tcl_UtfNcasecmp (int(*)(const char*,const char*,unsigned long))(void *)utfNcasecmp
+
 >>>>>>> upstream/master
 #endif /* TCL_WIDE_INT_IS_LONG */
 
@@ -735,7 +841,7 @@ static const TclIntStubs tclIntStubs = {
     0, /* 47 */
     0, /* 48 */
     0, /* 49 */
-    TclInitCompiledLocals, /* 50 */
+    0, /* 50 */
     TclInterpInit, /* 51 */
     0, /* 52 */
     TclInvokeObjectCommand, /* 53 */
@@ -956,6 +1062,10 @@ static const TclIntStubs tclIntStubs = {
 =======
     TclStaticPackage, /* 257 */
     TclpCreateTemporaryDirectory, /* 258 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+    TclAppendUnicodeToObj, /* 259 */
 >>>>>>> upstream/master
 };
 
@@ -1099,9 +1209,9 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_mp_div_d, /* 14 */
     TclBN_mp_div_2, /* 15 */
     TclBN_mp_div_2d, /* 16 */
-    TclBN_mp_div_3, /* 17 */
+    0, /* 17 */
     TclBN_mp_exch, /* 18 */
-    TclBN_mp_expt_d, /* 19 */
+    TclBN_mp_expt_u32, /* 19 */
     TclBN_mp_grow, /* 20 */
     TclBN_mp_init, /* 21 */
     TclBN_mp_init_copy, /* 22 */
@@ -1121,15 +1231,15 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_mp_read_radix, /* 36 */
     TclBN_mp_rshd, /* 37 */
     TclBN_mp_shrink, /* 38 */
-    TclBN_mp_set, /* 39 */
-    TclBN_mp_sqr, /* 40 */
+    0, /* 39 */
+    0, /* 40 */
     TclBN_mp_sqrt, /* 41 */
     TclBN_mp_sub, /* 42 */
     TclBN_mp_sub_d, /* 43 */
-    TclBN_mp_to_unsigned_bin, /* 44 */
-    TclBN_mp_to_unsigned_bin_n, /* 45 */
-    TclBN_mp_toradix_n, /* 46 */
-    TclBN_mp_unsigned_bin_size, /* 47 */
+    0, /* 44 */
+    0, /* 45 */
+    0, /* 46 */
+    TclBN_mp_ubin_size, /* 47 */
     TclBN_mp_xor, /* 48 */
     TclBN_mp_zero, /* 49 */
 <<<<<<< HEAD
@@ -1156,6 +1266,7 @@ const TclTomMathStubs tclTomMathStubs = {
     0, /* 58 */
     0, /* 59 */
     0, /* 60 */
+<<<<<<< HEAD
 >>>>>>> upstream/master
     TclBN_mp_init_set_int, /* 61 */
     TclBN_mp_set_int, /* 62 */
@@ -1171,11 +1282,32 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_mp_get_int, /* 72 */
 <<<<<<< HEAD
 =======
+=======
+    0, /* 61 */
+    0, /* 62 */
+    TclBN_mp_cnt_lsb, /* 63 */
+    0, /* 64 */
+    TclBN_mp_init_i64, /* 65 */
+    TclBN_mp_init_u64, /* 66 */
+    0, /* 67 */
+    TclBN_mp_set_u64, /* 68 */
+    TclBN_mp_get_mag_u64, /* 69 */
+    TclBN_mp_set_i64, /* 70 */
+    0, /* 71 */
+    0, /* 72 */
+>>>>>>> upstream/master
     0, /* 73 */
     0, /* 74 */
     0, /* 75 */
     TclBN_mp_signed_rsh, /* 76 */
+<<<<<<< HEAD
     TclBN_mp_get_bit, /* 77 */
+>>>>>>> upstream/master
+=======
+    0, /* 77 */
+    TclBN_mp_to_ubin, /* 78 */
+    0, /* 79 */
+    TclBN_mp_to_radix, /* 80 */
 >>>>>>> upstream/master
 };
 
@@ -1234,7 +1366,7 @@ const TclStubs tclStubs = {
     Tcl_DbNewObj, /* 27 */
     Tcl_DbNewStringObj, /* 28 */
     Tcl_DuplicateObj, /* 29 */
-    0, /* 30 */
+    TclFreeObj, /* 30 */
     Tcl_GetBoolean, /* 31 */
     Tcl_GetBooleanFromObj, /* 32 */
     Tcl_GetByteArrayFromObj, /* 33 */
@@ -1289,7 +1421,7 @@ const TclStubs tclStubs = {
     Tcl_BadChannelOption, /* 78 */
     Tcl_CallWhenDeleted, /* 79 */
     Tcl_CancelIdleCall, /* 80 */
-    Tcl_Close, /* 81 */
+    0, /* 81 */
     Tcl_CommandComplete, /* 82 */
     Tcl_Concat, /* 83 */
     Tcl_ConvertElement, /* 84 */
@@ -1355,7 +1487,7 @@ const TclStubs tclStubs = {
     0, /* 144 */
     Tcl_FirstHashEntry, /* 145 */
     Tcl_Flush, /* 146 */
-    Tcl_FreeResult, /* 147 */
+    0, /* 147 */
     Tcl_GetAlias, /* 148 */
     Tcl_GetAliasObj, /* 149 */
     Tcl_GetAssocData, /* 150 */
@@ -1576,8 +1708,8 @@ const TclStubs tclStubs = {
     Tcl_UniCharIsSpace, /* 349 */
     Tcl_UniCharIsUpper, /* 350 */
     Tcl_UniCharIsWordChar, /* 351 */
-    Tcl_UniCharLen, /* 352 */
-    Tcl_UniCharNcmp, /* 353 */
+    0, /* 352 */
+    0, /* 353 */
     Tcl_Char16ToUtfDString, /* 354 */
     Tcl_UtfToChar16DString, /* 355 */
     Tcl_GetRegExpFromObj, /* 356 */
@@ -1608,7 +1740,7 @@ const TclStubs tclStubs = {
     Tcl_GetUniChar, /* 381 */
     0, /* 382 */
     Tcl_GetRange, /* 383 */
-    Tcl_AppendUnicodeToObj, /* 384 */
+    0, /* 384 */
     Tcl_RegExpMatchObj, /* 385 */
     Tcl_SetNotifier, /* 386 */
     Tcl_GetAllocMutex, /* 387 */
@@ -1625,11 +1757,11 @@ const TclStubs tclStubs = {
     Tcl_ChannelName, /* 398 */
     Tcl_ChannelVersion, /* 399 */
     Tcl_ChannelBlockModeProc, /* 400 */
-    Tcl_ChannelCloseProc, /* 401 */
+    0, /* 401 */
     Tcl_ChannelClose2Proc, /* 402 */
     Tcl_ChannelInputProc, /* 403 */
     Tcl_ChannelOutputProc, /* 404 */
-    Tcl_ChannelSeekProc, /* 405 */
+    0, /* 405 */
     Tcl_ChannelSetOptionProc, /* 406 */
     Tcl_ChannelGetOptionProc, /* 407 */
     Tcl_ChannelWatchProc, /* 408 */
@@ -1643,8 +1775,8 @@ const TclStubs tclStubs = {
     Tcl_SpliceChannel, /* 416 */
     Tcl_ClearChannelHandlers, /* 417 */
     Tcl_IsChannelExisting, /* 418 */
-    Tcl_UniCharNcasecmp, /* 419 */
-    Tcl_UniCharCaseMatch, /* 420 */
+    0, /* 419 */
+    0, /* 420 */
     0, /* 421 */
     0, /* 422 */
     Tcl_InitCustomHashTable, /* 423 */

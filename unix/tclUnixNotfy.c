@@ -455,11 +455,18 @@ StartNotifierThread(const char *proc)
     if (tclNotifierHooks.initNotifierProc) {
 	return tclNotifierHooks.initNotifierProc();
     } else {
+<<<<<<< HEAD
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+=======
+#ifdef NOTIFIER_SELECT
+#if TCL_THREADS
+	ThreadSpecificData *tsdPtr = (ThreadSpecificData *)clientData;
+>>>>>>> upstream/master
 
 #ifdef TCL_THREADS
 	tsdPtr->eventReady = 0;
 
+<<<<<<< HEAD
 	/*
 	 * Initialize thread specific condition variable for this thread.
 	 */
@@ -496,6 +503,24 @@ StartNotifierThread(const char *proc)
 		    TclWinGetTclInstance(), NULL);
 	    tsdPtr->event = CreateEventW(NULL, 1 /* manual */,
 		    0 /* !signaled */, NULL);
+=======
+#   ifdef __CYGWIN__
+	PostMessageW(tsdPtr->hwnd, 1024, 0, 0);
+#   else
+	pthread_cond_broadcast(&tsdPtr->waitCV);
+#   endif /* __CYGWIN__ */
+	pthread_mutex_unlock(&notifierMutex);
+#endif /* TCL_THREADS */
+#else /* !NOTIFIER_SELECT */
+	ThreadSpecificData *tsdPtr = (ThreadSpecificData *)clientData;
+#if defined(NOTIFIER_EPOLL) && defined(HAVE_EVENTFD)
+	uint64_t eventFdVal = 1;
+	if (write(tsdPtr->triggerEventFd, &eventFdVal,
+		sizeof(eventFdVal)) != sizeof(eventFdVal)) {
+	    Tcl_Panic("Tcl_AlertNotifier: unable to write to %p->triggerEventFd",
+		(void *)tsdPtr);
+	}
+>>>>>>> upstream/master
 #else
 	    pthread_cond_init(&tsdPtr->waitCV, NULL);
 #endif /* __CYGWIN__ */

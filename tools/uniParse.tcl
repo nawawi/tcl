@@ -114,7 +114,7 @@ proc uni::buildTables {data} {
 	set items [split $line \;]
 
 	scan [lindex $items 0] %x index
-	if {$index > 0x2ffff} then {
+	if {$index > 0x2FFFF} then {
 	    # Ignore non-BMP characters, as long as Tcl doesn't support them
 	    continue
 	}
@@ -354,10 +354,14 @@ static const int groups\[\] = {"
 #if TCL_UTF_MAX > 3
 =======
 #if TCL_UTF_MAX > 3 || TCL_MAJOR_VERSION > 8 || TCL_MINOR_VERSION > 6
+<<<<<<< HEAD
 >>>>>>> upstream/master
 #   define UNICODE_OUT_OF_RANGE(ch) (((ch) & 0x1fffff) >= [format 0x%x $next])
+=======
+#   define UNICODE_OUT_OF_RANGE(ch) (((ch) & 0x1FFFFF) >= [format 0x%X $next])
+>>>>>>> upstream/master
 #else
-#   define UNICODE_OUT_OF_RANGE(ch) (((ch) & 0x1f0000) != 0)
+#   define UNICODE_OUT_OF_RANGE(ch) (((ch) & 0x1F0000) != 0)
 #endif
 
 /*
@@ -404,8 +408,8 @@ enum {
  * to do sign extension on right shifts.
  */
 
-#define GetCaseType(info) (((info) & 0xe0) >> 5)
-#define GetCategory(ch) (GetUniCharInfo(ch) & 0x1f)
+#define GetCaseType(info) (((info) & 0xE0) >> 5)
+#define GetCategory(ch) (GetUniCharInfo(ch) & 0x1F)
 #define GetDelta(info) ((info) >> 8)
 
 /*
@@ -417,10 +421,14 @@ enum {
 #if TCL_UTF_MAX > 3
 =======
 #if TCL_UTF_MAX > 3 || TCL_MAJOR_VERSION > 8 || TCL_MINOR_VERSION > 6
+<<<<<<< HEAD
 >>>>>>> upstream/master
 #   define GetUniCharInfo(ch) (groups\[groupMap\[pageMap\[((ch) & 0x1fffff) >> OFFSET_BITS\] | ((ch) & ((1 << OFFSET_BITS)-1))\]\])
+=======
+#   define GetUniCharInfo(ch) (groups\[groupMap\[pageMap\[((ch) & 0x1FFFFF) >> OFFSET_BITS\] | ((ch) & ((1 << OFFSET_BITS)-1))\]\])
+>>>>>>> upstream/master
 #else
-#   define GetUniCharInfo(ch) (groups\[groupMap\[pageMap\[((ch) & 0xffff) >> OFFSET_BITS\] | ((ch) & ((1 << OFFSET_BITS)-1))\]\])
+#   define GetUniCharInfo(ch) (groups\[groupMap\[pageMap\[((ch) & 0xFFFF) >> OFFSET_BITS\] | ((ch) & ((1 << OFFSET_BITS)-1))\]\])
 #endif
 "
 

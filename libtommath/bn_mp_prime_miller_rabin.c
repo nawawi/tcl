@@ -1,5 +1,6 @@
 #include "tommath_private.h"
 #ifdef BN_MP_PRIME_MILLER_RABIN_C
+<<<<<<< HEAD
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -16,6 +17,10 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master
 
 /* Miller-Rabin test of "a" to the base of "b" as described in
  * HAC pp. 139 Algorithm 4.24
@@ -24,10 +29,11 @@
  * Randomly the chance of error is no more than 1/4 and often
  * very much lower.
  */
-int mp_prime_miller_rabin(const mp_int *a, const mp_int *b, int *result)
+mp_err mp_prime_miller_rabin(const mp_int *a, const mp_int *b, mp_bool *result)
 {
    mp_int  n1, y, r;
-   int     s, j, err;
+   mp_err  err;
+   int     s, j;
 
    /* default */
    *result = MP_NO;
@@ -102,7 +108,3 @@ LBL_N1:
    return err;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */

@@ -1,4 +1,5 @@
 #include "tommath_private.h"
+<<<<<<< HEAD:libtommath/bn_fast_mp_montgomery_reduce.c
 #ifdef BN_FAST_MP_MONTGOMERY_REDUCE_C
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
@@ -16,6 +17,11 @@
  * SPDX-License-Identifier: Unlicense
 >>>>>>> upstream/master
  */
+=======
+#ifdef BN_S_MP_MONTGOMERY_REDUCE_FAST_C
+/* LibTomMath, multiple-precision integer library -- Tom St Denis */
+/* SPDX-License-Identifier: Unlicense */
+>>>>>>> upstream/master:libtommath/bn_s_mp_montgomery_reduce_fast.c
 
 /* computes xR**-1 == x (mod N) via Montgomery Reduction
  *
@@ -25,12 +31,13 @@
  *
  * Based on Algorithm 14.32 on pp.601 of HAC.
 */
-int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
+mp_err s_mp_montgomery_reduce_fast(mp_int *x, const mp_int *n, mp_digit rho)
 {
-   int     ix, res, olduse;
+   int     ix, olduse;
+   mp_err  err;
    mp_word W[MP_WARRAY];
 
-   if (x->used > (int)MP_WARRAY) {
+   if (x->used > MP_WARRAY) {
       return MP_VAL;
    }
 
@@ -39,8 +46,8 @@ int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
 
    /* grow a as required */
    if (x->alloc < (n->used + 1)) {
-      if ((res = mp_grow(x, n->used + 1)) != MP_OKAY) {
-         return res;
+      if ((err = mp_grow(x, n->used + 1)) != MP_OKAY) {
+         return err;
       }
    }
 
@@ -63,8 +70,8 @@ int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
       }
 
       /* zero the high words of W[a->used..m->used*2] */
-      for (; ix < ((n->used * 2) + 1); ix++) {
-         *_W++ = 0;
+      if (ix < ((n->used * 2) + 1)) {
+         MP_ZERO_BUFFER(_W, sizeof(mp_word) * (size_t)(((n->used * 2) + 1) - ix));
       }
    }
 
@@ -113,7 +120,7 @@ int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
       }
 
       /* now fix carry for next digit, W[ix+1] */
-      W[ix + 1] += W[ix] >> (mp_word)DIGIT_BIT;
+      W[ix + 1] += W[ix] >> (mp_word)MP_DIGIT_BIT;
    }
 
    /* now we have to propagate the carries and
@@ -132,8 +139,8 @@ int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
       /* alias for next word, where the carry goes */
       _W = W + ++ix;
 
-      for (; ix <= ((n->used * 2) + 1); ix++) {
-         *_W++ += *_W1++ >> (mp_word)DIGIT_BIT;
+      for (; ix < ((n->used * 2) + 1); ix++) {
+         *_W++ += *_W1++ >> (mp_word)MP_DIGIT_BIT;
       }
 
       /* copy out, A = A/b**n
@@ -156,9 +163,7 @@ int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
       /* zero oldused digits, if the input a was larger than
        * m->used+1 we'll have to clear the digits
        */
-      for (; ix < olduse; ix++) {
-         *tmpx++ = 0;
-      }
+      MP_ZERO_DIGITS(tmpx, olduse - ix);
    }
 
    /* set the max used and clamp */
@@ -172,7 +177,3 @@ int fast_mp_montgomery_reduce(mp_int *x, const mp_int *n, mp_digit rho)
    return MP_OKAY;
 }
 #endif
-
-/* ref:         $Format:%D$ */
-/* git commit:  $Format:%H$ */
-/* commit time: $Format:%ai$ */
