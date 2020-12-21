@@ -361,12 +361,12 @@ declare 85 {
 	    int flags)
 }
 declare 86 {
-    int Tcl_CreateAlias(Tcl_Interp *slave, const char *slaveCmd,
+    int Tcl_CreateAlias(Tcl_Interp *childInterp, const char *childCmd,
 	    Tcl_Interp *target, const char *targetCmd, int argc,
 	    const char *const *argv)
 }
 declare 87 {
-    int Tcl_CreateAliasObj(Tcl_Interp *slave, const char *slaveCmd,
+    int Tcl_CreateAliasObj(Tcl_Interp *childInterp, const char *childCmd,
 	    Tcl_Interp *target, const char *targetCmd, int objc,
 	    Tcl_Obj *const objv[])
 }
@@ -410,7 +410,7 @@ declare 96 {
 	    Tcl_CmdDeleteProc *deleteProc)
 }
 declare 97 {
-    Tcl_Interp *Tcl_CreateSlave(Tcl_Interp *interp, const char *slaveName,
+    Tcl_Interp *Tcl_CreateChild(Tcl_Interp *interp, const char *name,
 	    int isSafe)
 }
 declare 98 {
@@ -577,12 +577,12 @@ declare 146 {
 #    void Tcl_FreeResult(Tcl_Interp *interp)
 #}
 declare 148 {
-    int Tcl_GetAlias(Tcl_Interp *interp, const char *slaveCmd,
+    int Tcl_GetAlias(Tcl_Interp *interp, const char *childCmd,
 	    Tcl_Interp **targetInterpPtr, const char **targetCmdPtr,
 	    int *argcPtr, const char ***argvPtr)
 }
 declare 149 {
-    int Tcl_GetAliasObj(Tcl_Interp *interp, const char *slaveCmd,
+    int Tcl_GetAliasObj(Tcl_Interp *interp, const char *childCmd,
 	    Tcl_Interp **targetInterpPtr, const char **targetCmdPtr,
 	    int *objcPtr, Tcl_Obj ***objv)
 }
@@ -632,10 +632,10 @@ declare 162 {
     const char *Tcl_GetHostName(void)
 }
 declare 163 {
-    int Tcl_GetInterpPath(Tcl_Interp *askInterp, Tcl_Interp *slaveInterp)
+    int Tcl_GetInterpPath(Tcl_Interp *interp, Tcl_Interp *childInterp)
 }
 declare 164 {
-    Tcl_Interp *Tcl_GetMaster(Tcl_Interp *interp)
+    Tcl_Interp *Tcl_GetParent(Tcl_Interp *interp)
 }
 declare 165 {
     const char *Tcl_GetNameOfExecutable(void)
@@ -645,7 +645,7 @@ declare 166 {
 }
 
 # Tcl_GetOpenFile is only available on unix, but it is a part of the old
-# generic interface, so we inlcude it here for compatibility reasons.
+# generic interface, so we include it here for compatibility reasons.
 
 declare 167 unix {
     int Tcl_GetOpenFile(Tcl_Interp *interp, const char *chanID, int forWriting,
@@ -666,7 +666,7 @@ declare 171 {
     int Tcl_GetServiceMode(void)
 }
 declare 172 {
-    Tcl_Interp *Tcl_GetSlave(Tcl_Interp *interp, const char *slaveName)
+    Tcl_Interp *Tcl_GetChild(Tcl_Interp *interp, const char *name)
 }
 declare 173 {
     Tcl_Channel Tcl_GetStdChannel(int type)
@@ -3010,11 +3010,12 @@ declare 1 win {
 ################################
 # Mac OS X specific functions
 
-declare 0 macosx {
-    int Tcl_MacOSXOpenBundleResources(Tcl_Interp *interp,
-	    const char *bundleName, int hasResourceFile,
-	    size_t maxPathLen, char *libraryPath)
-}
+# Removed in 9.0
+#declare 0 macosx {
+#    int Tcl_MacOSXOpenBundleResources(Tcl_Interp *interp,
+#	    const char *bundleName, int hasResourceFile,
+#	    size_t maxPathLen, char *libraryPath)
+#}
 declare 1 macosx {
     int Tcl_MacOSXOpenVersionedBundleResources(Tcl_Interp *interp,
 	    const char *bundleName, const char *bundleVersion,

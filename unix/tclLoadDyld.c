@@ -300,8 +300,9 @@ TclpDlopen(
 	*loadHandle = newHandle;
 	result = TCL_OK;
     } else {
-	Tcl_Obj *errObj = Tcl_NewObj();
+	Tcl_Obj *errObj;
 
+	TclNewObj(errObj);
 	if (errMsg != NULL) {
 	    Tcl_AppendToObj(errObj, errMsg, -1);
 	}
@@ -494,14 +495,9 @@ UnloadFile(
 
 int
 TclGuessPackageName(
-    const char *fileName,	/* Name of file containing package (already
-				 * translated to local form if needed). */
-    Tcl_DString *bufPtr)	/* Initialized empty dstring. Append package
-				 * name to this if possible. */
+    TCL_UNUSED(const char *) /*fileName*/,
+    TCL_UNUSED(Tcl_DString *) /*bufPtr*/)
 {
-    (void)fileName;
-    (void)bufPtr;
-
     return 0;
 }
 
@@ -524,11 +520,10 @@ TclGuessPackageName(
 #ifdef TCL_LOAD_FROM_MEMORY
 MODULE_SCOPE void *
 TclpLoadMemoryGetBuffer(
-    Tcl_Interp *dummy,		/* Used for error reporting. */
+    TCL_UNUSED(Tcl_Interp *),
     int size)			/* Size of desired buffer. */
 {
     void *buffer = NULL;
-    (void)dummy;
 
     /*
      * NSCreateObjectFileImageFromMemory is available but always fails
@@ -624,7 +619,7 @@ TclpLoadMemory(
 
 	    if ((size_t) codeSize >= sizeof(struct fat_header) +
 		    fh_nfat_arch * sizeof(struct fat_arch)) {
-		void *fatarchs = (char*)buffer + sizeof(struct fat_header);
+		void *fatarchs = (char *)buffer + sizeof(struct fat_header);
 		const NXArchInfo *arch = NXGetLocalArchInfo();
 		struct fat_arch *fa;
 

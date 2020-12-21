@@ -37,12 +37,16 @@ if {"::tcltest" ni [namespace children]} {
 =======
 
 if {"::tcltest" ni [namespace children]} {
+<<<<<<< HEAD
     package require tcltest 2
 >>>>>>> upstream/master
 =======
 
 if {"::tcltest" ni [namespace children]} {
     package require tcltest 2
+>>>>>>> upstream/master
+=======
+    package require tcltest 2.5
 >>>>>>> upstream/master
     namespace import -force ::tcltest::*
 }

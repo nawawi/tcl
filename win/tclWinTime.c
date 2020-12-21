@@ -525,12 +525,9 @@ Tcl_GetTime(
 
 static void
 NativeScaleTime(
-    Tcl_Time *timePtr,
-    ClientData dummy)
+    TCL_UNUSED(Tcl_Time *),
+    TCL_UNUSED(ClientData))
 {
-    (void)timePtr;
-    (void)dummy;
-
     /*
      * Native scale is 1:1. Nothing is done.
      */
@@ -655,9 +652,9 @@ NativeGetMicroseconds(void)
 
 		GetSystemInfo(&systemInfo);
 		if (TclWinCPUID(0, regs) == TCL_OK
-			&& regs[1] == 0x756e6547	/* "Genu" */
-			&& regs[3] == 0x49656e69	/* "ineI" */
-			&& regs[2] == 0x6c65746e	/* "ntel" */
+			&& regs[1] == 0x756E6547	/* "Genu" */
+			&& regs[3] == 0x49656E69	/* "ineI" */
+			&& regs[2] == 0x6C65746E	/* "ntel" */
 			&& TclWinCPUID(1, regs) == TCL_OK
 			&& ((regs[0]&0x00000F00) == 0x00000F00 /* Pentium 4 */
 			|| ((regs[0] & 0x00F00000)	/* Extended family */
@@ -972,10 +969,9 @@ StopCalibration(
 static void
 NativeGetTime(
     Tcl_Time *timePtr,
-    ClientData dummy)
+    TCL_UNUSED(ClientData))
 {
     Tcl_WideInt usecSincePosixEpoch;
-    (void)dummy;
 
     /*
      * Try to use high resolution timer.
@@ -1143,10 +1139,8 @@ void TclWinResetTimerResolution(void);
 
 static void
 StopCalibration(
-    ClientData dummy)		/* Client data is unused */
+    TCL_UNUSED(ClientData))
 {
-    (void)dummy;
-
     SetEvent(timeInfo.exitEvent);
 
     /*
@@ -1197,11 +1191,10 @@ StopCalibration(
 
 static DWORD WINAPI
 CalibrationThread(
-    LPVOID arg)
+    TCL_UNUSED(LPVOID))
 {
     FILETIME curFileTime;
     DWORD waitResult;
-    (void)arg;
 
     /*
      * Get initial system time and performance counter.
@@ -1242,7 +1235,6 @@ CalibrationThread(
 	UpdateTimeEachSecond();
     }
 
-    /* lint */
     return (DWORD) 0;
 }
 

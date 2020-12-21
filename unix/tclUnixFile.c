@@ -34,16 +34,19 @@ static int NativeMatchType(Tcl_Interp *interp, const char* nativeEntry,
  *---------------------------------------------------------------------------
  */
 
+#ifdef __CYGWIN__
 void
 TclpFindExecutable(
-    const char *argv0)		/* The value of the application's argv[0]
-				 * (native). */
+    TCL_UNUSED(const char *) /*argv0*/)
 {
     Tcl_Encoding encoding;
+<<<<<<< HEAD
 #ifdef __CYGWIN__
 <<<<<<< HEAD
     int length;
 =======
+=======
+>>>>>>> upstream/master
     size_t length;
 <<<<<<< HEAD
 >>>>>>> upstream/master
@@ -52,7 +55,6 @@ TclpFindExecutable(
 =======
     wchar_t buf[PATH_MAX];
     char name[PATH_MAX * 3 + 1];
-    (void)argv0;
 
 >>>>>>> upstream/master
     GetModuleFileNameW(NULL, buf, PATH_MAX);
@@ -65,7 +67,14 @@ TclpFindExecutable(
     encoding = Tcl_GetEncoding(NULL, NULL);
     TclSetObjNameOfExecutable(
 	    Tcl_NewStringObj(name, length), encoding);
+}
 #else
+void
+TclpFindExecutable(
+    const char *argv0)		/* The value of the application's argv[0]
+				 * (native). */
+{
+    Tcl_Encoding encoding;
     const char *name, *p;
     Tcl_StatBuf statBuf;
     Tcl_DString buffer, nameString, cwd, utfName;
@@ -109,7 +118,7 @@ TclpFindExecutable(
      */
 
     while (1) {
-	while (TclIsSpaceProc(*p)) {
+	while (TclIsSpaceProcM(*p)) {
 	    p++;
 	}
 	name = p;
@@ -203,8 +212,8 @@ TclpFindExecutable(
 
   done:
     Tcl_DStringFree(&buffer);
-#endif
 }
+#endif
 
 /*
  *----------------------------------------------------------------------
@@ -760,7 +769,7 @@ TclpGetNativeCwd(
 #endif /* USEGETWD */
 
     if ((clientData == NULL) || strcmp(buffer, (const char *) clientData)) {
-	char *newCd = (char*)Tcl_Alloc(strlen(buffer) + 1);
+	char *newCd = (char *)Tcl_Alloc(strlen(buffer) + 1);
 
 	strcpy(newCd, buffer);
 	return newCd;
@@ -1081,9 +1090,8 @@ TclpObjLink(
 
 Tcl_Obj *
 TclpFilesystemPathType(
-    Tcl_Obj *pathPtr)
+    TCL_UNUSED(Tcl_Obj *))
 {
-    (void)pathPtr;
     /*
      * All native paths are of the same type.
      */

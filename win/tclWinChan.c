@@ -238,10 +238,8 @@ FileInit(void)
 
 static void
 FileChannelExitHandler(
-    ClientData dummy)	/* Old window proc */
+    TCL_UNUSED(ClientData))
 {
-    (void)dummy;
-
     Tcl_DeleteEventSource(FileSetupProc, FileCheckProc, NULL);
 }
 
@@ -264,13 +262,12 @@ FileChannelExitHandler(
 
 void
 FileSetupProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     FileInfo *infoPtr;
     Tcl_Time blockTime = { 0, 0 };
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!TEST_FLAG(flags, TCL_FILE_EVENTS)) {
 	return;
@@ -308,13 +305,12 @@ FileSetupProc(
 
 static void
 FileCheckProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     FileEvent *evPtr;
     FileInfo *infoPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!TEST_FLAG(flags, TCL_FILE_EVENTS)) {
 	return;
@@ -472,14 +468,13 @@ FileBlockProc(
 static int
 FileCloseProc(
     ClientData instanceData,	/* Pointer to FileInfo structure. */
-    Tcl_Interp *dummy,		/* Not used. */
+    TCL_UNUSED(Tcl_Interp *),
     int flags)
 {
     FileInfo *fileInfoPtr = (FileInfo *)instanceData;
     FileInfo *infoPtr;
     ThreadSpecificData *tsdPtr;
     int errorCode = 0;
-    (void)dummy;
 
     if ((flags & (TCL_CLOSE_READ | TCL_CLOSE_WRITE)) != 0) {
 	return EINVAL;
@@ -1281,7 +1276,7 @@ TclpOpenFileChannel(
     if (handle == INVALID_HANDLE_VALUE) {
 	DWORD err = GetLastError();
 
-	if ((err & 0xffffL) == ERROR_OPEN_FAILED) {
+	if ((err & 0xFFFFL) == ERROR_OPEN_FAILED) {
 	    err = TEST_FLAG(mode, O_CREAT) ? ERROR_FILE_EXISTS
 		    : ERROR_FILE_NOT_FOUND;
 	}
@@ -1550,7 +1545,7 @@ Tcl_MakeFileChannel(
 	    "leal       1f,             %%eax"          "\n\t"
 	    "movl       %%eax,          0x4(%%edx)"     "\n\t" /* handler */
 	    "movl       %%ebp,          0x8(%%edx)"     "\n\t" /* ebp */
-	    "movl       %%esp,          0xc(%%edx)"     "\n\t" /* esp */
+	    "movl       %%esp,          0xC(%%edx)"     "\n\t" /* esp */
 	    "movl       $0,             0x10(%%edx)"    "\n\t" /* status */
 
 	    /*
@@ -1590,7 +1585,7 @@ Tcl_MakeFileChannel(
 	     */
 
 	    "2:"                                        "\t"
-	    "movl       0xc(%%edx),     %%esp"          "\n\t"
+	    "movl       0xC(%%edx),     %%esp"          "\n\t"
 	    "movl       0x8(%%edx),     %%ebp"          "\n\t"
 	    "movl       0x0(%%edx),     %%eax"          "\n\t"
 	    "movl       %%eax,          %%fs:0"         "\n\t"

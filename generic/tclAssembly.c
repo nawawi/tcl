@@ -131,7 +131,7 @@ enum BasicBlockFlags {
  * Source instruction type recognized by the assembler.
  */
 
-typedef enum TalInstType {
+typedef enum {
     ASSEM_1BYTE,		/* Fixed arity, 1-byte instruction */
     ASSEM_BEGIN_CATCH,		/* Begin catch: one 4-byte jump offset to be
 				 * converted to appropriate exception
@@ -159,9 +159,12 @@ typedef enum TalInstType {
     ASSEM_DICT_GET,		/* 'dict get' and related - consumes N+1
 				 * operands, produces 1, N > 0 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     ASSEM_DICT_GET_DEF,		/* 'dict getwithdefault' - consumes N+2
 				 * operands, produces 1, N > 0 */
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     ASSEM_DICT_SET,		/* specifies key count and LVT index, consumes
 				 * N+1 operands, produces 1, N > 0 */
@@ -205,8 +208,10 @@ typedef enum TalInstType {
 				 * produces N */
     ASSEM_SINT1,		/* One 1-byte signed-integer operand
 				 * (INCR_STK_IMM) */
-    ASSEM_SINT4_LVT4		/* Signed 4-byte integer operand followed by
+    ASSEM_SINT4_LVT4,		/* Signed 4-byte integer operand followed by
 				 * LVT entry.  Fixed arity */
+    ASSEM_DICT_GET_DEF		/* 'dict getwithdefault' - consumes N+2
+				 * operands, produces 1, N > 0 */
 } TalInstType;
 
 /*
@@ -732,7 +737,7 @@ BBEmitOpcode(
 				/* Compilation environment */
     BasicBlock* bbPtr = assemEnvPtr->curr_bb;
 				/* Current basic block */
-    int op = TalInstructionTable[tblIdx].tclInstCode & 0xff;
+    int op = TalInstructionTable[tblIdx].tclInstCode & 0xFF;
 
     /*
      * If this is the first instruction in a basic block, record its line
@@ -794,13 +799,13 @@ BBEmitInst1or4(
 				/* Current basic block */
     int op = TalInstructionTable[tblIdx].tclInstCode;
 
-    if (param <= 0xff) {
+    if (param <= 0xFF) {
 	op >>= 8;
     } else {
-	op &= 0xff;
+	op &= 0xFF;
     }
     TclEmitInt1(op, envPtr);
-    if (param <= 0xff) {
+    if (param <= 0xFF) {
 	TclEmitInt1(param, envPtr);
     } else {
 	TclEmitInt4(param, envPtr);
@@ -879,9 +884,13 @@ TclNRAssembleObjCmd(
 	Tcl_AppendObjToErrorInfo(interp, objv[0]);
 	Tcl_AddErrorInfo(interp, "\" body, line ");
 <<<<<<< HEAD
+<<<<<<< HEAD
 	backtrace = Tcl_NewIntObj(Tcl_GetErrorLine(interp));
 =======
 	backtrace = Tcl_NewWideIntObj(Tcl_GetErrorLine(interp));
+>>>>>>> upstream/master
+=======
+	TclNewIntObj(backtrace, Tcl_GetErrorLine(interp));
 >>>>>>> upstream/master
 	Tcl_AppendObjToErrorInfo(interp, backtrace);
 	Tcl_AddErrorInfo(interp, ")");
@@ -1421,7 +1430,7 @@ AssembleOneLine(
     Tcl_Obj* instNameObj;	/* Name of the instruction */
     int tblIdx;			/* Index in TalInstructionTable of the
 				 * instruction */
-    enum TalInstType instType;	/* Type of the instruction */
+    TalInstType instType;	/* Type of the instruction */
     Tcl_Obj* operand1Obj = NULL;
 				/* First operand to the instruction */
     const char* operand1;	/* String rep of the operand */
@@ -2346,8 +2355,9 @@ GetNextOperand(
 				 * with \-substitutions done. */
 {
     Tcl_Interp* interp = (Tcl_Interp*) assemEnvPtr->envPtr->iPtr;
-    Tcl_Obj* operandObj = Tcl_NewObj();
+    Tcl_Obj* operandObj;
 
+    TclNewObj(operandObj);
     if (!TclWordKnownAtCompileTime(*tokenPtrPtr, operandObj)) {
 	Tcl_DecrRefCount(operandObj);
 	if (assemEnvPtr->flags & TCL_EVAL_DIRECT) {
@@ -2481,7 +2491,7 @@ GetIntegerOperand(
  *	TCL_ERROR (with an appropriate error message) if the parse fails.
  *
  * Side effects:
- *	Stores the list index at '*index'. Values between -1 and 0x7fffffff
+ *	Stores the list index at '*index'. Values between -1 and 0x7FFFFFFF
  *	have their natural meaning; values between -2 and -0x80000000
  *	represent 'end-2-N'.
  *
@@ -2672,7 +2682,7 @@ CheckOneByte(
 {
     Tcl_Obj* result;		/* Error message */
 
-    if (value < 0 || value > 0xff) {
+    if (value < 0 || value > 0xFF) {
 	result = Tcl_NewStringObj("operand does not fit in one byte", -1);
 	Tcl_SetObjResult(interp, result);
 	Tcl_SetErrorCode(interp, "TCL", "ASSEM", "1BYTE", NULL);
@@ -2707,7 +2717,7 @@ CheckSignedOneByte(
 {
     Tcl_Obj* result;		/* Error message */
 
-    if (value > 0x7f || value < -0x80) {
+    if (value > 0x7F || value < -0x80) {
 	result = Tcl_NewStringObj("operand does not fit in one byte", -1);
 	Tcl_SetObjResult(interp, result);
 	Tcl_SetErrorCode(interp, "TCL", "ASSEM", "1BYTE", NULL);
@@ -3129,7 +3139,7 @@ CalculateJumpRelocations(
 		if (bbPtr->flags & BB_JUMP1) {
 		    offset = jumpTarget->startOffset
 			    - (bbPtr->jumpOffset + motion);
-		    if (offset < -0x80 || offset > 0x7f) {
+		    if (offset < -0x80 || offset > 0x7F) {
 			opcode = TclGetUInt1AtPtr(envPtr->codeStart
 				+ bbPtr->jumpOffset);
 			++opcode;
@@ -3200,7 +3210,7 @@ CheckJumpTableLabels(
 	valEntryPtr = Tcl_FindHashEntry(&assemEnvPtr->labelHash,
 		TclGetString(symbolObj));
 	DEBUG_PRINT("  %s -> %s (%d)\n",
-		(char*) Tcl_GetHashKey(symHash, symEntryPtr),
+		(char *)Tcl_GetHashKey(symHash, symEntryPtr),
 		TclGetString(symbolObj), (valEntryPtr != NULL));
 	if (valEntryPtr == NULL) {
 	    ReportUndefinedLabel(assemEnvPtr, bbPtr, symbolObj);
@@ -3421,7 +3431,7 @@ ResolveJumpTableTargets(
 	realJumpEntryPtr = Tcl_CreateHashEntry(realJumpHashPtr,
 		Tcl_GetHashKey(symHash, symEntryPtr), &junk);
 	DEBUG_PRINT("  %s -> %s -> bb %p (pc %d)    hash entry %p\n",
-		(char*) Tcl_GetHashKey(symHash, symEntryPtr),
+		(char *)Tcl_GetHashKey(symHash, symEntryPtr),
 		TclGetString(symbolObj), jumpTargetBBPtr,
 		jumpTargetBBPtr->startOffset, realJumpEntryPtr);
 
@@ -4650,9 +4660,13 @@ AddBasicBlockRangeToErrorInfo(
 
     Tcl_AddErrorInfo(interp, "\n    in assembly code between lines ");
 <<<<<<< HEAD
+<<<<<<< HEAD
     lineNo = Tcl_NewIntObj(bbPtr->startLine);
 =======
     lineNo = Tcl_NewWideIntObj(bbPtr->startLine);
+>>>>>>> upstream/master
+=======
+    TclNewIntObj(lineNo, bbPtr->startLine);
 >>>>>>> upstream/master
     Tcl_IncrRefCount(lineNo);
     Tcl_AppendObjToErrorInfo(interp, lineNo);

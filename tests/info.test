@@ -16,7 +16,7 @@
 # DO NOT DELETE THIS LINE
 
 if {{::tcltest} ni [namespace children]} {
-    package require tcltest 2
+    package require tcltest 2.5
     namespace import -force ::tcltest::*
 }
 ::tcltest::loadTestedCommands
@@ -2450,6 +2450,7 @@ test info-33.35 {{*}, literal, simple, bytecompiled} -body {
 
 # -------------------------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 unset -nocomplain res
 =======
 
@@ -2458,6 +2459,84 @@ unset -nocomplain res
 >>>>>>> upstream/master
 test info-24.4 {info frame, interaction, foreach} -body {
     reduce [foo::bar]
+=======
+namespace eval ::testinfocmdtype {
+    apply {cmds {
+	foreach c $cmds {rename $c {}}
+    } ::testinfocmdtype} [info commands ::testinfocmdtype::*]
+}
+test info-40.1 {info cmdtype: syntax} -body {
+    info cmdtype
+} -returnCodes error -result {wrong # args: should be "info cmdtype commandName"}
+test info-40.2 {info cmdtype: syntax} -body {
+    info cmdtype foo bar
+} -returnCodes error -result {wrong # args: should be "info cmdtype commandName"}
+test info-40.3 {info cmdtype: no such command} -body {
+    info cmdtype ::testinfocmdtype::foo
+} -returnCodes error -result {unknown command "::testinfocmdtype::foo"}
+test info-40.4 {info cmdtype: native commands} -body {
+    info cmdtype ::if
+} -result native
+test info-40.5 {info cmdtype: native commands} -body {
+    info cmdtype ::puts
+} -result native
+test info-40.6 {info cmdtype: native commands} -body {
+    info cmdtype ::yield
+} -result native
+test info-40.7 {info cmdtype: procedures} -setup {
+    proc ::testinfocmdtype::someproc {} {}
+} -body {
+    info cmdtype ::testinfocmdtype::someproc
+} -cleanup {
+    rename ::testinfocmdtype::someproc {}
+} -result proc
+test info-40.8 {info cmdtype: aliases} -setup {
+    interp alias {} ::testinfocmdtype::somealias {} ::puts
+} -body {
+    info cmdtype ::testinfocmdtype::somealias
+} -cleanup {
+    rename ::testinfocmdtype::somealias {}
+} -result alias
+test info-40.9 {info cmdtype: imports} -setup {
+    namespace eval ::testinfocmdtype {
+	namespace eval foo {
+	    proc bar {} {}
+	    namespace export bar
+	}
+	namespace import foo::bar
+    }
+} -body {
+    info cmdtype ::testinfocmdtype::bar
+} -cleanup {
+    rename ::testinfocmdtype::bar {}
+    namespace delete ::testinfocmdtype::foo
+} -result import
+test info-40.10 {info cmdtype: interps} -setup {
+    apply {i {
+	rename $i ::testinfocmdtype::child
+	variable ::testinfocmdtype::child $i
+    }} [interp create]
+} -body {
+    info cmdtype ::testinfocmdtype::child
+} -cleanup {
+    interp delete $::testinfocmdtype::child
+} -result interp
+test info-40.11 {info cmdtype: objects} -setup {
+    apply {{} {
+	oo::object create obj
+    } ::testinfocmdtype}
+} -body {
+    info cmdtype ::testinfocmdtype::obj
+} -cleanup {
+    ::testinfocmdtype::obj destroy
+} -result object
+test info-40.12 {info cmdtype: objects} -setup {
+    apply {{} {
+	oo::object create obj
+    } ::testinfocmdtype}
+} -body {
+    info cmdtype [info object namespace ::testinfocmdtype::obj]::my
+>>>>>>> upstream/master
 } -cleanup {
     namespace delete foo
 } -result {type source line 880 file info.test cmd {info frame 0} proc ::foo::bar level 0}
@@ -2504,6 +2583,7 @@ switch -exact -- $x foo {
 test info-24.6.1 {info frame, interaction, switch, multi-body} -body {
     reduce [foo::bar]
 } -cleanup {
+<<<<<<< HEAD
     namespace delete foo
     unset x
 } -result {type source line 926 file info.test cmd {info frame 0} proc ::foo::bar level 0}
@@ -2523,6 +2603,58 @@ test info-24.6.2 {info frame, interaction, switch, list body, dynamic} -body {
     unset x
 } -result {type proc line 1 cmd {info frame 0} proc ::foo::bar level 0}
 
+=======
+    namespace eval ::testinfocmdtype {
+	catch {rename foo {}}
+	catch {rename bar {}}
+    }
+} -result {0 1 ::testinfocmdtype::foo {} ::testinfocmdtype::bar 1 0}
+test info-40.17 {info cmdtype: aliases in child interpreters} -setup {
+    set i [interp create]
+} -body {
+    $i alias foo gorp
+    $i eval {
+	info cmdtype foo
+    }
+} -cleanup {
+    interp delete $i
+} -result alias
+test info-40.18 {info cmdtype: aliases in child interpreters} -setup {
+    set safe [interp create -safe]
+} -body {
+    $safe alias foo gorp
+    $safe eval {
+	info cmdtype foo
+    }
+} -returnCodes error -cleanup {
+    interp delete $safe
+} -result {not allowed to invoke subcommand cmdtype of info}
+test info-40.19 {info cmdtype: aliases in child interpreters} -setup {
+    set safe [interp create -safe]
+} -body {
+    set inner [interp create [list $safe bar]]
+    interp alias $inner foo $safe gorp
+    $safe eval {
+	bar eval {
+	    info cmdtype foo
+	}
+    }
+} -returnCodes error -cleanup {
+    interp delete $safe
+} -result {not allowed to invoke subcommand cmdtype of info}
+test info-40.20 {info cmdtype: aliases in child interpreters} -setup {
+    set safe [interp create -safe]
+} -body {
+    $safe eval {
+	interp alias {} foo {} gorp
+	info cmdtype foo
+    }
+} -returnCodes error -cleanup {
+    interp delete $safe
+} -result {not allowed to invoke subcommand cmdtype of info}
+namespace delete ::testinfocmdtype
+
+>>>>>>> upstream/master
 # -------------------------------------------------------------------------
 
 namespace eval foo {}

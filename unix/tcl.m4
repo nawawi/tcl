@@ -973,6 +973,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	CFLAGS_WARNING="-Wall"
 =======
 	CFLAGS_WARNING="-Wall -Wsign-compare -Wdeclaration-after-statement"
@@ -994,8 +995,11 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 >>>>>>> upstream/master
 =======
 	CFLAGS_WARNING="-Wall -Wextra -Wwrite-strings -Wpointer-arith"
+=======
+	CFLAGS_WARNING="-Wall -Wextra -Wshadow -Wundef -Wwrite-strings -Wpointer-arith"
+>>>>>>> upstream/master
 	case "${CC}" in
-	    *++)
+	    *++|*++-*)
 		;;
 	    *)
 		CFLAGS_WARNING="${CFLAGS_WARNING} -Wc++-compat -Wdeclaration-after-statement"
@@ -1112,7 +1116,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LD_SEARCH_FLAGS=""
 	    ;;
 	CYGWIN_*)
-	    SHLIB_CFLAGS=""
+	    SHLIB_CFLAGS="-fno-common"
 	    SHLIB_LD='${CC} -shared'
 	    SHLIB_SUFFIX=".dll"
 	    DL_OBJS="tclLoadDl.o"
@@ -1220,7 +1224,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 			    do64bit_ok=yes
 			    SHLIB_LD='${CC} -shared'
 			    AS_IF([test $doRpath = yes], [
-				CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
+				CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'])
 			    LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
 			    ;;
 			*)
@@ -1255,7 +1259,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_LIBS=""
 	    AC_LIBOBJ(mkstemp)
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'
 		LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'])
 	    ;;
 	IRIX-6.*)
@@ -1266,7 +1270,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_LIBS=""
 	    AC_LIBOBJ(mkstemp)
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'
 		LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'])
 	    AS_IF([test "$GCC" = yes], [
 		CFLAGS="$CFLAGS -mabi=n32"
@@ -1292,7 +1296,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_LIBS=""
 	    AC_LIBOBJ(mkstemp)
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'
 		LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'])
 
 	    # Check to enable 64-bit flags for compiler/linker
@@ -1309,7 +1313,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ])
 	    ;;
 	Linux*|GNU*|NetBSD-Debian)
-	    SHLIB_CFLAGS="-fPIC"
+	    SHLIB_CFLAGS="-fPIC -fno-common"
 	    SHLIB_SUFFIX=".so"
 
 	    CFLAGS_OPTIMIZE="-O2"
@@ -1323,7 +1327,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_LIBS="-ldl"
 	    LDFLAGS="$LDFLAGS -Wl,--export-dynamic"
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'])
 	    LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
 	    AS_IF([test "`uname -m`" = "alpha"], [CFLAGS="$CFLAGS -mieee"])
 	    AS_IF([test $do64bit = yes], [
@@ -1355,6 +1359,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_LIBS="-mshared -ldl"
 	    LD_FLAGS="-Wl,--export-dynamic"
 	    AS_IF([test $doRpath = yes], [
+<<<<<<< HEAD
 		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
 		LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
 <<<<<<< HEAD
@@ -1380,6 +1385,10 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    LDFLAGS="$LDFLAGS -Wl,-Bexport"
 	    CC_SEARCH_FLAGS=""
 	    LD_SEARCH_FLAGS=""
+=======
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'
+		LD_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'])
+>>>>>>> upstream/master
 	    ;;
 	OpenBSD-*)
 	    arch=`arch -s`
@@ -1441,7 +1450,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_OBJS="tclLoadDl.o"
 	    DL_LIBS=""
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'])
 	    LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
 	    SHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.so.${SHLIB_VERSION}'
 	    LDFLAGS="-Wl,-export-dynamic"
@@ -1499,7 +1508,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_LIBS=""
 	    LDFLAGS="$LDFLAGS -export-dynamic"
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'])
 	    LD_SEARCH_FLAGS=${CC_SEARCH_FLAGS}
 	    # The -pthread needs to go in the CFLAGS, not LIBS
 	    LIBS=`echo $LIBS | sed s/-pthread//`
@@ -1535,13 +1544,13 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    ;;
 	DragonFly-*|FreeBSD-*)
 	    # This configuration from FreeBSD Ports.
-	    SHLIB_CFLAGS="-fPIC"
 	    SHLIB_LD="${CC} -shared"
 	    SHLIB_LD_LIBS="${SHLIB_LD_LIBS} -Wl,-soname,\$[@]"
 	    SHLIB_SUFFIX=".so"
 	    DL_OBJS="tclLoadDl.o"
 	    DL_LIBS=""
 	    AS_IF([test $doRpath = yes], [
+<<<<<<< HEAD
 		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
 		LD_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'])
 <<<<<<< HEAD
@@ -1560,6 +1569,10 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'
+		LD_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'])
 >>>>>>> upstream/master
 	    # The -pthread needs to go in the LDFLAGS, not LIBS
 	    LIBS=`echo $LIBS | sed s/-pthread//`
@@ -1782,7 +1795,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    DL_OBJS="tclLoadDl.o"
 	    DL_LIBS=""
 	    AS_IF([test $doRpath = yes], [
-		CC_SEARCH_FLAGS='-Wl,-rpath,${LIB_RUNTIME_DIR}'
+		CC_SEARCH_FLAGS='"-Wl,-rpath,${LIB_RUNTIME_DIR}"'
 		LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'])
 	    AS_IF([test "$GCC" = yes], [CFLAGS="$CFLAGS -mieee"], [
 		CFLAGS="$CFLAGS -DHAVE_TZSET -std1 -ieee"])
@@ -1800,7 +1813,6 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	QNX-6*)
 	    # QNX RTP
 	    # This may work for all QNX, but it was only reported for v6.
-	    SHLIB_CFLAGS="-fPIC"
 	    SHLIB_LD="ld -Bshareable -x"
 	    SHLIB_LD_LIBS=""
 	    SHLIB_SUFFIX=".so"
@@ -2028,9 +2040,12 @@ dnl # preprocessing tests use only CPPFLAGS.
 	    AIX-*) ;;
 	    BSD/OS*) ;;
 	    CYGWIN_*) ;;
-	    IRIX*) ;;
-	    NetBSD-*|DragonFly-*|FreeBSD-*|OpenBSD-*) ;;
+	    HP_UX*) ;;
 	    Darwin-*) ;;
+	    IRIX*) ;;
+	    Linux*|GNU*) ;;
+	    NetBSD-*|OpenBSD-*) ;;
+	    OSF1-V*) ;;
 	    SCO_SV-3.2*) ;;
 	    *) SHLIB_CFLAGS="-fPIC" ;;
 	esac])
@@ -2494,7 +2509,7 @@ AC_DEFUN([SC_TIME_HANDLER], [
     fi
 
     AC_CACHE_CHECK([tm_gmtoff in struct tm], tcl_cv_member_tm_gmtoff, [
-	AC_TRY_COMPILE([#include <time.h>], [struct tm tm; tm.tm_gmtoff;],
+	AC_TRY_COMPILE([#include <time.h>], [struct tm tm; (void)tm.tm_gmtoff;],
 	    tcl_cv_member_tm_gmtoff=yes, tcl_cv_member_tm_gmtoff=no)])
     if test $tcl_cv_member_tm_gmtoff = yes ; then
 	AC_DEFINE(HAVE_TM_GMTOFF, 1, [Should we use the tm_gmtoff field of struct tm?])
@@ -2816,14 +2831,14 @@ AC_DEFUN([SC_TCL_64BIT_FLAGS], [
 AC_DEFUN([SC_TCL_CFG_ENCODING], [
     AC_ARG_WITH(encoding,
 	AC_HELP_STRING([--with-encoding],
-	    [encoding for configuration values (default: iso8859-1)]),
+	    [encoding for configuration values (default: utf-8)]),
 	with_tcencoding=${withval})
 
     if test x"${with_tcencoding}" != x ; then
 	AC_DEFINE_UNQUOTED(TCL_CFGVAL_ENCODING,"${with_tcencoding}",
 	    [What encoding should be used for embedded configuration info?])
     else
-	AC_DEFINE(TCL_CFGVAL_ENCODING,"iso8859-1",
+	AC_DEFINE(TCL_CFGVAL_ENCODING,"utf-8",
 	    [What encoding should be used for embedded configuration info?])
     fi
 ])
@@ -2848,7 +2863,10 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
     AC_CHECK_FUNC($1, tcl_ok=1, tcl_ok=0)
     if test ["$tcl_ok"] = 1; then
 	AC_CACHE_CHECK([proper ]$1[ implementation], [tcl_cv_]$1[_unbroken],
-	    AC_TRY_RUN([[int main() {]$2[}]],[tcl_cv_]$1[_unbroken]=ok,
+	    AC_TRY_RUN([[
+#include <stdlib.h>
+#include <string.h>
+int main() {]$2[}]],[tcl_cv_]$1[_unbroken]=ok,
 		[tcl_cv_]$1[_unbroken]=broken,[tcl_cv_]$1[_unbroken]=unknown))
 	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
 	    tcl_ok=1

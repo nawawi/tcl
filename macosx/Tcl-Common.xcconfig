@@ -22,6 +22,7 @@ GCC = gcc-$(GCC_VERSION)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 WARNING_CFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-value -Winit-self -Wpointer-arith -Wcast-align -Wdisabled-optimization -Winline $(WARNING_CFLAGS)
 =======
 WARNING_CFLAGS = -Wall -Wwrite-strings -Wextra -Wdeclaration-after-statement -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-value -Winit-self -Wpointer-arith -Wcast-align -Wdisabled-optimization -Winline $(WARNING_CFLAGS)
@@ -31,6 +32,9 @@ WARNING_CFLAGS = -Wall -Wwrite-strings -Wextra -Wdeclaration-after-statement -Wn
 >>>>>>> upstream/master
 =======
 WARNING_CFLAGS = -Wall -Wwrite-strings -Wextra -Wdeclaration-after-statement -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-value -Winit-self -Wpointer-arith -Wcast-align -Wdisabled-optimization -Winline $(WARNING_CFLAGS)
+>>>>>>> upstream/master
+=======
+WARNING_CFLAGS = -Wall -Wextra -Wshadow -Wwrite-strings -Wpointer-arith -Wc++-compat -Wdeclaration-after-statement -Winit-self -Wcast-align -Wdisabled-optimization -Winline $(WARNING_CFLAGS)
 >>>>>>> upstream/master
 BINDIR = $(PREFIX)/bin
 CFLAGS = $(CFLAGS)

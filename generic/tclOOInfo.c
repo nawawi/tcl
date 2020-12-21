@@ -114,7 +114,7 @@ TclOOInitInfo(
     TclMakeEnsemble(interp, "::oo::InfoClass", infoClassCmds);
 
     /*
-     * Install into the master [info] ensemble.
+     * Install into the [info] ensemble.
      */
 
     infoCmd = Tcl_FindCommand(interp, "info", NULL, TCL_GLOBAL_ONLY);
@@ -171,7 +171,7 @@ GetClassFromObj(
 
 static int
 InfoObjectClassCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -233,11 +233,11 @@ InfoObjectClassCmd(
 	    }
 >>>>>>> upstream/master
 	    if (TclOOIsReachable(o2clsPtr, mixinPtr)) {
-		Tcl_SetObjResult(interp, Tcl_NewIntObj(1));
+		Tcl_SetObjResult(interp, Tcl_NewWideIntObj(1));
 		return TCL_OK;
 	    }
 	}
-	Tcl_SetObjResult(interp, Tcl_NewIntObj(
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(
 		TclOOIsReachable(o2clsPtr, oPtr->selfCls)));
 	return TCL_OK;
     }
@@ -255,7 +255,7 @@ InfoObjectClassCmd(
 
 static int
 InfoObjectDefnCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -297,13 +297,13 @@ InfoObjectDefnCmd(
 	return TCL_ERROR;
     }
 
-    resultObjs[0] = Tcl_NewObj();
+    TclNewObj(resultObjs[0]);
     for (localPtr=procPtr->firstLocalPtr; localPtr!=NULL;
 	    localPtr=localPtr->nextPtr) {
 	if (TclIsVarArgument(localPtr)) {
 	    Tcl_Obj *argObj;
 
-	    argObj = Tcl_NewObj();
+	    TclNewObj(argObj);
 	    Tcl_ListObjAppendElement(NULL, argObj,
 		    Tcl_NewStringObj(localPtr->name, -1));
 	    if (localPtr->defValuePtr != NULL) {
@@ -329,7 +329,7 @@ InfoObjectDefnCmd(
 
 static int
 InfoObjectFiltersCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -347,7 +347,7 @@ InfoObjectFiltersCmd(
     if (oPtr == NULL) {
 	return TCL_ERROR;
     }
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
 
     FOREACH(filterObj, oPtr->filters) {
 	Tcl_ListObjAppendElement(NULL, resultObj, filterObj);
@@ -368,7 +368,7 @@ InfoObjectFiltersCmd(
 
 static int
 InfoObjectForwardCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -425,7 +425,7 @@ InfoObjectForwardCmd(
 
 static int
 InfoObjectIsACmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -571,7 +571,7 @@ InfoObjectIsACmd(
 
 static int
 InfoObjectMethodsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -655,7 +655,7 @@ InfoObjectMethodsCmd(
 	}
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     if (recurse) {
 	const char **names;
 	int i, numNames = TclOOGetSortedMethodList(oPtr, NULL, NULL, flag,
@@ -695,7 +695,7 @@ InfoObjectMethodsCmd(
 
 static int
 InfoObjectMethodTypeCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -752,7 +752,7 @@ InfoObjectMethodTypeCmd(
 
 static int
 InfoObjectMixinsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -771,7 +771,7 @@ InfoObjectMixinsCmd(
 	return TCL_ERROR;
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     FOREACH(mixinPtr, oPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -822,7 +822,7 @@ InfoObjectMixinsCmd(
 
 static int
 InfoObjectIdCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -838,7 +838,7 @@ InfoObjectIdCmd(
 	return TCL_ERROR;
     }
 
-    Tcl_SetObjResult(interp, Tcl_NewIntObj(oPtr->creationEpoch));
+    Tcl_SetObjResult(interp, Tcl_NewWideIntObj(oPtr->creationEpoch));
     return TCL_OK;
 }
 
@@ -854,7 +854,7 @@ InfoObjectIdCmd(
 
 static int
 InfoObjectNsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -887,7 +887,7 @@ InfoObjectNsCmd(
 
 static int
 InfoObjectVariablesCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -922,10 +922,14 @@ InfoObjectVariablesCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     resultObj = Tcl_NewObj();
 <<<<<<< HEAD
     if (private) {
 =======
+=======
+    TclNewObj(resultObj);
+>>>>>>> upstream/master
     if (isPrivate) {
 >>>>>>> upstream/master
 	PrivateVariableMapping *privatePtr;
@@ -956,7 +960,7 @@ InfoObjectVariablesCmd(
 
 static int
 InfoObjectVarsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -978,7 +982,7 @@ InfoObjectVarsCmd(
     if (objc == 3) {
 	pattern = TclGetString(objv[2]);
     }
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
 
     /*
      * Extract the information we need from the object's namespace's table of
@@ -1017,7 +1021,7 @@ InfoObjectVarsCmd(
 
 static int
 InfoClassConstrCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1046,13 +1050,13 @@ InfoClassConstrCmd(
 	return TCL_ERROR;
     }
 
-    resultObjs[0] = Tcl_NewObj();
+    TclNewObj(resultObjs[0]);
     for (localPtr=procPtr->firstLocalPtr; localPtr!=NULL;
 	    localPtr=localPtr->nextPtr) {
 	if (TclIsVarArgument(localPtr)) {
 	    Tcl_Obj *argObj;
 
-	    argObj = Tcl_NewObj();
+	    TclNewObj(argObj);
 	    Tcl_ListObjAppendElement(NULL, argObj,
 		    Tcl_NewStringObj(localPtr->name, -1));
 	    if (localPtr->defValuePtr != NULL) {
@@ -1078,7 +1082,7 @@ InfoClassConstrCmd(
 
 static int
 InfoClassDefnCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1114,13 +1118,13 @@ InfoClassDefnCmd(
 	return TCL_ERROR;
     }
 
-    resultObjs[0] = Tcl_NewObj();
+    TclNewObj(resultObjs[0]);
     for (localPtr=procPtr->firstLocalPtr; localPtr!=NULL;
 	    localPtr=localPtr->nextPtr) {
 	if (TclIsVarArgument(localPtr)) {
 	    Tcl_Obj *argObj;
 
-	    argObj = Tcl_NewObj();
+	    TclNewObj(argObj);
 	    Tcl_ListObjAppendElement(NULL, argObj,
 		    Tcl_NewStringObj(localPtr->name, -1));
 	    if (localPtr->defValuePtr != NULL) {
@@ -1146,7 +1150,7 @@ InfoClassDefnCmd(
 
 static int
 InfoClassDefnNsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1196,7 +1200,7 @@ InfoClassDefnNsCmd(
 
 static int
 InfoClassDestrCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1240,7 +1244,7 @@ InfoClassDestrCmd(
 
 static int
 InfoClassFiltersCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1258,7 +1262,7 @@ InfoClassFiltersCmd(
 	return TCL_ERROR;
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     FOREACH(filterObj, clsPtr->filters) {
 	Tcl_ListObjAppendElement(NULL, resultObj, filterObj);
     }
@@ -1278,7 +1282,7 @@ InfoClassFiltersCmd(
 
 static int
 InfoClassForwardCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1329,7 +1333,7 @@ InfoClassForwardCmd(
 
 static int
 InfoClassInstancesCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1352,7 +1356,7 @@ InfoClassInstancesCmd(
 	pattern = TclGetString(objv[2]);
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     FOREACH(oPtr, clsPtr->instances) {
 	Tcl_Obj *tmpObj = TclOOObjectName(interp, oPtr);
 
@@ -1377,7 +1381,7 @@ InfoClassInstancesCmd(
 
 static int
 InfoClassMethodsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1456,7 +1460,7 @@ InfoClassMethodsCmd(
 	}
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     if (recurse) {
 	const char **names;
 	int i, numNames = TclOOGetSortedClassMethodList(clsPtr, flag, &names);
@@ -1497,7 +1501,7 @@ InfoClassMethodsCmd(
 
 static int
 InfoClassMethodTypeCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1549,7 +1553,7 @@ InfoClassMethodTypeCmd(
 
 static int
 InfoClassMixinsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1567,7 +1571,7 @@ InfoClassMixinsCmd(
 	return TCL_ERROR;
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     FOREACH(mixinPtr, clsPtr->mixins) {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1618,7 +1622,7 @@ InfoClassMixinsCmd(
 
 static int
 InfoClassSubsCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1640,7 +1644,7 @@ InfoClassSubsCmd(
 	pattern = TclGetString(objv[2]);
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     FOREACH(subclassPtr, clsPtr->subclasses) {
 	Tcl_Obj *tmpObj = TclOOObjectName(interp, subclassPtr->thisPtr);
 
@@ -1673,7 +1677,7 @@ InfoClassSubsCmd(
 
 static int
 InfoClassSupersCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1691,7 +1695,7 @@ InfoClassSupersCmd(
 	return TCL_ERROR;
     }
 
-    resultObj = Tcl_NewObj();
+    TclNewObj(resultObj);
     FOREACH(superPtr, clsPtr->superclasses) {
 	Tcl_ListObjAppendElement(NULL, resultObj,
 		TclOOObjectName(interp, superPtr->thisPtr));
@@ -1712,7 +1716,7 @@ InfoClassSupersCmd(
 
 static int
 InfoClassVariablesCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1747,10 +1751,14 @@ InfoClassVariablesCmd(
 	return TCL_ERROR;
     }
 
+<<<<<<< HEAD
     resultObj = Tcl_NewObj();
 <<<<<<< HEAD
     if (private) {
 =======
+=======
+    TclNewObj(resultObj);
+>>>>>>> upstream/master
     if (isPrivate) {
 >>>>>>> upstream/master
 	PrivateVariableMapping *privatePtr;
@@ -1781,7 +1789,7 @@ InfoClassVariablesCmd(
 
 static int
 InfoObjectCallCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
@@ -1827,7 +1835,7 @@ InfoObjectCallCmd(
 
 static int
 InfoClassCallCmd(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])

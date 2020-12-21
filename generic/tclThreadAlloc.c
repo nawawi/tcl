@@ -917,11 +917,9 @@ LockBucket(
 
 static void
 UnlockBucket(
-    Cache *cachePtr,
+    TCL_UNUSED(Cache *),
     int bucket)
 {
-    (void)cachePtr;
-
     Tcl_MutexUnlock(bucketInfo[bucket].lockPtr);
 }
 
@@ -1062,7 +1060,7 @@ GetBlocks(
 
 	blockPtr = NULL;
 	n = NBUCKETS;
-	size = 0; /* lint */
+	size = 0;
 	while (--n > (size_t)bucket) {
 	    if (cachePtr->buckets[n].numFree > 0) {
 		size = bucketInfo[n].blockSize;
@@ -1242,7 +1240,7 @@ TclFinalizeThreadAllocThread(void)
 
 void
 Tcl_GetMemoryInfo(
-    Tcl_DString *dsPtr)
+    TCL_UNUSED(Tcl_DString *))
 {
     Tcl_Panic("Tcl_GetMemoryInfo called when threaded memory allocator not in use");
 }

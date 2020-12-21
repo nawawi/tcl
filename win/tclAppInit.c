@@ -29,7 +29,7 @@ extern Tcl_PackageInitProc Tcltest_Init;
 extern Tcl_PackageInitProc Tcltest_SafeInit;
 #endif /* TCL_TEST */
 
-#if defined(STATIC_BUILD) && TCL_USE_STATIC_PACKAGES
+#if defined(STATIC_BUILD) && defined(TCL_USE_STATIC_PACKAGES) && TCL_USE_STATIC_PACKAGES
 extern Tcl_PackageInitProc Registry_Init;
 extern Tcl_PackageInitProc Dde_Init;
 extern Tcl_PackageInitProc Dde_SafeInit;
@@ -87,11 +87,10 @@ MODULE_SCOPE int TCL_LOCAL_MAIN_HOOK(int *argc, TCHAR ***argv);
 int
 main(
     int argc,			/* Number of command-line arguments. */
-    char *dummy[])		/* Not used. */
+    char **argv1)
 {
     TCHAR **argv;
     TCHAR *p;
-    (void)dummy;
 #else
 int
 _tmain(
@@ -113,6 +112,7 @@ _tmain(
      * Get our args from the c-runtime. Ignore command line.
      */
 
+    (void)argv1;
     setargv(&argc, &argv);
 #endif
 
@@ -164,7 +164,7 @@ Tcl_AppInit(
 	return TCL_ERROR;
     }
 
-#if defined(STATIC_BUILD) && TCL_USE_STATIC_PACKAGES
+#if defined(STATIC_BUILD) && defined(TCL_USE_STATIC_PACKAGES) && TCL_USE_STATIC_PACKAGES
     if (Registry_Init(interp) == TCL_ERROR) {
 	return TCL_ERROR;
     }

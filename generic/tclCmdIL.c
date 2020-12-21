@@ -419,7 +419,7 @@ Tcl_IncrObjCmd(
     if (objc == 3) {
 	incrPtr = objv[2];
     } else {
-	incrPtr = Tcl_NewWideIntObj(1);
+	TclNewIntObj(incrPtr, 1);
     }
     Tcl_IncrRefCount(incrPtr);
     newValuePtr = TclIncrObjVar2(interp, objv[1], NULL,
@@ -1129,9 +1129,13 @@ InfoErrorStackCmd(
     target = interp;
     if (objc == 2) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	target = Tcl_GetSlave(interp, Tcl_GetString(objv[1]));
 =======
 	target = Tcl_GetSlave(interp, TclGetString(objv[1]));
+>>>>>>> upstream/master
+=======
+	target = Tcl_GetChild(interp, TclGetString(objv[1]));
 >>>>>>> upstream/master
 	if (target == NULL) {
 	    return TCL_ERROR;
@@ -2389,7 +2393,7 @@ InfoCmdTypeCmd(
     }
 
     /*
-     * There's one special case: safe slave interpreters can't see aliases as
+     * There's one special case: safe child interpreters can't see aliases as
      * aliases as they're part of the security mechanisms.
      */
 
@@ -2963,6 +2967,14 @@ Tcl_LpopObjCmd(
      */
 
     if (objc == 2) {
+	if (!listLen) {
+	    /* empty list, throw the same error as with index "end" */
+	    Tcl_SetObjResult(interp, Tcl_NewStringObj(
+		"index \"end\" out of range", -1));
+	    Tcl_SetErrorCode(interp, "TCL", "VALUE", "INDEX"
+		"OUTOFRANGE", NULL);
+	    return TCL_ERROR;
+	}
 	elemPtr = elemPtrs[listLen - 1];
 	Tcl_IncrRefCount(elemPtr);
     } else {
@@ -4295,7 +4307,7 @@ Tcl_LsearchObjCmd(
 	"-real",    "-regexp",  "-sorted",     "-start", "-stride",
 	"-subindices", NULL
     };
-    enum options {
+    enum lsearchoptions {
 	LSEARCH_ALL, LSEARCH_ASCII, LSEARCH_BISECT, LSEARCH_DECREASING,
 	LSEARCH_DICTIONARY, LSEARCH_EXACT, LSEARCH_GLOB, LSEARCH_INCREASING,
 	LSEARCH_INDEX, LSEARCH_INLINE, LSEARCH_INTEGER, LSEARCH_NOCASE,
@@ -4389,7 +4401,7 @@ Tcl_LsearchObjCmd(
 	    result = TCL_ERROR;
 	    goto done;
 	}
-	switch ((enum options) index) {
+	switch ((enum lsearchoptions) index) {
 	case LSEARCH_ALL:		/* -all */
 	    allMatches = 1;
 	    break;
@@ -4498,7 +4510,7 @@ Tcl_LsearchObjCmd(
 >>>>>>> upstream/master
 		Tcl_SetObjResult(interp, Tcl_NewStringObj(
 			"stride length must be at least 1", -1));
-		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LSORT",
+		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "LSEARCH",
 			"BADSTRIDE", NULL);
 		result = TCL_ERROR;
 		goto done;
@@ -4745,7 +4757,8 @@ Tcl_LsearchObjCmd(
 	    if (allMatches || inlineReturn) {
 		Tcl_ResetResult(interp);
 	    } else {
-		Tcl_SetObjResult(interp, Tcl_NewWideIntObj(-1));
+		TclNewIndexObj(itemPtr, TCL_INDEX_NONE);
+		Tcl_SetObjResult(interp, itemPtr);
 	    }
 	    goto done;
 	}
@@ -4872,11 +4885,11 @@ Tcl_LsearchObjCmd(
 		/*
 		 * Normally, binary search is written to stop when it finds a
 		 * match. If there are duplicates of an element in the list,
-		 * our first match might not be the first occurance.
+		 * our first match might not be the first occurrence.
 		 * Consider: 0 0 0 1 1 1 2 2 2
 		 *
-		 * To maintain consistancy with standard lsearch semantics, we
-		 * must find the leftmost occurance of the pattern in the
+		 * To maintain consistency with standard lsearch semantics, we
+		 * must find the leftmost occurrence of the pattern in the
 		 * list. Thus we don't just stop searching here. This
 		 * variation means that a search always makes log n
 		 * comparisons (normal binary search might "get lucky" with an
@@ -5049,6 +5062,7 @@ Tcl_LsearchObjCmd(
 		int j;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		itemPtr = Tcl_NewIntObj(i+groupOffset);
 		for (j=0 ; j<sortInfo.indexc ; j++) {
 		    Tcl_ListObjAppendElement(interp, itemPtr, Tcl_NewIntObj(
@@ -5058,6 +5072,14 @@ Tcl_LsearchObjCmd(
 		    Tcl_ListObjAppendElement(interp, itemPtr, TclNewWideIntObjFromSize(
 >>>>>>> upstream/master
 			    TclIndexDecode(sortInfo.indexv[j], listc)));
+=======
+		TclNewIndexObj(itemPtr, i+groupOffset);
+		for (j=0 ; j<sortInfo.indexc ; j++) {
+		    Tcl_Obj *elObj;
+		    size_t elValue = TclIndexDecode(sortInfo.indexv[j], listc);
+		    TclNewIndexObj(elObj, elValue);
+		    Tcl_ListObjAppendElement(interp, itemPtr, elObj);
+>>>>>>> upstream/master
 		}
 		Tcl_ListObjAppendElement(interp, listPtr, itemPtr);
 	    } else {
@@ -5077,6 +5099,7 @@ Tcl_LsearchObjCmd(
 	    int j;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    itemPtr = Tcl_NewIntObj(index+groupOffset);
 	    for (j=0 ; j<sortInfo.indexc ; j++) {
 		Tcl_ListObjAppendElement(interp, itemPtr, Tcl_NewIntObj(
@@ -5086,10 +5109,20 @@ Tcl_LsearchObjCmd(
 		Tcl_ListObjAppendElement(interp, itemPtr, TclNewWideIntObjFromSize(
 >>>>>>> upstream/master
 			TclIndexDecode(sortInfo.indexv[j], listc)));
+=======
+	    TclNewIndexObj(itemPtr, index+groupOffset);
+	    for (j=0 ; j<sortInfo.indexc ; j++) {
+		Tcl_Obj *elObj;
+		size_t elValue = TclIndexDecode(sortInfo.indexv[j], listc);
+		TclNewIndexObj(elObj, elValue);
+		Tcl_ListObjAppendElement(interp, itemPtr, elObj);
+>>>>>>> upstream/master
 	    }
 	    Tcl_SetObjResult(interp, itemPtr);
 	} else {
-	    Tcl_SetObjResult(interp, Tcl_NewWideIntObj(index));
+		Tcl_Obj *elObj;
+		TclNewIndexObj(elObj, index);
+	    Tcl_SetObjResult(interp, elObj);
 	}
     } else if (index < 0) {
 	/*
@@ -5897,7 +5930,7 @@ Tcl_LsortObjCmd(
 		idx = elementPtr->payload.index;
 		for (j = 0; j < groupSize; j++) {
 		    if (indices) {
-			objPtr = TclNewWideIntObjFromSize(idx + j - groupOffset);
+			TclNewIndexObj(objPtr, idx + j - groupOffset);
 			newArray[i++] = objPtr;
 			Tcl_IncrRefCount(objPtr);
 		    } else {
@@ -5910,9 +5943,13 @@ Tcl_LsortObjCmd(
 	} else if (indices) {
 	    for (i=0; elementPtr != NULL ; elementPtr = elementPtr->nextPtr) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		objPtr = Tcl_NewIntObj(elementPtr->payload.index);
 =======
 		objPtr = TclNewWideIntObjFromSize(elementPtr->payload.index);
+>>>>>>> upstream/master
+=======
+		TclNewIndexObj(objPtr, elementPtr->payload.index);
 >>>>>>> upstream/master
 		newArray[i++] = objPtr;
 		Tcl_IncrRefCount(objPtr);
@@ -6213,7 +6250,7 @@ static int
 DictionaryCompare(
     const char *left, const char *right)	/* The strings to compare. */
 {
-    Tcl_UniChar uniLeft = 0, uniRight = 0, uniLeftLower, uniRightLower;
+    int uniLeft = 0, uniRight = 0, uniLeftLower, uniRightLower;
     int diff, zeros;
     int secondaryDiff = 0;
 
@@ -6282,8 +6319,8 @@ DictionaryCompare(
 	 */
 
 	if ((*left != '\0') && (*right != '\0')) {
-	    left += TclUtfToUniChar(left, &uniLeft);
-	    right += TclUtfToUniChar(right, &uniRight);
+	    left += TclUtfToUCS4(left, &uniLeft);
+	    right += TclUtfToUCS4(right, &uniRight);
 
 	    /*
 	     * Convert both chars to lower for the comparison, because

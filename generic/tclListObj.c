@@ -464,23 +464,26 @@ TclListObjCopy(
 Tcl_Obj *
 TclListObjRange(
     Tcl_Obj *listPtr,		/* List object to take a range from. */
-    int fromIdx,		/* Index of first element to include. */
-    int toIdx)			/* Index of last element to include. */
+    size_t fromIdx,		/* Index of first element to include. */
+    size_t toIdx)			/* Index of last element to include. */
 {
     Tcl_Obj **elemPtrs;
-    int listLen, i, newLen;
+    int listLen;
+    size_t i, newLen;
     List *listRepPtr;
 
     TclListObjGetElements(NULL, listPtr, &listLen, &elemPtrs);
 
-    if (fromIdx < 0) {
+    if (fromIdx == TCL_INDEX_NONE) {
 	fromIdx = 0;
     }
-    if (toIdx >= listLen) {
+    if (toIdx + 1 >= (size_t)listLen + 1) {
 	toIdx = listLen-1;
     }
-    if (fromIdx > toIdx) {
-	return Tcl_NewObj();
+    if (fromIdx + 1 > toIdx + 1) {
+	Tcl_Obj *obj;
+	TclNewObj(obj);
+	return obj;
     }
 
     newLen = toIdx - fromIdx + 1;
@@ -508,7 +511,7 @@ TclListObjRange(
     for (i = 0; i < fromIdx; i++) {
 	TclDecrRefCount(elemPtrs[i]);
     }
-    for (i = toIdx + 1; i < listLen; i++) {
+    for (i = toIdx + 1; i < (size_t)listLen; i++) {
 	TclDecrRefCount(elemPtrs[i]);
     }
 
@@ -2833,7 +2836,11 @@ TclLindexList(
 
     ListGetIntRep(argPtr, listRepPtr);
     if ((listRepPtr == NULL)
+<<<<<<< HEAD
 	    && TclGetIntForIndexM(NULL , argPtr, 0, &index) == TCL_OK) {
+=======
+	    && TclGetIntForIndexM(NULL , argPtr, (size_t)WIDE_MAX - 1, &index) == TCL_OK) {
+>>>>>>> upstream/master
 	/*
 	 * argPtr designates a single index.
 	 */
@@ -2951,13 +2958,13 @@ TclLindexFlat(
 		 */
 
 		while (++i < indexCount) {
-		    if (TclGetIntForIndexM(interp, indexArray[i], TCL_INDEX_NONE, &index)
+		    if (TclGetIntForIndexM(interp, indexArray[i], (size_t)WIDE_MAX - 1, &index)
 			!= TCL_OK) {
 			Tcl_DecrRefCount(sublistCopy);
 			return NULL;
 		    }
 		}
-		listPtr = Tcl_NewObj();
+		TclNewObj(listPtr);
 	    } else {
 		/*
 		 * Extract the pointer to the appropriate element.
@@ -3016,9 +3023,13 @@ TclLsetList(
     ListGetIntRep(indexArgPtr, listRepPtr);
     if (listRepPtr == NULL
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    && TclGetIntForIndexM(NULL, indexArgPtr, 0, &index) == TCL_OK) {
 =======
 	    && TclGetIntForIndexM(NULL, indexArgPtr, TCL_INDEX_START, &index) == TCL_OK) {
+>>>>>>> upstream/master
+=======
+	    && TclGetIntForIndexM(NULL, indexArgPtr, (size_t)WIDE_MAX - 1, &index) == TCL_OK) {
 >>>>>>> upstream/master
 	/*
 	 * indexArgPtr designates a single index.
@@ -3207,7 +3218,7 @@ TclLsetFlat(
 	if (--indexCount) {
 	    parentList = subListPtr;
 	    if (index == (size_t)elemCount) {
-		subListPtr = Tcl_NewObj();
+		TclNewObj(subListPtr);
 	    } else {
 		subListPtr = elemPtrs[index];
 	    }

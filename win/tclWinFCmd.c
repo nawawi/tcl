@@ -204,7 +204,7 @@ DoRenameFile(
 	"leal	    1f,		    %%eax"	    "\n\t"
 	"movl	    %%eax,	    0x4(%%edx)"	    "\n\t" /* handler */
 	"movl	    %%ebp,	    0x8(%%edx)"	    "\n\t" /* ebp */
-	"movl	    %%esp,	    0xc(%%edx)"	    "\n\t" /* esp */
+	"movl	    %%esp,	    0xC(%%edx)"	    "\n\t" /* esp */
 	"movl	    $0,		    0x10(%%edx)"    "\n\t" /* status */
 
 	/*
@@ -245,7 +245,7 @@ DoRenameFile(
 	 */
 
 	"2:"					    "\t"
-	"movl	    0xc(%%edx),	    %%esp"	    "\n\t"
+	"movl	    0xC(%%edx),	    %%esp"	    "\n\t"
 	"movl	    0x8(%%edx),	    %%ebp"	    "\n\t"
 	"movl	    0x0(%%edx),	    %%eax"	    "\n\t"
 	"movl	    %%eax,	    %%fs:0"	    "\n\t"
@@ -297,7 +297,7 @@ DoRenameFile(
 =======
     srcAttr = GetFileAttributesW(nativeSrc);
     dstAttr = GetFileAttributesW(nativeDst);
-    if (srcAttr == 0xffffffff) {
+    if (srcAttr == 0xFFFFFFFF) {
 	if (GetFullPathNameW(nativeSrc, 0, NULL,
 >>>>>>> upstream/master
 		NULL) >= MAX_PATH) {
@@ -306,10 +306,14 @@ DoRenameFile(
 	}
 	srcAttr = 0;
     }
+<<<<<<< HEAD
     if (dstAttr == 0xffffffff) {
 <<<<<<< HEAD
 	if (GetFullPathName(nativeDst, 0, NULL,
 =======
+=======
+    if (dstAttr == 0xFFFFFFFF) {
+>>>>>>> upstream/master
 	if (GetFullPathNameW(nativeDst, 0, NULL,
 >>>>>>> upstream/master
 		NULL) >= MAX_PATH) {
@@ -696,7 +700,7 @@ DoCopyFile(
 	"leal	    1f,		    %%eax"	    "\n\t"
 	"movl	    %%eax,	    0x4(%%edx)"	    "\n\t" /* handler */
 	"movl	    %%ebp,	    0x8(%%edx)"	    "\n\t" /* ebp */
-	"movl	    %%esp,	    0xc(%%edx)"	    "\n\t" /* esp */
+	"movl	    %%esp,	    0xC(%%edx)"	    "\n\t" /* esp */
 	"movl	    $0,		    0x10(%%edx)"    "\n\t" /* status */
 
 	/*
@@ -738,7 +742,7 @@ DoCopyFile(
 	 */
 
 	"2:"					    "\t"
-	"movl	    0xc(%%edx),	    %%esp"	    "\n\t"
+	"movl	    0xC(%%edx),	    %%esp"	    "\n\t"
 	"movl	    0x8(%%edx),	    %%ebp"	    "\n\t"
 	"movl	    0x0(%%edx),	    %%eax"	    "\n\t"
 	"movl	    %%eax,	    %%fs:0"	    "\n\t"
@@ -794,9 +798,14 @@ DoCopyFile(
 =======
 	srcAttr = GetFileAttributesW(nativeSrc);
 	dstAttr = GetFileAttributesW(nativeDst);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	if (srcAttr != 0xffffffff) {
 	    if (dstAttr == 0xffffffff) {
+=======
+	if (srcAttr != 0xFFFFFFFF) {
+	    if (dstAttr == 0xFFFFFFFF) {
+>>>>>>> upstream/master
 		dstAttr = 0;
 	    }
 	    if ((srcAttr & FILE_ATTRIBUTE_DIRECTORY) ||
@@ -903,8 +912,12 @@ TclpDeleteFile(
 	attr = GetFileAttributes(path);
 =======
 	attr = GetFileAttributesW(path);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	if (attr != 0xffffffff) {
+=======
+	if (attr != 0xFFFFFFFF) {
+>>>>>>> upstream/master
 	    if (attr & FILE_ATTRIBUTE_DIRECTORY) {
 		if (attr & FILE_ATTRIBUTE_REPARSE_POINT) {
 		    /*
@@ -954,8 +967,12 @@ TclpDeleteFile(
 	attr = GetFileAttributes(path);
 =======
 	attr = GetFileAttributesW(path);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	if (attr != 0xffffffff) {
+=======
+	if (attr != 0xFFFFFFFF) {
+>>>>>>> upstream/master
 	    if (attr & FILE_ATTRIBUTE_DIRECTORY) {
 		/*
 		 * Windows 95 reports removing a directory as ENOENT instead
@@ -1232,8 +1249,12 @@ DoRemoveJustDirectory(
 	attr = GetFileAttributes(nativePath);
 =======
 	attr = GetFileAttributesW(nativePath);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	if (attr != 0xffffffff) {
+=======
+	if (attr != 0xFFFFFFFF) {
+>>>>>>> upstream/master
 	    if ((attr & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 		/*
 		 * Windows 95 reports calling RemoveDirectory on a file as an
@@ -1390,7 +1411,7 @@ TraverseWinTree(
 
     nativeErrfile = NULL;
     result = TCL_OK;
-    oldTargetLen = 0;		/* lint. */
+    oldTargetLen = 0;
 
     nativeSource = (WCHAR *) Tcl_DStringValue(sourcePtr);
     nativeTarget = (WCHAR *)
@@ -1401,8 +1422,12 @@ TraverseWinTree(
     sourceAttr = GetFileAttributes(nativeSource);
 =======
     sourceAttr = GetFileAttributesW(nativeSource);
+<<<<<<< HEAD
 >>>>>>> upstream/master
     if (sourceAttr == 0xffffffff) {
+=======
+    if (sourceAttr == 0xFFFFFFFF) {
+>>>>>>> upstream/master
 	nativeErrfile = nativeSource;
 	goto end;
     }
@@ -1658,13 +1683,11 @@ TraversalCopy(
 static int
 TraversalDelete(
     const WCHAR *nativeSrc,	/* Source pathname to delete. */
-    const WCHAR *dstPtr,	/* Not used. */
+    TCL_UNUSED(const WCHAR *) /*dstPtr*/,
     int type,			/* Reason for call - see TraverseWinTree() */
     Tcl_DString *errorPtr)	/* If non-NULL, initialized DString filled
 				 * with UTF-8 name of file causing error. */
 {
-    (void)dstPtr;
-
     switch (type) {
     case DOTREE_F:
 	if (TclpDeleteFile(nativeSrc) == TCL_OK) {
@@ -1765,7 +1788,7 @@ GetWinFileAttributes(
     result = GetFileAttributesW(nativeName);
 >>>>>>> upstream/master
 
-    if (result == 0xffffffff) {
+    if (result == 0xFFFFFFFF) {
 	StatError(interp, fileName);
 	return TCL_ERROR;
     }
@@ -1829,7 +1852,7 @@ GetWinFileAttributes(
 	}
     }
 
-    *attributePtrPtr = Tcl_NewWideIntObj(attr != 0);
+    TclNewIntObj(*attributePtrPtr, attr != 0);
     return TCL_OK;
 }
 
@@ -1859,7 +1882,7 @@ GetWinFileAttributes(
 static int
 ConvertFileNameFormat(
     Tcl_Interp *interp,		/* The interp we are using for errors. */
-    int objIndex,		/* The index of the attribute. */
+    TCL_UNUSED(int) /*objIndex*/,
     Tcl_Obj *fileName,		/* The name of the file. */
     int longShort,		/* 0 to short name, 1 to long name. */
     Tcl_Obj **attributePtrPtr)	/* A pointer to return the object with. */
@@ -1867,7 +1890,6 @@ ConvertFileNameFormat(
     int pathc, i;
     Tcl_Obj *splitPath;
     size_t length;
-    (void)objIndex;
 
     splitPath = Tcl_FSSplitPath(fileName, &pathc);
 
@@ -2202,7 +2224,7 @@ SetWinFileAttributes(
     fileAttributes = old = GetFileAttributesW(nativeName);
 >>>>>>> upstream/master
 
-    if (fileAttributes == 0xffffffff) {
+    if (fileAttributes == 0xFFFFFFFF) {
 	StatError(interp, fileName);
 	return TCL_ERROR;
     }
@@ -2252,10 +2274,8 @@ CannotSetAttribute(
     Tcl_Interp *interp,		/* The interp we are using for errors. */
     int objIndex,		/* The index of the attribute. */
     Tcl_Obj *fileName,		/* The name of the file. */
-    Tcl_Obj *attributePtr)	/* The new value of the attribute. */
+    TCL_UNUSED(Tcl_Obj *) /*attributePtr*/)
 {
-    (void)attributePtr;
-
     Tcl_SetObjResult(interp, Tcl_ObjPrintf(
 	    "cannot set attribute \"%s\" for file \"%s\": attribute is readonly",
 <<<<<<< HEAD
@@ -2292,7 +2312,7 @@ TclpObjListVolumes(void)
     int i;
     char *p;
 
-    resultPtr = Tcl_NewObj();
+    TclNewObj(resultPtr);
 
     /*
      * On Win32s:

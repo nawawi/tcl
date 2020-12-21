@@ -328,7 +328,7 @@ TCLDIR          = $(_INSTALLDIR)\..
 _TCLDIR		= $(_INSTALLDIR)\..
 _TCL_H          = $(_TCLDIR)\include\tcl.h
 
-!else # exist(...) && ! $(NEED_TCL_SOURCE)
+!else # exist(...) && !$(NEED_TCL_SOURCE)
 
 !if [echo _TCLDIR = \> nmakehlp.out] \
    || [nmakehlp -L generic\tcl.h >> nmakehlp.out]
@@ -339,7 +339,7 @@ TCLINSTALL      = 0
 TCLDIR         = $(_TCLDIR)
 _TCL_H          = $(_TCLDIR)\generic\tcl.h
 
-!endif # exist(...) && ! $(NEED_TCL_SOURCE)
+!endif # exist(...) && !$(NEED_TCL_SOURCE)
 
 !endif # TCLDIR
 
@@ -441,9 +441,6 @@ _INSTALLDIR=$(_INSTALLDIR)\lib
 # NATIVE_ARCH - set to IX86 or AMD64 for the host machine
 # MACHINE - same as $(ARCH) - legacy
 # _VC_MANIFEST_EMBED_{DLL,EXE} - commands for embedding a manifest if needed
-# CFG_ENCODING - set to an character encoding.
-#   TBD - this is passed to compiler as TCL_CFGVAL_ENCODING but can't
-#   see where it is used
 
 cc32		= $(CC)   # built-in default.
 link32		= link
@@ -532,10 +529,6 @@ _VC_MANIFEST_EMBED_EXE=if exist $@.manifest mt -nologo -manifest $@.manifest -ou
 _VC_MANIFEST_EMBED_DLL=if exist $@.manifest mt -nologo -manifest $@.manifest -outputresource:$@;2
 !endif
 
-!ifndef CFG_ENCODING
-CFG_ENCODING	= \"cp1252\"
-!endif
-
 ################################################################
 # 4. Build the nmakehlp program
 # This is a helper app we need to overcome nmake's limiting
@@ -543,7 +536,7 @@ CFG_ENCODING	= \"cp1252\"
 # information about supported compiler options etc.
 #
 # Tcl itself will always use the nmakehlp.c program which is
-# in its own source. This is the "master" copy and kept updated.
+# in its own source. It will be kept updated there.
 #
 # Extensions built against an installed Tcl will use the installed
 # copy of Tcl's nmakehlp.c if there is one and their own version
@@ -566,7 +559,7 @@ NMAKEHLPC = nmakehlp.c
 !if exist("$(_TCLDIR)\lib\nmake\nmakehlp.c")
 NMAKEHLPC = $(_TCLDIR)\lib\nmake\nmakehlp.c
 !endif
-!else # ! $(TCLINSTALL)
+!else # !$(TCLINSTALL)
 !if exist("$(_TCLDIR)\win\nmakehlp.c")
 NMAKEHLPC = $(_TCLDIR)\win\nmakehlp.c
 !endif
@@ -784,6 +777,13 @@ LINKERFLAGS     = $(LINKERFLAGS) -ltcg
 #           configuration (ignored for Tcl itself)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+# _USE_64BIT_TIME_T - forces a build using 64-bit time_t for 32-bit build
+#           (CRT library should support this, not needed for Tcl 9.x)
+# TCL_UTF_MAX=4 - forces a build allowing 4-byte UTF-8 sequences internally.
+#           (Not needed for Tcl 9.x)
+>>>>>>> upstream/master
 # Further, LINKERFLAGS are modified based on above.
 
 # Default values for all the above
@@ -835,11 +835,8 @@ MSVCRT		= 0
 !else
 !if [nmakehlp -f $(OPTS) "msvcrt"]
 !message *** Doing msvcrt
-MSVCRT		= 1
 !else
-!if !$(STATIC_BUILD)
-MSVCRT		= 1
-!else
+!if $(STATIC_BUILD)
 MSVCRT		= 0
 !endif
 !endif
@@ -848,8 +845,6 @@ MSVCRT		= 0
 !if [nmakehlp -f $(OPTS) "staticpkg"] && $(STATIC_BUILD)
 !message *** Doing staticpkg
 TCL_USE_STATIC_PACKAGES	= 1
-!else
-TCL_USE_STATIC_PACKAGES	= 0
 !endif
 
 <<<<<<< HEAD
@@ -863,9 +858,24 @@ TCL_UTF_MAX = 6
 !message *** Compile explicitly for non-threaded tcl
 TCL_THREADS = 0
 USE_THREAD_ALLOC= 0
+<<<<<<< HEAD
 !else
 TCL_THREADS    = 1
 USE_THREAD_ALLOC= 1
+>>>>>>> upstream/master
+=======
+!endif
+
+!if "$(TCL_MAJOR_VERSION)" == "8"
+!if [nmakehlp -f $(OPTS) "time64bit"]
+!message *** Force 64-bit time_t
+_USE_64BIT_TIME_T = 1
+!endif
+
+!if [nmakehlp -f $(OPTS) "utfmax"]
+!message *** Force allowing 4-byte UTF-8 sequences internally
+TCL_UTF_MAX = 4
+!endif
 >>>>>>> upstream/master
 !endif
 
@@ -1153,7 +1163,7 @@ BUILDDIRTOP =$(BUILDDIRTOP)_$(MACHINE)
 BUILDDIRTOP =$(BUILDDIRTOP)_VC$(VCVER)
 !endif
 
-!if !$(DEBUG) || $(DEBUG) && $(UNCHECKED)
+!if !$(DEBUG) || $(TCL_VERSION) > 86 || $(DEBUG) && $(UNCHECKED)
 SUFX	    = $(SUFX:g=)
 !endif
 
@@ -1262,7 +1272,7 @@ TCL_INCLUDES    = -I"$(WINDIR)" -I"$(GENERICDIR)"
 TCL_INCLUDES    = -I"$(WIN_DIR)" -I"$(GENERICDIR)"
 >>>>>>> upstream/master
 
-!else # ! $(DOING_TCL)
+!else # !$(DOING_TCL)
 
 !if $(TCLINSTALL) # Building against an installed Tcl
 
@@ -1458,6 +1468,7 @@ BIN_INSTALL_DIR		= $(_INSTALLDIR)\bin
 DOC_INSTALL_DIR		= $(_INSTALLDIR)\doc
 !if $(DOING_TCL)
 SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\lib\$(PROJECT)$(TCL_MAJOR_VERSION).$(TCL_MINOR_VERSION)
+MODULE_INSTALL_DIR	= $(_INSTALLDIR)\lib\tcl$(TCL_MAJOR_VERSION)
 !else # DOING_TK
 SCRIPT_INSTALL_DIR	= $(_INSTALLDIR)\lib\$(PROJECT)$(TK_MAJOR_VERSION).$(TK_MINOR_VERSION)
 !endif
@@ -1508,6 +1519,7 @@ INCLUDE_INSTALL_DIR	= $(_INSTALLDIR)\..\include
 #    define PRJ_LIBS before including rules.rc if additional libs are needed
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 OPTDEFINES	= -DTCL_CFGVAL_ENCODING=$(CFG_ENCODING) -DSTDC_HEADERS
 
 !if $(TCL_MEM_DEBUG)
@@ -1529,6 +1541,9 @@ OPTDEFINES	= $(OPTDEFINES) -DSTATIC_BUILD
 OPTDEFINES	= $(OPTDEFINES) -DTCL_NO_DEPRECATED
 =======
 OPTDEFINES	= /DTCL_CFGVAL_ENCODING=$(CFG_ENCODING) /DSTDC_HEADERS
+=======
+OPTDEFINES	= /DSTDC_HEADERS
+>>>>>>> upstream/master
 !if $(VCVERSION) >= 1600
 OPTDEFINES	= $(OPTDEFINES) /DHAVE_STDINT_H=1
 !else
@@ -1566,12 +1581,16 @@ OPTDEFINES	= $(OPTDEFINES) /DTCL_NO_DEPRECATED
 !if $(USE_STUBS)
 # Note we do not define USE_TCL_STUBS even when building tk since some
 # test targets in tk do not use stubs
+<<<<<<< HEAD
 !if ! $(DOING_TCL)
 <<<<<<< HEAD
 USE_STUBS_DEFS  = -DUSE_TCL_STUBS -DUSE_TCLOO_STUBS
 !if $(NEED_TK)
 USE_STUBS_DEFS  = $(USE_STUBS_DEFS) -DUSE_TK_STUBS
 =======
+=======
+!if !$(DOING_TCL)
+>>>>>>> upstream/master
 USE_STUBS_DEFS  = /DUSE_TCL_STUBS /DUSE_TCLOO_STUBS
 !if $(NEED_TK)
 USE_STUBS_DEFS  = $(USE_STUBS_DEFS) /DUSE_TK_STUBS
@@ -1633,15 +1652,29 @@ OPTDEFINES	= $(OPTDEFINES) /DNO_STRTOI64=1
 !endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 !if "$(TCL_UTF_MAX)" == "6"
 OPTDEFINES	= $(OPTDEFINES) /DTCL_UTF_MAX=6
+=======
+!if "$(TCL_MAJOR_VERSION)" == "8"
+!if "$(_USE_64BIT_TIME_T)" == "1"
+OPTDEFINES	= $(OPTDEFINES) /D_USE_64BIT_TIME_T=1
+!endif
+!if "$(TCL_UTF_MAX)" == "4"
+OPTDEFINES	= $(OPTDEFINES) /DTCL_UTF_MAX=4
+>>>>>>> upstream/master
 !endif
 
 # _ATL_XP_TARGETING - Newer SDK's need this to build for XP
 COMPILERFLAGS  = /D_ATL_XP_TARGETING
+<<<<<<< HEAD
 >>>>>>> upstream/master
 
 =======
+>>>>>>> upstream/master
+=======
+!endif
+
 >>>>>>> upstream/master
 # Like the TEA system only set this non empty for non-Tk extensions
 # Note: some extensions use PACKAGE_NAME and others use PACKAGE_TCLNAME
@@ -2024,7 +2057,7 @@ default-shell: default-setup $(PROJECT)
 !ifdef RCFILE
 
 # Note: don't use $** in below rule because there may be other dependencies
-# and only the "master" rc must be passed to the resource compiler
+# and only the "main" rc must be passed to the resource compiler
 $(TMP_DIR)\$(PROJECT).res: $(RCDIR)\$(PROJECT).rc
 	$(RESCMD) $(RCDIR)\$(PROJECT).rc
 
@@ -2078,7 +2111,7 @@ DISABLE_IMPLICIT_RULES = 0
 
 !if !$(DISABLE_IMPLICIT_RULES)
 # Implicit rule definitions - only for building library objects. For stubs and
-# main application, the master makefile should define explicit rules.
+# main application, the makefile should define explicit rules.
 
 {$(ROOT)}.c{$(TMP_DIR)}.obj::
 	$(CCPKGCMD) @<<
@@ -2127,13 +2160,13 @@ $<
 # When building an extension, certain configuration options should
 # match the ones used when Tcl was built. Here we check and
 # warn on a mismatch.
-!if ! $(DOING_TCL)
+!if !$(DOING_TCL)
 
 !if $(TCLINSTALL) # Building against an installed Tcl
 !if exist("$(_TCLDIR)\lib\nmake\tcl.nmake")
 TCLNMAKECONFIG = "$(_TCLDIR)\lib\nmake\tcl.nmake"
 !endif
-!else # ! $(TCLINSTALL) - building against Tcl source
+!else # !$(TCLINSTALL) - building against Tcl source
 !if exist("$(OUT_DIR)\tcl.nmake")
 TCLNMAKECONFIG = "$(OUT_DIR)\tcl.nmake"
 !endif
@@ -2159,7 +2192,7 @@ TCLNMAKECONFIG = "$(OUT_DIR)\tcl.nmake"
 
 !endif # TCLNMAKECONFIG
 
-!endif # ! $(DOING_TCL)
+!endif # !$(DOING_TCL)
 
 
 #----------------------------------------------------------

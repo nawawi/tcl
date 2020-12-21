@@ -43,7 +43,7 @@ if test -f $ManPage ; then : ; else
     echo "source manual page file must exist"
     exit 1
 fi
-if test -d $Dir ; then : ; else
+if test -d "$Dir" ; then : ; else
     echo "target directory must exist"
     exit 1
 fi
@@ -128,6 +128,7 @@ SrcDir=`dirname $ManPage`
 ###
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 ########################################################################
@@ -137,6 +138,9 @@ SrcDir=`dirname $ManPage`
 >>>>>>> upstream/master
 =======
 Specials="DString Thread Notifier RegExp library packagens pkgMkIndex safesock"
+=======
+Specials="DString Thread Notifier RegExp library packagens pkgMkIndex safesock FindPhoto FontId MeasureChar"
+>>>>>>> upstream/master
 for n in $Specials; do
     if [ "$Name" = "$n" ] ; then
 	Names="$n $Names"
@@ -147,10 +151,11 @@ done
 First=""
 for Target in $Names; do
     Target=$Target.$Section$Suffix
-    rm -f $Dir/$Target $Dir/$Target.*
+    rm -f "$Dir/$Target" "$Dir/$Target.*"
     if test -z "$First" ; then
 	First=$Target
 	sed -e "/man\.macros/r $SrcDir/man.macros" -e "/man\.macros/d" \
+<<<<<<< HEAD
 	    $ManPage > $Dir/$First
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -170,8 +175,13 @@ for Target in $Names; do
 	chmod 644 $Dir/$First
 >>>>>>> upstream/master
 	$Gzip $Dir/$First
+=======
+	    $ManPage > "$Dir/$First"
+	chmod 644 "$Dir/$First"
+	$Gzip "$Dir/$First"
+>>>>>>> upstream/master
     else
-	ln $SymOrLoc$First$Gz $Dir/$Target$Gz
+	ln "$SymOrLoc$First$Gz" "$Dir/$Target$Gz"
     fi
 done
 

@@ -62,10 +62,7 @@ EXTERN char *		Tcl_WinTCharToUtf(const TCHAR *str, size_t len,
 =======
 >>>>>>> upstream/master
 #ifdef MAC_OSX_TCL /* MACOSX */
-/* 0 */
-EXTERN int		Tcl_MacOSXOpenBundleResources(Tcl_Interp *interp,
-				const char *bundleName, int hasResourceFile,
-				size_t maxPathLen, char *libraryPath);
+/* Slot 0 is reserved */
 /* 1 */
 EXTERN int		Tcl_MacOSXOpenVersionedBundleResources(
 				Tcl_Interp *interp, const char *bundleName,
@@ -86,7 +83,7 @@ typedef struct TclPlatStubs {
 =======
 >>>>>>> upstream/master
 #ifdef MAC_OSX_TCL /* MACOSX */
-    int (*tcl_MacOSXOpenBundleResources) (Tcl_Interp *interp, const char *bundleName, int hasResourceFile, size_t maxPathLen, char *libraryPath); /* 0 */
+    void (*reserved0)(void);
     int (*tcl_MacOSXOpenVersionedBundleResources) (Tcl_Interp *interp, const char *bundleName, const char *bundleVersion, int hasResourceFile, size_t maxPathLen, char *libraryPath); /* 1 */
 #endif /* MACOSX */
 } TclPlatStubs;
@@ -113,8 +110,7 @@ extern const TclPlatStubs *tclPlatStubsPtr;
 =======
 >>>>>>> upstream/master
 #ifdef MAC_OSX_TCL /* MACOSX */
-#define Tcl_MacOSXOpenBundleResources \
-	(tclPlatStubsPtr->tcl_MacOSXOpenBundleResources) /* 0 */
+/* Slot 0 is reserved */
 #define Tcl_MacOSXOpenVersionedBundleResources \
 	(tclPlatStubsPtr->tcl_MacOSXOpenVersionedBundleResources) /* 1 */
 #endif /* MACOSX */
@@ -122,6 +118,11 @@ extern const TclPlatStubs *tclPlatStubsPtr;
 #endif /* defined(USE_TCL_STUBS) */
 
 /* !END!: Do not edit above this line. */
+
+#ifdef MAC_OSX_TCL /* MACOSX */
+#undef Tcl_MacOSXOpenBundleResources
+#define Tcl_MacOSXOpenBundleResources(a,b,c,d,e) Tcl_MacOSXOpenVersionedBundleResources(a,b,NULL,c,d,e)
+#endif
 
 #undef TCL_STORAGE_CLASS
 #define TCL_STORAGE_CLASS DLLIMPORT

@@ -329,14 +329,13 @@ TclpFinalizePipes(void)
 
 void
 PipeSetupProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     PipeInfo *infoPtr;
     Tcl_Time blockTime = { 0, 0 };
     int block = 1;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
@@ -383,14 +382,13 @@ PipeSetupProc(
 
 static void
 PipeCheckProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     PipeInfo *infoPtr;
     PipeEvent *evPtr;
     int needEvent;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
@@ -653,7 +651,7 @@ TclpOpenFile(
 	DWORD err;
 
 	err = GetLastError();
-	if ((err & 0xffffL) == ERROR_OPEN_FAILED) {
+	if ((err & 0xFFFFL) == ERROR_OPEN_FAILED) {
 	    err = (mode & O_CREAT) ? ERROR_FILE_EXISTS : ERROR_FILE_NOT_FOUND;
 	}
 	TclWinConvertError(err);
@@ -902,7 +900,7 @@ TclpCloseFile(
  * Results:
  *	Returns the process id for the child process. If the pid was not known
  *	by Tcl, either because the pid was not created by Tcl or the child
- *	process has already been reaped, TCL_IO_FAILURE is returned.
+ *	process has already been reaped, TCL_INDEX_NONE is returned.
  *
  * Side effects:
  *	None.
@@ -926,7 +924,7 @@ TclpGetPid(
 	}
     }
     Tcl_MutexUnlock(&pipeMutex);
-    return TCL_IO_FAILURE;
+    return TCL_INDEX_NONE;
 }
 
 /*
@@ -1440,7 +1438,7 @@ ApplicationType(
 >>>>>>> upstream/master
 =======
 	attr = GetFileAttributesW(nativeFullPath);
-	if ((attr == 0xffffffff) || (attr & FILE_ATTRIBUTE_DIRECTORY)) {
+	if ((attr == 0xFFFFFFFF) || (attr & FILE_ATTRIBUTE_DIRECTORY)) {
 	    continue;
 	}
 	Tcl_DStringInit(&ds);
@@ -2231,11 +2229,10 @@ Tcl_CreatePipe(
     Tcl_Interp *interp,		/* Errors returned in result.*/
     Tcl_Channel *rchan,		/* Where to return the read side. */
     Tcl_Channel *wchan,		/* Where to return the write side. */
-    int flags)			/* Reserved for future use. */
+    TCL_UNUSED(int) /*flags*/)	/* Reserved for future use. */
 {
     HANDLE readHandle, writeHandle;
     SECURITY_ATTRIBUTES sec;
-    (void)flags;
 
     sec.nLength = sizeof(SECURITY_ATTRIBUTES);
     sec.lpSecurityDescriptor = NULL;
@@ -3420,10 +3417,9 @@ TclWinAddProcess(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_PidObjCmd(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* Current interpreter. */
     int objc,			/* Number of arguments. */
     Tcl_Obj *const *objv)	/* Argument strings. */
@@ -3433,7 +3429,6 @@ Tcl_PidObjCmd(
     PipeInfo *pipePtr;
     int i;
     Tcl_Obj *resultPtr;
-    (void)dummy;
 
     if (objc > 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "?channelId?");
@@ -3457,7 +3452,7 @@ Tcl_PidObjCmd(
 	}
 
 	pipePtr = (PipeInfo *) Tcl_GetChannelInstanceData(chan);
-	resultPtr = Tcl_NewObj();
+	TclNewObj(resultPtr);
 	for (i = 0; i < pipePtr->numPids; i++) {
 	    Tcl_ListObjAppendElement(/*interp*/ NULL, resultPtr,
 		    Tcl_NewWideIntObj((unsigned)
@@ -4005,9 +4000,9 @@ PipeThreadActionProc(
 
 Tcl_Channel
 TclpOpenTemporaryFile(
-    Tcl_Obj *dirObj,
+    TCL_UNUSED(Tcl_Obj *) /*dirObj*/,
     Tcl_Obj *basenameObj,
-    Tcl_Obj *extensionObj,
+    TCL_UNUSED(Tcl_Obj *) /*extensionObj*/,
     Tcl_Obj *resultingNameObj)
 {
     WCHAR name[MAX_PATH];
@@ -4017,8 +4012,6 @@ TclpOpenTemporaryFile(
     size_t length;
     int counter, counter2;
     Tcl_DString buf;
-    (void)dirObj;
-    (void)extensionObj;
 
     if (!resultingNameObj) {
 	flags |= FILE_FLAG_DELETE_ON_CLOSE;

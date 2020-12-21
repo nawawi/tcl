@@ -1,6 +1,7 @@
 *.a
 *.dll
 *.dylib
+*.dylib.E
 *.exe
 *.exp
 *.la
@@ -24,6 +25,7 @@
 *.sl
 *.so
 */Makefile
+*/autom4te.cache
 */config.cache
 */config.log
 */config.status
@@ -67,7 +69,7 @@ libtommath/*.sh
 =======
 libtommath/*.log
 libtommath/*.pdf
-libtommath/gen.pl
+libtommath/*.pl
 libtommath/*.sh
 libtommath/doc/*
 >>>>>>> upstream/master
@@ -83,17 +85,28 @@ libtommath/*.tex
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+macosx/configure
 >>>>>>> upstream/master
 unix/autoMkindex.tcl
 unix/dltest.marker
+unix/dltest/*.bundle
+unix/dltest/*.dll
+unix/dltest/*.dylib
+unix/dltest/*.o
+unix/dltest/*.sl
+unix/dltest/*.so
 unix/tcl.pc
 unix/tclIndex
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -105,6 +118,10 @@ win/tcl.hpj
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+unix/Tcl-Info.plist
+unix/Tclsh-Info.plist
 >>>>>>> upstream/master
 unix/pkgs/*
 win/Debug*
@@ -130,5 +147,6 @@ win/nmhlp-out.txt
 =======
 win/coffbase.txt
 win/tcl.hpj
+win/nmakehlp.out
 win/nmhlp-out.txt
 >>>>>>> upstream/master

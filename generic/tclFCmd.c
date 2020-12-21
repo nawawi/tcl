@@ -928,7 +928,7 @@ FileBasename(
 	}
     }
     if (resultPtr == NULL) {
-	resultPtr = Tcl_NewObj();
+	TclNewObj(resultPtr);
     }
     Tcl_IncrRefCount(resultPtr);
     Tcl_DecrRefCount(splitPtr);
@@ -1145,7 +1145,7 @@ TclFileAttrsCmd(
 >>>>>>> upstream/master
 
 	if (Tcl_GetIndexFromObj(interp, objv[0], attributeStrings,
-		"option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
+		"option", TCL_INDEX_TEMP_TABLE, &index) != TCL_OK) {
 	    goto end;
 <<<<<<< HEAD
 >>>>>>> upstream/master
@@ -1178,6 +1178,7 @@ TclFileAttrsCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    "option", 0, &index) != TCL_OK) {
 =======
 		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
@@ -1194,6 +1195,9 @@ TclFileAttrsCmd(
 >>>>>>> upstream/master
 =======
 		    "option", INDEX_TEMP_TABLE, &index) != TCL_OK) {
+=======
+		    "option", TCL_INDEX_TEMP_TABLE, &index) != TCL_OK) {
+>>>>>>> upstream/master
 		goto end;
 	    }
 >>>>>>> upstream/master

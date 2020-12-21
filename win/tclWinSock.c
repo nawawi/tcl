@@ -713,7 +713,7 @@ InitializeHostName(
     Tcl_DString ds;
 
     Tcl_DStringInit(&ds);
-    if (GetComputerNameExW(ComputerNameDnsFullyQualified, wbuf, &length) != 0) {
+    if (GetComputerNameExW(ComputerNamePhysicalDnsFullyQualified, wbuf, &length) != 0) {
 	/*
 	 * Convert string from native to UTF then change to lowercase.
 	 */
@@ -1095,7 +1095,6 @@ Tcl_GetHostName(void)
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 TcpBlockModeProc(
     ClientData instanceData,	/* Socket state. */
@@ -1525,7 +1524,6 @@ WaitForConnect(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 <<<<<<< HEAD
 WaitForConnect(
@@ -1908,20 +1906,22 @@ TcpOutputProc(
  *----------------------------------------------------------------------
  */
 
-    /* ARGSUSED */
 static int
 TcpCloseProc(
     ClientData instanceData,	/* The socket to close. */
-    Tcl_Interp *dummy)		/* Unused. */
+    TCL_UNUSED(Tcl_Interp *))
 {
     TcpState *statePtr = (TcpState *)instanceData;
     /* TIP #218 */
     int errorCode = 0;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
     (void)dummy;
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     /*
@@ -2201,7 +2201,7 @@ TcpSetOptionProc(
     ClientData instanceData,	/* Socket state. */
     Tcl_Interp *interp,		/* For error reporting - can be NULL. */
     const char *optionName,	/* Name of the option to set. */
-    const char *value)		/* New value for option. */
+    TCL_UNUSED(const char *) /*value*/)		/* New value for option. */
 {
 #ifdef TCL_FEATURE_KEEPALIVE_NAGLE
     TcpState *statePtr = instanceData;
@@ -2209,7 +2209,6 @@ TcpSetOptionProc(
 #else
     (void)instanceData;
 #endif /*TCL_FEATURE_KEEPALIVE_NAGLE*/
-    (void)value;
 
     /*
      * Check that WinSock is initialized; do not call it if not, to prevent
@@ -2765,11 +2764,18 @@ TcpWatchProc(
  */
 
 static int
+<<<<<<< HEAD
 TcpOutputProc(
     ClientData instanceData,	/* Socket state. */
     const char *buf,		/* The data buffer. */
     int toWrite,		/* How many bytes to write? */
     int *errorCodePtr)		/* Where to store error code. */
+=======
+TcpGetHandleProc(
+    ClientData instanceData,	/* The socket state. */
+    TCL_UNUSED(int) /*direction*/,
+    ClientData *handlePtr)	/* Where to store the handle. */
+>>>>>>> upstream/master
 {
 <<<<<<< HEAD
     TcpState *statePtr = instanceData;
@@ -2778,7 +2784,6 @@ TcpOutputProc(
     ThreadSpecificData *tsdPtr = TclThreadDataKeyGet(&dataKey);
 =======
     TcpState *statePtr = (TcpState *)instanceData;
-    (void)direction;
 
     *handlePtr = INT2PTR(statePtr->sockets->fd);
     return TCL_OK;
@@ -12870,11 +12875,19 @@ SocketCheckProc(
  *----------------------------------------------------------------------
  */
 
+<<<<<<< HEAD
 static int
 SocketEventProc(
     Tcl_Event *evPtr,		/* Event to service. */
     int flags)			/* Flags that indicate what events to handle,
 				 * such as TCL_FILE_EVENTS. */
+=======
+static void
+TcpAccept(
+    TcpFdList *fds,	/* Server socket that accepted newSocket. */
+    SOCKET newSocket,   /* Newly accepted socket. */
+    address addr)       /* Address of new socket. */
+>>>>>>> upstream/master
 {
 <<<<<<< HEAD
     TcpState *statePtr;
@@ -13138,7 +13151,7 @@ InitSockets(void)
 	windowClass.style = 0;
 	windowClass.cbClsExtra = 0;
 	windowClass.cbWndExtra = 0;
-	windowClass.hInstance = TclWinGetTclInstance();
+	windowClass.hInstance = (HINSTANCE)TclWinGetTclInstance();
 	windowClass.hbrBackground = NULL;
 	windowClass.lpszMenuName = NULL;
 	windowClass.lpszClassName = className;
@@ -13228,7 +13241,6 @@ InitSockets(void)
  *----------------------------------------------------------------------
  */
 
-    /* ARGSUSED */
 static int
 SocketsEnabled(void)
 {
@@ -13258,13 +13270,10 @@ SocketsEnabled(void)
  *----------------------------------------------------------------------
  */
 
-    /* ARGSUSED */
 static void
 SocketExitHandler(
-    ClientData dummy)		/* Not used. */
+    TCL_UNUSED(ClientData))
 {
-    (void)dummy;
-
     Tcl_MutexLock(&socketMutex);
 
     /*
@@ -13273,7 +13282,7 @@ SocketExitHandler(
      */
 
     TclpFinalizeSockets();
-    UnregisterClassW(className, TclWinGetTclInstance());
+    UnregisterClassW(className, (HINSTANCE)TclWinGetTclInstance());
     initialized = 0;
     Tcl_MutexUnlock(&socketMutex);
 }
@@ -13297,13 +13306,12 @@ SocketExitHandler(
 
 void
 SocketSetupProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     TcpState *statePtr;
     Tcl_Time blockTime = { 0, 0 };
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!GOT_BITS(flags, TCL_FILE_EVENTS)) {
 	return;
@@ -13343,13 +13351,12 @@ SocketSetupProc(
 
 static void
 SocketCheckProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     TcpState *statePtr;
     SocketEvent *evPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!GOT_BITS(flags, TCL_FILE_EVENTS)) {
 	return;

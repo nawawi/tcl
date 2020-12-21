@@ -933,7 +933,7 @@ TclPathPart(
 		    (Tcl_FSGetPathType(pathPtr) == TCL_PATH_RELATIVE))) {
 		Tcl_ListObjIndex(NULL, splitPtr, splitElements-1, &resultPtr);
 	    } else {
-		resultPtr = Tcl_NewObj();
+		TclNewObj(resultPtr);
 	    }
 	} else {
 	    /*
@@ -971,7 +971,7 @@ GetExtension(
     tail = TclGetString(pathPtr);
     extension = TclGetExtension(tail);
     if (extension == NULL) {
-	ret = Tcl_NewObj();
+	TclNewObj(ret);
     } else {
 	ret = Tcl_NewStringObj(extension, -1);
     }
@@ -1427,6 +1427,7 @@ TclJoinPath(
 
     noQuickReturn:
 	if (res == NULL) {
+<<<<<<< HEAD
 	    res = Tcl_NewObj();
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1448,6 +1449,9 @@ TclJoinPath(
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+	    TclNewObj(res);
 >>>>>>> upstream/master
 	}
 	ptr = TclGetStringFromObj(res, &length);
@@ -1719,7 +1723,7 @@ TclNewFSPathObj(
 	return pathPtr;
     }
 
-    pathPtr = Tcl_NewObj();
+    TclNewObj(pathPtr);
     fsPathPtr = (FsPath *)Tcl_Alloc(sizeof(FsPath));
 
     /*
@@ -1857,7 +1861,7 @@ AppendPath(
 
 Tcl_Obj *
 TclFSMakePathRelative(
-    Tcl_Interp *dummy,		/* Used for error reporting if not NULL. */
+    TCL_UNUSED(Tcl_Interp *),
     Tcl_Obj *pathPtr,		/* The path we have. */
     Tcl_Obj *cwdPtr)		/* Make it relative to this. */
 {
@@ -1868,9 +1872,12 @@ TclFSMakePathRelative(
 =======
     Tcl_ObjIntRep *irPtr = TclFetchIntRep(pathPtr, &fsPathType);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
     (void)dummy;
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     if (irPtr) {
@@ -1968,10 +1975,11 @@ TclFSMakePathRelative(
 
 static int
 MakePathFromNormalized(
-    Tcl_Interp *dummy,		/* Not used. */
+    TCL_UNUSED(Tcl_Interp *),
     Tcl_Obj *pathPtr)		/* The object to convert. */
 {
     FsPath *fsPathPtr;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     Tcl_ObjIntRep *irPtr = Tcl_FetchIntRep(pathPtr, &fsPathType);
@@ -1980,6 +1988,8 @@ MakePathFromNormalized(
 =======
 =======
     (void)dummy;
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
     if (TclHasIntRep(pathPtr, &fsPathType)) {
@@ -3196,13 +3206,16 @@ UpdateStringOfFsPath(
 int
 TclNativePathInFilesystem(
     Tcl_Obj *pathPtr,
-    ClientData *dummy)
+    TCL_UNUSED(ClientData *))
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     Tcl_ObjIntRep *irPtr = Tcl_FetchIntRep(pathPtr, &fsPathType);
 
 =======
     (void)dummy;
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
     /*
      * A special case is required to handle the empty path "". This is a valid

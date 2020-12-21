@@ -163,12 +163,16 @@ struct TcpState {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int		TcpConnect(Tcl_Interp *interp,
                                            TcpState *state);
 =======
 static int		TcpConnect(Tcl_Interp *interp, TcpState *state);
 >>>>>>> upstream/master
 =======
+=======
+static void		TcpAsyncCallback(void *clientData, int mask);
+>>>>>>> upstream/master
 static int		TcpConnect(Tcl_Interp *interp, TcpState *state);
 <<<<<<< HEAD
 >>>>>>> upstream/master
@@ -192,6 +196,7 @@ static int		TcpInputProc(void *instanceData, char *buf,
 			    int toRead, int *errorCode);
 static int		TcpOutputProc(void *instanceData,
 			    const char *buf, int toWrite, int *errorCode);
+static void		TcpThreadActionProc(void *instanceData, int action);
 static void		TcpWatchProc(void *instanceData, int mask);
 static int		WaitForConnect(TcpState *statePtr, int *errorCodePtr);
 static void		WrapNotify(void *clientData, int mask);
@@ -219,7 +224,7 @@ static const Tcl_ChannelType tcpChannelType = {
     NULL,			/* flush proc. */
     NULL,			/* handler proc. */
     NULL,			/* wide seek proc. */
-    NULL,			/* thread action proc. */
+    TcpThreadActionProc,	/* thread action proc. */
     NULL			/* truncate proc. */
 };
 
@@ -466,7 +471,7 @@ InitializeHostName(
     struct hostent *hp;
 
     memset(&u, (int) 0, sizeof(struct utsname));
-    if (uname(&u) > -1) {				/* INTL: Native. */
+    if (uname(&u) >= 0) {				/* INTL: Native. */
         hp = TclpGetHostByName(u.nodename);		/* INTL: Native. */
 	if (hp == NULL) {
 	    /*
@@ -531,7 +536,7 @@ InitializeHostName(
     char buffer[256];
 #    endif
 
-    if (gethostname(buffer, sizeof(buffer)) > -1) {	/* INTL: Native. */
+    if (gethostname(buffer, sizeof(buffer)) >= 0) {	/* INTL: Native. */
 	native = buffer;
     }
 #endif /* NO_UNAME */
@@ -649,10 +654,8 @@ Tcl_GetHostName(void)
 
 int
 TclpHasSockets(
-    Tcl_Interp *dummy)		/* Not used. */
+    TCL_UNUSED(Tcl_Interp *))
 {
-    (void)dummy;
-
     return TCL_OK;
 }
 
@@ -743,7 +746,6 @@ TclpFinalizeSockets(void)
 >>>>>>> upstream/master
  */
 
-	/* ARGSUSED */
 static int
 TcpBlockModeProc(
     void *instanceData,	/* Socket state. */
@@ -1032,7 +1034,6 @@ WaitForConnect(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 TcpInputProc(
     void *instanceData,	/* Socket state. */
@@ -1052,8 +1053,12 @@ TcpInputProc(
     bytesRead = recv(statePtr->fds.fd, buf, (size_t) bufSize, 0);
 =======
     bytesRead = recv(statePtr->fds.fd, buf, bufSize, 0);
+<<<<<<< HEAD
 >>>>>>> upstream/master
     if (bytesRead > -1) {
+=======
+    if (bytesRead >= 0) {
+>>>>>>> upstream/master
 	return bytesRead;
     }
     if (errno == ECONNRESET) {
@@ -1108,7 +1113,7 @@ TcpOutputProc(
     written = send(statePtr->fds.fd, buf, toWrite, 0);
 >>>>>>> upstream/master
 
-    if (written > -1) {
+    if (written >= 0) {
 	return written;
     }
     *errorCodePtr = errno;
@@ -1133,16 +1138,14 @@ TcpOutputProc(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 TcpCloseProc(
     void *instanceData,	/* The socket to close. */
-    Tcl_Interp *dummy)	/* For error reporting - unused  */
+    TCL_UNUSED(Tcl_Interp *))
 {
     TcpState *statePtr = (TcpState *)instanceData;
     int errorCode = 0;
     TcpFdList *fds;
-    (void)dummy;
 
     /*
      * Delete a file handler that may be active for this socket if this is a
@@ -1219,13 +1222,12 @@ TcpCloseProc(
 static int
 TcpClose2Proc(
     void *instanceData,	/* The socket to close. */
-    Tcl_Interp *dummy,		/* For error reporting. */
+    TCL_UNUSED(Tcl_Interp *),
     int flags)			/* Flags that indicate which side to close. */
 {
     TcpState *statePtr = (TcpState *)instanceData;
     int readError = 0;
     int writeError = 0;
-    (void)dummy;
 
     /*
      * Shutdown the OS socket handle.
@@ -1850,6 +1852,51 @@ TcpGetOptionProc(
  * ----------------------------------------------------------------------
 >>>>>>> upstream/master
  *
+ * TcpThreadActionProc --
+ *
+ *	Handles detach/attach for asynchronously connecting socket.
+ *
+ *	Reassigning the file handler associated with thread-related channel
+ *	notification, responsible for callbacks (signaling that asynchronous
+ *	connection attempt has succeeded or failed).
+ *
+ * Results:
+ *	None.
+ *
+ * ----------------------------------------------------------------------
+ */
+
+static void
+TcpThreadActionProc(
+    void *instanceData,
+    int action)
+{
+    TcpState *statePtr = (TcpState *)instanceData;
+
+    if (GOT_BITS(statePtr->flags, TCP_ASYNC_CONNECT)) {
+	/*
+	 * Async-connecting socket must get reassigned handler if it have been
+	 * transferred to another thread. Remove the handler if the socket is
+	 * not managed by this thread anymore and create new handler (TSD related)
+	 * so the callback will run in the correct thread, bug [f583715154].
+	 */
+	switch (action) {
+	  case TCL_CHANNEL_THREAD_REMOVE:
+	    CLEAR_BITS(statePtr->flags, TCP_ASYNC_PENDING);
+	    Tcl_DeleteFileHandler(statePtr->fds.fd);
+	  break;
+	  case TCL_CHANNEL_THREAD_INSERT:
+	    Tcl_CreateFileHandler(statePtr->fds.fd,
+		TCL_WRITABLE | TCL_EXCEPTION, TcpAsyncCallback, statePtr);
+	    SET_BITS(statePtr->flags, TCP_ASYNC_PENDING);
+	  break;
+	}
+    }
+}
+
+/*
+ * ----------------------------------------------------------------------
+ *
  * TcpWatchProc --
  *
  *	Initialize the notifier to watch the fd from this channel.
@@ -2092,15 +2139,13 @@ TcpWatchProc(
 >>>>>>> upstream/master
  */
 
-	/* ARGSUSED */
 static int
 TcpGetHandleProc(
     void *instanceData,	/* The socket state. */
-    int direction,		/* Not used. */
+    TCL_UNUSED(int) /*direction*/,
     void **handlePtr)	/* Where to store the handle. */
 {
     TcpState *statePtr = (TcpState *)instanceData;
-    (void)direction;
 
     *handlePtr = INT2PTR(statePtr->fds.fd);
     return TCL_OK;
@@ -2190,12 +2235,8 @@ TcpAsyncCallback(
 static void
 TcpAsyncCallback(
     void *clientData,	/* The socket state. */
-    int mask)			/* Events of interest; an OR-ed combination of
-				 * TCL_READABLE, TCL_WRITABLE and
-				 * TCL_EXCEPTION. */
+    TCL_UNUSED(int) /*mask*/)
 {
-    (void)mask;
-
     TcpConnect(NULL, (TcpState *)clientData);
 }
 
@@ -3262,11 +3303,10 @@ Tcl_OpenTcpServerEx(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static void
 TcpAccept(
     void *data,		/* Callback token. */
-    int mask)			/* Not used. */
+    TCL_UNUSED(int) /*mask*/)
 {
     TcpFdList *fds = (TcpFdList *)data;	/* Client data of server socket. */
     int newsock;		/* The new client socket */
@@ -3275,7 +3315,6 @@ TcpAccept(
     socklen_t len;		/* For accept interface */
     char channelName[SOCK_CHAN_LENGTH];
     char host[NI_MAXHOST], port[NI_MAXSERV];
-    (void)mask;
 
     len = sizeof(addr);
     newsock = accept(fds->fd, &addr.sa, &len);

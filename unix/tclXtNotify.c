@@ -248,7 +248,7 @@ InitNotifier(void)
 
 static void
 NotifierExitHandler(
-    ClientData clientData)	/* Not used. */
+    TCL_UNUSED(ClientData))
 {
     if (notifier.currentTimeout != 0) {
 	XtRemoveTimeOut(notifier.currentTimeout);
@@ -321,7 +321,7 @@ SetTimer(
 
 static void
 TimerProc(
-    XtPointer clientData, /* Not used. */
+    TCL_UNUSED(XtPointer),
     XtIntervalId *id)
 {
     if (*id != notifier.currentTimeout) {

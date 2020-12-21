@@ -327,11 +327,10 @@ SerialInit(void)
 
 static void
 SerialExitHandler(
-    ClientData dummy)	/* Old window proc */
+    TCL_UNUSED(ClientData))
 {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
     SerialInfo *infoPtr;
-    (void)dummy;
 
     /*
      * Clear all eventually pending output. Otherwise Tcl's exit could totally
@@ -366,10 +365,8 @@ SerialExitHandler(
 
 static void
 ProcExitHandler(
-    ClientData dummy)	/* Old window proc */
+    TCL_UNUSED(ClientData))
 {
-    (void)dummy;
-
     Tcl_MutexLock(&serialMutex);
     initialized = 0;
     Tcl_MutexUnlock(&serialMutex);
@@ -451,14 +448,13 @@ SerialGetMilliseconds(void)
 
 void
 SerialSetupProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     SerialInfo *infoPtr;
     int block = 1;
     int msec = INT_MAX;		/* min. found block time */
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
@@ -507,7 +503,7 @@ SerialSetupProc(
 
 static void
 SerialCheckProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     SerialInfo *infoPtr;
@@ -516,7 +512,6 @@ SerialCheckProc(
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
     COMSTAT cStat;
     unsigned int time;
-    (void)dummy;
 
     if (!(flags & TCL_FILE_EVENTS)) {
 	return;
@@ -648,14 +643,13 @@ SerialBlockProc(
 static int
 SerialCloseProc(
     ClientData instanceData,    /* Pointer to SerialInfo structure. */
-    Tcl_Interp *dummy,		/* For error reporting. */
+    TCL_UNUSED(Tcl_Interp *),
     int flags)
 {
     SerialInfo *serialPtr = (SerialInfo *) instanceData;
     int errorCode = 0, result = 0;
     SerialInfo *infoPtr, **nextPtrPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     if ((flags & (TCL_CLOSE_READ | TCL_CLOSE_WRITE)) != 0) {
 	return EINVAL;
@@ -1382,11 +1376,10 @@ SerialWatchProc(
 static int
 SerialGetHandleProc(
     ClientData instanceData,	/* The serial state. */
-    int direction,		/* TCL_READABLE or TCL_WRITABLE */
+    TCL_UNUSED(int) /*direction*/,
     ClientData *handlePtr)	/* Where to store the handle. */
 {
     SerialInfo *infoPtr = (SerialInfo *) instanceData;
-    (void)direction;
 
     *handlePtr = (ClientData) infoPtr->handle;
     return TCL_OK;
@@ -2228,7 +2221,7 @@ SerialSetOptionProc(
      */
 
     if ((len > 4) && (strncmp(optionName, "-ttycontrol", len) == 0)) {
-	int i, result = TCL_OK;
+	int i, res = TCL_OK;
 
 	if (Tcl_SplitList(interp, value, &argc, &argv) == TCL_ERROR) {
 	    return TCL_ERROR;
@@ -2250,7 +2243,7 @@ SerialSetOptionProc(
 
 	for (i = 0; i < argc - 1; i += 2) {
 	    if (Tcl_GetBoolean(interp, argv[i+1], &flag) == TCL_ERROR) {
-		result = TCL_ERROR;
+		res = TCL_ERROR;
 		break;
 	    }
 	    if (strncasecmp(argv[i], "DTR", strlen(argv[i])) == 0) {
@@ -2262,7 +2255,7 @@ SerialSetOptionProc(
 			Tcl_SetErrorCode(interp, "TCL", "OPERATION",
 				"FCONFIGURE", "TTY_SIGNAL", NULL);
 		    }
-		    result = TCL_ERROR;
+		    res = TCL_ERROR;
 		    break;
 		}
 	    } else if (strncasecmp(argv[i], "RTS", strlen(argv[i])) == 0) {
@@ -2274,7 +2267,7 @@ SerialSetOptionProc(
 			Tcl_SetErrorCode(interp, "TCL", "OPERATION",
 				"FCONFIGURE", "TTY_SIGNAL", NULL);
 		    }
-		    result = TCL_ERROR;
+		    res = TCL_ERROR;
 		    break;
 		}
 	    } else if (strncasecmp(argv[i], "BREAK", strlen(argv[i])) == 0) {
@@ -2286,7 +2279,7 @@ SerialSetOptionProc(
 			Tcl_SetErrorCode(interp, "TCL", "OPERATION",
 				"FCONFIGURE", "TTY_SIGNAL", NULL);
 		    }
-		    result = TCL_ERROR;
+		    res = TCL_ERROR;
 		    break;
 		}
 	    } else {
@@ -2297,7 +2290,7 @@ SerialSetOptionProc(
 		    Tcl_SetErrorCode(interp, "TCL", "VALUE", "TTY_SIGNAL",
 			    NULL);
 		}
-		result = TCL_ERROR;
+		res = TCL_ERROR;
 		break;
 	    }
 	}
@@ -2306,8 +2299,12 @@ SerialSetOptionProc(
 	Tcl_Free(argv);
 =======
 	Tcl_Free((void *)argv);
+<<<<<<< HEAD
 >>>>>>> upstream/master
 	return result;
+=======
+	return res;
+>>>>>>> upstream/master
     }
 
     /*

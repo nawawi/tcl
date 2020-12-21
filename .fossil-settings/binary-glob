@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 *.bmp
 *.gif
 *.png
@@ -38,6 +39,8 @@ libtommath/win32/libtommath.dll
 libtommath/win64/tommath.lib
 libtommath/win64/libtommath.dll
 libtommath/win64/libtommath.dll.a
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 *.a
 *.bmp

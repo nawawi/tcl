@@ -197,7 +197,7 @@ static const Tcl_MethodType classConstructor = {
 };
 
 /*
- * Scripted parts of TclOO. First, the master script (cannot be outside this
+ * Scripted parts of TclOO. First, the main script (cannot be outside this
  * file).
  */
 
@@ -439,7 +439,7 @@ TclOOInit(
     }
 
     return Tcl_PkgProvideEx(interp, "TclOO", TCLOO_PATCHLEVEL,
-	    (ClientData) &tclOOStubs);
+	    (void *) &tclOOStubs);
 }
 
 /*
@@ -834,7 +834,7 @@ DeletedHelpersNamespace(
 
 static void
 KillFoundation(
-    TCL_UNUSED(ClientData),
+    TCL_UNUSED(void *),
     Tcl_Interp *interp)	/* The interpreter containing the OO system
 			 * foundation. */
 {
@@ -1951,7 +1951,11 @@ ObjectNamespaceDeleted(
      * freed memory.
      */
 
+<<<<<<< HEAD
     if (((Command *) oPtr->command)->flags && CMD_IS_DELETED) {
+>>>>>>> upstream/master
+=======
+    if (((Command *) oPtr->command)->flags && CMD_DYING) {
 >>>>>>> upstream/master
 	/*
 	 * Something has already started the command deletion process. We can
@@ -4438,7 +4442,7 @@ TclOOObjectName(
     if (oPtr->cachedNameObj) {
 	return oPtr->cachedNameObj;
     }
-    namePtr = Tcl_NewObj();
+    TclNewObj(namePtr);
     Tcl_GetCommandFullName(interp, oPtr->command, namePtr);
     Tcl_IncrRefCount(namePtr);
     oPtr->cachedNameObj = namePtr;

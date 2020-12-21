@@ -170,12 +170,12 @@ typedef struct PendingObjData {
 #define ObjDeletionUnlock(contextPtr)	((contextPtr)->deletionCount--)
 #define ObjDeletePending(contextPtr)	((contextPtr)->deletionCount > 0)
 #define ObjOnStack(contextPtr)		((contextPtr)->deletionStack != NULL)
-#define PushObjToDelete(contextPtr,objPtr) \
+#define PushObjToDelete(contextPtr,objPtr)                              \
     /* The string rep is already invalidated so we can use the bytes value \
      * for our pointer chain: push onto the head of the stack. */       \
     (objPtr)->bytes = (char *) ((contextPtr)->deletionStack);           \
     (contextPtr)->deletionStack = (objPtr)
-#define PopObjToDelete(contextPtr,objPtrVar) \
+#define PopObjToDelete(contextPtr,objPtrVar)                            \
     (objPtrVar) = (contextPtr)->deletionStack;                          \
     (contextPtr)->deletionStack = (Tcl_Obj *) (objPtrVar)->bytes
 
@@ -186,14 +186,14 @@ typedef struct PendingObjData {
 static PendingObjData pendingObjData;
 #define ObjInitDeletionContext(contextPtr) \
     PendingObjData *const contextPtr = &pendingObjData
-#elif HAVE_FAST_TSD
+#elif defined(HAVE_FAST_TSD)
 static __thread PendingObjData pendingObjData;
 #define ObjInitDeletionContext(contextPtr) \
     PendingObjData *const contextPtr = &pendingObjData
 #else
 static Tcl_ThreadDataKey pendingObjDataKey;
 #define ObjInitDeletionContext(contextPtr) \
-    PendingObjData *const contextPtr =                                  \
+    PendingObjData *const contextPtr =     \
 	    (PendingObjData *)Tcl_GetThreadData(&pendingObjDataKey, sizeof(PendingObjData))
 #endif
 
@@ -202,6 +202,7 @@ static Tcl_ThreadDataKey pendingObjDataKey;
  */
 
 #define PACK_BIGNUM(bignum, objPtr) \
+<<<<<<< HEAD
     if ((bignum).used > 0x7fff) {                                       \
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -225,6 +226,14 @@ static Tcl_ThreadDataKey pendingObjDataKey;
 	(objPtr)->internalRep.twoPtrValue.ptr1 = temp;                 \
 	(objPtr)->internalRep.twoPtrValue.ptr2 = INT2PTR(-1); \
     } else if (((bignum).alloc <= 0x7fff) || (mp_shrink(&(bignum))) == MP_OKAY) { \
+>>>>>>> upstream/master
+=======
+    if ((bignum).used > 0x7FFF) {                                   \
+	mp_int *temp = (mp_int *)Tcl_Alloc(sizeof(mp_int));               \
+	*temp = bignum;                                                 \
+	(objPtr)->internalRep.twoPtrValue.ptr1 = temp;                  \
+	(objPtr)->internalRep.twoPtrValue.ptr2 = INT2PTR(-1);           \
+    } else if (((bignum).alloc <= 0x7FFF) || (mp_shrink(&(bignum))) == MP_OKAY) { \
 >>>>>>> upstream/master
 	(objPtr)->internalRep.twoPtrValue.ptr1 = (bignum).dp;           \
 >>>>>>> upstream/master
@@ -541,7 +550,7 @@ TclFinalizeThreadObjects(void)
     if (tablePtr != NULL) {
 	for (hPtr = Tcl_FirstHashEntry(tablePtr, &hSearch);
 		hPtr != NULL; hPtr = Tcl_NextHashEntry(&hSearch)) {
-	    ObjData *objData = Tcl_GetHashValue(hPtr);
+	    ObjData *objData = (ObjData *)Tcl_GetHashValue(hPtr);
 
 	    if (objData != NULL) {
 		Tcl_Free(objData);
@@ -660,7 +669,7 @@ TclContinuationsEnter(
     ThreadSpecificData *tsdPtr = TclGetContLineTable();
     Tcl_HashEntry *hPtr =
 	    Tcl_CreateHashEntry(tsdPtr->lineCLPtr, objPtr, &newEntry);
-    ContLineLoc *clLocPtr = (ContLineLoc *)Tcl_Alloc(sizeof(ContLineLoc) + num*sizeof(int));
+    ContLineLoc *clLocPtr = (ContLineLoc *)Tcl_Alloc(offsetof(ContLineLoc, loc) + (num + 1) *sizeof(int));
 
     if (!newEntry) {
 	/*
@@ -897,7 +906,7 @@ TclContinuationsGet(
 
 static void
 TclThreadFinalizeContLines(
-    ClientData dummy)
+    TCL_UNUSED(ClientData))
 {
     /*
      * Release the hashtable tracking invisible continuation lines.
@@ -906,7 +915,6 @@ TclThreadFinalizeContLines(
     ThreadSpecificData *tsdPtr = TclGetContLineTable();
     Tcl_HashEntry *hPtr;
     Tcl_HashSearch hSearch;
-    (void)dummy;
 
     for (hPtr = Tcl_FirstHashEntry(tsdPtr->lineCLPtr, &hSearch);
 	    hPtr != NULL; hPtr = Tcl_NextHashEntry(&hSearch)) {
@@ -1150,11 +1158,11 @@ Tcl_ConvertToType(
  *--------------------------------------------------------------
  */
 
+#if TCL_THREADS && defined(TCL_MEM_DEBUG)
 void
 TclDbDumpActiveObjects(
     FILE *outFile)
 {
-#if TCL_THREADS && defined(TCL_MEM_DEBUG)
     Tcl_HashSearch hSearch;
     Tcl_HashEntry *hPtr;
     Tcl_HashTable *tablePtr;
@@ -1166,7 +1174,7 @@ TclDbDumpActiveObjects(
 	fprintf(outFile, "total objects: %" TCL_Z_MODIFIER "u\n", tablePtr->numEntries);
 	for (hPtr = Tcl_FirstHashEntry(tablePtr, &hSearch); hPtr != NULL;
 		hPtr = Tcl_NextHashEntry(&hSearch)) {
-	    ObjData *objData = Tcl_GetHashValue(hPtr);
+	    ObjData *objData = (ObjData *)Tcl_GetHashValue(hPtr);
 
 	    if (objData != NULL) {
 		fprintf(outFile,
@@ -1179,10 +1187,14 @@ TclDbDumpActiveObjects(
 	    }
 	}
     }
-#else
-	(void)outFile;
-#endif
 }
+#else
+void
+TclDbDumpActiveObjects(
+    TCL_UNUSED(FILE *))
+{
+}
+#endif
 
 /*
 <<<<<<< HEAD
@@ -1568,14 +1580,9 @@ Tcl_DbNewObj(
 
 Tcl_Obj *
 Tcl_DbNewObj(
-    const char *file,		/* The name of the source file calling this
-				 * function; used for debugging. */
-    int line)			/* Line number in the source file; used for
-				 * debugging. */
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
-    (void)file;
-    (void)line;
-
     return Tcl_NewObj();
 }
 #endif /* TCL_MEM_DEBUG */
@@ -1720,7 +1727,7 @@ TclFreeObj(
 	     * As the Tcl_Obj is going to be deleted we remove the entry.
 	     */
 
-	    ObjData *objData = Tcl_GetHashValue(hPtr);
+	    ObjData *objData = (ObjData *)Tcl_GetHashValue(hPtr);
 
 	    if (objData != NULL) {
 		Tcl_Free(objData);
@@ -1745,16 +1752,20 @@ TclFreeObj(
      * sure we do not accept a second free when falling from 0 to -1.
      * Skip that possibility so any double free will trigger the panic.
      */
-    objPtr->refCount = TCL_AUTO_LENGTH;
+    objPtr->refCount = TCL_INDEX_NONE;
 
     /*
      * Invalidate the string rep first so we can use the bytes value for our
      * pointer chain, and signal an obj deletion (as opposed to shimmering)
-     * with 'length == TCL_AUTO_LENGTH'.
+     * with 'length == TCL_INDEX_NONE'.
      */
 
     TclInvalidateStringRep(objPtr);
+<<<<<<< HEAD
     objPtr->length = TCL_AUTO_LENGTH;
+>>>>>>> upstream/master
+=======
+    objPtr->length = TCL_INDEX_NONE;
 >>>>>>> upstream/master
 
 	tablePtr = tsdPtr->objThreadMap;
@@ -2013,7 +2024,17 @@ TclFreeObj(
 >>>>>>> upstream/master
 
     TclInvalidateStringRep(objPtr);
+<<<<<<< HEAD
     objPtr->length = -1;
+=======
+    objPtr->length = TCL_INDEX_NONE;
+
+    if (!objPtr->typePtr || !objPtr->typePtr->freeIntRepProc) {
+	/*
+	 * objPtr can be freed safely, as it will not attempt to free any
+	 * other objects: it will not cause recursive calls to this function.
+	 */
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
     if (ObjDeletePending(context)) {
@@ -11689,7 +11710,11 @@ int
 Tcl_HasStringRep(
     Tcl_Obj *objPtr)	/* Object to test */
 {
+<<<<<<< HEAD
     return TclHasStringRep(objPtr);
+=======
+    return (objPtr->length == TCL_INDEX_NONE);
+>>>>>>> upstream/master
 }
 >>>>>>> upstream/master
 
@@ -11824,6 +11849,7 @@ AllocObjEntry(
     Tcl_Obj *objPtr = keyPtr;
     Tcl_HashEntry *hPtr = ckalloc(sizeof(Tcl_HashEntry));
 
+<<<<<<< HEAD
     hPtr->key.objPtr = objPtr;
     Tcl_IncrRefCount(objPtr);
     hPtr->clientData = NULL;
@@ -11872,6 +11898,26 @@ Tcl_FetchIntRep(
 >>>>>>> upstream/master
 {
     return TclFetchIntRep(objPtr, typePtr);
+=======
+	if (objPtr->typePtr->updateStringProc == NULL) {
+	    /*
+	     * Those Tcl_ObjTypes which choose not to define an
+	     * updateStringProc must be written in such a way that
+	     * (objPtr->bytes) never becomes NULL.
+	     */
+	    Tcl_Panic("UpdateStringProc should not be invoked for type %s",
+		    objPtr->typePtr->name);
+	}
+	objPtr->typePtr->updateStringProc(objPtr);
+	if (objPtr->bytes == NULL || objPtr->length == TCL_INDEX_NONE
+		|| objPtr->bytes[objPtr->length] != '\0') {
+	    Tcl_Panic("UpdateStringProc for type '%s' "
+		    "failed to create a valid string rep",
+		    objPtr->typePtr->name);
+	}
+    }
+    return objPtr->bytes;
+>>>>>>> upstream/master
 }
 <<<<<<< HEAD
 #endif /* TCL_MEM_DEBUG */
@@ -12020,7 +12066,7 @@ Tcl_FreeIntRep(
 		    objPtr->typePtr->name);
 	}
 	objPtr->typePtr->updateStringProc(objPtr);
-	if (objPtr->bytes == NULL || objPtr->length == TCL_AUTO_LENGTH
+	if (objPtr->bytes == NULL || objPtr->length == TCL_INDEX_NONE
 		|| objPtr->bytes[objPtr->length] != '\0') {
 	    Tcl_Panic("UpdateStringProc for type '%s' "
 		    "failed to create a valid string rep",
@@ -12942,14 +12988,9 @@ Tcl_DbNewDoubleObj(
 Tcl_Obj *
 Tcl_DbNewDoubleObj(
     double dblValue,	/* Double used to initialize the object. */
-    const char *file,		/* The name of the source file calling this
-				 * function; used for debugging. */
-    int line)			/* Line number in the source file; used for
-				 * debugging. */
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
-    (void)file;
-    (void)line;
-
     return Tcl_NewDoubleObj(dblValue);
 >>>>>>> upstream/master
 }
@@ -13134,7 +13175,7 @@ UpdateStringOfDouble(
 {
     char *dst = Tcl_InitStringRep(objPtr, NULL, TCL_DOUBLE_SPACE);
 
-    TclOOM(dst, TCL_DOUBLE_SPACE + 1);
+    TclOOM(dst, (size_t)TCL_DOUBLE_SPACE + 1);
 
     Tcl_PrintDouble(NULL, objPtr->internalRep.doubleValue, dst);
     (void) Tcl_InitStringRep(objPtr, NULL, strlen(dst));
@@ -13387,7 +13428,7 @@ Tcl_DbNewLongObj(
 {
     char *dst = Tcl_InitStringRep( objPtr, NULL, TCL_INTEGER_SPACE);
 
-    TclOOM(dst, TCL_INTEGER_SPACE + 1);
+    TclOOM(dst, (size_t)TCL_INTEGER_SPACE + 1);
     (void) Tcl_InitStringRep(objPtr, NULL,
 	    TclFormatInt(dst, objPtr->internalRep.wideValue));
 }
@@ -13638,14 +13679,9 @@ Tcl_DbNewWideIntObj(
     Tcl_WideInt wideValue,
 				/* Long integer used to initialize the new
 				 * object. */
-    const char *file,		/* The name of the source file calling this
-				 * function; used for debugging. */
-    int line)			/* Line number in the source file; used for
-				 * debugging. */
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
-    (void)file;
-    (void)line;
-
     return Tcl_NewWideIntObj(wideValue);
 }
 #endif /* TCL_MEM_DEBUG */
@@ -14058,12 +14094,9 @@ Tcl_DbNewBignumObj(
 Tcl_Obj *
 Tcl_DbNewBignumObj(
     void *bignumValue,
-    const char *file,
-    int line)
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
 {
-    (void)file;
-    (void)line;
-
     return Tcl_NewBignumObj(bignumValue);
 }
 #endif
@@ -14634,6 +14667,7 @@ Tcl_IsShared(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int
 Tcl_RepresentationCmd(
     ClientData clientData,
@@ -14682,6 +14716,9 @@ Tcl_RepresentationCmd(
     Tcl_SetObjResult(interp, descObj);
     return TCL_OK;
 =======
+=======
+#ifdef TCL_MEM_DEBUG
+>>>>>>> upstream/master
 void
 Tcl_DbIncrRefCount(
     Tcl_Obj *objPtr,	/* The object we are registering a reference
@@ -14691,7 +14728,6 @@ Tcl_DbIncrRefCount(
     int line)			/* Line number in the source file; used for
 				 * debugging. */
 {
-#ifdef TCL_MEM_DEBUG
     if (objPtr->refCount == 0x61616161) {
 	fprintf(stderr, "file = %s, line = %d\n", file, line);
 	fflush(stderr);
@@ -14721,6 +14757,7 @@ Tcl_DbIncrRefCount(
     }
 # endif /* TCL_THREADS */
 <<<<<<< HEAD
+<<<<<<< HEAD
 #endif /* TCL_MEM_DEBUG */
     ++(objPtr)->refCount;
 >>>>>>> upstream/master
@@ -14742,10 +14779,28 @@ Tcl_DbIncrRefCount(
 #endif /* TCL_MEM_DEBUG */
     ++(objPtr)->refCount;
 }
+=======
+    ++(objPtr)->refCount;
+}
+#else /* !TCL_MEM_DEBUG */
+void
+Tcl_DbIncrRefCount(
+    Tcl_Obj *objPtr,	/* The object we are registering a reference
+				 * to. */
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
+{
+    ++(objPtr)->refCount;
+}
+#endif /* TCL_MEM_DEBUG */
+>>>>>>> upstream/master
 
 /*
  *----------------------------------------------------------------------
  *
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
  * Tcl_DbDecrRefCount --
  *
@@ -14755,6 +14810,7 @@ Tcl_DbIncrRefCount(
  *
  *	When TCL_MEM_DEBUG is not defined, this function just decrements the
  *	reference count of the object.
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> upstream/master
  *
@@ -14827,6 +14883,8 @@ Tcl_GetCommandFromObj(
      * had is invalid one way or another.
      */
 =======
+=======
+>>>>>>> upstream/master
  *
  * Results:
  *	None.
@@ -14839,6 +14897,7 @@ Tcl_GetCommandFromObj(
 >>>>>>> upstream/master
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (SetCmdNameFromAny(interp, objPtr) != TCL_OK) {
 =======
     /* See [07d13d99b0a9] why we cannot call SetCmdNameFromAny() directly here. */
@@ -14846,6 +14905,9 @@ Tcl_GetCommandFromObj(
 >>>>>>> upstream/master
         return NULL;
 =======
+=======
+#ifdef TCL_MEM_DEBUG
+>>>>>>> upstream/master
 void
 Tcl_DbDecrRefCount(
     Tcl_Obj *objPtr,	/* The object we are releasing a reference
@@ -14855,7 +14917,6 @@ Tcl_DbDecrRefCount(
     int line)			/* Line number in the source file; used for
 				 * debugging. */
 {
-#ifdef TCL_MEM_DEBUG
     if (objPtr->refCount == 0x61616161) {
 	fprintf(stderr, "file = %s, line = %d\n", file, line);
 	fflush(stderr);
@@ -14884,10 +14945,6 @@ Tcl_DbDecrRefCount(
 	}
     }
 # endif /* TCL_THREADS */
-#else
-    (void)file;
-    (void)line;
-#endif /* TCL_MEM_DEBUG */
 
     if (objPtr->refCount-- <= 1) {
 	TclFreeObj(objPtr);
@@ -14896,6 +14953,19 @@ Tcl_DbDecrRefCount(
     resPtr = objPtr->internalRep.twoPtrValue.ptr1;
     return (Tcl_Command) (resPtr ? resPtr->cmdPtr : NULL);
 }
+#else /* !TCL_MEM_DEBUG */
+void
+Tcl_DbDecrRefCount(
+    Tcl_Obj *objPtr,	/* The object we are releasing a reference
+				 * to. */
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
+{
+    if (objPtr->refCount-- <= 1) {
+	TclFreeObj(objPtr);
+    }
+}
+#endif /* TCL_MEM_DEBUG */
 
 /*
  *----------------------------------------------------------------------
@@ -15000,10 +15070,15 @@ TclSetCmdNameObj(
 int
 Tcl_DbIsShared(
     Tcl_Obj *objPtr,	/* The object to test for being shared. */
+#ifdef TCL_MEM_DEBUG
     const char *file,		/* The name of the source file calling this
 				 * function; used for debugging. */
     int line)			/* Line number in the source file; used for
 				 * debugging. */
+#else
+    TCL_UNUSED(const char *) /*file*/,
+    TCL_UNUSED(int) /*line*/)
+#endif
 {
 #ifdef TCL_MEM_DEBUG
     if (objPtr->refCount == 0x61616161) {
@@ -15034,9 +15109,6 @@ Tcl_DbIsShared(
 	}
     }
 # endif /* TCL_THREADS */
-#else
-    (void)file;
-    (void)line;
 #endif /* TCL_MEM_DEBUG */
 
 #ifdef TCL_COMPILE_STATS
@@ -15158,12 +15230,11 @@ DupCmdNameInternalRep(
 =======
 static Tcl_HashEntry *
 AllocObjEntry(
-    Tcl_HashTable *dummy,	/* Hash table. */
+    TCL_UNUSED(Tcl_HashTable *),
     void *keyPtr)		/* Key to store in the hash table entry. */
 {
     Tcl_Obj *objPtr = (Tcl_Obj *)keyPtr;
     Tcl_HashEntry *hPtr = (Tcl_HashEntry *)Tcl_Alloc(sizeof(Tcl_HashEntry));
-    (void)dummy;
 
     hPtr->key.objPtr = objPtr;
     Tcl_IncrRefCount(objPtr);
@@ -15439,14 +15510,13 @@ Tcl_RepresentationCmd(
 >>>>>>> upstream/master
 TCL_HASH_TYPE
 TclHashObjKey(
-    Tcl_HashTable *dummy,	/* Hash table. */
+    TCL_UNUSED(Tcl_HashTable *),
     void *keyPtr)		/* Key from which to compute hash value. */
 {
     Tcl_Obj *objPtr = (Tcl_Obj *)keyPtr;
     const char *string = TclGetString(objPtr);
     size_t length = objPtr->length;
     TCL_HASH_TYPE result = 0;
-    (void)dummy;
 
     /*
      * I tried a zillion different hash functions and asked many other people
@@ -15833,7 +15903,7 @@ SetCmdNameFromAny(
      * report the failure to find the command as an error.
      */
 
-    if (cmdPtr == NULL) {
+    if (cmdPtr == NULL || !TclRoutineHasName(cmdPtr)) {
 	return TCL_ERROR;
     }
 
@@ -15918,13 +15988,12 @@ Tcl_RepresentationCmd(
 
 int
 Tcl_RepresentationCmd(
-    ClientData dummy,
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,
     int objc,
     Tcl_Obj *const objv[])
 {
     Tcl_Obj *descObj;
-    (void)dummy;
 
     if (objc != 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "value");

@@ -113,12 +113,12 @@ Tcl_InitNotifier(void)
     } else {
 	ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
-	TclpMasterLock();
+	TclpGlobalLock();
 	if (!initialized) {
 	    initialized = 1;
 	    InitializeCriticalSection(&notifierMutex);
 	}
-	TclpMasterUnlock();
+	TclpGlobalUnlock();
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -188,7 +188,7 @@ Tcl_InitNotifier(void)
 	    clazz.style = 0;
 	    clazz.cbClsExtra = 0;
 	    clazz.cbWndExtra = 0;
-	    clazz.hInstance = TclWinGetTclInstance();
+	    clazz.hInstance = (HINSTANCE)TclWinGetTclInstance();
 	    clazz.hbrBackground = NULL;
 	    clazz.lpszMenuName = NULL;
 	    clazz.lpszClassName = className;
@@ -424,7 +424,7 @@ Tcl_FinalizeNotifier(
 	if (notifierCount) {
 	    notifierCount--;
 	    if (notifierCount == 0) {
-		UnregisterClassW(className, TclWinGetTclInstance());
+		UnregisterClassW(className, (HINSTANCE)TclWinGetTclInstance());
 	    }
 	}
 	LeaveCriticalSection(&notifierMutex);
@@ -609,8 +609,12 @@ Tcl_ServiceModeHook(
 >>>>>>> upstream/master
 =======
 	    tsdPtr->hwnd = CreateWindowW(className, className,
+<<<<<<< HEAD
 >>>>>>> upstream/master
 		    WS_TILED, 0, 0, 0, 0, NULL, NULL, TclWinGetTclInstance(),
+=======
+		    WS_TILED, 0, 0, 0, 0, NULL, NULL, (HINSTANCE)TclWinGetTclInstance(),
+>>>>>>> upstream/master
 		    NULL);
 
 	    /*

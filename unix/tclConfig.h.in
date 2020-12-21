@@ -7,6 +7,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
@@ -15,6 +16,11 @@
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+/* Define if building universal (internal helper macro) */
+#undef AC_APPLE_UNIVERSAL_BUILD
+
 >>>>>>> upstream/master
 /* Is gettimeofday() actually declared in <sys/time.h>? */
 #undef GETTOD_NOT_DECLARED
@@ -247,6 +253,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Define to 1 if `st_blksize' is a member of `struct stat'. */
 #undef HAVE_STRUCT_STAT_ST_BLKSIZE
 
@@ -270,6 +277,12 @@
 >>>>>>> upstream/master
 =======
 /* Define to 1 if `st_blocks' is member of `struct stat'. */
+>>>>>>> upstream/master
+=======
+/* Define to 1 if `st_blksize' is a member of `struct stat'. */
+#undef HAVE_STRUCT_STAT_ST_BLKSIZE
+
+/* Define to 1 if `st_blocks' is a member of `struct stat'. */
 >>>>>>> upstream/master
 #undef HAVE_STRUCT_STAT_ST_BLOCKS
 
@@ -341,6 +354,9 @@
 
 /* No Compiler support for module scope symbols */
 #undef MODULE_SCOPE
+
+/* Default libtommath precision. */
+#undef MP_PREC
 
 /* Is no debugging enabled? */
 #undef NDEBUG
@@ -420,6 +436,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Define to the home page for this package. */
 #undef PACKAGE_URL
 
@@ -428,6 +445,11 @@
 =======
 >>>>>>> upstream/master
 =======
+>>>>>>> upstream/master
+=======
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 >>>>>>> upstream/master
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
@@ -453,9 +475,6 @@
 /* Are bytecode statistics enabled? */
 #undef TCL_COMPILE_STATS
 
-/* Are we to override what our default encoding is? */
-#undef TCL_DEFAULT_ENCODING
-
 /* Is Tcl built as a framework? */
 #undef TCL_FRAMEWORK
 
@@ -480,6 +499,9 @@
 /* What type should be used to define wide integers? */
 #undef TCL_WIDE_INT_TYPE
 
+/* Tcl with external libtommath */
+#undef TCL_WITH_EXTERNAL_TOMMATH
+
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
 
@@ -501,6 +523,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD
@@ -512,6 +537,7 @@
 #  undef WORDS_BIGENDIAN
 # endif
 #endif
+<<<<<<< HEAD
 =======
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
@@ -526,6 +552,8 @@
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
 #undef WORDS_BIGENDIAN
+>>>>>>> upstream/master
+=======
 >>>>>>> upstream/master
 
 /* Are we building with zipfs enabled? */
@@ -587,6 +615,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 =======
 /* Define to `unsigned' if <sys/types.h> does not define. */
@@ -596,6 +625,9 @@
 >>>>>>> upstream/master
 =======
 /* Define to `unsigned' if <sys/types.h> does not define. */
+>>>>>>> upstream/master
+=======
+/* Define to `unsigned int' if <sys/types.h> does not define. */
 >>>>>>> upstream/master
 #undef size_t
 

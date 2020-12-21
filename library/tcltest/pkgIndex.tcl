@@ -11,10 +11,14 @@
 if {![package vsatisfies [package provide Tcl] 8.5-]} {return}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package ifneeded tcltest 2.5.0 [list source [file join $dir tcltest.tcl]]
 =======
 package ifneeded tcltest 2.5.1 [list source [file join $dir tcltest.tcl]]
 >>>>>>> upstream/master
 =======
 package ifneeded tcltest 2.5.2 [list source [file join $dir tcltest.tcl]]
+>>>>>>> upstream/master
+=======
+package ifneeded tcltest 2.5.3 [list source [file join $dir tcltest.tcl]]
 >>>>>>> upstream/master

@@ -117,7 +117,7 @@ static int		GetStatBuf(Tcl_Interp *interp, Tcl_Obj *pathPtr,
 static const char *	GetTypeFromMode(int mode);
 static int		StoreStatData(Tcl_Interp *interp, Tcl_Obj *varName,
 			    Tcl_StatBuf *statPtr);
-static inline int	EachloopCmd(Tcl_Interp *interp, int collect,
+static int	EachloopCmd(Tcl_Interp *interp, int collect,
 			    int objc, Tcl_Obj *const objv[]);
 static Tcl_NRPostProc	CatchObjCmdCallback;
 static Tcl_NRPostProc	ExprCallback;
@@ -175,7 +175,6 @@ static Tcl_ObjCmdProc PathTypeCmd;
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_BreakObjCmd(
     TCL_UNUSED(ClientData),
@@ -207,7 +206,6 @@ Tcl_BreakObjCmd(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_CatchObjCmd(
     ClientData clientData,
@@ -313,7 +311,6 @@ CatchObjCmdCallback(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_CdObjCmd(
     TCL_UNUSED(ClientData),
@@ -369,7 +366,6 @@ Tcl_CdObjCmd(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_ConcatObjCmd(
     TCL_UNUSED(ClientData),
@@ -404,7 +400,6 @@ Tcl_ConcatObjCmd(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_ContinueObjCmd(
     TCL_UNUSED(ClientData),
@@ -970,11 +965,14 @@ Tcl_ErrorObjCmd(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int
 EncodingConverttoObjCmd(
     ClientData dummy,		/* Not used. */
 =======
 	/* ARGSUSED */
+=======
+>>>>>>> upstream/master
 static int
 EvalCmdErrMsg(
     TCL_UNUSED(ClientData *),
@@ -1121,6 +1119,7 @@ Tcl_ExitObjCmd(
 	return TCL_ERROR;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 	return EncodingConverttoObjCmd(dummy, interp, objc, objv);
@@ -1153,6 +1152,16 @@ Tcl_ExitObjCmd(
 
 /*
  *-----------------------------------------------------------------------------
+=======
+    Tcl_Exit((int)value);
+    return TCL_OK;		/* Better not ever reach this! */
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_ExprObjCmd --
+>>>>>>> upstream/master
  *
  * EncodingNamesObjCmd --
  *
@@ -1319,6 +1328,7 @@ TclInitEncodingCmd(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	/* ARGSUSED */
 static int
 EvalCmdErrMsg(
@@ -1333,6 +1343,8 @@ EvalCmdErrMsg(
     return result;
 }
 
+=======
+>>>>>>> upstream/master
 int
 <<<<<<< HEAD
 Tcl_EvalObjCmd(
@@ -6550,7 +6562,7 @@ FilesystemSeparatorCmd(
 	return TCL_ERROR;
     }
     if (objc == 1) {
-	const char *separator = NULL; /* lint */
+	const char *separator = NULL;
 
 	switch (tclPlatform) {
 	case TCL_PLATFORM_UNIX:
@@ -6915,7 +6927,6 @@ GetTypeFromMode(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_ForObjCmd(
     ClientData clientData,
@@ -7229,7 +7240,6 @@ ForPostNextCallback(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_ForeachObjCmd(
     ClientData clientData,
@@ -7270,7 +7280,7 @@ TclNRLmapCmd(
     return EachloopCmd(interp, TCL_EACH_COLLECT, objc, objv);
 }
 
-static inline int
+static int
 EachloopCmd(
     Tcl_Interp *interp,		/* Our context for variables and script
 				 * evaluation. */
@@ -7597,7 +7607,6 @@ ForeachCleanup(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_FormatObjCmd(
     TCL_UNUSED(ClientData),

@@ -371,10 +371,10 @@ static int formatInt(char *buffer, int n){
 static void uniCodePanic() {
     Tcl_Panic("This extension uses a deprecated function, not available now: Tcl is compiled with -DTCL_UTF_MAX==%d", TCL_UTF_MAX);
 }
-#   define Tcl_GetUnicode (int *(*)(Tcl_Obj *)) uniCodePanic
-#   define Tcl_GetUnicodeFromObj (int *(*)(Tcl_Obj *, Tcl_UniChar *)) uniCodePanic
-#   define Tcl_NewUnicodeObj (Tcl_Obj *(*)(const int *, Tcl_UniChar)) uniCodePanic
-#   define Tcl_SetUnicodeObj (void(*)(Tcl_Obj *, const Tcl_UniChar *, int)) uniCodePanic
+#   define Tcl_GetUnicode (int *(*)(Tcl_Obj *))(void *)uniCodePanic
+#   define Tcl_GetUnicodeFromObj (Tcl_UniChar *(*)(Tcl_Obj *, int *))(void *)uniCodePanic
+#   define Tcl_NewUnicodeObj (Tcl_Obj *(*)(const Tcl_UniChar *, size_t))(void *)uniCodePanic
+#   define Tcl_SetUnicodeObj (void(*)(Tcl_Obj *, const Tcl_UniChar *, size_t))(void *)uniCodePanic
 #endif
 
 #define TclBN_mp_add mp_add
@@ -443,6 +443,16 @@ static void uniCodePanic() {
 #define TclBN_mp_toom_mul s_mp_toom_mul
 #define TclBN_mp_toom_sqr s_mp_toom_sqr
 
+#define TclpCreateTempFile_ TclpCreateTempFile
+#define TclUnixWaitForFile_ TclUnixWaitForFile
+#ifndef MAC_OSX_TCL /* On UNIX, fill with other stub entries */
+#define TclMacOSXGetFileAttribute (int (*)(Tcl_Interp *, int, Tcl_Obj *, Tcl_Obj **))(void *)TclpCreateProcess
+#define TclMacOSXSetFileAttribute (int (*)(Tcl_Interp *, int, Tcl_Obj *, Tcl_Obj *))(void *)isatty
+#define TclMacOSXCopyFileAttributes (int (*)(const char *, const char *, const Tcl_StatBuf *))(void *)TclUnixCopyFile
+#define TclMacOSXMatchType (int (*)(Tcl_Interp *, const char *, const char *, Tcl_StatBuf *, Tcl_GlobTypeData *))(void *)TclpMakeFile
+#define TclMacOSXNotifierAddRunLoopMode (void (*)(const void *))(void *)TclpOpenFile
+#endif
+
 #ifdef _WIN32
 #   define TclUnixWaitForFile 0
 #   define TclUnixCopyFile 0
@@ -450,7 +460,7 @@ static void uniCodePanic() {
 #   define TclpReaddir 0
 #   define TclpIsAtty 0
 #elif defined(__CYGWIN__)
-#   define TclpIsAtty TclPlatIsAtty
+#   define TclpIsAtty isatty
 static void
 doNothing(void)
 {
@@ -525,6 +535,7 @@ static unsigned short TclWinNToHS(unsigned short ns) {
 #   define TclWinFlushDirtyChannels doNothing
 #   define TclWinResetInterfaces doNothing
 
+<<<<<<< HEAD
 >>>>>>> upstream/master
 static Tcl_Encoding winTCharEncoding;
 
@@ -549,6 +560,8 @@ void *TclWinGetTclInstance()
     return hInstance;
 }
 
+=======
+>>>>>>> upstream/master
 #define TclWinNoBackslash winNoBackslash
 static char *
 TclWinNoBackslash(char *path)
@@ -563,10 +576,18 @@ TclWinNoBackslash(char *path)
     return path;
 }
 
+void *TclWinGetTclInstance()
+{
+    void *hInstance = NULL;
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+	    (const wchar_t *)&TclWinNoBackslash, &hInstance);
+    return hInstance;
+}
+
 size_t
 TclpGetPid(Tcl_Pid pid)
 {
-    return (size_t) pid;
+    return (size_t)pid;
 }
 
 <<<<<<< HEAD
@@ -1041,7 +1062,7 @@ static const TclIntStubs tclIntStubs = {
     TclResetRewriteEnsemble, /* 247 */
     TclCopyChannel, /* 248 */
     TclDoubleDigits, /* 249 */
-    TclSetSlaveCancelFlags, /* 250 */
+    TclSetChildCancelFlags, /* 250 */
     TclRegisterLiteral, /* 251 */
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1066,6 +1087,10 @@ static const TclIntStubs tclIntStubs = {
 >>>>>>> upstream/master
 =======
     TclAppendUnicodeToObj, /* 259 */
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+    TclGetBytesFromObj, /* 260 */
 >>>>>>> upstream/master
 };
 
@@ -1078,7 +1103,7 @@ static const TclIntPlatStubs tclIntPlatStubs = {
     TclpCreateCommandChannel, /* 2 */
     TclpCreatePipe, /* 3 */
     TclpCreateProcess, /* 4 */
-    0, /* 5 */
+    TclUnixWaitForFile_, /* 5 */
     TclpMakeFile, /* 6 */
     TclpOpenFile, /* 7 */
     TclUnixWaitForFile, /* 8 */
@@ -1088,14 +1113,14 @@ static const TclIntPlatStubs tclIntPlatStubs = {
     0, /* 12 */
     0, /* 13 */
     TclUnixCopyFile, /* 14 */
-    0, /* 15 */
-    0, /* 16 */
-    0, /* 17 */
-    0, /* 18 */
-    0, /* 19 */
+    TclMacOSXGetFileAttribute, /* 15 */
+    TclMacOSXSetFileAttribute, /* 16 */
+    TclMacOSXCopyFileAttributes, /* 17 */
+    TclMacOSXMatchType, /* 18 */
+    TclMacOSXNotifierAddRunLoopMode, /* 19 */
     0, /* 20 */
     0, /* 21 */
-    0, /* 22 */
+    TclpCreateTempFile_, /* 22 */
     0, /* 23 */
     0, /* 24 */
     0, /* 25 */
@@ -1144,7 +1169,7 @@ static const TclIntPlatStubs tclIntPlatStubs = {
     TclpCreateCommandChannel, /* 2 */
     TclpCreatePipe, /* 3 */
     TclpCreateProcess, /* 4 */
-    0, /* 5 */
+    TclUnixWaitForFile_, /* 5 */
     TclpMakeFile, /* 6 */
     TclpOpenFile, /* 7 */
     TclUnixWaitForFile, /* 8 */
@@ -1161,7 +1186,7 @@ static const TclIntPlatStubs tclIntPlatStubs = {
     TclMacOSXNotifierAddRunLoopMode, /* 19 */
     0, /* 20 */
     0, /* 21 */
-    0, /* 22 */
+    TclpCreateTempFile_, /* 22 */
     0, /* 23 */
     0, /* 24 */
     0, /* 25 */
@@ -1184,7 +1209,7 @@ static const TclPlatStubs tclPlatStubs = {
 =======
 >>>>>>> upstream/master
 #ifdef MAC_OSX_TCL /* MACOSX */
-    Tcl_MacOSXOpenBundleResources, /* 0 */
+    0, /* 0 */
     Tcl_MacOSXOpenVersionedBundleResources, /* 1 */
 #endif /* MACOSX */
 };
@@ -1437,7 +1462,7 @@ const TclStubs tclStubs = {
     Tcl_CreateInterp, /* 94 */
     0, /* 95 */
     Tcl_CreateObjCommand, /* 96 */
-    Tcl_CreateSlave, /* 97 */
+    Tcl_CreateChild, /* 97 */
     Tcl_CreateTimerHandler, /* 98 */
     Tcl_CreateTrace, /* 99 */
     Tcl_DeleteAssocData, /* 100 */
@@ -1504,7 +1529,7 @@ const TclStubs tclStubs = {
     Tcl_GetErrno, /* 161 */
     Tcl_GetHostName, /* 162 */
     Tcl_GetInterpPath, /* 163 */
-    Tcl_GetMaster, /* 164 */
+    Tcl_GetParent, /* 164 */
     Tcl_GetNameOfExecutable, /* 165 */
     Tcl_GetObjResult, /* 166 */
 #if !defined(_WIN32) && !defined(MAC_OSX_TCL) /* UNIX */
@@ -1520,7 +1545,7 @@ const TclStubs tclStubs = {
     Tcl_Gets, /* 169 */
     Tcl_GetsObj, /* 170 */
     Tcl_GetServiceMode, /* 171 */
-    Tcl_GetSlave, /* 172 */
+    Tcl_GetChild, /* 172 */
     Tcl_GetStdChannel, /* 173 */
 <<<<<<< HEAD
     Tcl_GetStringResult, /* 174 */

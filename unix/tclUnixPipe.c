@@ -245,9 +245,10 @@ TclpCreateTempFile(
 Tcl_Obj *
 TclpTempFileName(void)
 {
-    Tcl_Obj *retVal, *nameObj = Tcl_NewObj();
+    Tcl_Obj *retVal, *nameObj;
     int fd;
 
+    TclNewObj(nameObj);
     Tcl_IncrRefCount(nameObj);
     fd = TclUnixOpenTemporaryFile(NULL, NULL, NULL, nameObj);
     if (fd == -1) {
@@ -284,10 +285,9 @@ TclpTempFileName(void)
 Tcl_Obj *
 TclpTempFileNameForLibrary(
     Tcl_Interp *interp,		/* Tcl interpreter. */
-    Tcl_Obj *path)		/* Path name of the library in the VFS. */
+    TCL_UNUSED(Tcl_Obj *) /*path*/)
 {
     Tcl_Obj *retval = TclpTempFileName();
-    (void)path;
 
     if (retval == NULL) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf(
@@ -391,7 +391,6 @@ TclpCloseFile(
  *---------------------------------------------------------------------------
  */
 
-    /* ARGSUSED */
 int
 TclpCreateProcess(
     Tcl_Interp *interp,		/* Interpreter in which to leave errors that
@@ -827,10 +826,9 @@ Tcl_CreatePipe(
     Tcl_Interp *interp,		/* Errors returned in result. */
     Tcl_Channel *rchan,		/* Returned read side. */
     Tcl_Channel *wchan,		/* Returned write side. */
-    int flags)			/* Reserved for future use. */
+    TCL_UNUSED(int) /*flags*/)	/* Reserved for future use. */
 {
     int fileNums[2];
-    (void)flags;
 
     if (pipe(fileNums) < 0) {
 	Tcl_SetObjResult(interp, Tcl_ObjPrintf("pipe creation failed: %s",
@@ -922,7 +920,6 @@ TclGetAndDetachPids(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 PipeBlockModeProc(
     void *instanceData,	/* Pipe state. */
@@ -1271,10 +1268,9 @@ Tcl_WaitPid(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_PidObjCmd(
-    void *dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* Current interpreter. */
     int objc,			/* Number of arguments. */
     Tcl_Obj *const *objv)	/* Argument strings. */
@@ -1283,7 +1279,6 @@ Tcl_PidObjCmd(
     PipeState *pipePtr;
     int i;
     Tcl_Obj *resultPtr;
-    (void)dummy;
 
     if (objc > 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "?channelId?");
@@ -1310,7 +1305,7 @@ Tcl_PidObjCmd(
 	 */
 
 	pipePtr = (PipeState *)Tcl_GetChannelInstanceData(chan);
-	resultPtr = Tcl_NewObj();
+	TclNewObj(resultPtr);
 	for (i = 0; i < pipePtr->numPids; i++) {
 	    Tcl_ListObjAppendElement(NULL, resultPtr,
 <<<<<<< HEAD

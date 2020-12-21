@@ -708,7 +708,8 @@ Tcl_SplitPath(
      * plus the argv pointers and the terminating NULL pointer.
      */
 
-    *argvPtr = (const char **)Tcl_Alloc((((*argcPtr) + 1) * sizeof(char *)) + size);
+    *argvPtr = (const char **)Tcl_Alloc(
+	    ((((*argcPtr) + 1) * sizeof(char *)) + size));
 
     /*
      * Position p after the last argv pointer and copy the contents of the
@@ -735,7 +736,11 @@ Tcl_SplitPath(
 	memcpy(p, str, (size_t) len+1);
 =======
 	str = TclGetStringFromObj(eltPtr, &len);
+<<<<<<< HEAD
 	memcpy(p, str, len+1);
+>>>>>>> upstream/master
+=======
+	memcpy(p, str, len + 1);
 >>>>>>> upstream/master
 	p += len+1;
     }
@@ -786,12 +791,13 @@ SplitUnixPath(
     size_t length;
 >>>>>>> upstream/master
     const char *origPath = path, *elementStart;
-    Tcl_Obj *result = Tcl_NewObj();
+    Tcl_Obj *result;
 
     /*
      * Deal with the root directory as a special case.
      */
 
+    TclNewObj(result);
     if (*path == '/') {
 	Tcl_Obj *rootElt;
 	++path;
@@ -877,9 +883,10 @@ SplitWinPath(
     const char *p, *elementStart;
     Tcl_PathType type = TCL_PATH_ABSOLUTE;
     Tcl_DString buf;
-    Tcl_Obj *result = Tcl_NewObj();
+    Tcl_Obj *result;
     Tcl_DStringInit(&buf);
 
+    TclNewObj(result);
     p = ExtractWinRoot(path, &buf, 0, &type);
 
     /*
@@ -1193,7 +1200,7 @@ Tcl_JoinPath(
 {
     int i;
     size_t len;
-    Tcl_Obj *listObj = Tcl_NewObj();
+    Tcl_Obj *listObj;
     Tcl_Obj *resultObj;
     const char *resultStr;
 
@@ -1201,6 +1208,7 @@ Tcl_JoinPath(
      * Build the list of paths.
      */
 
+    TclNewObj(listObj);
     for (i = 0; i < argc; i++) {
 	Tcl_ListObjAppendElement(NULL, listObj,
 		Tcl_NewStringObj(argv[i], -1));
@@ -1449,7 +1457,6 @@ DoTildeSubst(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_GlobObjCmd(
     TCL_UNUSED(ClientData),
@@ -1467,7 +1474,7 @@ Tcl_GlobObjCmd(
 	"-directory", "-join", "-nocomplain", "-path", "-tails",
 	"-types", "--", NULL
     };
-    enum options {
+    enum globOptionsEnum {
 	GLOB_DIR, GLOB_JOIN, GLOB_NOCOMPLAIN, GLOB_PATH, GLOB_TAILS,
 	GLOB_TYPE, GLOB_LAST
     };
@@ -1516,7 +1523,7 @@ Tcl_GlobObjCmd(
 	    }
 	}
 
-	switch (index) {
+	switch ((enum globOptionsEnum) index) {
 	case GLOB_NOCOMPLAIN:			/* -nocomplain */
 	    globFlags |= TCL_GLOBMODE_NO_COMPLAIN;
 	    break;
@@ -1529,7 +1536,10 @@ Tcl_GlobObjCmd(
 	    }
 	    if (dir != PATH_NONE) {
 		Tcl_SetObjResult(interp, Tcl_NewStringObj(
-			"\"-directory\" cannot be used with \"-path\"", -1));
+			dir == PATH_DIR
+			    ? "\"-directory\" may only be used once"
+			    : "\"-directory\" cannot be used with \"-path\"",
+			-1));
 		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "GLOB",
 			"BADOPTIONCOMBINATION", NULL);
 		return TCL_ERROR;
@@ -1554,7 +1564,10 @@ Tcl_GlobObjCmd(
 	    }
 	    if (dir != PATH_NONE) {
 		Tcl_SetObjResult(interp, Tcl_NewStringObj(
-			"\"-path\" cannot be used with \"-directory\"", -1));
+			dir == PATH_GENERAL
+			    ? "\"-path\" may only be used once"
+			    : "\"-path\" cannot be used with \"-dictionary\"",
+			-1));
 		Tcl_SetErrorCode(interp, "TCL", "OPERATION", "GLOB",
 			"BADOPTIONCOMBINATION", NULL);
 		return TCL_ERROR;
@@ -1592,7 +1605,7 @@ Tcl_GlobObjCmd(
 	return TCL_ERROR;
     }
 
-    separators = NULL;		/* lint. */
+    separators = NULL;
     switch (tclPlatform) {
     case TCL_PLATFORM_UNIX:
 	separators = "/";
@@ -2005,7 +2018,6 @@ Tcl_GlobObjCmd(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 TclGlob(
     Tcl_Interp *interp,		/* Interpreter for returning error message or
@@ -2024,7 +2036,7 @@ TclGlob(
     int result;
     Tcl_Obj *filenamesObj, *savedResultObj;
 
-    separators = NULL;		/* lint. */
+    separators = NULL;
     switch (tclPlatform) {
     case TCL_PLATFORM_UNIX:
 	separators = "/";
@@ -2409,7 +2421,7 @@ TclGlob(
  * SkipToChar --
  *
  *	This function traverses a glob pattern looking for the next unquoted
- *	occurance of the specified character at the same braces nesting level.
+ *	occurrence of the specified character at the same braces nesting level.
  *
  * Results:
  *	Updates stringPtr to point to the matching character, or to the end of
@@ -2852,7 +2864,7 @@ DoGlob(
 		const char *joined = TclGetStringFromObj(joinedPtr,&len);
 >>>>>>> upstream/master
 
-		if (strchr(separators, joined[len-1]) == NULL) {
+		if ((len > 0) && (strchr(separators, joined[len-1]) == NULL)) {
 		    Tcl_AppendToObj(joinedPtr, "/", 1);
 		}
 	    }
@@ -2906,7 +2918,7 @@ DoGlob(
 	    const char *joined = TclGetStringFromObj(joinedPtr,&len);
 >>>>>>> upstream/master
 
-	    if (strchr(separators, joined[len-1]) == NULL) {
+	    if ((len > 0) && (strchr(separators, joined[len-1]) == NULL)) {
 		if (Tcl_FSGetPathType(pathPtr) != TCL_PATH_VOLUME_RELATIVE) {
 		    Tcl_AppendToObj(joinedPtr, "/", 1);
 		}

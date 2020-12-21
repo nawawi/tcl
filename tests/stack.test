@@ -20,8 +20,10 @@
 =======
 >>>>>>> upstream/master
 
-package require tcltest 2
-namespace import ::tcltest::*
+if {"::tcltest" ni [namespace children]} {
+    package require tcltest 2.5
+    namespace import -force ::tcltest::*
+}
 
 # Note that a failure in this test may result in a crash of the executable.
 

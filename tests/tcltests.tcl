@@ -2,11 +2,15 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 testConstraint notValgrind [expr {![testConstraint valgrind]}]
 =======
 =======
 >>>>>>> upstream/master
 package require tcltest 2.2
+=======
+package require tcltest 2.5
+>>>>>>> upstream/master
 namespace import ::tcltest::*
 testConstraint exec          [llength [info commands exec]]
 testConstraint fcopy         [llength [info commands fcopy]]

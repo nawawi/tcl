@@ -208,11 +208,11 @@ TclMacOSXGetFileAttribute(
 		OSSwapBigToHostInt32(finder->type));
 	break;
     case MACOSX_HIDDEN_ATTRIBUTE:
-	*attributePtrPtr = Tcl_NewWideIntObj(
+	TclNewIntObj(*attributePtrPtr,
 		(finder->fdFlags & kFinfoIsInvisible) != 0);
 	break;
     case MACOSX_RSRCLENGTH_ATTRIBUTE:
-	*attributePtrPtr = Tcl_NewWideIntObj(*rsrcForkSize);
+	TclNewIntObj(*attributePtrPtr, *rsrcForkSize);
 	break;
     }
     return TCL_OK;
@@ -740,7 +740,7 @@ UpdateStringOfOSType(
     Tcl_Obj *objPtr)	/* OSType object whose string rep to
 				 * update. */
 {
-    const int size = TCL_UTF_MAX * 4;
+    const size_t size = TCL_UTF_MAX * 4;
     char *dst = Tcl_InitStringRep(objPtr, NULL, size);
 <<<<<<< HEAD
     OSType osType = (OSType) objPtr->internalRep.longValue;

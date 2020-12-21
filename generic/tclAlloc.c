@@ -24,7 +24,7 @@
 #include "tclInt.h"
 #if !TCL_THREADS || !defined(USE_THREAD_ALLOC)
 
-#if USE_TCLALLOC
+#if defined(USE_TCLALLOC) && USE_TCLALLOC
 
 /*
  * We should really make use of AC_CHECK_TYPE(caddr_t) here, but it can wait
@@ -68,7 +68,7 @@ union overhead {
 };
 
 
-#define MAGIC		0xef	/* magic # on accounting info */
+#define MAGIC		0xEF	/* magic # on accounting info */
 #define RMAGIC		0x5555	/* magic # on range info */
 
 #ifndef NDEBUG
@@ -299,7 +299,7 @@ TclpAlloc(
 
 	overPtr = (union overhead *) (bigBlockPtr + 1);
 	overPtr->overMagic0 = overPtr->overMagic1 = MAGIC;
-	overPtr->bucketIndex = 0xff;
+	overPtr->bucketIndex = 0xFF;
 #ifdef MSTATS
 	numMallocs[NBUCKETS]++;
 #endif
@@ -356,7 +356,7 @@ TclpAlloc(
 
     nextf[bucket] = overPtr->next;
     overPtr->overMagic0 = overPtr->overMagic1 = MAGIC;
-    overPtr->bucketIndex = (unsigned char) bucket;
+    overPtr->bucketIndex = UCHAR(bucket);
 
 #ifdef MSTATS
     numMallocs[bucket]++;
@@ -489,7 +489,7 @@ TclpFree(
     RANGE_ASSERT(overPtr->rangeCheckMagic == RMAGIC);
     RANGE_ASSERT(BLOCK_END(overPtr) == RMAGIC);
     size = overPtr->bucketIndex;
-    if (size == 0xff) {
+    if (size == 0xFF) {
 #ifdef MSTATS
 	numMallocs[NBUCKETS]--;
 #endif
@@ -563,7 +563,7 @@ TclpRealloc(
      * If the block isn't in a bin, just realloc it.
      */
 
-    if (i == 0xff) {
+    if (i == 0xFF) {
 	struct block *prevPtr, *nextPtr;
 	bigBlockPtr = (struct block *) overPtr - 1;
 	prevPtr = bigBlockPtr->prevPtr;

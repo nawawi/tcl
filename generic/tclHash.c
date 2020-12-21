@@ -1224,7 +1224,6 @@ HashStringKey(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static Tcl_HashEntry *
 BogusFind(
     TCL_UNUSED(Tcl_HashTable *),
@@ -1251,7 +1250,6 @@ BogusFind(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static Tcl_HashEntry *
 BogusCreate(
     TCL_UNUSED(Tcl_HashTable *),

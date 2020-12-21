@@ -14,12 +14,26 @@
  */
 
 #include "tclInt.h"
+
+/*
+ * In macOS 10.12 the os_unfair_lock was introduced as a replacement for the
+ * OSSpinLock, and the OSSpinLock was deprecated.
+ */
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
+#define USE_OS_UNFAIR_LOCK
+#include <os/lock.h>
+#undef TCL_MAC_DEBUG_NOTIFIER
+#endif
+
 #ifdef HAVE_COREFOUNDATION	/* Traditional unix select-based notifier is
 				 * in tclUnixNotfy.c */
 #include <CoreFoundation/CoreFoundation.h>
 #include <pthread.h>
 
 /* #define TCL_MAC_DEBUG_NOTIFIER 1 */
+
+#if  !defined(USE_OS_UNFAIR_LOCK)
 
 /*
  * We use the Darwin-native spinlock API rather than pthread mutexes for
@@ -172,26 +186,45 @@ SpinLockTry(
 
 #pragma GCC diagnostic pop
 #endif /* HAVE_LIBKERN_OSATOMIC_H && HAVE_OSSPINLOCKLOCK */
+#endif /* not using os_unfair_lock */
 
 /*
- * These spinlocks lock access to the global notifier state.
+ * These locks control access to the global notifier state.
  */
 
+#if defined(USE_OS_UNFAIR_LOCK)
+static os_unfair_lock notifierInitLock = OS_UNFAIR_LOCK_INIT;
+static os_unfair_lock notifierLock     = OS_UNFAIR_LOCK_INIT;
+#else
 static OSSpinLock notifierInitLock = SPINLOCK_INIT;
 static OSSpinLock notifierLock     = SPINLOCK_INIT;
+#endif
 
 /*
- * Macros abstracting notifier locking/unlocking
+ * Macros that abstract notifier locking/unlocking
  */
 
+#if defined(USE_OS_UNFAIR_LOCK)
+#define LOCK_NOTIFIER_INIT	os_unfair_lock_lock(&notifierInitLock)
+#define UNLOCK_NOTIFIER_INIT	os_unfair_lock_unlock(&notifierInitLock)
+#define LOCK_NOTIFIER		os_unfair_lock_lock(&notifierLock)
+#define UNLOCK_NOTIFIER		os_unfair_lock_unlock(&notifierLock)
+#define LOCK_NOTIFIER_TSD	os_unfair_lock_lock(&tsdPtr->tsdLock)
+#define UNLOCK_NOTIFIER_TSD	os_unfair_lock_unlock(&tsdPtr->tsdLock)
+#else
 #define LOCK_NOTIFIER_INIT	SpinLockLock(&notifierInitLock)
 #define UNLOCK_NOTIFIER_INIT	SpinLockUnlock(&notifierInitLock)
 #define LOCK_NOTIFIER		SpinLockLock(&notifierLock)
 #define UNLOCK_NOTIFIER		SpinLockUnlock(&notifierLock)
 #define LOCK_NOTIFIER_TSD	SpinLockLock(&tsdPtr->tsdLock)
 #define UNLOCK_NOTIFIER_TSD	SpinLockUnlock(&tsdPtr->tsdLock)
+#endif
 
-#ifdef TCL_MAC_DEBUG_NOTIFIER
+/*
+ * The debug version of the Notifier only works if using OSSpinLock.
+ */
+
+#if defined(TCL_MAC_DEBUG_NOTIFIER) && !defined(USE_OS_UNFAIR_LOCK)
 #define TclMacOSXNotifierDbgMsg(m, ...) \
     do {								\
 	fprintf(notifierLog?notifierLog:stderr, "tclMacOSXNotify.c:%d: " \
@@ -218,7 +251,7 @@ static OSSpinLock notifierLock     = SPINLOCK_INIT;
 #undef LOCK_NOTIFIER
 #define LOCK_NOTIFIER		SpinLockLockDbg(&notifierLock)
 #undef LOCK_NOTIFIER_TSD
-#define LOCK_NOTIFIER_TSD	SpinLockLockDbg(&tsdPtr->tsdLock)
+#define LOCK_NOTIFIER_TSD	SpinLockLockDbg(tsdPtr->tsdLock)
 #include <asl.h>
 static FILE *notifierLog = NULL;
 #ifndef NOTIFIER_LOG
@@ -357,8 +390,6 @@ typedef struct ThreadSpecificData {
     int runLoopRunning;		/* True if this thread's Tcl runLoop is
 				 * running. */
     int runLoopNestingLevel;	/* Level of nested runLoop invocations. */
-    int runLoopServicingEvents;	/* True if this thread's runLoop is servicing
-				 * Tcl events. */
 
     /* Must hold the notifierLock before accessing the following fields: */
     /* Start notifierLock section */
@@ -371,9 +402,14 @@ typedef struct ThreadSpecificData {
 				 * from these pointers. */
     /* End notifierLock section */
 
+#if defined(USE_OS_UNFAIR_LOCK)
+    os_unfair_lock tsdLock;
+#else
     OSSpinLock tsdLock;		/* Must hold this lock before acessing the
 				 * following fields from more than one
 				 * thread. */
+#endif
+
     /* Start tsdLock section */
     SelectMasks checkMasks;	/* This structure is used to build up the
 				 * masks to be used in the next call to
@@ -565,7 +601,6 @@ Tcl_InitNotifier(void)
     /*
      * Initialize support for weakly imported spinlock API.
      */
-
     if (pthread_once(&spinLockLockInitControl, SpinLockLockInit)) {
 	Tcl_Panic("Tcl_InitNotifier: pthread_once failed");
     }
@@ -714,7 +749,7 @@ Tcl_InitNotifier(void)
 	bzero(&runLoopObserverContext, sizeof(CFRunLoopObserverContext));
 	runLoopObserverContext.info = tsdPtr;
 	runLoopObserver = CFRunLoopObserverCreate(NULL,
-		kCFRunLoopEntry|kCFRunLoopExit|kCFRunLoopBeforeWaiting, TRUE,
+		kCFRunLoopEntry|kCFRunLoopExit, TRUE,
 		LONG_MIN, UpdateWaitingListAndServiceEvents,
 		&runLoopObserverContext);
 	if (!runLoopObserver) {
@@ -732,7 +767,7 @@ Tcl_InitNotifier(void)
 	 */
 
 	runLoopObserverTcl = CFRunLoopObserverCreate(NULL,
-		kCFRunLoopEntry|kCFRunLoopExit|kCFRunLoopBeforeWaiting, TRUE,
+		kCFRunLoopEntry|kCFRunLoopExit, TRUE,
 		LONG_MIN, UpdateWaitingListAndServiceEvents,
 		&runLoopObserverContext);
 	if (!runLoopObserverTcl) {
@@ -748,7 +783,11 @@ Tcl_InitNotifier(void)
 	tsdPtr->runLoopObserverTcl = runLoopObserverTcl;
 	tsdPtr->runLoopTimer = NULL;
 	tsdPtr->waitTime = CF_TIMEINTERVAL_FOREVER;
+#if defined(USE_OS_UNFAIR_LOCK)
+	tsdPtr->tsdLock = OS_UNFAIR_LOCK_INIT;
+#else
 	tsdPtr->tsdLock = SPINLOCK_INIT;
+#endif
     }
 
     LOCK_NOTIFIER_INIT;
@@ -806,7 +845,6 @@ Tcl_InitNotifier(void)
     ENABLE_ASL;
     notifierCount++;
     UNLOCK_NOTIFIER_INIT;
-
     return tsdPtr;
 }
 
@@ -906,7 +944,7 @@ StartNotifierThread(void)
 
 void
 Tcl_FinalizeNotifier(
-    ClientData clientData)		/* Not used. */
+    ClientData clientData)
 {
     ThreadSpecificData *tsdPtr;
 
@@ -1093,11 +1131,9 @@ Tcl_SetTimer(
 
 static void
 TimerWakeUp(
-    CFRunLoopTimerRef timer,
-    void *info)
+    TCL_UNUSED(CFRunLoopTimerRef),
+    TCL_UNUSED(ClientData))
 {
-    (void)timer;
-    (void)info;
 }
 
 /*
@@ -1444,6 +1480,10 @@ Tcl_WaitForEvent(
 	Tcl_Panic("Tcl_WaitForEvent: Notifier not initialized");
     }
 
+    /*
+     * A NULL timePtr means wait forever.
+     */
+
     if (timePtr) {
 	Tcl_Time vTime = *timePtr;
 
@@ -1457,14 +1497,23 @@ Tcl_WaitForEvent(
 	    tclScaleTimeProcPtr(&vTime, tclTimeClientData);
 	    waitTime = vTime.sec + 1.0e-6 * vTime.usec;
 	} else {
+
 	    /*
-	     * Polling: pretend to wait for files and tell the notifier thread
-	     * what we are doing. The notifier thread makes sure it goes
-	     * through select with its select mask in the same state as ours
-	     * currently is. We block until that happens.
+	     * The max block time was set to 0.
+	     *
+	     * If we set the waitTime to 0, then the call to CFRunLoopInMode
+	     * may return without processing all of its sources.  The Apple
+	     * documentation says that if the waitTime is 0 "only one pass is
+	     * made through the run loop before returning; if multiple sources
+	     * or timers are ready to fire immediately, only one (possibly two
+	     * if one is a version 0 source) will be fired, regardless of the
+	     * value of returnAfterSourceHandled."  This can cause some chanio
+	     * tests to fail.  So we use a small positive waitTime unless there
+	     * is another RunLoop running.
 	     */
 
 	    polling = 1;
+	    waitTime = tsdPtr->runLoopRunning ? 0 : 0.0001;
 	}
     }
 
@@ -1477,18 +1526,18 @@ Tcl_WaitForEvent(
 
     /*
      * If the Tcl runloop is already running (e.g. if Tcl_WaitForEvent was
-     * called recursively) or is servicing events via the runloop observer,
-     * re-run it in a custom runloop mode containing only the source for the
-     * notifier thread, otherwise wakeups from other sources added to the
-     * common runloop modes might get lost or 3rd party event handlers might
-     * get called when they do not expect to be.
+     * called recursively) start a new runloop in a custom runloop mode
+     * containing only the source for the notifier thread.  Otherwise wakeups
+     * from other sources added to the common runloop mode might get lost or
+     * 3rd party event handlers might get called when they do not expect to
+     * be.
      */
 
     runLoopRunning = tsdPtr->runLoopRunning;
     tsdPtr->runLoopRunning = 1;
-    runLoopStatus = CFRunLoopRunInMode(tsdPtr->runLoopServicingEvents ||
-	    runLoopRunning ? tclEventsOnlyRunLoopMode : kCFRunLoopDefaultMode,
-	    waitTime, TRUE);
+    runLoopStatus = CFRunLoopRunInMode(
+	runLoopRunning ? tclEventsOnlyRunLoopMode : kCFRunLoopDefaultMode,
+	waitTime, TRUE);
     tsdPtr->runLoopRunning = runLoopRunning;
 
     LOCK_NOTIFIER_TSD;
@@ -1601,13 +1650,11 @@ QueueFileEvents(
 
 static void
 UpdateWaitingListAndServiceEvents(
-    CFRunLoopObserverRef observer,
+    TCL_UNUSED(CFRunLoopObserverRef),
     CFRunLoopActivity activity,
     void *info)
 {
     ThreadSpecificData *tsdPtr = (ThreadSpecificData *)info;
-    (void)observer;
-
     if (tsdPtr->sleeping) {
 	return;
     }
@@ -1629,19 +1676,6 @@ UpdateWaitingListAndServiceEvents(
 	    UNLOCK_NOTIFIER;
 	}
 	tsdPtr->runLoopNestingLevel--;
-	break;
-    case kCFRunLoopBeforeWaiting:
-	if (tsdPtr->runLoopTimer && !tsdPtr->runLoopServicingEvents &&
-		(tsdPtr->runLoopNestingLevel > 1
-			|| !tsdPtr->runLoopRunning)) {
-	    tsdPtr->runLoopServicingEvents = 1;
-            /*
-	     * This call seems to simply force event processing through and
-	     * prevents hangups that have long been observed with Tk-Cocoa.
-	     */
-	    Tcl_ServiceAll();
-	    tsdPtr->runLoopServicingEvents = 0;
-	}
 	break;
     default:
 	break;
@@ -1675,7 +1709,7 @@ OnOffWaitingList(
 {
     int changeWaitingList;
 
-#ifdef TCL_MAC_DEBUG_NOTIFIER
+#if defined(TCL_MAC_DEBUG_NOTIFIER) && !defined(USE_OS_UNFAIR_LOCK)
     if (SpinLockTry(&notifierLock)) {
 	Tcl_Panic("OnOffWaitingList: notifierLock unlocked");
     }
@@ -1993,14 +2027,13 @@ static TCL_NORETURN void
 static TCL_NORETURN void
 >>>>>>> upstream/master
 NotifierThreadProc(
-    ClientData dummy)	/* Not used. */
+    TCL_UNUSED(ClientData))
 {
     ThreadSpecificData *tsdPtr;
     fd_set readableMask, writableMask, exceptionalMask;
     int i, numFdBits = 0, polling;
     struct timeval poll = {0., 0.}, *timePtr;
     char buf[2];
-    (void)dummy;
 
     /*
      * Look for file events and report them to interested threads.
@@ -2219,9 +2252,19 @@ AtForkChild(void)
 {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
 
-    UNLOCK_NOTIFIER_TSD;
-    UNLOCK_NOTIFIER;
-    UNLOCK_NOTIFIER_INIT;
+    /*
+     * If a child process unlocks an os_unfair_lock that was created in its parent
+     * the child will exit with an illegal instruction error.  So we reinitialize
+     * the lock in the child rather than attempt to unlock it.
+     */
+
+#if defined(USE_OS_UNFAIR_LOCK)
+    tsdPtr->tsdLock = OS_UNFAIR_LOCK_INIT;
+#else
+       UNLOCK_NOTIFIER_TSD;
+       UNLOCK_NOTIFIER;
+       UNLOCK_NOTIFIER_INIT;
+#endif
     if (tsdPtr->runLoop) {
 	tsdPtr->runLoop = NULL;
 	if (!noCFafterFork) {

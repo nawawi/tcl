@@ -849,7 +849,7 @@ TclOO_Object_VarName(
      * (including traversing variable links), convert back to a name.
      */
 
-    varNamePtr = Tcl_NewObj();
+    TclNewObj(varNamePtr);
     if (aryVar != NULL) {
 	Tcl_GetVariableFullName(interp, (Tcl_Var) aryVar, varNamePtr);
 
@@ -1271,7 +1271,7 @@ TclOOSelfObjCmd(
 	}
     case SELF_CALL:
 	result[0] = TclOORenderCallChain(interp, contextPtr->callPtr);
-	result[1] = Tcl_NewIntObj(contextPtr->index);
+	TclNewIntObj(result[1], contextPtr->index);
 	Tcl_SetObjResult(interp, Tcl_NewListObj(2, result));
 	return TCL_OK;
     }

@@ -692,6 +692,7 @@ TclRegAbout(
      * well and Tcl has other limits that constrain things as well...
      */
 
+<<<<<<< HEAD
     resultObj = Tcl_NewObj();
     Tcl_ListObjAppendElement(NULL, resultObj,
 <<<<<<< HEAD
@@ -706,6 +707,11 @@ TclRegAbout(
 >>>>>>> upstream/master
 =======
 	    TclNewWideIntObjFromSize(regexpPtr->re.re_nsub));
+>>>>>>> upstream/master
+=======
+    TclNewObj(resultObj);
+    TclNewIndexObj(infoObj, regexpPtr->re.re_nsub);
+    Tcl_ListObjAppendElement(NULL, resultObj, infoObj);
 >>>>>>> upstream/master
 
     /*
@@ -1089,12 +1095,11 @@ FreeRegexp(
 
 static void
 FinalizeRegexp(
-    ClientData dummy)	/* Not used. */
+    TCL_UNUSED(ClientData))
 {
     int i;
     TclRegexp *regexpPtr;
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
-    (void)dummy;
 
     for (i = 0; (i < NUM_REGEXPS) && (tsdPtr->patterns[i] != NULL); i++) {
 	regexpPtr = tsdPtr->regexps[i];

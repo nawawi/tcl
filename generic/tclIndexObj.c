@@ -244,6 +244,7 @@ GetIndexFromObjList(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    sizeof(char *), msg, flags, indexPtr);
 
     /*
@@ -270,6 +271,9 @@ GetIndexFromObjList(
 >>>>>>> upstream/master
 =======
 	    sizeof(char *), msg, flags | INDEX_TEMP_TABLE, indexPtr);
+=======
+	    sizeof(char *), msg, flags | TCL_INDEX_TEMP_TABLE, indexPtr);
+>>>>>>> upstream/master
 
     Tcl_Free((void *)tablePtr);
 >>>>>>> upstream/master
@@ -339,6 +343,7 @@ Tcl_GetIndexFromObjStruct(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (objPtr->typePtr == &indexType) {
 =======
     if (!(flags & INDEX_TEMP_TABLE) && objPtr->typePtr == &indexType) {
@@ -358,6 +363,9 @@ Tcl_GetIndexFromObjStruct(
 >>>>>>> upstream/master
 =======
     if (!(flags & INDEX_TEMP_TABLE)) {
+=======
+    if (!(flags & TCL_INDEX_TEMP_TABLE)) {
+>>>>>>> upstream/master
     irPtr = TclFetchIntRep(objPtr, &indexType);
     if (irPtr) {
 <<<<<<< HEAD
@@ -430,6 +438,7 @@ Tcl_GetIndexFromObjStruct(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (objPtr->typePtr == &indexType) {
 	indexRep = objPtr->internalRep.twoPtrValue.ptr1;
     } else {
@@ -439,6 +448,9 @@ Tcl_GetIndexFromObjStruct(
 	objPtr->typePtr = &indexType;
 =======
     if (!(flags & INDEX_TEMP_TABLE)) {
+=======
+    if (!(flags & TCL_INDEX_TEMP_TABLE)) {
+>>>>>>> upstream/master
     irPtr = TclFetchIntRep(objPtr, &indexType);
     if (irPtr) {
 	indexRep = (IndexRep *)irPtr->twoPtrValue.ptr1;
@@ -717,7 +729,7 @@ PrefixMatchObjCmd(
     static const char *const matchOptions[] = {
 	"-error", "-exact", "-message", NULL
     };
-    enum matchOptions {
+    enum matchOptionsEnum {
 	PRFMATCH_ERROR, PRFMATCH_EXACT, PRFMATCH_MESSAGE
     };
 
@@ -731,7 +743,7 @@ PrefixMatchObjCmd(
 		&index) != TCL_OK) {
 	    return TCL_ERROR;
 	}
-	switch ((enum matchOptions) index) {
+	switch ((enum matchOptionsEnum) index) {
 	case PRFMATCH_EXACT:
 	    flags |= TCL_EXACT;
 	    break;
@@ -797,7 +809,7 @@ PrefixMatchObjCmd(
 	}
 	Tcl_ListObjAppendElement(interp, errorPtr,
 		Tcl_NewStringObj("-code", 5));
-	Tcl_ListObjAppendElement(interp, errorPtr, Tcl_NewIntObj(result));
+	Tcl_ListObjAppendElement(interp, errorPtr, Tcl_NewWideIntObj(result));
 
 	return Tcl_SetReturnOptions(interp, errorPtr);
     }
@@ -951,7 +963,7 @@ PrefixLongestObjCmd(
 		     * Adjust in case we stopped in the middle of a UTF char.
 		     */
 
-		    resultLength = Tcl_UtfPrev(&resultString[i+1],
+		    resultLength = TclUtfPrev(&resultString[i+1],
 			    resultString) - resultString;
 		    break;
 		}

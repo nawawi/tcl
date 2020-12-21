@@ -211,10 +211,9 @@ InitTimer(void)
 
 static void
 TimerExitProc(
-    ClientData dummy)	/* Not used. */
+    TCL_UNUSED(ClientData))
 {
     ThreadSpecificData *tsdPtr = (ThreadSpecificData *)TclThreadDataKeyGet(&dataKey);
-    (void)dummy;
 
     Tcl_DeleteEventSource(TimerSetupProc, TimerCheckProc, NULL);
     if (tsdPtr != NULL) {
@@ -403,12 +402,11 @@ Tcl_DeleteTimerHandler(
 
 static void
 TimerSetupProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     Tcl_Time blockTime;
     ThreadSpecificData *tsdPtr = InitTimer();
-    (void)dummy;
 
     if (((flags & TCL_IDLE_EVENTS) && tsdPtr->idleList)
 	    || ((flags & TCL_TIMER_EVENTS) && tsdPtr->timerPending)) {
@@ -462,13 +460,12 @@ TimerSetupProc(
 
 static void
 TimerCheckProc(
-    ClientData dummy,		/* Not used. */
+    TCL_UNUSED(ClientData),
     int flags)			/* Event flags as passed to Tcl_DoOneEvent. */
 {
     Tcl_Event *timerEvPtr;
     Tcl_Time blockTime;
     ThreadSpecificData *tsdPtr = InitTimer();
-    (void)dummy;
 
     if ((flags & TCL_TIMER_EVENTS) && tsdPtr->firstTimerHandlerPtr) {
 	/*
@@ -525,7 +522,7 @@ TimerCheckProc(
 
 static int
 TimerHandlerEventProc(
-    Tcl_Event *evPtr,		/* Event to service. */
+    TCL_UNUSED(Tcl_Event *),
     int flags)			/* Flags that indicate what events to handle,
 				 * such as TCL_FILE_EVENTS. */
 {
@@ -533,7 +530,6 @@ TimerHandlerEventProc(
     Tcl_Time time;
     int currentTimerId;
     ThreadSpecificData *tsdPtr = InitTimer();
-    (void)evPtr;
 
     /*
      * Do nothing if timers aren't enabled. This leaves the event on the
@@ -784,10 +780,9 @@ TclServiceIdle(void)
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_AfterObjCmd(
-    ClientData dummy,	/* Unused */
+    TCL_UNUSED(ClientData),
     Tcl_Interp *interp,		/* Current interpreter. */
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
@@ -805,9 +800,8 @@ Tcl_AfterObjCmd(
     static const char *const afterSubCmds[] = {
 	"cancel", "idle", "info", NULL
     };
-    enum afterSubCmds {AFTER_CANCEL, AFTER_IDLE, AFTER_INFO};
+    enum afterSubCmdsEnum {AFTER_CANCEL, AFTER_IDLE, AFTER_INFO};
     ThreadSpecificData *tsdPtr = InitTimer();
-    (void)dummy;
 
     if (objc < 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "option ?arg ...?");
@@ -987,8 +981,9 @@ Tcl_AfterObjCmd(
 	break;
     case AFTER_INFO:
 	if (objc == 2) {
-            Tcl_Obj *resultObj = Tcl_NewObj();
+	    Tcl_Obj *resultObj;
 
+	    TclNewObj(resultObj);
 	    for (afterPtr = assocPtr->firstAfterPtr; afterPtr != NULL;
 		    afterPtr = afterPtr->nextPtr) {
 		if (assocPtr->interp == interp) {
@@ -1012,8 +1007,9 @@ Tcl_AfterObjCmd(
             Tcl_SetErrorCode(interp, "TCL","LOOKUP","EVENT", eventStr, NULL);
 	    return TCL_ERROR;
 	} else {
-            Tcl_Obj *resultListPtr = Tcl_NewObj();
+            Tcl_Obj *resultListPtr;
 
+            TclNewObj(resultListPtr);
             Tcl_ListObjAppendElement(interp, resultListPtr,
                     afterPtr->commandPtr);
             Tcl_ListObjAppendElement(interp, resultListPtr, Tcl_NewStringObj(
@@ -1356,16 +1352,14 @@ FreeAfterPtr(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static void
 AfterCleanupProc(
     ClientData clientData,	/* Points to AfterAssocData for the
 				 * interpreter. */
-    Tcl_Interp *dummy)		/* Interpreter that is being deleted. */
+    TCL_UNUSED(Tcl_Interp *))
 {
     AfterAssocData *assocPtr = (AfterAssocData *)clientData;
     AfterInfo *afterPtr;
-    (void)dummy;
 
     while (assocPtr->firstAfterPtr != NULL) {
 	afterPtr = assocPtr->firstAfterPtr;

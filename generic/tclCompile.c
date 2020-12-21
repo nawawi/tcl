@@ -9795,6 +9795,7 @@ TclInitByteCode(
     iPtr = envPtr->iPtr;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     codeBytes = envPtr->codeNext - envPtr->codeStart;
     objArrayBytes = envPtr->literalArrayNext * sizeof(Tcl_Obj *);
     exceptArrayBytes = envPtr->exceptArrayNext * sizeof(ExceptionRange);
@@ -9802,6 +9803,9 @@ TclInitByteCode(
     cmdLocBytes = GetCmdLocEncodingSize(envPtr);
 =======
     if (Tcl_GetMaster(interp) == NULL &&
+=======
+    if (Tcl_GetParent(interp) == NULL &&
+>>>>>>> upstream/master
 	    !Tcl_LimitTypeEnabled(interp, TCL_LIMIT_COMMANDS|TCL_LIMIT_TIME)
 	    && IsCompactibleCompileEnv(&compEnv)) {
 	TclFreeCompileEnv(&compEnv);
@@ -10804,6 +10808,7 @@ TclGetInnermostExceptionRange(
 	    return rangePtr;
 	}
     }
+<<<<<<< HEAD
     return NULL;
 }
 
@@ -10840,6 +10845,12 @@ TclExpandCodeArray(
 	memcpy(newPtr, envPtr->codeStart, currBytes);
 	envPtr->codeStart = newPtr;
 	envPtr->mallocedCodeArray = 1;
+=======
+    tokenPtr++;
+    if (valuePtr != NULL) {
+	TclNewObj(tempPtr);
+	Tcl_IncrRefCount(tempPtr);
+>>>>>>> upstream/master
     }
 
     envPtr->codeNext = envPtr->codeStart + currBytes;
@@ -10975,8 +10986,13 @@ TclInitByteCode(
     iPtr = envPtr->iPtr;
 >>>>>>> upstream/master
 
+<<<<<<< HEAD
     if (envPtr->exceptArrayPtr[range].type != LOOP_EXCEPTION_RANGE) {
 	Tcl_Panic("trying to add 'break' fixup to full exception range");
+=======
+    if (cmdPtr && TclRoutineHasName(cmdPtr)) {
+	TclSetCmdNameObj(interp, TclFetchLiteral(envPtr, cmdLitIdx), cmdPtr);
+>>>>>>> upstream/master
     }
 
     if (++auxPtr->numBreakTargets > auxPtr->allocBreakTargets) {
@@ -10999,7 +11015,13 @@ TclAddLoopContinueFixup(
     CompileEnv *envPtr,
     ExceptionAux *auxPtr)
 {
+<<<<<<< HEAD
     int range = auxPtr - envPtr->exceptAuxArrayPtr;
+=======
+    DefineLineInformation;
+    size_t wordIdx = 0;
+    int depth = TclGetStackDepth(envPtr);
+>>>>>>> upstream/master
 
     if (envPtr->exceptArrayPtr[range].type != LOOP_EXCEPTION_RANGE) {
 	Tcl_Panic("trying to add 'continue' fixup to full exception range");
@@ -11198,6 +11220,7 @@ static void
 <<<<<<< HEAD
 StartExpanding(
     CompileEnv *envPtr)
+<<<<<<< HEAD
 =======
 EnterCmdExtentData(
     CompileEnv *envPtr,		/* Points to the compilation environment
@@ -11210,6 +11233,12 @@ EnterCmdExtentData(
 >>>>>>> upstream/master
 {
     int i;
+=======
+{
+    DefineLineInformation;
+    int wordIdx = 0;
+    int depth = TclGetStackDepth(envPtr);
+>>>>>>> upstream/master
 
 <<<<<<< HEAD
     TclEmitOpcode(INST_EXPAND_START, envPtr);
@@ -11257,12 +11286,55 @@ EnterCmdExtentData(
 <<<<<<< HEAD
     envPtr->expandCount++;
 }
+<<<<<<< HEAD
 
 /*
  * ---------------------------------------------------------------------
 =======
     if ((cmdIndex < 0) || (cmdIndex >= envPtr->numCommands)) {
 	Tcl_Panic("EnterCmdExtentData: bad command index %d", cmdIndex);
+=======
+
+static int
+CompileCmdCompileProc(
+    Tcl_Interp *interp,
+    Tcl_Parse *parsePtr,
+    Command *cmdPtr,
+    CompileEnv *envPtr)
+{
+    DefineLineInformation;
+    int unwind = 0, incrOffset = -1;
+    int depth = TclGetStackDepth(envPtr);
+
+    /*
+     * Emit of the INST_START_CMD instruction is controlled by the value of
+     * envPtr->atCmdStart:
+     *
+     * atCmdStart == 2	: We are not using the INST_START_CMD instruction.
+     * atCmdStart == 1	: INST_START_CMD was the last instruction emitted.
+     *			: We do not need to emit another.  Instead we
+     *			: increment the number of cmds started at it (except
+     *			: for the special case at the start of a script.)
+     * atCmdStart == 0	: The last instruction was something else.  We need
+     *			: to emit INST_START_CMD here.
+     */
+
+    switch (envPtr->atCmdStart) {
+    case 0:
+	unwind = tclInstructionTable[INST_START_CMD].numBytes;
+	TclEmitInstInt4(INST_START_CMD, 0, envPtr);
+	incrOffset = envPtr->codeNext - envPtr->codeStart;
+	TclEmitInt4(0, envPtr);
+	break;
+    case 1:
+	if (envPtr->codeNext > envPtr->codeStart) {
+	    incrOffset = envPtr->codeNext - 4 - envPtr->codeStart;
+	}
+	break;
+    case 2:
+	/* Nothing to do */
+	;
+>>>>>>> upstream/master
     }
 
 <<<<<<< HEAD
@@ -11361,6 +11433,7 @@ TclFindCompiledLocal(
 >>>>>>> upstream/master
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     ECL *ePtr;
     const char *last;
     int wordIdx, wordLine, *wwlines, *wordNext;
@@ -11369,6 +11442,30 @@ TclFindCompiledLocal(
     int localVar = -1;
     int i;
     Proc *procPtr;
+=======
+    Interp *iPtr = (Interp *) interp;
+    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
+    ExtCmdLoc *eclPtr = envPtr->extCmdMapPtr;
+    Tcl_Obj *cmdObj;
+    Command *cmdPtr = NULL;
+    int code = TCL_ERROR;
+    int cmdKnown, expand = -1;
+    int *wlines, wlineat;
+    int cmdLine = envPtr->line;
+    int *clNext = envPtr->clNext;
+    int cmdIdx = envPtr->numCommands;
+    int startCodeOffset = envPtr->codeNext - envPtr->codeStart;
+    int depth = TclGetStackDepth(envPtr);
+
+    assert (parsePtr->numWords > 0);
+
+    /* Pre-Compile */
+
+    TclNewObj(cmdObj);
+    envPtr->numCommands++;
+    EnterCmdStartData(envPtr, cmdIdx,
+	    parsePtr->commandStart - envPtr->source, startCodeOffset);
+>>>>>>> upstream/master
 
     /*
      * If not creating a temporary, does a local variable of the specified

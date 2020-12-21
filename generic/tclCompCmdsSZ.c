@@ -129,9 +129,9 @@ TclCompileSetCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+    DefineLineInformation;	/* TIP #280 */
     Tcl_Token *varTokenPtr, *valueTokenPtr;
     int isAssignment, isScalar, localIndex, numWords;
-    DefineLineInformation;	/* TIP #280 */
 
     numWords = parsePtr->numWords;
     if ((numWords != 2) && (numWords != 3)) {
@@ -222,10 +222,10 @@ TclCompileStringCatCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+    DefineLineInformation;	/* TIP #280 */
     int i, numWords = parsePtr->numWords, numArgs;
     Tcl_Token *wordTokenPtr;
     Tcl_Obj *obj, *folded;
-    DefineLineInformation;	/* TIP #280 */
 
     /* Trivial case, no arg */
 
@@ -265,7 +265,7 @@ TclCompileStringCatCmd(
     folded = NULL;
     wordTokenPtr = TokenAfter(parsePtr->tokenPtr);
     for (i = 1; i < numWords; i++) {
-	obj = Tcl_NewObj();
+	TclNewObj(obj);
 	if (TclWordKnownAtCompileTime(wordTokenPtr, obj)) {
 	    if (folded) {
 		Tcl_AppendObjToObj(folded, obj);
@@ -593,8 +593,8 @@ TclCompileStringInsertCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
-    Tcl_Token *tokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr;
     int idx;
 
     if (parsePtr->numWords != 4) {
@@ -611,7 +611,7 @@ TclCompileStringInsertCmd(
 	    TCL_INDEX_END, &idx)) {
 
 	/* Nothing useful knowable - cease compile; let it direct eval */
-	return TCL_OK;
+	return TCL_ERROR;
     }
 
     /* Compute and push the string to be inserted */
@@ -660,7 +660,7 @@ TclCompileStringIsCmd(
 	"true",		"upper",	"wideinteger",	"wordchar",
 	"xdigit",	NULL
     };
-    enum isClasses {
+    enum isClassesEnum {
 	STR_IS_ALNUM,	STR_IS_ALPHA,	STR_IS_ASCII,	STR_IS_CONTROL,
 	STR_IS_BOOL,	STR_IS_DICT, STR_IS_DIGIT,	STR_IS_DOUBLE,	STR_IS_ENTIER,
 	STR_IS_FALSE,	STR_IS_GRAPH,	STR_IS_INT,	STR_IS_LIST,
@@ -675,7 +675,7 @@ TclCompileStringIsCmd(
     if (parsePtr->numWords < 3 || parsePtr->numWords > 6) {
 	return TCL_ERROR;
     }
-    isClass = Tcl_NewObj();
+    TclNewObj(isClass);
     if (!TclWordKnownAtCompileTime(tokenPtr, isClass)) {
 	Tcl_DecrRefCount(isClass);
 	return TCL_ERROR;
@@ -724,7 +724,7 @@ TclCompileStringIsCmd(
 
     CompileWord(envPtr, tokenPtr, interp, parsePtr->numWords-1);
 
-    switch ((enum isClasses) t) {
+    switch ((enum isClassesEnum) t) {
     case STR_IS_ALNUM:
 	strClassType = STR_CLASS_ALNUM;
 	goto compileStrClass;
@@ -1081,7 +1081,7 @@ TclCompileStringMapCmd(
     }
     mapTokenPtr = TokenAfter(parsePtr->tokenPtr);
     stringTokenPtr = TokenAfter(mapTokenPtr);
-    mapObj = Tcl_NewObj();
+    TclNewObj(mapObj);
     Tcl_IncrRefCount(mapObj);
     if (!TclWordKnownAtCompileTime(mapTokenPtr, mapObj)) {
 	Tcl_DecrRefCount(mapObj);
@@ -1197,8 +1197,8 @@ TclCompileStringReplaceCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds the resulting instructions. */
 {
-    Tcl_Token *tokenPtr, *valueTokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr, *valueTokenPtr;
     int first, last;
 
     if (parsePtr->numWords < 4 || parsePtr->numWords > 5) {
@@ -2471,7 +2471,7 @@ StringClassDesc const tclStringClassTable[] = {
     {"upper",	Tcl_UniCharIsUpper},
     {"word",	Tcl_UniCharIsWordChar},
     {"xdigit",	UniCharIsHexDigit},
-    {NULL,	NULL}
+    {"",	NULL}
 };
 
 /*
@@ -2502,13 +2502,13 @@ TclCompileSubstCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+    DefineLineInformation;	/* TIP #280 */
     int numArgs = parsePtr->numWords - 1;
     int numOpts = numArgs - 1;
     int objc, flags = TCL_SUBST_ALL;
     Tcl_Obj **objv/*, *toSubst = NULL*/;
     Tcl_Token *wordTokenPtr = TokenAfter(parsePtr->tokenPtr);
     int code = TCL_ERROR;
-    DefineLineInformation;	/* TIP #280 */
 
     if (numArgs == 0) {
 	return TCL_ERROR;
@@ -2517,7 +2517,7 @@ TclCompileSubstCmd(
     objv = (Tcl_Obj **)TclStackAlloc(interp, /*numArgs*/ numOpts * sizeof(Tcl_Obj *));
 
     for (objc = 0; objc < /*numArgs*/ numOpts; objc++) {
-	objv[objc] = Tcl_NewObj();
+	TclNewObj(objv[objc]);
 	Tcl_IncrRefCount(objv[objc]);
 	if (!TclWordKnownAtCompileTime(wordTokenPtr, objv[objc])) {
 	    objc++;
@@ -2840,6 +2840,7 @@ TclCompileSwitchCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+    DefineLineInformation;	/* TIP #280 */
     Tcl_Token *tokenPtr;	/* Pointer to tokens in command. */
     int numWords;		/* Number of words in command. */
 
@@ -2856,7 +2857,6 @@ TclCompileSwitchCmd(
     int foundMode = 0;		/* Have we seen a mode flag yet? */
     int i, valueIndex;
     int result = TCL_ERROR;
-    DefineLineInformation;	/* TIP #280 */
     int *clNext = envPtr->clNext;
 
     /*
@@ -3798,19 +3798,24 @@ DisassembleJumptableInfo(
     register JumptableInfo *jtPtr = clientData;
 =======
     JumptableInfo *jtPtr = (JumptableInfo *)clientData;
+<<<<<<< HEAD
 >>>>>>> upstream/master
     Tcl_Obj *mapping = Tcl_NewObj();
+=======
+    Tcl_Obj *mapping;
+>>>>>>> upstream/master
     Tcl_HashEntry *hPtr;
     Tcl_HashSearch search;
     const char *keyPtr;
-    int offset;
+    size_t offset;
 
+    TclNewObj(mapping);
     hPtr = Tcl_FirstHashEntry(&jtPtr->hashTable, &search);
     for (; hPtr ; hPtr = Tcl_NextHashEntry(&search)) {
 	keyPtr = (const char *)Tcl_GetHashKey(&jtPtr->hashTable, hPtr);
 	offset = PTR2INT(Tcl_GetHashValue(hPtr));
 	Tcl_DictObjPut(NULL, mapping, Tcl_NewStringObj(keyPtr, -1),
-		Tcl_NewIntObj(offset));
+		Tcl_NewWideIntObj(offset));
     }
     Tcl_DictObjPut(NULL, dictObj, Tcl_NewStringObj("mapping", -1), mapping);
 }
@@ -4410,7 +4415,7 @@ IssueTryClausesInstructions(
 	    OP(				STR_EQ);
 	    JUMP4(			JUMP_FALSE, notECJumpSource);
 	} else {
-	    notECJumpSource = -1; /* LINT */
+	    notECJumpSource = -1;
 	}
 	OP(				POP);
 
@@ -4639,7 +4644,7 @@ IssueTryClausesFinallyInstructions(
 	    OP(				STR_EQ);
 	    JUMP4(			JUMP_FALSE, notECJumpSource);
 	} else {
-	    notECJumpSource = -1; /* LINT */
+	    notECJumpSource = -1;
 	}
 	OP(				POP);
 <<<<<<< HEAD
@@ -5129,9 +5134,9 @@ TclCompileUnsetCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+    DefineLineInformation;	/* TIP #280 */
     Tcl_Token *varTokenPtr;
     int isScalar, localIndex, flags = 1, i, varCount = 0, haveFlags = 0;
-    DefineLineInformation;	/* TIP #280 */
 
     /* TODO: Consider support for compiling expanded args. */
 <<<<<<< HEAD
@@ -5152,8 +5157,9 @@ TclCompileUnsetCmd(
 
 >>>>>>> upstream/master
     for (i=1,varTokenPtr=parsePtr->tokenPtr ; i<parsePtr->numWords ; i++) {
-	Tcl_Obj *leadingWord = Tcl_NewObj();
+	Tcl_Obj *leadingWord;
 
+	TclNewObj(leadingWord);
 	varTokenPtr = TokenAfter(varTokenPtr);
 	if (!TclWordKnownAtCompileTime(varTokenPtr, leadingWord)) {
 	    TclDecrRefCount(leadingWord);
@@ -5294,13 +5300,13 @@ TclCompileWhileCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)		/* Holds resulting instructions. */
 {
+    DefineLineInformation;	/* TIP #280 */
     Tcl_Token *testTokenPtr, *bodyTokenPtr;
     JumpFixup jumpEvalCondFixup;
     int testCodeOffset, bodyCodeOffset, jumpDist, range, code, boolVal;
     int loopMayEnd = 1;		/* This is set to 0 if it is recognized as an
 				 * infinite loop. */
     Tcl_Obj *boolObj;
-    DefineLineInformation;	/* TIP #280 */
 
     if (parsePtr->numWords != 3) {
 	return TCL_ERROR;
@@ -5556,8 +5562,8 @@ CompileUnaryOpCmd(
     int instruction,
     CompileEnv *envPtr)
 {
-    Tcl_Token *tokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr;
 
     if (parsePtr->numWords != 2) {
 	return TCL_ERROR;
@@ -5598,8 +5604,8 @@ CompileAssociativeBinaryOpCmd(
     int instruction,
     CompileEnv *envPtr)
 {
-    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     int words;
 
     /* TODO: Consider support for compiling expanded args. */
@@ -5683,8 +5689,8 @@ CompileComparisonOpCmd(
     int instruction,
     CompileEnv *envPtr)
 {
-    Tcl_Token *tokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr;
 
     /* TODO: Consider support for compiling expanded args. */
     if (parsePtr->numWords < 3) {
@@ -5837,14 +5843,14 @@ TclCompilePowOpCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)
 {
+    DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
+    int words;
+
     /*
      * This one has its own implementation because the ** operator is the only
      * one with right associativity.
      */
-
-    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
-    DefineLineInformation;	/* TIP #280 */
-    int words;
 
     for (words=1 ; words<parsePtr->numWords ; words++) {
 	tokenPtr = TokenAfter(tokenPtr);
@@ -6038,8 +6044,8 @@ TclCompileMinusOpCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)
 {
-    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     int words;
 
     /* TODO: Consider support for compiling expanded args. */
@@ -6083,8 +6089,8 @@ TclCompileDivOpCmd(
     TCL_UNUSED(Command *),
     CompileEnv *envPtr)
 {
-    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     DefineLineInformation;	/* TIP #280 */
+    Tcl_Token *tokenPtr = parsePtr->tokenPtr;
     int words;
 
     /* TODO: Consider support for compiling expanded args. */

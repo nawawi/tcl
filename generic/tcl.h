@@ -677,7 +677,7 @@ typedef void *ClientData;
  */
 
 #if !defined(TCL_WIDE_INT_TYPE)&&!defined(TCL_WIDE_INT_IS_LONG)
-#   if defined(_MSC_VER) || defined(_WIN32)
+#   if defined(_WIN32) && (!defined(__USE_MINGW_ANSI_STDIO) || !__USE_MINGW_ANSI_STDIO)
 #      define TCL_WIDE_INT_TYPE __int64
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -831,6 +831,11 @@ typedef unsigned TCL_WIDE_INT_TYPE	Tcl_WideUInt;
 	struct {long long tv_sec;} st_mtim;
 	struct {long long tv_sec;} st_ctim;
     } Tcl_StatBuf;
+<<<<<<< HEAD
+>>>>>>> upstream/master
+=======
+#elif defined(HAVE_STRUCT_STAT64) && !defined(__APPLE__)
+    typedef struct stat64 Tcl_StatBuf;
 >>>>>>> upstream/master
 #else
     typedef struct stat Tcl_StatBuf;
@@ -1426,11 +1431,14 @@ typedef struct Tcl_DString {
 #define TCL_DONT_QUOTE_HASH	8
 
 /*
- * Flag that may be passed to Tcl_GetIndexFromObj to force it to disallow
- * abbreviated strings.
+ * Flags that may be passed to Tcl_GetIndexFromObj.
+ * TCL_EXACT disallows abbreviated strings.
+ * TCL_INDEX_TEMP_TABLE disallows caching of lookups. A possible use case is
+ *      a table that will not live long enough to make it worthwhile.
  */
 
-#define TCL_EXACT	1
+#define TCL_EXACT		1
+#define TCL_INDEX_TEMP_TABLE	2
 
 /*
  *----------------------------------------------------------------------------
@@ -2105,12 +2113,14 @@ typedef void (Tcl_ScaleTimeProc) (Tcl_Time *timebuf, void *clientData);
  */
 
 typedef int	(Tcl_DriverBlockModeProc) (void *instanceData, int mode);
+typedef void Tcl_DriverCloseProc;
 typedef int	(Tcl_DriverClose2Proc) (void *instanceData,
 			Tcl_Interp *interp, int flags);
 typedef int	(Tcl_DriverInputProc) (void *instanceData, char *buf,
 			int toRead, int *errorCodePtr);
 typedef int	(Tcl_DriverOutputProc) (void *instanceData,
 			const char *buf, int toWrite, int *errorCodePtr);
+typedef void Tcl_DriverSeekProc;
 typedef int	(Tcl_DriverSetOptionProc) (void *instanceData,
 			Tcl_Interp *interp, const char *optionName,
 			const char *value);
@@ -2911,7 +2921,7 @@ typedef struct Tcl_EncodingType {
  * Unicode character in UTF-8. The valid values are 3 and 4
  * (or perhaps 1 if we want to support a non-unicode enabled core). If > 3,
  * then Tcl_UniChar must be 4-bytes in size (UCS-4) (the default). If == 3,
- * then Tcl_UniChar must be 2-bytes in size (UCS-2). Since Tcl 9.0, UCS-4
+ * then Tcl_UniChar must be 2-bytes in size (UTF-16). Since Tcl 9.0, UCS-4
  * mode is the default and recommended mode.
  */
 
@@ -3940,7 +3950,7 @@ EXTERN void		Tcl_GetMemoryInfo(Tcl_DString *dsPtr);
 #   define Tcl_DecrRefCount(objPtr) \
 	do { \
 	    Tcl_Obj *_objPtr = (objPtr); \
-	    if ((_objPtr)->refCount-- <= 1) { \
+	    if (_objPtr->refCount-- <= 1) { \
 		TclFreeObj(_objPtr); \
 	    } \
 	} while(0)

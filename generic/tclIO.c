@@ -491,9 +491,9 @@ static int              WillRead(Channel *chanPtr);
 
 #define IsBufferOverflowing(bufPtr) ((bufPtr)->nextAdded>(bufPtr)->bufLength)
 
-#define InsertPoint(bufPtr)	((bufPtr)->buf + (bufPtr)->nextAdded)
+#define InsertPoint(bufPtr)	(&(bufPtr)->buf[(bufPtr)->nextAdded])
 
-#define RemovePoint(bufPtr)	((bufPtr)->buf + (bufPtr)->nextRemoved)
+#define RemovePoint(bufPtr)	(&(bufPtr)->buf[(bufPtr)->nextRemoved])
 
 /*
  * For working with channel state flag bits.
@@ -976,7 +976,6 @@ TclInitIOSubsystem(void)
  *-------------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 void
 TclFinalizeIOSubsystem(void)
 {
@@ -4656,6 +4655,9 @@ CutChannel(
      */
 
     ChanThreadAction((Channel *) chan, TCL_CHANNEL_THREAD_REMOVE);
+
+    /* Channel is not managed by any thread */
+    statePtr->managingThread = NULL;
 }
 
 void
@@ -4700,6 +4702,9 @@ Tcl_CutChannel(
     for (; chanPtr != NULL ; chanPtr = chanPtr->upChanPtr) {
 	ChanThreadAction(chanPtr, TCL_CHANNEL_THREAD_REMOVE);
     }
+
+    /* Channel is not managed by any thread */
+    statePtr->managingThread = NULL;
 }
 
 /*
@@ -4814,7 +4819,6 @@ Tcl_SpliceChannel(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 TclClose(
     Tcl_Interp *interp,		/* Interpreter for errors. */
@@ -5078,7 +5082,6 @@ TclClose(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 int
 Tcl_CloseEx(
     Tcl_Interp *interp,		/* Interpreter for errors. */
@@ -6092,7 +6095,11 @@ Tcl_Write(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (srcLen == TCL_AUTO_LENGTH) {
+=======
+    if (srcLen == TCL_INDEX_NONE) {
+>>>>>>> upstream/master
 	srcLen = strlen(src);
 =======
     if (((Tcl_ChannelWideSeekProc(chanPtr->typePtr) != NULL)
@@ -6353,7 +6360,7 @@ Tcl_Write(
 	return TCL_IO_FAILURE;
     }
 
-    if (srcLen == TCL_AUTO_LENGTH) {
+    if (srcLen == TCL_INDEX_NONE) {
 	srcLen = strlen(src);
     }
 
@@ -6433,9 +6440,31 @@ Tcl_WriteChars(
 		&statePtr->outputEncodingState, dst,
 		dstLen + BUFFER_PADDING, &srcRead, &dstWrote, NULL);
 
+<<<<<<< HEAD
 	/*
 	 * See chan-io-1.[89]. Tcl Bug 506297.
 	 */
+=======
+    if (CheckChannelErrors(statePtr, TCL_WRITABLE) != 0) {
+	return TCL_IO_FAILURE;
+    }
+
+    chanPtr = statePtr->topChanPtr;
+
+    if (len == TCL_INDEX_NONE) {
+	len = strlen(src);
+    }
+    if (statePtr->encoding) {
+	return WriteChars(chanPtr, src, len);
+    }
+
+    /*
+     * Inefficient way to convert UTF-8 to byte-array, but the code
+     * parallels the way it is done for objects.  Special case for 1-byte
+     * (used by eg [puts] for the \n) could be extended to more efficient
+     * translation of the src string.
+     */
+>>>>>>> upstream/master
 
 	statePtr->outputEncodingFlags &= ~TCL_ENCODING_START;
 
@@ -8106,6 +8135,7 @@ Tcl_GetsObj(
     ChannelBuffer *bufPtr;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int inEofChar, skip, copiedTotal, oldLength, oldFlags, oldRemoved;
 =======
     int inEofChar, skip, copiedTotal, oldFlags, oldRemoved;
@@ -8114,6 +8144,35 @@ Tcl_GetsObj(
     Tcl_Encoding encoding;
     char *dst, *dstEnd, *eol, *eof;
     Tcl_EncodingState oldState;
+=======
+    int copied, copiedNow, result;
+    Tcl_Encoding encoding = statePtr->encoding;
+    int binaryMode;
+#define UTF_EXPANSION_FACTOR	1024
+    int factor = UTF_EXPANSION_FACTOR;
+
+    binaryMode = (encoding == NULL)
+	    && (statePtr->inputTranslation == TCL_TRANSLATE_LF)
+	    && (statePtr->inEofChar == '\0');
+
+    if (appendFlag) {
+	if (binaryMode && (NULL == TclGetBytesFromObj(NULL, objPtr, NULL))) {
+	    binaryMode = 0;
+	}
+    } else {
+	if (binaryMode) {
+	    Tcl_SetByteArrayLength(objPtr, 0);
+	} else {
+	    Tcl_SetObjLength(objPtr, 0);
+
+	    /*
+	     * We're going to access objPtr->bytes directly, so we must ensure
+	     * that this is actually a string object (otherwise it might have
+	     * been pure Unicode).
+	     *
+	     * Probably not needed anymore.
+	     */
+>>>>>>> upstream/master
 
     if (CheckChannelErrors(statePtr, TCL_READABLE) != 0) {
 <<<<<<< HEAD
@@ -10470,12 +10529,60 @@ ReadChars(
     size_t numBytes;
     int srcLen = BytesLeft(bufPtr);
 
+<<<<<<< HEAD
     /*
      * One src byte can yield at most one character.  So when the number of
      * src bytes we plan to read is less than the limit on character count to
      * be read, clearly we will remain within that limit, and we can use the
      * value of "srcLen" as a tighter limit for sizing receiving buffers.
      */
+=======
+	Tcl_DStringInit(&ds);
+	Tcl_DStringAppend(&ds, genericopt, -1);
+	if (optionList && (*optionList)) {
+	    TclDStringAppendLiteral(&ds, " ");
+	    Tcl_DStringAppend(&ds, optionList, -1);
+	}
+	if (Tcl_SplitList(interp, Tcl_DStringValue(&ds),
+		&argc, &argv) != TCL_OK) {
+	    Tcl_Panic("malformed option list in channel driver");
+	}
+	Tcl_ResetResult(interp);
+	errObj = Tcl_ObjPrintf("bad option \"%s\": should be one of ",
+                optionName ? optionName : "");
+	argc--;
+	for (i = 0; i < argc; i++) {
+	    Tcl_AppendPrintfToObj(errObj, "-%s, ", argv[i]);
+	}
+	Tcl_AppendPrintfToObj(errObj, "or -%s", argv[i]);
+        Tcl_SetObjResult(interp, errObj);
+	Tcl_DStringFree(&ds);
+	Tcl_Free((void *)argv);
+    }
+    Tcl_SetErrno(EINVAL);
+    return TCL_ERROR;
+}
+
+/*
+ *----------------------------------------------------------------------
+ *
+ * Tcl_GetChannelOption --
+ *
+ *	Gets a mode associated with an IO channel. If the optionName arg is
+ *	non NULL, retrieves the value of that option. If the optionName arg is
+ *	NULL, retrieves a list of alternating option names and values for the
+ *	given channel.
+ *
+ * Results:
+ *	A standard Tcl result. Also sets the supplied DString to the string
+ *	value of the option(s) returned.
+ *
+ * Side effects:
+ *	None.
+ *
+ *----------------------------------------------------------------------
+ */
+>>>>>>> upstream/master
 
     int toRead = ((charsToRead<0)||(charsToRead > srcLen)) ? srcLen : charsToRead;
 >>>>>>> upstream/master
@@ -23260,6 +23367,13 @@ CreateScriptRecord(
     Tcl_Preserve(statePtr);
 
     /*
+     * Avoid processing if the channel owner has been changed.
+     */
+    if (statePtr->managingThread != Tcl_GetCurrentThread()) {
+	goto done;
+    }
+
+    /*
      * If we are flushing in the background, be sure to call FlushChannel for
      * writable events. Note that we have to discard the writable event so we
      * don't call any write handlers before the flush is complete.
@@ -23293,6 +23407,13 @@ CreateScriptRecord(
 	} else {
 	    chPtr = chPtr->nextPtr;
 	}
+
+	/*
+	 * Stop if the channel owner has been changed in-between.
+	 */
+	if (chanPtr->state->managingThread != Tcl_GetCurrentThread()) {
+	    goto done;
+	}
     }
 >>>>>>> upstream/master
 
@@ -23315,6 +23436,7 @@ CreateScriptRecord(
 	UpdateInterest(chanPtr);
     }
 
+done:
     Tcl_Release(statePtr);
     TclChannelRelease(channel);
 
@@ -24136,6 +24258,11 @@ TclChannelEventScriptInvoker(
     int result;			/* Result of call to eval script. */
 
     /*
+     * Be sure event executed in managed channel (covering bugs similar [f583715154]).
+     */
+    assert(chanPtr->state->managingThread == Tcl_GetCurrentThread());
+
+    /*
      * We must preserve the interpreter so we can report errors on it later.
      * Note that we do not need to preserve the channel because that is done
      * by Tcl_NotifyChannel before calling channel handlers.
@@ -24353,11 +24480,14 @@ MBError(
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void
 ZeroTransferTimerProc(
     ClientData clientData)
 =======
 	/* ARGSUSED */
+=======
+>>>>>>> upstream/master
 int
 Tcl_FileEventObjCmd(
     TCL_UNUSED(ClientData),
@@ -25747,8 +25877,23 @@ DoRead(
 	     *    seeking. That's fine.
 	     */
 
+<<<<<<< HEAD
 	    if (bytesToRead == 0) {
 		break;
+=======
+	if (sizeb == TCL_INDEX_NONE) {
+	writeError:
+	    if (interp) {
+		TclNewObj(errObj);
+		Tcl_AppendStringsToObj(errObj, "error writing \"",
+			Tcl_GetChannelName(outChan), "\": ", NULL);
+		if (msg != NULL) {
+		    Tcl_AppendObjToObj(errObj, msg);
+		} else {
+		    Tcl_AppendStringsToObj(errObj, Tcl_PosixError(interp),
+			    NULL);
+		}
+>>>>>>> upstream/master
 	    }
 
 	    /*
@@ -27252,7 +27397,7 @@ FixLevelCode(
 	if (0 == strcmp(TclGetString(lv[i]), "-level")) {
 	    if (newlevel >= 0) {
 		lvn[j++] = lv[i];
-		lvn[j++] = Tcl_NewIntObj(newlevel);
+		lvn[j++] = Tcl_NewWideIntObj(newlevel);
 		newlevel = -1;
 		lignore = 1;
 		continue;
@@ -27262,7 +27407,7 @@ FixLevelCode(
 	} else if (0 == strcmp(TclGetString(lv[i]), "-code")) {
 	    if (newcode >= 0) {
 		lvn[j++] = lv[i];
-		lvn[j++] = Tcl_NewIntObj(newcode);
+		lvn[j++] = Tcl_NewWideIntObj(newcode);
 		newcode = -1;
 		cignore = 1;
 		continue;

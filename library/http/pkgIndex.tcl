@@ -5,6 +5,7 @@ if {![package vsatisfies [package provide Tcl] 8.6-]} {return}
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package ifneeded http 2.8.10 [list tclPkgSetup $dir http 2.8.10 {{http.tcl source {::http::config ::http::formatQuery ::http::geturl ::http::reset ::http::wait ::http::register ::http::unregister ::http::mapReply}}}]
 =======
 package ifneeded http 2.8.11 [list tclPkgSetup $dir http 2.8.11 {{http.tcl source {::http::config ::http::formatQuery ::http::geturl ::http::reset ::http::wait ::http::register ::http::unregister ::http::mapReply}}}]
@@ -27,4 +28,7 @@ package ifneeded tcl::idna 1.0 [list source [file join $dir idna.tcl]]
 >>>>>>> upstream/master
 =======
 package ifneeded http 2.9.1 [list tclPkgSetup $dir http 2.9.1 {{http.tcl source {::http::config ::http::formatQuery ::http::geturl ::http::reset ::http::wait ::http::register ::http::unregister ::http::mapReply}}}]
+>>>>>>> upstream/master
+=======
+package ifneeded http 2.10.0a1 [list tclPkgSetup $dir http 2.10.0a1 {{http.tcl source {::http::config ::http::formatQuery ::http::geturl ::http::reset ::http::wait ::http::register ::http::unregister ::http::mapReply}}}]
 >>>>>>> upstream/master

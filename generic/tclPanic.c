@@ -69,7 +69,6 @@ Tcl_SetPanicProc(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 /*
  * The following comment is here so that Coverity's static analizer knows that
  * a Tcl_Panic() call can never return and avoids lots of false positives.

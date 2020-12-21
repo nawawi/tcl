@@ -1507,6 +1507,7 @@ enum TclInstruction {
     INST_JUMP_FALSE1,
     INST_JUMP_FALSE4,
 
+<<<<<<< HEAD
     /* Opcodes 42 to 64 */
     INST_BITOR,
     INST_BITXOR,
@@ -1831,6 +1832,10 @@ typedef enum InstStringClassType {
 
 typedef struct StringClassDesc {
     const char *name;		/* Name of the class. */
+=======
+typedef struct StringClassDesc {
+    char name[8];		/* Name of the class. */
+>>>>>>> upstream/master
     int (*comparator)(int);	/* Function to test if a single unicode
 				 * character is a member of the class. */
 } StringClassDesc;
@@ -3291,10 +3296,23 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
  * static void		BODY(Tcl_Token *tokenPtr, int word);
  */
 
+<<<<<<< HEAD
 #define BODY(tokenPtr, word)						\
     SetLineInformation((word));						\
     TclCompileCmdWord(interp, (tokenPtr)+1, (tokenPtr)->numComponents,	\
 	    envPtr)
+=======
+typedef struct ForeachVarList {
+    int numVars;		/* The number of variables in the list. */
+    int varIndexes[TCLFLEXARRAY];/* An array of the indexes ("slot numbers")
+				 * for each variable in the procedure's array
+				 * of local variables. Only scalar variables
+				 * are supported. The actual size of this
+				 * field will be large enough to numVars
+				 * indexes. THIS MUST BE THE LAST FIELD IN THE
+				 * STRUCTURE! */
+} ForeachVarList;
+>>>>>>> upstream/master
 
 /*
  * Convenience macro for use when compiling tokens to be pushed. The ANSI C
@@ -3304,6 +3322,7 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
  *			    Tcl_Interp *interp);
  */
 
+<<<<<<< HEAD
 #define CompileTokens(envPtr, tokenPtr, interp) \
     TclCompileTokens((interp), (tokenPtr)+1, (tokenPtr)->numComponents, \
 	    (envPtr));
@@ -3321,6 +3340,23 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
     TclEmitPush(TclRegisterLiteral(envPtr, string, length, 0), (envPtr))
 #define PushStringLiteral(envPtr, string) \
     PushLiteral(envPtr, string, (int) (sizeof(string "") - 1))
+=======
+typedef struct ForeachInfo {
+    int numLists;		/* The number of both the variable and value
+				 * lists of the foreach command. */
+    int firstValueTemp;		/* Index of the first temp var in a proc frame
+				 * used to point to a value list. */
+    int loopCtTemp;		/* Index of temp var in a proc frame holding
+				 * the loop's iteration count. Used to
+				 * determine next value list element to assign
+				 * each loop var. */
+    ForeachVarList *varLists[TCLFLEXARRAY];/* An array of pointers to ForeachVarList
+				 * structures describing each var list. The
+				 * actual size of this field will be large
+				 * enough to numVars indexes. THIS MUST BE THE
+				 * LAST FIELD IN THE STRUCTURE! */
+} ForeachInfo;
+>>>>>>> upstream/master
 
 /*
  * Macro to advance to the next token; it is more mnemonic than the address
@@ -3457,8 +3493,20 @@ MODULE_SCOPE int	TclPushProcCallFrame(ClientData clientData,
  * Flags bits used by TclPushVarName.
  */
 
+<<<<<<< HEAD
 #define TCL_NO_LARGE_INDEX 1	/* Do not return localIndex value > 255 */
 #define TCL_NO_ELEMENT 2	/* Do not push the array element. */
+=======
+typedef struct {
+    size_t length;		/* Size of array */
+    int varIndices[TCLFLEXARRAY];		/* Array of variable indices to manage when
+				 * processing the start and end of a [dict
+				 * update]. There is really more than one
+				 * entry, and the structure is allocated to
+				 * take account of this. MUST BE LAST FIELD IN
+				 * STRUCTURE. */
+} DictUpdateInfo;
+>>>>>>> upstream/master
 
 /*
  * DTrace probe macros (NOPs if DTrace support is not enabled).

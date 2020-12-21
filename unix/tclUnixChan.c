@@ -242,7 +242,6 @@ static const Tcl_ChannelType ttyChannelType = {
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 FileBlockModeProc(
     void *instanceData,	/* File state. */
@@ -298,7 +297,7 @@ FileInputProc(
      */
 
     bytesRead = read(fsPtr->fd, buf, toRead);
-    if (bytesRead > -1) {
+    if (bytesRead >= 0) {
 	return bytesRead;
     }
     *errorCodePtr = errno;
@@ -345,7 +344,7 @@ FileOutputProc(
 	return 0;
     }
     written = write(fsPtr->fd, buf, toWrite);
-    if (written > -1) {
+    if (written >= 0) {
 	return written;
     }
     *errorCodePtr = errno;
@@ -373,12 +372,11 @@ FileOutputProc(
 static int
 FileCloseProc(
     void *instanceData,	/* File state. */
-    Tcl_Interp *dummy,		/* For error reporting - unused. */
+    TCL_UNUSED(Tcl_Interp *),
     int flags)
 {
     FileState *fsPtr = (FileState *)instanceData;
     int errorCode = 0;
-    (void)dummy;
 
     if ((flags & (TCL_CLOSE_READ | TCL_CLOSE_WRITE)) != 0) {
 	return EINVAL;
@@ -2083,9 +2081,8 @@ Tcl_GetOpenFile(
     const char *chanID,		/* String that identifies file. */
     int forWriting,		/* 1 means the file is going to be used for
 				 * writing, 0 means for reading. */
-    int dummy,		/* 1 means verify that the file was opened in
-				 * a mode that allows the access specified by
-				 * "forWriting". Ignored, we always check that
+    TCL_UNUSED(int),		/* Obsolete argument.
+				 * Ignored, we always check that
 				 * the channel is open for the requested
 				 * mode. */
     void **filePtr)	/* Store pointer to FILE structure here. */
@@ -2095,7 +2092,6 @@ Tcl_GetOpenFile(
     const Tcl_ChannelType *chanTypePtr;
     void *data;
     FILE *f;
-    (void)dummy;
 
     chan = Tcl_GetChannel(interp, chanID, &chanMode);
     if (chan == NULL) {

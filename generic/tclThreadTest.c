@@ -203,10 +203,9 @@ TclThread_Init(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 ThreadObjCmd(
-    void *dummy,		/* Not used. */
+    TCL_UNUSED(void *),
     Tcl_Interp *interp,		/* Current interpreter. */
     int objc,			/* Number of arguments. */
     Tcl_Obj *const objv[])	/* Argument objects. */
@@ -223,7 +222,6 @@ ThreadObjCmd(
 	THREAD_ID, THREAD_JOIN, THREAD_NAMES, THREAD_SEND,
 	THREAD_WAIT, THREAD_ERRORPROC
     };
-    (void)dummy;
 
     if (objc < 2) {
 	Tcl_WrongNumArgs(interp, 1, objv, "option ?arg ...?");
@@ -427,7 +425,7 @@ ThreadObjCmd(
 	    Tcl_WrongNumArgs(interp, 2, objv, NULL);
 	    return TCL_ERROR;
 	}
-	Tcl_SetObjResult(interp, Tcl_NewIntObj(
+	Tcl_SetObjResult(interp, Tcl_NewWideIntObj(
 		Tcl_DoOneEvent(TCL_ALL_EVENTS | TCL_DONT_WAIT)));
 	return TCL_OK;
     }
@@ -504,7 +502,6 @@ ThreadObjCmd(
  *----------------------------------------------------------------------
  */
 
-	/* ARGSUSED */
 static int
 ThreadCreate(
     Tcl_Interp *interp,		/* Current interpreter. */
@@ -1123,7 +1120,7 @@ ThreadCancel(
 static int
 ThreadEventProc(
     Tcl_Event *evPtr,		/* Really ThreadEvent */
-    int mask)
+    TCL_UNUSED(int) /*mask*/)
 {
     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
     ThreadEvent *threadEventPtr = (ThreadEvent *) evPtr;
@@ -1131,7 +1128,6 @@ ThreadEventProc(
     Tcl_Interp *interp = tsdPtr->interp;
     int code;
     const char *result, *errorCode, *errorInfo;
-    (void)mask;
 
     if (interp == NULL) {
 	code = TCL_ERROR;
@@ -1212,7 +1208,6 @@ ThreadEventProc(
  *------------------------------------------------------------------------
  */
 
-     /* ARGSUSED */
 static void
 ThreadFreeProc(
     void *clientData)
@@ -1239,14 +1234,11 @@ ThreadFreeProc(
  *------------------------------------------------------------------------
  */
 
-     /* ARGSUSED */
 static int
 ThreadDeleteEvent(
     Tcl_Event *eventPtr,	/* Really ThreadEvent */
-    void *dummy)	/* dummy */
+    TCL_UNUSED(void *))
 {
-    (void)dummy;
-
     if (eventPtr->proc == ThreadEventProc) {
 	Tcl_Free(((ThreadEvent *) eventPtr)->script);
 	return 1;
@@ -1277,7 +1269,6 @@ ThreadDeleteEvent(
  *------------------------------------------------------------------------
  */
 
-     /* ARGSUSED */
 static void
 ThreadExitProc(
     void *clientData)
